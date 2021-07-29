@@ -103,6 +103,7 @@ const useChildStyleSheet = createUseComponentStyleSheet([
     composition([
         layout({
             '--child-': '"child"',
+            background: 'lightGreen',
         }),
 
         variants([

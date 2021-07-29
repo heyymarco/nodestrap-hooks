@@ -2,7 +2,7 @@
 import {
     default as React,
     useContext,
-    useEffect,
+    useLayoutEffect,
     useMemo,
 }                           from 'react'         // base technology of our nodestrap components
 
@@ -64,7 +64,7 @@ export type PropList                                   = { [name: string]: JssVa
 
 
 // jss:
-const jss = createJss().setup({plugins:[
+const customJss = createJss().setup({plugins:[
     jssPluginGlobal(),
     jssPluginExtend(),
     jssPluginNested(),
@@ -77,65 +77,50 @@ const jss = createJss().setup({plugins:[
 
 // styles:
 
-const styleSheetManagers    = new Map<object, SheetsManager>();
+const styleSheetManager = new SheetsManager();
 export const createUseStyleSheet          = <TClass extends string = string>(styles: Styles<TClass> | Factory<Styles<TClass>>): Factory<Classes<TClass>> => {
-    const styleSheetId      = {}; // a simple object as the styleSheet's identifier (by reference)
-    console.log('creating a new styleSheet', styleSheetId);
+    const styleSheetId  = {}; // a simple object as the styleSheet's identifier (by reference)
 
     
     return (): Classes<TClass> => {
-        const styleSheetManager = useMemo(() : SheetsManager => (
+        const styleSheet = useMemo(() => (
             // from existing (if any):
-            styleSheetManagers.get(styleSheetId)
+            styleSheetManager.get(styleSheetId)
             ??
             // or create a new one:
-            ((): SheetsManager => {
-                const newStyleSheetManager = new SheetsManager();
-                styleSheetManagers.set(styleSheetId, newStyleSheetManager);
-                console.log('creating a new manager', newStyleSheetManager);
+            (() => {
+                // create a new styleSheet using our pre-configured customJss:
+                const styleSheet = customJss.createStyleSheet(
+                    ((typeof(styles) === 'function') ? styles() : styles)
+                )
+                ;
+                
+                
+                
+                // register to styleSheetManager to be manageable:
+                styleSheetManager.add(styleSheetId, styleSheet);
 
-                return newStyleSheetManager;
+                
+                
+                // here the styleSheet:
+                return styleSheet;
             })()
         ), []);
         
-        const styleSheet = useMemo(() => {
-            const styleSheet = (
-                // from existing (if any):
-                styleSheetManager.get(styleSheetId)
-                ??
-                // or create a new one:
-                (() => {
-                    const styleSheet = jss.createStyleSheet(
-                        ((typeof(styles) === 'function') ? styles() : styles)
-                    )
-                    ;
-                    
-                    styleSheetManager.add(styleSheetId, styleSheet);
-                    return styleSheet;
-                })()
-            );
-            
-
-            
-            return styleSheet;
-        }, [styleSheetManager]);
         
         
-        
-        useEffect(() => {
-            console.log('manageA stylesheet', (styleSheetManager as any).sheets.get(styleSheetId));
-            styleSheetManager.manage(styleSheetId); // use the styleSheet
-            console.log('manageB stylesheet', (styleSheetManager as any).sheets.get(styleSheetId));
+        useLayoutEffect(() => {
+            // use the styleSheet:
+            styleSheetManager.manage(styleSheetId);
             
             
             
             // cleanups:
             return () => {
-                console.log('unmanageA stylesheet', (styleSheetManager as any).sheets.get(styleSheetId));
-                styleSheetManager.unmanage(styleSheetId); // unuse the styleSheet
-                console.log('unmanageB stylesheet', (styleSheetManager as any).sheets.get(styleSheetId));
+                // unuse the styleSheet:
+                styleSheetManager.unmanage(styleSheetId);
             };
-        }, [styleSheetManager])
+        }, [])
 
 
 
