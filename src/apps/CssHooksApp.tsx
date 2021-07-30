@@ -7,9 +7,10 @@ import {
 // nodestrap (modular web components):
 import {
     // components:
-    createUseComponentStyleSheet,
+    createUseComponentStyle,
 
     composition,
+    global,
 
     layout,
 
@@ -64,13 +65,17 @@ export default App;
 
 
 
-const useAwesomeButtonStyleSheet = createUseComponentStyleSheet([
+const useAwesomeButtonStyleSheet = createUseComponentStyle([
     composition([
         layout({
             background: 'red',
             color: 'blue',
 
             '--parent-': '"parent"',
+        }),
+
+        layout({
+            opacity: 0.5,
         }),
 
         variants([
@@ -92,14 +97,24 @@ const useAwesomeButtonStyleSheet = createUseComponentStyleSheet([
 
         states([
             [ ':hover', { background: 'pink' } ],
+
+            gradient(),
         ]),
     ]),
     composition([
 
     ], 'other'),
+    global([
+        [ ':root', {
+            '--glob-var': '"hello global"',
+        }],
+        [ ':root', {
+            '--glob-var-oth': '"hello global again"',
+        }],
+    ]),
 ]);
 
-const useChildStyleSheet = createUseComponentStyleSheet([
+const useChildStyleSheet = createUseComponentStyle([
     composition([
         layout({
             '--child-': '"child"',

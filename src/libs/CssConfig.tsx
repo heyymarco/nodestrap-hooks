@@ -7,7 +7,7 @@ import { Cust, PropEx, }            from './Css' // ts defs support for jss
 // import jssPluginFunctions        from 'jss-plugin-rule-value-function'
 // import jssPluginObservable       from 'jss-plugin-rule-value-observable'
 // import jssPluginTemplate         from 'jss-plugin-template'
-import jssPluginGlobal              from 'jss-plugin-global'
+// import jssPluginGlobal              from 'jss-plugin-global'
 // import jssPluginExtend           from 'jss-plugin-extend'
 // import jssPluginNested           from 'jss-plugin-nested'
 // import jssPluginCompose          from 'jss-plugin-compose'
@@ -16,7 +16,8 @@ import jssPluginCamelCase           from 'jss-plugin-camel-case'
 import jssPluginExpand              from 'jss-plugin-expand'
 // import jssPluginVendorPrefixer   from 'jss-plugin-vendor-prefixer'
 // import jssPluginPropsSort        from 'jss-plugin-props-sort'
-import jssPluginNormalizeShorthands from './jss-plugin-normalize-shorthands'
+import jssPluginGlobal              from './jss-plugin-global'
+import jssPluginShort               from './jss-plugin-short'
 
 
 
@@ -46,7 +47,7 @@ const getCustomJss = () => {
         jssPluginExpand(),
         // jssPluginVendorPrefixer(),
         // jssPluginPropsSort(),
-        jssPluginNormalizeShorthands(),
+        jssPluginShort(),
     ]});
 
     return customJssCache;

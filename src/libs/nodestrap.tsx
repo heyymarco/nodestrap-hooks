@@ -15,20 +15,19 @@ import {
 
     create as createJss,
     SheetsManager,
-}                           from 'jss'           // ts defs support for jss
+}                           from 'jss'           // base technology of our nodestrap components
 import {
     jss as jssDefault,
     createUseStyles,
     JssContext,
 }                           from 'react-jss'     // base technology of our nodestrap components
 import jssPluginExtend      from 'jss-plugin-extend'
-import jssPluginGlobal      from 'jss-plugin-global'
+// import jssPluginGlobal      from 'jss-plugin-global'
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginNested      from 'jss-plugin-nested'
-import
-    jssPluginNormalizeShorthands
-                            from './jss-plugin-normalize-shorthands'
+import jssPluginGlobal      from './jss-plugin-global'
+import jssPluginShort       from './jss-plugin-short'
 import type {
     Prop,
     PropEx,
@@ -70,17 +69,19 @@ const customJss = createJss().setup({plugins:[
     jssPluginNested(),
     jssPluginCamelCase(),
     jssPluginExpand(),
-    jssPluginNormalizeShorthands(),
+    jssPluginShort(),
 ]});
 
 
 
 // styles:
 
+// hook factories:
 const styleSheetManager = new SheetsManager();
-export const createUseStyleSheet          = <TClass extends string = string>(styles: Styles<TClass> | Factory<Styles<TClass>>): Factory<Classes<TClass>> => {
+export const createUseStyle          = <TClass extends string = string>(styles: Styles<TClass> | Factory<Styles<TClass>>): Factory<Classes<TClass>> => {
     const styleSheetId  = {}; // a simple object as the styleSheet's identifier (by reference)
 
+    
     
     return (): Classes<TClass> => {
         const styleSheet = useMemo(() => (
@@ -92,12 +93,11 @@ export const createUseStyleSheet          = <TClass extends string = string>(sty
                 // create a new styleSheet using our pre-configured customJss:
                 const styleSheet = customJss.createStyleSheet(
                     ((typeof(styles) === 'function') ? styles() : styles)
-                )
-                ;
+                );
                 
                 
                 
-                // register to styleSheetManager to be manageable:
+                // register to styleSheetManager to be attached/detached from dom:
                 styleSheetManager.add(styleSheetId, styleSheet);
 
                 
@@ -110,14 +110,16 @@ export const createUseStyleSheet          = <TClass extends string = string>(sty
         
         
         useLayoutEffect(() => {
-            // use the styleSheet:
+            // notify styleSheetManager that the styleSheet is being used
+            // the styleSheetManager will attach the styleSheet to dom if one/more styleSheet users exist.
             styleSheetManager.manage(styleSheetId);
             
             
             
             // cleanups:
             return () => {
-                // unuse the styleSheet:
+                // notify styleSheetManager that the styleSheet is no longer being used
+                // the styleSheetManager will detach the styleSheet from dom if no styleSheet user exists.
                 styleSheetManager.unmanage(styleSheetId);
             };
         }, [])
@@ -127,8 +129,8 @@ export const createUseStyleSheet          = <TClass extends string = string>(sty
         return styleSheet.classes;
     };
 }
-export const createUseComponentStyleSheet = <TClass extends string>(styles: ClassList<TClass> | Factory<ClassList<TClass>>): Factory<Classes<TClass>> => {
-    return createUseStyleSheet(
+export const createUseComponentStyle = <TClass extends string>(styles: ClassList<TClass> | Factory<ClassList<TClass>>): Factory<Classes<TClass>> => {
+    return createUseStyle(
         Object.assign({}, // combines array to props
             ...((typeof(styles) === 'function') ? styles() : styles).map((style) => ({ [style[0] ?? 'main']: style[1] }))
         )
@@ -137,6 +139,7 @@ export const createUseComponentStyleSheet = <TClass extends string>(styles: Clas
 
 
 
+// compositions:
 export const composition = <TClass extends string = 'main'>(styles: Style[], className: TClass = 'main' as TClass): ClassEntry<TClass> => [
     className,
 
@@ -144,13 +147,20 @@ export const composition = <TClass extends string = 'main'>(styles: Style[], cla
         extend: (styles as Style),
     } as Style
 ];
+export const global = (ruleCollection: RuleCollection): ClassEntry<''> => [
+    '',
+
+    rules(ruleCollection)
+];
 
 
 
+// layouts:
 export const layout = (style: Style): Style => style;
 
 
 
+// rules:
 export const rules = (ruleCollection: RuleCollection, specificityWeight: number = 0): Style => ({
     extend: [
         ...((): Style[] => {
@@ -260,9 +270,7 @@ export const rules = (ruleCollection: RuleCollection, specificityWeight: number 
         })(),
     ] as Style,
 });
-
 export const variants = (variants: RuleCollection): Style => rules(variants);
-
 export const states = (states: RuleCollection, inherit = false): Style => rules(states, /*specificityWeight :*/1);
 
 
@@ -271,6 +279,43 @@ export const gradient = (): RuleList => [
     [ [':not(.gradient)'], [{ '--no-gradient' : 'no' }] ],
     [      ['.gradient', '.grad'],  [{ '--has-gradient': 'yes' }, {'--is-gradient': 'yea'}] ],
 ];
+
+
+
+// utilities:
+export const iif = <T extends PropList|Style>(condition: boolean, content: T): T => {
+    return condition ? content : ({} as T);
+};
+/**
+ * Escapes some sets of character in svg data, so it will be valid to be written in css.
+ * @param svgData The raw svg data to be escaped.
+ * @returns A `string` represents an escaped svg data.
+ */
+export const escapeSvg = (svgData: string): string => {
+    const escapedChars: Dictionary<string> = {
+        '<': '%3c',
+        '>': '%3e',
+        '#': '%23',
+        '(': '%28',
+        ')': '%29',
+    };
+
+    const svgDataCopy = Array.from(svgData);
+    for (const index in svgDataCopy) {
+        const char = svgDataCopy[index];
+        if (char in escapedChars) svgDataCopy[index] = escapedChars[char];
+    }
+
+    return svgDataCopy.join('');
+};
+/**
+ * Creates a single layer solid background based on specified `color`.
+ * @param color The color of the solid background to create.
+ * @returns A `JssValue` represents a solid background.
+ */
+export const solidBackg = (color: Cust.Ref, clip : Prop.BackgroundClip = 'border-box'): JssValue => {
+    return [[`linear-gradient(${color},${color})`, clip]];
+}
 
 
 
@@ -534,7 +579,7 @@ export class ElementStyles {
                     const jss = jssContext.jss ?? jssDefault;
                     jss.use(
                         jssPluginGlobal(),
-                        jssPluginNormalizeShorthands()
+                        jssPluginShort()
                     );
 
                     this._useStylesCache = createUseStyles(
@@ -701,41 +746,7 @@ export class ElementStyles {
         ] as JssStyle,
     }}
     
-    protected iif<T extends PropList|JssStyle>(condition: boolean, content: T): T {
-        return condition ? content : ({} as T);
-    }
 
-    /**
-     * Escapes some sets of character in svg data, so it will be valid to be written in css.
-     * @param svgData The raw svg data to be escaped.
-     * @returns A `string` represents an escaped svg data.
-     */
-    public escapeSvg(svgData: string): string {
-        const escapedChars: Dictionary<string> = {
-            '<': '%3c',
-            '>': '%3e',
-            '#': '%23',
-            '(': '%28',
-            ')': '%29',
-        };
-
-        const svgDataCopy = Array.from(svgData);
-        for (const index in svgDataCopy) {
-            const char = svgDataCopy[index];
-            if (char in escapedChars) svgDataCopy[index] = escapedChars[char];
-        }
-    
-        return svgDataCopy.join('');
-    }
-
-    /**
-     * Creates a single layer solid background based on specified `color`.
-     * @param color The color of the solid background to create.
-     * @returns A `JssValue` represents a solid background.
-     */
-    public solidBackg(color: Cust.Ref, clip : Prop.BackgroundClip = 'border-box'): JssValue {
-        return [[`linear-gradient(${color},${color})`, clip]];
-    }
 }
 
 
