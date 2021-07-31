@@ -1,22 +1,23 @@
 // jss   (builds css  using javascript):
-import {
+import type {
     Plugin,
     JssStyle,
+
+    Rule,
 }                           from 'jss'           // base technology of our nodestrap components
 
 
 
-class GlobalContainerRule {
+class GlobalStyleRule {
     // BaseRule:
-    type        : string = 'style' // for satisfying the jss-plugin-nested
+    type        : string  = 'style' // for satisfying the jss-plugin-nested
     key         : string
-    isProcessed : boolean = false
+    isProcessed : boolean = false   // required to avoid double processed
     options     : any
     renderable? : Object|null|void
 
     style       : JssStyle
-    selector    : string = '' // for satisfying the jss-plugin-nested
-
+    selector    : string  = ''      // for satisfying the jss-plugin-nested
 
     
     
@@ -40,17 +41,15 @@ class GlobalContainerRule {
 
 
 
-export default function pluginGlobal(): Plugin {
-    return {
-        onCreateRule(key: string, style: JssStyle, options: any): any {
-            switch (key) {
-                case '':
-                case '@global':
-                    return new GlobalContainerRule(key, style, options);
-                
-                default:
-                    return null;
-            } // switch
-        },
-    } as Plugin;
-}
+export default function pluginGlobal(): Plugin { return {
+    onCreateRule(key: string, style: JssStyle, options: any): Rule|any {
+        switch (key) {
+            case '':
+            case '@global':
+                return new GlobalStyleRule(key, style, options);
+            
+            default:
+                return null;
+        } // switch
+    },
+}}
