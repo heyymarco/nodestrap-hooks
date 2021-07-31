@@ -10,12 +10,12 @@ import type {
 
 
 const shorts: { [key: string]: string } = {
-    foreg        : 'color',
-    backg        : 'background',
-    'backg-clip' : 'background-clip',
-    anim         : 'animation',
-    'gap-x'      : 'column-gap',
-    'gap-y'      : 'row-gap',
+    foreg       : 'color',
+    backg       : 'background',
+    'backgClip' : 'backgroundClip',
+    anim        : 'animation',
+    'gapX'      : 'columnGap',
+    'gapY'      : 'rowGap',
 };
 
 export default function pluginShort(): Plugin { return {
