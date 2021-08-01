@@ -13,45 +13,59 @@ import warning              from 'tiny-warning'
 
 
 // utilities:
-type LiteralObject    = { [key: string]: any }
-const isLiteralObject = (object: any): object is LiteralObject => object && (typeof(object) === 'object') && !Array.isArray(object);
+type LiteralObject      = { [key: string]: any }
+const isLiteralObject   = (object: any): object is LiteralObject => object && (typeof(object) === 'object') && !Array.isArray(object);
+
+// upgrade `JssStyle` definition:
+type Optional<T>        = T|null|undefined
+type ExtendableObject   = JssStyle|string // extend using a JssStyle object or using a rule name
+type SingleExtend       = Optional<ExtendableObject>
+type Extend             = SingleExtend|SingleExtend[]
+type Style              = JssStyle & { extend?: Optional<Extend> } // add `extend` prop into `JssStyle`
+// export the upgraded `JssStyle`:
+export type { Style, Style as ExtendableStyle, Style as JssStyle }
+const isStyle           = (object: any): object is Style => isLiteralObject(object);
 
 
 
-const mergeExtendProp    = (currentObject: LiteralObject, rule?: Rule, sheet?: StyleSheet): void => {
-    const extend = currentObject.extend;
+const mergeExtend       = (style: Style, rule?: Rule, sheet?: StyleSheet): void => {
+    const extend = style.extend;
     if (!extend) return; // nothing to extend
 
 
     
-    // if extend is an array => loop it
-    // otherwise => convert to single array => loop it
+    // if `extend` is an `Array` => loop it
+    // otherwise => convert to single `Array` => loop it
     for (const singleExtend of (Array.isArray(extend) ? extend : [extend])) {
-        //#region extend using a literalObject
-        if (isLiteralObject(singleExtend)) {
-            mergeComplex(currentObject, singleExtend, rule, sheet);
+        if (!singleExtend) continue; // null & undefined => skip
+        
+        
+        
+        //#region extend using a `Style`
+        if (isStyle(singleExtend)) {
+            mergeStyle(style, singleExtend, rule, sheet);
         } // if
-        //#endregion extend using a literalObject
+        //#endregion extend using a `Style`
         
         
         
         //#region extend using a rule name
         else if (typeof(singleExtend) === 'string') {
             if (sheet) {
-                const refRule = sheet.getRule(singleExtend);
+                const refRule = sheet.getRule(singleExtend) as Optional<Rule>;
                 if (refRule) {
                     if (refRule === rule) {
                         warning(false, `[JSS] A rule tries to extend itself \n${rule.toString()}`);
                         
-                        // todo detect circular extend, causing infinite recursive
+                        // TODO: detect circular ref, causing infinite recursive
                     }
                     else {
-                        // now it seems the `refRule` is not itself nor circular ref
-                        // warning: calling `mergeComplex` might causing infinite recursive if the `refRule` it itself or circular ref
+                        // now it seems the `refRule` is not `rule` nor circular ref
+                        // warning: calling `mergeStyle` might causing infinite recursive if the `refRule` is `rule` or circular ref
                         
-                        const ruleStyle = (refRule.options?.parent as any)?.rules?.raw?.[singleExtend] as JssStyle|null|undefined;
+                        const ruleStyle = (refRule.options?.parent as any)?.rules?.raw?.[singleExtend] as Optional<Style>;
                         if (ruleStyle) {
-                            mergeComplex(currentObject, ruleStyle, rule, sheet);
+                            mergeStyle(style, ruleStyle, rule, sheet);
                         } // if
                     } // if
                 } // if
@@ -62,60 +76,97 @@ const mergeExtendProp    = (currentObject: LiteralObject, rule?: Rule, sheet?: S
 
 
 
-    // the `extend` has been completed => remove unused `extend` prop:
-    // delete currentObject.extend;
-    currentObject.extend = null; // maybe it's safer not to mutate the current rule, instead set it to `null`
+    // the `extend` operation has been completed => remove unused `extend` prop:
+    // delete style.extend;
+    style.extend = null; // maybe it's safer not to remove the `style`'s prop, instead set it to `null`
 }
-const mergeLiteralObject = (currentObject: LiteralObject, newObject: LiteralObject, rule?: Rule, sheet?: StyleSheet): void => {
-    for (const [name, newValue] of Object.entries(newObject)) { // loop through newObject's props
+const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?: Rule, sheet?: StyleSheet): void => {
+    for (const [name, newValue] of Object.entries(newStyle)) { // loop through `newStyle`'s props
         // `extend` is a special prop that we don't handle here:
         if (name === 'extend') continue; // skip `extend` prop
 
 
 
-        if (!isLiteralObject(newValue)) {
-            // `newValue` is not a `LiteralObject` => unmergeable => add/overwrite `newValue` into `currentObject`:
-            currentObject[name] = newValue; // add/overwrite
+        if (!isStyle(newValue)) {
+            // `newValue` is not a `Style` => unmergeable => add/overwrite `newValue` into `style`:
+            style[name] = newValue; // add/overwrite
         }
         else {
-            // `newValue` is a `LiteralObject` => possibility to merge with `currentValue`
+            // `newValue` is a `Style` => possibility to merge with `currentValue`
 
-            let currentValue = currentObject[name];
-            if (!isLiteralObject(currentValue)) {
-                // `currentValue` is not a `LiteralObject` => unmergeable => add/overwrite `newValue` into `currentObject`:
-                currentObject[name] = newValue; // add/overwrite
+            const currentValue = style[name];
+            if (!isStyle(currentValue)) {
+                // `currentValue` is not a `Style` => unmergeable => add/overwrite `newValue` into `style`:
+                style[name] = newValue; // add/overwrite
             }
             else {
-                // both `newValue` & `currentValue` are `LiteralObject` => merge them recursively (deeply):
+                // both `newValue` & `currentValue` are `Style` => merge them recursively (deeply):
 
-                currentValue = {...currentValue}; // clone the `currentValue` to avoid side effect, because the `currentValue` is not **the primary object** we're working on
-                mergeComplex(currentValue, newValue, rule, sheet);
-                currentObject[name] = currentValue; // set the mutated `currentValue` back to `currentObject`
+                const currentValueClone = {...currentValue} as Style; // clone the `currentValue` to avoid side effect, because the `currentValue` is not **the primary object** we're working on
+                mergeStyle(currentValueClone, newValue, rule, sheet);
+                style[name] = currentValueClone; // set the mutated `currentValueClone` back to `style`
             } // if
         } // if
     } // for
 }
-const mergeComplex       = (currentObject: LiteralObject, newObject: LiteralObject, rule?: Rule, sheet?: StyleSheet): void => {
-    newObject = {...newObject}; // clone the `newObject` to avoid side effect, because the `newObject` is not **the primary object** we're working on
-    mergeExtendProp(newObject, rule, sheet);
+// we export `mergeStyle` so it reusable:
+export const mergeStyle = (style: Style, newStyle: Style, rule?: Rule, sheet?: StyleSheet): void => {
+    const newStyleClone = {...newStyle} as Style; // clone the `newStyle` to avoid side effect, because the `newStyle` is not **the primary object** we're working on
+    mergeExtend(newStyleClone, rule, sheet);
 
-    mergeLiteralObject(currentObject, newObject, rule, sheet);
+    mergeLiteral(style, newStyleClone, rule, sheet);
 }
 
 
 
 export default function pluginExtend(): Plugin { return {
-    onProcessStyle: (style: JssStyle & { [key: string]: JssStyle[keyof JssStyle] }, rule: Rule, sheet?: StyleSheet): JssStyle => {
-        mergeExtendProp(style, rule, sheet);
+    onProcessStyle: (style: Style, rule: Rule, sheet?: StyleSheet): Style => {
+        mergeExtend(style, rule, sheet);
 
 
 
         return style;
     },
 
-    onChangeValue: (value: string, prop: string, rule: Rule): string|null|false => {
-        if (prop !== 'extend') return value;
+    onChangeValue: (value: any, prop: string, rule: Rule): string|null|false => {
+        if (prop !== 'extend') return value; // do not modify any props other than `extend`
 
-        return null;
+
+
+        const __prevObject = '__prevObject';
+        if (typeof(value) === 'object') {
+            const ruleProp = (rule as any).prop;
+            if (typeof(ruleProp) === 'function') {
+                for (const [propName, propVal] of Object.entries(value)) {
+                    ruleProp(propName, propVal);
+                } // for
+
+
+                
+                // store the object to the rule, so we can remove all props we've set later:
+                (rule as any)[__prevObject] = value;
+            } // if
+        }
+        else if ((value === null) || (value === false)) {
+            // remove all props we've set before (if any):
+            const prevObject = (rule as any)[__prevObject];
+            if (prevObject) {
+                const ruleProp = (rule as any).prop;
+                if (typeof(ruleProp) === 'function') {
+                    for (const propName of Object.keys(prevObject)) {
+                        ruleProp(propName, null);
+                    } // for
+                } // if
+
+
+
+                // clear the stored object:
+                delete (rule as any)[__prevObject];
+            } // if
+        } // if
+
+        
+        
+        return null; // do not set the value in the core
     },
 }}
