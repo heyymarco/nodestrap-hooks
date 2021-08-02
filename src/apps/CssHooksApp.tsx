@@ -17,7 +17,7 @@ import {
     variants,
     states,
 
-    gradient,
+    // usingGradient,
 }                           from '../libs/nodestrap'   // nodestrap's core
 
 
@@ -68,8 +68,10 @@ export default App;
 const useAwesomeButtonStyleSheet = createUseComponentStyle([
     composition([
         layout({
-            background: 'red',
-            color: 'blue',
+            backg: 'red',
+            foreg: 'blue',
+            backgClip: 'unset',
+            gapX: 'inherit',
 
             '--parent-': '"parent"',
         }),
@@ -87,7 +89,7 @@ const useAwesomeButtonStyleSheet = createUseComponentStyle([
                 fontSize: 'x-small'
             }],
 
-            gradient(),
+            // usingGradient(),
 
             [ null, (() => {
                 console.log('creating parent css....');
@@ -96,9 +98,9 @@ const useAwesomeButtonStyleSheet = createUseComponentStyle([
         ]),
 
         states([
-            [ ':hover', { background: 'pink' } ],
+            [ ':hover', { backg: 'pink' } ],
 
-            gradient(),
+            [ null, { cursor: 'pointer' } ],
         ]),
     ]),
     composition([
@@ -118,7 +120,7 @@ const useChildStyleSheet = createUseComponentStyle([
     composition([
         layout({
             '--child-': '"child"',
-            background: 'lightGreen',
+            backg: 'lightGreen',
         }),
 
         variants([

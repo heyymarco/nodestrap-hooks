@@ -1,23 +1,21 @@
 // jss   (builds css  using javascript):
-import { create as createJss }      from 'jss'   // base technology of our nodestrap components
-import type * as Jss                from 'jss'   // ts defs support for jss
-import { Cust, PropEx, }            from './Css' // ts defs support for jss
+import {
+    JssValue,
+    StyleSheet,
 
-// import presetDefault from 'jss-preset-default'
-// import jssPluginFunctions        from 'jss-plugin-rule-value-function'
-// import jssPluginObservable       from 'jss-plugin-rule-value-observable'
-// import jssPluginTemplate         from 'jss-plugin-template'
-// import jssPluginGlobal              from 'jss-plugin-global'
-// import jssPluginExtend           from 'jss-plugin-extend'
-// import jssPluginNested           from 'jss-plugin-nested'
-// import jssPluginCompose          from 'jss-plugin-compose'
-import jssPluginCamelCase           from 'jss-plugin-camel-case'
-// import jssPluginDefaultUnit      from 'jss-plugin-default-unit'
-import jssPluginExpand              from 'jss-plugin-expand'
-// import jssPluginVendorPrefixer   from 'jss-plugin-vendor-prefixer'
-// import jssPluginPropsSort        from 'jss-plugin-props-sort'
-import jssPluginGlobal              from './jss-plugin-global'
-import jssPluginShort               from './jss-plugin-short'
+    create as createJss,
+}                           from 'jss'           // base technology of our nodestrap components
+import jssPluginCamelCase   from 'jss-plugin-camel-case'
+import jssPluginExpand      from 'jss-plugin-expand'
+import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
+import jssPluginGlobal      from './jss-plugin-global'
+import jssPluginShort       from './jss-plugin-short'
+import type {
+    PropEx,
+    Cust,
+}                           from './Css'         // ts defs support for jss
+import { pascalCase }       from 'pascal-case'   // pascal-case support for jss
+import { camelCase }        from 'camel-case'    // camel-case  support for jss
 
 
 
@@ -25,33 +23,18 @@ import jssPluginShort               from './jss-plugin-short'
 export type Dictionary<TValue>        = { [key: string]: TValue }
 export type ValueOf<TCollection>      = TCollection[keyof TCollection]
 export type DictionaryOf<TCollection> = Dictionary<ValueOf<TCollection>>
+export type PropList                  = { [name: string]: JssValue }
 
 
 
-// jss & utilities:
-
-let customJssCache: Jss.Jss | null = null;
-const getCustomJss = () => {
-    if (customJssCache) return customJssCache;
-
-    customJssCache = createJss().setup({plugins:[
-        // jssPluginFunctions(),
-        // jssPluginObservable({}),
-        // jssPluginTemplate(),
-        jssPluginGlobal(),
-        // jssPluginExtend(),
-        // jssPluginNested(),
-        // jssPluginCompose(),
-        jssPluginCamelCase(),
-        // jssPluginDefaultUnit({}),
-        jssPluginExpand(),
-        // jssPluginVendorPrefixer(),
-        // jssPluginPropsSort(),
-        jssPluginShort(),
-    ]});
-
-    return customJssCache;
-}
+// jss:
+const customJss = createJss().setup({plugins:[
+    jssPluginGlobal(),    // requires to be placed before all other plugins
+    jssPluginShort(),     // requires to be placed before `camelCase`
+    jssPluginCamelCase(),
+    jssPluginExpand(),
+    jssPluginVendor(),
+]});
 
 
 
@@ -172,7 +155,7 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
     /**
      * Generated *css dom* resides on html document.
      */
-    private          _sheet      : Jss.StyleSheet<'@global'> | null = null;
+    private          _sheet      : StyleSheet<'@global'> | null = null;
 
     /**
      * Converts the origin prop name to the generated prop name, eg: `'favColor'` => `'--my-favColor'`.
@@ -817,10 +800,183 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
     
             // create a new sheet & attach:
             this._sheet =
-                getCustomJss()
+                customJss
                 .createStyleSheet(styles)
                 .attach();
         }
         //#endregion rebuild a new sheet content
     }
+}
+
+
+
+// utilities:
+/**
+ * Includes the *general* prop names in the specified `cssProps`.  
+ * @param cssProps The collection of the prop name to be filtered.  
+ * @returns A `PropList` which is the copy of the `cssProps` that only having *general* prop names.
+ */
+export const filterGeneralProps = <TCssProps,>(cssProps: TCssProps): PropList => {
+    const propList: PropList = {};
+    for (const [name, prop] of Object.entries(cssProps)) {
+        // excludes the entry if the name matching with following:
+
+        // prefixes:
+        /**
+         * For sub-component-variant
+         * Eg:
+         * fooSomething
+         * booSomething
+         * logoBackgColor
+         * logoOpacity
+         */
+        if ((/^(icon|img|items|item|logo|toggler|menu|menus|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|caption|header|footer|body)[A-Z]/).test(name)) continue; // exclude
+
+        // suffixes:
+        /**
+         * For size-variant
+         * Eg:
+         * somethingSm
+         * something0em
+         */
+        if ((/(Xs|Sm|Nm|Md|Lg|Xl|Xxl|Xxxl|[0-9]+em|None)$/).test(name)) continue; // exclude
+
+        // suffixes:
+        /**
+         * For state-variant
+         * Eg:
+         * animValid
+         * animInvalidInline
+         */
+            if ((/(Enable|Disable|Active|Passive|Press|Release|Check|Clear|Hover|Arrive|Leave|Focus|Blur|Valid|Unvalid|Invalid|Uninvalid|Full|Compact)(Block|Inline)?$/).test(name)) continue; // exclude
+
+        // special props:
+        /**
+         * Eg:
+         * foo
+         * boo
+         * size
+         * orientation
+         * valid   => (icon)Valid   => valid
+         * invalid => (icon)Invalid => invalid
+         */
+        if ((/backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid/).test(name)) continue; // exclude
+
+        // @keyframes:
+        if ((/@/).test(name)) continue; // exclude
+        
+
+        
+        // if not match => include it:
+        propList[name] = prop;
+    }
+    return propList;
+}
+
+/**
+ * Includes the prop names in the specified `cssProps` starting with specified `prefix`.
+ * @param cssProps The collection of the prop name to be filtered.  
+ * @param prefix The prefix name of the prop names to be *included*.  
+ * @returns A `PropList` which is the copy of the `cssProps` that only having matching prefix names.  
+ * The retuning prop names has been normalized (renamed), so it doesn't starting with `prefix`.
+ */
+export const filterPrefixProps = <TCssProps,>(cssProps: TCssProps, prefix: string): PropList => {
+    const propList: PropList = {};
+    for (const [name, prop] of Object.entries(cssProps)) {
+        // excludes the entry if the name not starting with specified prefix:
+        if (!name.startsWith(prefix)) continue; // exclude
+        if (name.length <= prefix.length) continue; // at least 1 char left;
+
+        // if match => remove the prefix => normalize the case => then include it:
+        propList[camelCase(name.substr(prefix.length))] = prop;
+    }
+    return propList;
+}
+
+/**
+ * Includes the prop names in the specified `cssProps` ending with specified `suffix`.
+ * @param cssProps The collection of the prop name to be filtered.  
+ * @param suffix The suffix name of the prop names to be *included*.  
+ * @returns A `PropList` which is the copy of the `cssProps` that only having matching suffix names.  
+ * The retuning prop names has been normalized (renamed), so it doesn't ending with `suffix`.
+ */
+export const filterSuffixProps = <TCssProps,>(cssProps: TCssProps, suffix: string): PropList => {
+    suffix = pascalCase(suffix);
+    const propList: PropList = {};
+    for (const [name, prop] of Object.entries(cssProps)) {
+        // excludes the entry if the name not ending with specified suffix:
+        if (!name.endsWith(suffix)) continue; // exclude
+        if (name.length <= suffix.length) continue; // at least 1 char left;
+
+        // if match => remove the suffix => then include it:
+        propList[name.substr(0, name.length - suffix.length)] = prop;
+    }
+    return propList;
+}
+
+/**
+ * Backups the value of the specified `cssProps`.
+ * @param cssProps The props to be backed up.  
+ * @param backupSuff The suffix name of the backup props.
+ * @returns A `PropList` which is the copy of the `cssProps` that the prop names renamed with the specified `backupSuff`.
+ */
+export const backupProps = <TCssProps,>(cssProps: TCssProps, backupSuff: string = 'Bak'): PropList => {
+    const propList: PropList = {};
+    for (const [name] of Object.entries(cssProps)) {
+        propList[`${name}${backupSuff}`] = `var(${name})`;
+    }
+    return propList;
+}
+
+/**
+ * Restores the value of the specified `cssProps`.
+ * @param cssProps The props to be restored.  
+ * @param backupSuff The suffix name of the backup props.
+ * @returns A `PropList` which is the copy of the `cssProps` that the prop values pointed to the backed up values.
+ */
+export const restoreProps = <TCssProps,>(cssProps: TCssProps, backupSuff: string = 'Bak'): PropList => {
+    const propList: PropList = {};
+    for (const [name] of Object.entries(cssProps)) {
+        propList[name] = `var(${name}${backupSuff})`;
+    }
+    return propList;
+}
+
+/**
+ * Overwrites prop declarations from the specified `cssProps` into the specified `cssDecls`.  
+ * @param cssDecls The collection of the prop name to be overwritten. 
+ * @param cssProps The collection of the prop name to overwrite.  
+ * @returns A `PropList` which is the copy of the `cssProps` that overwrites the specified `cssDecls`.
+ */
+export const overwriteProps = <TCssDecls extends { [key in keyof TCssProps]: string }, TCssProps>(cssDecls: TCssDecls, cssProps: TCssProps): PropList => {
+    const propList: PropList = {};
+    for (const [name, prop] of Object.entries(cssProps)) {
+        const varDecl = (cssDecls as unknown as DictionaryOf<typeof cssDecls>)[name];
+        if (!varDecl) continue;
+        propList[varDecl] = prop;
+    }
+    return propList;
+}
+
+/**
+ * Overwrites prop declarations from the specified `cssProps` into the specified `cssDeclss`.  
+ * @param cssDeclss The list of the parent's collection prop name to be overwritten.  
+ * The order must be from the most specific parent to the least specific one.  
+ * @param cssProps The collection of the prop name to overwrite.  
+ * @returns A `PropList` which is the copy of the `cssProps` that overwrites the specified `cssDeclss`.
+ */
+export const overwriteParentProps = <TCssProps,>(cssProps: TCssProps, ...cssDeclss: { [key in keyof unknown]: string }[]): PropList => {
+    const propList: PropList = {};
+    for (const [name, prop] of Object.entries(cssProps)) {
+        const varDecl = ((): string => {
+            for (const cssDecls of cssDeclss) {
+                if (name in cssDecls) return (cssDecls as DictionaryOf<typeof cssDecls>)[name]; // found => replace the cssDecl
+            } // for
+
+            return name; // not found => use the original decl name
+        })();
+        if (!varDecl) continue;
+        propList[varDecl] = prop;
+    }
+    return propList;
 }
