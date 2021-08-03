@@ -1,7 +1,7 @@
 // react (builds html using javascript):
 import {
     useLayoutEffect,
-}                           from 'react'         // base technology of our nodestrap components
+}                           from 'react'        // base technology of our nodestrap components
 
 // jss   (builds css  using javascript):
 import {
@@ -12,7 +12,7 @@ import {
 
     create as createJss,
     SheetsManager,
-}                           from 'jss'           // base technology of our nodestrap components
+}                           from 'jss'          // base technology of our nodestrap components
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginNested      from 'jss-plugin-nested'
@@ -24,17 +24,28 @@ import {
     mergeStyle,
 }                           from './jss-plugin-extend'
 import jssPluginShort       from './jss-plugin-short'
+
+// nodestrap (modular web components):
+import type {
+    Optional,
+    Factory,
+    Dictionary,
+    ValueOf,
+    DictionaryOf,
+}                           from './types'      // nodestrap's types
 import type {
     Prop,
     PropEx,
     Cust,
-}                           from './Css'         // ts defs support for jss
+}                           from './css-types'  // ts defs support for jss
 import {
-    Dictionary,
-    ValueOf,
-    DictionaryOf,
+    PropList,
+    Refs,
+    Decls,
+    Vals,
+    CssConfig,
 
-    default as CssConfig,
+    createCssConfig,
 
     // utilities:
     filterGeneralProps,
@@ -44,9 +55,11 @@ import {
     restoreProps,
     overwriteProps,
     overwriteParentProps,
-}                           from './CssConfig'   // Stores & retrieves configuration using *css custom properties* (css variables) stored at HTML `:root` level (default) or at specified `rule`.
-import { pascalCase }       from 'pascal-case'   // pascal-case support for jss
-import { camelCase }        from 'camel-case'    // camel-case  support for jss
+}                           from './CssConfig'  // Stores & retrieves configuration using *css custom properties* (css variables) stored at HTML `:root` level (default) or at specified `rule`.
+
+// utils:
+import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
+import { camelCase }        from 'camel-case'   // camel-case  support for jss
 
 
 
@@ -56,8 +69,6 @@ export type { JssStyle, Classes }
 export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
-export type Optional<T>                                = T|null|undefined
-export type Factory<TProduct>                          = () => TProduct
 export type Style                                      = JssStyle & ExtendableStyle
 export type ClassEntry<TClass extends string = string> = readonly [TClass, Style]
 export type ClassList <TClass extends string = string> = ClassEntry<TClass>[]
@@ -66,7 +77,6 @@ export type OneOrMore<T>                               = T|T[]
 export type RuleEntry                                  = readonly [OneOrMore<OptionalString>, OneOrMore<Style>]
 export type RuleList                                   = RuleEntry[]
 export type RuleCollection                             = (RuleEntry|RuleList)[]
-export type PropList                                   = { [name: string]: JssValue }
 
 
 
@@ -405,19 +415,18 @@ let prefix: string = 'ns';
 /**
  * Gets the declaration name of the specified `propName`.
  * @param propName The name of prop to retrieve.
- * @returns A generated prop name for declaring the prop.
+ * @returns A `Cust.Decl` represents the declaration of the specified `propName`.
  */
-export const decl = (name: string) => {
-    if (prefix) return `--${prefix}-${name}`;
-    return `--${name}`;
+export const decl = (propName: string): Cust.Decl => {
+    return prefix ? `--${prefix}-${propName}` : `--${propName}`; // add double dash with prefix `--prefix-` or double dash without prefix `--`
 }
 /**
  * Gets the *value* (reference) of the specified `propName`.
  * @param propName The name of prop to retrieve.
- * @param fallbacks The name of secondary/next prop to retrieve if the `propName` was not found.
- * @returns A generated css expression for retrieving the value.
+ * @param fallbacks The name of secondary/next prop to retrieve if the specified `propName` was not found.
+ * @returns A `Cust.Ref` represents the expression for retrieving value of the specified `propName`.
  */
-export const ref = (propName: string, ...fallbacks: string[]) => {
+export const ref = (propName: string, ...fallbacks: string[]): Cust.Ref => {
     const varPrefix = prefix ? `--${prefix}-` : '--';
 
 
@@ -433,15 +442,25 @@ export const ref = (propName: string, ...fallbacks: string[]) => {
 
 
 
-    return `var(${varPrefix}${propName}${fallbackRecursive(...fallbacks)})`;
+    return `var(${varPrefix}${propName}${fallbackRecursive(...fallbacks)})` as Cust.Ref;
 }
 
 
 
-// configs:
+// other utilities:
+export { pascalCase, camelCase }
 
-export {
+
+
+// configs:
+export type {
+    Refs,
+    Decls,
+    Vals,
     CssConfig,
+}
+export {
+    createCssConfig,
 
     // utilities:
     filterGeneralProps,
@@ -452,9 +471,3 @@ export {
     overwriteProps,
     overwriteParentProps,
 }
-
-
-
-// utils:
-
-export { pascalCase, camelCase }
