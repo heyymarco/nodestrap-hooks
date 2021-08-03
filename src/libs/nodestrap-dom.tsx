@@ -2,13 +2,36 @@
 import {
     default as React,
     useMemo,
-}                           from 'react'         // base technology of our nodestrap components
+}                           from 'react'        // base technology of our nodestrap components
 
 // nodestrap (modular web components):
 import type {
-    // general types:
     Optional,
-}                           from './nodestrap'   // nodestrap's core
+}                           from './types'      // nodestrap's types
+
+
+
+// utils:
+
+export function isTypeOf<TProps>(element: React.ReactNode, funcComponent: React.JSXElementConstructor<TProps>): element is React.ReactElement<TProps, React.JSXElementConstructor<TProps>> {
+    return (
+        React.isValidElement<TProps>(element)
+        &&
+        (
+            (element.type === funcComponent)
+            ||
+            (
+                (typeof element.type === 'function')
+                &&
+                (
+                    (element.type.prototype instanceof funcComponent)
+                    ||
+                    (element.type.prototype === funcComponent.prototype)
+                )
+            )
+        )
+    );
+}
 
 
 
@@ -229,27 +252,3 @@ export default function Element<TElement extends HTMLElement = HTMLElement>(prop
     );
 };
 export { Element }
-
-
-
-// utils:
-
-export function isTypeOf<TProps>(element: React.ReactNode, funcComponent: React.JSXElementConstructor<TProps>): element is React.ReactElement<TProps, React.JSXElementConstructor<TProps>> {
-    return (
-        React.isValidElement<TProps>(element)
-        &&
-        (
-            (element.type === funcComponent)
-            ||
-            (
-                (typeof element.type === 'function')
-                &&
-                (
-                    (element.type.prototype instanceof funcComponent)
-                    ||
-                    (element.type.prototype === funcComponent.prototype)
-                )
-            )
-        )
-    );
-}
