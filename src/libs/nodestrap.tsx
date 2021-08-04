@@ -413,9 +413,9 @@ export const solidBackg = (color: Cust.Ref, clip : Prop.BackgroundClip = 'border
  */
 let prefix: string = 'ns';
 /**
- * Gets the declaration name of the specified `propName`.
+ * Gets the *declaration name* of the specified `propName`.
  * @param propName The name of prop to retrieve.
- * @returns A `Cust.Decl` represents the declaration of the specified `propName`.
+ * @returns A `Cust.Decl` represents the declaration name of the specified `propName`.
  */
 export const decl = (propName: string): Cust.Decl => {
     return prefix ? `--${prefix}-${propName}` : `--${propName}`; // add double dash with prefix `--prefix-` or double dash without prefix `--`
@@ -424,7 +424,7 @@ export const decl = (propName: string): Cust.Decl => {
  * Gets the *value* (reference) of the specified `propName`.
  * @param propName The name of prop to retrieve.
  * @param fallbacks The name of secondary/next prop to retrieve if the specified `propName` was not found.
- * @returns A `Cust.Ref` represents the expression for retrieving value of the specified `propName`.
+ * @returns A `Cust.Ref` represents the expression for retrieving the value of the specified `propName`.
  */
 export const ref = (propName: string, ...fallbacks: string[]): Cust.Ref => {
     const varPrefix = prefix ? `--${prefix}-` : '--';
