@@ -28,7 +28,9 @@ import jssPluginShort       from './jss-plugin-short'
 // nodestrap (modular web components):
 import type {
     Optional,
+    SingleOrArray,
     Factory,
+
     Dictionary,
     ValueOf,
     DictionaryOf,
@@ -73,8 +75,7 @@ export type Style                                      = JssStyle & ExtendableSt
 export type ClassEntry<TClass extends string = string> = readonly [TClass, Style]
 export type ClassList <TClass extends string = string> = ClassEntry<TClass>[]
 export type OptionalString                             = Optional<string>
-export type OneOrMore<T>                               = T|T[]
-export type RuleEntry                                  = readonly [OneOrMore<OptionalString>, OneOrMore<Style>]
+export type RuleEntry                                  = readonly [SingleOrArray<OptionalString>, SingleOrArray<Style>]
 export type RuleList                                   = RuleEntry[]
 export type RuleCollection                             = (RuleEntry|RuleList)[]
 
