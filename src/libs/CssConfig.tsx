@@ -4,26 +4,43 @@ import {
     StyleSheet,
 
     create as createJss,
-}                           from 'jss'           // base technology of our nodestrap components
+}                           from 'jss'          // base technology of our nodestrap components
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
 import jssPluginGlobal      from './jss-plugin-global'
 import jssPluginShort       from './jss-plugin-short'
+
+// nodestrap (modular web components):
+import type {
+    Factory,
+    Dictionary,
+    ValueOf,
+    DictionaryOf,
+}                           from './types'      // nodestrap's types
 import type {
     PropEx,
     Cust,
-}                           from './Css'         // ts defs support for jss
-import { pascalCase }       from 'pascal-case'   // pascal-case support for jss
-import { camelCase }        from 'camel-case'    // camel-case  support for jss
+}                           from './css-types'  // ts defs support for jss
+
+// utils:
+import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
+import { camelCase }        from 'camel-case'   // camel-case  support for jss
 
 
 
-// ts defs:
-export type Dictionary<TValue>        = { [key: string]: TValue }
-export type ValueOf<TCollection>      = TCollection[keyof TCollection]
-export type DictionaryOf<TCollection> = Dictionary<ValueOf<TCollection>>
-export type PropList                  = { [name: string]: JssValue }
+// general types:
+export type PropList                     = Dictionary<JssValue>
+
+export type Refs     <TProps extends {}> = { [key in keyof TProps]: Cust.Ref    } // typescript helper: make the TValue appears as Cust.Ref (string)
+export type Decls    <TProps extends {}> = { [key in keyof TProps]: Cust.Decl   } // typescript helper: make the TValue appears as Cust.Decl (string)
+export type Vals     <TProps extends {}> = { [key in keyof TProps]: TProps[key] } // typescript helper: make the TValue appears as TProps's TValue
+export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>, Vals<TProps>, ((immediately?: boolean) => void)]
+
+
+
+// defaults:
+const _defaultRule = ':root';
 
 
 
@@ -39,409 +56,130 @@ const customJss = createJss().setup({plugins:[
 
 
 /**
- * Stores & retrieves configuration using *css custom properties* (css variables) stored at HTML `:root` level (default) or at specified `rule`.  
- * The config's values can be *accessed directly* into DOM.
+ * Stores & retrieves configuration using *css custom properties* (css variables) stored at `:root` level (default) or at the desired `rule`.  
+ * The config's values can be *accessed directly* in CSS and DOM.
  * 
  * Supports get property by *declaration*, eg:  
- * `cssConfig.decls.myFavColor` => returns `'--myFavColor'`.  
- *   
- * Supports get property by *reference*,   eg:  
- * `cssConfig.refs.myFavColor`  => returns `'var(--myFooProp)'`.  
- *   
+ * `myButtonConfig.decls.myFavColor` => returns `'--myBtn-myFavColor'`.  
+ * 
+ * Supports get property by *reference*, eg:  
+ * `myButtonConfig.refs.myFavColor`  => returns `'var(--myBtn-myFavColor)'`.  
+ * 
  * Supports get property by *value*, eg:  
- * `cssConfig.vals.myFavColor`  => returns `'#ff0000'`.  
- *   
- * Supports set property,                  eg:  
- * `cssConfig.vals.myFavColor = 'red'`
+ * `myButtonConfig.vals.myFavColor`  => returns `'#ff0000'`.  
+ * 
+ * Supports set property, eg:  
+ * `myButtonConfig.vals.myFavColor = 'red'`  
+ * 
+ * Supports delete property, eg:  
+ * `myButtonConfig.vals.myFavColor = undefined
+ * @param prefix The prefix name of the generated css custom props.
+ * @param rule The declaring location (selector) of the generated css custom props.
  */
-export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
-    // settings:
-
-    //#region rule
-    /**
-     * Holds the declaring location (selector) of the generated css props.  
-     * If changed, causing the `_genProps` needs to rebuild.
-     */
-    private _rule : string;
-    
-    /**
-     * Gets the declaring location (selector) of the generated css props.
-     */
-    public  get rule() { return this._rule; }
-    
-    /**
-     * Sets the declaring location (selector) of the generated css props.
-     */
-    public  set rule(newValue: string) {
-        if (this._rule === newValue) return; // still the same => no changes needed
-        this._rule = newValue;
-
-        this.refresh(); // setting changed => need to rebuild the jss
-    }
-    //#endregion rule
-
-    //#region prefix
-    /**
-     * Holds the prefix name of the generated css props.  
-     * Useful to avoid name collision if working with another css frameworks.  
-     * If changed, causing the `_genProps` needs to rebuild.
-     */
-    private _prefix : string;
-
-    /**
-     * Gets the prefix name of the generated css props.
-     */
-    public  get prefix() { return this._prefix; }
-
-    /**
-     * Sets the prefix name of the generated css props.  
-     * Useful to avoid name collision if working with another css frameworks.
-     */
-    public  set prefix(newValue: string) {
-        if (this._prefix === newValue) return; // still the same => no changes needed
-        this._prefix = newValue;
-
-        this.refresh(); // setting changed => need to rebuild the jss
-    }
-    //#endregion prefix
-
-
-
+const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps|Factory<TProps>, rule = _defaultRule): CssConfig<TProps> => {
     // data sources:
 
+    type TValue        = ValueOf<TProps>
+
     /**
-     * Virtual *css dom*.  
+     * A *virtual css*.  
      * The source of truth.  
-     * If changed, causing the `_genProps` needs to rebuild.
+     * If modified, causing the `genProps` & `genKeyframes` need to `refresh()`.
      */
-    private readonly _props      : Dictionary</*original: */TProp>;
+    const props        : Dictionary</*original: */TValue> = ((typeof(initialProps) === 'function') ? (initialProps as Factory<TProps>)() : initialProps);
 
 
 
     // generated data:
 
     /**
-     * Generated *css dom* resides on memory only.  
-     * Similar to `_props` but some values has been partially/fully *transformed*.  
-     * The duplicate values has been replaced with the *'var(...)'* linked to the existing ones.  
+     * The *generated css* resides on memory only.  
+     * Similar to `props` but some values has been partially/fully *transformed*.  
+     * The duplicate values has been replaced with the `var(...)` linked to the existing ones.  
      * eg:  
      * // origin:  
-     * _props = {  
+     * props = {  
      *    --col-red      : '#ff0000',  
      *    --col-blue     : '#0000ff',  
-     *    --bd-width     : '1px',
+     *    --bd-width     : '1px',  
      *    
      *    --col-favorite : '#ff0000',  
      *    --the-border   : [[ 'solid', '1px', '#0000ff' ]],  
-     * };
+     * };  
      *   
      * // transformed:  
-     * _genProps = {  
+     * genProps = {  
      *    --col-red      : '#ff0000',  
      *    --col-blue     : '#0000ff',  
-     *    --bd-width     : '1px',
+     *    --bd-width     : '1px',  
      *    
      *    --col-favorite : 'var(--col-red)',  
      *    --the-border   : [[ 'solid', 'var(--bd-width)', 'var(--col-blue)' ]],  
-     * }
+     * };  
      */
-    public readonly genProps     : Dictionary</*original: */TProp | /*transformed: */Cust.Expr> = {};
+    const genProps     : Dictionary</*original: */TValue | /*transformed: */Cust.Expr> = {};
 
     /**
-     * Generated *css dom* of @keyframes.
+     * The *generated css* of `@keyframes` resides on memory only.
      */
-    public readonly genKeyframes : Dictionary<PropEx.Keyframes> = {};
+    const genKeyframes : Dictionary<PropEx.Keyframes> = {};
 
     /**
-     * Generated *css dom* resides on html document.
+     * The *generated css* attached on dom.
      */
-    private          _sheet      : StyleSheet<'@global'> | null = null;
+    let styleSheet     : StyleSheet<'@global'> | null = null;
 
     /**
-     * Converts the origin prop name to the generated prop name, eg: `'favColor'` => `'--my-favColor'`.
-     * @param prop The origin prop name.
-     * @returns The generated prop name with/without prefix (depends on the configuration).
+     * Gets the *declaration name* of the specified `propName`, eg: `--my-favColor`.
+     * @param propName The `props`'s prop name to retrieve.
+     * @returns A `Cust.Decl` represents the declaration name of the specified `propName`.
      */
-    private getGenProp(prop: string): string {
-        prop = prop.replace(/^@keyframes\s+/, 'keyframes-'); // replaces '@keyframes fooSomething' => 'keyframes-fooSomething'
+    const decl = (propName: string): Cust.Decl => {
+        propName = propName.replace(/^@keyframes\s+/, 'keyframes-'); // replace `@keyframes fooSomething` => `keyframes-fooSomething`
 
-        const prefix = this._prefix;
-        return prefix ? `--${prefix}-${prop}` : `--${prop}`; // add double dash with prefix '--my-' or double dash without prefix '--'
+        return prefix ? `--${prefix}-${propName}` : `--${propName}`; // add double dash with prefix `--prefix-` or double dash without prefix `--`
     }
 
     /**
-     * Converts the origin prop name to the generated prop ref, eg: `'favColor'` => `'var(--my-favColor)'`.
-     * @param prop The origin prop name.
-     * @returns The generated prop ref with/without prefix (depends on the configuration).
+     * Gets the *value* (reference) of the specified `propName`, not the *direct* value, eg: `var(--my-favColor)`.
+     * @param propName The `props`'s prop name to retrieve.
+     * @returns A `Cust.Ref` represents the expression for retrieving the value of the specified `propName`.
      */
-    private getGenRef(prop: string): Cust.Ref {
-        return `var(${this.getGenProp(prop)})`;
+    const ref = (propName: string): Cust.Ref => {
+        return `var(${decl(propName)})`;
     }
 
     /**
-     * Converts the base @keyframes name to the generated one, eg: `'coolFadeIn'` => `'my-coolFadeIn'`.
-     * @param baseName The base @keyframes name.
-     * @returns The generated @keyframes name with/without prefix (depends on the configuration).
+     * Gets the *value* (reference) of the specified `keyframesName`.
+     * @param keyframesName The `props`'s `@keyframes` name to retrieve.
+     * @returns A `Cust.KeyframesRef` represents the expression for retrieving the value of the specified `keyframesName`.
      */
-    private getGenKeyframesName(baseName: string): string {
-        const prefix = this._prefix;
-        return prefix ? `${prefix}-${baseName}` : baseName; // add prefix '--my-' or just a baseName
+    const keyframesRef = (keyframesName: string): Cust.KeyframesRef => {
+        return prefix ? `${prefix}-${keyframesName}` : keyframesName; // add prefix `--prefix-` or just a `keyframesName`
     }
 
     /**
-     * Removes all props inside the specified `data`.
+     * Removes all props inside the specified `dataContainer`.
      * @param dataContainer The data container.
      */
-    private clearData(dataContainer: any) {
+    const clearData = (dataContainer: Dictionary<any>) => {
         for (const name in Object.keys(dataContainer)) {
             delete dataContainer[name];
-        }
-    }
-
-
-
-    // proxies - representing data in various formats:
-
-    //#region decls
-    /**
-     * Getter: Gets the *prop name* which is declaring the css prop, eg: `'--my-favColor'`.  
-     * Setter: Sets the *direct* value of the css props.
-     */
-    private readonly _declsProxy : Dictionary</*getter: */          string  | /*setter: */TProp>;
-
-    /**
-     * Getter: Gets the *prop name* which is declaring the css prop, eg: `'--my-favColor'`.  
-     * Setter: Sets the *direct* value of the css props.
-     */
-    public get decls() {
-        return this._declsProxy as unknown as { [key in keyof TProps]: string }; // typescript helper: make the TValue appears as string
-    }
-    //#endregion decls
-
-    //#region refs
-    /**
-     * Getter: Gets the *prop reference* linked to the css prop, not the *direct* value, eg: `'var(--my-favColor)'`.  
-     * Setter: Sets the *direct* value of the css props.
-     */
-    private readonly _refsProxy  : Dictionary</*getter: */       Cust.Ref   | /*setter: */TProp>;
-
-    /**
-     * Getter: Gets the *prop reference* linked to the css prop, not the *direct* value, eg: `'var(--my-favColor)'`.  
-     * Setter: Sets the *direct* value of the css props.
-     */
-    public get refs() {
-        return this._refsProxy  as unknown as { [key in keyof TProps]: Cust.Ref }; // typescript helper: make the TValue appears as Cust.Ref (string)
-    }
-    //#endregion refs
-    
-    //#region vals
-    /**
-     * Getter: Gets the *equivalent value* of the css prop, might be the *transformed* value, eg: `[['var(--pad-y)', 'var(--pad-x)']]`; or the *direct* value, eg: `[['5px', '10px']]`.  
-     * Setter: Sets the *direct* value of the css props.
-     */
-    private readonly _valsProxy  : Dictionary</*getter: */TProp | Cust.Expr | /*setter: */TProp>;
-
-    /**
-     * Getter: Gets the *equivalent value* of the css prop, might be the *transformed* value, eg: `[['var(--pad-y)', 'var(--pad-x)']]`; or the *direct* value, eg: `[['5px', '10px']]`.  
-     * Setter: Sets the *direct* value of the css props.
-     */
-    public get vals() {
-        return this._valsProxy as unknown as TProps; // typescript helper: make the TValue appears as TProps's TValue
-    }
-    //#endregion vals
-
-
-
-    // data getters & setters:
-
-    /**
-     * Gets the *prop name* which is declaring the css prop, eg: `'--my-favColor'`.
-     * @param prop The origin prop name.
-     * @return A string represents the declaring css prop -or- `undefined` if it doesn't exist.
-     */
-    private getDecl(prop: string) {
-        /*
-            source    cssProps:
-            {
-                '@keyframes foo' :  {...}
-                'myFavColor'     : 'blue',
-            }
-
-            generated valProps:
-            {
-                '--pfx-keyframes-foo' : 'pfx-foo',             // '@keyframes foo'  => getPropName => '--pfx-keyframes-foo'
-                '--pfx-myFavColor'    : 'var(--col-primary)',  // 'myFavColor'      => getPropName => '--pfx-myFavColor'
-                '@keyframes pfx-foo'  : {...}
-            }
-        */
-
-
-
-        this.ensureGenerated(); // ensures the generated data was fully generated.
-        
-        
-
-        const genProp = this.getGenProp(prop);
-
-        // check if the genProp is already exists:
-        if (!(genProp in this.genProps)) return undefined; // not found
-        
-        return genProp;
-    }
-
-    /**
-     * Gets the *prop reference* linked to the css prop, not the *direct* value, eg: `'var(--my-favColor)'`.
-     * @param prop The origin prop name.
-     */
-    private getRef(prop: string) {
-        const genProp = this.getDecl(prop);
-        if (!genProp) return undefined; // not found
-
-        return `var(${genProp})`;
-    }
-
-    /**
-     * Gets the *equivalent value* of the css prop, might be the *transformed* value, eg: `[['var(--pad-y)', 'var(--pad-x)']]`; or the *direct* value, eg: `[['5px', '10px']]`.
-     * @param prop The origin prop name.
-     */
-    private getVal(prop: string) {
-        const genProp = this.getDecl(prop);
-        if (!genProp) return undefined; // not found
-
-        return this.genProps[genProp];
-    }
-
-    /**
-     * Sets the *direct* value of the css props.
-     * @param prop The origin prop name.
-     * @param newValue The desired prop value.
-     */
-    private setDirect(prop: string, newValue: TProp) {
-        if ((newValue === undefined) || (newValue === null)) {
-            delete this._props[prop];
-
-            this.refresh(); // setting changed => need to rebuild the jss
-        }
-        else
-        {
-            if (this._props[prop] !== newValue) {
-                this._props[prop] = newValue;
-
-                this.refresh(); // setting changed => need to rebuild the jss
-            }
-        }
-
-        return true;
+        } // for
     }
 
 
 
     // constructions:
-
-    constructor(
-        props  : TProps | (() => TProps),
-        prefix = '',
-        rule   = ':root'
-    ) {
-        // settings:
-        this._rule   = rule;
-        this._prefix = prefix;
-
-
-
-        // data sources:
-        this._props    = ((typeof(props) === 'function') ? (props as (() => TProps))() : props) as unknown as Dictionary<TProp>;
-
-
-
-        // proxies - representing data in various formats:
-
-        const _this = this;
-
-        this._declsProxy = new Proxy<typeof _this._declsProxy>(this._props, {
-            get: (t, prop: string)                  => this.getDecl(prop),             // Gets the *prop name* which is declaring the css prop, eg: `'--my-favColor'`.
-            set: (t, prop: string, newValue: TProp) => this.setDirect(prop, newValue), // Sets the *direct* value of the css props.
-        });
-
-        this._refsProxy = new Proxy<typeof _this._refsProxy>(this._props, {
-            get: (t, prop: string)                  => this.getRef(prop),              // Gets the *prop reference* linked to the css prop, not the *direct* value, eg: `'var(--my-favColor)'`.
-            set: (t, prop: string, newValue: TProp) => this.setDirect(prop, newValue), // Sets the *direct* value of the css props.
-        });
-
-        this._valsProxy = new Proxy<typeof _this._valsProxy>(this._props, {
-            get: (t, prop: string)                  => this.getVal(prop),              // Gets the *equivalent value* of the css prop, might be the *transformed* value, eg: `[['var(--pad-y)', 'var(--pad-x)']]`; or the *direct* value, eg: `[['5px', '10px']]`.
-            set: (t, prop: string, newValue: TProp) => this.setDirect(prop, newValue), // Sets the *direct* value of the css props.
-        });
-
-
-        
-        // constructions:
-
-        this.refresh();
-    }
-
-
-    /**
-     * Holds the validity status of the generated data.  
-     * `false` is invalid or never built.  
-     * `true`  is valid.
-     */
-    private _valid = false;
-
-    /**
-     * Regenerates the css props.
-     * @param immediately `true` to refresh the css props immediately (guaranteed has been refreshed after `refresh` returned) -or- `false` to refresh shortly after current execution finished.
-     */
-    public refresh(immediately = false) {
-        if (immediately) {
-            // regenerate the data now:
-
-            this.rebuild();
-            this._valid = true; // mark the generated data as valid
-
-            // now the data was guaranteed regenerated.
-        }
-        else
-        {
-            // promises to regenerate the data in a short time:
-
-            this._valid = false; // mark the generated data as invalid
-            setTimeout(() => {
-                if (this._valid) return; // has been previously generated => abort
-                this.rebuild();
-                this._valid = true; // mark the generated data as valid
-            }, 0);
-        }
-    }
-
-    /**
-     * Ensures the generated data was fully generated.
-     */
-    private ensureGenerated() {
-        if (this._valid) {
-            // console.log('refresh not required');
-            return; // if was valid => return immediately
-        } // if
-
-
-        this.refresh(/*immediately*/true); // regenerate the css props and wait until fully done
-        // console.log(`refresh done - prefix: ${this._prefix}`);
-    }
-    
-
-    private rebuild() {
-        /**
-         * Generated *css dom* of @keyframes.
-         */
-        const genKeyframes = this.genKeyframes;
-        this.clearData(genKeyframes);
+    const rebuild = () => {
+        clearData(genKeyframes);
 
 
 
         /**
          * Transforms the specified `srcProps` with the equivalent literal object,  
          * in which some values has been partially/fully *transformed*.  
-         * The duplicate values has been replaced with the *'var(...)'* linked to the existing props in `refProps`.  
+         * The duplicate values has been replaced with the `var(...)` linked to the existing props in `refProps`.  
          * @param srcProps The literal object to transform.
          * @param refProps The literal object as the props reference.
          * @param propRename A handler to rename the props name of `srcProps`.
@@ -450,7 +188,7 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
          * -or-  
          * A copy *transformed* literal object.
          */
-        const transformDuplicates = <TSrcProp, TRefProp>(srcProps: Dictionary<TSrcProp>, refProps: Dictionary<TRefProp>, propRename?: ((srcName: string) => string)): (Dictionary<TSrcProp|Cust.Ref|(any|Cust.Ref)[]> | undefined) => {
+        const transformDuplicates = <TSrcProp, TRefProp>(srcProps: Dictionary<TSrcProp>, refProps: Dictionary<TRefProp>, propRename?: ((srcName: string) => string)): (Dictionary<TSrcProp|Cust.Ref|Cust.KeyframesRef|(any|Cust.Ref)[]> | undefined) => {
             /**
              * Determines if the specified `prop` can be transformed to another equivalent prop link `var(...)`.
              * @param prop The value to test.
@@ -540,7 +278,7 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
 
                     // comparing the srcProp & refProp:
                     if (isEqualProp(srcProp, refProp)) {
-                        return this.getGenRef(refName); // return the link to the ref
+                        return ref(refName); // return the link to the ref
                     }
                 } // for // search for duplicates
 
@@ -552,7 +290,7 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
             /**
              * Stores the modified props in `srcProps`.
              */
-            const modifSrcProps: Dictionary<TSrcProp|Cust.Ref|(any|Cust.Ref)[]> = {}; // initially empty (no modification)
+            const modifSrcProps: Dictionary<TSrcProp|Cust.Ref|Cust.KeyframesRef|(any|Cust.Ref)[]> = {}; // initially empty (no modification)
 
 
 
@@ -569,8 +307,8 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
                      * `undefined` => *not* a special `@keyframes name`.  
                      * `string`    => represents the name of the `@keyframes`.
                      */
-                    const kfName = srcName.match(/(?<=@keyframes\s+).+/)?.[0];
-                    if (kfName) {
+                    const keyframesName = srcName.match(/(?<=@keyframes\s+).+/)?.[0];
+                    if (keyframesName) {
                         /**
                          * Assumes the current `srcProp` is a valid `@keyframes`' value.
                          */
@@ -595,13 +333,13 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
                         // else
                         {
                             // not found => create a @keyframes name:
-                            const newKfName = this.getGenKeyframesName(kfName);
+                            const keyframesReference = keyframesRef(keyframesName);
     
                             // store the new @keyframes:
-                            genKeyframes[`@keyframes ${newKfName}`] = srcKeyframeProp;
+                            genKeyframes[`@keyframes ${keyframesReference}`] = srcKeyframeProp;
     
                             // replace with the new `@keyframes` name:
-                            modifSrcProps[propRename?.(srcName) ?? srcName] = newKfName;
+                            modifSrcProps[propRename?.(srcName) ?? srcName] = keyframesReference;
                         } // if
     
     
@@ -646,7 +384,7 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
                     /**
                      * Determines if the current `literalProps` has the equivalent literal object,  
                      * in which some values has been partially/fully *transformed*.  
-                     * The duplicate values has been replaced with the *'var(...)'* linked to the existing props in `refProps`.  
+                     * The duplicate values has been replaced with the `var(...)` linked to the existing props in `refProps`.  
                      * value:  
                      * `undefined` => *no* transformation was performed.  
                      * -or-  
@@ -698,23 +436,20 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
         
         //#region transform the props
         {
-            const genProps = this.genProps;
-            this.clearData(genProps);
+            clearData(genProps);
     
 
 
-            const props = this._props;
-    
             /**
              * Determines if the current `props` has the equivalent literal object,  
              * in which some values has been partially/fully *transformed*.  
-             * The duplicate values has been replaced with the *'var(...)'* linked to the existing props in `props`.  
+             * The duplicate values has been replaced with the `var(...)` linked to the existing props in `props`.  
              * value:  
              * `undefined` => *no* transformation was performed.  
              * -or-  
              * A copy *transformed* literal object.
              */
-            const equalLiteral = transformDuplicates(props, props, (srcName) => this.getGenProp(srcName)) ?? props;
+            const equalLiteral = transformDuplicates(props, props, (srcName) => decl(srcName)) ?? props;
             if (equalLiteral) Object.assign(genProps, equalLiteral);
         }
         //#endregion transform the props
@@ -723,14 +458,14 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
 
         /* -- treats @keyframes *always unique* -- */
         //#region transform the keyframes
-        // /*
-        //     kfName            : kfProp
-        //     ------------------:---------------------------
-        //     string            : Dict<  Dict<Cust.Expr>   >
-        //     ------------------:---------------------------
-        //     '@keyframes foo'  : {     {'opacity': 0.5}  },
-        //     '@keyframes dude' : {            ...        },
-        // */
+        /*
+            keyframesName     : kfProp
+            ------------------:---------------------------
+            string            : Dict<  Dict<Cust.Expr>   >
+            ------------------:---------------------------
+            '@keyframes foo'  : {     {'opacity': 0.5}  },
+            '@keyframes dude' : {            ...        },
+        */
         // for (const [name, kfProp] of Object.entries(genKeyframes)) {
         //     if ((kfProp === undefined) || (kfProp === null)) continue; // skip empty keyframes
 
@@ -765,13 +500,13 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
         //         /**
         //          * Determines if the current `frameProp` has the equivalent literal object,  
         //          * in which some values has been partially/fully *transformed*.  
-        //          * The duplicate values has been replaced with the *'var(...)'* linked to the existing props in `props`.  
+        //          * The duplicate values has been replaced with the `var(...)` linked to the existing props in `props`.  
         //          * value:  
         //          * `undefined` => *no* transformation was performed.  
         //          * -or-  
         //          * A copy *transformed* literal object.
         //          */
-        //         const equalFrameProp = transformDuplicates(frameProp as DictionaryOf<typeof frameProp>, this._props);
+        //         const equalFrameProp = transformDuplicates(frameProp as DictionaryOf<typeof frameProp>, props);
 
         //         // if transformed (modified) => store the modified:
         //         if (equalFrameProp) modifKfProp[key] = equalFrameProp;
@@ -790,56 +525,216 @@ export default class CssConfig<TProps, TProp extends ValueOf<TProps>> {
         {
             const styles = {
                 '@global': {
-                    [this._rule]: this.genProps,
+                    [rule]: genProps,
                     ...genKeyframes,
                 },
             };
     
             // detach the old sheet (if any):
-            this._sheet?.detach();
+            styleSheet?.detach();
     
             // create a new sheet & attach:
-            this._sheet =
+            styleSheet =
                 customJss
                 .createStyleSheet(styles)
                 .attach();
         }
         //#endregion rebuild a new sheet content
     }
+    
+    /**
+     * Holds the validity status of the `genProps` & `genKeyframes`.  
+     * `false` is invalid or never built.  
+     * `true`  is valid.
+     */
+    let _valid = false;
+
+    /**
+     * Regenerates the `genProps` & `genKeyframes`.
+     * @param immediately `true` to refresh immediately (guaranteed has been refreshed after `refresh()` returned) -or- `false` to refresh shortly after current execution finished.
+     */
+    const refresh = (immediately = false) => {
+        if (immediately) {
+            // regenerate the data now:
+
+            rebuild();
+            _valid = true; // mark the `genProps` & `genKeyframes` as valid
+
+            // now the data was guaranteed regenerated.
+        }
+        else {
+            // promise to regenerate the data in the future as soon as possible:
+
+            _valid = false; // mark the `genProps` & `genKeyframes` as invalid
+            setTimeout(() => {
+                if (_valid) return; // has been previously generated => abort
+                rebuild();
+                _valid = true; // mark the `genProps` & `genKeyframes` as valid
+            }, 0);
+        } // if
+    }
+    refresh(); // regenerate the `genProps` & `genKeyframes` for the first time
+
+    /**
+     * Ensures the `genProps` & `genKeyframes` was fully generated.
+     */
+    const ensureGenerated = () => {
+        if (_valid) {
+            // console.log('refresh not required');
+            return; // if was valid => return immediately
+        } // if
+
+
+        refresh(/*immediately*/true); // regenerate the `genProps` & `genKeyframes` and wait until completed
+        // console.log(`refresh done - prefix: ${prefix}`);
+    }
+
+
+
+    // Proxy's getters & setters:
+
+    /**
+     * Gets the *declaration name* of the specified `propName`, eg: `--my-favColor`.
+     * @param propName The `props`'s prop name to retrieve.
+     * @returns A `Cust.Decl` represents the declaration name of the specified `propName` -or- `undefined` if it doesn't exist.
+     */
+    const getDecl   = (propName: string): Cust.Decl|undefined => {
+        /*
+            source    props:
+            {
+                '@keyframes foo' :  {...}
+                'myFavColor'     : 'blue',
+            }
+
+            generated genProps:
+            {
+                '--pfx-keyframes-foo' : 'pfx-foo',             // '@keyframes foo'  => decl() => '--pfx-keyframes-foo'
+                '--pfx-myFavColor'    : 'var(--col-primary)',  // 'myFavColor'      => decl() => '--pfx-myFavColor'
+                '@keyframes pfx-foo'  : {...}
+            }
+        */
+
+
+
+        ensureGenerated(); // ensures the `genProps` & `genKeyframes` was fully generated.
+        
+        
+
+        const propDecl = decl(propName);
+
+        // check if the `genProps` has `propDecl`:
+        if (!(propDecl in genProps)) return undefined; // not found
+        
+        return propDecl;
+    }
+
+    /**
+     * Gets the *value* (reference) of the specified `propName`, not the *direct* value, eg: `var(--my-favColor)`.
+     * @param propName The `props`'s prop name to retrieve.
+     * @returns A `Cust.Ref` represents the expression for retrieving the value of the specified `propName` -or- `undefined` if it doesn't exist.
+     */
+    const getRef    = (propName: string): Cust.Ref|undefined => {
+        const propDecl = getDecl(propName);
+        if (!propDecl) return undefined; // not found
+
+        return `var(${propDecl})`;
+    }
+
+    /**
+     * Gets the *equivalent value* of the specified `propName`, might be the *transformed* value, eg: `[['var(--pad-y)', 'var(--pad-x)']]` -or- the *direct* value, eg: `[['5px', '10px']]`.
+     * @param propName The `props`'s prop name to retrieve.
+     * @returns A `ValueOf<TProps>` or `Cust.Expr` represents the value of the specified `propName` -or- `undefined` if it doesn't exist.
+     */
+    const getVal    = (propName: string): /*original: */TValue | /*transformed: */Cust.Expr | /*not found: */undefined => {
+        const propDecl = getDecl(propName);
+        if (!propDecl) return undefined; // not found
+
+        return genProps[propDecl];
+    }
+
+    /**
+     * Sets the *direct* value of the specified `propName`.
+     * @param propName The `props`'s prop name to update.
+     * @param newValue The new value.
+     * @returns Always return `true`.
+     */
+    const setDirect = (propName: string, newValue: TValue): boolean => {
+        if ((newValue === undefined) || (newValue === null)) {
+            delete props[propName];
+
+            refresh(); // setting changed => need to `refresh()` the jss
+        }
+        else
+        {
+            if (props[propName] !== newValue) {
+                props[propName] = newValue; // oldValue is different than newValue => update the value
+
+                refresh(); // setting changed => need to `refresh()` the jss
+            } // if
+        } // if
+
+        return true; // notify update was successful
+    }
+
+
+
+    return [
+        //#region proxies - representing data in various formats
+        new Proxy<Dictionary</*getter: */          Cust.Ref | /*setter: */TValue>>(props, {
+            get: (_props, propName: string)                   => getRef(propName),
+            set: (_props, propName: string, newValue: TValue) => setDirect(propName, newValue),
+        }) as Refs<TProps>,
+
+        new Proxy<Dictionary</*getter: */         Cust.Decl | /*setter: */TValue>>(props, {
+            get: (_props, propName: string)                   => getDecl(propName),
+            set: (_props, propName: string, newValue: TValue) => setDirect(propName, newValue),
+        }) as Decls<TProps>,
+
+        new Proxy<Dictionary</*getter: */TValue | Cust.Expr | /*setter: */TValue>>(props, {
+            get: (_props, propName: string)                   => getVal(propName),
+            set: (_props, propName: string, newValue: TValue) => setDirect(propName, newValue),
+        }) as Vals<TProps>,
+        //#endregion proxies - representing data in various formats
+
+        refresh,
+    ];
 }
+export { createCssConfig, createCssConfig as default }
 
 
 
 // utilities:
 /**
- * Includes the *general* prop names in the specified `cssProps`.  
- * @param cssProps The collection of the prop name to be filtered.  
- * @returns A `PropList` which is the copy of the `cssProps` that only having *general* prop names.
+ * Includes the *general* props in the specified `cssProps`.
+ * @param cssProps The collection of the css custom props to be filtered.
+ * @returns A `PropList` which is the copy of the `cssProps` that only having *general* props.
  */
-export const filterGeneralProps = <TCssProps,>(cssProps: TCssProps): PropList => {
+export const filterGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): PropList => {
     const propList: PropList = {};
-    for (const [name, prop] of Object.entries(cssProps)) {
-        // excludes the entry if the name matching with following:
+    for (const [propName, propValue] of Object.entries(cssProps)) {
+        // excludes the entries if the `propName` matching with following:
 
         // prefixes:
         /**
          * For sub-component-variant
          * Eg:
-         * fooSomething
-         * booSomething
+         * fooBorder
+         * booPadding
          * logoBackgColor
          * logoOpacity
          */
-        if ((/^(icon|img|items|item|logo|toggler|menu|menus|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|caption|header|footer|body)[A-Z]/).test(name)) continue; // exclude
+        if ((/^(icon|img|items|item|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|caption|header|footer|body)[A-Z]/).test(propName)) continue; // exclude
 
         // suffixes:
         /**
          * For size-variant
          * Eg:
-         * somethingSm
-         * something0em
+         * paddingSm
+         * borderRadius0em
+         * fontSizeSm
+         * fontSizeXl
          */
-        if ((/(Xs|Sm|Nm|Md|Lg|Xl|Xxl|Xxxl|[0-9]+em|None)$/).test(name)) continue; // exclude
+        if ((/[a-z](Xs|Sm|Nm|Md|Lg|Xl|Xxl|Xxxl|[0-9]+em)$/).test(propName)) continue; // exclude
 
         // suffixes:
         /**
@@ -848,135 +743,163 @@ export const filterGeneralProps = <TCssProps,>(cssProps: TCssProps): PropList =>
          * animValid
          * animInvalidInline
          */
-            if ((/(Enable|Disable|Active|Passive|Press|Release|Check|Clear|Hover|Arrive|Leave|Focus|Blur|Valid|Unvalid|Invalid|Uninvalid|Full|Compact)(Block|Inline)?$/).test(name)) continue; // exclude
+        if ((/(None|Enable|Disable|Active|Passive|Press|Release|Check|Clear|Hover|Arrive|Leave|Focus|Blur|Valid|Unvalid|Invalid|Uninvalid|Full|Compact)(Block|Inline)?$/).test(propName)) continue; // exclude
 
         // special props:
         /**
          * Eg:
-         * foo
-         * boo
-         * size
+         * spacing
+         * valid
+         * vertAlign
          * orientation
          * valid   => (icon)Valid   => valid
          * invalid => (icon)Invalid => invalid
          */
-        if ((/backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid/).test(name)) continue; // exclude
+        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid)$/).test(propName)) continue; // exclude
 
-        // @keyframes:
-        if ((/@/).test(name)) continue; // exclude
+        // props starting with `@`:
+        /**
+         * Eg:
+         * @keyframes
+         */
+        if ((/^@/).test(propName)) continue; // exclude
         
 
         
         // if not match => include it:
-        propList[name] = prop;
-    }
+        propList[propName] = (propValue as Cust.Ref);
+    } // for
     return propList;
 }
 
 /**
- * Includes the prop names in the specified `cssProps` starting with specified `prefix`.
- * @param cssProps The collection of the prop name to be filtered.  
- * @param prefix The prefix name of the prop names to be *included*.  
- * @returns A `PropList` which is the copy of the `cssProps` that only having matching prefix names.  
- * The retuning prop names has been normalized (renamed), so it doesn't starting with `prefix`.
+ * Includes the props in the specified `cssProps` starting with specified `prefix`.
+ * @param cssProps The collection of the css custom props to be filtered.
+ * @param prefix The prefix name of the props to be *included*.
+ * @returns A `PropList` which is the copy of the `cssProps` that only having matching `prefix` name.  
+ * The returning props has been normalized (renamed), so they don't start with `prefix`.
  */
-export const filterPrefixProps = <TCssProps,>(cssProps: TCssProps, prefix: string): PropList => {
+export const filterPrefixProps = <TProps extends {}>(cssProps: Refs<TProps>, prefix: string): PropList => {
     const propList: PropList = {};
-    for (const [name, prop] of Object.entries(cssProps)) {
-        // excludes the entry if the name not starting with specified prefix:
-        if (!name.startsWith(prefix)) continue; // exclude
-        if (name.length <= prefix.length) continue; // at least 1 char left;
+    for (const [propName, propValue] of Object.entries(cssProps)) {
+        // excludes the entries if the `propName` not starting with specified `prefix`:
+        if (!propName.startsWith(prefix)) continue; // exclude
+        if (propName.length <= prefix.length) continue; // at least 1 char left;
 
-        // if match => remove the prefix => normalize the case => then include it:
-        propList[camelCase(name.substr(prefix.length))] = prop;
-    }
+        const propNameLeft = propName.substr(prefix.length); // remove the `prefix`
+        if (!(/^[A-Z]/).test(propNameLeft)) continue; // the first character must be a capital
+        /**
+         * removing `menu`:
+         * menuColor  => Color  => ok
+         * menusColor => sColor => `menus` is not part of `menu`
+         */
+
+        // if match => normalize the case => include it:
+        propList[camelCase(propNameLeft)] = (propValue as Cust.Ref);
+    } // for
     return propList;
 }
 
 /**
- * Includes the prop names in the specified `cssProps` ending with specified `suffix`.
- * @param cssProps The collection of the prop name to be filtered.  
- * @param suffix The suffix name of the prop names to be *included*.  
- * @returns A `PropList` which is the copy of the `cssProps` that only having matching suffix names.  
- * The retuning prop names has been normalized (renamed), so it doesn't ending with `suffix`.
+ * Includes the props in the specified `cssProps` ending with specified `suffix`.
+ * @param cssProps The collection of the css custom props to be filtered.
+ * @param suffix The suffix name of the props to be *included*.
+ * @returns A `PropList` which is the copy of the `cssProps` that only having matching `suffix` name.  
+ * The returning props has been normalized (renamed), so they don't end with `suffix`.
  */
-export const filterSuffixProps = <TCssProps,>(cssProps: TCssProps, suffix: string): PropList => {
+export const filterSuffixProps = <TProps extends {}>(cssProps: Refs<TProps>, suffix: string): PropList => {
     suffix = pascalCase(suffix);
     const propList: PropList = {};
-    for (const [name, prop] of Object.entries(cssProps)) {
-        // excludes the entry if the name not ending with specified suffix:
-        if (!name.endsWith(suffix)) continue; // exclude
-        if (name.length <= suffix.length) continue; // at least 1 char left;
+    for (const [propName, propValue] of Object.entries(cssProps)) {
+        // excludes the entries if the `propName` not ending with specified `suffix`:
+        if (!propName.endsWith(suffix)) continue; // exclude
+        if (propName.length <= suffix.length) continue; // at least 1 char left;
 
-        // if match => remove the suffix => then include it:
-        propList[name.substr(0, name.length - suffix.length)] = prop;
-    }
+        const propNameLeft = propName.substr(0, propName.length - suffix.length); // remove the `suffix`
+        /**
+         * removing `valid` => `Valid`:
+         * colorValid   => color => ok
+         * colorInvalid => filtered by pascalized `Valid`
+         */
+
+        // if match => include it:
+        propList[propNameLeft] = (propValue as Cust.Ref);
+    } // for
     return propList;
 }
 
 /**
- * Backups the value of the specified `cssProps`.
- * @param cssProps The props to be backed up.  
- * @param backupSuff The suffix name of the backup props.
- * @returns A `PropList` which is the copy of the `cssProps` that the prop names renamed with the specified `backupSuff`.
+ * Backups the prop's values in the specified `cssProps`.
+ * @param cssProps The collection of the css custom props to be backed up.
+ * @param backupSuff The suffix name of the backup's props.
+ * @returns A `PropList` which is the copy of the `cssProps` that the prop's names was renamed with the specified `backupSuff` name.  
+ * eg:  
+ * --com-backgBak     : var(--com-backg)  
+ * --com-boxShadowBak : var(--com-boxShadow)
  */
-export const backupProps = <TCssProps,>(cssProps: TCssProps, backupSuff: string = 'Bak'): PropList => {
+export const backupProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSuff: string = 'Bak'): PropList => {
+    backupSuff = pascalCase(backupSuff);
     const propList: PropList = {};
-    for (const [name] of Object.entries(cssProps)) {
-        propList[`${name}${backupSuff}`] = `var(${name})`;
-    }
+    for (const propName of Object.keys(cssProps)) {
+        propList[`${propName}${backupSuff}`] = `var(${propName})`;
+    } // for
     return propList;
 }
 
 /**
- * Restores the value of the specified `cssProps`.
- * @param cssProps The props to be restored.  
- * @param backupSuff The suffix name of the backup props.
- * @returns A `PropList` which is the copy of the `cssProps` that the prop values pointed to the backed up values.
+ * Restores the prop's values in the specified `cssProps`.
+ * @param cssProps The collection of the css custom props to be restored.
+ * @param backupSuff The suffix name of the backup's props.
+ * @returns A `PropList` which is the copy of the `cssProps` that the prop's values pointed to the backup's values.  
+ * eg:  
+ * --com-backg     : var(--com-backgBak)  
+ * --com-boxShadow : var(--com-boxShadowBak)
  */
-export const restoreProps = <TCssProps,>(cssProps: TCssProps, backupSuff: string = 'Bak'): PropList => {
+export const restoreProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSuff: string = 'Bak'): PropList => {
     const propList: PropList = {};
-    for (const [name] of Object.entries(cssProps)) {
-        propList[name] = `var(${name}${backupSuff})`;
-    }
+    for (const propName of Object.keys(cssProps)) {
+        propList[propName] = `var(${propName}${backupSuff})`;
+    } // for
     return propList;
 }
 
 /**
- * Overwrites prop declarations from the specified `cssProps` into the specified `cssDecls`.  
- * @param cssDecls The collection of the prop name to be overwritten. 
- * @param cssProps The collection of the prop name to overwrite.  
- * @returns A `PropList` which is the copy of the `cssProps` that overwrites the specified `cssDecls`.
+ * Overwrites prop declarations from the specified `cssProps` (source) to the specified `cssDecls` (target).
+ * @param cssDecls The collection of the css custom props to be overwritten (target).
+ * @param cssProps The collection of the css custom props for overwritting (source).
+ * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDecls`.
  */
-export const overwriteProps = <TCssDecls extends { [key in keyof TCssProps]: string }, TCssProps>(cssDecls: TCssDecls, cssProps: TCssProps): PropList => {
+export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssProps: Refs<TProps>): PropList => {
     const propList: PropList = {};
-    for (const [name, prop] of Object.entries(cssProps)) {
-        const varDecl = (cssDecls as unknown as DictionaryOf<typeof cssDecls>)[name];
-        if (!varDecl) continue;
-        propList[varDecl] = prop;
-    }
+    for (const [propName, propValue] of Object.entries(cssProps)) {
+        const targetPropName = (cssDecls as DictionaryOf<typeof cssDecls>)[propName];
+        if (!targetPropName) continue; // target prop not found => skip
+
+        propList[targetPropName] = (propValue as Cust.Ref);
+    } // for
     return propList;
 }
 
 /**
- * Overwrites prop declarations from the specified `cssProps` into the specified `cssDeclss`.  
- * @param cssDeclss The list of the parent's collection prop name to be overwritten.  
- * The order must be from the most specific parent to the least specific one.  
- * @param cssProps The collection of the prop name to overwrite.  
- * @returns A `PropList` which is the copy of the `cssProps` that overwrites the specified `cssDeclss`.
+ * Overwrites prop declarations from the specified `cssProps` (source) to the specified `cssDeclss` (targets).
+ * @param cssProps The collection of the css custom props for overwritting (source).
+ * @param cssDeclss The list of the parent's collection css props to be overwritten (targets).
+ * The order must be from the most specific parent to the least specific one.
+ * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDeclss`.
  */
-export const overwriteParentProps = <TCssProps,>(cssProps: TCssProps, ...cssDeclss: { [key in keyof unknown]: string }[]): PropList => {
+export const overwriteParentProps = <TProps extends {}>(cssProps: Refs<TProps>, ...cssDeclss: Decls<{}>[]): PropList => {
     const propList: PropList = {};
-    for (const [name, prop] of Object.entries(cssProps)) {
-        const varDecl = ((): string => {
+    for (const [propName, propValue] of Object.entries(cssProps)) {
+        const targetPropName = ((): Cust.Decl => {
             for (const cssDecls of cssDeclss) {
-                if (name in cssDecls) return (cssDecls as DictionaryOf<typeof cssDecls>)[name]; // found => replace the cssDecl
+                if (propName in cssDecls) return (cssDecls as DictionaryOf<typeof cssDecls>)[propName]; // found => replace the cssDecl
             } // for
 
-            return name; // not found => use the original decl name
+            return (propName as Cust.Decl); // not found => use the original decl name
         })();
-        if (!varDecl) continue;
-        propList[varDecl] = prop;
+        if (!targetPropName) continue; // target prop not found => skip
+        
+        propList[targetPropName] = (propValue as Cust.Ref);
     }
     return propList;
 }
