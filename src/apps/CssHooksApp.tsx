@@ -18,6 +18,10 @@ import {
     states,
 
     // usingGradient,
+
+
+    // configs:
+    createCssConfig,
 }                           from '../libs/nodestrap'   // nodestrap's core
 
 
@@ -131,3 +135,11 @@ const useChildStyleSheet = createUseComponentStyle([
         ]),
     ]),
 ]);
+
+
+const [cssProps, cssDecls] = createCssConfig('boo', () => ({
+    backg: 'pink',
+    color: 'red',
+
+    favColor: 'red',
+}));

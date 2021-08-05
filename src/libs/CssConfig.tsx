@@ -474,18 +474,20 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
 
 
 
-        // // calculate the changes:
+        // // calculate the generated data changes:
         // const remGenKeyframes = Object.entries(oldGenKeyframes).filter(([name, value]) => !(name in    genKeyframes) /*not exist in new*/ /* || !Object.is(value,    genKeyframes[name])*/ /*old !== new*/);
         // const addGenKeyframes = Object.entries(   genKeyframes).filter(([name, value]) => !(name in oldGenKeyframes) /*not exist in old*/    || !Object.is(value, oldGenKeyframes[name])   /*new !== old*/);
+        // const remGenProps     = Object.entries(oldGenProps)    .filter(([name, value]) => !(name in    genProps)     /*not exist in new*/ /* || !Object.is(value,    genProps[name])*/     /*old !== new*/);
+        // const addGenProps     = Object.entries(   genProps)    .filter(([name, value]) => !(name in oldGenProps)     /*not exist in old*/    || !Object.is(value, oldGenProps[name])       /*new !== old*/);
 
 
 
-        // rebuild a new styleSheet:
+        // (re)build the styleSheet:
 
-        // detach the old sheet (if any):
+        // detach the old styleSheet (if any):
         genStyleSheet?.detach();
 
-        // create a new sheet & attach:
+        // create a new styleSheet & attach:
         genStyleSheet =
             customJss
             .createStyleSheet({
