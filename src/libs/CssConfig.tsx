@@ -8,9 +8,9 @@ import {
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
-// import jssPluginGlobal      from './jss-plugin-global'
+import jssPluginGlobal      from './jss-plugin-global'
+import jssPluginExtend      from './jss-plugin-extend'
 import jssPluginShort       from './jss-plugin-short'
-import jssPluginGlobal      from 'jss-plugin-global' // TODO: fix global plugin
 
 // nodestrap (modular web components):
 import type {
@@ -48,6 +48,7 @@ const _defaultRule = ':root';
 // jss:
 const customJss = createJss().setup({plugins:[
     jssPluginGlobal(),    // requires to be placed before all other plugins
+    jssPluginExtend(),
     jssPluginShort(),     // requires to be placed before `camelCase`
     jssPluginCamelCase(),
     jssPluginExpand(),

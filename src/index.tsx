@@ -6,12 +6,13 @@ import reportWebVitals from './reportWebVitals';
 
 
 import CssHooksApp from './apps/CssHooksApp';
+import CssConfigApp from './apps/CssConfigApp';
 
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssHooksApp />
+    <CssConfigApp />
   </React.StrictMode>,
   document.getElementById('root')
 );
