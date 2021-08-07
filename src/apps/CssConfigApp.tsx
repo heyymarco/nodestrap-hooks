@@ -21,9 +21,24 @@ function App() {
 export default App;
 
 
-const [cssProps, cssDecls] = createCssConfig('boo', () => ({
-    backg: 'pink',
-    color: 'red',
+export const [cssProps, cssDecls] = createCssConfig('boo', () => {
+    const keyframesFadeOut = {
+        from: {
+            opacity: 0,
+        },
+        '100%': {
+            opacity: 0.8,
+        },
+    };
 
-    favColor: 'red',
-}));
+    return {
+        backg: 'pink',
+        color: 'red',
+
+        favColor: 'red',
+
+        fadeEnd  : 0.8,
+        '@keyframes fadeOut': keyframesFadeOut,
+        animFade: [['300ms', 'ease-out', 'both', keyframesFadeOut]],
+    };
+});
