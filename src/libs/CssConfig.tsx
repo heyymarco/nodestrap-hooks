@@ -9,7 +9,6 @@ import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
 import jssPluginGlobal      from './jss-plugin-global'
-import jssPluginExtend      from './jss-plugin-extend'
 import jssPluginShort       from './jss-plugin-short'
 
 // nodestrap (modular web components):
@@ -48,7 +47,6 @@ const _defaultRule = ':root';
 // jss:
 const customJss = createJss().setup({plugins:[
     jssPluginGlobal(),    // requires to be placed before all other plugins
-    jssPluginExtend(),
     jssPluginShort(),     // requires to be placed before `camelCase`
     jssPluginCamelCase(),
     jssPluginExpand(),
