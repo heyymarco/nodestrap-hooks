@@ -156,7 +156,7 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
      * @returns A `Cust.KeyframesRef` represents the expression for retrieving the value of the specified `keyframesName`.
      */
     const keyframesRef = (keyframesName: string): Cust.KeyframesRef => {
-        return prefix ? `${prefix}-${keyframesName}` : keyframesName; // add prefix `--prefix-` or just a `keyframesName`
+        return prefix ? `${prefix}-${keyframesName}` : keyframesName; // add prefix `prefix-` or just a `keyframesName`
     }
 
 
@@ -177,57 +177,78 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
      */
     const transformDuplicates = <TSrcValue, TRefValue>(srcProps: Dictionary<TSrcValue>, refProps: Dictionary<TRefValue>, propRename?: ((srcPropName: string) => string)): (Dictionary<TSrcValue|Cust.Ref|Cust.KeyframesRef|any[]> | null) => {
         /**
-         * Determines if the specified `prop` can be transformed to another equivalent prop link `var(...)`.
-         * @param prop The value to test.
-         * @returns `true` indicates its transformable, otherwise `false`.
+         * Determines if the specified `propValue` can be transformed to another equivalent prop link `var(...)`.
+         * @param srcPropValue The value to test.
+         * @returns `true` indicates it's transformable, otherwise `false`.
          */
-        const isTransformableProp = <TTProp,>(prop: TTProp): boolean => {
-            if ((prop === undefined) || (prop === null)) return false; // skip empty prop
+        const isTransformableProp = <TTSrcValue,>(srcPropValue: TTSrcValue): boolean => {
+            if ((srcPropValue === undefined) || (srcPropValue === null)) return false; // skip empty prop
 
-            if ((typeof(prop) === 'string') && (/^(none|unset|inherit|initial)$/).test(prop)) return false; // ignore reserved keywords
+            if ((typeof(srcPropValue) === 'string') && (/^(none|unset|inherit|initial|revert)$/).test(srcPropValue)) return false; // ignore global keywords
 
             return true; // passed, transformable
         };
 
         /**
-         * Determines if the specified `srcName` and `refName` are pointed to the same object.
-         * @param srcName The prop name of `srcProps`.
-         * @param refName The prop name of `refProps`.
+         * Determines if the specified `srcPropName` and `refPropName` are pointed to the same object.
+         * @param srcPropName The prop name of `srcProps`.
+         * @param refPropName The prop name of `refProps`.
          * @returns `true` indicates the same object, otherwise `false`.
          */
-        const isSelfProp = (srcName: string, refName: string): boolean => {
-            if (!Object.is(srcProps, refProps)) return false; // if srcProps & refProps are not the same object in memory => always return false
+        const isSelfProp = (srcPropName: string, refPropName: string): boolean => {
+            if (!Object.is(srcProps, refProps)) return false; // if `srcProps` & `refProps` are not the same object in memory => always return `false`
             
-            return (srcName === refName);
+            return (srcPropName === refPropName);
         };
 
-        const isExistingKeyframes = <TTRefProp,>(refProp: TTRefProp): boolean => {
-            if (typeof refProp !== 'object') return false;
-            if (Array.isArray(refProp))      return false;
+        /**
+         * Determines if the specified `srcPropName` is a special `@keyframes name`.
+         * @param srcPropName The prop name of `srcProps`.
+         * @returns  
+         * A `string` represents the name of `@keyframes`.  
+         * -or-  
+         * `null` if not a special `@keyframes name`.
+         */
+        const isKeyframesName = (srcPropName: string): string|null => srcPropName.match(/(?<=@keyframes\s+)[\w-]+/)?.[0] ?? null;
+
+        const isExistingKeyframes = <TTRefValue,>(refPropValue: TTRefValue): boolean => {
+            if (typeof(refPropValue) !== 'object') return false; // should be an object
+            if (Array.isArray(refPropValue))       return false; //   but not an array
             
             
             
-            return Object.values(genKeyframes).some((kf) => ((kf as Object) === (refProp as Object)));
+            return Object.values(genKeyframes).some((keyframes) => Object.is(keyframes, refPropValue));
         };
 
-        const deepEquals = (srcProp: Object, refProp: Object): boolean => {
-            if (Object.is(srcProp, refProp)) return true;
+        /**
+         * Determines if the specified `srcPropValue` and `refPropValue` are deeply the same by reference or value.
+         * @param srcPropValue The first value to test.
+         * @param refPropValue The second value to test.
+         * @returns `true` if both are equal, otherwise `false`.
+         */
+        const deepEqual = <TTSrcValue, TTRefValue>(srcPropValue: TTSrcValue, refPropValue: TTRefValue): boolean => {
+            if (Object.is(srcPropValue, refPropValue)) return true; // shallow equal
 
 
 
-            if (isExistingKeyframes(refProp)) return false; // @keyframes must be compared by reference, no deep equal
+            if (isExistingKeyframes(refPropValue)) return false; // `@keyframes` must be compared by reference, no deep equal
 
 
 
-            if (typeof srcProp !== 'object') return false;
-            if (typeof refProp !== 'object') return false;
-            if (Array.isArray(srcProp) !== Array.isArray(refProp)) return false; // both must be an array -or- both must not be an array
+            // both must be an object:
+            if (typeof(srcPropValue) !== 'object') return false;
+            if (typeof(refPropValue) !== 'object') return false;
+
+            // both must be an array -or- both must not be an array:
+            if (Array.isArray(srcPropValue) !== Array.isArray(refPropValue)) return false;
 
 
 
-            if (Object.keys(srcProp).length !== Object.keys(refProp).length) return false; // items count are different => false
-            for (const [name, prop] of Object.entries(srcProp)) {
-                if (!deepEquals(prop, (refProp as any)[name])) return false; // the same prop name with different values => false
+            // both props count must be the same:
+            if (Object.keys(srcPropValue).length !== Object.keys(refPropValue).length) return false;
+            
+            for (const [deepPropName, deepSrcPropValue] of Object.entries(srcPropValue)) {
+                if (!deepEqual(deepSrcPropValue, (refPropValue as any)[deepPropName])) return false; // the same prop name with different prop value => false
             } // for
 
 
@@ -236,37 +257,44 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
         };
 
         /**
-         * Determines if the specified `srcProp` and `refProp` are deeply the same by value.
-         * @param srcProp The first value to test.
-         * @param refProp The second value to test.
-         * @returns 
-         */
-        const isEqualProp = <TTSrcProp, TTRefProp>(srcProp: TTSrcProp, refProp: TTRefProp) => {
-            return deepEquals(srcProp, refProp);
-        };
-
-        /**
-         * Determines if the specified prop [key = `srcName` : value = `srcProp`] has the equivalent prop previously.
-         * @param srcName The prop name (key).
-         * @param srcProp The prop value.
-         * @returns A `Cust.Ref` (`string`) represents the link to the equivalent prop `var(...)`  
+         * Determines if the specified entry [`srcPropName`, `srcPropValue`] has the equivalent entry in `refProps`.
+         * @param srcPropName The prop name of `srcProps`.
+         * @param srcPropValue The prop value of `srcProps`.
+         * @returns A `Cust.Ref` represents the link to the equivalent entry in `refProps`.  
          * -or- `null` if no equivalent found.
          */
-        const findEqualProp = <TTSrcProp,>(srcName: string, srcProp: TTSrcProp): (Cust.Ref|null) => {
-            for (const [refName, refProp] of Object.entries(refProps)) { // search for duplicates
-                if ((refProp === undefined) || (refProp === null)) continue; // skip empty ref
-                if (isSelfProp(srcName, refName)) break;                     // stop search if reaches current pos (search for prev props only)
+        const findEqualProp = <TTSrcValue,>(srcPropName: string, srcPropValue: TTSrcValue): (Cust.Ref|null) => {
+            for (const [refPropName, refPropValue] of Object.entries(refProps)) { // search for duplicates
+                if ((refPropValue === undefined) || (refPropValue === null)) continue; // skip empty ref
+                if (isSelfProp(srcPropName, refPropName)) break;                       // stop search if reaches current entry (search for prev entries only)
 
 
 
-                if (!isTransformableProp(srcProp)) continue; // skip non transformable prop
+                if (!isTransformableProp(srcPropValue)) continue; // skip non transformable prop
 
 
 
-                // comparing the srcProp & refProp:
-                if (isEqualProp(srcProp, refProp)) {
-                    return ref(refName); // return the link to the ref
-                }
+                // comparing the `srcPropValue` & `refPropValue` deeply:
+                if (deepEqual(srcPropValue, refPropValue)) return ref(refPropName); // return the link to the ref
+            } // for // search for duplicates
+
+            return null; // not found
+        }
+
+        /**
+         * Determines if the specified `srcKeyframesValue` has the equivalent value in `genKeyframes`.
+         * @param srcKeyframesValue The value of `@keyframes`.
+         * @returns A `PropEx.Keyframes` represents the object reference to the equivalent value in `genKeyframes`.  
+         * -or- `null` if no equivalent found.
+         */
+        const findEqualKeyframes = (srcKeyframesValue: PropEx.Keyframes): (PropEx.Keyframes|null) => {
+            for (const refKeyframesValue of Object.values(genKeyframes)) { // search for duplicates
+                // if ((refKeyframesValue === undefined) || (refKeyframesValue === null)) continue; // skip empty ref
+
+
+
+                // comparing the `srcKeyframesValue` & `refKeyframesValue` deeply:
+                if (deepEqual(srcKeyframesValue, refKeyframesValue)) return refKeyframesValue; // return the object reference to the ref
             } // for // search for duplicates
 
             return null; // not found
@@ -275,121 +303,79 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
 
         
         /**
-         * Stores the modified props in `srcProps`.
+         * Stores the modified entries of `srcProps`.
          */
         const modifSrcProps: Dictionary<TSrcValue|Cust.Ref|Cust.KeyframesRef|any[]> = {}; // initially empty (no modification)
 
 
 
-        for (const [srcName, srcProp] of Object.entries(srcProps)) { // walk each props in srcProps
-            if ((srcProp === undefined) || (srcProp === null)) continue; // skip empty src
+        for (const [srcPropName, srcPropValue] of Object.entries(srcProps)) { // walk each entry in `srcProps`
+            if ((srcPropValue === undefined) || (srcPropValue === null)) continue; // skip empty src
 
 
 
-            //#region handle @keyframes foo
+            //#region handle `@keyframes foo`
             {
-                /**
-                 * Determines if the current `srcName` is a special `@keyframes name`.  
-                 * value:  
-                 * `undefined` => *not* a special `@keyframes name`.  
-                 * `string`    => represents the name of the `@keyframes`.
-                 */
-                const keyframesName = srcName.match(/(?<=@keyframes\s+).+/)?.[0];
+                const keyframesName = isKeyframesName(srcPropName);
                 if (keyframesName) {
-                    /**
-                     * Assumes the current `srcProp` is a valid `@keyframes`' value.
-                     */
-                    const srcKeyframeProp = srcProp as unknown as PropEx.Keyframes;
+                    let srcKeyframesValue = srcPropValue as unknown as PropEx.Keyframes; // assumes the current `srcPropValue` is a valid `@keyframes`' value.
+                    srcKeyframesValue = findEqualKeyframes(srcKeyframesValue) ?? srcKeyframesValue;
 
                     
 
-                    /* -- treats @keyframes *always unique* -- */
-                    // /**
-                    //  * Determines if the current `srcKeyframeProp` has the equivalent stored `@keyframes`.  
-                    //  * value:  
-                    //  * `undefined` => *no* equivalent `@keyframes` found.  
-                    //  * `string`    => represents the name of the equivalent `@keyframes`.
-                    //  */
-                    // const equalKfName = Object.entries(genKeyframes).find(entry => isEqualProp(entry[1], srcKeyframeProp))?.[0];
-                    // if (equalKfName) {
-                    //     // found => use existing @keyframes name:
+                    // create a link to current `@keyframes` name:
+                    const keyframesReference = keyframesRef(keyframesName); // `@keyframes`' name is always created even if the content is the same as the another `@keyframes`
 
-                    //     // replace with the equivalent `@keyframes` name:
-                    //     modifSrcProps[propRename?.(srcName) ?? srcName] = equalKfName;
-                    // }
-                    // else
-                    {
-                        // not found => create a @keyframes name:
-                        const keyframesReference = keyframesRef(keyframesName);
+                    // store the new `@keyframes`:
+                    genKeyframes[`@keyframes ${keyframesReference}`] = srcKeyframesValue;
 
-                        // store the new @keyframes:
-                        genKeyframes[`@keyframes ${keyframesReference}`] = srcKeyframeProp;
+                    
+                    
+                    // store the modified `srcProps`' entry:
+                    modifSrcProps[propRename?.(srcPropName) ?? srcPropName] = keyframesReference;
 
-                        // replace with the new `@keyframes` name:
-                        modifSrcProps[propRename?.(srcName) ?? srcName] = keyframesReference;
-                    } // if
-
-
-
-                    // mission done => continue walk to next prop:
+                    // mission done => continue walk to the next entry:
                     continue;
                 } // if
             }
-            //#endregion handle @keyframes foo
+            //#endregion handle `@keyframes foo`
 
 
 
-            //#region handle equal item
+            //#region handle equal entry
             {
-                /**
-                 * Determines if the current `srcProp` has the equivalent prop previously.  
-                 * value:  
-                 * `null`                 => *no* equivalent prop found.  
-                 * A `Cust.Ref` (`string`) => represents the name of the equivalent prop.
-                 */
-                const equalPropName = findEqualProp(srcName, srcProp);
-                if (equalPropName) {
-                    modifSrcProps[propRename?.(srcName) ?? srcName] = equalPropName;
+                const equalPropRef = findEqualProp(srcPropName, srcPropValue);
+                if (equalPropRef) {
+                    // store the modified `srcProps`' entry:
+                    modifSrcProps[propRename?.(srcPropName) ?? srcPropName] = equalPropRef;
                     
-                    
-                    
-                    // mission done => continue walk to next prop:
+                    // mission done => continue walk to the next entry:
                     continue;
                 } // if
             }
-            //#endregion handle equal item
+            //#endregion handle equal entry
 
 
 
             //#region handle array
-            if (Array.isArray(srcProp)) {
+            if (Array.isArray(srcPropValue)) {
                 // convert the array as a literal object:
-                const literalProps = srcProp as Dictionary<any>;
+                const srcLiteralProps = srcPropValue as Dictionary<any>;
 
 
 
-                /**
-                 * Determines if the current `literalProps` has the equivalent literal object,  
-                 * in which some values has been partially/fully *transformed*.  
-                 * The duplicate values has been replaced with the `var(...)` linked to the existing props in `refProps`.  
-                 * value:  
-                 * `undefined` => *no* transformation was performed.  
-                 * -or-  
-                 * A copy *transformed* literal object.
-                 */
-                const equalLiteral = transformDuplicates(/*srcProps: */literalProps, /*refProps: */refProps);
+                const equalLiteral = transformDuplicates(/*srcProps: */srcLiteralProps, /*refProps: */refProps);
                 if (equalLiteral) {
-                    // convert the literal object back to array:
-                    const arrayProp: ValueOf<typeof equalLiteral>[] = [];
-                    Object.assign(arrayProp, equalLiteral); // convert literal object to array
+                    // convert the literal object back to an array:
+                    const equalArray: ValueOf<typeof equalLiteral>[] = [];
+                    Object.assign(equalArray, equalLiteral); // convert literal object to array
 
 
 
-                    modifSrcProps[propRename?.(srcName) ?? srcName] = arrayProp;
+                    // store the modified `srcProps`' entry:
+                    modifSrcProps[propRename?.(srcPropName) ?? srcPropName] = equalArray;
                     
-                    
-                    
-                    // mission done => continue walk to next prop:
+                    // mission done => continue walk to the next entry:
                     continue;
                 } // if
             } // if
@@ -399,23 +385,25 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
 
             //#region handle no value change
             if (propRename) {
-                // The `srcProp` is not modified but the `srcName` needs to renamed:
-                modifSrcProps[propRename(srcName)] = srcProp;
+                // The `srcPropValue` was not modified but the `srcPropName` needs to be renamed:
+                modifSrcProps[propRename(srcPropName)] = srcPropValue;
             } // if
             //#endregion handle no value change
-        } // for // walk each props in srcProps
+        } // for // walk each entry in `srcProps`
 
 
 
-        // if the modifSrcProps is not empty (has any modifications) => return the (original + modified):
+        // if the `modifSrcProps` is not empty (has any modifications) => return the (original + modified):
         if (Object.keys(modifSrcProps).length) {
-            // propRename does exists    => all props always modified => return the modified:
+            // `propRename` does exists    => all entries are always modified => return the modified:
             if (propRename) return modifSrcProps;
 
-            // propRename doesn't exists => return (original + modified):
+            // `propRename` doesn't exists => return (original + modified):
             return {...srcProps, ...modifSrcProps};
         } // if
 
+        
+        
         return null; // `null` means no modification was performed
     }
     
