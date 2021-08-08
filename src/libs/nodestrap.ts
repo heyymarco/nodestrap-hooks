@@ -101,6 +101,11 @@ export const createStyle = <TClass extends string = string>(styles: Styles<TClas
         ((typeof(styles) === 'function') ? styles() : styles)
     );
 }
+export const createNodestrapStyle = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): StyleSheet<TClass> => {
+    return createStyle(
+        () => usesNodestrap(classes)
+    );
+}
 
 
 

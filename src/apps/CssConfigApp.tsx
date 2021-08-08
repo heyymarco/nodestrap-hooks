@@ -7,7 +7,7 @@ import {
 import {
     // configs:
     createCssConfig,
-}                           from '../libs/nodestrap'   // nodestrap's core
+}                           from '../libs/nodestrap'   // nodestrap core
 
 
 function App() {

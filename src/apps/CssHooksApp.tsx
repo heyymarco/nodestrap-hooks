@@ -19,11 +19,11 @@ import {
 
     // configs:
     createCssConfig,
-}                           from '../libs/nodestrap'   // nodestrap's core
+}                           from '../libs/nodestrap'   // nodestrap core
 // nodestrap (modular web components):
 import {
     // components:
-    createUseComponentStyle,
+    createUseNodestrapStyle,
 }                           from '../libs/react-nodestrap' // nodestrap for react
 
 
@@ -42,9 +42,9 @@ function Child() {
 }
 
 function App() {
-	const styleSheet1 = useAwesomeButtonStyleSheet();
-	const styleSheet2 = useAwesomeButtonStyleSheet();
-	const styleSheet3 = useAwesomeButtonStyleSheet();
+	const styleSheet1 = useAwesomeButtonStyle();
+	const styleSheet2 = useAwesomeButtonStyle();
+	const styleSheet3 = useAwesomeButtonStyle();
 
     const [showChild, setShowChild] = useState(false);
 
@@ -71,7 +71,7 @@ export default App;
 
 
 
-const useAwesomeButtonStyleSheet = createUseComponentStyle([
+const useAwesomeButtonStyle = createUseNodestrapStyle([
     composition([
         layout({
             backg: 'red',
@@ -122,7 +122,7 @@ const useAwesomeButtonStyleSheet = createUseComponentStyle([
     ]),
 ]);
 
-const useChildStyleSheet = createUseComponentStyle([
+const useChildStyleSheet = createUseNodestrapStyle([
     composition([
         layout({
             '--child-': '"child"',

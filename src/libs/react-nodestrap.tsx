@@ -30,7 +30,7 @@ import {
     
     // nodestrap hooks:
     usesNodestrap,
-}                           from './nodestrap'  // nodestrap's core
+}                           from './nodestrap'  // nodestrap core
 
 
 
@@ -86,7 +86,7 @@ export const createUseStyle          = <TClass extends string = string>(styles: 
         return styleSheet.classes;
     };
 }
-export const createUseComponentStyle = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): Factory<Classes<TClass>> => {
+export const createUseNodestrapStyle = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): Factory<Classes<TClass>> => {
     return createUseStyle(
         () => usesNodestrap(classes)
     );
