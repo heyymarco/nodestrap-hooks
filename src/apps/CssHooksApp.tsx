@@ -6,9 +6,6 @@ import {
 
 // nodestrap (modular web components):
 import {
-    // components:
-    createUseComponentStyle,
-
     composition,
     global,
 
@@ -23,6 +20,11 @@ import {
     // configs:
     createCssConfig,
 }                           from '../libs/nodestrap'   // nodestrap's core
+// nodestrap (modular web components):
+import {
+    // components:
+    createUseComponentStyle,
+}                           from '../libs/react-nodestrap' // nodestrap for react
 
 
 function Child() {
