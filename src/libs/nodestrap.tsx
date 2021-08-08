@@ -41,10 +41,13 @@ import type {
     Cust,
 }                           from './css-types'  // ts defs support for jss
 import {
+    // general types:
     PropList,
     Refs,
     Decls,
     Vals,
+    CssConfigOptions,
+    ProxyCssConfigOptions,
     CssConfig,
 
     createCssConfig,
@@ -57,7 +60,7 @@ import {
     restoreProps,
     overwriteProps,
     overwriteParentProps,
-}                           from './CssConfig'  // Stores & retrieves configuration using *css custom properties* (css variables) stored at HTML `:root` level (default) or at specified `rule`.
+}                           from './css-config' // Stores & retrieves configuration using *css custom properties* (css variables) stored at HTML `:root` level (default) or at specified `rule`.
 
 // utils:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
@@ -455,9 +458,13 @@ export { pascalCase, camelCase }
 
 // configs:
 export type {
+    // general types:
+    PropList,
     Refs,
     Decls,
     Vals,
+    CssConfigOptions,
+    ProxyCssConfigOptions,
     CssConfig,
 }
 export {
