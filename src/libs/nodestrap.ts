@@ -9,6 +9,7 @@ import {
     JssValue,
     Classes,
     Styles,
+    StyleSheet,
 
     create as createJss,
     SheetsManager,
@@ -72,7 +73,7 @@ import { camelCase }        from 'camel-case'   // camel-case  support for jss
 
 // general types:
 
-export type { JssStyle, Classes }
+export type { JssStyle, JssValue, Classes, Styles, StyleSheet }
 export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
@@ -100,6 +101,11 @@ const customJss = createJss().setup({plugins:[
 
 
 // styles:
+export const createStyle = <TClass extends string = string>(styles: Styles<TClass>|Factory<Styles<TClass>>): StyleSheet<TClass> => {
+    return customJss.createStyleSheet(
+        ((typeof(styles) === 'function') ? styles() : styles)
+    );
+}
 
 // hook factories:
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
@@ -116,9 +122,7 @@ export const createUseStyle          = <TClass extends string = string>(styles: 
             // or create a new one:
             (() => { // expensive operation
                 // create a new styleSheet using our pre-configured `customJss`:
-                const newStyleSheet = customJss.createStyleSheet(
-                    ((typeof(styles) === 'function') ? styles() : styles)
-                );
+                const newStyleSheet = createStyle(styles);
                 
                 
                 
