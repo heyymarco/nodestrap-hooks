@@ -27,6 +27,7 @@ class GlobalStyleRule {
     rules       : RuleList
 
     // StyleRule:
+    style       : Style
     selector    : string  = ''      // for satisfying `jss-plugin-nested`
 
     
@@ -41,6 +42,13 @@ class GlobalStyleRule {
             ...options,
             parent: this,
         });
+
+
+
+        this.style = style; // the `style` needs to be attached to `GlobalStyleRule` for satisfying `onProcessStyle()`
+        const plugins : any = options?.jss?.plugins;
+        const onProcessStyle : ((style: Style, rule: Rule, sheet?: StyleSheet) => void) | undefined | null = plugins?.onProcessStyle;
+        onProcessStyle?.call(plugins, this.style, this as Rule, options?.sheet as (StyleSheet|undefined));
 
 
         

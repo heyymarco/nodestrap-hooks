@@ -24,7 +24,7 @@ type Extend             = SingleExtend|SingleExtend[]
 type Style              = JssStyle & { extend?: Optional<Extend> } // add `extend` prop into `JssStyle`
 // export the upgraded `JssStyle`:
 export type { Style, Style as ExtendableStyle, Style as JssStyle }
-export const isStyle    = (object: any): object is Style => isLiteralObject(object);
+const isStyle           = (object: any): object is Style => isLiteralObject(object);
 
 
 

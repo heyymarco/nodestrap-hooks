@@ -5,14 +5,15 @@ import reportWebVitals from './reportWebVitals';
 
 
 
-import CssHooksApp from './apps/CssHooksApp';
+// import CssHooksApp from './apps/CssHooksApp';
 // import CssConfigApp from './apps/CssConfigApp';
+import NodestrapApp from './apps/NodestrapApp';
 
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssHooksApp />
+    <NodestrapApp />
   </React.StrictMode>,
   document.getElementById('root')
 );
