@@ -208,7 +208,7 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
                     return ruleEntryList;
                 })
                 .flat(/*depth: */1) // flatten: RuleList[] => [RuleList, RuleList, ...] => [...RuleList, ...RuleList, ...] => [RuleEntry, RuleEntry, ...] => RuleEntry[]
-                .map(([rules, styles]): Style => {
+                .map(([rules, styles]): readonly [string[], Style] => {
                     let normalizedRules = (Array.isArray(rules) ? rules : [rules]).map((rule): string => {
                         if (!rule) return '&';
 
@@ -266,6 +266,10 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
 
 
 
+                    return [normalizedRules, mergedStyles];
+                })
+                .filter(([normalizedRules]) => (normalizedRules.length > 0)) // filter out empty normalizedRules
+                .map(([normalizedRules, mergedStyles]): Style => {
                     return {
                         [normalizedRules.join(',')] : mergedStyles,
                     };
