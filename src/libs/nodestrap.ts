@@ -1,10 +1,6 @@
-// react (builds html using javascript):
-import {
-    useLayoutEffect,
-}                           from 'react'        // base technology of our nodestrap components
-
 // jss   (builds css  using javascript):
 import {
+    // general types:
     JssStyle,
     JssValue,
     Classes,
@@ -12,7 +8,6 @@ import {
     StyleSheet,
 
     create as createJss,
-    SheetsManager,
 }                           from 'jss'          // base technology of our nodestrap components
 // official jss-plugins:
 import jssPluginNested      from 'jss-plugin-nested'
@@ -24,7 +19,6 @@ import jssPluginGlobal      from './jss-plugin-global'
 import {
     default as jssPluginExtend,
     ExtendableStyle,
-    mergeStyle,
 }                           from './jss-plugin-extend'
 import jssPluginShort       from './jss-plugin-short'
 
@@ -104,77 +98,6 @@ const customJss = createJss().setup({plugins:[
 export const createStyle = <TClass extends string = string>(styles: Styles<TClass>|Factory<Styles<TClass>>): StyleSheet<TClass> => {
     return customJss.createStyleSheet(
         ((typeof(styles) === 'function') ? styles() : styles)
-    );
-}
-
-// hook factories:
-const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
-export const createUseStyle          = <TClass extends string = string>(styles: Styles<TClass>|Factory<Styles<TClass>>): Factory<Classes<TClass>> => {
-    const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
-
-    
-    
-    return (): Classes<TClass> => {
-        const styleSheet = ( // no need to use `useMemo` because fetching from `styleSheetManager` is inexpensive
-            // take from an existing cached styleSheet (if any):
-            styleSheetManager.get(styleSheetId) // inexpensive operation
-            ??
-            // or create a new one:
-            (() => { // expensive operation
-                // create a new styleSheet using our pre-configured `customJss`:
-                const newStyleSheet = createStyle(styles);
-                
-                
-                
-                // register to `styleSheetManager` to be cached and also to be able to attach/detach to/from dom:
-                styleSheetManager.add(styleSheetId, newStyleSheet);
-
-                
-                
-                // here the ready to use styleSheet:
-                return newStyleSheet;
-            })()
-        );
-        
-        
-        
-        useLayoutEffect(() => {
-            // notify `styleSheetManager` that the `styleSheet` is being used
-            // the `styleSheetManager` will attach the `styleSheet` to dom if one/more `styleSheet` users exist.
-            styleSheetManager.manage(styleSheetId);
-            
-            
-            
-            // cleanups:
-            return () => {
-                // notify `styleSheetManager` that the `styleSheet` is no longer being used
-                // the `styleSheetManager` will detach the `styleSheet` from dom if no `styleSheet` user exists.
-                styleSheetManager.unmanage(styleSheetId);
-            };
-        }, []);
-
-
-
-        // here the ready to use `styleSheet`'s classes:
-        return styleSheet.classes;
-    };
-}
-export const createUseComponentStyle = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): Factory<Classes<TClass>> => {
-    return createUseStyle(
-        ((): Styles<TClass> => {
-            const mergedStyles = {} as Styles<TClass>;
-
-            
-            
-            ((typeof(classes) === 'function') ? classes() : classes)
-            .map((classEntry): Style => ({ [classEntry[0] ?? 'main']: classEntry[1] })) // convert each `ClassEntry` to `Style` of `Style`
-            .forEach((style) => mergeStyle(mergedStyles, style)); // merge each `Style` to `mergedStyles`
-
-            
-            
-            // here the merged `Style`s:
-            return mergedStyles;
-        })
     );
 }
 
