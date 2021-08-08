@@ -46,7 +46,24 @@ export interface CssConfigOptions {
      */
     rule?   : string
 }
-export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>, Vals<TProps>, CssConfigOptions, ((immediately?: boolean) => void)]
+export interface ProxyCssConfigOptions extends CssConfigOptions {
+    /**
+     * The prefix name of the generated css custom props.
+     */
+    prefix  : string
+
+    /**
+     * The declaring location (selector) of the generated css custom props.
+     */
+    rule    : string
+
+    /**
+     * Regenerates the css custom props.
+     * @param immediately `true` to refresh immediately (guaranteed has been refreshed after `refresh()` returned) -or- `false` to refresh shortly after current execution finished.
+     */
+    refresh : ((immediately?: boolean) => void)
+}
+export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>, Vals<TProps>, ProxyCssConfigOptions]
 
 
 
@@ -88,11 +105,13 @@ const customJss = createJss().setup({plugins:[
  */
 const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>, options?: CssConfigOptions): CssConfig<TProps> => {
     // settings:
-    const settings = {
+    const settings: ProxyCssConfigOptions = {
         ...options,
 
-        prefix : (options?.prefix ?? _defaultPrefix),
-        rule   : (options?.rule   ?? _defaultRule),
+        prefix  : (options?.prefix ?? _defaultPrefix),
+        rule    : (options?.rule   ?? _defaultRule),
+
+        refresh : (immediately) => refresh(immediately)
     };
     
     
@@ -517,7 +536,7 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
      * Regenerates the `genProps` & `genKeyframes`.
      * @param immediately `true` to refresh immediately (guaranteed has been refreshed after `refresh()` returned) -or- `false` to refresh shortly after current execution finished.
      */
-    const refresh = (immediately = false) => {
+    const refresh = (immediately = false): void => {
         if (immediately) {
             // regenerate the data now:
 
@@ -663,7 +682,7 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
 
 
         // settings:
-        new Proxy<CssConfigOptions>(settings, {
+        new Proxy<ProxyCssConfigOptions>(settings, {
             get: (settings, propName: string): any => {
                 return (settings as any)[propName];
             },
@@ -695,11 +714,6 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
                 return true; // notify the operation was completed successfully
             },
         }),
-
-        
-        
-        // actions:
-        refresh,
     ];
 }
 export { createCssConfig, createCssConfig as default }
