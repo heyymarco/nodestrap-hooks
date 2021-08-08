@@ -96,7 +96,7 @@ export const usesNodestrap = <TClass extends string = string>(classes: ClassList
     
     
     ((typeof(classes) === 'function') ? classes() : classes)
-    .map((classEntry): Style => ({ [classEntry[0] ?? 'main']: classEntry[1] })) // convert each `ClassEntry` to `Style` of `Style`
+    .map((classEntry): Style => ({ [classEntry[0] || 'main']: classEntry[1] })) // convert each `ClassEntry` to `Style` of `Style`
     .forEach((style) => mergeStyle(mergedStyles, style)); // merge each `Style` to `mergedStyles`
 
     
