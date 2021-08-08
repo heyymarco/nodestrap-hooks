@@ -35,12 +35,24 @@ export type PropList                     = Dictionary<JssValue>
 export type Refs     <TProps extends {}> = { [key in keyof TProps]: Cust.Ref    } // typescript helper: make the TValue appears as Cust.Ref (string)
 export type Decls    <TProps extends {}> = { [key in keyof TProps]: Cust.Decl   } // typescript helper: make the TValue appears as Cust.Decl (string)
 export type Vals     <TProps extends {}> = { [key in keyof TProps]: TProps[key] } // typescript helper: make the TValue appears as TProps's TValue
-export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>, Vals<TProps>, ((immediately?: boolean) => void)]
+export interface CssConfigOptions {
+    /**
+     * The prefix name of the generated css custom props.
+     */
+    prefix? : string
+
+    /**
+     * The declaring location (selector) of the generated css custom props.
+     */
+    rule?   : string
+}
+export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>, Vals<TProps>, CssConfigOptions, ((immediately?: boolean) => void)]
 
 
 
 // defaults:
-const _defaultRule = ':root';
+const _defaultPrefix = '';
+const _defaultRule   = ':root';
 
 
 
@@ -73,10 +85,18 @@ const customJss = createJss().setup({plugins:[
  * 
  * Supports delete property, eg:  
  * `myButtonConfig.vals.myFavColor = undefined
- * @param prefix The prefix name of the generated css custom props.
- * @param rule The declaring location (selector) of the generated css custom props.
  */
-const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps|Factory<TProps>, rule = _defaultRule): CssConfig<TProps> => {
+const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>, options?: CssConfigOptions): CssConfig<TProps> => {
+    // settings:
+    const settings = {
+        ...options,
+
+        prefix : (options?.prefix ?? _defaultPrefix),
+        rule   : (options?.rule   ?? _defaultRule),
+    };
+    
+    
+    
     // data sources:
 
     type TValue       = ValueOf<TProps>
@@ -137,7 +157,7 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
     const decl = (propName: string): Cust.Decl => {
         propName = propName.replace(/^@keyframes\s+/, 'keyframes-'); // replace `@keyframes fooSomething` => `keyframes-fooSomething`
 
-        return prefix ? `--${prefix}-${propName}` : `--${propName}`; // add double dash with prefix `--prefix-` or double dash without prefix `--`
+        return settings.prefix ? `--${settings.prefix}-${propName}` : `--${propName}`; // add double dash with prefix `--prefix-` or double dash without prefix `--`
     }
 
     /**
@@ -155,7 +175,7 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
      * @returns A `Cust.KeyframesRef` represents the expression for retrieving the value of the specified `keyframesName`.
      */
     const keyframesRef = (keyframesName: string): Cust.KeyframesRef => {
-        return prefix ? `${prefix}-${keyframesName}` : keyframesName; // add prefix `prefix-` or just a `keyframesName`
+        return settings.prefix ? `${settings.prefix}-${keyframesName}` : keyframesName; // add prefix `prefix-` or just a `keyframesName`
     }
 
 
@@ -479,7 +499,7 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
             customJss
             .createStyleSheet({
                 '@global': {
-                    [rule]: genProps,
+                    [settings.rule]: genProps,
                     ...genKeyframes,
                 },
             })
@@ -640,6 +660,45 @@ const createCssConfig = <TProps extends {}>(prefix: string, initialProps: TProps
         }) as Vals<TProps>,
         //#endregion proxies - representing data in various formats
 
+
+
+        // settings:
+        new Proxy<CssConfigOptions>(settings, {
+            get: (settings, propName: string): any => {
+                return (settings as any)[propName];
+            },
+            set: (settings, propName: string, newValue: any): boolean => {
+                if (!(propName in settings)) return false; // the requested prop does not exist
+
+
+
+                // apply the default value (if any):
+                newValue = newValue ?? ((): any => {
+                    switch (propName) {
+                        case 'prefix' : return _defaultPrefix;
+                        case 'rule'   : return _defaultRule;
+                        default       : return newValue;
+                    } // switch
+                })();
+                
+                
+                
+                // compare `oldValue` & `newValue`:
+                const oldValue = (settings as any)[propName];
+                if (oldValue === newValue) return true; // success but no change => no need to update
+
+
+
+                // apply changes & update:
+                (settings as any)[propName] = newValue;
+                refresh(); // setting changed => need to `refresh()` the jss
+                return true; // notify the operation was completed successfully
+            },
+        }),
+
+        
+        
+        // actions:
         refresh,
     ];
 }

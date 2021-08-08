@@ -21,7 +21,7 @@ function App() {
 export default App;
 
 
-export const [cssProps, cssDecls] = createCssConfig('boo', () => {
+export const [cssProps, cssDecls, ,cssConfig] = createCssConfig(() => {
     const keyframesFadeOut = {
         from: {
             opacity: 0,
@@ -41,4 +41,7 @@ export const [cssProps, cssDecls] = createCssConfig('boo', () => {
         '@keyframes fadeOut': keyframesFadeOut,
         animFade: [['300ms', 'ease-out', 'both', keyframesFadeOut]],
     };
-});
+}, { prefix: 'boo' });
+cssConfig.prefix = 'wow';
+(window as any).cssConfig = cssConfig;
+(window as any).cssProps = cssProps;
