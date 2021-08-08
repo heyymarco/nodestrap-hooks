@@ -19,6 +19,7 @@ import jssPluginGlobal      from './jss-plugin-global'
 import {
     default as jssPluginExtend,
     ExtendableStyle,
+    mergeStyle,
 }                           from './jss-plugin-extend'
 import jssPluginShort       from './jss-plugin-short'
 
@@ -99,6 +100,24 @@ export const createStyle = <TClass extends string = string>(styles: Styles<TClas
     return customJss.createStyleSheet(
         ((typeof(styles) === 'function') ? styles() : styles)
     );
+}
+
+
+
+// nodestrap hooks:
+export const usesNodestrap = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): Styles<TClass> => {
+    const mergedStyles = {} as Styles<TClass>;
+
+    
+    
+    ((typeof(classes) === 'function') ? classes() : classes)
+    .map((classEntry): Style => ({ [classEntry[0] ?? 'main']: classEntry[1] })) // convert each `ClassEntry` to `Style` of `Style`
+    .forEach((style) => mergeStyle(mergedStyles, style)); // merge each `Style` to `mergedStyles`
+
+    
+    
+    // here the merged `Style`s:
+    return mergedStyles;
 }
 
 

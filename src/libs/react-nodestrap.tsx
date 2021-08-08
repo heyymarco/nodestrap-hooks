@@ -13,10 +13,6 @@ import {
 
     SheetsManager,
 }                           from 'jss'          // base technology of our nodestrap components
-// custom jss-plugins:
-import {
-    mergeStyle,
-}                           from './jss-plugin-extend'
 
 // nodestrap (modular web components):
 import type {
@@ -25,15 +21,20 @@ import type {
 }                           from './types'      // nodestrap's types
 import {
     // general types:
-    Style,
     ClassList,
 
+    
+    // styles:
     createStyle,
+
+    
+    // nodestrap hooks:
+    usesNodestrap,
 }                           from './nodestrap'  // nodestrap's core
 
 
 
-// hooks:
+// react hooks:
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
 export const createUseStyle          = <TClass extends string = string>(styles: Styles<TClass>|Factory<Styles<TClass>>): Factory<Classes<TClass>> => {
     const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
@@ -87,20 +88,7 @@ export const createUseStyle          = <TClass extends string = string>(styles: 
 }
 export const createUseComponentStyle = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): Factory<Classes<TClass>> => {
     return createUseStyle(
-        ((): Styles<TClass> => {
-            const mergedStyles = {} as Styles<TClass>;
-
-            
-            
-            ((typeof(classes) === 'function') ? classes() : classes)
-            .map((classEntry): Style => ({ [classEntry[0] ?? 'main']: classEntry[1] })) // convert each `ClassEntry` to `Style` of `Style`
-            .forEach((style) => mergeStyle(mergedStyles, style)); // merge each `Style` to `mergedStyles`
-
-            
-            
-            // here the merged `Style`s:
-            return mergedStyles;
-        })
+        () => usesNodestrap(classes)
     );
 }
 
