@@ -77,8 +77,7 @@ const mergeExtend       = (style: Style, rule?: Rule, sheet?: StyleSheet): void 
 
 
     // the `extend` operation has been completed => remove unused `extend` prop:
-    // delete style.extend;
-    style.extend = null; // maybe it's safer not to remove the `style`'s prop, instead set it to `null`
+    delete style.extend; // delete `extend` prop so the `jss-plugin-nested` won't process this prop
 }
 const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?: Rule, sheet?: StyleSheet): void => {
     for (const [name, newValue] of Object.entries(newStyle)) { // loop through `newStyle`'s props
