@@ -13,10 +13,12 @@ import {
     create as createJss,
     SheetsManager,
 }                           from 'jss'          // base technology of our nodestrap components
+// official jss-plugins:
+import jssPluginNested      from 'jss-plugin-nested'
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
-import jssPluginNested      from 'jss-plugin-nested'
 import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
+// custom jss-plugins:
 import jssPluginGlobal      from './jss-plugin-global'
 import {
     default as jssPluginExtend,

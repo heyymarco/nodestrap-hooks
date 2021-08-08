@@ -5,9 +5,11 @@ import {
 
     create as createJss,
 }                           from 'jss'          // base technology of our nodestrap components
+// official jss-plugins:
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
+// custom jss-plugins:
 import jssPluginGlobal      from './jss-plugin-global'
 import jssPluginShort       from './jss-plugin-short'
 
