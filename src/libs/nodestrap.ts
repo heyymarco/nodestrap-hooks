@@ -38,27 +38,6 @@ import type {
     PropEx,
     Cust,
 }                           from './css-types'  // ts defs support for jss
-import {
-    // general types:
-    PropList,
-    Refs,
-    Decls,
-    Vals,
-    CssConfigOptions,
-    ProxyCssConfigOptions,
-    CssConfig,
-
-    createCssConfig,
-
-    // utilities:
-    filterGeneralProps,
-    filterPrefixProps,
-    filterSuffixProps,
-    backupProps,
-    restoreProps,
-    overwriteProps,
-    overwriteParentProps,
-}                           from './css-config' // Stores & retrieves configuration using *css custom properties* (css variables) stored at HTML `:root` level (default) or at specified `rule`.
 
 // utils:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
@@ -79,6 +58,7 @@ export type OptionalString                             = Optional<string>
 export type RuleEntry                                  = readonly [SingleOrArray<OptionalString>, SingleOrArray<Style>]
 export type RuleList                                   = RuleEntry[]
 export type RuleCollection                             = (RuleEntry|RuleList)[]
+export type PropList                                   = Dictionary<JssValue>
 
 
 
@@ -406,29 +386,3 @@ export const ref = (propName: string, ...fallbacks: string[]): Cust.Ref => {
 
 // other utilities:
 export { pascalCase, camelCase }
-
-
-
-// configs:
-export type {
-    // general types:
-    PropList,
-    Refs,
-    Decls,
-    Vals,
-    CssConfigOptions,
-    ProxyCssConfigOptions,
-    CssConfig,
-}
-export {
-    createCssConfig,
-
-    // utilities:
-    filterGeneralProps,
-    filterPrefixProps,
-    filterSuffixProps,
-    backupProps,
-    restoreProps,
-    overwriteProps,
-    overwriteParentProps,
-}
