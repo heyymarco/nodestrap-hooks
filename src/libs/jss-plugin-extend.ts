@@ -122,74 +122,77 @@ export const mergeStyle = (style: Style, newStyle: Style, rule?: Rule, sheet?: S
 
 
 
-export default function pluginExtend(): Plugin { return {
-    onProcessStyle: (style: Style, rule: Rule, sheet?: StyleSheet): Style => {
-        mergeExtend(style, rule, sheet);
+const onProcessStyle = (style: Style, rule: Rule, sheet?: StyleSheet): Style => {
+    mergeExtend(style, rule, sheet);
 
 
 
-        //#region handle `@keyframes`
-        if (sheet) {
-            for (const [propName, propValue] of Object.entries(style)) {
-                if (propName.startsWith('@keyframes ')) {
-                    // move `@keyframes` to StyleSheet:
-                    sheet.addRule(propName, propValue as Style, {
-                        generateId : ruleGenerateId,
-                    });
-
-
-                    
-                    // delete `@keyframes` prop, so another plugins won't see this:
-                    delete (style as any)[propName];
-                } // if
-            } // for
-        } // if
-        //#endregion handle `@keyframes`
-
-
-
-        return style;
-    },
-
-    onChangeValue: (value: any, prop: string, rule: Rule): string|null|false => {
-        if (prop !== 'extend') return value; // do not modify any props other than `extend`
-
-
-
-        const __prevObject = '__prevObject';
-        if (typeof(value) === 'object') {
-            const ruleProp = (rule as any).prop;
-            if (typeof(ruleProp) === 'function') {
-                for (const [propName, propVal] of Object.entries(value)) {
-                    ruleProp(propName, propVal);
-                } // for
+    //#region handle `@keyframes`
+    if (sheet) {
+        for (const [propName, propValue] of Object.entries(style)) {
+            if (propName.startsWith('@keyframes ')) {
+                // move `@keyframes` to StyleSheet:
+                sheet.addRule(propName, propValue as Style, {
+                    generateId : ruleGenerateId,
+                });
 
 
                 
-                // store the object to the rule, so we can remove all props we've set later:
-                (rule as any)[__prevObject] = value;
+                // delete `@keyframes` prop, so another plugins won't see this:
+                delete (style as any)[propName];
             } // if
-        }
-        else if ((value === null) || (value === false)) {
-            // remove all props we've set before (if any):
-            const prevObject = (rule as any)[__prevObject];
-            if (prevObject) {
-                const ruleProp = (rule as any).prop;
-                if (typeof(ruleProp) === 'function') {
-                    for (const propName of Object.keys(prevObject)) {
-                        ruleProp(propName, null);
-                    } // for
-                } // if
+        } // for
+    } // if
+    //#endregion handle `@keyframes`
 
 
 
-                // clear the stored object:
-                delete (rule as any)[__prevObject];
-            } // if
+    return style;
+};
+
+const onChangeValue  = (value: any, prop: string, rule: Rule): string|null|false => {
+    if (prop !== 'extend') return value; // do not modify any props other than `extend`
+
+
+
+    const __prevObject = '__prevObject';
+    if (typeof(value) === 'object') {
+        const ruleProp = (rule as any).prop;
+        if (typeof(ruleProp) === 'function') {
+            for (const [propName, propVal] of Object.entries(value)) {
+                ruleProp(propName, propVal);
+            } // for
+
+
+            
+            // store the object to the rule, so we can remove all props we've set later:
+            (rule as any)[__prevObject] = value;
         } // if
+    }
+    else if ((value === null) || (value === false)) {
+        // remove all props we've set before (if any):
+        const prevObject = (rule as any)[__prevObject];
+        if (prevObject) {
+            const ruleProp = (rule as any).prop;
+            if (typeof(ruleProp) === 'function') {
+                for (const propName of Object.keys(prevObject)) {
+                    ruleProp(propName, null);
+                } // for
+            } // if
 
-        
-        
-        return null; // do not set the value in the core
-    },
+
+
+            // clear the stored object:
+            delete (rule as any)[__prevObject];
+        } // if
+    } // if
+
+    
+    
+    return null; // do not set the value in the core
+};
+
+export default function pluginExtend(): Plugin { return {
+    onProcessStyle,
+    onChangeValue,
 }}

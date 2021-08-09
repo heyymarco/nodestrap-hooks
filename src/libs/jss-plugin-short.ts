@@ -18,20 +18,22 @@ const shorts: { [key: string]: string } = {
     'gapY'      : 'rowGap',
 };
 
+const onProcessStyle = (style: JssStyle & { [key: string]: JssStyle[keyof JssStyle] }, rule: Rule, sheet?: StyleSheet): JssStyle => {
+    for (const name in style) {
+        if (name in shorts) {
+            // set the expanded name:
+            style[shorts[name]] = style[name];
+
+            // delete the original name:
+            delete style[name];
+        } // if
+    } // for
+
+
+
+    return style;
+};
+
 export default function pluginShort(): Plugin { return {
-    onProcessStyle: (style: JssStyle & { [key: string]: JssStyle[keyof JssStyle] }, rule: Rule, sheet?: StyleSheet): JssStyle => {
-        for (const name in style) {
-            if (name in shorts) {
-                // set the expanded name:
-                style[shorts[name]] = style[name];
-
-                // delete the original name:
-                delete style[name];
-            } // if
-        } // for
-
-
-
-        return style;
-    },
+    onProcessStyle,
 }}

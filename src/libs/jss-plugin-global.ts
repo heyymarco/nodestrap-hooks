@@ -87,15 +87,17 @@ class GlobalStyleRule {
 
 
 
+const onCreateRule = (key: string, style: Style, options: any): (Rule|any) => {
+    switch (key) {
+        case '':
+        case '@global':
+            return new GlobalStyleRule(key, style, options);
+        
+        default:
+            return null;
+    } // switch
+};
+
 export default function pluginGlobal(): Plugin { return {
-    onCreateRule(key: string, style: Style, options: any): Rule|any {
-        switch (key) {
-            case '':
-            case '@global':
-                return new GlobalStyleRule(key, style, options);
-            
-            default:
-                return null;
-        } // switch
-    },
+    onCreateRule,
 }}
