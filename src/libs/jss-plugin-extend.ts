@@ -28,6 +28,10 @@ const isStyle           = (object: any): object is Style => isLiteralObject(obje
 
 
 
+const ruleGenerateId    = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
+
+
+
 const mergeExtend       = (style: Style, rule?: Rule, sheet?: StyleSheet): void => {
     const extend = style.extend;
     if (!extend) return; // nothing to extend
@@ -77,7 +81,7 @@ const mergeExtend       = (style: Style, rule?: Rule, sheet?: StyleSheet): void 
 
 
     // the `extend` operation has been completed => remove unused `extend` prop:
-    delete style.extend; // delete `extend` prop so the `jss-plugin-nested` won't process this prop
+    delete style.extend; // delete `extend` prop, so another plugins won't see this
 }
 const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?: Rule, sheet?: StyleSheet): void => {
     for (const [name, newValue] of Object.entries(newStyle)) { // loop through `newStyle`'s props
@@ -121,6 +125,26 @@ export const mergeStyle = (style: Style, newStyle: Style, rule?: Rule, sheet?: S
 export default function pluginExtend(): Plugin { return {
     onProcessStyle: (style: Style, rule: Rule, sheet?: StyleSheet): Style => {
         mergeExtend(style, rule, sheet);
+
+
+
+        //#region handle `@keyframes`
+        if (sheet) {
+            for (const [propName, propValue] of Object.entries(style)) {
+                if (propName.startsWith('@keyframes ')) {
+                    // move `@keyframes` to StyleSheet:
+                    sheet.addRule(propName, propValue as Style, {
+                        generateId : ruleGenerateId,
+                    });
+
+
+                    
+                    // delete `@keyframes` prop, so another plugins won't see this:
+                    delete (style as any)[propName];
+                } // if
+            } // for
+        } // if
+        //#endregion handle `@keyframes`
 
 
 
