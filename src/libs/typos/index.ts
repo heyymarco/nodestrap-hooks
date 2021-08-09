@@ -3,7 +3,7 @@ import generals,
 import * as secondary      from './secondary'
 
 import * as paragraph      from './paragraph'
-// import * as lead           from './lead'
+import * as lead           from './lead'
 
 // import * as heading        from './heading'
 // import * as display        from './display'
@@ -26,7 +26,7 @@ export {
     secondary,
 
     paragraph,
-    // lead,
+    lead,
 
     // heading,
     // display,

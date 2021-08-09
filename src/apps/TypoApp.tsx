@@ -13,9 +13,13 @@ function App() {
         <div>
             <div>General text</div>
             <div className='txt-sec'>Secondary text</div>
+
             <p>Paragraph text 1</p>
             <p>Paragraph text 2</p>
             <p>Paragraph text 3</p>
+
+            <div className='lead'>Lead Paragraph 1</div>
+            <p className='lead'>Lead Paragraph 2</p>
         </div>
     );
 }
