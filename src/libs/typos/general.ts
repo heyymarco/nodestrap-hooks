@@ -12,6 +12,10 @@ import {
     global,
 
 
+    // layouts:
+    layout,
+
+
     // rules:
     rule,
 }                           from '../nodestrap'  // nodestrap core
@@ -102,10 +106,12 @@ export default cssProps;
 // create a new styleSheet & attach:
 createNodestrapStyle(() => [
     global([
-        rule(':root', {
-            // customize:
-            ...usesGeneralProps(cssProps),
-        }),
+        rule(':root', [
+            layout({
+                // customize:
+                ...usesGeneralProps(cssProps),
+            }),
+        ]),
     ]),
 ])
 .attach();
