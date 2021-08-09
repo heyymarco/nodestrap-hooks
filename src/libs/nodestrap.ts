@@ -96,8 +96,13 @@ export const usesNodestrap = <TClass extends string = string>(classes: ClassList
     
     
     ((typeof(classes) === 'function') ? classes() : classes)
-    .map((classEntry): Style => ({ [classEntry[0] || 'main']: classEntry[1] })) // convert each `ClassEntry` to `Style` of `Style`
-    .forEach((style) => mergeStyle(mergedStyles, style)); // merge each `Style` to `mergedStyles`
+    /*
+        empty `className` recognized as `@global` in our `jss-plugin-global`
+        but to make more compatible with JSS' official `jss-plugin-global`
+        we convert empty `className` to `'@global'`
+     */
+    .map(([className, style]): Style => ({ [className || '@global']: style })) // convert each `[className, style]` to `Style` of `Style`
+    .forEach((style) => mergeStyle(mergedStyles as Style, style)); // merge each `Style` to `mergedStyles`
 
     
     
