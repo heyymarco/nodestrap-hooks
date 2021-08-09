@@ -6,15 +6,16 @@ import reportWebVitals from './reportWebVitals';
 
 
 // import CssHooksApp from './apps/CssHooksApp';
-// import CssConfigApp from './apps/CssConfigApp';
-import NodestrapApp from './apps/NodestrapApp';
+import CssConfigApp from './apps/CssConfigApp';
+// import NodestrapApp from './apps/NodestrapApp';
 
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <NodestrapApp />
-  </React.StrictMode>,
+  // <React.StrictMode>
+  // </React.StrictMode>
+    <CssConfigApp />
+  ,
   document.getElementById('root')
 );
 

@@ -15,16 +15,12 @@ import {
     states,
 
     // usingGradient,
-
-
-    // configs:
-    createCssConfig,
-}                           from '../libs/nodestrap'   // nodestrap core
-// nodestrap (modular web components):
+}                           from '../libs/nodestrap'       // nodestrap core
 import {
     // components:
     createUseNodestrapStyle,
 }                           from '../libs/react-nodestrap' // nodestrap for react
+import createCssConfig      from '../libs/css-config'      // Stores & retrieves configuration using *css custom properties* (css variables)
 
 
 function Child() {

@@ -1,13 +1,10 @@
 // react (builds html using javascript):
 import {
     default as React,
-}                           from 'react'         // base technology of our nodestrap components
+}                           from 'react'                   // base technology of our nodestrap components
 
 // nodestrap (modular web components):
-import {
-    // configs:
-    createCssConfig,
-}                           from '../libs/nodestrap'   // nodestrap core
+import createCssConfig      from '../libs/css-config'      // Stores & retrieves configuration using *css custom properties* (css variables)
 
 
 function App() {
@@ -42,6 +39,6 @@ export const [cssProps, cssDecls, ,cssConfig] = createCssConfig(() => {
         animFade: [['300ms', 'ease-out', 'both', keyframesFadeOut]],
     };
 }, { prefix: 'boo' });
-cssConfig.prefix = 'wow';
+// cssConfig.prefix = 'wow';
 (window as any).cssConfig = cssConfig;
 (window as any).cssProps = cssProps;

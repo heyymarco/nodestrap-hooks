@@ -1,18 +1,3 @@
-// jss   (builds css  using javascript):
-import {
-    JssValue,
-    StyleSheet,
-
-    create as createJss,
-}                           from 'jss'          // base technology of our nodestrap components
-// official jss-plugins:
-import jssPluginCamelCase   from 'jss-plugin-camel-case'
-import jssPluginExpand      from 'jss-plugin-expand'
-import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
-// custom jss-plugins:
-import jssPluginGlobal      from './jss-plugin-global'
-import jssPluginShort       from './jss-plugin-short'
-
 // nodestrap (modular web components):
 import type {
     Factory,
@@ -24,6 +9,21 @@ import type {
     PropEx,
     Cust,
 }                           from './css-types'  // ts defs support for jss
+import {
+    // general types:
+    StyleSheet,
+    Style,
+    PropList,
+
+    
+    // styles:
+    createNodestrapStyle,
+    usesNodestrap,
+
+
+    // compositions:
+    global,
+}                           from './nodestrap'  // nodestrap core
 
 // utils:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
@@ -32,8 +32,6 @@ import { camelCase }        from 'camel-case'   // camel-case  support for jss
 
 
 // general types:
-export type PropList                     = Dictionary<JssValue>
-
 export type Refs     <TProps extends {}> = { [key in keyof TProps]: Cust.Ref    } // typescript helper: make the TValue appears as Cust.Ref (string)
 export type Decls    <TProps extends {}> = { [key in keyof TProps]: Cust.Decl   } // typescript helper: make the TValue appears as Cust.Decl (string)
 export type Vals     <TProps extends {}> = { [key in keyof TProps]: TProps[key] } // typescript helper: make the TValue appears as TProps's TValue
@@ -72,17 +70,6 @@ export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>
 // defaults:
 const _defaultPrefix = '';
 const _defaultRule   = ':root';
-
-
-
-// jss:
-const customJss = createJss().setup({plugins:[
-    jssPluginGlobal(),    // requires to be placed before all other plugins
-    jssPluginShort(),     // requires to be placed before `camelCase`
-    jssPluginCamelCase(),
-    jssPluginExpand(),
-    jssPluginVendor(),
-]});
 
 
 
@@ -168,7 +155,7 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
     /**
      * The *generated css* attached on dom.
      */
-    let genStyleSheet : StyleSheet<'@global'> | null = null;
+    let genStyleSheet : StyleSheet<''> | null = null;
 
     /**
      * Gets the *declaration name* of the specified `propName`, eg: `--my-favColor`.
@@ -516,15 +503,13 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
         genStyleSheet?.detach();
 
         // create a new styleSheet & attach:
-        genStyleSheet =
-            customJss
-            .createStyleSheet({
-                '@global': {
-                    [settings.rule]: genProps,
-                    ...genKeyframes,
-                },
-            })
-            .attach();
+        genStyleSheet = createNodestrapStyle([
+            global([
+                [ settings.rule, genProps     as Style ],
+                [ null         , genKeyframes as Style ],
+            ]),
+        ])
+        .attach();
     }
     
     /**
