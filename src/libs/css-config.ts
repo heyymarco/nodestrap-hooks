@@ -12,7 +12,6 @@ import type {
 import {
     // general types:
     StyleSheet,
-    Style,
     PropList,
 
     
