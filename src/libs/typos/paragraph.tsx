@@ -41,7 +41,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
         foreg             : 'inherit' as Prop.Color             | Cust.Ref,
         
-        marginBlockStart  : 0         as Prop.MarginBlockStart  | Cust.Expr,
+        marginBlockStart  : '1em'     as Prop.MarginBlockStart  | Cust.Expr,
         marginBlockEnd    : '1em'     as Prop.MarginBlockEnd    | Cust.Expr,
         marginInlineStart : 0         as Prop.MarginInlineStart | Cust.Expr,
         marginInlineEnd   : 0         as Prop.MarginInlineEnd   | Cust.Expr,
@@ -54,7 +54,7 @@ export default cssProps;
 // create a new styleSheet & attach:
 createNodestrapStyle(() => [
     global([
-        rule(['p', '.p'], [
+        rule(['&p', '.p'], [
             layout({
                 // layouts:
                 display : 'block',
@@ -62,8 +62,11 @@ createNodestrapStyle(() => [
 
 
                 // spacings:
+                '&:first-child': {
+                    marginBlockStart : 0, // kill the first marginStart for the first element
+                },
                 '&:last-child': {
-                    marginBlockEnd: 0, // kill the last marginEnd for the last element
+                    marginBlockEnd   : 0, // kill the last marginEnd for the last element
                 },
 
 
