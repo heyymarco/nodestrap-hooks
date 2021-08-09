@@ -1,6 +1,6 @@
 import generals,
        * as general        from './general'
-// import * as secondary      from './secondary'
+import * as secondary      from './secondary'
 
 // import * as paragraph      from './paragraph'
 // import * as lead           from './lead'
@@ -23,7 +23,7 @@ import generals,
 export {
     generals as default,
     general,
-    // secondary,
+    secondary,
 
     // paragraph,
     // lead,

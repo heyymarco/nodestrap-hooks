@@ -11,7 +11,8 @@ import '../libs/typos/index'
 function App() {
 	return (
         <div>
-            test
+            <p>General text</p>
+            <p className='txt-sec'>Secondary text</p>
         </div>
     );
 }

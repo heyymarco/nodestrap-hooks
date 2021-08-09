@@ -1,16 +1,8 @@
+// nodestrap (modular web components):
 import type {
     Prop,
     Cust,
 }                           from '../css-types'  // ts defs support for jss
-import {
-    createCssConfig,
-
-
-    // utilities:
-    usesGeneralProps,
-}                           from '../css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
-
-// nodestrap (modular web components):
 import {
     // styles:
     createNodestrapStyle,
@@ -23,6 +15,13 @@ import {
     // rules:
     rule,
 }                           from '../nodestrap'  // nodestrap core
+import {
+    createCssConfig,
+
+
+    // utilities:
+    usesGeneralProps,
+}                           from '../css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
 import colors               from '../colors'     // configurable colors & theming defs
 
 
@@ -95,7 +94,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
         lineHeight            : basics.lineHeightNm         as Prop.LineHeight   | Cust.Expr,
     };
-});
+}, { prefix: '' });
 export default cssProps;
 
 
