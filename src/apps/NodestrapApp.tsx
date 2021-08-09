@@ -10,7 +10,7 @@ import {
     // createNodestrapStyle,
     // global,
     Style,
-    Styles,
+    // Styles,
 }                           from '../libs/nodestrap'       // nodestrap core
 
 
@@ -46,7 +46,7 @@ const keyframesFadeOut = {
 
 createStyle({
     // @global:
-    ['']: {
+    '': {
         '&:root': {
             '--hello': 'world',
             extend: [

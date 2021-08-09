@@ -18,11 +18,14 @@ import {
     
     // styles:
     createNodestrapStyle,
-    usesNodestrap,
 
 
     // compositions:
     global,
+
+
+    // rules:
+    rule,
 }                           from './nodestrap'  // nodestrap core
 
 // utils:
@@ -505,8 +508,8 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
         // create a new styleSheet & attach:
         genStyleSheet = createNodestrapStyle([
             global([
-                [ settings.rule, genProps     as Style ],
-                [ null         , genKeyframes as Style ],
+                rule(settings.rule, genProps    ),
+                rule(null         , genKeyframes),
             ]),
         ])
         .attach();

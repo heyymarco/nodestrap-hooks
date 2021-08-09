@@ -297,6 +297,11 @@ export const variants = (variants: RuleCollection): Style => rules(variants);
 export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, minSpecificityWeight = 3): Style => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, minSpecificityWeight);
 }
+/**
+ * Defines component's `style` that is applied when the specified `rule` meets the conditions.
+ * @returns A `RuleEntry` represents the component's rule.
+ */
+export const rule     = (rule: SingleOrArray<OptionalString>, style: SingleOrArray<Style>): RuleEntry => [rule, style];
 
 
 
