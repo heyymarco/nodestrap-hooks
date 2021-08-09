@@ -8,14 +8,15 @@ import reportWebVitals from './reportWebVitals';
 // import CssHooksApp from './apps/CssHooksApp';
 // import CssConfigApp from './apps/CssConfigApp';
 // import NodestrapApp from './apps/NodestrapApp';
-import ColorApp from './apps/ColorApp';
+// import ColorApp from './apps/ColorApp';
+import TypoApp from './apps/TypoApp';
 
 
 
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <ColorApp />
+    <TypoApp />
   ,
   document.getElementById('root')
 );

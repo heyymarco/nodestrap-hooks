@@ -715,7 +715,7 @@ export { createCssConfig, createCssConfig as default }
  * @param cssProps The collection of the css custom props to be filtered.
  * @returns A `PropList` which is the copy of the `cssProps` that only having *general* props.
  */
-export const filterGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): PropList => {
+export const usesGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): PropList => {
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` matching with following:
@@ -744,6 +744,15 @@ export const filterGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): P
 
         // suffixes:
         /**
+         * For weight-variant
+         * Eg:
+         * fontWeightLight
+         * fontWeightNormal
+         */
+        if ((/[a-z](Lighter|Light|Normal|Bold|Bolder)$/).test(propName)) continue; // exclude
+
+        // suffixes:
+        /**
          * For state-variant
          * Eg:
          * animValid
@@ -761,7 +770,7 @@ export const filterGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): P
          * valid   => (icon)Valid   => valid
          * invalid => (icon)Invalid => invalid
          */
-        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid)$/).test(propName)) continue; // exclude
+        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|fontFamily\w+)$/).test(propName)) continue; // exclude
 
         // props starting with `@`:
         /**
@@ -785,7 +794,7 @@ export const filterGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): P
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `prefix` name.  
  * The returning props has been normalized (renamed), so they don't start with `prefix`.
  */
-export const filterPrefixProps = <TProps extends {}>(cssProps: Refs<TProps>, prefix: string): PropList => {
+export const usesPrefixedProps = <TProps extends {}>(cssProps: Refs<TProps>, prefix: string): PropList => {
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` not starting with specified `prefix`:
@@ -813,7 +822,7 @@ export const filterPrefixProps = <TProps extends {}>(cssProps: Refs<TProps>, pre
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `suffix` name.  
  * The returning props has been normalized (renamed), so they don't end with `suffix`.
  */
-export const filterSuffixProps = <TProps extends {}>(cssProps: Refs<TProps>, suffix: string): PropList => {
+export const usesSuffixedProps = <TProps extends {}>(cssProps: Refs<TProps>, suffix: string): PropList => {
     suffix = pascalCase(suffix);
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
