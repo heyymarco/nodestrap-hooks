@@ -21,6 +21,7 @@ import type {
 }                           from './types'      // nodestrap's types
 import {
     // general types:
+    ClassName,
     ClassList,
 
     
@@ -36,12 +37,12 @@ import {
 
 // react hooks:
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
-export const createUseStyle          = <TClass extends string = string>(styles: Styles<TClass>|Factory<Styles<TClass>>): Factory<Classes<TClass>> => {
+export const createUseStyle          = <TClassName extends ClassName = ClassName>(styles: Styles<TClassName>|Factory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
     const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
 
     
     
-    return (): Classes<TClass> => {
+    return (): Classes<TClassName> => {
         const styleSheet = ( // no need to use `useMemo` because fetching from `styleSheetManager` is inexpensive
             // take from an existing cached styleSheet (if any):
             styleSheetManager.get(styleSheetId) // inexpensive operation
@@ -86,7 +87,7 @@ export const createUseStyle          = <TClass extends string = string>(styles: 
         return styleSheet.classes;
     };
 }
-export const createUseNodestrapStyle = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): Factory<Classes<TClass>> => {
+export const createUseNodestrapStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Factory<Classes<TClassName>> => {
     return createUseStyle(
         () => usesNodestrap(classes)
     );

@@ -51,14 +51,18 @@ export type { JssStyle, JssValue, Classes, Styles, StyleSheet }
 export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
-export type Style                                      = JssStyle & ExtendableStyle
-export type ClassEntry<TClass extends string = string> = readonly [TClass, Style]
-export type ClassList <TClass extends string = string> = ClassEntry<TClass>[]
-export type OptionalString                             = Optional<string>
-export type RuleEntry                                  = readonly [SingleOrArray<OptionalString>, SingleOrArray<Style>]
-export type RuleList                                   = RuleEntry[]
-export type RuleCollection                             = (RuleEntry|RuleList)[]
-export type PropList                                   = Dictionary<JssValue>
+export type Style                                                = JssStyle & ExtendableStyle
+export type ClassName                                            = string
+export type PseudoClass                                          = `:${ClassName}`
+export type RealClass                                            = `.${ClassName}`
+export type Class                                                = PseudoClass|RealClass
+export type ClassEntry<TClassName extends ClassName = ClassName> = readonly [TClassName, Style]
+export type ClassList <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
+export type OptionalString                                       = Optional<string>
+export type RuleEntry                                            = readonly [SingleOrArray<OptionalString>, SingleOrArray<Style>]
+export type RuleList                                             = RuleEntry[]
+export type RuleCollection                                       = (RuleEntry|RuleList)[]
+export type PropList                                             = Dictionary<JssValue>
 
 
 
@@ -76,12 +80,12 @@ const customJss = createJss().setup({plugins:[
 
 
 // styles:
-export const createStyle = <TClass extends string = string>(styles: Styles<TClass>|Factory<Styles<TClass>>): StyleSheet<TClass> => {
+export const createStyle = <TClassName extends ClassName = ClassName>(styles: Styles<TClassName>|Factory<Styles<TClassName>>): StyleSheet<TClassName> => {
     return customJss.createStyleSheet(
         ((typeof(styles) === 'function') ? styles() : styles)
     );
 }
-export const createNodestrapStyle = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): StyleSheet<TClass> => {
+export const createNodestrapStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): StyleSheet<TClassName> => {
     return createStyle(
         () => usesNodestrap(classes)
     );
@@ -90,8 +94,8 @@ export const createNodestrapStyle = <TClass extends string = string>(classes: Cl
 
 
 // nodestrap hooks:
-export const usesNodestrap = <TClass extends string = string>(classes: ClassList<TClass>|Factory<ClassList<TClass>>): Styles<TClass> => {
-    const mergedStyles = {} as Styles<TClass>;
+export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Styles<TClassName> => {
+    const mergedStyles = {} as Styles<TClassName>;
 
     
     
@@ -117,7 +121,7 @@ export const usesNodestrap = <TClass extends string = string>(classes: ClassList
  * Defines the component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const composition = <TClass extends string = 'main'>(styles: Style[], className: TClass = 'main' as TClass): ClassEntry<TClass> => [
+export const composition = <TClassName extends ClassName = 'main'>(styles: Style[], className: TClassName = 'main' as TClassName): ClassEntry<TClassName> => [
     className,
 
     {
