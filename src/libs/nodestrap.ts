@@ -145,7 +145,7 @@ export const layout = (style: Style): Style => style;
 
 
 
-// rules:
+// rule groups:
 export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => ({
     extend: ((): Style[] => {
         const noRules: Style[] = [];
@@ -297,11 +297,34 @@ export const variants = (variants: RuleCollection): Style => rules(variants);
 export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, minSpecificityWeight = 3): Style => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, minSpecificityWeight);
 }
+
+// rules:
 /**
  * Defines component's `style` that is applied when the specified `rule` meets the conditions.
  * @returns A `RuleEntry` represents the component's rule.
  */
 export const rule     = (rule: SingleOrArray<OptionalString>, style: SingleOrArray<Style>): RuleEntry => [rule, style];
+// shortcut rules:
+export const isFirstChild = (style: SingleOrArray<Style>) => rule(':first-child', style);
+export const isLastChild  = (style: SingleOrArray<Style>) => rule(':last-child', style);
+/*export const isNthChild = (step: number, offset: number, style: SingleOrArray<Style>): RuleEntry => {
+    if (step <= 0) { // no step
+        if (offset <= 0) return rule(':none', {}); // element indices are starting from 1 => never match => return empty style
+
+        if (offset === 1) return isFirstChild(style);
+
+        return rule(`:nth-child(${offset})`, {});
+    }
+    else if (step === 1) {
+
+    }
+    
+    
+    
+    if(offset <= 0) {
+
+    } // if
+};*/
 
 
 
