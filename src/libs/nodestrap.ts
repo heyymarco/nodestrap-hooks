@@ -52,14 +52,26 @@ export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
 export type Style                                                = JssStyle & ExtendableStyle
+
 export type ClassName                                            = string
-export type PseudoClass                                          = `:${ClassName}`
 export type RealClass                                            = `.${ClassName}`
-export type Class                                                = PseudoClass|RealClass
+export type PseudoClass                                          = `:${ClassName}`
+export type Class                                                = RealClass|PseudoClass
 export type ClassEntry<TClassName extends ClassName = ClassName> = readonly [TClassName, Style]
 export type ClassList <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
+
 export type OptionalString                                       = Optional<string>
-export type RuleEntry                                            = readonly [SingleOrArray<OptionalString>, SingleOrArray<Style>]
+
+export type UniversalSelector                                    = '*'
+export type RealElementSelector                                  = string
+export type PseudoElementSelector                                = `::${string}`
+export type ElementSelector                                      = RealElementSelector|PseudoElementSelector
+export type ClassSelector                                        = Class
+export type IdSelector                                           = `#${string}`
+export type SingleSelector                                       = UniversalSelector|ElementSelector|ClassSelector|IdSelector
+export type Selector                                             = SingleSelector|`${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`
+export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
+export type RuleEntry                                            = readonly [SingleOrArray<Optional<Selector>>, SingleOrArray<Style>]
 export type RuleList                                             = RuleEntry[]
 export type RuleCollection                                       = (RuleEntry|RuleList)[]
 export type PropList                                             = Dictionary<JssValue>
@@ -152,12 +164,12 @@ export const layout = (style: Style): Style => style;
 // rule groups:
 export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => ({
     extend: ((): Style[] => {
-        const noRules: Style[] = [];
+        const noSelectors: Style[] = [];
 
         return [
             ...ruleCollection
                 .map((ruleEntryList: RuleEntry|RuleList): RuleList => { // unflat: RuleEntry|RuleList => [RuleEntry]|RuleList => RuleList
-                    const isOptionalString    = (value: any): value is OptionalString => {
+                    const isOptionalString      = (value: any): value is OptionalString => {
                         if ((typeof value) === 'string') return true; // a `string` detected
 
                         if (value === null)              return true; // optional `null`
@@ -165,7 +177,7 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
 
                         return false; // the value is not an `OptionalString`
                     };
-                    const isOptionalStringArr = (value: any): value is OptionalString[] => {
+                    const isOptionalStringArr   = (value: any): value is OptionalString[] => {
                         return (
                             Array.isArray(value)
                             &&
@@ -173,10 +185,13 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
                         );
                     };
 
-                    const isStyle             = (value: any): value is Style => {
+                    const isOptionalSelector    = (value: any): value is Optional<Selector>   => isOptionalString(value);
+                    const isOptionalSelectorArr = (value: any): value is Optional<Selector>[] => isOptionalStringArr(value);
+
+                    const isStyle               = (value: any): value is Style => {
                         return value && (typeof(value) === 'object') && !Array.isArray(value);
                     };
-                    const isStyleArr          = (value: any): value is Style[] => {
+                    const isStyleArr            = (value: any): value is Style[] => {
                         return (
                             Array.isArray(value)
                             &&
@@ -193,14 +208,14 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
                         
                         const [first, second] = value;
 
-                        // the first element must be an `OptionalString` -or- an array of `OptionalString` -or- an empty array
+                        // the first element must be an `Optional<Selector>` -or- an array of `Optional<Selector>` -or- an empty array
                         // and
-                        // the second element must be a `Style`          -or- an array of `Style`          -or- an empty array
+                        // the second element must be a `Style`              -or- an array of `Style`              -or- an empty array
                         return (
                             (
-                                isOptionalString(first)
+                                isOptionalSelector(first)
                                 ||
-                                isOptionalStringArr(first)
+                                isOptionalSelectorArr(first)
                             )
                             &&
                             (
@@ -217,19 +232,19 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
                     return ruleEntryList;
                 })
                 .flat(/*depth: */1) // flatten: RuleList[] => [RuleList, RuleList, ...] => [...RuleList, ...RuleList, ...] => [RuleEntry, RuleEntry, ...] => RuleEntry[]
-                .map(([rules, styles]): readonly [string[], Style] => {
-                    let normalizedRules = (Array.isArray(rules) ? rules : [rules]).map((rule): string => {
-                        if (!rule) return '&';
+                .map(([selectors, styles]): readonly [NestedSelector[], Style] => {
+                    let nestedSelectors = (Array.isArray(selectors) ? selectors : [selectors]).map((selector): NestedSelector => {
+                        if (!selector) return '&';
 
-                        if (rule.includes('&')) return rule;
+                        if (selector.startsWith('&') || selector.endsWith('&')) return (selector as NestedSelector);
 
-                        if (rule.includes('.') || rule.includes(':')) return `&${rule}`;
+                        if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
 
-                        return `&.${rule}`;
+                        return `&.${selector}`;
                     });
                     if (minSpecificityWeight >= 2) {
-                        normalizedRules = normalizedRules.map((rule): string => {
-                            if (rule === '&') return rule; // zero specificity => no change
+                        nestedSelectors = nestedSelectors.map((nestedSelector: NestedSelector): NestedSelector => {
+                            if (nestedSelector === '&') return nestedSelector; // zero specificity => no change
 
                             // one/more specificities found => increase the specificity weight until reaches `minSpecificityWeight`
 
@@ -237,28 +252,28 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
                             
                             // calculate the specificity weight:
                             // `.realClassName` or `:pseudoClassName` (without parameters):
-                            const classes               = rule.match(/(\.|:(?!(is|not)(?![\w-])))[\w-]+/gmi); // count the `.realClassName` and `:pseudoClassName` but not `:is` or `:not`
+                            const classes               = nestedSelector.match(/(\.|:(?!(is|not)(?![\w-])))[\w-]+/gmi); // count the `.RealClass` and `:PseudoClass` but not `:is` or `:not`
                             const specificityWeight     = classes?.length ?? 0;
                             const missSpecificityWeight = minSpecificityWeight - specificityWeight;
 
                             
                             
                             // the specificity weight was meet the minimum specificity required => no change:
-                            if (missSpecificityWeight <= 0) return rule;
+                            if (missSpecificityWeight <= 0) return nestedSelector;
 
                             // the specificity weight is less than the minimum specificity required => increase the specificity:
-                            return `${rule}${(new Array(missSpecificityWeight)).fill(((): string => {
+                            return `${nestedSelector}${(new Array(missSpecificityWeight)).fill(((): Selector => {
                                 const lastClass = classes?.[classes.length - 1];
                                 if (lastClass) {
                                     // the last word (without parameters):
-                                    if (rule.length === (rule.lastIndexOf(lastClass) + lastClass.length)) return lastClass; // `.realClassName` or `:pseudoClassName` without parameters
+                                    if (nestedSelector.length === (nestedSelector.lastIndexOf(lastClass) + lastClass.length)) return (lastClass as Selector); // `.RealClass` or `:PseudoClass` without parameters
                                 } // if
                                 
                                 
                                 
                                 // use a **hacky class name** to increase the specificity:
                                 return ':not(._)';
-                            })()).join('')}`;
+                            })()).join('')}` as NestedSelector;
                         });
                     } // if
 
@@ -268,23 +283,23 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
 
 
 
-                    if (normalizedRules.includes('&')) { // contains one/more rules with zero specificity
-                        normalizedRules = normalizedRules.filter((rule) => (rule !== '&')); // filter out rules with zero specificity
-                        noRules.push(mergedStyles); // add styles with zero specificity
+                    if (nestedSelectors.includes('&')) { // contains one/more selectors with zero specificity
+                        nestedSelectors = nestedSelectors.filter((nestedSelector) => (nestedSelector !== '&')); // filter out selectors with zero specificity
+                        noSelectors.push(mergedStyles); // add styles with zero specificity
                     } // if
 
 
 
-                    return [normalizedRules, mergedStyles];
+                    return [nestedSelectors, mergedStyles];
                 })
-                .filter(([normalizedRules]) => (normalizedRules.length > 0)) // filter out empty normalizedRules
-                .map(([normalizedRules, mergedStyles]): Style => {
+                .filter(([nestedSelectors]) => (nestedSelectors.length > 0)) // filter out empty `nestedSelectors`
+                .map(([nestedSelectors, mergedStyles]): Style => {
                     return {
-                        [normalizedRules.join(',')] : mergedStyles,
+                        [nestedSelectors.join(',')] : mergedStyles,
                     };
                 }),
             
-            ...noRules,
+            ...noSelectors,
         ];
     })(),
 });
