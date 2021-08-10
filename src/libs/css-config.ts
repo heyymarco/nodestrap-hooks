@@ -728,8 +728,9 @@ export const usesGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): Pro
          * booPadding
          * logoBackgColor
          * logoOpacity
+         * subOpacity
          */
-        if ((/^(icon|img|items|item|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|caption|header|footer|body)[A-Z]/).test(propName)) continue; // exclude
+        if ((/^(icon|img|items|item|sub|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|caption|header|footer|body)[A-Z]/).test(propName)) continue; // exclude
 
         // suffixes:
         /**
@@ -770,7 +771,7 @@ export const usesGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): Pro
          * valid   => (icon)Valid   => valid
          * invalid => (icon)Invalid => invalid
          */
-        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|fontFamily\w+)$/).test(propName)) continue; // exclude
+        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
 
         // props starting with `@`:
         /**
@@ -884,7 +885,7 @@ export const restoreProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSu
  * @param cssProps The collection of the css custom props for overwritting (source).
  * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDecls`.
  */
-export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssProps: Refs<TProps>): PropList => {
+export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssProps: Refs<{}>): PropList => {
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         const targetPropName = (cssDecls as DictionaryOf<typeof cssDecls>)[propName];
