@@ -84,11 +84,11 @@ const useAwesomeButtonStyle = createUseNodestrapStyle([
         }),
 
         variants([
-            [ 'big', {
+            [ '.big', {
                 fontSize: 'x-large'
             }],
 
-            [ 'small', {
+            [ '.small', {
                 fontSize: 'x-small'
             }],
 
