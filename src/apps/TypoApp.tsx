@@ -30,6 +30,11 @@ function App() {
             <h1>Heading 1</h1>
             <h2>Sub Heading 2</h2>
             <p>Some paragraph</p>
+
+            <h1>Heading 1</h1>
+            <h2>Sub Heading 2</h2>
+            <h3>Sub Heading 3</h3>
+            <p>Some paragraph</p>
         </div>
     );
 }

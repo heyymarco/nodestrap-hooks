@@ -21,6 +21,7 @@ import {
 
     // layouts:
     layout,
+    adjacentSiblings,
 
 
     // rules:
@@ -28,6 +29,7 @@ import {
     rule,
     isFirstChild,
     isLastChild,
+    isNotLastChild,
 }                           from '../nodestrap'  // nodestrap core
 import {
     createCssConfig,
@@ -76,7 +78,7 @@ export default cssProps;
 // create a new styleSheet & attach:
 export const usesLeveledRule = (selector: SingleOrArray<Selector>, levels = [1,2,3,4,5,6]) => {
     const selectors = (Array.isArray(selector) ? selector : [selector]);
-    const allLevels =
+    const selectorsWithLevels =
         levels
         .map((level) => selectors.map((selector) => `${selector}${level}`))
         .flat(/*depth: */1);
@@ -85,36 +87,39 @@ export const usesLeveledRule = (selector: SingleOrArray<Selector>, levels = [1,2
     
     return [
         // global rule for h1-h6:
-        rule(allLevels, [
+        rule(selectorsWithLevels, [
             layout({
                 // layouts:
                 display : 'block',
     
     
     
-                // siblings:
-                /**
-                 * treats the next title as sub-title
-                 * makes it closer to the main-title by applying a negative marginStart into it
-                 * makes the content after sub-title even further by applying main-title's marginEnd into it
-                 */
-                [ allLevels.map((cls) => `&+${cls}`).join(',') ]: layout({
-                    // appearances:
-                    opacity: cssProps.subOpacity,
-    
-    
-    
-                    // spacings:
-                    //#region take over marginStart & marginEnd to the next sub-title
-                    // make sub-title closer to the main-title:
-                    marginBlockStart: [['calc(0px -', cssProps.marginBlockEnd, ')']], // cancel-out parent's marginEnd with negative marginStart
-    
-                    // apply new marginEnd to sub-title:
-                    '&:not(:last-child)': {
-                        marginBlockEnd: cssProps.marginBlockEnd,
-                    },
-                    //#endregion take over marginStart & marginEnd to the next sub-title
-                }),
+                ...adjacentSiblings(selectorsWithLevels, [
+                    /*
+                     * treats subsequent headings as subtitles
+                     * make it closer to the main heading
+                     * make it further to the content
+                    */
+                    layout({
+                        // appearances:
+                        opacity: cssProps.subOpacity,
+        
+        
+        
+                        // spacings:
+                        // make subtitle closer to the main heading:
+                        marginBlockStart: [['calc(0px -', cssProps.marginBlockEnd, ')']], // cancel-out parent's marginBlockEnd with negative marginBlockStart
+                    }),
+                    variants([
+                        isNotLastChild([
+                            layout({
+                                // spacings:
+                                // make subtitle further to the content:
+                                marginBlockEnd: cssProps.marginBlockEnd,
+                            }),
+                        ]),
+                    ]),
+                ]),
     
     
     
