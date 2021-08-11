@@ -16,7 +16,7 @@ import * as markingKbd     from './marking-kbd'
 
 import * as markingGeneral from './marking-general'
 
-// import * as horizontalRule from './horizontal-rule'
+import * as horizontalRule from './horizontal-rule'
 
 
 
@@ -39,5 +39,5 @@ export {
 
     markingGeneral,
 
-    // horizontalRule,
+    horizontalRule,
 };

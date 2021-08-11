@@ -77,6 +77,9 @@ function App() {
             <p>
                 <em>really</em> <i>italic</i>
             </p>
+            <p>horz line:</p>
+            <hr />
+            <p>horz above ^</p>
         </div>
     );
 }
