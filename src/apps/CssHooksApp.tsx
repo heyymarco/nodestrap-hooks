@@ -7,7 +7,7 @@ import {
 // nodestrap (modular web components):
 import {
     compositionOf,
-    composition,
+    mainComposition,
     global,
 
     layout,
@@ -69,7 +69,7 @@ export default App;
 
 
 const useAwesomeButtonStyle = createUseNodestrapStyle([
-    composition([
+    mainComposition([
         layout({
             backg: 'red',
             foreg: 'blue',
@@ -120,7 +120,7 @@ const useAwesomeButtonStyle = createUseNodestrapStyle([
 ]);
 
 const useChildStyleSheet = createUseNodestrapStyle([
-    composition([
+    mainComposition([
         layout({
             '--child-': '"child"',
             backg: 'lightGreen',

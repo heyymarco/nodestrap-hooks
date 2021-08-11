@@ -129,25 +129,26 @@ export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes:
 
 
 // compositions:
+export const composition     = (styles: SingleOrArray<Style>): Style => (Array.isArray(styles) ? ({ extend: styles } as Style) : styles);
 /**
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const compositionOf = <TClassName extends ClassName = 'main'>(className: TClassName, styles: SingleOrArray<Style>): ClassEntry<TClassName> => [
+export const compositionOf   = <TClassName extends ClassName = 'main'>(className: TClassName, styles: SingleOrArray<Style>): ClassEntry<TClassName> => [
     className,
 
-    mergeStyles(styles)
+    composition(styles)
 ];
 /**
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const composition   = (styles: SingleOrArray<Style>)   => compositionOf('main' , styles);
+export const mainComposition = (styles: SingleOrArray<Style>)   => compositionOf('main' , styles);
 /**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
  */
-export const global        = (ruleCollection: RuleCollection) => compositionOf(''     , rules(ruleCollection));
+export const global          = (ruleCollection: RuleCollection) => compositionOf(''     , rules(ruleCollection));
 
 
 
@@ -159,7 +160,7 @@ export const global        = (ruleCollection: RuleCollection) => compositionOf('
 export const layout = (style: Style): Style => style;
 //combinators:
 export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): PropList => ({
-    [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => `&${combinator}${selector}`).join(',') ] : mergeStyles(styles) as JssValue,
+    [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => `&${combinator}${selector}`).join(',') ] : composition(styles) as JssValue,
 });
 export const descendants      = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators(' ', selectors, styles);
 export const children         = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('>', selectors, styles);
@@ -372,7 +373,6 @@ export const propsFn = (props: PropList): Style => {
 
 
 // utilities:
-export const mergeStyles = (styles: SingleOrArray<Style>): Style => (Array.isArray(styles) ? ({ extend: styles } as Style) : styles);
 export const iif = <T extends PropList|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);
 };
