@@ -20,6 +20,16 @@ function App() {
 
             <div className='lead'>Lead Paragraph 1</div>
             <p className='lead'>Lead Paragraph 2</p>
+
+            <h1>Heading 1</h1>
+            <p>Some paragraph</p>
+
+            <h2>Heading 2</h2>
+            <p>Some paragraph</p>
+
+            <h1>Heading 1</h1>
+            <h2>Sub Heading 2</h2>
+            <p>Some paragraph</p>
         </div>
     );
 }
