@@ -35,6 +35,21 @@ function App() {
             <h2>Sub Heading 2</h2>
             <h3>Sub Heading 3</h3>
             <p>Some paragraph</p>
+
+            <h1 className='display-1'>Display 1</h1>
+            <p>Some paragraph</p>
+
+            <h2 className='display-2'>Display 2</h2>
+            <p>Some paragraph</p>
+
+            <h1 className='display-1'>Display 1</h1>
+            <h2 className='display-2'>Sub Display 2</h2>
+            <p>Some paragraph</p>
+
+            <h1 className='display-1'>Display 1</h1>
+            <h2 className='display-2'>Sub Display 2</h2>
+            <h3 className='display-3'>Sub Display 3</h3>
+            <p>Some paragraph</p>
         </div>
     );
 }

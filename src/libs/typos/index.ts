@@ -6,7 +6,7 @@ import * as paragraph      from './paragraph'
 import * as lead           from './lead'
 
 import * as heading        from './heading'
-// import * as display        from './display'
+import * as display        from './display'
 
 // import * as blockquote     from './blockquote'
 
@@ -29,7 +29,7 @@ export {
     lead,
 
     heading,
-    // display,
+    display,
 
     // blockquote,
 

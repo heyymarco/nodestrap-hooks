@@ -76,7 +76,7 @@ export default cssProps;
 
 
 // create a new styleSheet & attach:
-export const usesLeveledRule = (selector: SingleOrArray<Selector>, levels = [1,2,3,4,5,6]) => {
+export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls extends typeof cssDecls>(cssProps: TCssProps, cssDecls: TCssDecls, selector: SingleOrArray<Selector>, levels = [1,2,3,4,5,6]) => {
     const selectors = (Array.isArray(selector) ? selector : [selector]);
     const selectorsWithLevels =
         levels
@@ -156,7 +156,7 @@ export const usesLeveledRule = (selector: SingleOrArray<Selector>, levels = [1,2
 };
 createNodestrapStyle(() => [
     global([
-        usesLeveledRule(['h', '.h']),
+        usesLevelingRule(cssProps, cssDecls, ['h', '.h']),
     ]),
 ])
 .attach();
