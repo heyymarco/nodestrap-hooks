@@ -55,6 +55,8 @@ function App() {
                 <p>This is a blockquote</p>
                 <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corrupti vel est aliquam, doloremque quae, nisi quod labore numquam rem voluptatum voluptate, ullam distinctio velit aperiam dolor qui eos blanditiis ut!</p>
             </blockquote>
+
+            <p>I am <mark>marked</mark> here</p>
         </div>
     );
 }
