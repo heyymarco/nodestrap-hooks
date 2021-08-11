@@ -61,6 +61,22 @@ function App() {
             <p>The syntax is <code>console.log('hello world')</code></p>
 
             <p>Press <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>del</kbd></p>
+
+            <p>
+                <del>deleted</del> <s>wrong</s>
+            </p>
+            <p>
+                <ins>inserted</ins> <u>underlined</u>
+            </p>
+            <p>
+                <small>small text</small> <span className='small'>small text too</span>
+            </p>
+            <p>
+                <strong>important</strong> <b>bold</b>
+            </p>
+            <p>
+                <em>really</em> <i>italic</i>
+            </p>
         </div>
     );
 }
