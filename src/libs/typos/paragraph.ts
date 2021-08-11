@@ -17,7 +17,10 @@ import {
 
 
     // rules:
+    variants,
     rule,
+    isFirstChild,
+    isLastChild,
 }                           from '../nodestrap'  // nodestrap core
 import {
     createCssConfig,
@@ -61,19 +64,23 @@ createNodestrapStyle(() => [
 
 
 
-                // spacings:
-                '&:first-child': {
-                    marginBlockStart : 0, // kill the first marginStart for the first element
-                },
-                '&:last-child': {
-                    marginBlockEnd   : 0, // kill the last marginEnd for the last element
-                },
-
-
-
                 // customize:
                 ...usesGeneralProps(cssProps),
             }),
+            variants([
+                isFirstChild([
+                    layout({
+                        // spacings:
+                        marginBlockStart : 0, // kill the first marginBlockStart for the first element
+                    }),
+                ]),
+                isLastChild([
+                    layout({
+                        // spacings:
+                        marginBlockEnd   : 0, // kill the last marginBlockEnd for the last element
+                    }),
+                ]),
+            ]),
         ]),
     ]),
 ])

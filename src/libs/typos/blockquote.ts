@@ -30,28 +30,27 @@ import {
     usesGeneralProps,
 }                           from '../css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
 import gens                 from './general'
-import pars                 from './paragraph'
 
 
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        fontSize          : gens.fontSizeMd        as Prop.FontSize          | Cust.Expr,
-        fontFamily        : pars.fontFamily        as Prop.FontFamily[]      | Cust.Ref,
-        fontWeight        : gens.fontWeightLight   as Prop.FontWeight        | Cust.Expr,
-        fontStyle         : pars.fontStyle         as Prop.FontStyle         | Cust.Ref,
-        textDecoration    : pars.textDecoration    as Prop.TextDecoration    | Cust.Ref,
-        lineHeight        : pars.lineHeight        as Prop.LineHeight        | Cust.Expr,
+        fontSize          : gens.fontSizeMd as Prop.FontSize          | Cust.Expr,
+        fontFamily        : 'inherit'       as Prop.FontFamily[]      | Cust.Ref,
+        fontWeight        : 'inherit'       as Prop.FontWeight        | Cust.Expr,
+        fontStyle         : 'inherit'       as Prop.FontStyle         | Cust.Ref,
+        textDecoration    : 'inherit'       as Prop.TextDecoration    | Cust.Ref,
+        lineHeight        : 'inherit'       as Prop.LineHeight        | Cust.Expr,
     
-        foreg             : pars.foreg             as Prop.Color             | Cust.Ref,
+        foreg             : 'inherit'       as Prop.Color             | Cust.Ref,
         
-        marginBlockStart  : pars.marginBlockStart  as Prop.MarginBlockStart  | Cust.Expr,
-        marginBlockEnd    : pars.marginBlockEnd    as Prop.MarginBlockEnd    | Cust.Expr,
-        marginInlineStart : pars.marginInlineStart as Prop.MarginInlineStart | Cust.Expr,
-        marginInlineEnd   : pars.marginInlineEnd   as Prop.MarginInlineEnd   | Cust.Expr,
+        marginBlockStart  : '1em'           as Prop.MarginBlockStart  | Cust.Expr,
+        marginBlockEnd    : '1em'           as Prop.MarginBlockEnd    | Cust.Expr,
+        marginInlineStart : 0               as Prop.MarginInlineStart | Cust.Expr,
+        marginInlineEnd   : 0               as Prop.MarginInlineEnd   | Cust.Expr,
     };
-}, { prefix: 'lead' });
+}, { prefix: 'bq' });
 export default cssProps;
 
 
@@ -59,7 +58,7 @@ export default cssProps;
 // create a new styleSheet & attach:
 createNodestrapStyle(() => [
     global([
-        rule('.lead', [
+        rule(['blockquote', '.blockquote'], [
             layout({
                 // layouts:
                 display : 'block',

@@ -8,7 +8,7 @@ import * as lead           from './lead'
 import * as heading        from './heading'
 import * as display        from './display'
 
-// import * as blockquote     from './blockquote'
+import * as blockquote     from './blockquote'
 
 // import * as markingMark    from './marking-mark'
 // import * as markingCode    from './marking-code'
@@ -31,7 +31,7 @@ export {
     heading,
     display,
 
-    // blockquote,
+    blockquote,
 
     // markingMark,
     // markingCode,

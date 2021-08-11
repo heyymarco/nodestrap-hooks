@@ -50,6 +50,11 @@ function App() {
             <h2 className='display-2'>Sub Display 2</h2>
             <h3 className='display-3'>Sub Display 3</h3>
             <p>Some paragraph</p>
+
+            <blockquote>
+                <p>This is a blockquote</p>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corrupti vel est aliquam, doloremque quae, nisi quod labore numquam rem voluptatum voluptate, ullam distinctio velit aperiam dolor qui eos blanditiis ut!</p>
+            </blockquote>
         </div>
     );
 }

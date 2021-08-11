@@ -130,13 +130,13 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
                 isFirstChild([
                     layout({
                         // spacings:
-                        marginBlockStart : 0, // kill the first marginStart for the first element
+                        marginBlockStart : 0, // kill the first marginBlockStart for the first element
                     }),
                 ]),
                 isLastChild([
                     layout({
                         // spacings:
-                        marginBlockEnd   : 0, // kill the last marginEnd for the last element
+                        marginBlockEnd   : 0, // kill the last marginBlockEnd for the last element
                     }),
                 ]),
             ]),
