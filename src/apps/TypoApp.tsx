@@ -59,6 +59,8 @@ function App() {
             <p>I am <mark>marked</mark> here</p>
 
             <p>The syntax is <code>console.log('hello world')</code></p>
+
+            <p>Press <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>del</kbd></p>
         </div>
     );
 }
