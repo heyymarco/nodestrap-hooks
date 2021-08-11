@@ -57,6 +57,8 @@ function App() {
             </blockquote>
 
             <p>I am <mark>marked</mark> here</p>
+
+            <p>The syntax is <code>console.log('hello world')</code></p>
         </div>
     );
 }

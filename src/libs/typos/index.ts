@@ -11,7 +11,7 @@ import * as display        from './display'
 import * as blockquote     from './blockquote'
 
 import * as markingMark    from './marking-mark'
-// import * as markingCode    from './marking-code'
+import * as markingCode    from './marking-code'
 // import * as markingKbd     from './marking-kbd'
 
 // import * as markingGeneral from './marking-general'
@@ -34,7 +34,7 @@ export {
     blockquote,
 
     markingMark,
-    // markingCode,
+    markingCode,
     // markingKbd,
 
     // markingGeneral,
