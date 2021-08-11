@@ -236,9 +236,9 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
 
                         if (selector.startsWith('&') || selector.endsWith('&')) return (selector as NestedSelector);
 
-                        if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
+                        // if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
 
-                        return `&.${selector}`;
+                        return `&${selector}`;
                     });
                     if (minSpecificityWeight >= 2) {
                         nestedSelectors = nestedSelectors.map((nestedSelector: NestedSelector): NestedSelector => {
@@ -322,8 +322,9 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  */
 export const rule     = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): RuleEntry => [selectors, styles];
 // shortcut rules:
+export const atRoot       = (styles: SingleOrArray<Style>) => rule(':root'       , styles);
 export const isFirstChild = (styles: SingleOrArray<Style>) => rule(':first-child', styles);
-export const isLastChild  = (styles: SingleOrArray<Style>) => rule(':last-child', styles);
+export const isLastChild  = (styles: SingleOrArray<Style>) => rule(':last-child' , styles);
 /*export const isNthChild = (step: number, offset: number, styles: SingleOrArray<Style>): RuleEntry => {
     if (step <= 0) { // no step
         if (offset <= 0) return rule(':none', {}); // element indices are starting from 1 => never match => return empty style
