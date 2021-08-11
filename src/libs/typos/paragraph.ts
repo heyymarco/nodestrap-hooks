@@ -54,7 +54,7 @@ export default cssProps;
 // create a new styleSheet & attach:
 createNodestrapStyle(() => [
     global([
-        rule(['&p', '.p'], [
+        rule(['p', '.p'], [
             layout({
                 // layouts:
                 display : 'block',
