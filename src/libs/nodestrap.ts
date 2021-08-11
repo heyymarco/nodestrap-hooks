@@ -199,9 +199,7 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
                         );
                     };
 
-                    
-                    
-                    const isRuleEntry         = (value: any): value is RuleEntry => {
+                    const isRuleEntry           = (value: any): value is RuleEntry => {
                         if (value.length !== 2) return false; // not a tuple => not a `RuleEntry`
 
                         
@@ -319,18 +317,18 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 
 // rules:
 /**
- * Defines component's `style` that is applied when the specified `rule` meets the conditions.
+ * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
  * @returns A `RuleEntry` represents the component's rule.
  */
-export const rule     = (rule: SingleOrArray<OptionalString>, style: SingleOrArray<Style>): RuleEntry => [rule, style];
+export const rule     = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): RuleEntry => [selectors, styles];
 // shortcut rules:
-export const isFirstChild = (style: SingleOrArray<Style>) => rule(':first-child', style);
-export const isLastChild  = (style: SingleOrArray<Style>) => rule(':last-child', style);
-/*export const isNthChild = (step: number, offset: number, style: SingleOrArray<Style>): RuleEntry => {
+export const isFirstChild = (styles: SingleOrArray<Style>) => rule(':first-child', styles);
+export const isLastChild  = (styles: SingleOrArray<Style>) => rule(':last-child', styles);
+/*export const isNthChild = (step: number, offset: number, styles: SingleOrArray<Style>): RuleEntry => {
     if (step <= 0) { // no step
         if (offset <= 0) return rule(':none', {}); // element indices are starting from 1 => never match => return empty style
 
-        if (offset === 1) return isFirstChild(style);
+        if (offset === 1) return isFirstChild(styles);
 
         return rule(`:nth-child(${offset})`, {});
     }
