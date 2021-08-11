@@ -129,6 +129,10 @@ export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes:
 
 
 // compositions:
+/**
+ * Defines the (sub) component's composition.
+ * @returns A `Style` represents the (sub) component's composition.
+ */
 export const composition     = (styles: SingleOrArray<Style>): Style => (Array.isArray(styles) ? ({ extend: styles } as Style) : styles);
 /**
  * Defines the additional component's composition.
