@@ -107,23 +107,15 @@ export const createNodestrapStyle = <TClassName extends ClassName = ClassName>(c
 
 // nodestrap hooks:
 export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Styles<TClassName> => {
-    const mergedStyles = {} as Styles<TClassName>;
-
-    
-    
-    ((typeof(classes) === 'function') ? classes() : classes)
-    /*
-        empty `className` recognized as `@global` in our `jss-plugin-global`
-        but to make more compatible with JSS' official `jss-plugin-global`
-        we convert empty `className` to `'@global'`
-     */
-    .map(([className, style]): Style => ({ [className || '@global']: style })) // convert each `[className, style]` to `Style` of `Style`
-    .forEach((style) => mergeStyle(mergedStyles as Style, style)); // merge each `Style` to `mergedStyles`
-
-    
-    
-    // here the merged `Style`s:
-    return mergedStyles;
+    return composition(
+        ((typeof(classes) === 'function') ? classes() : classes)
+        /*
+            empty `className` recognized as `@global` in our `jss-plugin-global`
+            but to make more compatible with JSS' official `jss-plugin-global`
+            we convert empty `className` to `'@global'`
+         */
+        .map(([className, style]): Style => ({ [className || '@global']: style })) // convert each `[className, style]` to `Style` of `Style`
+    ) as Styles<TClassName>;
 }
 
 
@@ -133,7 +125,17 @@ export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes:
  * Defines the (sub) component's composition.
  * @returns A `Style` represents the (sub) component's composition.
  */
-export const composition     = (styles: SingleOrArray<Style>): Style => (Array.isArray(styles) ? ({ extend: styles } as Style) : styles);
+export const composition     = (styles: SingleOrArray<Style>): Style => {
+    if (!Array.isArray(styles)) return styles;
+
+
+
+    const mergedStyles: Style = {}
+    for (const style of styles) {
+        mergeStyle(mergedStyles, style);
+    } // for
+    return mergedStyles;
+}
 /**
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
@@ -174,8 +176,8 @@ export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, s
 
 
 // rule groups:
-export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => ({
-    extend: ((): Style[] => {
+export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => composition(
+    ((): Style[] => {
         const noSelectors: Style[] = [];
 
         return [
@@ -287,9 +289,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         });
                     } // if
 
-                    const mergedStyles: Style = {
-                        extend: styles,
-                    };
+                    const mergedStyles = composition(styles);
 
 
 
@@ -311,8 +311,8 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
             
             ...noSelectors,
         ];
-    })(),
-});
+    })()
+);
 // shortcut rule groups:
 /**
  * Defines component's variants.
