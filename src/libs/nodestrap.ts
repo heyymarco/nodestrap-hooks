@@ -136,9 +136,7 @@ export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes:
 export const compositionOf = <TClassName extends ClassName = 'main'>(className: TClassName, styles: SingleOrArray<Style>): ClassEntry<TClassName> => [
     className,
 
-    {
-        extend: styles,
-    } as Style
+    mergeStyles(styles)
 ];
 /**
  * Defines the main component's composition.
@@ -159,6 +157,14 @@ export const global        = (ruleCollection: RuleCollection) => compositionOf('
  * @returns A `Style` represents the component's layout.
  */
 export const layout = (style: Style): Style => style;
+//combinators:
+export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): PropList => ({
+    [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => `&${combinator}${selector}`).join(',') ] : mergeStyles(styles) as JssValue,
+});
+export const descendants      = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators(' ', selectors, styles);
+export const children         = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('>', selectors, styles);
+export const siblings         = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('~', selectors, styles);
+export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('+', selectors, styles);
 
 
 
@@ -324,10 +330,12 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  */
 export const rule = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): RuleEntry => [selectors, styles];
 // shortcut rules:
-export const atRoot       = (styles: SingleOrArray<Style>) => rule(':root'        , styles);
-export const isFirstChild = (styles: SingleOrArray<Style>) => rule(':first-child' , styles);
-export const isLastChild  = (styles: SingleOrArray<Style>) => rule(':last-child'  , styles);
-/*export const isNthChild = (step: number, offset: number, styles: SingleOrArray<Style>): RuleEntry => {
+export const atRoot          = (styles: SingleOrArray<Style>) => rule(':root'              , styles);
+export const isFirstChild    = (styles: SingleOrArray<Style>) => rule(     ':first-child'  , styles);
+export const isNotFirstChild = (styles: SingleOrArray<Style>) => rule(':not(:first-child)' , styles);
+export const isLastChild     = (styles: SingleOrArray<Style>) => rule(     ':last-child'   , styles);
+export const isNotLastChild  = (styles: SingleOrArray<Style>) => rule(':not(:last-child)'  , styles);
+/*export const isNthChild    = (step: number, offset: number, styles: SingleOrArray<Style>): RuleEntry => {
     if (step <= 0) { // no step
         if (offset <= 0) return rule(':none', {}); // element indices are starting from 1 => never match => return empty style
 
@@ -364,6 +372,7 @@ export const propsFn = (props: PropList): Style => {
 
 
 // utilities:
+export const mergeStyles = (styles: SingleOrArray<Style>): Style => (Array.isArray(styles) ? ({ extend: styles } as Style) : styles);
 export const iif = <T extends PropList|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);
 };
