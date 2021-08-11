@@ -17,7 +17,7 @@ import {
 
 
     // rules:
-    rule,
+    atRoot,
 }                           from '../nodestrap'  // nodestrap core
 import {
     createCssConfig,
@@ -106,7 +106,7 @@ export default cssProps;
 // create a new styleSheet & attach:
 createNodestrapStyle(() => [
     global([
-        rule(':root', [
+        atRoot([
             layout({
                 // customize:
                 ...usesGeneralProps(cssProps),
