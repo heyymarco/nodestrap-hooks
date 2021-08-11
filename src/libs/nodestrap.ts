@@ -130,10 +130,10 @@ export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes:
 
 // compositions:
 /**
- * Defines the component's composition.
+ * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const composition = <TClassName extends ClassName = 'main'>(styles: Style[], className: TClassName = 'main' as TClassName): ClassEntry<TClassName> => [
+export const compositionOf = <TClassName extends ClassName = 'main'>(className: TClassName, styles: SingleOrArray<Style>): ClassEntry<TClassName> => [
     className,
 
     {
@@ -141,14 +141,15 @@ export const composition = <TClassName extends ClassName = 'main'>(styles: Style
     } as Style
 ];
 /**
+ * Defines the main component's composition.
+ * @returns A `ClassEntry` represents the component's composition.
+ */
+export const composition   = (styles: SingleOrArray<Style>)   => compositionOf('main' , styles);
+/**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
  */
-export const global = (ruleCollection: RuleCollection): ClassEntry<''> => [
-    '',
-
-    rules(ruleCollection)
-];
+export const global        = (ruleCollection: RuleCollection) => compositionOf(''     , rules(ruleCollection));
 
 
 
@@ -162,7 +163,7 @@ export const layout = (style: Style): Style => style;
 
 
 // rule groups:
-export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => ({
+export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => ({
     extend: ((): Style[] => {
         const noSelectors: Style[] = [];
 
@@ -301,6 +302,7 @@ export const rules    = (ruleCollection: RuleCollection, minSpecificityWeight: n
         ];
     })(),
 });
+// shortcut rule groups:
 /**
  * Defines component's variants.
  * @returns A `Style` represents the component's variants.
@@ -320,11 +322,11 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
  * @returns A `RuleEntry` represents the component's rule.
  */
-export const rule     = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): RuleEntry => [selectors, styles];
+export const rule = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): RuleEntry => [selectors, styles];
 // shortcut rules:
-export const atRoot       = (styles: SingleOrArray<Style>) => rule(':root'       , styles);
-export const isFirstChild = (styles: SingleOrArray<Style>) => rule(':first-child', styles);
-export const isLastChild  = (styles: SingleOrArray<Style>) => rule(':last-child' , styles);
+export const atRoot       = (styles: SingleOrArray<Style>) => rule(':root'        , styles);
+export const isFirstChild = (styles: SingleOrArray<Style>) => rule(':first-child' , styles);
+export const isLastChild  = (styles: SingleOrArray<Style>) => rule(':last-child'  , styles);
 /*export const isNthChild = (step: number, offset: number, styles: SingleOrArray<Style>): RuleEntry => {
     if (step <= 0) { // no step
         if (offset <= 0) return rule(':none', {}); // element indices are starting from 1 => never match => return empty style

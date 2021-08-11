@@ -6,6 +6,7 @@ import {
 
 // nodestrap (modular web components):
 import {
+    compositionOf,
     composition,
     global,
 
@@ -105,9 +106,9 @@ const useAwesomeButtonStyle = createUseNodestrapStyle([
             [ null, { cursor: 'pointer' } ],
         ]),
     ]),
-    composition([
+    compositionOf('other', [
 
-    ], 'other'),
+    ]),
     global([
         [ ':root', {
             '--glob-var': '"hello global"',
