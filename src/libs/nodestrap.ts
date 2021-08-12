@@ -168,7 +168,13 @@ export const imports         = (styles: SingleOrArray<Style>)   => composition(s
 export const layout = (style: Style): Style => style;
 //combinators:
 export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): PropList => ({
-    [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => `&${combinator}${selector}`).join(',') ] : composition(styles) as JssValue,
+    [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => {
+        if (!selector) selector = '*'; // empty selector => match any element
+
+        if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
+
+        return `&${combinator}${selector}`;
+    }).join(',') ] : composition(styles) as JssValue,
 });
 export const descendants      = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators(' ', selectors, styles);
 export const children         = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('>', selectors, styles);
