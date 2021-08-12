@@ -9,14 +9,15 @@ import reportWebVitals from './reportWebVitals';
 // import CssConfigApp from './apps/CssConfigApp';
 // import NodestrapApp from './apps/NodestrapApp';
 // import ColorApp from './apps/ColorApp';
-import TypoApp from './apps/TypoApp';
+// import TypoApp from './apps/TypoApp';
+import BreakpointsApp from './apps/BreakpointsApp';
 
 
 
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <TypoApp />
+    <BreakpointsApp />
   ,
   document.getElementById('root')
 );
