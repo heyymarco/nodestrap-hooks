@@ -421,7 +421,7 @@ export const escapeSvg = (svgData: string): string => {
  * @param color The color of the solid background to create.
  * @returns A `JssValue` represents a solid background.
  */
-export const solidBackg = (color: Cust.Ref, clip : Prop.BackgroundClip = 'border-box'): JssValue => {
+export const solidBackg = (color: Cust.Expr, clip : Prop.BackgroundClip = 'border-box'): JssValue => {
     return [[`linear-gradient(${color},${color})`, clip]];
 }
 
