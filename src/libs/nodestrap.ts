@@ -358,6 +358,10 @@ export const isNotLastChild  = (styles: SingleOrArray<Style>) => rule(':not(:las
 
     } // if
 };*/
+export const isActive        = (styles: SingleOrArray<Style>) => rule(     ':active'       , styles);
+export const isNotActive     = (styles: SingleOrArray<Style>) => rule(':not(:active)'      , styles);
+export const isFocus         = (styles: SingleOrArray<Style>) => rule(     ':focus'        , styles);
+export const isNotFocus      = (styles: SingleOrArray<Style>) => rule(':not(:focus)'       , styles);
 
 
 
