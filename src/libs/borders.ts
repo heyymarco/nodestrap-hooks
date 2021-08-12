@@ -5,7 +5,7 @@ import type {
 }                           from './css-types'  // ts defs support for jss
 import type {
     // general types:
-    Style
+    Style,
 }                           from './nodestrap'  // nodestrap core
 import createCssConfig      from './css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
 import * as radius          from './borders-radiuses'
