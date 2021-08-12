@@ -256,6 +256,8 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                     let nestedSelectors = (Array.isArray(selectors) ? selectors : [selectors]).map((selector): NestedSelector => {
                         if (!selector) return '&';
 
+                        if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
+
                         if (selector.startsWith('&') || selector.endsWith('&')) return (selector as NestedSelector);
 
                         // if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
