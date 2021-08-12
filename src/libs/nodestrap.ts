@@ -145,6 +145,7 @@ export const compositionOf   = <TClassName extends ClassName = 'main'>(className
 
     composition(styles)
 ];
+// shortcut compositions:
 /**
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
@@ -155,6 +156,7 @@ export const mainComposition = (styles: SingleOrArray<Style>)   => compositionOf
  * @returns A `ClassEntry` represents the global style.
  */
 export const global          = (ruleCollection: RuleCollection) => compositionOf(''     , rules(ruleCollection));
+export const imports         = (styles: SingleOrArray<Style>)   => composition(styles);
 
 
 
