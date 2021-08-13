@@ -1,7 +1,7 @@
 // nodestrap (modular web components):
 import {
     // styles:
-    createNodestrapStyle,
+    createCssfnStyle,
 
 
     // compositions:
@@ -20,7 +20,7 @@ import gens                 from './general'
 
 
 // create a new styleSheet & attach:
-createNodestrapStyle(() => [
+createCssfnStyle(() => [
     global([
         rule(['del', 's', 'ins', 'u', 'small', '.small', 'strong', 'b', 'em', 'i'], [
             layout({

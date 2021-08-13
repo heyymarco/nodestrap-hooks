@@ -12,7 +12,7 @@ import {
 
 
     // styles:
-    createNodestrapStyle,
+    createCssfnStyle,
 
 
     // compositions:
@@ -154,7 +154,7 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
         ])),
     ];
 };
-createNodestrapStyle(() => [
+createCssfnStyle(() => [
     global([
         usesLevelingRule(cssProps, cssDecls, ['h', '.h']),
     ]),

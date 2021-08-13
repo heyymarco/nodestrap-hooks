@@ -5,7 +5,7 @@ import type {
 }                           from '../css-types'  // ts defs support for jss
 import {
     // styles:
-    createNodestrapStyle,
+    createCssfnStyle,
 
 
     // compositions:
@@ -50,7 +50,7 @@ export default cssProps;
 
 
 // create a new styleSheet & attach:
-createNodestrapStyle(() => [
+createCssfnStyle(() => [
     global([
         rule(['hr'], [
             layout({

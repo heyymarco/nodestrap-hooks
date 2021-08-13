@@ -8,7 +8,7 @@ import {
     StyleSheet,
 
     create as createJss,
-}                           from 'jss'          // base technology of our nodestrap components
+}                           from 'jss'          // base technology of our cssfn components
 // official jss-plugins:
 import jssPluginNested      from 'jss-plugin-nested'
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
@@ -23,7 +23,7 @@ import {
 }                           from './jss-plugin-extend'
 import jssPluginShort       from './jss-plugin-short'
 
-// nodestrap (modular web components):
+// cssfn:
 import type {
     Optional,
     SingleOrArray,
@@ -32,7 +32,7 @@ import type {
     Dictionary,
     ValueOf,
     DictionaryOf,
-}                           from './types'      // nodestrap's types
+}                           from './types'      // cssfn's types
 import type {
     Prop,
     PropEx,
@@ -97,16 +97,16 @@ export const createStyle = <TClassName extends ClassName = ClassName>(styles: St
         ((typeof(styles) === 'function') ? styles() : styles)
     );
 }
-export const createNodestrapStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): StyleSheet<TClassName> => {
+export const createCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): StyleSheet<TClassName> => {
     return createStyle(
-        () => usesNodestrap(classes)
+        () => usesCssfn(classes)
     );
 }
 
 
 
-// nodestrap hooks:
-export const usesNodestrap = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Styles<TClassName> => {
+// cssfn hooks:
+export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Styles<TClassName> => {
     return composition(
         ((typeof(classes) === 'function') ? classes() : classes)
         /*

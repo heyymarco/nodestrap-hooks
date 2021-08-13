@@ -16,7 +16,7 @@ import {
 
     
     // styles:
-    createNodestrapStyle,
+    createCssfnStyle,
 
 
     // compositions:
@@ -538,7 +538,7 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
         genStyleSheet?.detach();
 
         // create a new styleSheet & attach:
-        genStyleSheet = createNodestrapStyle([
+        genStyleSheet = createCssfnStyle([
             global([
                 rule(settings.rule, genProps    ),
                 rule(null         , genKeyframes),

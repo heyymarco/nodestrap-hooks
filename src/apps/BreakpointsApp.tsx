@@ -5,7 +5,7 @@ import {
 
 // nodestrap (modular web components):
 import {
-    createNodestrapStyle,
+    createCssfnStyle,
     global,
     rule,
     layout,
@@ -18,7 +18,7 @@ import {
 
 
 
-createNodestrapStyle(() => [
+createCssfnStyle(() => [
     global([
         rule('.btn', [
             layout({

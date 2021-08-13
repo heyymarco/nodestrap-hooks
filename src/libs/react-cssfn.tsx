@@ -3,7 +3,7 @@ import {
     default as React,
     useMemo,
     useLayoutEffect,
-}                           from 'react'        // base technology of our nodestrap components
+}                           from 'react'        // base technology of our cssfn components
 
 // jss   (builds css  using javascript):
 import {
@@ -12,13 +12,13 @@ import {
     Styles,
 
     SheetsManager,
-}                           from 'jss'          // base technology of our nodestrap components
+}                           from 'jss'          // base technology of our cssfn components
 
-// nodestrap (modular web components):
+// cssfn:
 import type {
     Optional,
     Factory,
-}                           from './types'      // nodestrap's types
+}                           from './types'      // cssfn's types
 import {
     // general types:
     ClassName,
@@ -29,15 +29,15 @@ import {
     createStyle,
 
     
-    // nodestrap hooks:
-    usesNodestrap,
+    // cssfn hooks:
+    usesCssfn,
 }                           from './cssfn'      // cssfn core
 
 
 
 // react hooks:
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
-export const createUseStyle          = <TClassName extends ClassName = ClassName>(styles: Styles<TClassName>|Factory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
+export const createUseStyle      = <TClassName extends ClassName = ClassName>(styles: Styles<TClassName>|Factory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
     const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
 
     
@@ -87,9 +87,9 @@ export const createUseStyle          = <TClassName extends ClassName = ClassName
         return styleSheet.classes;
     };
 }
-export const createUseNodestrapStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Factory<Classes<TClassName>> => {
+export const createUseCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Factory<Classes<TClassName>> => {
     return createUseStyle(
-        () => usesNodestrap(classes)
+        () => usesCssfn(classes)
     );
 }
 
