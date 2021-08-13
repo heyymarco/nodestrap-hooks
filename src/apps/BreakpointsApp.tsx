@@ -11,7 +11,7 @@ import {
     layout,
     variants,
     children,
-}                           from '../libs/nodestrap'       // nodestrap core
+}                           from '../libs/cssfn'           // cssfn core
 import {
     isScreenWidthAtLeast,
 } from '../libs/breakpoints';

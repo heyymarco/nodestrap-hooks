@@ -25,7 +25,7 @@ import {
 
     // rules:
     rule,
-}                           from './nodestrap'  // cssfn core
+}                           from './cssfn'      // cssfn core
 
 // utils:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss

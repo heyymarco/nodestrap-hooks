@@ -18,7 +18,7 @@ import {
 
     // rules:
     atRoot,
-}                           from '../nodestrap'  // nodestrap core
+}                           from '../cssfn'      // cssfn core
 import {
     createCssConfig,
 

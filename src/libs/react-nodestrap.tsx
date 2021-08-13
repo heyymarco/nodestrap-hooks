@@ -31,7 +31,7 @@ import {
     
     // nodestrap hooks:
     usesNodestrap,
-}                           from './nodestrap'  // nodestrap core
+}                           from './cssfn'      // cssfn core
 
 
 

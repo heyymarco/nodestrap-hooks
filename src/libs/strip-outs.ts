@@ -14,7 +14,7 @@ import {
     rule,
     isActive,
     isFocus,
-}                           from './nodestrap'  // nodestrap core
+}                           from './cssfn'      // cssfn core
 
 
 

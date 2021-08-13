@@ -10,7 +10,7 @@ import {
 
     // compositions:
     global,
-}                           from '../nodestrap'  // nodestrap core
+}                           from '../cssfn'      // cssfn core
 import {
     createCssConfig,
 }                           from '../css-config' // Stores & retrieves configuration using *css custom properties* (css variables)

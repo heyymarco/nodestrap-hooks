@@ -21,7 +21,7 @@ import {
     rule,
     isFirstChild,
     isLastChild,
-}                           from '../nodestrap'  // nodestrap core
+}                           from '../cssfn'      // cssfn core
 import {
     createCssConfig,
 

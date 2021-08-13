@@ -30,7 +30,7 @@ import {
     isFirstChild,
     isLastChild,
     isNotLastChild,
-}                           from '../nodestrap'  // nodestrap core
+}                           from '../cssfn'      // cssfn core
 import {
     createCssConfig,
 
