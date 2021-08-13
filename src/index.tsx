@@ -6,18 +6,19 @@ import reportWebVitals from './reportWebVitals';
 
 
 // import CssHooksApp from './apps/CssHooksApp';
+import CssVarApp from './apps/CssVarApp';
 // import CssConfigApp from './apps/CssConfigApp';
 // import NodestrapApp from './apps/NodestrapApp';
 // import ColorApp from './apps/ColorApp';
 // import TypoApp from './apps/TypoApp';
-import BreakpointsApp from './apps/BreakpointsApp';
+// import BreakpointsApp from './apps/BreakpointsApp';
 
 
 
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <BreakpointsApp />
+    <CssVarApp />
   ,
   document.getElementById('root')
 );
