@@ -77,7 +77,7 @@ export type NestedSelector                                       = '&'|`&${Selec
 export type RuleEntry                                            = readonly [SingleOrArray<Optional<Selector>>, StyleCollection]
 export type RuleEntrySource                                      = ProductOrFactory<RuleEntry>
 export type RuleList                                             = RuleEntrySource[]
-export type RuleCollection                                       = (RuleEntrySource|RuleList)[]
+export type RuleCollection                                       = SingleOrArray<RuleEntrySource|RuleList>
 export type PropList                                             = Dictionary<JssValue>
 
 
@@ -193,7 +193,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
         const noSelectors: Style[] = [];
 
         return [
-            ...ruleCollection
+            ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
                 .map((ruleEntrySourceList: RuleEntrySource|RuleList): RuleEntry[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
                     const isOptionalString      = (value: any): value is OptionalString => {
                         if ((typeof value) === 'string') return true; // a `string` detected
