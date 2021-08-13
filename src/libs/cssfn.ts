@@ -27,7 +27,7 @@ import jssPluginShort       from './jss-plugin-short'
 import type {
     Optional,
     SingleOrArray,
-    Factory,
+    ProductOrFactory,
 
     Dictionary,
     ValueOf,
@@ -92,12 +92,12 @@ const customJss = createJss().setup({plugins:[
 
 
 // styles:
-export const createStyle = <TClassName extends ClassName = ClassName>(styles: Styles<TClassName>|Factory<Styles<TClassName>>): StyleSheet<TClassName> => {
+export const createStyle = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): StyleSheet<TClassName> => {
     return customJss.createStyleSheet(
         ((typeof(styles) === 'function') ? styles() : styles)
     );
 }
-export const createCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): StyleSheet<TClassName> => {
+export const createCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): StyleSheet<TClassName> => {
     return createStyle(
         () => usesCssfn(classes)
     );
@@ -106,7 +106,7 @@ export const createCssfnStyle = <TClassName extends ClassName = ClassName>(class
 
 
 // cssfn hooks:
-export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Styles<TClassName> => {
+export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): Styles<TClassName> => {
     return composition(
         ((typeof(classes) === 'function') ? classes() : classes)
         /*

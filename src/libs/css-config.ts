@@ -1,6 +1,7 @@
 // cssfn:
 import type {
     Factory,
+    ProductOrFactory,
     Dictionary,
     ValueOf,
     DictionaryOf,
@@ -127,7 +128,7 @@ const settingsHandler: ProxyHandler<CssConfigSettings> = {
  * Supports delete property, eg:  
  * `myButtonConfig.vals.myFavColor = undefined
  */
-const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>, options?: CssConfigOptions): CssConfig<TProps> => {
+const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProps>, options?: CssConfigOptions): CssConfig<TProps> => {
     // settings:
     const settings: CssConfigSettings = {
         ...options,

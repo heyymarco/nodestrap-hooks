@@ -18,6 +18,7 @@ import {
 import type {
     Optional,
     Factory,
+    ProductOrFactory,
 }                           from './types'      // cssfn's types
 import {
     // general types:
@@ -37,7 +38,7 @@ import {
 
 // react hooks:
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
-export const createUseStyle      = <TClassName extends ClassName = ClassName>(styles: Styles<TClassName>|Factory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
+export const createUseStyle      = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
     const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
 
     
@@ -87,7 +88,7 @@ export const createUseStyle      = <TClassName extends ClassName = ClassName>(st
         return styleSheet.classes;
     };
 }
-export const createUseCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ClassList<TClassName>|Factory<ClassList<TClassName>>): Factory<Classes<TClassName>> => {
+export const createUseCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): Factory<Classes<TClassName>> => {
     return createUseStyle(
         () => usesCssfn(classes)
     );
