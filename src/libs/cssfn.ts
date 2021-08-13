@@ -72,8 +72,9 @@ export type SingleSelector                                       = UniversalSele
 export type Selector                                             = SingleSelector|`${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`
 export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
 export type RuleEntry                                            = readonly [SingleOrArray<Optional<Selector>>, SingleOrArray<Style>]
-export type RuleList                                             = RuleEntry[]
-export type RuleCollection                                       = (RuleEntry|RuleList)[]
+export type RuleEntrySource                                      = ProductOrFactory<RuleEntry>
+export type RuleList                                             = RuleEntrySource[]
+export type RuleCollection                                       = (RuleEntrySource|RuleList)[]
 export type PropList                                             = Dictionary<JssValue>
 
 
@@ -190,7 +191,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
 
         return [
             ...ruleCollection
-                .map((ruleEntryList: RuleEntry|RuleList): RuleList => { // unflat: RuleEntry|RuleList => [RuleEntry]|RuleList => RuleList
+                .map((ruleEntrySourceList: RuleEntrySource|RuleList): RuleEntry[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
                     const isOptionalString      = (value: any): value is OptionalString => {
                         if ((typeof value) === 'string') return true; // a `string` detected
 
@@ -248,10 +249,11 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
 
 
 
-                    if (isRuleEntry(ruleEntryList)) return [ruleEntryList];
-                    return ruleEntryList;
+                    if (typeof(ruleEntrySourceList) === 'function') return [ruleEntrySourceList()];
+                    if (isRuleEntry(ruleEntrySourceList)) return [ruleEntrySourceList];
+                    return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
                 })
-                .flat(/*depth: */1) // flatten: RuleList[] => [RuleList, RuleList, ...] => [...RuleList, ...RuleList, ...] => [RuleEntry, RuleEntry, ...] => RuleEntry[]
+                .flat(/*depth: */1) // flatten: RuleEntry[][] => RuleEntry[]
                 .map(([selectors, styles]): readonly [NestedSelector[], Style] => {
                     let nestedSelectors = (Array.isArray(selectors) ? selectors : [selectors]).map((selector): NestedSelector => {
                         if (!selector) return '&';
