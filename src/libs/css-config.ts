@@ -1,14 +1,14 @@
-// nodestrap (modular web components):
+// cssfn:
 import type {
     Factory,
     Dictionary,
     ValueOf,
     DictionaryOf,
-}                           from './types'      // nodestrap's types
+}                           from './types'      // cssfn's types
 import type {
     PropEx,
     Cust,
-}                           from './css-types'  // ts defs support for jss
+}                           from './css-types'  // ts defs support for cssfn
 import {
     // general types:
     StyleSheet,
@@ -25,7 +25,7 @@ import {
 
     // rules:
     rule,
-}                           from './nodestrap'  // nodestrap core
+}                           from './nodestrap'  // cssfn core
 
 // utils:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
@@ -34,38 +34,38 @@ import { camelCase }        from 'camel-case'   // camel-case  support for jss
 
 
 // general types:
-export type Refs     <TProps extends {}> = { [key in keyof TProps]: Cust.Ref    } // typescript helper: make the TValue appears as Cust.Ref (string)
-export type Decls    <TProps extends {}> = { [key in keyof TProps]: Cust.Decl   } // typescript helper: make the TValue appears as Cust.Decl (string)
-export type Vals     <TProps extends {}> = { [key in keyof TProps]: TProps[key] } // typescript helper: make the TValue appears as TProps's TValue
+export type Refs     <TProps extends {}> = { [key in keyof TProps]: Cust.Ref    }
+export type Decls    <TProps extends {}> = { [key in keyof TProps]: Cust.Decl   }
+export type Vals     <TProps extends {}> = { [key in keyof TProps]: TProps[key] }
 export interface CssConfigOptions {
     /**
-     * The prefix name of the generated css custom props.
+     * The prefix name of the generated css vars.
      */
     prefix? : string
 
     /**
-     * The declaring location (selector) of the generated css custom props.
+     * The declaring location (selector) of the generated css vars.
      */
     rule?   : string
 }
-export interface ProxyCssConfigOptions extends CssConfigOptions {
+export interface CssConfigSettings extends CssConfigOptions {
     /**
-     * The prefix name of the generated css custom props.
+     * The prefix name of the generated css vars.
      */
     prefix  : string
 
     /**
-     * The declaring location (selector) of the generated css custom props.
+     * The declaring location (selector) of the generated css vars.
      */
     rule    : string
 
     /**
-     * Regenerates the css custom props.
+     * Regenerates the css vars.
      * @param immediately `true` to refresh immediately (guaranteed has been refreshed after `refresh()` returned) -or- `false` to refresh shortly after current execution finished.
      */
     refresh : ((immediately?: boolean) => void)
 }
-export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>, Vals<TProps>, ProxyCssConfigOptions]
+export type CssConfig<TProps extends {}> = readonly [Refs<TProps>, Decls<TProps>, Vals<TProps>, CssConfigSettings]
 
 
 
@@ -75,8 +75,41 @@ const _defaultRule   = ':root';
 
 
 
+// global proxy's handlers:
+const settingsHandler: ProxyHandler<CssConfigSettings> = {
+    set : (settings, propName: string, newValue: any): boolean => {
+        if (!(propName in settings)) return false; // the requested prop does not exist
+
+
+
+        // apply the default value (if any):
+        newValue = newValue ?? ((): any => {
+            switch (propName) {
+                case 'prefix' : return _defaultPrefix;
+                case 'rule'   : return _defaultRule;
+                default       : return newValue;
+            } // switch
+        })();
+        
+        
+        
+        // compare `oldValue` & `newValue`:
+        const oldValue = (settings as any)[propName];
+        if (oldValue === newValue) return true; // success but no change => no need to update
+
+
+
+        // apply changes & update:
+        (settings as any)[propName] = newValue;
+        settings.refresh(); // setting changed => need to `refresh()` the jss
+        return true; // notify the operation was completed successfully
+    },
+};
+
+
+
 /**
- * Stores & retrieves configuration using *css custom properties* (css variables) stored at `:root` level (default) or at the desired `rule`.  
+ * Create, read, update, and delete configurations using *css variables* (css custom properties) stored at `:root` level (default) or at the desired `rule`.  
  * The config's values can be *accessed directly* in CSS and DOM.
  * 
  * Supports get property by *declaration*, eg:  
@@ -96,13 +129,13 @@ const _defaultRule   = ':root';
  */
 const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>, options?: CssConfigOptions): CssConfig<TProps> => {
     // settings:
-    const settings: ProxyCssConfigOptions = {
+    const settings: CssConfigSettings = {
         ...options,
 
         prefix  : (options?.prefix ?? _defaultPrefix),
         rule    : (options?.rule   ?? _defaultRule),
 
-        refresh : (immediately) => refresh(immediately)
+        refresh : (immediately) => refresh(immediately),
     };
     
     
@@ -120,7 +153,7 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
 
 
 
-    // generated data:
+    // data generates:
 
     /**
      * The *generated css* resides on memory only.  
@@ -671,38 +704,7 @@ const createCssConfig = <TProps extends {}>(initialProps: TProps|Factory<TProps>
 
 
         // settings:
-        new Proxy<ProxyCssConfigOptions>(settings, {
-            get: (settings, propName: string): any => {
-                return (settings as any)[propName];
-            },
-            set: (settings, propName: string, newValue: any): boolean => {
-                if (!(propName in settings)) return false; // the requested prop does not exist
-
-
-
-                // apply the default value (if any):
-                newValue = newValue ?? ((): any => {
-                    switch (propName) {
-                        case 'prefix' : return _defaultPrefix;
-                        case 'rule'   : return _defaultRule;
-                        default       : return newValue;
-                    } // switch
-                })();
-                
-                
-                
-                // compare `oldValue` & `newValue`:
-                const oldValue = (settings as any)[propName];
-                if (oldValue === newValue) return true; // success but no change => no need to update
-
-
-
-                // apply changes & update:
-                (settings as any)[propName] = newValue;
-                refresh(); // setting changed => need to `refresh()` the jss
-                return true; // notify the operation was completed successfully
-            },
-        }),
+        new Proxy<CssConfigSettings>(settings, settingsHandler),
     ];
 }
 export { createCssConfig, createCssConfig as default }
@@ -712,7 +714,7 @@ export { createCssConfig, createCssConfig as default }
 // utilities:
 /**
  * Includes the *general* props in the specified `cssProps`.
- * @param cssProps The collection of the css custom props to be filtered.
+ * @param cssProps The collection of the css vars to be filtered.
  * @returns A `PropList` which is the copy of the `cssProps` that only having *general* props.
  */
 export const usesGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): PropList => {
@@ -790,7 +792,7 @@ export const usesGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): Pro
 
 /**
  * Includes the props in the specified `cssProps` starting with specified `prefix`.
- * @param cssProps The collection of the css custom props to be filtered.
+ * @param cssProps The collection of the css vars to be filtered.
  * @param prefix The prefix name of the props to be *included*.
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `prefix` name.  
  * The returning props has been normalized (renamed), so they don't start with `prefix`.
@@ -818,7 +820,7 @@ export const usesPrefixedProps = <TProps extends {}>(cssProps: Refs<TProps>, pre
 
 /**
  * Includes the props in the specified `cssProps` ending with specified `suffix`.
- * @param cssProps The collection of the css custom props to be filtered.
+ * @param cssProps The collection of the css vars to be filtered.
  * @param suffix The suffix name of the props to be *included*.
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `suffix` name.  
  * The returning props has been normalized (renamed), so they don't end with `suffix`.
@@ -846,7 +848,7 @@ export const usesSuffixedProps = <TProps extends {}>(cssProps: Refs<TProps>, suf
 
 /**
  * Backups the prop's values in the specified `cssProps`.
- * @param cssProps The collection of the css custom props to be backed up.
+ * @param cssProps The collection of the css vars to be backed up.
  * @param backupSuff The suffix name of the backup's props.
  * @returns A `PropList` which is the copy of the `cssProps` that the prop's names was renamed with the specified `backupSuff` name.  
  * eg:  
@@ -864,7 +866,7 @@ export const backupProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSuf
 
 /**
  * Restores the prop's values in the specified `cssProps`.
- * @param cssProps The collection of the css custom props to be restored.
+ * @param cssProps The collection of the css vars to be restored.
  * @param backupSuff The suffix name of the backup's props.
  * @returns A `PropList` which is the copy of the `cssProps` that the prop's values pointed to the backup's values.  
  * eg:  
@@ -881,8 +883,8 @@ export const restoreProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSu
 
 /**
  * Overwrites prop declarations from the specified `cssProps` (source) to the specified `cssDecls` (target).
- * @param cssDecls The collection of the css custom props to be overwritten (target).
- * @param cssProps The collection of the css custom props for overwritting (source).
+ * @param cssDecls The collection of the css vars to be overwritten (target).
+ * @param cssProps The collection of the css vars for overwritting (source).
  * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDecls`.
  */
 export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssProps: Refs<{}>): PropList => {
@@ -898,7 +900,7 @@ export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssPr
 
 /**
  * Overwrites prop declarations from the specified `cssProps` (source) to the specified `cssDeclss` (targets).
- * @param cssProps The collection of the css custom props for overwritting (source).
+ * @param cssProps The collection of the css vars for overwritting (source).
  * @param cssDeclss The list of the parent's collection css props to be overwritten (targets).
  * The order must be from the most specific parent to the least specific one.
  * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDeclss`.
