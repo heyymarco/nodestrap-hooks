@@ -52,6 +52,9 @@ export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
 export type Style                                                = JssStyle & ExtendableStyle
+export type StyleSource                                          = ProductOrFactory<Style>
+export type StyleList                                            = StyleSource[]
+export type StyleCollection                                      = SingleOrArray<StyleSource|StyleList>
 
 export type ClassName                                            = string
 export type RealClass                                            = `.${ClassName}`
@@ -71,7 +74,7 @@ export type IdSelector                                           = `#${string}`
 export type SingleSelector                                       = UniversalSelector|ElementSelector|ClassSelector|IdSelector
 export type Selector                                             = SingleSelector|`${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`
 export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
-export type RuleEntry                                            = readonly [SingleOrArray<Optional<Selector>>, SingleOrArray<Style>]
+export type RuleEntry                                            = readonly [SingleOrArray<Optional<Selector>>, StyleCollection]
 export type RuleEntrySource                                      = ProductOrFactory<RuleEntry>
 export type RuleList                                             = RuleEntrySource[]
 export type RuleCollection                                       = (RuleEntrySource|RuleList)[]
@@ -126,14 +129,14 @@ export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: Pro
  * Defines the (sub) component's composition.
  * @returns A `Style` represents the (sub) component's composition.
  */
-export const composition     = (styles: SingleOrArray<Style>): Style => {
-    if (!Array.isArray(styles)) return styles;
+export const composition     = (styles: StyleCollection): Style => {
+    if (!Array.isArray(styles)) return ((typeof(styles) === 'function') ? styles() : styles);
 
 
 
     const mergedStyles: Style = {}
-    for (const style of styles) {
-        mergeStyle(mergedStyles, style);
+    for (const styleSource of styles.flat(/*depth: */1)) {
+        mergeStyle(mergedStyles, ((typeof(styleSource) === 'function') ? styleSource() : styleSource));
     } // for
     return mergedStyles;
 }
@@ -141,7 +144,7 @@ export const composition     = (styles: SingleOrArray<Style>): Style => {
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const compositionOf   = <TClassName extends ClassName = 'main'>(className: TClassName, styles: SingleOrArray<Style>): ClassEntry<TClassName> => [
+export const compositionOf   = <TClassName extends ClassName = 'main'>(className: TClassName, styles: StyleCollection): ClassEntry<TClassName> => [
     className,
 
     composition(styles)
@@ -151,13 +154,13 @@ export const compositionOf   = <TClassName extends ClassName = 'main'>(className
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const mainComposition = (styles: SingleOrArray<Style>)   => compositionOf('main' , styles);
+export const mainComposition = (styles: StyleCollection)        => compositionOf('main' , styles);
 /**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
  */
 export const global          = (ruleCollection: RuleCollection) => compositionOf(''     , rules(ruleCollection));
-export const imports         = (styles: SingleOrArray<Style>)   => composition(styles);
+export const imports         = (styles: StyleCollection)        => composition(styles);
 
 
 
@@ -168,7 +171,7 @@ export const imports         = (styles: SingleOrArray<Style>)   => composition(s
  */
 export const layout = (style: Style): Style => style;
 //combinators:
-export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): PropList => ({
+export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): PropList => ({
     [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
 
@@ -177,10 +180,10 @@ export const combinators = (combinator: string, selectors: SingleOrArray<Optiona
         return `&${combinator}${selector}`;
     }).join(',') ] : composition(styles) as JssValue,
 });
-export const descendants      = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators(' ', selectors, styles);
-export const children         = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('>', selectors, styles);
-export const siblings         = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('~', selectors, styles);
-export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>) => combinators('+', selectors, styles);
+export const descendants      = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators(' ', selectors, styles);
+export const children         = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators('>', selectors, styles);
+export const siblings         = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators('~', selectors, styles);
+export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators('+', selectors, styles);
 
 
 
@@ -345,14 +348,14 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
  * @returns A `RuleEntry` represents the component's rule.
  */
-export const rule = (selectors: SingleOrArray<Optional<Selector>>, styles: SingleOrArray<Style>): RuleEntry => [selectors, styles];
+export const rule = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): RuleEntry => [selectors, styles];
 // shortcut rules:
-export const atRoot          = (styles: SingleOrArray<Style>) => rule(':root'              , styles);
-export const isFirstChild    = (styles: SingleOrArray<Style>) => rule(     ':first-child'  , styles);
-export const isNotFirstChild = (styles: SingleOrArray<Style>) => rule(':not(:first-child)' , styles);
-export const isLastChild     = (styles: SingleOrArray<Style>) => rule(     ':last-child'   , styles);
-export const isNotLastChild  = (styles: SingleOrArray<Style>) => rule(':not(:last-child)'  , styles);
-/*export const isNthChild    = (step: number, offset: number, styles: SingleOrArray<Style>): RuleEntry => {
+export const atRoot          = (styles: StyleCollection) => rule(':root'              , styles);
+export const isFirstChild    = (styles: StyleCollection) => rule(     ':first-child'  , styles);
+export const isNotFirstChild = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
+export const isLastChild     = (styles: StyleCollection) => rule(     ':last-child'   , styles);
+export const isNotLastChild  = (styles: StyleCollection) => rule(':not(:last-child)'  , styles);
+/*export const isNthChild    = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step <= 0) { // no step
         if (offset <= 0) return rule(':none', {}); // element indices are starting from 1 => never match => return empty style
 
@@ -370,10 +373,10 @@ export const isNotLastChild  = (styles: SingleOrArray<Style>) => rule(':not(:las
 
     } // if
 };*/
-export const isActive        = (styles: SingleOrArray<Style>) => rule(     ':active'       , styles);
-export const isNotActive     = (styles: SingleOrArray<Style>) => rule(':not(:active)'      , styles);
-export const isFocus         = (styles: SingleOrArray<Style>) => rule(     ':focus'        , styles);
-export const isNotFocus      = (styles: SingleOrArray<Style>) => rule(':not(:focus)'       , styles);
+export const isActive        = (styles: StyleCollection) => rule(     ':active'       , styles);
+export const isNotActive     = (styles: StyleCollection) => rule(':not(:active)'      , styles);
+export const isFocus         = (styles: StyleCollection) => rule(     ':focus'        , styles);
+export const isNotFocus      = (styles: StyleCollection) => rule(':not(:focus)'       , styles);
 
 
 
