@@ -1,10 +1,10 @@
 import type { Property }    from 'csstype' // ts defs support for jss
 import type { Style }       from './jss-plugin-extend'
 
-// nodestrap (modular web components):
+// cssfn:
 import type {
     Dictionary,
-}                           from './types'      // nodestrap's types
+}                           from './types'      // cssfn's types
 
 
 

@@ -1,9 +1,9 @@
 // react (builds html using javascript):
 import {
     default as React,
-}                           from 'react'                   // base technology of our nodestrap components
+}                           from 'react'                   // base technology of our cssfn components
 
-// nodestrap (modular web components):
+// cssfn:
 import createCssVar      from '../libs/css-var'      // Stores & retrieves configuration using *css custom properties* (css variables)
 
 

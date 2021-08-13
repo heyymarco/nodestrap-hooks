@@ -2,9 +2,9 @@
 import {
     default as React,
     useState,
-}                           from 'react'         // base technology of our nodestrap components
+}                           from 'react'         // base technology of our cssfn components
 
-// nodestrap (modular web components):
+// cssfn:
 import {
     compositionOf,
     mainComposition,

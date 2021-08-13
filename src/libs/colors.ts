@@ -1,9 +1,9 @@
-// nodestrap (modular web components):
+// cssfn:
 import type {
     Dictionary,
     ValueOf,
     DictionaryOf,
-}                           from './types'      // nodestrap's types
+}                           from './types'      // cssfn's types
 import type {
     Prop,
 }                           from './css-types'  // ts defs support for jss

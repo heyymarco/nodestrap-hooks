@@ -1,7 +1,7 @@
-// nodestrap (modular web components):
+// cssfn:
 import type {
     SingleOrArray,
-}                           from './types'      // nodestrap's types
+}                           from './types'      // cssfn's types
 import {
     // general types:
     Style,

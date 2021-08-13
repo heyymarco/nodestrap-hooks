@@ -5,7 +5,7 @@ import {
     Rule,
     RuleList,
     StyleSheet,
-}                           from 'jss'           // base technology of our nodestrap components
+}                           from 'jss'           // base technology of our cssfn components
 import type {
     Style,
 }                           from './jss-plugin-extend'

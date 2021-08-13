@@ -1,4 +1,4 @@
-// nodestrap (modular web components):
+// cssfn:
 import type {
     PropEx,
     Cust,

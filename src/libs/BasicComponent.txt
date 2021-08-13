@@ -1,9 +1,9 @@
 // react (builds html using javascript):
 import {
     default as React,
-}                           from 'react'         // base technology of our nodestrap components
+}                           from 'react'         // base technology of our cssfn components
 
-// nodestrap (modular web components):
+// cssfn:
 import type {
     SingleOrArray,
     Factory,
@@ -11,7 +11,7 @@ import type {
     Dictionary,
     ValueOf,
     DictionaryOf,
-}                           from './types'       // nodestrap's types
+}                           from './types'       // cssfn's types
 import type {
     PropEx,
     Cust,
@@ -57,7 +57,7 @@ import {
     // utils:
     pascalCase,
     camelCase,
-}                           from './nodestrap'   // nodestrap core
+}                           from './cssfn'       // cssfn core
 import {
     createCssConfig,
 

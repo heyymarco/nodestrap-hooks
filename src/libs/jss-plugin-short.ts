@@ -5,7 +5,7 @@ import type {
 
     Rule,
     StyleSheet,
-}                           from 'jss'           // base technology of our nodestrap components
+}                           from 'jss'           // base technology of our cssfn components
 
 
 
