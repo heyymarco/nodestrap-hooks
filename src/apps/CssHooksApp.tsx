@@ -20,7 +20,7 @@ import {
 import {
     // components:
     createUseNodestrapStyle,
-}                           from '../libs/react-nodestrap' // nodestrap for react
+}                           from '../libs/react-cssfn'     // cssfn for react
 import createCssConfig      from '../libs/css-config'      // Stores & retrieves configuration using *css custom properties* (css variables)
 
 
