@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 // import CssHooksApp from './apps/CssHooksApp';
 import CssVarApp from './apps/CssVarApp';
 // import CssConfigApp from './apps/CssConfigApp';
-// import NodestrapApp from './apps/NodestrapApp';
+// import CssfnApp from './apps/CssfnApp';
 // import ColorApp from './apps/ColorApp';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';

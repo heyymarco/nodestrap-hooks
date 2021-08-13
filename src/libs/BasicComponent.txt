@@ -24,7 +24,7 @@ import {
 
 
     // styles:
-    createNodestrapStyle,
+    createCssfnStyle,
 
 
     // compositions:
@@ -637,7 +637,7 @@ export const animFn = (): Cust.Ref[] => { return [
     cssProps.anim,
 ]}
 
-export const basicComponentStyle = createNodestrapStyle(() => [
+export const basicComponentStyle = createCssfnStyle(() => [
     mainComposition([
         layout({
             // customize:
