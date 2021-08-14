@@ -170,6 +170,7 @@ export const imports         = (styles: StyleCollection)        => composition(s
  * @returns A `Style` represents the component's layout.
  */
 export const layout = (style: Style): Style => style;
+export const vars   = (items: { [name: string]: Cust.Expr }): Style => items;
 //combinators:
 export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): PropList => ({
     [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => {
@@ -431,9 +432,9 @@ export const escapeSvg = (svgData: string): string => {
 /**
  * Creates a single layer solid background based on specified `color`.
  * @param color The color of the solid background to create.
- * @returns A `JssValue` represents a solid background.
+ * @returns A `Cust.Expr` represents a solid background.
  */
-export const solidBackg = (color: Cust.Expr, clip : Prop.BackgroundClip = 'border-box'): JssValue => {
+export const solidBackg = (color: Cust.Expr, clip : Prop.BackgroundClip = 'border-box'): Cust.Expr => {
     return [[`linear-gradient(${color},${color})`, clip]];
 }
 
