@@ -974,18 +974,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             ['opacity'    , '300ms', 'ease-out'],
         ],
 
-        // TODO: remove none...
-        boxShadowNone     : [[0, 0, 'transparent']],
         boxShadow         : [[0, 0, 'transparent']],
         boxShadowFocus    : [[0, 0, 0, '0.25rem' ]], // supports for Control children's theming
 
-        // TODO: remove none...
-        filterNone        : 'brightness(100%)',
         filter            : 'brightness(100%)',
 
         '@keyframes none' : keyframesNone,
-        // TODO: remove none...
-        animNone          : [[keyframesNone]],
         anim              : [[keyframesNone]],
         //#endregion animations
     };
