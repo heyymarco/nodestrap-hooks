@@ -114,7 +114,7 @@ export const usesThemes = (factory = themeOf, options = themeOptions()) => {
     return [
         () => composition([
             rules([
-                options.map((theme) => () => rule(
+                options.map((theme) => rule(
                     `.th${pascalCase(theme)}`,
                     factory(theme)
                 )),
@@ -232,7 +232,7 @@ export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
     return [
         () => composition([
             rules([
-                options.map((size) => () => rule(
+                options.map((size) => rule(
                     `.sz${pascalCase(size)}`,
                     factory(size)
                 )),
@@ -383,22 +383,13 @@ export const noOutlined = (inherit = false) => composition([
  * Creates an outlined definition when the outlined variant is enabled.
  * @returns A `Style` represents the outlined definition.
  */
-export const isOutlined = () => {
-    const [outlined, outlinedRefs] = usesOutlined();
-
-    
-    
-    return composition([
-        rules([
-            outlined,
-        ]),
-        layout({
-            // *toggle on* the outlined props:
-            [outlinedDecls.outlinedForegTg] : outlinedRefs.outlinedForegFn,
-            [outlinedDecls.outlinedBackgTg] : outlinedRefs.outlinedBackgFn,
-        }),
-    ]);
-};
+export const isOutlined = () => composition([
+    layout({
+        // *toggle on* the outlined props:
+        [outlinedDecls.outlinedForegTg] : outlinedRefs.outlinedForegFn,
+        [outlinedDecls.outlinedBackgTg] : outlinedRefs.outlinedBackgFn,
+    }),
+]);
 //#endregion outlined
 
 //#region mild
