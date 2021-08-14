@@ -188,7 +188,7 @@ export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, s
 
 
 
-// rule groups:
+// rules:
 export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => composition(
     ((): Style[] => {
         const noSelectors: Style[] = [];
@@ -329,7 +329,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
         ];
     })()
 );
-// shortcut rule groups:
+// shortcut rules:
 /**
  * Defines component's variants.
  * @returns A `Style` represents the component's variants.
@@ -343,21 +343,13 @@ export const variants = (variants: RuleCollection): Style => rules(variants);
 export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, minSpecificityWeight = 3): Style => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, minSpecificityWeight);
 }
-
-// rules:
-export const ruleList = <TMeta = unknown>(list: ProductOrFactory<RuleList>, meta?: (TMeta & {})): (RuleList & TMeta) => {
-    const result = ((typeof(list) === 'function') ? list() : list);
-
-    if (meta) return Object.assign(result, meta);
-
-    return result as (RuleList & TMeta);
-};
+// rule items:
 /**
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
  * @returns A `RuleEntry` represents the component's rule.
  */
 export const rule = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): RuleEntry => [selectors, styles];
-// shortcut rules:
+// shortcut rule items:
 export const atRoot          = (styles: StyleCollection) => rule(':root'              , styles);
 export const isFirstChild    = (styles: StyleCollection) => rule(     ':first-child'  , styles);
 export const isNotFirstChild = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
@@ -437,49 +429,4 @@ export const escapeSvg = (svgData: string): string => {
 export const solidBackg = (color: Cust.Expr, clip : Prop.BackgroundClip = 'border-box'): Cust.Expr => {
     return [[`linear-gradient(${color},${color})`, clip]];
 }
-
-
-    
-// prop's utilities:
-/**
- * Holds the prefix name of the generated css props.  
- * Useful to avoid name collision if working with another css frameworks.
- */
-let prefix: string = 'ns';
-/**
- * Gets the *declaration name* of the specified `propName`.
- * @param propName The name of prop to retrieve.
- * @returns A `Cust.Decl` represents the declaration name of the specified `propName`.
- */
-export const decl = (propName: string): Cust.Decl => {
-    return prefix ? `--${prefix}-${propName}` : `--${propName}`; // add double dash with prefix `--prefix-` or double dash without prefix `--`
-}
-/**
- * Gets the *value* (reference) of the specified `propName`.
- * @param propName The name of prop to retrieve.
- * @param fallbacks The name of secondary/next prop to retrieve if the specified `propName` was not found.
- * @returns A `Cust.Ref` represents the expression for retrieving the value of the specified `propName`.
- */
-export const ref = (propName: string, ...fallbacks: string[]): Cust.Ref => {
-    const varPrefix = prefix ? `--${prefix}-` : '--';
-
-
-
-    const fallbackRecursive = (...fallbacks: string[]): string => {
-        const [curentFallback, ...restFallbacks] = fallbacks;
-
-        if (!curentFallback) return ''; // no more fallback => return empty
-
-        // handle the curentFallback and recursively handle the restFallbacks:
-        return `,var(${varPrefix}${curentFallback}${fallbackRecursive(...restFallbacks)})`;
-    };
-
-
-
-    return `var(${varPrefix}${propName}${fallbackRecursive(...fallbacks)})` as Cust.Ref;
-}
-
-
-
-// other utilities:
 export { pascalCase, camelCase }
