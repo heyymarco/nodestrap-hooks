@@ -121,3 +121,31 @@ const createCssVar = <TProps extends {}>(options?: CssVarOptions): CssVar<TProps
     ];
 }
 export { createCssVar, createCssVar as default }
+
+
+
+// utils:
+export const fallbacks = (first: Cust.Ref, ...next: Cust.Ref[]): Cust.Ref => {
+    if (!next || !next.length) return first;
+
+
+
+    const refs = [first, ...next];
+    let totalClosingCount = 0;
+    return (
+        refs
+        .map((ref, index) => {
+            const closingCount = (ref.match(/\)+$/)?.[0]?.length ?? 0);
+            totalClosingCount += closingCount;
+
+            return (
+                ref.substr(0, ref.length - closingCount)
+                +
+                ((index < (refs.length - 1)) ? ',' : '') // add a comma except the last one
+            );
+        })
+        .join('')
+        +
+        (new Array(/*arrayLength: */totalClosingCount)).fill(')').join('')
+    ) as Cust.Ref;
+}
