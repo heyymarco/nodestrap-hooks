@@ -344,7 +344,13 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 }
 
 // rules:
-export const ruleList = (list: ProductOrFactory<RuleList>): RuleList => ((typeof(list) === 'function') ? list() : list);
+export const ruleList = <TMeta = unknown>(list: ProductOrFactory<RuleList>, meta?: (TMeta & {})): (RuleList & TMeta) => {
+    const result = ((typeof(list) === 'function') ? list() : list);
+
+    if (meta) return Object.assign(result, meta);
+
+    return result as (RuleList & TMeta);
+};
 /**
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
  * @returns A `RuleEntry` represents the component's rule.
