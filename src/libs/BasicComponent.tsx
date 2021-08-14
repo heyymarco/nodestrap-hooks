@@ -66,7 +66,7 @@ import typos                from './typos/index' // configurable typography (tex
 
 
 
-// styles:
+// nodestrap hooks:
 
 //#region themes
 export interface ThemeVars {
@@ -857,6 +857,7 @@ export const usesAnim = () => {
 
 
 
+// styles:
 export const useBasicComponentStyle = createUseCssfnStyle(() => {
     const [themes]             = usesThemes();
     const [sizes]              = usesSizes();
