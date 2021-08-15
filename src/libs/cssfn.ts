@@ -170,7 +170,7 @@ export const imports         = (styles: StyleCollection)        => composition(s
  * @returns A `Style` represents the component's layout.
  */
 export const layout = (style: Style): Style => style;
-export const vars   = (items: { [name: string]: Cust.Expr }): Style => items;
+export const vars   = (items: { [name: string]: JssValue }): Style => items;
 //combinators:
 export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): PropList => ({
     [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => {
