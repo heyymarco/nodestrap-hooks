@@ -69,54 +69,123 @@ import typos                from './typos/index' // configurable typography (tex
 // nodestrap hooks:
 
 //#region themes
+export type ThemeName = (keyof typeof color.themes)
 export interface ThemeVars {
     /**
      * themed foreground color.
      */
-    foregTh          : any
-    
+    foregTh            : any
     /**
-     * themed background.
+     * themed background color.
      */
-    backgTh          : any
-    
+    backgTh            : any
     /**
      * themed border color.
      */
-    borderTh         : any
+    borderTh           : any
     
     /**
      * themed foreground color - at outlined variant.
      */
-    outlinedForegTh  : any
+    outlinedForegTh    : any
     
     /**
      * themed foreground color - at mild variant.
      */
-    mildForegTh      : any
+    mildForegTh        : any
+    /**
+     * themed background color - at mild variant.
+     */
+    mildBackgTh        : any
     
     /**
-     * themed background - at mild variant.
+     * themed boxShadow color - at focused state.
      */
-    mildBackgTh      : any
+    focusBoxShadowTh   : any
+    
+    
     
     /**
-     * focused themed box-shadow color.
+     * conditional unthemed foreground color.
      */
-    boxShadowFocusTh : any
+    foregIf            : any
+    /**
+     * conditional unthemed background color.
+     */
+    backgIf            : any
+    /**
+     * conditional unthemed border color.
+     */
+    borderIf           : any
+    
+    /**
+     * conditional unthemed foreground color - at outlined variant.
+     */
+    outlinedForegIf    : any
+    
+    /**
+     * conditional unthemed foreground color - at mild variant.
+     */
+    mildForegIf        : any
+    /**
+     * conditional unthemed background color - at mild variant.
+     */
+    mildBackgIf        : any
+    
+    /**
+     * conditional unthemed boxShadow color - at focused state.
+     */
+    focusBoxShadowIf   : any
+    
+    
+    
+    /**
+     * important conditional unthemed foreground color.
+     */
+    foregIfIf          : any
+    /**
+     * important conditional unthemed background color.
+     */
+    backgIfIf          : any
+    /**
+     * important conditional unthemed border color.
+     */
+    borderIfIf         : any
+    
+    /**
+     * important conditional unthemed foreground color - at outlined variant.
+     */
+    outlinedForegIfIf  : any
+    
+    /**
+     * important conditional unthemed foreground color - at mild variant.
+     */
+    mildForegIfIf      : any
+    /**
+     * important conditional unthemed background color - at mild variant.
+     */
+    mildBackgIfIf      : any
+    
+    /**
+     * important conditional unthemed boxShadow color - at focused state.
+     */
+    focusBoxShadowIfIf : any
 }
-/**
- * Uses color definitions *for each* `themeOptions()`.
- * @returns An `[]` represents the color definitions *for each* `themeOptions()`.
- */
 const [themeRefs, themeDecls] = createCssVar<ThemeVars>();
+/**
+ * Uses theme colors.  
+ * For example: `primary`, `secondary`, `danger`, `success`, etc.
+ * @param factory Customize the callback to create color definitions for each color in `options`.
+ * @param options Customize the color options.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents color definitions for each color in `options`.
+ */
 export const usesThemes = (factory = themeOf, options = themeOptions()) => {
     return [
         () => composition([
             rules([
-                options.map((theme) => rule(
-                    `.th${pascalCase(theme)}`,
-                    factory(theme)
+                options.map((themeName) => rule(
+                    `.th${pascalCase(themeName)}`,
+                    factory(themeName)
                 )),
             ]),
         ]),
@@ -125,116 +194,100 @@ export const usesThemes = (factory = themeOf, options = themeOptions()) => {
     ] as const;
 };
 /**
- * Creates a color definition for the specified `theme`.
- * @param theme The given theme name written in camel case.
- * @returns A `Style` represents the color definition for the given `theme`.
+ * Creates color definitions for the given `themeName`.
+ * @param themeName The given theme name written in camel case.
+ * @returns A `Style` represents color definitions for the given `themeName`.
  */
-export const themeOf = (theme: string) => composition([
+export const themeOf = (themeName: ThemeName) => composition([
     vars({
-        [themeDecls.foregTh]          : (colors as DictionaryOf<typeof colors>)[`${theme}Text`],   // light on dark backg | dark on light backg
-        [themeDecls.backgTh]          : (colors as DictionaryOf<typeof colors>)[theme],
-        [themeDecls.borderTh]         : (colors as DictionaryOf<typeof colors>)[`${theme}Bold`],   // 20% background + 80% page's foreground
+        [themeDecls.foregTh]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgTh]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderTh]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         [themeDecls.outlinedForegTh]  : themeRefs.backgTh,
         [themeDecls.mildForegTh]      : themeRefs.borderTh,
-        [themeDecls.mildBackgTh]      : (colors as DictionaryOf<typeof colors>)[`${theme}Mild`],   // // 20% background + 80% page's background
-        [themeDecls.boxShadowFocusTh] : (colors as DictionaryOf<typeof colors>)[`${theme}Thin`],
+        [themeDecls.mildBackgTh]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.focusBoxShadowTh] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 /**
  * Gets the all available theme options.
- * @returns A `string[]` represents the all available theme options.
+ * @returns A `ThemeName[]` represents the all available theme options.
  */
-export const themeOptions = (): string[] => Object.keys(color.themes);
+export const themeOptions = () => Object.keys(color.themes) as ThemeName[];
 
-export const themeDefault = (theme: string|null = null) => {
-    if (theme) return themeIf(theme);
+/**
+ * Creates the default color definitions for unspecified `themeName`.
+ * @param themeName The theme name as the default, written in camel case -or- `null`.
+ * @returns A `Style` represents color definitions for the default `themeName`.
+ */
+export const themeDefault = (themeName: ThemeName|null = null) => {
+    if (themeName) return themeIf(themeName);
     
     
     
-    const [, foregRefs, foregDecls] = usesForeg();
-    const [, backgRefs, backgDecls] = usesBackg();
-    const [, , borderDecls        ] = usesBorder();
-    const [, , outlinedDecls      ] = usesOutlined();
-    const [, , mildDecls          ] = usesMild();
-    const [, , boxShadowFocusDecls] = usesBoxShadowFocus();
+    return composition([]);
+};
+/**
+ * Creates a conditional color definitions for the given `themeName`.
+ * @param themeName The given theme name written in camel case.
+ * @returns A `Style` represents the conditional color definitions for the given `themeName`.
+ */
+export const themeIf = (themeName: ThemeName) => {
     return composition([
         vars({
-            [foregDecls.foregIf]                   : cssProps.foreg,
-            [backgDecls.backgIf]                   : 'transparent',
-            [borderDecls.borderIf]                 : cssProps.borderColor,
-            [outlinedDecls.outlinedForegIf]        : foregRefs.foregIf,
-            [mildDecls.mildForegIf]                : foregRefs.foregIf,
-            [mildDecls.mildBackgIf]                : backgRefs.backgIf,
-            [boxShadowFocusDecls.boxShadowFocusIf] : colors.secondaryThin,
+            [themeDecls.foregIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+            [themeDecls.backgIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+            [themeDecls.borderIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+            
+            [themeDecls.outlinedForegIf]  : themeRefs.backgIf,
+            
+            [themeDecls.mildForegIf]      : themeRefs.borderIf,
+            [themeDecls.mildBackgIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+            
+            [themeDecls.focusBoxShadowIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
         }),
     ]);
 };
 /**
- * Creates a conditional color definition for the specified `theme`.
- * @param theme The theme name written in camel case.
- * @returns A `Style` represents the conditional color definition for the specified `theme`.
+ * Creates an important conditional color definitions for the given `themeName`.
+ * @param themeName The given theme name written in camel case.
+ * @returns A `Style` represents the important conditional color definitions for the given `themeName`.
  */
-export const themeIf = (theme: string) => {
-    const [, , foregDecls           ] = usesForeg();
-    const [, backgRefs , backgDecls ] = usesBackg();
-    const [, borderRefs, borderDecls] = usesBorder();
-    const [, , outlinedDecls        ] = usesOutlined();
-    const [, , mildDecls            ] = usesMild();
-    const [, , boxShadowFocusDecls  ] = usesBoxShadowFocus();
+export const themeIfIf = (themeName: ThemeName) => {
     return composition([
         vars({
-            [foregDecls.foregIf]                   : (colors as DictionaryOf<typeof colors>)[`${theme}Text`], // light on dark backg | dark on light backg
-            [backgDecls.backgIf]                   : (colors as DictionaryOf<typeof colors>)[theme],
-            [borderDecls.borderIf]                 : (colors as DictionaryOf<typeof colors>)[`${theme}Bold`], // 20% background + 80% page's foreground
-            [outlinedDecls.outlinedForegIf]        : backgRefs.backgIf,
-            [mildDecls.mildForegIf]                : borderRefs.borderIf,
-            [mildDecls.mildBackgIf]                : (colors as DictionaryOf<typeof colors>)[`${theme}Mild`], // 20% background + 80% page's background
-            [boxShadowFocusDecls.boxShadowFocusIf] : (colors as DictionaryOf<typeof colors>)[`${theme}Thin`],
-        }),
-    ]);
-};
-/**
- * Creates an important conditional color definition for the specified `theme`.
- * @param theme The theme name written in camel case.
- * @returns A `Style` represents the important conditional color definition for the specified `theme`.
- */
-export const themeIfIf = (theme: string) => {
-    const [, , foregDecls           ] = usesForeg();
-    const [, backgRefs , backgDecls ] = usesBackg();
-    const [, borderRefs, borderDecls] = usesBorder();
-    const [, , outlinedDecls        ] = usesOutlined();
-    const [, , mildDecls            ] = usesMild();
-    const [, , boxShadowFocusDecls  ] = usesBoxShadowFocus();
-    return composition([
-        vars({
-            [foregDecls.foregIfIf]                   : (colors as DictionaryOf<typeof colors>)[`${theme}Text`], // light on dark backg | dark on light backg
-            [backgDecls.backgIfIf]                   : (colors as DictionaryOf<typeof colors>)[theme],
-            [borderDecls.borderIfIf]                 : (colors as DictionaryOf<typeof colors>)[`${theme}Bold`], // 20% background + 80% page's foreground
-            [outlinedDecls.outlinedForegIfIf]        : backgRefs.backgIfIf,
-            [mildDecls.mildForegIfIf]                : borderRefs.borderIfIf,
-            [mildDecls.mildBackgIfIf]                : (colors as DictionaryOf<typeof colors>)[`${theme}Mild`], // 20% background + 80% page's background
-            [boxShadowFocusDecls.boxShadowFocusIfIf] : (colors as DictionaryOf<typeof colors>)[`${theme}Thin`],
+            [themeDecls.foregIfIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+            [themeDecls.backgIfIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+            [themeDecls.borderIfIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+            [themeDecls.outlinedForegIfIf]  : themeRefs.backgIfIf,
+            [themeDecls.mildForegIfIf]      : themeRefs.borderIfIf,
+            [themeDecls.mildBackgIfIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+            [themeDecls.focusBoxShadowIfIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
         }),
     ]);
 };
 //#endregion themes
 
 //#region sizes
+export type SizeName = 'sm'|'lg'
 export interface SizeVars {
     // empty (might be added soon)
 }
 const [sizeRefs, sizeDecls] = createCssVar<SizeVars>();
 /**
- * Creates sizing definitions *for each* `sizeOptions()`.
- * @returns A `[]` represents the sizing definitions *for each* `sizeOptions()`.
+ * Uses basic sizes.  
+ * For example: `sm`, `lg`.
+ * @param factory Customize the callback to create sizing definitions for each size in `options`.
+ * @param options Customize the size options.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
 export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
     return [
         () => composition([
             rules([
-                options.map((size) => rule(
-                    `.sz${pascalCase(size)}`,
-                    factory(size)
+                options.map((sizeName) => rule(
+                    `.sz${pascalCase(sizeName)}`,
+                    factory(sizeName)
                 )),
             ]),
         ]),
@@ -243,29 +296,38 @@ export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
     ] as const;
 };
 /**
- * Creates a sizing definition for the specified `size`.
- * @param size The given size name written in camel case.
- * @returns A `Style` represents the sizing definition for the given `size`.
+ * Creates sizing definitions for the given `sizeName`.
+ * @param sizeName The given size name written in camel case.
+ * @returns A `Style` represents sizing definitions for the given `sizeName`.
  */
-export const sizeOf = (size: string) => composition([
+export const sizeOf = (sizeName: SizeName) => composition([
     layout({
-        // overwrites propName = propName{Size}:
-        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, size)),
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
     }),
 ]);
 /**
  * Gets the all available size options.
- * @returns A `string[]` represents the all available size options.
+ * @returns A `SizeName[]` represents the all available size options.
  */
-export const sizeOptions = (): string[] => ['sm', 'lg'];
+export const sizeOptions = (): SizeName[] => ['sm', 'lg'];
 //#endregion sizes
 
 
 //#region gradient
 export interface GradientVars {
+    /**
+     * toggles on background gradient - at gradient variant.
+     */
     backgGradTg : any
 }
 const [gradientRefs, gradientDecls] = createCssVar<GradientVars>();
+/**
+ * Uses toggleable gradient.
+ * @param off Customize the callback to create gradient definitions when *toggled off*.
+ * @param on Customize the callback to create gradient definitions when *toggled on*.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents toggleable gradient definitions.
+ */
 export const usesGradient = (off = noGradient, on = isGradient) => {
     return [
         () => composition([
@@ -279,23 +341,23 @@ export const usesGradient = (off = noGradient, on = isGradient) => {
     ] as const;
 };
 /**
- * Creates a no gradient definition when the gradient variant is disabled.
- * @returns A `Style` represents the no gradient definition.
+ * Creates gradient definitions when *toggled off*.
+ * @returns A `Style` represents gradient definitions when *toggled off*.
  */
 export const noGradient = (inherit = false) => composition([
     vars({
         // *toggle off* the background gradient prop:
-        [gradientDecls.backgGradTg]     : inherit ? 'unset' : 'initial',
+        [gradientDecls.backgGradTg] : inherit ? 'unset' : 'initial',
     }),
 ]);
 /**
- * Creates a gradient definition when the gradient variant is enabled.
- * @returns A `Style` represents the gradient definition.
+ * Creates gradient definitions when *toggled on*.
+ * @returns A `Style` represents gradient definitions when *toggled on*.
  */
 export const isGradient = () => composition([
     vars({
         // *toggle on* the background gradient prop:
-        [gradientDecls.backgGradTg]     : cssProps.backgGrad,
+        [gradientDecls.backgGradTg] : cssProps.backgGrad,
     }),
 ]);
 //#endregion gradient
@@ -303,38 +365,32 @@ export const isGradient = () => composition([
 //#region outlined
 export interface OutlinedVars {
     /**
-     * conditional foreground color - at outlined variant.
-     */
-    outlinedForegIfIf : any
-
-    /**
-     * conditional unthemed foreground color - at outlined variant.
-     */
-    outlinedForegIf   : any
-
-    /**
      * functional foreground color - at outlined variant.
      */
-    outlinedForegFn   : any
-
+    outlinedForegFn : any
     /**
-     * toggles *on* foreground color - at outlined variant.
+     * toggles on foreground color - at outlined variant.
      */
-    outlinedForegTg   : any
-
-
-
+    outlinedForegTg : any
+    
+    
+    
     /**
-     * functional backgrounds - at outlined variant.
+     * functional background color - at outlined variant.
      */
     outlinedBackgFn : any
-
     /**
-     * toggles *on* backgrounds - at outlined variant.
+     * toggles on background color - at outlined variant.
      */
     outlinedBackgTg : any
 }
 const [outlinedRefs, outlinedDecls] = createCssVar<OutlinedVars>();
+/**
+ * Uses toggleable outlining.
+ * @param off Customize the callback to create outlining definitions when *toggled off*.
+ * @param on Customize the callback to create outlining definitions when *toggled on*.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents toggleable outlining definitions.
+ */
 export const usesOutlined = (off = noOutlined, on = isOutlined) => {
     // dependencies:
     const [themes, themeRefs] = usesThemes();
@@ -344,24 +400,28 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
     return [
         () => composition([
             imports([
+                // `usesOutlined()` implicitly `usesThemes()`
+                // `usesOutlined()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes,
             ]),
             rules([
-                // grandpa ??? .outlined and parent not .outlined and current not .outlined:
-                rule(                     ':not(.outlined)&:not(.outlined)' , off(/*inherit =*/false)), // can't inherit, because outlined() uses dedicated color theme
-
-                // grandpa iss .outlined or  parent is  .outlined or  current is  .outlined:
+                // grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
+                rule(                     ':not(.outlined)&:not(.outlined)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesOutlined()` uses dedicated theme
+                
+                // grandpa is `.outlined` or  parent is  `.outlined` or  current is  `.outlined`:
                 // double `.outlined.outlined` to combat with `:not(.outlined)&:not(.outlined)`
                 rule(['.outlined.outlined &',  '.outlined&',  '&.outlined'] , on()                   ),
             ]),
             vars({
-                [outlinedDecls.outlinedForegFn]: fallbacks(
-                    outlinedRefs.outlinedForegIfIf, // first  priority
-                       themeRefs.outlinedForegTh,   // second priority
-                    outlinedRefs.outlinedForegIf,   // third  priority
+                [outlinedDecls.outlinedForegFn] : fallbacks(
+                    themeRefs.outlinedForegIfIf, // first  priority
+                    themeRefs.outlinedForegTh,   // second priority
+                    themeRefs.outlinedForegIf,   // third  priority
+                    
+                    cssProps.foreg,              // default => uses config's foreground
                 ),
-        
-                [outlinedDecls.outlinedBackgFn]: 'transparent',
+                
+                [outlinedDecls.outlinedBackgFn] : 'transparent', // set background to transparent, regardless of the theme colors
             }),
         ]),
         outlinedRefs,
@@ -369,8 +429,8 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
     ] as const;
 };
 /**
- * Creates a no outlined definition when the outlined variant is disabled.
- * @returns A `Style` represents the no outlined definition.
+ * Creates outlining definitions when *toggled off*.
+ * @returns A `Style` represents outlining definitions when *toggled off*.
  */
 export const noOutlined = (inherit = false) => composition([
     vars({
@@ -380,11 +440,11 @@ export const noOutlined = (inherit = false) => composition([
     }),
 ]);
 /**
- * Creates an outlined definition when the outlined variant is enabled.
- * @returns A `Style` represents the outlined definition.
+ * Creates outlining definitions when *toggled on*.
+ * @returns A `Style` represents outlining definitions when *toggled on*.
  */
 export const isOutlined = () => composition([
-    layout({
+    vars({
         // *toggle on* the outlined props:
         [outlinedDecls.outlinedForegTg] : outlinedRefs.outlinedForegFn,
         [outlinedDecls.outlinedBackgTg] : outlinedRefs.outlinedBackgFn,
@@ -395,48 +455,32 @@ export const isOutlined = () => composition([
 //#region mild
 export interface MildVars {
     /**
-     * conditional foreground color - at mild variant.
-     */
-    mildForegIfIf : any
-
-    /**
-     * conditional unthemed foreground color - at mild variant.
-     */
-    mildForegIf   : any
-
-    /**
      * functional foreground color - at mild variant.
      */
-    mildForegFn   : any
-
+    mildForegFn : any
     /**
-     * toggles *on* foreground color - at mild variant.
+     * toggles on foreground color - at mild variant.
      */
-    mildForegTg   : any
+    mildForegTg : any
     
     
     
     /**
-     * conditional background - at mild variant.
+     * functional background color - at mild variant.
      */
-    mildBackgIfIf : any
-
+    mildBackgFn : any
     /**
-     * conditional unthemed background - at mild variant.
+     * toggles on background color - at mild variant.
      */
-    mildBackgIf   : any
-
-    /**
-     * functional backgrounds - at mild variant.
-     */
-    mildBackgFn   : any
-
-    /**
-     * toggles *on* backgrounds - at mild variant.
-     */
-    mildBackgTg   : any
+    mildBackgTg : any
 }
 const [mildRefs, mildDecls] = createCssVar<MildVars>();
+/**
+ * Uses toggleable mildification.
+ * @param off Customize the callback to create mildification definitions when *toggled off*.
+ * @param on Customize the callback to create mildification definitions when *toggled on*.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents toggleable mildification definitions.
+ */
 export const usesMild = (off = noMild, on = isMild) => {
     // dependencies:
     const [themes, themeRefs] = usesThemes();
@@ -446,27 +490,33 @@ export const usesMild = (off = noMild, on = isMild) => {
     return [
         () => composition([
             imports([
+                // `usesMild()` implicitly `usesThemes()`
+                // `usesMild()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes,
             ]),
             rules([
-                // grandpa's .mild does not affect the .mild
-                // parent not .mild and current not .mild:
-                rule(':not(.mild)&:not(.mild)' , off(/*inherit =*/false)), // can't inherit, because mild() uses dedicated color theme
+                // by design: grandpa's `.mild` does not affect current `.mild`
+                // parent not `.mild` and current not `.mild`:
+                rule(':not(.mild)&:not(.mild)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesMild()` uses dedicated theme
                 
-                // parent is  .mild or  current is  .mild:
+                // parent is  `.mild` or  current is  `.mild`:
                 rule([    '.mild&',  '&.mild'] , on()                   ),
             ]),
             vars({
                 [mildDecls.mildForegFn]: fallbacks(
-                     mildRefs.mildForegIfIf, // first  priority
+                    themeRefs.mildForegIfIf, // first  priority
                     themeRefs.mildForegTh,   // second priority
-                     mildRefs.mildForegIf,   // third  priority
+                    themeRefs.mildForegIf,   // third  priority
+                    
+                    cssProps.foreg,          // default => uses config's foreground
                 ),
-        
+                
                 [mildDecls.mildBackgFn]: fallbacks(
-                     mildRefs.mildBackgIfIf, // first  priority
+                    themeRefs.mildBackgIfIf, // first  priority
                     themeRefs.mildBackgTh,   // second priority
-                     mildRefs.mildBackgIf,   // third  priority
+                    themeRefs.mildBackgIf,   // third  priority
+                    
+                    cssProps.backg,          // default => uses config's background
                 ),
             }),
         ]),
@@ -475,23 +525,23 @@ export const usesMild = (off = noMild, on = isMild) => {
     ] as const;
 };
 /**
- * Creates a no mild definition when the mild variant is disabled.
- * @returns A `Style` represents the no mild definition.
+ * Creates mildification definitions when *toggled off*.
+ * @returns A `Style` represents mildification definitions when *toggled off*.
  */
 export const noMild = (inherit = false) => composition([
     vars({
-        // *toggle off* the mild props:
+        // *toggle off* the mildification props:
         [mildDecls.mildForegTg] : inherit ? 'unset' : 'initial',
         [mildDecls.mildBackgTg] : inherit ? 'unset' : 'initial',
     }),
 ]);
 /**
- * Creates a mild definition when the mild variant is enabled.
- * @returns A `Style` represents the mild definition.
+ * Creates mildification definitions when *toggled on*.
+ * @returns A `Style` represents mildification definitions when *toggled on*.
  */
 export const isMild = () => composition([
-    layout({
-        // *toggle on* the mild props:
+    vars({
+        // *toggle on* the mildification props:
         [mildDecls.mildForegTg] : mildRefs.mildForegFn,
         [mildDecls.mildBackgTg] : mildRefs.mildBackgFn,
     }),
@@ -502,53 +552,44 @@ export const isMild = () => composition([
 //#region foreg
 export interface ForegVars {
     /**
-     * conditional foreground color.
-     */
-    foregIfIf : any
-
-    /**
-     * conditional unthemed foreground color.
-     */
-    foregIf   : any
-
-    /**
      * functional foreground color.
      */
-    foregFn   : any
-
+    foregFn     : any
+    
     /**
      * final foreground color.
      */
-    foreg     : any
+    foreg       : any
 }
 const [foregRefs, foregDecls] = createCssVar<ForegVars>();
+/**
+ * Uses foreground color (text color).
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents foreground color definitions.
+ */
 export const usesForeg = () => {
     // dependencies:
-    const [themes  , themeRefs   ] = usesThemes();
-    const [outlined, outlinedRefs] = usesOutlined();
-    const [mild    , mildRefs    ] = usesMild();
+    const [, themeRefs   ] = usesThemes();
+    const [, outlinedRefs] = usesOutlined();
+    const [, mildRefs    ] = usesMild();
     
     
     
     return [
         () => composition([
-            imports([
-                themes,
-                outlined,
-                mild,
-            ]),
             vars({
-                [foregDecls.foregFn]: fallbacks(
-                    foregRefs.foregIfIf, // first  priority
+                [foregDecls.foregFn] : fallbacks(
+                    themeRefs.foregIfIf, // first  priority
                     themeRefs.foregTh,   // second priority
-                    foregRefs.foregIf,   // third  priority
+                    themeRefs.foregIf,   // third  priority
+                    
+                    cssProps.foreg,      // default => uses config's foreground
                 ),
-        
-                // define a final *foreground* color func:
-                [foregDecls.foreg]: fallbacks(
-                    outlinedRefs.outlinedForegTg, // toggle outlined
-                    mildRefs.mildForegTg,         // toggle mild
-                    foregRefs.foregFn,
+                
+                [foregDecls.foreg]   : fallbacks(
+                    outlinedRefs.outlinedForegTg, // toggle outlined (if `usesOutlined()` applied)
+                    mildRefs.mildForegTg,         // toggle mild     (if `usesMild()` applied)
+                    
+                    foregRefs.foregFn,            // default => uses our `foregFn`
                 ),
             }),
         ]),
@@ -566,86 +607,62 @@ export interface BackgVars {
     backgNone   : any
     
     /**
-     * conditional background.
-     */
-    backgIfIf   : any
-    
-    /**
-     * conditional unthemed background.
-     */
-    backgIf     : any
-    
-    /**
-     * functional backgrounds.
+     * functional background color.
      */
     backgFn     : any
-    
-    /**
-     * toggles background gradient.
-     */
-    backgGradTg : any
-    
     /**
      * final background color.
      */
     backgCol    : any
     
     /**
-     * final background color as solid background.
-     */
-    backgSol    : any
-    
-    /**
-     * final backgrounds.
+     * final background layers.
      */
     backg       : any
 }
 const [backgRefs, backgDecls] = createCssVar<BackgVars>();
+/**
+ * Uses background layer(s).
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents background layer(s) definitions.
+ */
 export const usesBackg = () => {
     // dependencies:
-    const [themes  , themeRefs   ] = usesThemes();
-    const [outlined, outlinedRefs] = usesOutlined();
-    const [mild    , mildRefs    ] = usesMild();
-
+    const [, themeRefs   ] = usesThemes();
+    const [, gradientRefs] = usesGradient();
+    const [, outlinedRefs] = usesOutlined();
+    const [, mildRefs    ] = usesMild();
+    
     
     
     return [
         () => composition([
-            imports([
-                themes,
-                outlined,
-                mild,
-            ]),
             vars({
-                // define a *none* background:
-                [backgDecls.backgNone]: solidBackg('transparent'),
-
-                [backgDecls.backgFn]: fallbacks(
-                    backgRefs.backgIfIf, // first  priority
+                [backgDecls.backgNone] : solidBackg('transparent'),
+                
+                [backgDecls.backgFn]   : fallbacks(
+                    themeRefs.backgIfIf, // first  priority
                     themeRefs.backgTh,   // second priority
-                    backgRefs.backgIf,   // third  priority
+                    themeRefs.backgIf,   // third  priority
+                    
+                    cssProps.backg,      // default => uses config's background
                 ),
-        
-                // define a final *background* color func:
-                [backgDecls.backgCol]: fallbacks(
-                    outlinedRefs.outlinedBackgTg, // toggle outlined
-                    mildRefs.mildBackgTg,         // toggle mild
-                    backgRefs.backgFn,
+                [backgDecls.backgCol]  : fallbacks(
+                    outlinedRefs.outlinedBackgTg, // toggle outlined (if `usesOutlined()` applied)
+                    mildRefs.mildBackgTg,         // toggle mild     (if `usesMild()` applied)
+                    
+                    backgRefs.backgFn,            // default => uses our `backgFn`
                 ),
-                [backgDecls.backgSol]: solidBackg(backgRefs.backgCol),
-                // define a final *backgrounds* func:
-                [backgDecls.backg]: [
+                
+                [backgDecls.backg]     : [
                     // top layer:
                     fallbacks(
-                        backgRefs.backgGradTg,
-                        backgRefs.backgNone,
+                        gradientRefs.backgGradTg, // toggle gradient (if `usesGradient()` applied)
+                        
+                        backgRefs.backgNone,      // default => no top layer
                     ),
-        
-                    // middle layer:
-                    backgRefs.backgSol,
-        
+                    
                     // bottom layer:
-                    cssProps.backg,
+                    backgRefs.backgCol,
                 ],
             }),
         ]),
@@ -658,50 +675,38 @@ export const usesBackg = () => {
 //#region border
 export interface BorderVars {
     /**
-     * conditional border color.
-     */
-    borderIfIf : any
-
-    /**
-     * conditional unthemed border color.
-     */
-    borderIf   : any
-
-    /**
      * functional border color.
      */
-    borderFn   : any
-
+    borderFn    : any
+    
     /**
      * final border color.
      */
-    borderCol  : any
+    borderCol   : any
 }
 const [borderRefs, borderDecls] = createCssVar<BorderVars>();
 export const usesBorder = () => {
     // dependencies:
-    const [themes  , themeRefs   ] = usesThemes();
-    const [outlined, outlinedRefs] = usesOutlined();
+    const [, themeRefs   ] = usesThemes();
+    const [, outlinedRefs] = usesOutlined();
     
     
     
     return [
         () => composition([
-            imports([
-                themes,
-                outlined,
-            ]),
             vars({
-                [borderDecls.borderFn]: fallbacks(
-                    borderRefs.borderIfIf, // first  priority
-                     themeRefs.borderTh,   // second priority
-                    borderRefs.borderIf,   // third  priority
+                [borderDecls.borderFn]  : fallbacks(
+                    themeRefs.borderIfIf, // first  priority
+                    themeRefs.borderTh,   // second priority
+                    themeRefs.borderIf,   // third  priority
+                    
+                    cssProps.borderColor, // default => uses config's border color
                 ),
                 
-                // define a final *border* color func:
                 [borderDecls.borderCol] : fallbacks(
-                    outlinedRefs.outlinedForegTg, // toggle outlined
-                      borderRefs.borderFn
+                    outlinedRefs.outlinedForegTg, // toggle outlined (if `usesOutlined()` applied)
+                    
+                    borderRefs.borderFn,          // default => uses our `borderFn`
                 ),
             }),
         ]),
@@ -712,77 +717,109 @@ export const usesBorder = () => {
 //#endregion border
 
 
-//#region boxShadow focus
-export interface BoxShadowFocusVars {
+//#region focusBlur
+export interface FocusBlurVars {
     /**
-     * Supports for Control
+     * functional boxShadow color - at focus state.
      */
-    
-    
-    
+    focusBoxShadowFn  : any
     /**
-     * none box shadow.
+     * final boxShadow color - at focus state.
      */
-    boxShadowNone      : any
-
+    focusBoxShadowCol : any
     /**
-     * focused conditional box-shadow color.
+     * final boxShadow single layer - at focus state.
      */
-    boxShadowFocusIfIf : any
-
+    focusBoxShadowLy  : any
     /**
-     * focused conditional unthemed box-shadow color.
+     * toggles on boxShadow single layer - at focus state.
      */
-    boxShadowFocusIf   : any
-
-    /**
-     * focused functional box-shadow color.
-     */
-    boxShadowFocusFn   : any
-
-    /**
-     * final box-shadow.
-     */
-    boxShadow          : any
+    focusBoxShadowTg : any
 }
-const [boxShadowFocusRefs, boxShadowFocusDecls] = createCssVar<BoxShadowFocusVars>();
-export const usesBoxShadowFocus = () => {
+const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
+/**
+ * Uses focus & blur states.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
+ */
+export const usesFocusBlur = () => {
+    return [
+        () => composition([
+            vars({
+                [focusBlurDecls.focusBoxShadowFn]  : fallbacks(
+                    themeRefs.focusBoxShadowIfIf, // first  priority
+                    themeRefs.focusBoxShadowTh,   // second priority
+                    themeRefs.focusBoxShadowIf,   // third  priority
+                    
+                    colors.secondaryThin,         // default => uses secondary theme, because its color is neutral
+                ),
+                [focusBlurDecls.focusBoxShadowCol] : fallbacks(
+                    // no toggle outlined nor toggle mild yet (might be added in the future)
+                    
+                    focusBlurRefs.focusBoxShadowFn, // default => uses our `focusBoxShadowFn`
+                ),
+                [focusBlurDecls.focusBoxShadowLy]  : [
+                    // focusBoxShadow pos, width, spread, etc:
+                    cssProps.boxShadowFocus,
+                    
+                    // focusBoxShadow color:
+                    focusBlurRefs.focusBoxShadowCol,
+                ],
+            }),
+            // TODO: under construction
+        ]),
+        focusBlurRefs,
+        focusBlurDecls,
+    ] as const;
+}
+//#endregion focusBlur
+
+
+//#region boxShadow
+export interface BoxShadowVars {
+    /**
+     * none boxShadow.
+     */
+    boxShadowNone : any
+    
+    /**
+     * final boxShadow layers.
+     */
+    boxShadow     : any
+}
+const [boxShadowRefs, boxShadowDecls] = createCssVar<BoxShadowVars>();
+/**
+ * Uses boxShadow layer(s).
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents boxShadow layer(s) definitions.
+ */
+export const usesBoxShadow = () => {
     // dependencies:
-    const [themes  , themeRefs   ] = usesThemes();
+    const [, focusBlurRefs] = usesFocusBlur();
     
     
     
     return [
         () => composition([
-            imports([
-                themes,
-            ]),
             vars({
-                // define a *none* box shadow:
-                [boxShadowFocusDecls.boxShadowNone] : [[0, 0, 'transparent']],
-
-                [boxShadowFocusDecls.boxShadowFocusFn]: [[
-                    cssProps.boxShadowFocus,      // box-shadow pos, width, spread, etc
-        
-                    // box-shadow color:
-                    fallbacks(
-                        boxShadowFocusRefs.boxShadowFocusIfIf, // first  priority
-                                 themeRefs.boxShadowFocusTh,   // second priority
-                        boxShadowFocusRefs.boxShadowFocusIf,   // third  priority
-                    ),
-                ]],
+                [boxShadowDecls.boxShadowNone] : [[0, 0, 'transparent']],
                 
-                // define a final *box-shadow* func:
-                [boxShadowFocusDecls.boxShadow] : [ // single array => makes the JSS treat as comma separated values
+                [boxShadowDecls.boxShadow] : [
+                    // top layer:
+                    fallbacks(
+                        focusBlurRefs.focusBoxShadowTg, // toggle focusBoxShadow (if `usesFocusBlur()` applied)
+                        
+                        boxShadowRefs.boxShadowNone,    // default => no top layer
+                    ),
+                    
+                    // bottom layer:
                     cssProps.boxShadow,
                 ],
             }),
         ]),
-        boxShadowFocusRefs,
-        boxShadowFocusDecls,
+        boxShadowRefs,
+        boxShadowDecls,
     ] as const;
 };
-//#endregion boxShadow focus
+//#endregion boxShadow
 
 //#region animations
 export interface AnimVars {
@@ -982,9 +1019,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 // react hooks:
 
 export interface VariantTheme {
-    theme?: string
+    theme?: ThemeName
 }
-export function useVariantTheme(props: VariantTheme, themeDefault?: () => (string|undefined)) {
+export function useVariantTheme(props: VariantTheme, themeDefault?: () => (ThemeName|null)) {
     const theme = props.theme ?? themeDefault?.();
     return {
         class: theme ? `th${pascalCase(theme)}` : null,
