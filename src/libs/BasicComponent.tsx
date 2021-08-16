@@ -1059,7 +1059,7 @@ export const useBasicComponentStyle = createUseCssfnStyle(() => {
                 
                 // states & animations:
                 filter      : animRefs.filter,
-                transform   : animRefs.transf,
+                transf      : animRefs.transf,
                 anim        : animRefs.anim,
             }),
         ]),
