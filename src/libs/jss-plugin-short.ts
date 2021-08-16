@@ -14,8 +14,11 @@ const shorts: { [key: string]: string } = {
     backg       : 'background',
     'backgClip' : 'backgroundClip',
     anim        : 'animation',
+    transf      : 'transform',
     'gapX'      : 'columnGap',
     'gapY'      : 'rowGap',
+    'gapInline' : 'columnGap',
+    'gapBlock'  : 'rowGap',
 };
 
 const onProcessStyle = (style: JssStyle & { [key: string]: JssStyle[keyof JssStyle] }, rule: Rule, sheet?: StyleSheet): JssStyle => {
