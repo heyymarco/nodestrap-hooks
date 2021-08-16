@@ -1,16 +1,15 @@
 .main-0-1-1 {
-    --fn-outlinedForegFn: var(--fn-outlinedForegIfIf,var(--fn-outlinedForegTh,var(--fn-outlinedForegIf)));
+    --fn-outlinedForegFn: var(--fn-outlinedForegIfIf,var(--fn-outlinedForegTh,var(--fn-outlinedForegIf,var(--bsc-foreg))));
     --fn-outlinedBackgFn: transparent;
-    --fn-mildForegFn: var(--fn-mildForegIfIf,var(--fn-mildForegTh,var(--fn-mildForegIf)));
-    --fn-mildBackgFn: var(--fn-mildBackgIfIf,var(--fn-mildBackgTh,var(--fn-mildBackgIf)));
-    --fn-foregFn: var(--fn-foregIfIf,var(--fn-foregTh,var(--fn-foregIf)));
+    --fn-mildForegFn: var(--fn-mildForegIfIf,var(--fn-mildForegTh,var(--fn-mildForegIf,var(--bsc-foreg))));
+    --fn-mildBackgFn: var(--fn-mildBackgIfIf,var(--fn-mildBackgTh,var(--fn-mildBackgIf,var(--bsc-backg))));
+    --fn-foregFn: var(--fn-foregIfIf,var(--fn-foregTh,var(--fn-foregIf,var(--bsc-foreg))));
     --fn-foreg: var(--fn-outlinedForegTg,var(--fn-mildForegTg,var(--fn-foregFn)));
     --fn-backgNone: linear-gradient(transparent,transparent) border-box;
-    --fn-backgFn: var(--fn-backgIfIf,var(--fn-backgTh,var(--fn-backgIf)));
+    --fn-backgFn: var(--fn-backgIfIf,var(--fn-backgTh,var(--fn-backgIf,var(--bsc-backg))));
     --fn-backgCol: var(--fn-outlinedBackgTg,var(--fn-mildBackgTg,var(--fn-backgFn)));
-    --fn-backgSol: linear-gradient(var(--fn-backgCol),var(--fn-backgCol)) border-box;
-    --fn-backg: var(--fn-backgGradTg,var(--fn-backgNone)), var(--fn-backgSol), var(--bsc-backg);
-    --fn-borderFn: var(--fn-borderIfIf,var(--fn-borderTh,var(--fn-borderIf)));
+    --fn-backg: var(--fn-backgGradTg,var(--fn-backgNone)), var(--fn-backgCol);
+    --fn-borderFn: var(--fn-borderIfIf,var(--fn-borderTh,var(--fn-borderIf,var(--bsc-borderColor))));
     --fn-borderCol: var(--fn-outlinedForegTg,var(--fn-borderFn));
     --fn-filterNone: brightness(100%);
     --fn-filter: var(--bsc-filter);
@@ -37,78 +36,9 @@
     background: var(--fn-backg);
     animation: var(--fn-anim);
 }
-.main-0-1-1.thPrimary {
-    --fn-foregTh: var(--col-primaryText);
-    --fn-backgTh: var(--col-primary);
-    --fn-borderTh: var(--col-primaryBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-primaryMild);
-    --fn-boxShadowFocusTh: var(--col-primaryThin);
-}
-.main-0-1-1.thSecondary {
-    --fn-foregTh: var(--col-secondaryText);
-    --fn-backgTh: var(--col-secondary);
-    --fn-borderTh: var(--col-secondaryBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-secondaryMild);
-    --fn-boxShadowFocusTh: var(--col-secondaryThin);
-}
-.main-0-1-1.thSuccess {
-    --fn-foregTh: var(--col-successText);
-    --fn-backgTh: var(--col-success);
-    --fn-borderTh: var(--col-successBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-successMild);
-    --fn-boxShadowFocusTh: var(--col-successThin);
-}
-.main-0-1-1.thInfo {
-    --fn-foregTh: var(--col-infoText);
-    --fn-backgTh: var(--col-info);
-    --fn-borderTh: var(--col-infoBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-infoMild);
-    --fn-boxShadowFocusTh: var(--col-infoThin);
-}
-.main-0-1-1.thWarning {
-    --fn-foregTh: var(--col-warningText);
-    --fn-backgTh: var(--col-warning);
-    --fn-borderTh: var(--col-warningBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-warningMild);
-    --fn-boxShadowFocusTh: var(--col-warningThin);
-}
-.main-0-1-1.thDanger {
-    --fn-foregTh: var(--col-dangerText);
-    --fn-backgTh: var(--col-danger);
-    --fn-borderTh: var(--col-dangerBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-dangerMild);
-    --fn-boxShadowFocusTh: var(--col-dangerThin);
-}
-.main-0-1-1.thLight {
-    --fn-foregTh: var(--col-lightText);
-    --fn-backgTh: var(--col-light);
-    --fn-borderTh: var(--col-lightBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-lightMild);
-    --fn-boxShadowFocusTh: var(--col-lightThin);
-}
-.main-0-1-1.thDark {
-    --fn-foregTh: var(--col-darkText);
-    --fn-backgTh: var(--col-dark);
-    --fn-borderTh: var(--col-darkBold);
-    --fn-outlinedForegTh: var(--fn-backgTh);
-    --fn-mildForegTh: var(--fn-borderTh);
-    --fn-mildBackgTh: var(--col-darkMild);
-    --fn-boxShadowFocusTh: var(--col-darkThin);
-}
+
+
+
 .main-0-1-1.szSm {
     --bsc-fontSize: var(--bsc-fontSizeSm);
     --bsc-borderRadius: var(--bsc-borderRadiusSm);
@@ -121,12 +51,89 @@
     --bsc-paddingInline: var(--bsc-paddingInlineLg);
     --bsc-paddingBlock: var(--bsc-paddingBlockLg);
 }
+
+
+
+.main-0-1-1.thPrimary {
+    --fn-foregTh: var(--col-primaryText);
+    --fn-backgTh: var(--col-primary);
+    --fn-borderTh: var(--col-primaryBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-primaryMild);
+    --fn-focusBoxShadowTh: var(--col-primaryThin);
+}
+.main-0-1-1.thSecondary {
+    --fn-foregTh: var(--col-secondaryText);
+    --fn-backgTh: var(--col-secondary);
+    --fn-borderTh: var(--col-secondaryBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-secondaryMild);
+    --fn-focusBoxShadowTh: var(--col-secondaryThin);
+}
+.main-0-1-1.thSuccess {
+    --fn-foregTh: var(--col-successText);
+    --fn-backgTh: var(--col-success);
+    --fn-borderTh: var(--col-successBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-successMild);
+    --fn-focusBoxShadowTh: var(--col-successThin);
+}
+.main-0-1-1.thInfo {
+    --fn-foregTh: var(--col-infoText);
+    --fn-backgTh: var(--col-info);
+    --fn-borderTh: var(--col-infoBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-infoMild);
+    --fn-focusBoxShadowTh: var(--col-infoThin);
+}
+.main-0-1-1.thWarning {
+    --fn-foregTh: var(--col-warningText);
+    --fn-backgTh: var(--col-warning);
+    --fn-borderTh: var(--col-warningBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-warningMild);
+    --fn-focusBoxShadowTh: var(--col-warningThin);
+}
+.main-0-1-1.thDanger {
+    --fn-foregTh: var(--col-dangerText);
+    --fn-backgTh: var(--col-danger);
+    --fn-borderTh: var(--col-dangerBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-dangerMild);
+    --fn-focusBoxShadowTh: var(--col-dangerThin);
+}
+.main-0-1-1.thLight {
+    --fn-foregTh: var(--col-lightText);
+    --fn-backgTh: var(--col-light);
+    --fn-borderTh: var(--col-lightBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-lightMild);
+    --fn-focusBoxShadowTh: var(--col-lightThin);
+}
+.main-0-1-1.thDark {
+    --fn-foregTh: var(--col-darkText);
+    --fn-backgTh: var(--col-dark);
+    --fn-borderTh: var(--col-darkBold);
+    --fn-outlinedForegTh: var(--fn-backgTh);
+    --fn-mildForegTh: var(--fn-borderTh);
+    --fn-mildBackgTh: var(--col-darkMild);
+    --fn-focusBoxShadowTh: var(--col-darkThin);
+}
+
 .main-0-1-1:not(.gradient) {
     --fn-backgGradTg: unset;
 }
 .main-0-1-1.gradient {
     --fn-backgGradTg: var(--bsc-backgGrad);
 }
+
 .main-0-1-1:not(.outlined).main-0-1-1:not(.outlined) {
     --fn-outlinedForegTg: initial;
     --fn-outlinedBackgTg: initial;
@@ -135,6 +142,7 @@
     --fn-outlinedForegTg: var(--fn-outlinedForegFn);
     --fn-outlinedBackgTg: var(--fn-outlinedBackgFn);
 }
+
 .main-0-1-1:not(.mild).main-0-1-1:not(.mild) {
     --fn-mildForegTg: initial;
     --fn-mildBackgTg: initial;

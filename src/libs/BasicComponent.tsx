@@ -26,7 +26,6 @@ import {
     
     // rules:
     rules,
-    states,
     rule,
     
     
@@ -66,7 +65,126 @@ import typos                from './typos/index' // configurable typography (tex
 
 
 
-// nodestrap hooks:
+// hooks:
+
+// layouts:
+
+//#region sizes
+export type SizeName = 'sm'|'lg'
+export interface SizeVars {
+    // empty (might be added soon)
+}
+const [sizeRefs, sizeDecls] = createCssVar<SizeVars>();
+/**
+ * Uses basic sizes.  
+ * For example: `sm`, `lg`.
+ * @param factory Customize the callback to create sizing definitions for each size in `options`.
+ * @param options Customize the size options.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
+ */
+export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
+    return [
+        () => composition([
+            rules([
+                options.map((sizeName) => rule(
+                    `.sz${pascalCase(sizeName)}`,
+                    factory(sizeName)
+                )),
+            ]),
+        ]),
+        sizeRefs,
+        sizeDecls,
+    ] as const;
+};
+/**
+ * Creates sizing definitions for the given `sizeName`.
+ * @param sizeName The given size name written in camel case.
+ * @returns A `Style` represents sizing definitions for the given `sizeName`.
+ */
+export const sizeOf = (sizeName: SizeName) => composition([
+    layout({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }),
+]);
+/**
+ * Gets the all available size options.
+ * @returns A `SizeName[]` represents the all available size options.
+ */
+export const sizeOptions = (): SizeName[] => ['sm', 'lg'];
+
+export interface VariantSize {
+    size?: SizeName
+}
+export const useVariantSize = (props: VariantSize) => {
+    const sizeName = props.size;
+    return {
+        class: sizeName ? `sz${pascalCase(sizeName)}` : null,
+    };
+};
+//#endregion sizes
+
+//#region orientation
+export type OrientationName = 'block'|'inline'
+export interface OrientationVars {
+    /**
+     * configured orientation.
+     */
+    orientation : any
+}
+const [orientationRefs, orientationDecls] = createCssVar<OrientationVars>();
+/**
+ * Uses configurable orientation.  
+ * For example: `block`, `inline`.
+ * @param factory Customize the callback to create orientation definitions for each orientation in `options`.
+ * @param options Customize the orientation options.
+ * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents orientation definitions for each orientation in `options`.
+ */
+export const usesOrientation = (factory = orientationOf, options = orientationOptions()) => {
+    return [
+        () => composition([
+            rules([
+                options.map((orientationName) => rule(
+                    `.${orientationName}`,
+                    factory(orientationName)
+                )),
+            ]),
+        ]),
+        orientationRefs,
+        orientationDecls,
+    ] as const;
+};
+/**
+ * Creates orientation definitions for the given `orientationName`.
+ * @param orientationName The given orientation name written in camel case.
+ * @returns A `Style` represents orientation definitions for the given `orientationName`.
+ */
+export const orientationOf = (orientationName: OrientationName) => composition([
+    layout({
+        display: orientationName,
+    }),
+    vars({
+        [orientationDecls.orientation]: orientationName,
+    }),
+]);
+/**
+ * Gets the all available orientation options.
+ * @returns A `OrientationName[]` represents the all available orientation options.
+ */
+export const orientationOptions = (): OrientationName[] => ['block', 'inline'];
+
+export interface VariantOrientation {
+    orientation?: OrientationName
+}
+export const useVariantOrientation = (props: VariantOrientation) => {
+    return {
+        class: props.orientation ? props.orientation : null,
+    };
+};
+//#endregion orientation
+
+
+// colors:
 
 //#region themes
 export type ThemeName = (keyof typeof color.themes)
@@ -266,53 +384,17 @@ export const themeIfIf = (themeName: ThemeName) => {
         }),
     ]);
 };
-//#endregion themes
 
-//#region sizes
-export type SizeName = 'sm'|'lg'
-export interface SizeVars {
-    // empty (might be added soon)
+export interface VariantTheme {
+    theme?: ThemeName
 }
-const [sizeRefs, sizeDecls] = createCssVar<SizeVars>();
-/**
- * Uses basic sizes.  
- * For example: `sm`, `lg`.
- * @param factory Customize the callback to create sizing definitions for each size in `options`.
- * @param options Customize the size options.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
- */
-export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
-    return [
-        () => composition([
-            rules([
-                options.map((sizeName) => rule(
-                    `.sz${pascalCase(sizeName)}`,
-                    factory(sizeName)
-                )),
-            ]),
-        ]),
-        sizeRefs,
-        sizeDecls,
-    ] as const;
+export const useVariantTheme = (props: VariantTheme, themeDefault?: ThemeName) => {
+    const themeName = props.theme ?? themeDefault;
+    return {
+        class: themeName ? `th${pascalCase(themeName)}` : null,
+    };
 };
-/**
- * Creates sizing definitions for the given `sizeName`.
- * @param sizeName The given size name written in camel case.
- * @returns A `Style` represents sizing definitions for the given `sizeName`.
- */
-export const sizeOf = (sizeName: SizeName) => composition([
-    layout({
-        // overwrites propName = propName{SizeName}:
-        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-    }),
-]);
-/**
- * Gets the all available size options.
- * @returns A `SizeName[]` represents the all available size options.
- */
-export const sizeOptions = (): SizeName[] => ['sm', 'lg'];
-//#endregion sizes
-
+//#endregion themes
 
 //#region gradient
 export interface GradientVars {
@@ -360,6 +442,15 @@ export const isGradient = () => composition([
         [gradientDecls.backgGradTg] : cssProps.backgGrad,
     }),
 ]);
+
+export interface VariantGradient {
+    gradient?: boolean
+}
+export const useVariantGradient = (props: VariantGradient) => {
+    return {
+        class: props.gradient ? 'gradient' : null,
+    };
+};
 //#endregion gradient
 
 //#region outlined
@@ -450,6 +541,15 @@ export const isOutlined = () => composition([
         [outlinedDecls.outlinedBackgTg] : outlinedRefs.outlinedBackgFn,
     }),
 ]);
+
+export interface VariantOutlined {
+    outlined?: boolean
+}
+export const useVariantOutlined = (props: VariantOutlined) => {
+    return {
+        class: props.outlined ? 'outlined' : null,
+    };
+};
 //#endregion outlined
 
 //#region mild
@@ -546,6 +646,15 @@ export const isMild = () => composition([
         [mildDecls.mildBackgTg] : mildRefs.mildBackgFn,
     }),
 ]);
+
+export interface VariantMild {
+    mild?: boolean
+}
+export const useVariantMild = (props: VariantMild) => {
+    return {
+        class: props.mild ? 'mild' : null,
+    };
+};
 //#endregion mild
 
 
@@ -717,6 +826,8 @@ export const usesBorder = () => {
 //#endregion border
 
 
+// animations:
+
 //#region focusBlur
 export interface FocusBlurVars {
     /**
@@ -772,7 +883,6 @@ export const usesFocusBlur = () => {
     ] as const;
 }
 //#endregion focusBlur
-
 
 //#region boxShadow
 export interface BoxShadowVars {
@@ -887,9 +997,11 @@ export const usesAnim = () => {
 
 // styles:
 export const useBasicComponentStyle = createUseCssfnStyle(() => {
-    const [themes]             = usesThemes();
+    // layouts:
     const [sizes]              = usesSizes();
     
+    // colors:
+    const [themes]             = usesThemes();
     const [gradient]           = usesGradient();
     const [outlined]           = usesOutlined();
     const [mild]               = usesMild();
@@ -898,6 +1010,7 @@ export const useBasicComponentStyle = createUseCssfnStyle(() => {
     const [backg , backgRefs]  = usesBackg();
     const [border, borderRefs] = usesBorder();
     
+    // animations:
     const [anim  , animRefs]   = usesAnim();
     
     
@@ -905,36 +1018,47 @@ export const useBasicComponentStyle = createUseCssfnStyle(() => {
     return [
         mainComposition([
             imports([
-                themes,
+                // layouts:
                 sizes,
+                
+                // colors:
+                themes,
                 gradient,
                 outlined,
                 mild,
+                
                 foreg,
                 backg,
                 border,
+                
+                // animations:
                 anim,
             ]),
             layout({
                 // customize:
                 ...usesGeneralProps(cssProps), // apply *general* cssProps
                 
+                
+                
                 // foregrounds:
                 foreg       : foregRefs.foreg,
+                
+                
                 
                 // backgrounds:
                 backg       : backgRefs.backg,
                 
+                
+                
                 // borders:
                 borderColor : borderRefs.borderCol,
+                
+                
                 
                 // states & animations:
                 filter      : animRefs.filter,
                 anim        : animRefs.anim,
             }),
-            states([
-    
-            ]),
         ]),
     ];
 });
@@ -1016,111 +1140,57 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
-// react hooks:
-
-export interface VariantTheme {
-    theme?: ThemeName
-}
-export function useVariantTheme(props: VariantTheme, themeDefault?: () => (ThemeName|null)) {
-    const theme = props.theme ?? themeDefault?.();
-    return {
-        class: theme ? `th${pascalCase(theme)}` : null,
-    };
-}
-
-export interface VariantSize {
-    size?: 'sm' | 'lg' | string
-}
-export function useVariantSize(props: VariantSize) {
-    return {
-        class: props.size ? `sz${pascalCase(props.size)}` : null,
-    };
-}
-
-export interface VariantGradient {
-    gradient?: boolean
-}
-export function useVariantGradient(props: VariantGradient) {
-    return {
-        class: props.gradient ? 'gradient' : null,
-    };
-}
-
-export interface VariantOutlined {
-    outlined?: boolean
-}
-export function useVariantOutlined(props: VariantOutlined) {
-    return {
-        class: props.outlined ? 'outlined' : null,
-    };
-}
-
-export interface VariantMild {
-    mild?: boolean
-}
-export function useVariantMild(props: VariantMild) {
-    return {
-        class: props.mild ? 'mild' : null,
-    };
-}
-
-export type OrientationStyle = 'block'|'inline'
-export interface VariantOrientation {
-    orientation?: OrientationStyle
-}
-export function useVariantOrientation(props: VariantOrientation) {
-    return {
-        class: props.orientation ? props.orientation : null,
-    };
-}
-
-
-
 // react components:
 
 export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
     extends
         ElementProps<TElement>,
         
-        VariantTheme,
+        // layouts:
         VariantSize,
+        // VariantOrientation,
+        
+        // colors:
+        VariantTheme,
         VariantGradient,
         VariantOutlined,
         VariantMild
 {
 }
-export default function BasicComponent<TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) {
+export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) => {
     // styles:
     const styles       = useBasicComponentStyle();
-
+    
     
     
     // variants:
-    const variTheme    = useVariantTheme(props);
     const variSize     = useVariantSize(props);
+
+    const variTheme    = useVariantTheme(props);
     const variGradient = useVariantGradient(props);
     const variOutlined = useVariantOutlined(props);
     const variMild     = useVariantMild(props);
-
-
-
+    
+    
+    
     // jsx:
     return (
         <Element<TElement>
             // other props:
             {...props}
-
-
+            
+            
             // classes:
             mainClass={props.mainClass ?? styles.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variTheme.class,
                 variSize.class,
+
+                variTheme.class,
                 variGradient.class,
                 variOutlined.class,
                 variMild.class,
             ]}
         />
     );
-}
-export { BasicComponent }
+};
+export { BasicComponent as default }

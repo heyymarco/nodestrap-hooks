@@ -6,16 +6,20 @@ import {
 }                          from 'react';
 
 // import Container from '../libs/Container';
-import BasicComponent from '../libs/BasicComponent';
+import {
+	ThemeName,
+	SizeName,
+	BasicComponent,
+} from '../libs/BasicComponent';
 
 
 
 function App() {
     const themes = [undefined,'primary','secondary','success','info','warning','danger','light','dark'];
-    const [theme, 	   setTheme     ] = useState<string|undefined>('primary');
+    const [theme, 	   setTheme     ] = useState<ThemeName|undefined>('primary');
 
     const sizes = ['sm', undefined, 'lg'];
-	const [size, 	   setSize      ] = useState<string|undefined>(undefined);
+	const [size, 	   setSize      ] = useState<SizeName|undefined>(undefined);
 
 	const [enableGrad, setEnableGrad] = useState(false);
 	const [outlined,   setOutlined  ] = useState(false);
@@ -41,7 +45,7 @@ function App() {
 								<input type='radio'
 									value={th}
 									checked={theme===th}
-									onChange={(e) => setTheme(e.target.value || undefined)}
+									onChange={(e) => setTheme(e.target.value as ThemeName || undefined)}
 								/>
 								{`${th}`}
 							</label>
@@ -56,7 +60,7 @@ function App() {
 								<input type='radio'
 									value={sz}
 									checked={size===sz}
-									onChange={(e) => setSize(e.target.value || undefined)}
+									onChange={(e) => setSize(e.target.value as SizeName || undefined)}
 								/>
 								{`${sz}`}
 							</label>
