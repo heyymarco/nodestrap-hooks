@@ -1,0 +1,199 @@
+// react (builds html using javascript):
+import {
+    default as React,
+}                           from 'react'         // base technology of our cssfn components
+
+// cssfn:
+import type {
+    PropEx,
+}                           from './css-types'   // ts defs support for cssfn
+import {
+    // compositions:
+    composition,
+    mainComposition,
+    global,
+    imports,
+    
+    
+    
+    // layouts:
+    layout,
+    vars,
+    
+    
+    
+    // rules:
+    rules,
+    rule,
+}                           from './cssfn'       // cssfn core
+import {
+    // hooks:
+    createUseCssfnStyle,
+}                           from '../libs/react-cssfn' // cssfn for react
+import {
+    createCssConfig,
+    
+    
+    
+    // utilities:
+    usesGeneralProps,
+    usesSuffixedProps,
+    overwriteProps,
+}                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+import {
+    // hooks:
+    usesBasicComponent,
+    
+    
+    
+    // react components:
+    BasicComponentProps,
+    BasicComponent,
+}                           from './BasicComponent'
+import {
+    breakpoints,
+    isScreenWidthAtLeast,
+}                           from './breakpoints'
+
+
+
+// styles:
+/**
+ * Applies a responsive container layout.
+ * @returns A `Style` represents a responsive container layout.
+ */
+export const usesResponsiveContainerLayout = () => composition([
+    layout({
+        // customize:
+        ...usesGeneralProps(cssProps), // apply general cssProps
+    }),
+]);
+/**
+ * Applies a responsive container using grid layout.
+ * @returns A `Style` represents a responsive container using grid layout.
+ */
+export const usesResponsiveContainerGridLayout = () => composition([
+    imports([
+        usesResponsiveContainerLayout(),
+    ]),
+    layout({
+        // layouts:
+        display             : 'grid', // use css grid for layouting
+        gridTemplateRows    : [[cssProps.paddingBlock,  'auto', cssProps.paddingBlock ]],
+        gridTemplateColumns : [[cssProps.paddingInline, 'auto', cssProps.paddingInline]],
+        gridTemplateAreas   : [[
+            '"........... blockStart ........."',
+            '"inlineStart  content   inlineEnd"',
+            '"...........  blockEnd  ........."',
+        ]],
+        
+        
+        
+        // since we use grid as paddings, so the css paddings are not longer needed:
+        paddingInline : null,
+        paddingBlock  : null,
+    }),
+]);
+export const usesContainer = () => {
+    return composition([
+        imports([
+            usesBasicComponent(),
+            usesResponsiveContainerLayout(),
+        ]),
+        layout({
+            // layouts:
+            display: 'block',
+        }),
+    ]);
+};
+export const useContainerStyle = createUseCssfnStyle(() => [
+    mainComposition([
+        imports([
+            usesContainer(),
+        ]),
+    ]),
+    global([
+        Object.keys(breakpoints)
+        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, composition([
+            rules([
+                rule(':root:root', composition([
+                    vars({
+                        // overwrites propName = propName{BreakpointName}:
+                        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
+                    }),
+                ])),
+            ]),
+        ])))
+    ]),
+]);
+
+
+
+// configs:
+export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    return {
+        //#region borders
+        borderWidth  : 0, // strip out BasicComponent's border
+        borderRadius : 0, // strip out BasicComponent's borderRadius
+        //#endregion borders
+        
+        
+        
+        //#region spacings
+        paddingInline    : '12px' as PropEx.Length,
+        paddingBlock     :  '9px' as PropEx.Length,
+    
+        paddingInlineSm  : '24px' as PropEx.Length,
+        paddingBlockSm   : '18px' as PropEx.Length,
+    
+        paddingInlineMd  : '36px' as PropEx.Length,
+        paddingBlockMd   : '27px' as PropEx.Length,
+    
+        paddingInlineLg  : '48px' as PropEx.Length,
+        paddingBlockLg   : '36px' as PropEx.Length,
+    
+        paddingInlineXl  : '60px' as PropEx.Length,
+        paddingBlockXl   : '45px' as PropEx.Length,
+    
+        paddingInlineXxl : '72px' as PropEx.Length,
+        paddingBlockXxl  : '54px' as PropEx.Length,
+        //#endregion spacings
+    };
+}, { prefix: 'con' });
+
+
+
+// react components:
+
+export interface ContainerProps<TElement extends HTMLElement = HTMLElement>
+    extends
+        BasicComponentProps<TElement>
+{
+    // children:
+    children? : React.ReactNode
+}
+export default function Container<TElement extends HTMLElement = HTMLElement>(props: ContainerProps<TElement>) {
+    // styles:
+    const styles = useContainerStyle();
+    
+    
+    
+    // jsx:
+    return (
+        <BasicComponent<TElement>
+            // other props:
+            {...props}
+            
+            
+            
+            // variants:
+            mild={props.mild ?? true}
+            
+            
+            
+            // classes:
+            mainClass={props.mainClass ?? styles.main}
+        />
+    );
+}
+export { Container }

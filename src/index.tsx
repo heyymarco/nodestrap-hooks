@@ -13,8 +13,8 @@ import reportWebVitals from './reportWebVitals';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
-import BasicComponentApp                            from './apps/BasicComponentApp';
-//     import ContainerApp                             from './apps/ContainerApp';
+// import BasicComponentApp                            from './apps/BasicComponentApp';
+    import ContainerApp                             from './apps/ContainerApp';
 //     import IndicatorApp                             from './apps/IndicatorApp';
 //         import ContentApp                           from './apps/ContentApp';
 //            import ListgroupApp                      from './apps/ListgroupApp';
@@ -46,7 +46,7 @@ import BasicComponentApp                            from './apps/BasicComponentA
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <BasicComponentApp />
+    <ContainerApp />
   ,
   document.getElementById('root')
 );
