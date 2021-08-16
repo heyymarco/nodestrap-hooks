@@ -414,8 +414,12 @@ export const usesGradient = (off = noGradient, on = isGradient) => {
     return [
         () => composition([
             rules([
-                rule(':not(.gradient)' , off(/*inherit =*/true)),
-                rule(     '.gradient'  , on()                  ),
+                // grandpa ?? `.gradient` and parent not `.gradient` and current not `.gradient`:
+                rule(                     ':not(.gradient)&:not(.gradient)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesGradient()` uses dedicated gradient direction
+                
+                // grandpa is `.gradient` or  parent is  `.gradient` or  current is  `.gradient`:
+                // double `.gradient.gradient` to combat with `:not(.gradient)&:not(.gradient)`
+                rule(['.gradient.gradient &',  '.gradient&',  '&.gradient'] , on()                   ),
             ]),
         ]),
         gradientRefs,
@@ -495,14 +499,6 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
                 // `usesOutlined()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes,
             ]),
-            rules([
-                // grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
-                rule(                     ':not(.outlined)&:not(.outlined)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesOutlined()` uses dedicated theme
-                
-                // grandpa is `.outlined` or  parent is  `.outlined` or  current is  `.outlined`:
-                // double `.outlined.outlined` to combat with `:not(.outlined)&:not(.outlined)`
-                rule(['.outlined.outlined &',  '.outlined&',  '&.outlined'] , on()                   ),
-            ]),
             vars({
                 [outlinedDecls.outlinedForegFn] : fallbacks(
                     themeRefs.outlinedForegIfIf, // first  priority
@@ -514,6 +510,14 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
                 
                 [outlinedDecls.outlinedBackgFn] : 'transparent', // set background to transparent, regardless of the theme colors
             }),
+            rules([
+                // grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
+                rule(                     ':not(.outlined)&:not(.outlined)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesOutlined()` uses dedicated theme
+                
+                // grandpa is `.outlined` or  parent is  `.outlined` or  current is  `.outlined`:
+                // double `.outlined.outlined` to combat with `:not(.outlined)&:not(.outlined)`
+                rule(['.outlined.outlined &',  '.outlined&',  '&.outlined'] , on()                   ),
+            ]),
         ]),
         outlinedRefs,
         outlinedDecls,
@@ -594,14 +598,6 @@ export const usesMild = (off = noMild, on = isMild) => {
                 // `usesMild()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes,
             ]),
-            rules([
-                // by design: grandpa's `.mild` does not affect current `.mild`
-                // parent not `.mild` and current not `.mild`:
-                rule(':not(.mild)&:not(.mild)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesMild()` uses dedicated theme
-                
-                // parent is  `.mild` or  current is  `.mild`:
-                rule([    '.mild&',  '&.mild'] , on()                   ),
-            ]),
             vars({
                 [mildDecls.mildForegFn]: fallbacks(
                     themeRefs.mildForegIfIf, // first  priority
@@ -619,6 +615,14 @@ export const usesMild = (off = noMild, on = isMild) => {
                     cssProps.backg,          // default => uses config's background
                 ),
             }),
+            rules([
+                // by design: grandpa's `.mild` does not affect current `.mild`
+                // parent not `.mild` and current not `.mild`:
+                rule(':not(.mild)&:not(.mild)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesMild()` uses dedicated theme
+                
+                // parent is  `.mild` or  current is  `.mild`:
+                rule([    '.mild&',  '&.mild'] , on()                   ),
+            ]),
         ]),
         mildRefs,
         mildDecls,
@@ -664,7 +668,6 @@ export interface ForegVars {
      * functional foreground color.
      */
     foregFn     : any
-    
     /**
      * final foreground color.
      */
@@ -693,7 +696,6 @@ export const usesForeg = () => {
                     
                     cssProps.foreg,      // default => uses config's foreground
                 ),
-                
                 [foregDecls.foreg]   : fallbacks(
                     outlinedRefs.outlinedForegTg, // toggle outlined (if `usesOutlined()` applied)
                     mildRefs.mildForegTg,         // toggle mild     (if `usesMild()` applied)
@@ -723,7 +725,6 @@ export interface BackgVars {
      * final background color.
      */
     backgCol    : any
-    
     /**
      * final background layers.
      */
@@ -761,7 +762,6 @@ export const usesBackg = () => {
                     
                     backgRefs.backgFn,            // default => uses our `backgFn`
                 ),
-                
                 [backgDecls.backg]     : [
                     // top layer:
                     fallbacks(
@@ -787,7 +787,6 @@ export interface BorderVars {
      * functional border color.
      */
     borderFn    : any
-    
     /**
      * final border color.
      */
@@ -811,7 +810,6 @@ export const usesBorder = () => {
                     
                     cssProps.borderColor, // default => uses config's border color
                 ),
-                
                 [borderDecls.borderCol] : fallbacks(
                     outlinedRefs.outlinedForegTg, // toggle outlined (if `usesOutlined()` applied)
                     
@@ -826,7 +824,7 @@ export const usesBorder = () => {
 //#endregion border
 
 
-// animations:
+// states:
 
 //#region focusBlur
 export interface FocusBlurVars {
@@ -876,13 +874,17 @@ export const usesFocusBlur = () => {
                     focusBlurRefs.focusBoxShadowCol,
                 ],
             }),
-            // TODO: under construction
+            rules([
+            ]),
         ]),
         focusBlurRefs,
         focusBlurDecls,
     ] as const;
 }
 //#endregion focusBlur
+
+
+// animations:
 
 //#region animations
 export interface AnimVars {
