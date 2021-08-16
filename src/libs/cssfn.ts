@@ -264,7 +264,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
 
                         if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
 
-                        if (selector.startsWith('&') || selector.endsWith('&')) return (selector as NestedSelector);
+                        if (selector.includes('&')) return (selector as NestedSelector); // &.foo   .boo&   .foo&.boo
 
                         // if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
 
