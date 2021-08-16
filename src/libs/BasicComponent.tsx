@@ -9,7 +9,7 @@ import type {
 }                           from './types'       // cssfn's types
 import type {
     PropEx,
-}                           from './css-types'   // ts defs support for jss
+}                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
     composition,
@@ -986,7 +986,7 @@ export const usesAnim = () => {
 
 
 // styles:
-export const useBasicComponentStyle = createUseCssfnStyle(() => {
+export const usesBasicComponent = () => {
     // dependencies:
     
     // layouts:
@@ -1007,55 +1007,60 @@ export const useBasicComponentStyle = createUseCssfnStyle(() => {
     
     
     
-    return [
-        mainComposition([
-            imports([
-                // layouts:
-                sizes,
-                
-                // colors:
-                themes,
-                gradient,
-                outlined,
-                mild,
-                
-                foreg,
-                backg,
-                border,
-                
-                // animations:
-                anim,
-            ]),
-            layout({
-                // customize:
-                ...usesGeneralProps(cssProps), // apply *general* cssProps
-                
-                
-                
-                // foregrounds:
-                foreg       : foregRefs.foreg,
-                
-                
-                
-                // backgrounds:
-                backg       : backgRefs.backg,
-                
-                
-                
-                // borders:
-                borderColor : borderRefs.borderCol,
-                
-                
-                
-                // states & animations:
-                boxShadow   : animRefs.boxShadow,
-                filter      : animRefs.filter,
-                transf      : animRefs.transf,
-                anim        : animRefs.anim,
-            }),
+    return composition([
+        imports([
+            // layouts:
+            sizes,
+            
+            // colors:
+            themes,
+            gradient,
+            outlined,
+            mild,
+            
+            foreg,
+            backg,
+            border,
+            
+            // animations:
+            anim,
         ]),
-    ];
-});
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+            
+            
+            
+            // foregrounds:
+            foreg       : foregRefs.foreg,
+            
+            
+            
+            // backgrounds:
+            backg       : backgRefs.backg,
+            
+            
+            
+            // borders:
+            borderColor : borderRefs.borderCol,
+            
+            
+            
+            // states & animations:
+            boxShadow   : animRefs.boxShadow,
+            filter      : animRefs.filter,
+            transf      : animRefs.transf,
+            anim        : animRefs.anim,
+        }),
+    ]);
+};
+export const useBasicComponentStyle = createUseCssfnStyle(() => [
+    mainComposition([
+        imports([
+            usesBasicComponent(),
+        ]),
+    ]),
+]);
 
 
 
