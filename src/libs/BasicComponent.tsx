@@ -1048,6 +1048,7 @@ export const useBasicComponentStyle = createUseCssfnStyle(() => {
                 
                 
                 // states & animations:
+                boxShadow   : animRefs.boxShadow,
                 filter      : animRefs.filter,
                 transf      : animRefs.transf,
                 anim        : animRefs.anim,
@@ -1171,6 +1172,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
         <Element<TElement>
             // other props:
             {...props}
+            
             
             
             // classes:
