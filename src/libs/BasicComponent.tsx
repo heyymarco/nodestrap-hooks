@@ -102,7 +102,7 @@ export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
  * @returns A `Style` represents sizing definitions for the given `sizeName`.
  */
 export const sizeOf = (sizeName: SizeName) => composition([
-    layout({
+    vars({
         // overwrites propName = propName{SizeName}:
         ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
     }),
@@ -976,7 +976,7 @@ export const usesAnim = () => {
                 [animDecls.transfNone]    : 'translate(0)',
                 // define a final *transform* func:
                 [animDecls.transf]: [[ // double array => makes the JSS treat as space separated values
-                    animRefs.transfNone,
+                    cssProps.transf,
                 ]],
                 
                 // define a *none* animation:
@@ -997,6 +997,8 @@ export const usesAnim = () => {
 
 // styles:
 export const useBasicComponentStyle = createUseCssfnStyle(() => {
+    // dependencies:
+    
     // layouts:
     const [sizes]              = usesSizes();
     
@@ -1057,6 +1059,7 @@ export const useBasicComponentStyle = createUseCssfnStyle(() => {
                 
                 // states & animations:
                 filter      : animRefs.filter,
+                transform   : animRefs.transf,
                 anim        : animRefs.anim,
             }),
         ]),
@@ -1131,6 +1134,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         boxShadowFocus    : [[0, 0, 0, '0.25rem' ]], // supports for Control children's theming
 
         filter            : 'brightness(100%)',
+        transf            : 'translate(0)',
 
         '@keyframes none' : keyframesNone,
         anim              : [[keyframesNone]],

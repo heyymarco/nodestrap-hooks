@@ -1,44 +1,77 @@
 .main-0-1-1 {
+    // outlined:
     --fn-outlinedForegFn: var(--fn-outlinedForegIfIf,var(--fn-outlinedForegTh,var(--fn-outlinedForegIf,var(--bsc-foreg))));
     --fn-outlinedBackgFn: transparent;
+    
+    
+    // mild:
     --fn-mildForegFn: var(--fn-mildForegIfIf,var(--fn-mildForegTh,var(--fn-mildForegIf,var(--bsc-foreg))));
     --fn-mildBackgFn: var(--fn-mildBackgIfIf,var(--fn-mildBackgTh,var(--fn-mildBackgIf,var(--bsc-backg))));
+    
+    
+    // foreg:
     --fn-foregFn: var(--fn-foregIfIf,var(--fn-foregTh,var(--fn-foregIf,var(--bsc-foreg))));
     --fn-foreg: var(--fn-outlinedForegTg,var(--fn-mildForegTg,var(--fn-foregFn)));
+    
+    
+    // backg:
     --fn-backgNone: linear-gradient(transparent,transparent) border-box;
     --fn-backgFn: var(--fn-backgIfIf,var(--fn-backgTh,var(--fn-backgIf,var(--bsc-backg))));
     --fn-backgCol: var(--fn-outlinedBackgTg,var(--fn-mildBackgTg,var(--fn-backgFn)));
     --fn-backg: var(--fn-backgGradTg,var(--fn-backgNone)), var(--fn-backgCol);
+    
+    
+    // border:
     --fn-borderFn: var(--fn-borderIfIf,var(--fn-borderTh,var(--fn-borderIf,var(--bsc-borderColor))));
     --fn-borderCol: var(--fn-outlinedForegTg,var(--fn-borderFn));
+    
+    
+    // animations:
     --fn-filterNone: brightness(100%);
     --fn-filter: var(--bsc-filter);
+
     --fn-transfNone: translate(0);
     --fn-transf: var(--fn-transfNone);
+
     --fn-animNone: none;
     --fn-anim: var(--bsc-anim);
+    
+    
+    // layout:
     font-size: var(--bsc-fontSize);
     font-family: var(--bsc-fontFamily);
     font-weight: var(--bsc-fontWeight);
     font-style: var(--bsc-fontStyle);
     text-decoration: var(--bsc-textDecoration);
     line-height: var(--bsc-lineHeight);
+    
     border: var(--bsc-border);
-    border-color: var(--fn-borderCol);
     border-radius: var(--bsc-borderRadius);
+    
     padding-inline: var(--bsc-paddingInline);
     padding-block: var(--bsc-paddingBlock);
+    
     opacity: var(--bsc-opacity);
+
     transition: var(--bsc-transition);
     box-shadow: var(--bsc-boxShadow);
-    filter: var(--fn-filter);
+
+
+
+    // foregrounds:
     color: var(--fn-foreg);
+    // backgrounds:
     background: var(--fn-backg);
+    // borders:
+    border-color: var(--fn-borderCol);
+    // states & animations:
+    filter: var(--fn-filter);
     animation: var(--fn-anim);
 }
 
 
 
+// sizes:
 .main-0-1-1.szSm {
     --bsc-fontSize: var(--bsc-fontSizeSm);
     --bsc-borderRadius: var(--bsc-borderRadiusSm);
@@ -54,6 +87,7 @@
 
 
 
+// themes:
 .main-0-1-1.thPrimary {
     --fn-foregTh: var(--col-primaryText);
     --fn-backgTh: var(--col-primary);
@@ -127,6 +161,7 @@
     --fn-focusBoxShadowTh: var(--col-darkThin);
 }
 
+// gradient:
 .main-0-1-1:not(.gradient) {
     --fn-backgGradTg: unset;
 }
@@ -134,6 +169,7 @@
     --fn-backgGradTg: var(--bsc-backgGrad);
 }
 
+// outlined:
 .main-0-1-1:not(.outlined).main-0-1-1:not(.outlined) {
     --fn-outlinedForegTg: initial;
     --fn-outlinedBackgTg: initial;
@@ -143,6 +179,7 @@
     --fn-outlinedBackgTg: var(--fn-outlinedBackgFn);
 }
 
+// mild:
 .main-0-1-1:not(.mild).main-0-1-1:not(.mild) {
     --fn-mildForegTg: initial;
     --fn-mildBackgTg: initial;
