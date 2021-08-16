@@ -36,7 +36,7 @@ import {
 
 
 
-// react hooks:
+// hooks:
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
 export const createUseStyle      = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
     const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
