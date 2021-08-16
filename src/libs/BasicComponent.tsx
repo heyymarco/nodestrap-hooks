@@ -884,55 +884,17 @@ export const usesFocusBlur = () => {
 }
 //#endregion focusBlur
 
-//#region boxShadow
-export interface BoxShadowVars {
+//#region animations
+export interface AnimVars {
     /**
      * none boxShadow.
      */
     boxShadowNone : any
-    
     /**
      * final boxShadow layers.
      */
     boxShadow     : any
-}
-const [boxShadowRefs, boxShadowDecls] = createCssVar<BoxShadowVars>();
-/**
- * Uses boxShadow layer(s).
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents boxShadow layer(s) definitions.
- */
-export const usesBoxShadow = () => {
-    // dependencies:
-    const [, focusBlurRefs] = usesFocusBlur();
     
-    
-    
-    return [
-        () => composition([
-            vars({
-                [boxShadowDecls.boxShadowNone] : [[0, 0, 'transparent']],
-                
-                [boxShadowDecls.boxShadow] : [
-                    // top layer:
-                    fallbacks(
-                        focusBlurRefs.focusBoxShadowTg, // toggle focusBoxShadow (if `usesFocusBlur()` applied)
-                        
-                        boxShadowRefs.boxShadowNone,    // default => no top layer
-                    ),
-                    
-                    // bottom layer:
-                    cssProps.boxShadow,
-                ],
-            }),
-        ]),
-        boxShadowRefs,
-        boxShadowDecls,
-    ] as const;
-};
-//#endregion boxShadow
-
-//#region animations
-export interface AnimVars {
     /**
      * none filter.
      */
@@ -962,27 +924,39 @@ export interface AnimVars {
 }
 const [animRefs, animDecls] = createCssVar<AnimVars>();
 export const usesAnim = () => {
+    // dependencies:
+    const [, focusBlurRefs] = usesFocusBlur();
+    
+    
+    
     return [
         () => composition([
             vars({
-                // define a *none* filter:
+                [animDecls.boxShadowNone] : [[0, 0, 'transparent']],
+                [animDecls.boxShadow]     : [
+                    // top layer:
+                    fallbacks(
+                        focusBlurRefs.focusBoxShadowTg, // toggle focusBoxShadow (if `usesFocusBlur()` applied)
+                        
+                        animRefs.boxShadowNone,         // default => no top layer
+                    ),
+                    
+                    // bottom layer:
+                    cssProps.boxShadow,
+                ],
+                
                 [animDecls.filterNone]    : 'brightness(100%)',
-                // define a final *filter* func:
-                [animDecls.filter]: [[ // double array => makes the JSS treat as space separated values
+                [animDecls.filter]        : [[ // double array => makes the JSS treat as space separated values
                     cssProps.filter,
                 ]],
                 
-                // define a *none* transform:
                 [animDecls.transfNone]    : 'translate(0)',
-                // define a final *transform* func:
-                [animDecls.transf]: [[ // double array => makes the JSS treat as space separated values
+                [animDecls.transf]        : [[ // double array => makes the JSS treat as space separated values
                     cssProps.transf,
                 ]],
                 
-                // define a *none* animation:
                 [animDecls.animNone]      : 'none',
-                // define a final *animation* func:
-                [animDecls.anim]      : [ // single array => makes the JSS treat as comma separated values
+                [animDecls.anim]          : [ // single array => makes the JSS treat as comma separated values
                     cssProps.anim,
                 ],
             }),
@@ -1132,7 +1106,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
         boxShadow         : [[0, 0, 'transparent']],
         boxShadowFocus    : [[0, 0, 0, '0.25rem' ]], // supports for Control children's theming
-
         filter            : 'brightness(100%)',
         transf            : 'translate(0)',
 
