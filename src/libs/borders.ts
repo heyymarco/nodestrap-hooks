@@ -9,7 +9,6 @@ import type {
 }                           from './cssfn'      // cssfn core
 import createCssConfig      from './css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
 import * as radius          from './borders-radiuses'
-import colors               from './colors'     // configurable colors & theming defs
 
 
 
@@ -36,8 +35,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     };
     
     const styles = {
-        color : colors.darkThin ?? 'currentColor' as BorderColor,
-        style : 'solid'                           as BorderStyle,
+        color : 'currentColor' as BorderColor,
+        style : 'solid'        as BorderStyle,
     };
     
     const defaults = {
