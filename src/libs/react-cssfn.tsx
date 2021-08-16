@@ -98,7 +98,7 @@ export const createUseCssfnStyle = <TClassName extends ClassName = ClassName>(cl
 
 // utils:
 
-export function isTypeOf<TProps>(element: React.ReactNode, funcComponent: React.JSXElementConstructor<TProps>): element is React.ReactElement<TProps, React.JSXElementConstructor<TProps>> {
+export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React.JSXElementConstructor<TProps>): element is React.ReactElement<TProps, React.JSXElementConstructor<TProps>> => {
     return (
         React.isValidElement<TProps>(element)
         &&
@@ -116,7 +116,7 @@ export function isTypeOf<TProps>(element: React.ReactNode, funcComponent: React.
             )
         )
     );
-}
+};
 
 
 
@@ -280,7 +280,7 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
     variantClasses? : Optional<string>[]
     stateClasses?   : Optional<string>[]
 }
-export default function Element<TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>) {
+export const Element = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>) => {
     // html props:
     const htmlProps = useMemo(() => {
         const htmlProps = {
@@ -336,4 +336,4 @@ export default function Element<TElement extends HTMLElement = HTMLElement>(prop
         </Tag>
     );
 };
-export { Element }
+export { Element as default }
