@@ -35,8 +35,10 @@ import {
     pascalCase,
 }                           from './cssfn'       // cssfn core
 import {
-    // react hooks:
+    // hooks:
     createUseCssfnStyle,
+    
+    
     
     // react components:
     ElementProps,
@@ -45,9 +47,11 @@ import {
 import {
     createCssVar,
     fallbacks,
-}                           from './css-var'
+}                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
+    
+    
     
     // utilities:
     usesGeneralProps,
@@ -762,7 +766,9 @@ export const usesBackg = () => {
                     
                     backgRefs.backgFn,            // default => uses our `backgFn`
                 ),
-                [backgDecls.backg]     : [
+                [backgDecls.backg]     : [ // single array => makes the JSS treat as comma separated values
+                    // layering: backg1 , backg2 , backg3 ...
+                    
                     // top layer:
                     fallbacks(
                         gradientRefs.backgGradTg, // toggle gradient (if `usesGradient()` applied)
@@ -850,7 +856,7 @@ const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
  * Uses focus & blur states.
  * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
  */
-export const usesFocusBlur = () => {
+export const usesFocusBlurBase = () => {
     return [
         () => composition([
             vars({
@@ -866,16 +872,16 @@ export const usesFocusBlur = () => {
                     
                     focusBlurRefs.focusBoxShadowFn, // default => uses our `focusBoxShadowFn`
                 ),
-                [focusBlurDecls.focusBoxShadowLy]  : [
+                [focusBlurDecls.focusBoxShadowLy]  : [[ // double array => makes the JSS treat as space separated values
+                    // combining: pos width spread color ...
+                    
                     // focusBoxShadow pos, width, spread, etc:
                     cssProps.boxShadowFocus,
                     
                     // focusBoxShadow color:
                     focusBlurRefs.focusBoxShadowCol,
-                ],
+                ]],
             }),
-            rules([
-            ]),
         ]),
         focusBlurRefs,
         focusBlurDecls,
@@ -927,7 +933,7 @@ export interface AnimVars {
 const [animRefs, animDecls] = createCssVar<AnimVars>();
 export const usesAnim = () => {
     // dependencies:
-    const [, focusBlurRefs] = usesFocusBlur();
+    const [, focusBlurRefs] = usesFocusBlurBase();
     
     
     
@@ -935,7 +941,9 @@ export const usesAnim = () => {
         () => composition([
             vars({
                 [animDecls.boxShadowNone] : [[0, 0, 'transparent']],
-                [animDecls.boxShadow]     : [
+                [animDecls.boxShadow]     : [ // single array => makes the JSS treat as comma separated values
+                    // layering: boxShadow1 , boxShadow2 , boxShadow3 ...
+                    
                     // top layer:
                     fallbacks(
                         focusBlurRefs.focusBoxShadowTg, // toggle focusBoxShadow (if `usesFocusBlur()` applied)
@@ -949,16 +957,22 @@ export const usesAnim = () => {
                 
                 [animDecls.filterNone]    : 'brightness(100%)',
                 [animDecls.filter]        : [[ // double array => makes the JSS treat as space separated values
+                    // combining: filter1 * filter2 * filter3 ...
+                    
                     cssProps.filter,
                 ]],
                 
                 [animDecls.transfNone]    : 'translate(0)',
                 [animDecls.transf]        : [[ // double array => makes the JSS treat as space separated values
+                    // combining: transf1 * transf2 * transf3 ...
+                    
                     cssProps.transf,
                 ]],
                 
                 [animDecls.animNone]      : 'none',
                 [animDecls.anim]          : [ // single array => makes the JSS treat as comma separated values
+                    // layering: anim1 , anim2 , anim3 ...
+                    
                     cssProps.anim,
                 ],
             }),
