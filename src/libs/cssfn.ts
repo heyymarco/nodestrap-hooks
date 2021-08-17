@@ -229,15 +229,34 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                     const isOptionalSelector    = (value: any): value is Optional<Selector>   => isOptionalString(value);
                     const isOptionalSelectorArr = (value: any): value is Optional<Selector>[] => isOptionalStringArr(value);
 
-                    const isStyle               = (value: any): value is Style => {
-                        return value && (typeof(value) === 'object') && !Array.isArray(value);
-                    };
-                    const isStyleArr            = (value: any): value is Style[] => {
+                    const isStyleOrFactory      = (value: any): value is ProductOrFactory<Style> => {
                         return (
-                            Array.isArray(value)
+                            value
                             &&
-                            value.every((v) => isStyle(v))
+                            (
+                                ((typeof(value) === 'object') && !Array.isArray(value)) // literal object => `Style`
+                                ||
+                                (typeof(value) === 'function') // function => `Factory<Style>`
+                            )
                         );
+                    };
+                    const isStyleOrFactoryArr   = (value: any): value is Style[] => {
+                        if (!Array.isArray(value)) return false;
+
+                        
+                        
+                        const nonStyleOrFactoryItems = value.filter((v) => !isStyleOrFactory(v));
+                        if (nonStyleOrFactoryItems.length === 0) return true;
+
+                        
+                        
+                        for (const nonStyleOrFactoryItem of nonStyleOrFactoryItems) {
+                            if (!isStyleOrFactoryArr(nonStyleOrFactoryItem)) return false;
+                        } // for
+
+
+                        
+                        return true;
                     };
 
                     const isRuleEntry           = (value: any): value is RuleEntry => {
@@ -268,9 +287,9 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                             )
                             &&
                             (
-                                isStyle(second)
+                                isStyleOrFactory(second)
                                 ||
-                                isStyleArr(second)
+                                isStyleOrFactoryArr(second)
                             )
                         );
                     };
