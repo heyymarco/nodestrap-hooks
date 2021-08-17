@@ -35,7 +35,6 @@ import {
     
     // utilities:
     usesGeneralProps,
-    usesPrefixedProps,
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
