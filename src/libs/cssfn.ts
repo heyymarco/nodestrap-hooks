@@ -74,10 +74,12 @@ export type IdSelector                                           = `#${string}`
 export type SingleSelector                                       = UniversalSelector|ElementSelector|ClassSelector|IdSelector
 export type Selector                                             = SingleSelector|`${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`
 export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
+
 export type RuleEntry                                            = readonly [SingleOrArray<Optional<Selector>>, StyleCollection]
 export type RuleEntrySource                                      = ProductOrFactory<RuleEntry>
 export type RuleList                                             = RuleEntrySource[]
 export type RuleCollection                                       = SingleOrArray<RuleEntrySource|RuleList>
+
 export type PropList                                             = Dictionary<JssValue>
 
 
