@@ -1054,7 +1054,7 @@ export const usesBasicComponent = () => {
         }),
     ]);
 };
-export const useBasicComponentStyle = createUseCssfnStyle(() => [
+export const useBasicComponentSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
             usesBasicComponent(),
@@ -1158,7 +1158,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
 }
 export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) => {
     // styles:
-    const styles       = useBasicComponentStyle();
+    const sheet        = useBasicComponentSheet();
     
     
     
@@ -1181,7 +1181,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
             
             
             // classes:
-            mainClass={props.mainClass ?? styles.main}
+            mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 variSize.class,
 
