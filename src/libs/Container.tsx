@@ -11,7 +11,6 @@ import {
     // compositions:
     composition,
     mainComposition,
-    global,
     imports,
     
     
@@ -24,7 +23,6 @@ import {
     
     // rules:
     rules,
-    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -37,6 +35,7 @@ import {
     
     // utilities:
     usesGeneralProps,
+    usesPrefixedProps,
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
@@ -59,13 +58,33 @@ import {
 
 // styles:
 /**
+ * Applies a responsive sizing based on screen width.
+ * @returns A `Style` represents a responsive sizing based on screen width.
+ */
+export const usesResponsiveSize = () => composition([
+    rules([
+        // the container size is determined by screen width:
+        Object.keys(breakpoints)
+        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, composition([
+            vars({
+                // overwrites propName = propName{BreakpointName}:
+                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
+            }),
+        ]))),
+    ]),
+]);
+/**
  * Applies a responsive container layout.
  * @returns A `Style` represents a responsive container layout.
  */
 export const usesResponsiveContainerLayout = () => composition([
+    imports([
+        usesResponsiveSize(),
+    ]),
     layout({
-        // customize:
-        ...usesGeneralProps(cssProps), // apply general cssProps
+        // spacings:
+        paddingInline : cssProps.paddingInline,
+        paddingBlock  : cssProps.paddingBlock,
     }),
 ]);
 /**
@@ -74,13 +93,13 @@ export const usesResponsiveContainerLayout = () => composition([
  */
 export const usesResponsiveContainerGridLayout = () => composition([
     imports([
-        usesResponsiveContainerLayout(),
+        usesResponsiveSize(),
     ]),
     layout({
         // layouts:
         display             : 'grid', // use css grid for layouting
-        gridTemplateRows    : [[cssProps.paddingBlock,  'auto', cssProps.paddingBlock ]],
-        gridTemplateColumns : [[cssProps.paddingInline, 'auto', cssProps.paddingInline]],
+        gridTemplateRows    : [[cssProps.paddingBlock,  'auto', cssProps.paddingBlock ]], // the height of each row
+        gridTemplateColumns : [[cssProps.paddingInline, 'auto', cssProps.paddingInline]], // the width of each column
         gridTemplateAreas   : [[
             '"........... blockStart ........."',
             '"inlineStart  content   inlineEnd"',
@@ -89,41 +108,32 @@ export const usesResponsiveContainerGridLayout = () => composition([
         
         
         
-        // since we use grid as paddings, so the css paddings are not longer needed:
+        // spacings:
+        // since we use grid as paddings, so the css paddings are no longer needed:
         paddingInline : null,
         paddingBlock  : null,
     }),
 ]);
-export const usesContainer = () => {
-    return composition([
-        imports([
-            usesBasicComponent(),
-            usesResponsiveContainerLayout(),
-        ]),
-        layout({
-            // layouts:
-            display: 'block',
-        }),
-    ]);
-};
-export const useContainerStyle = createUseCssfnStyle(() => [
+export const usesContainer = () => composition([
+    imports([
+        usesBasicComponent(),
+        usesResponsiveContainerLayout(),
+    ]),
+    layout({
+        // layouts:
+        display: 'block',
+        
+        
+        
+        // customize:
+        ...usesGeneralProps(cssProps), // apply general cssProps
+    }),
+]);
+export const useContainerSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
             usesContainer(),
         ]),
-    ]),
-    global([
-        Object.keys(breakpoints)
-        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, composition([
-            rules([
-                rule(':root:root', composition([
-                    vars({
-                        // overwrites propName = propName{BreakpointName}:
-                        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
-                    }),
-                ])),
-            ]),
-        ])))
     ]),
 ]);
 
@@ -174,7 +184,7 @@ export interface ContainerProps<TElement extends HTMLElement = HTMLElement>
 }
 export default function Container<TElement extends HTMLElement = HTMLElement>(props: ContainerProps<TElement>) {
     // styles:
-    const styles = useContainerStyle();
+    const sheet = useContainerSheet();
     
     
     
@@ -192,7 +202,7 @@ export default function Container<TElement extends HTMLElement = HTMLElement>(pr
             
             
             // classes:
-            mainClass={props.mainClass ?? styles.main}
+            mainClass={props.mainClass ?? sheet.main}
         />
     );
 }
