@@ -27,6 +27,7 @@ import jssPluginShort       from './jss-plugin-short'
 import type {
     Optional,
     SingleOrArray,
+    ProductOrFactoryOrDeepArray,
     ProductOrFactory,
 
     Dictionary,
@@ -52,15 +53,13 @@ export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
 export type Style                                                = JssStyle & ExtendableStyle
-export type StyleSource                                          = ProductOrFactory<Style>
-export type StyleList                                            = StyleSource[]
-export type StyleCollection                                      = SingleOrArray<StyleSource|StyleList>
+export type StyleCollection                                      = ProductOrFactoryOrDeepArray<Style>
 
 export type ClassName                                            = string
 export type RealClass                                            = `.${ClassName}`
 export type PseudoClass                                          = `:${ClassName}`
 export type Class                                                = RealClass|PseudoClass
-export type ClassEntry<TClassName extends ClassName = ClassName> = readonly [TClassName, Style]
+export type ClassEntry<TClassName extends ClassName = ClassName> = readonly [TClassName, StyleCollection]
 export type ClassList <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
 
 export type OptionalString                                       = Optional<string>
@@ -113,14 +112,14 @@ export const createCssfnStyle = <TClassName extends ClassName = ClassName>(class
 
 // cssfn hooks:
 export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): Styles<TClassName> => {
-    return composition(
+    return mergeStyles(
         ((typeof(classes) === 'function') ? classes() : classes)
         /*
             empty `className` recognized as `@global` in our `jss-plugin-global`
             but to make more compatible with JSS' official `jss-plugin-global`
             we convert empty `className` to `'@global'`
          */
-        .map(([className, style]): Style => ({ [className || '@global']: style })) // convert each `[className, style]` to `Style` of `Style`
+        .map(([className, styles]): Style => ({ [className || '@global'] : mergeStyles(styles) })) // convert each `[className, styles]` to `{ className : mergeStyles(styles) }`
     ) as Styles<TClassName>;
 }
 
@@ -129,16 +128,26 @@ export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: Pro
 // compositions:
 /**
  * Defines the (sub) component's composition.
- * @returns A `Style` represents the (sub) component's composition.
+ * @returns A `StyleCollection` represents the (sub) component's composition.
  */
-export const composition     = (styles: StyleCollection): Style => {
+export const composition     = (styles: StyleCollection[]): StyleCollection => styles;
+/**
+ * Merges the (sub) component's composition to single `Style`.
+ * @returns A `Style` represents the merged (sub) component's composition.
+ */
+export const mergeStyles     = (styles: StyleCollection): Style => {
     if (!Array.isArray(styles)) return ((typeof(styles) === 'function') ? styles() : styles);
 
 
 
     const mergedStyles: Style = {}
-    for (const styleSource of styles.flat(/*depth: */1)) {
-        mergeStyle(mergedStyles, ((typeof(styleSource) === 'function') ? styleSource() : styleSource));
+    for (const subStyles of styles) {
+        if (!Array.isArray(subStyles)) {
+            mergeStyle(mergedStyles, ((typeof(subStyles) === 'function') ? subStyles() : subStyles));
+        }
+        else {
+            mergeStyle(mergedStyles, mergeStyles(subStyles));
+        } // if
     } // for
     return mergedStyles;
 }
@@ -146,23 +155,22 @@ export const composition     = (styles: StyleCollection): Style => {
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const compositionOf   = <TClassName extends ClassName = 'main'>(className: TClassName, styles: StyleCollection): ClassEntry<TClassName> => [
+export const compositionOf   = <TClassName extends ClassName = 'main'>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
     className,
-
-    composition(styles)
+    styles
 ];
 // shortcut compositions:
 /**
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const mainComposition = (styles: StyleCollection)        => compositionOf('main' , styles);
+export const mainComposition = (styles: StyleCollection[])      => compositionOf('main' , styles);
 /**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
  */
-export const global          = (ruleCollection: RuleCollection) => compositionOf(''     , rules(ruleCollection));
-export const imports         = (styles: StyleCollection)        => composition(styles);
+export const global          = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
+export const imports         = (styles: StyleCollection[])      => composition(styles);
 
 
 
@@ -172,6 +180,10 @@ export const imports         = (styles: StyleCollection)        => composition(s
  * @returns A `Style` represents the component's layout.
  */
 export const layout = (style: Style): Style => style;
+/**
+ * Defines component's variable(s).
+ * @returns A `Style` represents the component's variable(s).
+ */
 export const vars   = (items: { [name: string]: JssValue }): Style => items;
 //combinators:
 export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): PropList => ({
@@ -181,7 +193,7 @@ export const combinators = (combinator: string, selectors: SingleOrArray<Optiona
         if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
 
         return `&${combinator}${selector}`;
-    }).join(',') ] : composition(styles) as JssValue,
+    }).join(',') ] : mergeStyles(styles) as JssValue, // merge the `styles` to single `Style`, for making JSS understand
 });
 export const descendants      = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators(' ', selectors, styles);
 export const children         = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators('>', selectors, styles);
@@ -191,9 +203,9 @@ export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, s
 
 
 // rules:
-export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): Style => composition(
-    ((): Style[] => {
-        const noSelectors: Style[] = [];
+export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): StyleCollection => composition(
+    ((): StyleCollection[] => {
+        const noSelectors: StyleCollection[] = [];
 
         return [
             ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
@@ -235,9 +247,19 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         
                         const [first, second] = value;
 
-                        // the first element must be an `Optional<Selector>` -or- an array of `Optional<Selector>` -or- an empty array
+                        /*
+                            the first element must be:
+                            * `Optional<Selector>`
+                            * ArrayOf< `Optional<Selector>` >
+                            * empty array
+                        */
                         // and
-                        // the second element must be a `Style`              -or- an array of `Style`              -or- an empty array
+                        /*
+                            the second element must be:
+                            * `Style` | `Factory<Style>`
+                            * DeepArrayOf< `Style | Factory<Style>` >
+                            * empty array
+                        */
                         return (
                             (
                                 isOptionalSelector(first)
@@ -260,7 +282,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                     return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
                 })
                 .flat(/*depth: */1) // flatten: RuleEntry[][] => RuleEntry[]
-                .map(([selectors, styles]): readonly [NestedSelector[], Style] => {
+                .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
                     let nestedSelectors = (Array.isArray(selectors) ? selectors : [selectors]).map((selector): NestedSelector => {
                         if (!selector) return '&';
 
@@ -307,23 +329,21 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         });
                     } // if
 
-                    const mergedStyles = composition(styles);
-
 
 
                     if (nestedSelectors.includes('&')) { // contains one/more selectors with zero specificity
                         nestedSelectors = nestedSelectors.filter((nestedSelector) => (nestedSelector !== '&')); // filter out selectors with zero specificity
-                        noSelectors.push(mergedStyles); // add styles with zero specificity
+                        noSelectors.push(styles); // add styles with zero specificity
                     } // if
 
 
 
-                    return [nestedSelectors, mergedStyles];
+                    return [nestedSelectors, styles];
                 })
                 .filter(([nestedSelectors]) => (nestedSelectors.length > 0)) // filter out empty `nestedSelectors`
-                .map(([nestedSelectors, mergedStyles]): Style => {
+                .map(([nestedSelectors, styles]): Style => {
                     return {
-                        [nestedSelectors.join(',')] : mergedStyles,
+                        [nestedSelectors.join(',')] : mergeStyles(styles), // merge the `styles` to single `Style`, for making JSS understand
                     };
                 }),
             
@@ -334,15 +354,15 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
 // shortcut rules:
 /**
  * Defines component's variants.
- * @returns A `Style` represents the component's variants.
+ * @returns A `StyleCollection` represents the component's variants.
  */
-export const variants = (variants: RuleCollection): Style => rules(variants);
+export const variants = (variants: RuleCollection): StyleCollection => rules(variants);
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
- * @returns A `Style` represents the component's states.
+ * @returns A `StyleCollection` represents the component's states.
  */
-export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, minSpecificityWeight = 3): Style => {
+export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, minSpecificityWeight = 3): StyleCollection => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, minSpecificityWeight);
 }
 // rule items:
@@ -379,21 +399,6 @@ export const isActive        = (styles: StyleCollection) => rule(     ':active' 
 export const isNotActive     = (styles: StyleCollection) => rule(':not(:active)'      , styles);
 export const isFocus         = (styles: StyleCollection) => rule(     ':focus'        , styles);
 export const isNotFocus      = (styles: StyleCollection) => rule(':not(:focus)'       , styles);
-
-
-
-// functions:
-/**
- * Defines functional props in which the values *depends on* the variants and/or the states using *fallback* strategy.
- * @returns A `Style` represents the functional props.
- */
-export const propsFn = (props: PropList): Style => {
-    const style: Dictionary<any> = {};
-    for (const [propName, propValue] of Object.entries(props)) {
-        style[propName] = propValue;
-    } // for
-    return style as Style;
-}
 
 
 
