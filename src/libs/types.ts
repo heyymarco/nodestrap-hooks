@@ -1,5 +1,6 @@
 export type Optional<T>                = T|null|undefined
 export type SingleOrArray<T>           = T|T[]
+
 export type Factory<TProduct>          = () => TProduct
 export type ProductOrFactory<TProduct> = TProduct|Factory<TProduct>
 
