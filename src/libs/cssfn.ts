@@ -27,6 +27,7 @@ import jssPluginShort       from './jss-plugin-short'
 import type {
     Optional,
     SingleOrArray,
+    SingleOrDeepArray,
     ProductOrFactoryOrDeepArray,
     ProductOrFactory,
 
@@ -462,6 +463,42 @@ export const isNotFocus      = (styles: StyleCollection) => rule(':not(:focus)' 
 
 
 // utilities:
+/**
+ * Returns a new array with all sub-array elements concatenated into it recursively up to infinity depth.
+ * @param collection An element -or- an array of element -or- a recursive array of element
+ * @returns A new array with all sub-array elements concatenated into it.
+ */
+const flat = <T,>(collection: SingleOrDeepArray<T>): T[] => {
+    /*
+        SingleOrDeepArray<T> =       T      | DeepArray<T>
+        typeof               = not an array | is an array
+    */
+    
+    
+    
+    if (!Array.isArray(collection)) {
+        // not an array => T
+        
+        return [collection];
+    } // if
+    
+    
+    
+    const merged: T[] = [];
+    for (const item of collection) {
+        if (Array.isArray(item)) {
+            // an array => DeepArray<T> => recursively `flat()`
+            
+            merged.push(...flat(item));
+        }
+        else {
+            // not an array => T
+            
+            merged.push(item);
+        } // if
+    } // for
+    return merged;
+};
 export const iif = <T extends PropList|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);
 };
