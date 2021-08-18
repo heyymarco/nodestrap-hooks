@@ -73,9 +73,11 @@ export type ClassSelector                                        = Class
 export type IdSelector                                           = `#${string}`
 export type SingleSelector                                       = UniversalSelector|ElementSelector|ClassSelector|IdSelector
 export type Selector                                             = SingleSelector|`${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`
+export type SelectorCollection                                   = SingleOrDeepArray<Optional<Selector>>
+
 export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
 
-export type RuleEntry                                            = readonly [SingleOrArray<Optional<Selector>>, StyleCollection]
+export type RuleEntry                                            = readonly [SelectorCollection, StyleCollection]
 export type RuleEntrySource                                      = ProductOrFactory<RuleEntry>
 export type RuleList                                             = RuleEntrySource[]
 export type RuleCollection                                       = SingleOrArray<RuleEntrySource|RuleList>
@@ -227,8 +229,8 @@ export const layout = (style: Style): Style => style;
  */
 export const vars   = (items: { [name: string]: JssValue }): Style => items;
 //combinators:
-export const combinators = (combinator: string, selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): PropList => ({
-    [ (Array.isArray(selectors) ? selectors : [selectors]).map((selector) => {
+export const combinators = (combinator: string, selectors: SelectorCollection, styles: StyleCollection): PropList => ({
+    [ flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
 
         if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
@@ -236,10 +238,10 @@ export const combinators = (combinator: string, selectors: SingleOrArray<Optiona
         return `&${combinator}${selector}`;
     }).join(',') ] : mergeStyles(styles) as JssValue, // merge the `styles` to single `Style`, for making JSS understand
 });
-export const descendants      = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators(' ', selectors, styles);
-export const children         = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators('>', selectors, styles);
-export const siblings         = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators('~', selectors, styles);
-export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection) => combinators('+', selectors, styles);
+export const descendants      = (selectors: SelectorCollection, styles: StyleCollection) => combinators(' ', selectors, styles);
+export const children         = (selectors: SelectorCollection, styles: StyleCollection) => combinators('>', selectors, styles);
+export const siblings         = (selectors: SelectorCollection, styles: StyleCollection) => combinators('~', selectors, styles);
+export const adjacentSiblings = (selectors: SelectorCollection, styles: StyleCollection) => combinators('+', selectors, styles);
 
 
 
@@ -247,30 +249,41 @@ export const adjacentSiblings = (selectors: SingleOrArray<Optional<Selector>>, s
 export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: number = 0): StyleCollection => composition(
     ((): StyleCollection[] => {
         const noSelectors: StyleCollection[] = [];
-
+        
         return [
             ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
                 .map((ruleEntrySourceList: RuleEntrySource|RuleList): RuleEntry[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
-                    const isOptionalString      = (value: any): value is OptionalString => {
+                    const isOptionalString          = (value: any): value is OptionalString => {
                         if ((typeof value) === 'string') return true; // a `string` detected
-
+                        
                         if (value === null)              return true; // optional `null`
                         if (value === undefined)         return true; // optional `undefined`
-
+                        
                         return false; // the value is not an `OptionalString`
                     };
-                    const isOptionalStringArr   = (value: any): value is OptionalString[] => {
-                        return (
-                            Array.isArray(value)
-                            &&
-                            value.every((v) => isOptionalString(v))
-                        );
+                    const isOptionalStringDeepArr   = (value: any): value is OptionalString[] => {
+                        if (!Array.isArray(value)) return false;
+                        
+                        
+                        
+                        const nonOptionalStringItems = value.filter((v) => !isOptionalString(v));
+                        if (nonOptionalStringItems.length === 0) return true;
+                        
+                        
+                        
+                        for (const nonOptionalStringItem of nonOptionalStringItems) {
+                            if (!isOptionalStringDeepArr(nonOptionalStringItem)) return false;
+                        } // for
+                        
+                        
+                        
+                        return true;
                     };
-
-                    const isOptionalSelector    = (value: any): value is Optional<Selector>   => isOptionalString(value);
-                    const isOptionalSelectorArr = (value: any): value is Optional<Selector>[] => isOptionalStringArr(value);
-
-                    const isStyleOrFactory      = (value: any): value is ProductOrFactory<Style> => {
+                    
+                    const isOptionalSelector        = (value: any): value is Optional<Selector>   => isOptionalString(value);
+                    const isOptionalSelectorDeepArr = (value: any): value is Optional<Selector>[] => isOptionalStringDeepArr(value);
+                    
+                    const isStyleOrFactory          = (value: any): value is ProductOrFactory<Style> => {
                         return (
                             value
                             &&
@@ -281,36 +294,36 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                             )
                         );
                     };
-                    const isStyleOrFactoryArr   = (value: any): value is Style[] => {
+                    const isStyleOrFactoryDeepArr   = (value: any): value is Style[] => {
                         if (!Array.isArray(value)) return false;
-
+                        
                         
                         
                         const nonStyleOrFactoryItems = value.filter((v) => !isStyleOrFactory(v));
                         if (nonStyleOrFactoryItems.length === 0) return true;
-
+                        
                         
                         
                         for (const nonStyleOrFactoryItem of nonStyleOrFactoryItems) {
-                            if (!isStyleOrFactoryArr(nonStyleOrFactoryItem)) return false;
+                            if (!isStyleOrFactoryDeepArr(nonStyleOrFactoryItem)) return false;
                         } // for
-
-
+                        
+                        
                         
                         return true;
                     };
-
-                    const isRuleEntry           = (value: any): value is RuleEntry => {
+                    
+                    const isRuleEntry               = (value: any): value is RuleEntry => {
                         if (value.length !== 2) return false; // not a tuple => not a `RuleEntry`
-
+                        
                         
                         
                         const [first, second] = value;
-
+                        
                         /*
                             the first element must be:
                             * `Optional<Selector>`
-                            * ArrayOf< `Optional<Selector>` >
+                            * DeepArrayOf< `Optional<Selector>` >
                             * empty array
                         */
                         // and
@@ -324,26 +337,26 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                             (
                                 isOptionalSelector(first)
                                 ||
-                                isOptionalSelectorArr(first)
+                                isOptionalSelectorDeepArr(first)
                             )
                             &&
                             (
                                 isStyleOrFactory(second)
                                 ||
-                                isStyleOrFactoryArr(second)
+                                isStyleOrFactoryDeepArr(second)
                             )
                         );
                     };
-
-
-
+                    
+                    
+                    
                     if (typeof(ruleEntrySourceList) === 'function') return [ruleEntrySourceList()];
                     if (isRuleEntry(ruleEntrySourceList)) return [ruleEntrySourceList];
                     return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
                 })
                 .flat(/*depth: */1) // flatten: RuleEntry[][] => RuleEntry[]
                 .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
-                    let nestedSelectors = (Array.isArray(selectors) ? selectors : [selectors]).map((selector): NestedSelector => {
+                    let nestedSelectors = flat(selectors).map((selector): NestedSelector => {
                         if (!selector) return '&';
 
                         if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
@@ -430,7 +443,7 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
  * @returns A `RuleEntry` represents the component's rule.
  */
-export const rule = (selectors: SingleOrArray<Optional<Selector>>, styles: StyleCollection): RuleEntry => [selectors, styles];
+export const rule = (selectors: SelectorCollection, styles: StyleCollection): RuleEntry => [selectors, styles];
 // shortcut rule items:
 export const atRoot          = (styles: StyleCollection) => rule(':root'              , styles);
 export const isFirstChild    = (styles: StyleCollection) => rule(     ':first-child'  , styles);
