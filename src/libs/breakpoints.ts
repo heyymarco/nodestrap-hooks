@@ -2,9 +2,9 @@
 import {
     // general types:
     StyleCollection,
-    RuleEntry,
-
-
+    
+    
+    
     // rules:
     rule,
 }                           from './cssfn'      // cssfn core
@@ -106,7 +106,7 @@ export const infix = (breakpointName: string): string|null => {
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const isScreenWidthAtLeast = (breakpointName: string, styles: StyleCollection): RuleEntry => {
+export const isScreenWidthAtLeast = (breakpointName: string, styles: StyleCollection) => {
     const minWidth = min(breakpointName);
     return rule((minWidth ? `@media (min-width: ${minWidth}px)` : null), styles);
 };
@@ -118,7 +118,7 @@ export const isScreenWidthAtLeast = (breakpointName: string, styles: StyleCollec
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const isScreenWidthSmallerThan = (breakpointName: string, styles: StyleCollection): RuleEntry => {
+export const isScreenWidthSmallerThan = (breakpointName: string, styles: StyleCollection) => {
     const maxWidth = max(breakpointName);
     return rule((maxWidth ? `@media (max-width: ${maxWidth}px)` : null), styles);
 };
@@ -131,7 +131,7 @@ export const isScreenWidthSmallerThan = (breakpointName: string, styles: StyleCo
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `lowerBreakpointName` or `upperBreakpointName` are not found in breakpoints.
  */
-export const isScreenWidthBetween = (lowerBreakpointName: string, upperBreakpointName: string, styles: StyleCollection): RuleEntry => {
+export const isScreenWidthBetween = (lowerBreakpointName: string, upperBreakpointName: string, styles: StyleCollection) => {
     const minWidth = min(lowerBreakpointName);
     const maxWidth = max(upperBreakpointName);
     if (minWidth && maxWidth) {
@@ -155,7 +155,7 @@ export const isScreenWidthBetween = (lowerBreakpointName: string, upperBreakpoin
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const isScreenWidth = (breakpointName: string, styles: StyleCollection): RuleEntry => {
+export const isScreenWidth = (breakpointName: string, styles: StyleCollection) => {
     const minWidth = min(breakpointName);
     const nextBp   = next(breakpointName);
     const maxWidth = nextBp ? max(nextBp) : null;
