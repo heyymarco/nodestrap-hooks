@@ -100,8 +100,8 @@ import triggerChange        from 'react-trigger-change'
 
 //#region enableDisable
 export interface EnableDisableVars {
-    enableDisableFilter : any
-    enableDisableAnim   : any
+    filterEnableDisable : any
+    animEnableDisable   : any
 }
 const [enableDisableRefs, enableDisableDecls] = createCssVar<EnableDisableVars>();
 
@@ -128,25 +128,25 @@ export const usesEnableDisable = () => {
     return [
         () => composition([
             vars({
-                [enableDisableDecls.enableDisableFilter] : 'initial',
-                [enableDisableDecls.enableDisableAnim]   : 'initial',
+                [enableDisableDecls.filterEnableDisable] : 'initial',
+                [enableDisableDecls.animEnableDisable]   : 'initial',
             }),
             states([
                 isEnabling([
                     vars({
-                        [enableDisableDecls.enableDisableFilter] : cssProps.filterDisable,
-                        [enableDisableDecls.enableDisableAnim]   : cssProps.animEnable,
+                        [enableDisableDecls.filterEnableDisable] : cssProps.filterDisable,
+                        [enableDisableDecls.animEnableDisable]   : cssProps.animEnable,
                     }),
                 ]),
                 isDisabling([
                     vars({
-                        [enableDisableDecls.enableDisableFilter] : cssProps.filterDisable,
-                        [enableDisableDecls.enableDisableAnim]   : cssProps.animDisable,
+                        [enableDisableDecls.filterEnableDisable] : cssProps.filterDisable,
+                        [enableDisableDecls.animEnableDisable]   : cssProps.animDisable,
                     }),
                 ]),
                 isDisabled([
                     vars({
-                        [enableDisableDecls.enableDisableFilter] : cssProps.filterDisable,
+                        [enableDisableDecls.filterEnableDisable] : cssProps.filterDisable,
                     }),
                 ]),
             ]),
@@ -159,8 +159,8 @@ export const usesEnableDisable = () => {
 
 //#region activePassive
 export interface ActivePassiveVars {
-    activePassiveFilter : any
-    activePassiveAnim   : any
+    filterActivePassive : any
+    animActivePassive   : any
 }
 const [activePassiveRefs, activePassiveDecls] = createCssVar<ActivePassiveVars>();
 
@@ -187,25 +187,25 @@ export const usesActivePassive = (onActive: (Optional<Factory<StyleCollection>>)
     return [
         () => composition([
             vars({
-                [activePassiveDecls.activePassiveFilter] : 'initial',
-                [activePassiveDecls.activePassiveAnim]   : 'initial',
+                [activePassiveDecls.filterActivePassive] : 'initial',
+                [activePassiveDecls.animActivePassive]   : 'initial',
             }),
             states([
                 isActived([
                     vars({
-                        [activePassiveDecls.activePassiveFilter] : cssProps.filterActive,
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
                     }),
                 ]),
                 isActivating([
                     vars({
-                        [activePassiveDecls.activePassiveFilter] : cssProps.filterActive,
-                        [activePassiveDecls.activePassiveAnim]   : cssProps.animActive,
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.animActivePassive]   : cssProps.animActive,
                     }),
                 ]),
                 isPassivating([
                     vars({
-                        [activePassiveDecls.activePassiveFilter] : cssProps.filterActive,
-                        [activePassiveDecls.activePassiveAnim]   : cssProps.animPassive,
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
                     }),
                 ]),
                 
