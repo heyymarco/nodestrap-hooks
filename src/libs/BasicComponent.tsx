@@ -11,6 +11,11 @@ import type {
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
+    // general types:
+    StyleCollection,
+    
+    
+    
     // compositions:
     composition,
     mainComposition,
@@ -79,19 +84,21 @@ export interface SizeVars {
     // empty (might be added soon)
 }
 const [sizeRefs, sizeDecls] = createCssVar<SizeVars>();
+
+export const isSize = (sizeName: SizeName, styles: StyleCollection) => rule(`.sz${pascalCase(sizeName)}`, styles);
+
 /**
  * Uses basic sizes.  
  * For example: `sm`, `lg`.
  * @param factory Customize the callback to create sizing definitions for each size in `options`.
  * @param options Customize the size options.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
 export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
     return [
         () => composition([
             variants([
-                options.map((sizeName) => rule(
-                    `.sz${pascalCase(sizeName)}`,
+                options.map((sizeName) => isSize(sizeName,
                     factory(sizeName)
                 )),
             ]),
@@ -103,7 +110,7 @@ export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
 /**
  * Creates sizing definitions for the given `sizeName`.
  * @param sizeName The given size name written in camel case.
- * @returns A `Style` represents sizing definitions for the given `sizeName`.
+ * @returns A `StyleCollection` represents sizing definitions for the given `sizeName`.
  */
 export const sizeOf = (sizeName: SizeName) => composition([
     vars({
@@ -137,19 +144,21 @@ export interface OrientationVars {
     orientation : any
 }
 const [orientationRefs, orientationDecls] = createCssVar<OrientationVars>();
+
+export const isOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`.${orientationName}`, styles);
+
 /**
  * Uses configurable orientation.  
  * For example: `block`, `inline`.
  * @param factory Customize the callback to create orientation definitions for each orientation in `options`.
  * @param options Customize the orientation options.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents orientation definitions for each orientation in `options`.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents orientation definitions for each orientation in `options`.
  */
-export const usesOrientation = (factory = orientationOf, options = orientationOptions()) => {
+export const usesOrientations = (factory = orientationOf, options = orientationOptions()) => {
     return [
         () => composition([
             variants([
-                options.map((orientationName) => rule(
-                    `.${orientationName}`,
+                options.map((orientationName) => isOrientation(orientationName,
                     factory(orientationName)
                 )),
             ]),
@@ -161,7 +170,7 @@ export const usesOrientation = (factory = orientationOf, options = orientationOp
 /**
  * Creates orientation definitions for the given `orientationName`.
  * @param orientationName The given orientation name written in camel case.
- * @returns A `Style` represents orientation definitions for the given `orientationName`.
+ * @returns A `StyleCollection` represents orientation definitions for the given `orientationName`.
  */
 export const orientationOf = (orientationName: OrientationName) => composition([
     layout({
@@ -294,19 +303,21 @@ export interface ThemeVars {
     focusBoxShadowIfIf : any
 }
 const [themeRefs, themeDecls] = createCssVar<ThemeVars>();
+
+export const isTheme = (themeName: ThemeName, styles: StyleCollection) => rule(`.th${pascalCase(themeName)}`, styles);
+
 /**
  * Uses theme colors.  
  * For example: `primary`, `secondary`, `danger`, `success`, etc.
  * @param factory Customize the callback to create color definitions for each color in `options`.
  * @param options Customize the color options.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents color definitions for each color in `options`.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents color definitions for each color in `options`.
  */
 export const usesThemes = (factory = themeOf, options = themeOptions()) => {
     return [
         () => composition([
             variants([
-                options.map((themeName) => rule(
-                    `.th${pascalCase(themeName)}`,
+                options.map((themeName) => isTheme(themeName,
                     factory(themeName)
                 )),
             ]),
@@ -318,7 +329,7 @@ export const usesThemes = (factory = themeOf, options = themeOptions()) => {
 /**
  * Creates color definitions for the given `themeName`.
  * @param themeName The given theme name written in camel case.
- * @returns A `Style` represents color definitions for the given `themeName`.
+ * @returns A `StyleCollection` represents color definitions for the given `themeName`.
  */
 export const themeOf = (themeName: ThemeName) => composition([
     vars({
@@ -343,7 +354,7 @@ export const themeOptions = () => Object.keys(color.themes) as ThemeName[];
 /**
  * Creates the default color definitions for unspecified `themeName`.
  * @param themeName The theme name as the default, written in camel case -or- `null`.
- * @returns A `Style` represents color definitions for the default `themeName`.
+ * @returns A `StyleCollection` represents color definitions for the default `themeName`.
  */
 export const themeDefault = (themeName: ThemeName|null = null) => {
     if (themeName) return themeIf(themeName);
@@ -355,7 +366,7 @@ export const themeDefault = (themeName: ThemeName|null = null) => {
 /**
  * Creates a conditional color definitions for the given `themeName`.
  * @param themeName The given theme name written in camel case.
- * @returns A `Style` represents the conditional color definitions for the given `themeName`.
+ * @returns A `StyleCollection` represents the conditional color definitions for the given `themeName`.
  */
 export const themeIf = (themeName: ThemeName) => composition([
     vars({
@@ -374,7 +385,7 @@ export const themeIf = (themeName: ThemeName) => composition([
 /**
  * Creates an important conditional color definitions for the given `themeName`.
  * @param themeName The given theme name written in camel case.
- * @returns A `Style` represents the important conditional color definitions for the given `themeName`.
+ * @returns A `StyleCollection` represents the important conditional color definitions for the given `themeName`.
  */
 export const themeIfIf = (themeName: ThemeName) => composition([
     vars({
@@ -410,22 +421,24 @@ export interface GradientVars {
     backgGradTg : any
 }
 const [gradientRefs, gradientDecls] = createCssVar<GradientVars>();
+
+// grandpa ?? `.gradient` and parent not `.gradient` and current not `.gradient`:
+export const noGradient = (styles: StyleCollection) => rule(                     ':not(.gradient)&:not(.gradient)', styles);
+// grandpa is `.gradient` or  parent is  `.gradient` or  current is  `.gradient`:
+// double `.gradient.gradient` to combat with `:not(.gradient)&:not(.gradient)`
+export const isGradient = (styles: StyleCollection) => rule(['.gradient.gradient &',  '.gradient&',  '&.gradient'], styles);
+
 /**
  * Uses toggleable gradient.
- * @param off Customize the callback to create gradient definitions when *toggled off*.
- * @param on Customize the callback to create gradient definitions when *toggled on*.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents toggleable gradient definitions.
+ * @param factory Customize the callback to create gradient definitions for each toggle state.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable gradient definitions.
  */
-export const usesGradient = (off = noGradient, on = isGradient) => {
+export const usesGradient = (factory = gradientOf) => {
     return [
         () => composition([
             variants([
-                // grandpa ?? `.gradient` and parent not `.gradient` and current not `.gradient`:
-                rule(                     ':not(.gradient)&:not(.gradient)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesGradient()` uses dedicated gradient direction
-                
-                // grandpa is `.gradient` or  parent is  `.gradient` or  current is  `.gradient`:
-                // double `.gradient.gradient` to combat with `:not(.gradient)&:not(.gradient)`
-                rule(['.gradient.gradient &',  '.gradient&',  '&.gradient'] , on()                   ),
+                noGradient(factory(false)),
+                isGradient(factory(true)),
             ]),
         ]),
         gradientRefs,
@@ -433,23 +446,14 @@ export const usesGradient = (off = noGradient, on = isGradient) => {
     ] as const;
 };
 /**
- * Creates gradient definitions when *toggled off*.
- * @returns A `Style` represents gradient definitions when *toggled off*.
+ * Creates gradient definitions based on the given `toggle`.
+ * @param toggle `true` to activate the gradient -or- `false` to deactivate.
+ * @returns A `StyleCollection` represents gradient definitions based on the given `toggle`.
  */
-export const noGradient = (inherit = false) => composition([
+export const gradientOf = (toggle = true) => composition([
     vars({
-        // *toggle off* the background gradient prop:
-        [gradientDecls.backgGradTg] : inherit ? 'unset' : 'initial',
-    }),
-]);
-/**
- * Creates gradient definitions when *toggled on*.
- * @returns A `Style` represents gradient definitions when *toggled on*.
- */
-export const isGradient = () => composition([
-    vars({
-        // *toggle on* the background gradient prop:
-        [gradientDecls.backgGradTg] : cssProps.backgGrad,
+        // *toggle on/off* the background gradient prop:
+        [gradientDecls.backgGradTg] : toggle ? cssProps.backgGrad : 'initial',
     }),
 ]);
 
@@ -490,7 +494,7 @@ const [outlinedRefs, outlinedDecls] = createCssVar<OutlinedVars>();
  * Uses toggleable outlining.
  * @param off Customize the callback to create outlining definitions when *toggled off*.
  * @param on Customize the callback to create outlining definitions when *toggled on*.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents toggleable outlining definitions.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable outlining definitions.
  */
 export const usesOutlined = (off = noOutlined, on = isOutlined) => {
     // dependencies:
@@ -531,7 +535,7 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
 };
 /**
  * Creates outlining definitions when *toggled off*.
- * @returns A `Style` represents outlining definitions when *toggled off*.
+ * @returns A `StyleCollection` represents outlining definitions when *toggled off*.
  */
 export const noOutlined = (inherit = false) => composition([
     vars({
@@ -542,7 +546,7 @@ export const noOutlined = (inherit = false) => composition([
 ]);
 /**
  * Creates outlining definitions when *toggled on*.
- * @returns A `Style` represents outlining definitions when *toggled on*.
+ * @returns A `StyleCollection` represents outlining definitions when *toggled on*.
  */
 export const isOutlined = () => composition([
     vars({
@@ -589,7 +593,7 @@ const [mildRefs, mildDecls] = createCssVar<MildVars>();
  * Uses toggleable mildification.
  * @param off Customize the callback to create mildification definitions when *toggled off*.
  * @param on Customize the callback to create mildification definitions when *toggled on*.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents toggleable mildification definitions.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable mildification definitions.
  */
 export const usesMild = (off = noMild, on = isMild) => {
     // dependencies:
@@ -636,7 +640,7 @@ export const usesMild = (off = noMild, on = isMild) => {
 };
 /**
  * Creates mildification definitions when *toggled off*.
- * @returns A `Style` represents mildification definitions when *toggled off*.
+ * @returns A `StyleCollection` represents mildification definitions when *toggled off*.
  */
 export const noMild = (inherit = false) => composition([
     vars({
@@ -647,7 +651,7 @@ export const noMild = (inherit = false) => composition([
 ]);
 /**
  * Creates mildification definitions when *toggled on*.
- * @returns A `Style` represents mildification definitions when *toggled on*.
+ * @returns A `StyleCollection` represents mildification definitions when *toggled on*.
  */
 export const isMild = () => composition([
     vars({
@@ -682,7 +686,7 @@ export interface ForegVars {
 const [foregRefs, foregDecls] = createCssVar<ForegVars>();
 /**
  * Uses foreground color (text color).
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents foreground color definitions.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents foreground color definitions.
  */
 export const usesForeg = () => {
     // dependencies:
@@ -739,7 +743,7 @@ export interface BackgVars {
 const [backgRefs, backgDecls] = createCssVar<BackgVars>();
 /**
  * Uses background layer(s).
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents background layer(s) definitions.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents background layer(s) definitions.
  */
 export const usesBackg = () => {
     // dependencies:
@@ -790,6 +794,10 @@ export const usesBackg = () => {
 //#endregion backg
 
 //#region border
+/**
+ * Uses border color.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents border color definitions.
+ */
 export interface BorderVars {
     /**
      * functional border color.
@@ -856,7 +864,7 @@ export interface FocusBlurVars {
 const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
 /**
  * Uses focus & blur states.
- * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
  */
 export const usesFocusBlurBase = () => {
     // dependencies:
