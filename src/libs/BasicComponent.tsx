@@ -325,9 +325,12 @@ export const themeOf = (themeName: ThemeName) => composition([
         [themeDecls.foregTh]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
         [themeDecls.backgTh]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
         [themeDecls.borderTh]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        
         [themeDecls.outlinedForegTh]  : themeRefs.backgTh,
+        
         [themeDecls.mildForegTh]      : themeRefs.borderTh,
         [themeDecls.mildBackgTh]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        
         [themeDecls.focusBoxShadowTh] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
@@ -354,40 +357,39 @@ export const themeDefault = (themeName: ThemeName|null = null) => {
  * @param themeName The given theme name written in camel case.
  * @returns A `Style` represents the conditional color definitions for the given `themeName`.
  */
-export const themeIf = (themeName: ThemeName) => {
-    return composition([
-        vars({
-            [themeDecls.foregIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-            [themeDecls.backgIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-            [themeDecls.borderIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
-            
-            [themeDecls.outlinedForegIf]  : themeRefs.backgIf,
-            
-            [themeDecls.mildForegIf]      : themeRefs.borderIf,
-            [themeDecls.mildBackgIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
-            
-            [themeDecls.focusBoxShadowIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
-        }),
-    ]);
-};
+export const themeIf = (themeName: ThemeName) => composition([
+    vars({
+        [themeDecls.foregIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        
+        [themeDecls.outlinedForegIf]  : themeRefs.backgIf,
+        
+        [themeDecls.mildForegIf]      : themeRefs.borderIf,
+        [themeDecls.mildBackgIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        
+        [themeDecls.focusBoxShadowIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+    }),
+]);
 /**
  * Creates an important conditional color definitions for the given `themeName`.
  * @param themeName The given theme name written in camel case.
  * @returns A `Style` represents the important conditional color definitions for the given `themeName`.
  */
-export const themeIfIf = (themeName: ThemeName) => {
-    return composition([
-        vars({
-            [themeDecls.foregIfIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-            [themeDecls.backgIfIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-            [themeDecls.borderIfIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
-            [themeDecls.outlinedForegIfIf]  : themeRefs.backgIfIf,
-            [themeDecls.mildForegIfIf]      : themeRefs.borderIfIf,
-            [themeDecls.mildBackgIfIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
-            [themeDecls.focusBoxShadowIfIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
-        }),
-    ]);
-};
+export const themeIfIf = (themeName: ThemeName) => composition([
+    vars({
+        [themeDecls.foregIfIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgIfIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderIfIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        
+        [themeDecls.outlinedForegIfIf]  : themeRefs.backgIfIf,
+        
+        [themeDecls.mildForegIfIf]      : themeRefs.borderIfIf,
+        [themeDecls.mildBackgIfIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        
+        [themeDecls.focusBoxShadowIfIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+    }),
+]);
 
 export interface VariantTheme {
     theme?: ThemeName
@@ -501,7 +503,7 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
             imports([
                 // `usesOutlined()` implicitly `usesThemes()`
                 // `usesOutlined()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
-                themes,
+                themes(),
             ]),
             vars({
                 [outlinedDecls.outlinedForegFn] : fallbacks(
@@ -600,7 +602,7 @@ export const usesMild = (off = noMild, on = isMild) => {
             imports([
                 // `usesMild()` implicitly `usesThemes()`
                 // `usesMild()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
-                themes,
+                themes(),
             ]),
             vars({
                 [mildDecls.mildForegFn]: fallbacks(
@@ -857,6 +859,11 @@ const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
  * @returns A `[Style, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
  */
 export const usesFocusBlurBase = () => {
+    // dependencies:
+    const [, themeRefs] = usesThemes();
+    
+    
+    
     return [
         () => composition([
             vars({
@@ -1010,20 +1017,20 @@ export const usesBasicComponent = () => {
     return composition([
         imports([
             // layouts:
-            sizes,
+            sizes(),
             
             // colors:
-            themes,
-            gradient,
-            outlined,
-            mild,
+            themes(),
+            gradient(),
+            outlined(),
+            mild(),
             
-            foreg,
-            backg,
-            border,
+            foreg(),
+            backg(),
+            border(),
             
             // animations:
-            anim,
+            anim(),
         ]),
         layout({
             // customize:
