@@ -668,6 +668,7 @@ export interface ForegVars {
     foreg       : any
 }
 const [foregRefs, foregDecls] = createCssVar<ForegVars>();
+
 /**
  * Uses foreground color (text color).
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents foreground color definitions.
@@ -725,6 +726,7 @@ export interface BackgVars {
     backg       : any
 }
 const [backgRefs, backgDecls] = createCssVar<BackgVars>();
+
 /**
  * Uses background layer(s).
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents background layer(s) definitions.
@@ -793,6 +795,7 @@ export interface BorderVars {
     borderCol   : any
 }
 const [borderRefs, borderDecls] = createCssVar<BorderVars>();
+
 export const usesBorder = () => {
     // dependencies:
     const [, themeRefs   ] = usesThemes();
@@ -846,6 +849,7 @@ export interface FocusBlurVars {
     focusBoxShadowTg : any
 }
 const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
+
 /**
  * Uses focus & blur states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
@@ -930,6 +934,7 @@ export interface AnimVars {
     anim          : any
 }
 const [animRefs, animDecls] = createCssVar<AnimVars>();
+
 export const usesAnim = () => {
     // dependencies:
     const [, focusBlurRefs] = usesFocusBlurBase();
