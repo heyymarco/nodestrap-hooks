@@ -53,7 +53,7 @@ export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
 export type Style                                                = JssStyle & ExtendableStyle
-export type StyleCollection                                      = ProductOrFactoryOrDeepArray<Style>
+export type StyleCollection                                      = ProductOrFactoryOrDeepArray<Optional<Style>>
 
 export type ClassName                                            = string
 export type RealClass                                            = `.${ClassName}`
@@ -112,15 +112,15 @@ export const createCssfnStyle = <TClassName extends ClassName = ClassName>(class
 
 // cssfn hooks:
 export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): Styles<TClassName> => {
-    return mergeStyles(
+    return (mergeStyles(
         ((typeof(classes) === 'function') ? classes() : classes)
         /*
             empty `className` recognized as `@global` in our `jss-plugin-global`
             but to make more compatible with JSS' official `jss-plugin-global`
             we convert empty `className` to `'@global'`
          */
-        .map(([className, styles]): Style => ({ [className || '@global'] : mergeStyles(styles) })) // convert each `[className, styles]` to `{ className : mergeStyles(styles) }`
-    ) as Styles<TClassName>;
+        .map(([className, styles]): Style => ({ [className || '@global'] : mergeStyles(styles) })) // convert each `[className, styles]` to `{ className : mergeStyles(styles) | null }`
+    ) ?? {}) as Styles<TClassName>;
 }
 
 
@@ -133,29 +133,69 @@ export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: Pro
 export const composition     = (styles: StyleCollection[]): StyleCollection => styles;
 /**
  * Merges the (sub) component's composition to single `Style`.
- * @returns A `Style` represents the merged (sub) component's composition.
+ * @returns A `Style` represents the merged (sub) component's composition  
+ * -or-  
+ * `null` represents an empty `Style`.
  */
-export const mergeStyles     = (styles: StyleCollection): Style => {
-    if (!Array.isArray(styles)) return ((typeof(styles) === 'function') ? styles() : styles);
-
-
-
+export const mergeStyles     = (styles: StyleCollection): Style|null => {
+    /*
+        StyleCollection = ProductOrFactoryOrDeepArray<Optional<Style>>
+        StyleCollection = ProductOrFactory<Optional<Style>> | ProductOrFactoryDeepArray<Optional<Style>>
+        typeof          = ---------- not an array --------- | -------------- is an array ---------------
+    */
+    
+    
+    
+    if (!Array.isArray(styles)) {
+        // not an array => ProductOrFactory<Optional<Style>>
+        
+        const styleValue: Optional<Style> = (
+            (typeof(styles) === 'function')
+            ?
+            styles() // a function => Factory<Optional<Style>>
+            :
+            styles   // a product  => Optional<Style>
+        );
+        if (!styleValue) return null; // `null` or `undefined` => return `null`
+        
+        
+        
+        return styleValue;
+    } // if
+    
+    
+    
     const mergedStyles: Style = {}
     for (const subStyles of styles) {
-        if (!Array.isArray(subStyles)) {
-            mergeStyle(mergedStyles, ((typeof(subStyles) === 'function') ? subStyles() : subStyles));
-        }
-        else {
-            mergeStyle(mergedStyles, mergeStyles(subStyles));
-        } // if
+        const subStyleValue: Optional<Style> = (
+            Array.isArray(subStyles)
+            ?
+            mergeStyles(subStyles) // an array => ProductOrFactoryDeepArray<Optional<Style>> => recursively `mergeStyles()`
+            :
+            (
+                // not an array => ProductOrFactory<Optional<Style>>
+                
+                (typeof(subStyles) === 'function')
+                ?
+                subStyles() // a function => Factory<Optional<Style>>
+                :
+                subStyles   // a product  => Optional<Style>
+            )
+        );
+        if (!subStyleValue) continue; // `null` or `undefined` => skip
+        
+        
+        
+        mergeStyle(mergedStyles, subStyleValue);
     } // for
+    if (Object.keys(mergedStyles).length === 0) return null; // an empty object => return `null`
     return mergedStyles;
 }
 /**
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const compositionOf   = <TClassName extends ClassName = 'main'>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
+export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
     className,
     styles
 ];
@@ -362,7 +402,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                 .filter(([nestedSelectors]) => (nestedSelectors.length > 0)) // filter out empty `nestedSelectors`
                 .map(([nestedSelectors, styles]): Style => {
                     return {
-                        [nestedSelectors.join(',')] : mergeStyles(styles), // merge the `styles` to single `Style`, for making JSS understand
+                        [nestedSelectors.join(',')] : mergeStyles(styles) as JssValue, // merge the `styles` to single `Style`, for making JSS understand
                     };
                 }),
             
