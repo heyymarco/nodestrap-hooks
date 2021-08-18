@@ -25,7 +25,7 @@ import {
     
     
     // rules:
-    rules,
+    variants,
     rule,
     
     
@@ -89,7 +89,7 @@ const [sizeRefs, sizeDecls] = createCssVar<SizeVars>();
 export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
     return [
         () => composition([
-            rules([
+            variants([
                 options.map((sizeName) => rule(
                     `.sz${pascalCase(sizeName)}`,
                     factory(sizeName)
@@ -147,7 +147,7 @@ const [orientationRefs, orientationDecls] = createCssVar<OrientationVars>();
 export const usesOrientation = (factory = orientationOf, options = orientationOptions()) => {
     return [
         () => composition([
-            rules([
+            variants([
                 options.map((orientationName) => rule(
                     `.${orientationName}`,
                     factory(orientationName)
@@ -304,7 +304,7 @@ const [themeRefs, themeDecls] = createCssVar<ThemeVars>();
 export const usesThemes = (factory = themeOf, options = themeOptions()) => {
     return [
         () => composition([
-            rules([
+            variants([
                 options.map((themeName) => rule(
                     `.th${pascalCase(themeName)}`,
                     factory(themeName)
@@ -419,7 +419,7 @@ const [gradientRefs, gradientDecls] = createCssVar<GradientVars>();
 export const usesGradient = (off = noGradient, on = isGradient) => {
     return [
         () => composition([
-            rules([
+            variants([
                 // grandpa ?? `.gradient` and parent not `.gradient` and current not `.gradient`:
                 rule(                     ':not(.gradient)&:not(.gradient)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesGradient()` uses dedicated gradient direction
                 
@@ -516,7 +516,7 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
                 
                 [outlinedDecls.outlinedBackgFn] : 'transparent', // set background to transparent, regardless of the theme colors
             }),
-            rules([
+            variants([
                 // grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
                 rule(                     ':not(.outlined)&:not(.outlined)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesOutlined()` uses dedicated theme
                 
@@ -621,7 +621,7 @@ export const usesMild = (off = noMild, on = isMild) => {
                     cssProps.backg,          // default => uses config's background
                 ),
             }),
-            rules([
+            variants([
                 // by design: grandpa's `.mild` does not affect current `.mild`
                 // parent not `.mild` and current not `.mild`:
                 rule(':not(.mild)&:not(.mild)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesMild()` uses dedicated theme
