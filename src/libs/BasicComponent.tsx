@@ -490,13 +490,19 @@ export interface OutlinedVars {
     outlinedBackgTg : any
 }
 const [outlinedRefs, outlinedDecls] = createCssVar<OutlinedVars>();
+
+// grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
+export const noOutlined = (styles: StyleCollection) => rule(                     ':not(.outlined)&:not(.outlined)', styles);
+// grandpa is `.outlined` or  parent is  `.outlined` or  current is  `.outlined`:
+// double `.outlined.outlined` to combat with `:not(.outlined)&:not(.outlined)`
+export const isOutlined = (styles: StyleCollection) => rule(['.outlined.outlined &',  '.outlined&',  '&.outlined'], styles);
+
 /**
  * Uses toggleable outlining.
- * @param off Customize the callback to create outlining definitions when *toggled off*.
- * @param on Customize the callback to create outlining definitions when *toggled on*.
+ * @param factory Customize the callback to create outlining definitions for each toggle state.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable outlining definitions.
  */
-export const usesOutlined = (off = noOutlined, on = isOutlined) => {
+export const usesOutlined = (factory = outlinedOf) => {
     // dependencies:
     const [themes, themeRefs] = usesThemes();
     
@@ -521,12 +527,8 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
                 [outlinedDecls.outlinedBackgFn] : 'transparent', // set background to transparent, regardless of the theme colors
             }),
             variants([
-                // grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
-                rule(                     ':not(.outlined)&:not(.outlined)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesOutlined()` uses dedicated theme
-                
-                // grandpa is `.outlined` or  parent is  `.outlined` or  current is  `.outlined`:
-                // double `.outlined.outlined` to combat with `:not(.outlined)&:not(.outlined)`
-                rule(['.outlined.outlined &',  '.outlined&',  '&.outlined'] , on()                   ),
+                noOutlined(factory(false)),
+                isOutlined(factory(true)),
             ]),
         ]),
         outlinedRefs,
@@ -534,25 +536,15 @@ export const usesOutlined = (off = noOutlined, on = isOutlined) => {
     ] as const;
 };
 /**
- * Creates outlining definitions when *toggled off*.
- * @returns A `StyleCollection` represents outlining definitions when *toggled off*.
+ * Creates outlining definitions based on the given `toggle`.
+ * @param toggle `true` to activate the outlining -or- `false` to deactivate.
+ * @returns A `StyleCollection` represents outlining definitions based on the given `toggle`.
  */
-export const noOutlined = (inherit = false) => composition([
+export const outlinedOf = (toggle = true) => composition([
     vars({
-        // *toggle off* the outlined props:
-        [outlinedDecls.outlinedForegTg] : inherit ? 'unset' : 'initial',
-        [outlinedDecls.outlinedBackgTg] : inherit ? 'unset' : 'initial',
-    }),
-]);
-/**
- * Creates outlining definitions when *toggled on*.
- * @returns A `StyleCollection` represents outlining definitions when *toggled on*.
- */
-export const isOutlined = () => composition([
-    vars({
-        // *toggle on* the outlined props:
-        [outlinedDecls.outlinedForegTg] : outlinedRefs.outlinedForegFn,
-        [outlinedDecls.outlinedBackgTg] : outlinedRefs.outlinedBackgFn,
+        // *toggle on/off* the outlined props:
+        [outlinedDecls.outlinedForegTg] : toggle ? outlinedRefs.outlinedForegFn : 'initial',
+        [outlinedDecls.outlinedBackgTg] : toggle ? outlinedRefs.outlinedBackgFn : 'initial',
     }),
 ]);
 
@@ -589,13 +581,19 @@ export interface MildVars {
     mildBackgTg : any
 }
 const [mildRefs, mildDecls] = createCssVar<MildVars>();
+
+// by design: grandpa's `.mild` does not affect current `.mild`
+// parent not `.mild` and current not `.mild`:
+export const noMild = (styles: StyleCollection) => rule(':not(.mild)&:not(.mild)', styles);
+// parent is  `.mild` or  current is  `.mild`:
+export const isMild = (styles: StyleCollection) => rule([    '.mild&',  '&.mild'], styles);
+
 /**
  * Uses toggleable mildification.
- * @param off Customize the callback to create mildification definitions when *toggled off*.
- * @param on Customize the callback to create mildification definitions when *toggled on*.
+ * @param factory Customize the callback to create mildification definitions for each toggle state.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable mildification definitions.
  */
-export const usesMild = (off = noMild, on = isMild) => {
+export const usesMild = (factory = mildOf) => {
     // dependencies:
     const [themes, themeRefs] = usesThemes();
     
@@ -626,12 +624,8 @@ export const usesMild = (off = noMild, on = isMild) => {
                 ),
             }),
             variants([
-                // by design: grandpa's `.mild` does not affect current `.mild`
-                // parent not `.mild` and current not `.mild`:
-                rule(':not(.mild)&:not(.mild)' , off(/*inherit =*/false)), // can't inherit from grandpa, because `usesMild()` uses dedicated theme
-                
-                // parent is  `.mild` or  current is  `.mild`:
-                rule([    '.mild&',  '&.mild'] , on()                   ),
+                noMild(factory(false)),
+                isMild(factory(true)),
             ]),
         ]),
         mildRefs,
@@ -639,25 +633,15 @@ export const usesMild = (off = noMild, on = isMild) => {
     ] as const;
 };
 /**
- * Creates mildification definitions when *toggled off*.
- * @returns A `StyleCollection` represents mildification definitions when *toggled off*.
+ * Creates mildification definitions based on the given `toggle`.
+ * @param toggle `true` to activate the mildification -or- `false` to deactivate.
+ * @returns A `StyleCollection` represents mildification definitions based on the given `toggle`.
  */
-export const noMild = (inherit = false) => composition([
+export const mildOf = (toggle = true) => composition([
     vars({
-        // *toggle off* the mildification props:
-        [mildDecls.mildForegTg] : inherit ? 'unset' : 'initial',
-        [mildDecls.mildBackgTg] : inherit ? 'unset' : 'initial',
-    }),
-]);
-/**
- * Creates mildification definitions when *toggled on*.
- * @returns A `StyleCollection` represents mildification definitions when *toggled on*.
- */
-export const isMild = () => composition([
-    vars({
-        // *toggle on* the mildification props:
-        [mildDecls.mildForegTg] : mildRefs.mildForegFn,
-        [mildDecls.mildBackgTg] : mildRefs.mildBackgFn,
+        // *toggle on/off* the mildification props:
+        [mildDecls.mildForegTg] : toggle ? mildRefs.mildForegFn : 'initial',
+        [mildDecls.mildBackgTg] : toggle ? mildRefs.mildBackgFn : 'initial',
     }),
 ]);
 
