@@ -967,7 +967,7 @@ export const usesAnim = () => {
                     // layering: boxShadow1 | boxShadow2 | boxShadow3 ...
                     
                     // top layers:
-                    ...Array.from(setsBoxShadow).reverse().map((boxShadow) => fallbacks(
+                    ...propsManager.boxShadows().reverse().map((boxShadow) => fallbacks(
                         boxShadow,
                         
                         animRefs.boxShadowNone, // default => none boxShadow
@@ -982,7 +982,7 @@ export const usesAnim = () => {
                     // combining: filter1 * filter2 * filter3 ...
                     
                     // top layers:
-                    ...Array.from(setsFilter).reverse().map((filter) => fallbacks(
+                    ...propsManager.filters().reverse().map((filter) => fallbacks(
                         filter,
                         
                         animRefs.filterNone, // default => none filter
@@ -997,7 +997,7 @@ export const usesAnim = () => {
                     // combining: transf1 * transf2 * transf3 ...
                     
                     // top layers:
-                    ...Array.from(setsTransf).reverse().map((transf) => fallbacks(
+                    ...propsManager.transfs().reverse().map((transf) => fallbacks(
                         transf,
                         
                         animRefs.transfNone, // default => none transf
@@ -1012,7 +1012,7 @@ export const usesAnim = () => {
                     // layering: anim1 | anim2 | anim3 ...
                     
                     // top layers:
-                    ...Array.from(setsAnim).reverse().map((anim) => fallbacks(
+                    ...propsManager.anims().reverse().map((anim) => fallbacks(
                         anim,
                         
                         animRefs.animNone, // default => none anim
