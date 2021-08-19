@@ -61,7 +61,6 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    SizeName,
     usesSizes,
     ThemeName,
     themeCond,
@@ -486,7 +485,7 @@ export const usesIndicator = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizes((sizeName: SizeName) => composition([
+    const [sizes] = usesSizes((sizeName) => composition([
         vars({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
