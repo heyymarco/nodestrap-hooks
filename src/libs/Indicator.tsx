@@ -512,10 +512,6 @@ export const usesIndicator = () => {
             activePassive(),
         ]),
         layout({
-            // layouts:
-            
-            
-            
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
