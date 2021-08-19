@@ -61,11 +61,10 @@ import {
     // hooks:
     SizeName,
     usesSizes,
-    
     themeIf,
-
     outlinedOf,
     mildOf,
+    usesAnim,
     
     usesBasicComponent,
     
@@ -125,6 +124,13 @@ export const isDisable         = (styles: StyleCollection) => rule([selectorIsDi
 export const isEnablingDisable = (styles: StyleCollection) => rule([selectorIsEnabling, selectorIsDisabling, selectorIsDisabled], styles);
 
 export const usesEnableDisable = () => {
+    // dependencies:
+    const [, , , propsManager] = usesAnim();
+    propsManager.registerFilter(enableDisableRefs.filterEnableDisable);
+    propsManager.registerAnim(enableDisableRefs.animEnableDisable);
+    
+    
+    
     return [
         () => composition([
             vars({
@@ -155,213 +161,6 @@ export const usesEnableDisable = () => {
         enableDisableDecls,
     ] as const;
 };
-//#endregion enableDisable
-
-//#region activePassive
-export interface ActivePassiveVars {
-    filterActivePassive : any
-    animActivePassive   : any
-}
-const [activePassiveRefs, activePassiveDecls] = createCssVar<ActivePassiveVars>();
-
-// .actived will be added after activating-animation done:
-const selectorIsActived     =  '.actived'
-// .active = programatically active, :checked = user active:
-const selectorIsActivating  = ['.active',
-                               ':checked:not(.actived)']
-// .passive will be added after loosing active and will be removed after deactivating-animation done:
-const selectorIsPassivating =  '.passive'
-// if all above are not set => passived:
-const selectorIsPassived    =  ':not(.actived):not(.active):not(:checked):not(.passive)'
-
-export const isActived           = (styles: StyleCollection) => rule(selectorIsActived    , styles);
-export const isActivating        = (styles: StyleCollection) => rule(selectorIsActivating , styles);
-export const isPassivating       = (styles: StyleCollection) => rule(selectorIsPassivating, styles);
-export const isPassived          = (styles: StyleCollection) => rule(selectorIsPassived   , styles);
-
-export const isActive            = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived ], styles);
-export const isPassive           = (styles: StyleCollection) => rule([selectorIsPassivating, selectorIsPassived], styles);
-export const isActivePassivating = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived, selectorIsPassivating], styles);
-
-export const usesActivePassive = (onActive: (Optional<Factory<StyleCollection>>) = markActive) => {
-    return [
-        () => composition([
-            vars({
-                [activePassiveDecls.filterActivePassive] : 'initial',
-                [activePassiveDecls.animActivePassive]   : 'initial',
-            }),
-            states([
-                isActived([
-                    vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                    }),
-                ]),
-                isActivating([
-                    vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animActive,
-                    }),
-                ]),
-                isPassivating([
-                    vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
-                    }),
-                ]),
-                
-                isActive(onActive?.()),
-            ]),
-        ]),
-        activePassiveRefs,
-        activePassiveDecls,
-    ] as const;
-};
-
-export const markActive = () => composition([
-    imports([
-        outlinedOf(false), // kill outlined variant
-        mildOf(false),     // kill mild     variant
-        
-        themeActive(),     // switch to active theme
-    ]),
-]);
-/**
- * Creates a conditional color definitions at active state.
- * @returns A `StyleCollection` represents the conditional color definitions at active state.
- */
-export const themeActive = () => themeIf('secondary');
-//#endregion activePassive
-
-
-
-// styles:
-export const usesIndicator = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizes((sizeName: SizeName) => composition([
-        vars({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-
-    // states:
-    const [enableDisable, enableDisableRefs] = usesEnableDisable();
-    const [activePassive, activePassiveRefs] = usesActivePassive();
-    
-    
-    
-    return composition([
-        imports([
-            // base:
-            usesBasicComponent(),
-            
-            // layouts:
-            sizes(),
-            
-            // states:
-            enableDisable(),
-            activePassive(),
-        ]),
-        layout({
-            // layouts:
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-}
-export const useIndicatorSheet = createUseCssfnStyle(() => [
-    mainComposition([
-        imports([
-            usesIndicator(),
-        ]),
-    ]),
-]);
-
-
-
-// configs:
-export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    const keyframesDisable : PropEx.Keyframes = {
-        // TODO:
-        /*from : {
-            filter: [[ // double array => makes the JSS treat as space separated values
-                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone)),
-
-             // indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone), // missing the last => let's the browser interpolated it
-            ]],
-        },
-        to   : {
-            filter: [[ // double array => makes the JSS treat as space separated values
-                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone)),
-
-                indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone), // existing the last => let's the browser interpolated it
-            ]],
-        },*/
-    };
-    const keyframesEnable  : PropEx.Keyframes = {
-        from : keyframesDisable.to,
-        to   : keyframesDisable.from,
-    };
-    
-    
-    
-    const keyframesActive  : PropEx.Keyframes = {
-        // TODO:
-        /*from : {
-            // foreg       : indicatorStyles.ref(indicatorStyles._outlinedForegTg, indicatorStyles._mildForegTg, indicatorStyles._foregFn),
-            // backg       : indicatorStyles.ref(indicatorStyles._outlinedBackgTg, indicatorStyles._mildBackgTg, indicatorStyles._backgFn),
-            // borderColor : indicatorStyles.ref(indicatorStyles._outlinedForegTg,                               indicatorStyles._borderFn),
-
-            filter: [[ // double array => makes the JSS treat as space separated values
-                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone)),
-
-             // indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone), // missing the last => let's the browser interpolated it
-            ]],
-        },
-        to   : {
-            // foreg       : indicatorStyles.ref(indicatorStyles._foregFn),
-            // backg       : indicatorStyles.ref(indicatorStyles._backgFn),
-            // borderColor : indicatorStyles.ref(indicatorStyles._borderFn),
-
-            filter: [[ // double array => makes the JSS treat as space separated values
-                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone)),
-
-                indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone), // existing the last => let's the browser interpolated it
-            ]],
-        },*/
-    };
-    const keyframesPassive : PropEx.Keyframes = {
-        from : keyframesActive.to,
-        to   : keyframesActive.from,
-    };
-    
-    
-    
-    return {
-        //#region animations
-        filterDisable        : [['grayscale(50%)',  'opacity(50%)'  ]],
-        filterActive         : 'initial',
-
-        '@keyframes enable'  : keyframesEnable,
-        '@keyframes disable' : keyframesDisable,
-        '@keyframes active'  : keyframesActive,
-        '@keyframes passive' : keyframesPassive,
-        animEnable           : [['300ms', 'ease-out', 'both', keyframesEnable ]],
-        animDisable          : [['300ms', 'ease-out', 'both', keyframesDisable]],
-        animActive           : [['150ms', 'ease-out', 'both', keyframesActive ]],
-        animPassive          : [['300ms', 'ease-out', 'both', keyframesPassive]],
-        //#endregion animations
-    };
-}, { prefix: 'indi' });
-
-
-
-// hooks:
 
 export function useStateEnableDisable(props: IndicationProps & ElementProps) {
     // fn props:
@@ -444,6 +243,88 @@ export function useStateEnableDisable(props: IndicationProps & ElementProps) {
         },
     };
 }
+//#endregion enableDisable
+
+//#region activePassive
+export interface ActivePassiveVars {
+    filterActivePassive : any
+    animActivePassive   : any
+}
+const [activePassiveRefs, activePassiveDecls] = createCssVar<ActivePassiveVars>();
+
+// .actived will be added after activating-animation done:
+const selectorIsActived     =  '.actived'
+// .active = programatically active, :checked = user active:
+const selectorIsActivating  = ['.active',
+                               ':checked:not(.actived)']
+// .passive will be added after loosing active and will be removed after deactivating-animation done:
+const selectorIsPassivating =  '.passive'
+// if all above are not set => passived:
+const selectorIsPassived    =  ':not(.actived):not(.active):not(:checked):not(.passive)'
+
+export const isActived           = (styles: StyleCollection) => rule(selectorIsActived    , styles);
+export const isActivating        = (styles: StyleCollection) => rule(selectorIsActivating , styles);
+export const isPassivating       = (styles: StyleCollection) => rule(selectorIsPassivating, styles);
+export const isPassived          = (styles: StyleCollection) => rule(selectorIsPassived   , styles);
+
+export const isActive            = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived ], styles);
+export const isPassive           = (styles: StyleCollection) => rule([selectorIsPassivating, selectorIsPassived], styles);
+export const isActivePassivating = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived, selectorIsPassivating], styles);
+
+export const usesActivePassive = (onActive: (Optional<Factory<StyleCollection>>) = markActive) => {
+    // dependencies:
+    const [, , , propsManager] = usesAnim();
+    propsManager.registerFilter(activePassiveRefs.filterActivePassive);
+    propsManager.registerAnim(activePassiveRefs.animActivePassive);
+    
+    
+    
+    return [
+        () => composition([
+            vars({
+                [activePassiveDecls.filterActivePassive] : 'initial',
+                [activePassiveDecls.animActivePassive]   : 'initial',
+            }),
+            states([
+                isActived([
+                    vars({
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                    }),
+                ]),
+                isActivating([
+                    vars({
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.animActivePassive]   : cssProps.animActive,
+                    }),
+                ]),
+                isPassivating([
+                    vars({
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
+                    }),
+                ]),
+                
+                isActive(onActive?.()),
+            ]),
+        ]),
+        activePassiveRefs,
+        activePassiveDecls,
+    ] as const;
+};
+
+export const markActive = () => composition([
+    imports([
+        outlinedOf(false), // kill outlined variant
+        mildOf(false),     // kill mild     variant
+        
+        themeActive(),     // switch to active theme
+    ]),
+]);
+/**
+ * Creates a conditional color definitions at active state.
+ * @returns A `StyleCollection` represents the conditional color definitions at active state.
+ */
+export const themeActive = () => themeIf('secondary');
 
 export function useStateActivePassive(props: IndicationProps & ElementProps, activeDn?: boolean) {
     // fn props:
@@ -581,6 +462,134 @@ export function useTogglerActive(props: TogglerActiveProps, changeEventTarget?: 
         setActive,
     ];
 }
+//#endregion activePassive
+
+
+
+// styles:
+export const usesIndicator = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizes((sizeName: SizeName) => composition([
+        vars({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    // states:
+    const [enableDisable] = usesEnableDisable();
+    const [activePassive] = usesActivePassive();
+    
+    
+    
+    return composition([
+        imports([
+            // base:
+            usesBasicComponent(),
+            
+            // layouts:
+            sizes(),
+            
+            // states:
+            enableDisable(),
+            activePassive(),
+        ]),
+        layout({
+            // layouts:
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+}
+export const useIndicatorSheet = createUseCssfnStyle(() => [
+    mainComposition([
+        imports([
+            usesIndicator(),
+        ]),
+    ]),
+]);
+
+
+
+// configs:
+export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    const keyframesDisable : PropEx.Keyframes = {
+        // TODO:
+        /*from : {
+            filter: [[ // double array => makes the JSS treat as space separated values
+                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone)),
+
+             // indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone), // missing the last => let's the browser interpolated it
+            ]],
+        },
+        to   : {
+            filter: [[ // double array => makes the JSS treat as space separated values
+                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone)),
+
+                indicatorStyles.ref(indicatorStyles._filterEnableDisable, indicatorStyles._filterNone), // existing the last => let's the browser interpolated it
+            ]],
+        },*/
+    };
+    const keyframesEnable  : PropEx.Keyframes = {
+        from : keyframesDisable.to,
+        to   : keyframesDisable.from,
+    };
+    
+    
+    
+    const keyframesActive  : PropEx.Keyframes = {
+        // TODO:
+        /*from : {
+            // foreg       : indicatorStyles.ref(indicatorStyles._outlinedForegTg, indicatorStyles._mildForegTg, indicatorStyles._foregFn),
+            // backg       : indicatorStyles.ref(indicatorStyles._outlinedBackgTg, indicatorStyles._mildBackgTg, indicatorStyles._backgFn),
+            // borderColor : indicatorStyles.ref(indicatorStyles._outlinedForegTg,                               indicatorStyles._borderFn),
+
+            filter: [[ // double array => makes the JSS treat as space separated values
+                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone)),
+
+             // indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone), // missing the last => let's the browser interpolated it
+            ]],
+        },
+        to   : {
+            // foreg       : indicatorStyles.ref(indicatorStyles._foregFn),
+            // backg       : indicatorStyles.ref(indicatorStyles._backgFn),
+            // borderColor : indicatorStyles.ref(indicatorStyles._borderFn),
+
+            filter: [[ // double array => makes the JSS treat as space separated values
+                ...indicatorStyles.filterFn().filter((f) => f !== indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone)),
+
+                indicatorStyles.ref(indicatorStyles._filterActivePassive, indicatorStyles._filterNone), // existing the last => let's the browser interpolated it
+            ]],
+        },*/
+    };
+    const keyframesPassive : PropEx.Keyframes = {
+        from : keyframesActive.to,
+        to   : keyframesActive.from,
+    };
+    
+    
+    
+    return {
+        //#region animations
+        filterDisable        : [['grayscale(50%)',  'opacity(50%)'  ]],
+        filterActive         : 'initial',
+
+        '@keyframes enable'  : keyframesEnable,
+        '@keyframes disable' : keyframesDisable,
+        '@keyframes active'  : keyframesActive,
+        '@keyframes passive' : keyframesPassive,
+        animEnable           : [['300ms', 'ease-out', 'both', keyframesEnable ]],
+        animDisable          : [['300ms', 'ease-out', 'both', keyframesDisable]],
+        animActive           : [['150ms', 'ease-out', 'both', keyframesActive ]],
+        animPassive          : [['300ms', 'ease-out', 'both', keyframesPassive]],
+        //#endregion animations
+    };
+}, { prefix: 'indi' });
 
 
 
