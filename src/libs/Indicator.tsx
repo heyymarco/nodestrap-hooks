@@ -560,9 +560,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     const keyframesActive  : PropEx.Keyframes = {
         from : {
-            // foreg       : indicatorStyles.ref(indicatorStyles._outlinedForegTg, indicatorStyles._mildForegTg, indicatorStyles._foregFn),
-            // backg       : indicatorStyles.ref(indicatorStyles._outlinedBackgTg, indicatorStyles._mildBackgTg, indicatorStyles._backgFn),
-            // borderColor : indicatorStyles.ref(indicatorStyles._outlinedForegTg,                               indicatorStyles._borderFn),
+            // foreg       : fallbacks(outlinedRefs.foregOutlinedTg, mildRefs.foregMildTg,  foregRefs.foregFn),
+            // backg       : fallbacks(outlinedRefs.backgOutlinedTg, mildRefs.backgMildTg,  backgRefs.backgFn),
+            // borderColor : fallbacks(outlinedRefs.foregOutlinedTg,                       borderRefs.borderFn),
 
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterActivePassive)),
@@ -571,9 +571,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             ]],
         },
         to   : {
-            // foreg       : indicatorStyles.ref(indicatorStyles._foregFn),
-            // backg       : indicatorStyles.ref(indicatorStyles._backgFn),
-            // borderColor : indicatorStyles.ref(indicatorStyles._borderFn),
+            // foreg       : foregRefs.foregFn,
+            // backg       : backgRefs.backgFn,
+            // borderColor : borderRefs.borderFn,
 
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterActivePassive)),
