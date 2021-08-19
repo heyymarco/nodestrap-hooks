@@ -10,6 +10,7 @@ import type {
     Factory,
 }                           from './types'       // cssfn's types
 import type {
+    Cust,
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
@@ -46,6 +47,7 @@ import {
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
+    fallbacks,
 }                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
@@ -61,6 +63,7 @@ import {
     // hooks:
     SizeName,
     usesSizes,
+    ThemeName,
     themeCond,
     outlinedOf,
     mildOf,
@@ -130,7 +133,7 @@ export const isDisabled        = (styles: StyleCollection) => rule(selectorIsDis
 
 export const isEnable          = (styles: StyleCollection) => rule([selectorIsEnabling , selectorIsEnabled ], styles);
 export const isDisable         = (styles: StyleCollection) => rule([selectorIsDisabling, selectorIsDisabled], styles);
-export const isEnablingDisable = (styles: StyleCollection) => rule([selectorIsEnabling, selectorIsDisabling, selectorIsDisabled], styles);
+export const isEnablingDisable = (styles: StyleCollection) => rule([selectorIsEnabling , selectorIsDisabling, selectorIsDisabled], styles);
 
 export const usesEnableDisable = () => {
     // dependencies:
@@ -282,7 +285,7 @@ export const isPassived          = (styles: StyleCollection) => rule(selectorIsP
 
 export const isActive            = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived ], styles);
 export const isPassive           = (styles: StyleCollection) => rule([selectorIsPassivating, selectorIsPassived], styles);
-export const isActivePassivating = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived, selectorIsPassivating], styles);
+export const isActivePassivating = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived  , selectorIsPassivating], styles);
 
 export const usesActivePassive = (onActive: (Optional<Factory<StyleCollection>>) = markActive) => {
     // dependencies:
@@ -333,9 +336,10 @@ export const markActive = () => composition([
 ]);
 /**
  * Creates a conditional color definitions at active state.
+ * @param themeName The name of active theme.
  * @returns A `StyleCollection` represents the conditional color definitions at active state.
  */
-export const themeActive = () => themeCond('secondary');
+export const themeActive = (themeName: ThemeName = 'secondary') => themeCond(themeName);
 
 export function useStateActivePassive(props: IndicationProps & ElementProps, activeDn?: boolean) {
     // fn props:
@@ -530,8 +534,10 @@ export const useIndicatorSheet = createUseCssfnStyle(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
-    const [, , , propsManager] = usesAnim();
+    const [, animRefs, , propsManager] = usesAnim();
     const filters = propsManager.filters();
+    
+    const defaultFilter = (filter: Cust.Ref) => fallbacks(filter, animRefs.filterNone);
     
     const [, {filterEnableDisable}] = usesEnableDisable();
     const [, {filterActivePassive}] = usesActivePassive();
@@ -544,14 +550,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterEnableDisable)),
 
              // filterEnableDisable, // missing the last => let's the browser interpolated it
-            ]],
+            ].map(defaultFilter)],
         },
         to   : {
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterEnableDisable)),
 
                 filterEnableDisable, // existing the last => let's the browser interpolated it
-            ]],
+            ].map(defaultFilter)],
         },
     };
     const keyframesEnable  : PropEx.Keyframes = {
@@ -571,7 +577,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterActivePassive)),
 
              // filterActivePassive, // missing the last => let's the browser interpolated it
-            ]],
+            ].map(defaultFilter)],
         },
         to   : {
             // foreg       : foregRefs.foregFn,
@@ -582,7 +588,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterActivePassive)),
 
                 filterActivePassive, // existing the last => let's the browser interpolated it
-            ]],
+            ].map(defaultFilter)],
         },
     };
     const keyframesPassive : PropEx.Keyframes = {
