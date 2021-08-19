@@ -941,15 +941,19 @@ const setsFilter    = new Set<Cust.Ref>();
 const setsTransf    = new Set<Cust.Ref>();
 const setsAnim      = new Set<Cust.Ref>();
 const propsManager  = {
+    boxShadows          : () => Array.from(setsBoxShadow),
     registerBoxShadow   : (item: Cust.Ref) => setsBoxShadow.add(item),
     unregisterBoxShadow : (item: Cust.Ref) => setsBoxShadow.delete(item),
     
+    filters             : () => Array.from(setsFilter),
     registerFilter      : (item: Cust.Ref) => setsFilter.add(item),
     unregisterFilter    : (item: Cust.Ref) => setsFilter.delete(item),
     
+    transfs             : () => Array.from(setsTransf),
     registerTransf      : (item: Cust.Ref) => setsTransf.add(item),
     unregisterTransf    : (item: Cust.Ref) => setsTransf.delete(item),
     
+    anims               : () => Array.from(setsAnim),
     registerAnim        : (item: Cust.Ref) => setsAnim.add(item),
     unregisterAnim      : (item: Cust.Ref) => setsAnim.delete(item),
 } as const;
@@ -963,7 +967,7 @@ export const usesAnim = () => {
                     // layering: boxShadow1 | boxShadow2 | boxShadow3 ...
                     
                     // top layers:
-                    ...Array.from(setsBoxShadow).map((boxShadow) => fallbacks(
+                    ...Array.from(setsBoxShadow).reverse().map((boxShadow) => fallbacks(
                         boxShadow,
                         
                         animRefs.boxShadowNone, // default => none boxShadow
@@ -978,7 +982,7 @@ export const usesAnim = () => {
                     // combining: filter1 * filter2 * filter3 ...
                     
                     // top layers:
-                    ...Array.from(setsFilter).map((filter) => fallbacks(
+                    ...Array.from(setsFilter).reverse().map((filter) => fallbacks(
                         filter,
                         
                         animRefs.filterNone, // default => none filter
@@ -993,7 +997,7 @@ export const usesAnim = () => {
                     // combining: transf1 * transf2 * transf3 ...
                     
                     // top layers:
-                    ...Array.from(setsTransf).map((transf) => fallbacks(
+                    ...Array.from(setsTransf).reverse().map((transf) => fallbacks(
                         transf,
                         
                         animRefs.transfNone, // default => none transf
@@ -1008,7 +1012,7 @@ export const usesAnim = () => {
                     // layering: anim1 | anim2 | anim3 ...
                     
                     // top layers:
-                    ...Array.from(setsAnim).map((anim) => fallbacks(
+                    ...Array.from(setsAnim).reverse().map((anim) => fallbacks(
                         anim,
                         
                         animRefs.animNone, // default => none anim
