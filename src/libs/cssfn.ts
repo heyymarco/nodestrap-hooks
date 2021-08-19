@@ -229,15 +229,27 @@ export const layout = (style: Style): Style => style;
  */
 export const vars   = (items: { [name: string]: JssValue }): Style => items;
 //combinators:
-export const combinators = (combinator: string, selectors: SelectorCollection, styles: StyleCollection): PropList => ({
-    [ flat(selectors).map((selector) => {
+export const combinators = (combinator: string, selectors: SelectorCollection, styles: StyleCollection): PropList => {
+    const combiSelectors = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
-
+        
         if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
-
+        
         return `&${combinator}${selector}`;
-    }).join(',') ] : mergeStyles(styles) as JssValue, // merge the `styles` to single `Style`, for making JSS understand
-});
+    });
+    if (!combiSelectors.length) return {}; // no selector => return empty
+    
+    
+    
+    const mergedStyles = mergeStyles(styles); // merge the `styles` to single `Style`, for making JSS understand
+    if (!mergedStyles) return {}; // no style => return empty
+    
+    
+    
+    return {
+        [combiSelectors.join(',')]: mergedStyles as JssValue,
+    };
+};
 export const descendants      = (selectors: SelectorCollection, styles: StyleCollection) => combinators(' ', selectors, styles);
 export const children         = (selectors: SelectorCollection, styles: StyleCollection) => combinators('>', selectors, styles);
 export const siblings         = (selectors: SelectorCollection, styles: StyleCollection) => combinators('~', selectors, styles);
