@@ -15,8 +15,8 @@ import reportWebVitals from './reportWebVitals';
 
 // import BasicComponentApp                            from './apps/BasicComponentApp';
 //     import ContainerApp                             from './apps/ContainerApp';
-    import IndicatorApp                             from './apps/IndicatorApp';
-//         import ContentApp                           from './apps/ContentApp';
+//     import IndicatorApp                             from './apps/IndicatorApp';
+        import ContentApp                           from './apps/ContentApp';
 //            import ListgroupApp                      from './apps/ListgroupApp';
 //                 import AccordionApp                 from './apps/AccordionApp';
 //                 import NavscrollApp                 from './apps/NavscrollApp';
@@ -46,7 +46,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <IndicatorApp />
+    <ContentApp />
   ,
   document.getElementById('root')
 );
