@@ -940,7 +940,7 @@ const setsBoxShadow = new Set<Cust.Ref>();
 const setsFilter    = new Set<Cust.Ref>();
 const setsTransf    = new Set<Cust.Ref>();
 const setsAnim      = new Set<Cust.Ref>();
-const setsManager   = {
+const propsManager  = {
     registerBoxShadow   : (item: Cust.Ref) => setsBoxShadow.add(item),
     unregisterBoxShadow : (item: Cust.Ref) => setsBoxShadow.delete(item),
     
@@ -1021,7 +1021,7 @@ export const usesAnim = () => {
         ]),
         animRefs,
         animDecls,
-        setsManager,
+        propsManager,
     ] as const;
 };
 //#endregion animations
