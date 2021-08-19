@@ -828,70 +828,70 @@ export const usesBorder = () => {
 //#endregion border
 
 
-// states:
+// // states:
 
-//#region focusBlur
-export interface FocusBlurVars {
-    /**
-     * functional boxShadow color - at focus state.
-     */
-    focusBoxShadowFn  : any
-    /**
-     * final boxShadow color - at focus state.
-     */
-    focusBoxShadowCol : any
-    /**
-     * final boxShadow single layer - at focus state.
-     */
-    focusBoxShadowLy  : any
-    /**
-     * toggles on boxShadow single layer - at focus state.
-     */
-    focusBoxShadowTg : any
-}
-const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
+// //#region focusBlur
+// export interface FocusBlurVars {
+//     /**
+//      * functional boxShadow color - at focus state.
+//      */
+//     focusBoxShadowFn  : any
+//     /**
+//      * final boxShadow color - at focus state.
+//      */
+//     focusBoxShadowCol : any
+//     /**
+//      * final boxShadow single layer - at focus state.
+//      */
+//     focusBoxShadowLy  : any
+//     /**
+//      * toggles on boxShadow single layer - at focus state.
+//      */
+//     focusBoxShadowTg : any
+// }
+// const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
 
-/**
- * Uses focus & blur states.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
- */
-export const usesFocusBlurBase = () => {
-    // dependencies:
-    const [, themeRefs] = usesThemes();
+// /**
+//  * Uses focus & blur states.
+//  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
+//  */
+// export const usesFocusBlurBase = () => {
+//     // dependencies:
+//     const [, themeRefs] = usesThemes();
     
     
     
-    return [
-        () => composition([
-            vars({
-                [focusBlurDecls.focusBoxShadowFn]  : fallbacks(
-                    themeRefs.focusBoxShadowIfIf, // first  priority
-                    themeRefs.focusBoxShadowTh,   // second priority
-                    themeRefs.focusBoxShadowIf,   // third  priority
+//     return [
+//         () => composition([
+//             vars({
+//                 [focusBlurDecls.focusBoxShadowFn]  : fallbacks(
+//                     themeRefs.focusBoxShadowIfIf, // first  priority
+//                     themeRefs.focusBoxShadowTh,   // second priority
+//                     themeRefs.focusBoxShadowIf,   // third  priority
                     
-                    colors.secondaryThin,         // default => uses secondary theme, because its color is neutral
-                ),
-                [focusBlurDecls.focusBoxShadowCol] : fallbacks(
-                    // no toggle outlined nor toggle mild yet (might be added in the future)
+//                     colors.secondaryThin,         // default => uses secondary theme, because its color is neutral
+//                 ),
+//                 [focusBlurDecls.focusBoxShadowCol] : fallbacks(
+//                     // no toggle outlined nor toggle mild yet (might be added in the future)
                     
-                    focusBlurRefs.focusBoxShadowFn, // default => uses our `focusBoxShadowFn`
-                ),
-                [focusBlurDecls.focusBoxShadowLy]  : [[ // double array => makes the JSS treat as space separated values
-                    // combining: pos width spread color ...
+//                     focusBlurRefs.focusBoxShadowFn, // default => uses our `focusBoxShadowFn`
+//                 ),
+//                 [focusBlurDecls.focusBoxShadowLy]  : [[ // double array => makes the JSS treat as space separated values
+//                     // combining: pos width spread color ...
                     
-                    // focusBoxShadow pos, width, spread, etc:
-                    cssProps.boxShadowFocus,
+//                     // focusBoxShadow pos, width, spread, etc:
+//                     cssProps.boxShadowFocus,
                     
-                    // focusBoxShadow color:
-                    focusBlurRefs.focusBoxShadowCol,
-                ]],
-            }),
-        ]),
-        focusBlurRefs,
-        focusBlurDecls,
-    ] as const;
-}
-//#endregion focusBlur
+//                     // focusBoxShadow color:
+//                     focusBlurRefs.focusBoxShadowCol,
+//                 ]],
+//             }),
+//         ]),
+//         focusBlurRefs,
+//         focusBlurDecls,
+//     ] as const;
+// }
+// //#endregion focusBlur
 
 
 // animations:
