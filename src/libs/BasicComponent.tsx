@@ -564,22 +564,22 @@ export interface MildVars {
     /**
      * functional foreground color - at mild variant.
      */
-    mildForegFn : any
+    foregMildFn : any
     /**
      * toggles on foreground color - at mild variant.
      */
-    mildForegTg : any
+    foregMildTg : any
     
     
     
     /**
      * functional background color - at mild variant.
      */
-    mildBackgFn : any
+    backgMildFn : any
     /**
      * toggles on background color - at mild variant.
      */
-    mildBackgTg : any
+    backgMildTg : any
 }
 const [mildRefs, mildDecls] = createCssVar<MildVars>();
 
@@ -608,7 +608,7 @@ export const usesMild = (factory = mildOf) => {
                 themes(),
             ]),
             vars({
-                [mildDecls.mildForegFn]: fallbacks(
+                [mildDecls.foregMildFn] : fallbacks(
                     themeRefs.foregMildImpt,  // first  priority
                     themeRefs.foregMildTheme, // second priority
                     themeRefs.foregMildCond,  // third  priority
@@ -616,7 +616,7 @@ export const usesMild = (factory = mildOf) => {
                     cssProps.foreg,           // default => uses config's foreground
                 ),
                 
-                [mildDecls.mildBackgFn]: fallbacks(
+                [mildDecls.backgMildFn] : fallbacks(
                     themeRefs.backgMildImpt,  // first  priority
                     themeRefs.backgMildTheme, // second priority
                     themeRefs.backgMildCond,  // third  priority
@@ -641,8 +641,8 @@ export const usesMild = (factory = mildOf) => {
 export const mildOf = (toggle = true) => composition([
     vars({
         // *toggle on/off* the mildification props:
-        [mildDecls.mildForegTg] : toggle ? mildRefs.mildForegFn : 'initial',
-        [mildDecls.mildBackgTg] : toggle ? mildRefs.mildBackgFn : 'initial',
+        [mildDecls.foregMildTg] : toggle ? mildRefs.foregMildFn : 'initial',
+        [mildDecls.backgMildTg] : toggle ? mildRefs.backgMildFn : 'initial',
     }),
 ]);
 
@@ -694,7 +694,7 @@ export const usesForeg = () => {
                 ),
                 [foregDecls.foreg]   : fallbacks(
                     outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
-                    mildRefs.mildForegTg,         // toggle mild     (if `usesMild()` applied)
+                    mildRefs.foregMildTg,         // toggle mild     (if `usesMild()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
                 ),
@@ -755,7 +755,7 @@ export const usesBackg = () => {
                 ),
                 [backgDecls.backgCol]  : fallbacks(
                     outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
-                    mildRefs.mildBackgTg,         // toggle mild     (if `usesMild()` applied)
+                    mildRefs.backgMildTg,         // toggle mild     (if `usesMild()` applied)
                     
                     backgRefs.backgFn,            // default => uses our `backgFn`
                 ),
