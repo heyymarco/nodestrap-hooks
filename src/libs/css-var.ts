@@ -28,7 +28,7 @@ export type CssVar<TProps extends {}> = readonly [ReadonlyRefs<TProps>, Readonly
 
 
 // defaults:
-const _defaultPrefix = 'ns';
+const _defaultPrefix = 'fn';
 
 
 
