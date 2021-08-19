@@ -8,6 +8,7 @@ import type {
     DictionaryOf,
 }                           from './types'       // cssfn's types
 import type {
+    Cust,
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
@@ -759,7 +760,7 @@ export const usesBackg = () => {
                     backgRefs.backgFn,            // default => uses our `backgFn`
                 ),
                 [backgDecls.backg]     : [ // single array => makes the JSS treat as comma separated values
-                    // layering: backg1 , backg2 , backg3 ...
+                    // layering: backg1 | backg2 | backg3 ...
                     
                     // top layer:
                     fallbacks(
@@ -935,25 +936,38 @@ export interface AnimVars {
 }
 const [animRefs, animDecls] = createCssVar<AnimVars>();
 
+const setsBoxShadow = new Set<Cust.Ref>();
+const setsFilter    = new Set<Cust.Ref>();
+const setsTransf    = new Set<Cust.Ref>();
+const setsAnim      = new Set<Cust.Ref>();
+const setsManager   = {
+    registerBoxShadow   : (item: Cust.Ref) => setsBoxShadow.add(item),
+    unregisterBoxShadow : (item: Cust.Ref) => setsBoxShadow.delete(item),
+    
+    registerFilter      : (item: Cust.Ref) => setsFilter.add(item),
+    unregisterFilter    : (item: Cust.Ref) => setsFilter.delete(item),
+    
+    registerTransf      : (item: Cust.Ref) => setsTransf.add(item),
+    unregisterTransf    : (item: Cust.Ref) => setsTransf.delete(item),
+    
+    registerAnim        : (item: Cust.Ref) => setsAnim.add(item),
+    unregisterAnim      : (item: Cust.Ref) => setsAnim.delete(item),
+} as const;
+
 export const usesAnim = () => {
-    // dependencies:
-    const [, focusBlurRefs] = usesFocusBlurBase();
-    
-    
-    
     return [
         () => composition([
             vars({
                 [animDecls.boxShadowNone] : [[0, 0, 'transparent']],
                 [animDecls.boxShadow]     : [ // single array => makes the JSS treat as comma separated values
-                    // layering: boxShadow1 , boxShadow2 , boxShadow3 ...
+                    // layering: boxShadow1 | boxShadow2 | boxShadow3 ...
                     
-                    // top layer:
-                    fallbacks(
-                        focusBlurRefs.focusBoxShadowTg, // toggle focusBoxShadow (if `usesFocusBlur()` applied)
+                    // top layers:
+                    ...Array.from(setsBoxShadow).map((boxShadow) => fallbacks(
+                        boxShadow,
                         
-                        animRefs.boxShadowNone,         // default => no top layer
-                    ),
+                        animRefs.boxShadowNone, // default => none boxShadow
+                    )),
                     
                     // bottom layer:
                     cssProps.boxShadow,
@@ -963,6 +977,14 @@ export const usesAnim = () => {
                 [animDecls.filter]        : [[ // double array => makes the JSS treat as space separated values
                     // combining: filter1 * filter2 * filter3 ...
                     
+                    // top layers:
+                    ...Array.from(setsFilter).map((filter) => fallbacks(
+                        filter,
+                        
+                        animRefs.filterNone, // default => none filter
+                    )),
+                    
+                    // bottom layer:
                     cssProps.filter,
                 ]],
                 
@@ -970,19 +992,36 @@ export const usesAnim = () => {
                 [animDecls.transf]        : [[ // double array => makes the JSS treat as space separated values
                     // combining: transf1 * transf2 * transf3 ...
                     
+                    // top layers:
+                    ...Array.from(setsTransf).map((transf) => fallbacks(
+                        transf,
+                        
+                        animRefs.transfNone, // default => none transf
+                    )),
+                    
+                    // bottom layer:
                     cssProps.transf,
                 ]],
                 
                 [animDecls.animNone]      : 'none',
                 [animDecls.anim]          : [ // single array => makes the JSS treat as comma separated values
-                    // layering: anim1 , anim2 , anim3 ...
+                    // layering: anim1 | anim2 | anim3 ...
                     
+                    // top layers:
+                    ...Array.from(setsAnim).map((anim) => fallbacks(
+                        anim,
+                        
+                        animRefs.animNone, // default => none anim
+                    )),
+                    
+                    // bottom layer:
                     cssProps.anim,
                 ],
             }),
         ]),
         animRefs,
         animDecls,
+        setsManager,
     ] as const;
 };
 //#endregion animations
