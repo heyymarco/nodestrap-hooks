@@ -2,7 +2,7 @@
 import {
     default as React,
     useState,
-}                           from 'react'         // base technology of our cssfn components
+}                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
 import type {
@@ -61,11 +61,14 @@ import {
     // hooks:
     SizeName,
     usesSizes,
-    themeIf,
+    themeCond,
     outlinedOf,
     mildOf,
     usesAnim,
     
+    
+    
+    // styles:
     usesBasicComponent,
     
     
@@ -332,7 +335,7 @@ export const markActive = () => composition([
  * Creates a conditional color definitions at active state.
  * @returns A `StyleCollection` represents the conditional color definitions at active state.
  */
-export const themeActive = () => themeIf('secondary');
+export const themeActive = () => themeCond('secondary');
 
 export function useStateActivePassive(props: IndicationProps & ElementProps, activeDn?: boolean) {
     // fn props:
