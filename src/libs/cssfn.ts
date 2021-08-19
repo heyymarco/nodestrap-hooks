@@ -414,9 +414,14 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                     return [nestedSelectors, styles];
                 })
                 .filter(([nestedSelectors]) => (nestedSelectors.length > 0)) // filter out empty `nestedSelectors`
-                .map(([nestedSelectors, styles]): Style => {
+                .map(([nestedSelectors, styles]) => [
+                    nestedSelectors,
+                    mergeStyles(styles) // merge the `styles` to single `Style`, for making JSS understand
+                ] as const)
+                .filter(([, mergedStyles]) => !!mergedStyles) // filter out empty `mergedStyles`
+                .map(([nestedSelectors, mergedStyles]): Style => {
                     return {
-                        [nestedSelectors.join(',')] : mergeStyles(styles) as JssValue, // merge the `styles` to single `Style`, for making JSS understand
+                        [nestedSelectors.join(',')] : mergedStyles as JssValue,
                     };
                 }),
             
