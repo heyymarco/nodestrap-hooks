@@ -1,7 +1,7 @@
 // react (builds html using javascript):
 import {
     default as React,
-}                           from 'react'         // base technology of our cssfn components
+}                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
 import type {
@@ -49,7 +49,7 @@ import {
     // react components:
     ElementProps,
     Element,
-}                           from '../libs/react-cssfn' // cssfn for react
+}                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
     fallbacks,
@@ -358,7 +358,7 @@ export const themeOptions = () => Object.keys(color.themes) as ThemeName[];
  * @returns A `StyleCollection` represents color definitions for the default `themeName`.
  */
 export const themeDefault = (themeName: ThemeName|null = null) => {
-    if (themeName) return themeIf(themeName);
+    if (themeName) return themeCond(themeName);
     
     
     
@@ -369,7 +369,7 @@ export const themeDefault = (themeName: ThemeName|null = null) => {
  * @param themeName The given theme name written in camel case.
  * @returns A `StyleCollection` represents the conditional color definitions for the given `themeName`.
  */
-export const themeIf = (themeName: ThemeName) => composition([
+export const themeCond = (themeName: ThemeName) => composition([
     vars({
         [themeDecls.foregCond]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
         [themeDecls.backgCond]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
@@ -388,7 +388,7 @@ export const themeIf = (themeName: ThemeName) => composition([
  * @param themeName The given theme name written in camel case.
  * @returns A `StyleCollection` represents the important conditional color definitions for the given `themeName`.
  */
-export const themeIfIf = (themeName: ThemeName) => composition([
+export const themeImpt = (themeName: ThemeName) => composition([
     vars({
         [themeDecls.foregImpt]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
         [themeDecls.backgImpt]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
@@ -830,6 +830,7 @@ export const usesBorder = () => {
 
 // // states:
 
+// TODO: removed
 // //#region focusBlur
 // export interface FocusBlurVars {
 //     /**
