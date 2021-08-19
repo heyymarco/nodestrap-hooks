@@ -206,102 +206,102 @@ export interface ThemeVars {
     /**
      * themed foreground color.
      */
-    foregTh            : any
+    themeForeg         : any
     /**
      * themed background color.
      */
-    backgTh            : any
+    themeBackg         : any
     /**
      * themed border color.
      */
-    borderTh           : any
+    themeBorder        : any
     
     /**
      * themed foreground color - at outlined variant.
      */
-    outlinedForegTh    : any
+    themeForegOutlined : any
     
     /**
      * themed foreground color - at mild variant.
      */
-    mildForegTh        : any
+    themeForegMild     : any
     /**
      * themed background color - at mild variant.
      */
-    mildBackgTh        : any
+    themeBackgMild     : any
     
     /**
-     * themed boxShadow color - at focused state.
+     * themed focus color - at focused state.
      */
-    focusBoxShadowTh   : any
+    themeFocus         : any
     
     
     
     /**
      * conditional unthemed foreground color.
      */
-    foregIf            : any
+    condForeg          : any
     /**
      * conditional unthemed background color.
      */
-    backgIf            : any
+    condBackg          : any
     /**
      * conditional unthemed border color.
      */
-    borderIf           : any
+    condBorder         : any
     
     /**
      * conditional unthemed foreground color - at outlined variant.
      */
-    outlinedForegIf    : any
+    condForegOutlined  : any
     
     /**
      * conditional unthemed foreground color - at mild variant.
      */
-    mildForegIf        : any
+    condForegMild      : any
     /**
      * conditional unthemed background color - at mild variant.
      */
-    mildBackgIf        : any
+    condBackgMild      : any
     
     /**
-     * conditional unthemed boxShadow color - at focused state.
+     * conditional unthemed focus color - at focused state.
      */
-    focusBoxShadowIf   : any
+    condFocus          : any
     
     
     
     /**
      * important conditional unthemed foreground color.
      */
-    foregIfIf          : any
+    imptForeg          : any
     /**
      * important conditional unthemed background color.
      */
-    backgIfIf          : any
+    imptBackg          : any
     /**
      * important conditional unthemed border color.
      */
-    borderIfIf         : any
+    imptBorder         : any
     
     /**
      * important conditional unthemed foreground color - at outlined variant.
      */
-    outlinedForegIfIf  : any
+    imptForegOutlined  : any
     
     /**
      * important conditional unthemed foreground color - at mild variant.
      */
-    mildForegIfIf      : any
+    imptForegMild      : any
     /**
      * important conditional unthemed background color - at mild variant.
      */
-    mildBackgIfIf      : any
+    imptBackgMild      : any
     
     /**
-     * important conditional unthemed boxShadow color - at focused state.
+     * important conditional unthemed focus color - at focused state.
      */
-    focusBoxShadowIfIf : any
+    imptFocus          : any
 }
 const [themeRefs, themeDecls] = createCssVar<ThemeVars>();
 
@@ -334,16 +334,16 @@ export const usesThemes = (factory = themeOf, options = themeOptions()) => {
  */
 export const themeOf = (themeName: ThemeName) => composition([
     vars({
-        [themeDecls.foregTh]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgTh]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderTh]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        [themeDecls.themeForeg]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.themeBackg]         : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.themeBorder]        : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.outlinedForegTh]  : themeRefs.backgTh,
+        [themeDecls.themeForegOutlined] : themeRefs.themeBackg,
         
-        [themeDecls.mildForegTh]      : themeRefs.borderTh,
-        [themeDecls.mildBackgTh]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.themeForegMild]     : themeRefs.themeBorder,
+        [themeDecls.themeBackgMild]     : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusBoxShadowTh] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+        [themeDecls.themeFocus]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 /**
@@ -371,16 +371,16 @@ export const themeDefault = (themeName: ThemeName|null = null) => {
  */
 export const themeIf = (themeName: ThemeName) => composition([
     vars({
-        [themeDecls.foregIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        [themeDecls.condForeg]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.condBackg]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.condBorder]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.outlinedForegIf]  : themeRefs.backgIf,
+        [themeDecls.condForegOutlined]  : themeRefs.condBackg,
         
-        [themeDecls.mildForegIf]      : themeRefs.borderIf,
-        [themeDecls.mildBackgIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.condForegMild]      : themeRefs.condBorder,
+        [themeDecls.condBackgMild]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusBoxShadowIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+        [themeDecls.condFocus]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 /**
@@ -390,16 +390,16 @@ export const themeIf = (themeName: ThemeName) => composition([
  */
 export const themeIfIf = (themeName: ThemeName) => composition([
     vars({
-        [themeDecls.foregIfIf]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgIfIf]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderIfIf]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        [themeDecls.imptForeg]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.imptBackg]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.imptBorder]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.outlinedForegIfIf]  : themeRefs.backgIfIf,
+        [themeDecls.imptForegOutlined]  : themeRefs.imptBackg,
         
-        [themeDecls.mildForegIfIf]      : themeRefs.borderIfIf,
-        [themeDecls.mildBackgIfIf]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.imptForegMild]      : themeRefs.imptBorder,
+        [themeDecls.imptBackgMild]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusBoxShadowIfIf] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+        [themeDecls.imptFocus]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 
@@ -518,11 +518,11 @@ export const usesOutlined = (factory = outlinedOf) => {
             ]),
             vars({
                 [outlinedDecls.outlinedForegFn] : fallbacks(
-                    themeRefs.outlinedForegIfIf, // first  priority
-                    themeRefs.outlinedForegTh,   // second priority
-                    themeRefs.outlinedForegIf,   // third  priority
+                    themeRefs.imptForegOutlined,  // first  priority
+                    themeRefs.themeForegOutlined, // second priority
+                    themeRefs.condForegOutlined,  // third  priority
                     
-                    cssProps.foreg,              // default => uses config's foreground
+                    cssProps.foreg,               // default => uses config's foreground
                 ),
                 
                 [outlinedDecls.outlinedBackgFn] : 'transparent', // set background to transparent, regardless of the theme colors
@@ -609,19 +609,19 @@ export const usesMild = (factory = mildOf) => {
             ]),
             vars({
                 [mildDecls.mildForegFn]: fallbacks(
-                    themeRefs.mildForegIfIf, // first  priority
-                    themeRefs.mildForegTh,   // second priority
-                    themeRefs.mildForegIf,   // third  priority
+                    themeRefs.imptForegMild,  // first  priority
+                    themeRefs.themeForegMild, // second priority
+                    themeRefs.condForegMild,  // third  priority
                     
-                    cssProps.foreg,          // default => uses config's foreground
+                    cssProps.foreg,           // default => uses config's foreground
                 ),
                 
                 [mildDecls.mildBackgFn]: fallbacks(
-                    themeRefs.mildBackgIfIf, // first  priority
-                    themeRefs.mildBackgTh,   // second priority
-                    themeRefs.mildBackgIf,   // third  priority
+                    themeRefs.imptBackgMild,  // first  priority
+                    themeRefs.themeBackgMild, // second priority
+                    themeRefs.condBackgMild,  // third  priority
                     
-                    cssProps.backg,          // default => uses config's background
+                    cssProps.backg,           // default => uses config's background
                 ),
             }),
             variants([
@@ -686,11 +686,11 @@ export const usesForeg = () => {
         () => composition([
             vars({
                 [foregDecls.foregFn] : fallbacks(
-                    themeRefs.foregIfIf, // first  priority
-                    themeRefs.foregTh,   // second priority
-                    themeRefs.foregIf,   // third  priority
+                    themeRefs.imptForeg,  // first  priority
+                    themeRefs.themeForeg, // second priority
+                    themeRefs.condForeg,  // third  priority
                     
-                    cssProps.foreg,      // default => uses config's foreground
+                    cssProps.foreg,       // default => uses config's foreground
                 ),
                 [foregDecls.foreg]   : fallbacks(
                     outlinedRefs.outlinedForegTg, // toggle outlined (if `usesOutlined()` applied)
@@ -747,11 +747,11 @@ export const usesBackg = () => {
                 [backgDecls.backgNone] : solidBackg('transparent'),
                 
                 [backgDecls.backgFn]   : fallbacks(
-                    themeRefs.backgIfIf, // first  priority
-                    themeRefs.backgTh,   // second priority
-                    themeRefs.backgIf,   // third  priority
+                    themeRefs.imptBackg,  // first  priority
+                    themeRefs.themeBackg, // second priority
+                    themeRefs.condBackg,  // third  priority
                     
-                    cssProps.backg,      // default => uses config's background
+                    cssProps.backg,       // default => uses config's background
                 ),
                 [backgDecls.backgCol]  : fallbacks(
                     outlinedRefs.outlinedBackgTg, // toggle outlined (if `usesOutlined()` applied)
@@ -808,11 +808,11 @@ export const usesBorder = () => {
         () => composition([
             vars({
                 [borderDecls.borderFn]  : fallbacks(
-                    themeRefs.borderIfIf, // first  priority
-                    themeRefs.borderTh,   // second priority
-                    themeRefs.borderIf,   // third  priority
+                    themeRefs.imptBorder,  // first  priority
+                    themeRefs.themeBorder, // second priority
+                    themeRefs.condBorder,  // third  priority
                     
-                    cssProps.borderColor, // default => uses config's border color
+                    cssProps.borderColor,  // default => uses config's border color
                 ),
                 [borderDecls.borderCol] : fallbacks(
                     outlinedRefs.outlinedForegTg, // toggle outlined (if `usesOutlined()` applied)
@@ -865,11 +865,11 @@ export const usesBorder = () => {
 //         () => composition([
 //             vars({
 //                 [focusBlurDecls.focusBoxShadowFn]  : fallbacks(
-//                     themeRefs.focusBoxShadowIfIf, // first  priority
-//                     themeRefs.focusBoxShadowTh,   // second priority
-//                     themeRefs.focusBoxShadowIf,   // third  priority
+//                     themeRefs.imptFocus,  // first  priority
+//                     themeRefs.themeFocus, // second priority
+//                     themeRefs.condFocus,  // third  priority
                     
-//                     colors.secondaryThin,         // default => uses secondary theme, because its color is neutral
+//                     colors.secondaryThin, // default => uses secondary theme, because its color is neutral
 //                 ),
 //                 [focusBlurDecls.focusBoxShadowCol] : fallbacks(
 //                     // no toggle outlined nor toggle mild yet (might be added in the future)
