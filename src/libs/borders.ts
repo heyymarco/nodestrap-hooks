@@ -14,6 +14,7 @@ import * as radius          from './borders-radiuses'
 
 const radiuses = radius.radiuses;
 export { radiuses, radius };
+export { radiuses as borderRadiuses, radius as borderRadius };
 
 
 
