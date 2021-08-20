@@ -230,6 +230,96 @@ export const usesFocusBlur = () => {
         focusBlurDecls,
     ] as const;
 };
+
+export const useStateFocusBlur = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
+    // fn props:
+    const propEnabled = usePropEnabled(props);
+
+
+
+    // states:
+    const [focused,   setFocused  ] = useState<boolean>(props.focus ?? false); // true => focus, false => blur
+    const [animating, setAnimating] = useState<boolean|null>(null); // null => no-animation, true => focusing-animation, false => blurring-animation
+
+    const [focusDn,   setFocusDn  ] = useState<boolean>(false);     // uncontrollable (dynamic) state: true => user focus, false => user blur
+
+
+    
+    /*
+     * state is always blur if disabled
+     * state is focus/blur based on [controllable focus] (if set) and fallback to [uncontrollable focus]
+     */
+    const focusFn: boolean = propEnabled && (props.focus /*controllable*/ ?? focusDn /*uncontrollable*/);
+
+    if (focused !== focusFn) { // change detected => apply the change & start animating
+        setFocused(focusFn);   // remember the last change
+        setAnimating(focusFn); // start focusing-animation/blurring-animation
+    }
+
+
+    
+    const handleFocus = () => {
+        if (!propEnabled)              return; // control is disabled => no response required
+        if (props.focus !== undefined) return; // controllable [focus] is set => no uncontrollable required
+
+
+
+        setFocusDn(true);
+    }
+    const handleBlur = () => {
+        if (!propEnabled)              return; // control is disabled => no response required
+        if (props.focus !== undefined) return; // controllable [focus] is set => no uncontrollable required
+
+
+
+        setFocusDn(false);
+    }
+    const handleIdle = () => {
+        // clean up finished animation
+
+        setAnimating(null); // stop focusing-animation/blurring-animation
+    }
+    return {
+        focus    : focused,
+
+        class    : ((): string|null => {
+            // focusing:
+            if (animating === true) {
+                // focusing by controllable prop => use class .focus
+                if (props.focus !== undefined) return 'focus';
+
+                // negative [tabIndex] => can't be focused by user input => treats Control as *wrapper* element => use class .focus
+                if ((props.tabIndex ?? 0) < 0) return 'focus';
+
+                // otherwise use pseudo :focus
+                return null;
+            } // if
+
+            // blurring:
+            if (animating === false) return 'blur';
+
+            // fully focused:
+            if (focused) return 'focused';
+
+            // fully blurred:
+            if (props.focus !== undefined) {
+                return 'blurred'; // blurring by controllable prop => use class .blurred to kill pseudo :focus
+            }
+            else {
+                return null; // discard all classes above
+            } // if
+        })(),
+
+        handleFocus        : handleFocus,
+        handleBlur         : handleBlur,
+        handleAnimationEnd : (e: React.AnimationEvent<HTMLElement>) => {
+            if (e.target !== e.currentTarget) return; // no bubbling
+            if (/((?<![a-z])(focus|blur)|(?<=[a-z])(Focus|Blur))(?![a-z])/.test(e.animationName)) {
+                handleIdle();
+            }
+        },
+    };
+};
 //#endregion focusBlur
 
 //#region arriveLeave
@@ -310,6 +400,90 @@ export const usesArriveLeave = () => {
         arriveLeaveRefs,
         arriveLeaveDecls,
     ] as const;
+};
+
+export const useStateArriveLeave = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>, stateFocusBlur: { focus: boolean }) => {
+    // fn props:
+    const propEnabled = usePropEnabled(props);
+
+
+
+    // states:
+    const [arrived,   setArrived  ] = useState<boolean>(false);     // true => arrive, false => leave
+    const [animating, setAnimating] = useState<boolean|null>(null); // null => no-animation, true => arriving-animation, false => leaving-animation
+
+    const [hoverDn,   setHoverDn  ] = useState<boolean>(false);     // uncontrollable (dynamic) state: true => user hover, false => user leave
+
+
+
+    /*
+     * state is always leave if disabled
+     * state is arrive/leave based on [controllable arrive] (if set) and fallback to ([uncontrollable hover] || [uncontrollable focus])
+     */
+    const arriveFn: boolean = propEnabled && (props.arrive /*controllable*/ ?? (hoverDn /*uncontrollable*/ || stateFocusBlur.focus /*uncontrollable*/));
+
+    if (arrived !== arriveFn) { // change detected => apply the change & start animating
+        setArrived(arriveFn);   // remember the last change
+        setAnimating(arriveFn); // start arriving-animation/leaving-animation
+    }
+
+
+    
+    const handleHover = () => {
+        if (!propEnabled) return; // control is disabled => no response required
+
+
+
+        setHoverDn(true);
+    }
+    const handleLeave  = () => {
+        if (!propEnabled) return; // control is disabled => no response required
+
+
+
+        setHoverDn(false);
+    }
+    const handleIdle   = () => {
+        // clean up finished animation
+
+        setAnimating(null); // stop arriving-animation/leaving-animation
+    }
+    return {
+        arrive : arrived,
+
+        class  : ((): string|null => {
+            if (animating === true) {
+                // arriving by controllable prop => use class .arrive
+                if (props.arrive !== undefined) return 'arrive';
+
+                // otherwise use a combination of :hover || (.focused || .focus || :focus)
+                return null;
+            } // if
+
+            // leaving:
+            if (animating === false) return 'leave';
+
+            // fully arrived:
+            if (arrived) return 'arrived';
+
+            // fully left:
+            if (props.arrive !== undefined) {
+                return 'left'; // arriving by controllable prop => use class .left to kill [:hover || (.focused || .focus || :focus)]
+            }
+            else {
+                return null; // discard all classes above
+            } // if
+        })(),
+
+        handleMouseEnter   : handleHover,
+        handleMouseLeave   : handleLeave,
+        handleAnimationEnd : (e: React.AnimationEvent<HTMLElement>) => {
+            if (e.target !== e.currentTarget) return; // no bubbling
+            if (/((?<![a-z])(arrive|leave)|(?<=[a-z])(Arrive|Leave))(?![a-z])/.test(e.animationName)) {
+                handleIdle();
+            }
+        },
+    };
 };
 //#endregion arriveLeave
 
@@ -478,184 +652,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
-// hooks:
-
-export function useStateFocusBlur<TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) {
-    // fn props:
-    const propEnabled = usePropEnabled(props);
-
-
-
-    // states:
-    const [focused,   setFocused  ] = useState<boolean>(props.focus ?? false); // true => focus, false => blur
-    const [animating, setAnimating] = useState<boolean|null>(null); // null => no-animation, true => focusing-animation, false => blurring-animation
-
-    const [focusDn,   setFocusDn  ] = useState<boolean>(false);     // uncontrollable (dynamic) state: true => user focus, false => user blur
-
-
-    
-    /*
-     * state is always blur if disabled
-     * state is focus/blur based on [controllable focus] (if set) and fallback to [uncontrollable focus]
-     */
-    const focusFn: boolean = propEnabled && (props.focus /*controllable*/ ?? focusDn /*uncontrollable*/);
-
-    if (focused !== focusFn) { // change detected => apply the change & start animating
-        setFocused(focusFn);   // remember the last change
-        setAnimating(focusFn); // start focusing-animation/blurring-animation
-    }
-
-
-    
-    const handleFocus = () => {
-        if (!propEnabled)              return; // control is disabled => no response required
-        if (props.focus !== undefined) return; // controllable [focus] is set => no uncontrollable required
-
-
-
-        setFocusDn(true);
-    }
-    const handleBlur = () => {
-        if (!propEnabled)              return; // control is disabled => no response required
-        if (props.focus !== undefined) return; // controllable [focus] is set => no uncontrollable required
-
-
-
-        setFocusDn(false);
-    }
-    const handleIdle = () => {
-        // clean up finished animation
-
-        setAnimating(null); // stop focusing-animation/blurring-animation
-    }
-    return {
-        focus    : focused,
-
-        class    : ((): string|null => {
-            // focusing:
-            if (animating === true) {
-                // focusing by controllable prop => use class .focus
-                if (props.focus !== undefined) return 'focus';
-
-                // negative [tabIndex] => can't be focused by user input => treats Control as *wrapper* element => use class .focus
-                if ((props.tabIndex ?? 0) < 0) return 'focus';
-
-                // otherwise use pseudo :focus
-                return null;
-            } // if
-
-            // blurring:
-            if (animating === false) return 'blur';
-
-            // fully focused:
-            if (focused) return 'focused';
-
-            // fully blurred:
-            if (props.focus !== undefined) {
-                return 'blurred'; // blurring by controllable prop => use class .blurred to kill pseudo :focus
-            }
-            else {
-                return null; // discard all classes above
-            } // if
-        })(),
-
-        handleFocus        : handleFocus,
-        handleBlur         : handleBlur,
-        handleAnimationEnd : (e: React.AnimationEvent<HTMLElement>) => {
-            if (e.target !== e.currentTarget) return; // no bubbling
-            if (/((?<![a-z])(focus|blur)|(?<=[a-z])(Focus|Blur))(?![a-z])/.test(e.animationName)) {
-                handleIdle();
-            }
-        },
-    };
-}
-
-export function useStateArriveLeave<TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>, stateFocusBlur: { focus: boolean }) {
-    // fn props:
-    const propEnabled = usePropEnabled(props);
-
-
-
-    // states:
-    const [arrived,   setArrived  ] = useState<boolean>(false);     // true => arrive, false => leave
-    const [animating, setAnimating] = useState<boolean|null>(null); // null => no-animation, true => arriving-animation, false => leaving-animation
-
-    const [hoverDn,   setHoverDn  ] = useState<boolean>(false);     // uncontrollable (dynamic) state: true => user hover, false => user leave
-
-
-
-    /*
-     * state is always leave if disabled
-     * state is arrive/leave based on [controllable arrive] (if set) and fallback to ([uncontrollable hover] || [uncontrollable focus])
-     */
-    const arriveFn: boolean = propEnabled && (props.arrive /*controllable*/ ?? (hoverDn /*uncontrollable*/ || stateFocusBlur.focus /*uncontrollable*/));
-
-    if (arrived !== arriveFn) { // change detected => apply the change & start animating
-        setArrived(arriveFn);   // remember the last change
-        setAnimating(arriveFn); // start arriving-animation/leaving-animation
-    }
-
-
-    
-    const handleHover = () => {
-        if (!propEnabled) return; // control is disabled => no response required
-
-
-
-        setHoverDn(true);
-    }
-    const handleLeave  = () => {
-        if (!propEnabled) return; // control is disabled => no response required
-
-
-
-        setHoverDn(false);
-    }
-    const handleIdle   = () => {
-        // clean up finished animation
-
-        setAnimating(null); // stop arriving-animation/leaving-animation
-    }
-    return {
-        arrive : arrived,
-
-        class  : ((): string|null => {
-            if (animating === true) {
-                // arriving by controllable prop => use class .arrive
-                if (props.arrive !== undefined) return 'arrive';
-
-                // otherwise use a combination of :hover || (.focused || .focus || :focus)
-                return null;
-            } // if
-
-            // leaving:
-            if (animating === false) return 'leave';
-
-            // fully arrived:
-            if (arrived) return 'arrived';
-
-            // fully left:
-            if (props.arrive !== undefined) {
-                return 'left'; // arriving by controllable prop => use class .left to kill [:hover || (.focused || .focus || :focus)]
-            }
-            else {
-                return null; // discard all classes above
-            } // if
-        })(),
-
-        handleMouseEnter   : handleHover,
-        handleMouseLeave   : handleLeave,
-        handleAnimationEnd : (e: React.AnimationEvent<HTMLElement>) => {
-            if (e.target !== e.currentTarget) return; // no bubbling
-            if (/((?<![a-z])(arrive|leave)|(?<=[a-z])(Arrive|Leave))(?![a-z])/.test(e.animationName)) {
-                handleIdle();
-            }
-        },
-    };
-}
-
-
-
 // react components:
 
 export interface ControlProps<TElement extends HTMLElement = HTMLElement>
@@ -668,7 +664,7 @@ export interface ControlProps<TElement extends HTMLElement = HTMLElement>
 
     arrive?   : boolean
 }
-export default function Control<TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) {
+export const Control = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
     // styles:
     const sheet            = useControlSheet();
 
@@ -723,5 +719,5 @@ export default function Control<TElement extends HTMLElement = HTMLElement>(prop
             }}
         />
     );
-}
-export { Control }
+};
+export { Control as default }
