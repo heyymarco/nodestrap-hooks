@@ -64,12 +64,14 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
-import
+import {
     colors,
-    * as color              from './colors'      // configurable colors & theming defs
-import
+    themes as colorThemes,
+}                           from './colors'      // configurable colors & theming defs
+import {
     borders,
-    * as border             from './borders'     // configurable borders & border radiuses defs
+    borderRadiuses,
+}                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
 import typos                from './typos/index' // configurable typography (texting) defs
 
@@ -201,7 +203,7 @@ export const useVariantOrientation = (props: VariantOrientation) => {
 // colors:
 
 //#region themes
-export type ThemeName = (keyof typeof color.themes)
+export type ThemeName = (keyof typeof colorThemes)
 export interface ThemeVars {
     /**
      * themed foreground color.
@@ -350,7 +352,7 @@ export const themeOf = (themeName: ThemeName) => composition([
  * Gets the all available theme options.
  * @returns A `ThemeName[]` represents the all available theme options.
  */
-export const themeOptions = () => Object.keys(color.themes) as ThemeName[];
+export const themeOptions = () => Object.keys(colorThemes) as ThemeName[];
 
 /**
  * Creates the default color definitions for unspecified `themeName`.
@@ -828,73 +830,6 @@ export const usesBorder = () => {
 //#endregion border
 
 
-// // states:
-
-// TODO: removed
-// //#region focusBlur
-// export interface FocusBlurVars {
-//     /**
-//      * functional boxShadow color - at focus state.
-//      */
-//     focusBoxShadowFn  : any
-//     /**
-//      * final boxShadow color - at focus state.
-//      */
-//     focusBoxShadowCol : any
-//     /**
-//      * final boxShadow single layer - at focus state.
-//      */
-//     focusBoxShadowLy  : any
-//     /**
-//      * toggles on boxShadow single layer - at focus state.
-//      */
-//     focusBoxShadowTg : any
-// }
-// const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
-
-// /**
-//  * Uses focus & blur states.
-//  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
-//  */
-// export const usesFocusBlurBase = () => {
-//     // dependencies:
-//     const [, themeRefs] = usesThemes();
-    
-    
-    
-//     return [
-//         () => composition([
-//             vars({
-//                 [focusBlurDecls.focusBoxShadowFn]  : fallbacks(
-//                     themeRefs.focusImpt,  // first  priority
-//                     themeRefs.focusTheme, // second priority
-//                     themeRefs.focusCond,  // third  priority
-                    
-//                     colors.secondaryThin, // default => uses secondary theme, because its color is neutral
-//                 ),
-//                 [focusBlurDecls.focusBoxShadowCol] : fallbacks(
-//                     // no toggle outlined nor toggle mild yet (might be added in the future)
-                    
-//                     focusBlurRefs.focusBoxShadowFn, // default => uses our `focusBoxShadowFn`
-//                 ),
-//                 [focusBlurDecls.focusBoxShadowLy]  : [[ // double array => makes the JSS treat as space separated values
-//                     // combining: pos width spread color ...
-                    
-//                     // focusBoxShadow pos, width, spread, etc:
-//                     cssProps.boxShadowFocus,
-                    
-//                     // focusBoxShadow color:
-//                     focusBlurRefs.focusBoxShadowCol,
-//                 ]],
-//             }),
-//         ]),
-//         focusBlurRefs,
-//         focusBlurDecls,
-//     ] as const;
-// }
-// //#endregion focusBlur
-
-
 // animations:
 
 //#region animations
@@ -1141,9 +1076,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         border            : borders.default,
         borderColor       : borders.color,
-        borderRadius      : border.radiuses.md,
-        borderRadiusSm    : border.radiuses.sm,
-        borderRadiusLg    : border.radiuses.lg,
+        borderRadius      : borderRadiuses.md,
+        borderRadiusSm    : borderRadiuses.sm,
+        borderRadiusLg    : borderRadiuses.lg,
         //#endregion foreg, backg, borders
 
         
@@ -1176,7 +1111,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         ],
 
         boxShadow         : [[0, 0, 'transparent']],
-        boxShadowFocus    : [[0, 0, 0, '0.25rem' ]], // supports for Control children's theming
         filter            : 'brightness(100%)',
         transf            : 'translate(0)',
 
