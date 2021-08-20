@@ -27,7 +27,7 @@ import {
 import {
     // hooks:
     createUseCssfnStyle,
-}                           from '../libs/react-cssfn' // cssfn for react
+}                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
     
