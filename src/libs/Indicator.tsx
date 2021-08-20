@@ -6,10 +6,6 @@ import {
 
 // cssfn:
 import type {
-    Optional,
-    Factory,
-}                           from './types'       // cssfn's types
-import type {
     Cust,
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
@@ -286,7 +282,7 @@ export const isActive            = (styles: StyleCollection) => rule([selectorIs
 export const isPassive           = (styles: StyleCollection) => rule([selectorIsPassivating, selectorIsPassived], styles);
 export const isActivePassivating = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived  , selectorIsPassivating], styles);
 
-export const usesActivePassive = (onActive: (Optional<Factory<StyleCollection>>) = markActive) => {
+export const usesActivePassive = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
     
@@ -316,8 +312,6 @@ export const usesActivePassive = (onActive: (Optional<Factory<StyleCollection>>)
                         [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
                     }),
                 ]),
-                
-                isActive(onActive?.()),
             ]),
         ]),
         activePassiveRefs,
@@ -514,6 +508,13 @@ export const usesIndicator = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+        states([
+            isActive([
+                imports([
+                    markActive(),
+                ]),
+            ]),
+        ]),
     ]);
 }
 export const useIndicatorSheet = createUseCssfnStyle(() => [
