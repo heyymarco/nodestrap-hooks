@@ -539,6 +539,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     
     
+    //#region keyframes
     const keyframesDisable : PropEx.Keyframes = {
         from : {
             filter: [[ // double array => makes the JSS treat as space separated values
@@ -590,6 +591,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         from : keyframesActive.to,
         to   : keyframesActive.from,
     };
+    //#endregion keyframes
     
     
     
