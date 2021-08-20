@@ -16,7 +16,7 @@ import reportWebVitals from './reportWebVitals';
 // import BasicComponentApp                            from './apps/BasicComponentApp';
 //     import ContainerApp                             from './apps/ContainerApp';
 //     import IndicatorApp                             from './apps/IndicatorApp';
-        import ContentApp                           from './apps/ContentApp';
+//         import ContentApp                           from './apps/ContentApp';
 //            import ListgroupApp                      from './apps/ListgroupApp';
 //                 import AccordionApp                 from './apps/AccordionApp';
 //                 import NavscrollApp                 from './apps/NavscrollApp';
@@ -24,7 +24,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import ModalApp                     from './apps/ModalApp';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
-//         import ControlApp                           from './apps/ControlApp';
+        import ControlApp                           from './apps/ControlApp';
 //             import ActionControlApp                 from './apps/ActionControlApp';
 //                 import ButtonApp                    from './apps/ButtonApp';
 //                     import ButtonIconApp            from './apps/ButtonIconApp';
@@ -46,7 +46,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <ContentApp />
+    <ControlApp />
   ,
   document.getElementById('root')
 );
