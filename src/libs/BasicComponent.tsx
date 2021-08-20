@@ -902,60 +902,48 @@ export const usesAnim = () => {
                 [animDecls.boxShadow]     : [ // single array => makes the JSS treat as comma separated values
                     // layering: boxShadow1 | boxShadow2 | boxShadow3 ...
                     
-                    // top layers:
-                    ...propsManager.boxShadows().reverse().map((boxShadow) => fallbacks(
+                    // layers:
+                    ...propsManager.boxShadows().map((boxShadow) => fallbacks(
                         boxShadow,
                         
                         animRefs.boxShadowNone, // default => none boxShadow
                     )),
-                    
-                    // bottom layer:
-                    cssProps.boxShadow,
                 ],
                 
                 [animDecls.filterNone]    : 'brightness(100%)',
                 [animDecls.filter]        : [[ // double array => makes the JSS treat as space separated values
                     // combining: filter1 * filter2 * filter3 ...
                     
-                    // top layers:
-                    ...propsManager.filters().reverse().map((filter) => fallbacks(
+                    // layers:
+                    ...propsManager.filters().map((filter) => fallbacks(
                         filter,
                         
                         animRefs.filterNone, // default => none filter
                     )),
-                    
-                    // bottom layer:
-                    cssProps.filter,
                 ]],
                 
                 [animDecls.transfNone]    : 'translate(0)',
                 [animDecls.transf]        : [[ // double array => makes the JSS treat as space separated values
                     // combining: transf1 * transf2 * transf3 ...
                     
-                    // top layers:
-                    ...propsManager.transfs().reverse().map((transf) => fallbacks(
+                    // layers:
+                    ...propsManager.transfs().map((transf) => fallbacks(
                         transf,
                         
                         animRefs.transfNone, // default => none transf
                     )),
-                    
-                    // bottom layer:
-                    cssProps.transf,
                 ]],
                 
                 [animDecls.animNone]      : 'none',
                 [animDecls.anim]          : [ // single array => makes the JSS treat as comma separated values
                     // layering: anim1 | anim2 | anim3 ...
                     
-                    // top layers:
-                    ...propsManager.anims().reverse().map((anim) => fallbacks(
+                    // layers:
+                    ...propsManager.anims().map((anim) => fallbacks(
                         anim,
                         
                         animRefs.animNone, // default => none anim
                     )),
-                    
-                    // bottom layer:
-                    cssProps.anim,
                 ],
             }),
         ]),
@@ -1119,6 +1107,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         //#endregion animations
     };
 }, { prefix: 'bsc' });
+propsManager.registerBoxShadow(cssProps.boxShadow);
+propsManager.registerFilter(cssProps.filter);
+propsManager.registerTransf(cssProps.transf);
+propsManager.registerAnim(cssProps.anim);
 
 
 
