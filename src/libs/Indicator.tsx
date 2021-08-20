@@ -494,7 +494,7 @@ export const usesIndicator = () => {
     
     return composition([
         imports([
-            // base:
+            // bases:
             usesBasicComponent(),
             
             // layouts:
