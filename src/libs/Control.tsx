@@ -209,18 +209,18 @@ export const usesFocusBlur = () => {
             states([
                 isFocused([
                     vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusFn,
+                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusLy,
                     }),
                 ]),
                 isFocusing([
                     vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusFn,
+                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusLy,
                         [focusBlurDecls.animFocusBlur]      : cssProps.animFocus,
                     }),
                 ]),
                 isBlurring([
                     vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusFn,
+                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusLy,
                         [focusBlurDecls.animFocusBlur]      : cssProps.animBlur,
                     }),
                 ]),
