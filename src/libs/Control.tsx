@@ -104,7 +104,7 @@ export const markActive = () => composition([
 ]);
 
 // change default parameter from `null` to 'secondary':
-export const themeDefault = (themeName: ThemeName|null = null) => basicComponentThemeDefault();
+export const themeDefault = (themeName: ThemeName|null = 'secondary') => basicComponentThemeDefault(themeName);
 
 // change default parameter from 'secondary' to 'primary':
 export const themeActive  = (themeName: ThemeName = 'primary') => indicatorThemeActive(themeName);
