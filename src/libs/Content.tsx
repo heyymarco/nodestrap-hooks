@@ -90,12 +90,12 @@ export const useContentSheet = createUseCssfnStyle(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region spacings
-        paddingInline        : spacers.default, // override to BasicElement
-        paddingBlock         : spacers.default, // override to BasicElement
-        paddingInlineSm      : spacers.sm,      // override to BasicElement
-        paddingBlockSm       : spacers.sm,      // override to BasicElement
-        paddingInlineLg      : spacers.lg,      // override to BasicElement
-        paddingBlockLg       : spacers.lg,      // override to BasicElement
+        paddingInline        : spacers.default, // override to BasicComponent
+        paddingBlock         : spacers.default, // override to BasicComponent
+        paddingInlineSm      : spacers.sm,      // override to BasicComponent
+        paddingBlockSm       : spacers.sm,      // override to BasicComponent
+        paddingInlineLg      : spacers.lg,      // override to BasicComponent
+        paddingBlockLg       : spacers.lg,      // override to BasicComponent
         //#endregion spacings
     };
 }, { prefix: 'ct' });
