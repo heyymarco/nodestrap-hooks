@@ -1061,6 +1061,7 @@ export const usesBasicComponent = () => {
             sizes(),
             
             // colors:
+            themeDefault(),
             themes(),
             gradient(),
             outlined(),
