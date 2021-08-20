@@ -167,7 +167,7 @@ export const usesEnableDisable = () => {
     ] as const;
 };
 
-export function useStateEnableDisable(props: IndicationProps & ElementProps) {
+export const useStateEnableDisable = (props: IndicationProps & ElementProps) => {
     // fn props:
     const propEnabled = usePropEnabled(props);
     const htmlCtrls   = [
@@ -247,7 +247,7 @@ export function useStateEnableDisable(props: IndicationProps & ElementProps) {
             }
         },
     };
-}
+};
 //#endregion enableDisable
 
 //#region activePassive
@@ -334,7 +334,7 @@ export const markActive = () => composition([
  */
 export const themeActive = (themeName: ThemeName = 'secondary') => themeCond(themeName);
 
-export function useStateActivePassive(props: IndicationProps & ElementProps, activeDn?: boolean) {
+export const useStateActivePassive = (props: IndicationProps & ElementProps, activeDn?: boolean) => {
     // fn props:
     const propActive = usePropActive(props, null);
     const isCheckbox = (props.tag === 'input') && ((props as any).type === 'checkbox');
@@ -406,7 +406,7 @@ export function useStateActivePassive(props: IndicationProps & ElementProps, act
             }
         },
     };
-}
+};
 
 export interface TogglerActiveProps
     extends
@@ -416,7 +416,7 @@ export interface TogglerActiveProps
     defaultActive?  : boolean
     onActiveChange? : (active: boolean) => void
 }
-export function useTogglerActive(props: TogglerActiveProps, changeEventTarget?: (React.RefObject<HTMLInputElement>|null)): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
+export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: (React.RefObject<HTMLInputElement>|null)): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
     // fn props:
     const propAccess   = usePropAccessibility<boolean, boolean, null>(props, undefined, undefined, null);
     const propEnabled  = propAccess.enabled;
@@ -469,7 +469,7 @@ export function useTogglerActive(props: TogglerActiveProps, changeEventTarget?: 
         activeFn,
         setActive,
     ];
-}
+};
 //#endregion activePassive
 
 
@@ -629,7 +629,7 @@ export interface IndicatorProps<TElement extends HTMLElement = HTMLElement>
         IndicationProps
 {
 }
-export default function Indicator<TElement extends HTMLElement = HTMLElement>(props: IndicatorProps<TElement>) {
+export const Indicator = <TElement extends HTMLElement = HTMLElement>(props: IndicatorProps<TElement>) => {
     // styles:
     const sheet        = useIndicatorSheet();
     
@@ -695,5 +695,5 @@ export default function Indicator<TElement extends HTMLElement = HTMLElement>(pr
             </AccessibilityProvider> }
         </BasicComponent>
     );
-}
-export { Indicator }
+};
+export { Indicator as default }
