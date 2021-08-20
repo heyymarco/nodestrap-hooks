@@ -130,6 +130,10 @@ export const isEnable          = (styles: StyleCollection) => rule([selectorIsEn
 export const isDisable         = (styles: StyleCollection) => rule([selectorIsDisabling, selectorIsDisabled], styles);
 export const isEnablingDisable = (styles: StyleCollection) => rule([selectorIsEnabling , selectorIsDisabling, selectorIsDisabled], styles);
 
+/**
+ * Uses enable & disable states.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents enable & disable state definitions.
+ */
 export const usesEnableDisable = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
@@ -282,6 +286,10 @@ export const isActive            = (styles: StyleCollection) => rule([selectorIs
 export const isPassive           = (styles: StyleCollection) => rule([selectorIsPassivating, selectorIsPassived], styles);
 export const isActivePassivating = (styles: StyleCollection) => rule([selectorIsActivating , selectorIsActived  , selectorIsPassivating], styles);
 
+/**
+ * Uses active & passive states.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
+ */
 export const usesActivePassive = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
