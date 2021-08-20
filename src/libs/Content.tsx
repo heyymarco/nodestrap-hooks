@@ -64,7 +64,7 @@ export const usesContent = () => {
     
     return composition([
         imports([
-            // base:
+            // bases:
             usesIndicator(),
             
             // layouts:
