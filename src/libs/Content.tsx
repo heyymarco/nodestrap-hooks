@@ -111,7 +111,7 @@ export interface ContentProps<TElement extends HTMLElement = HTMLElement>
     // children:
     children? : React.ReactNode
 }
-export default function Content<TElement extends HTMLElement = HTMLElement>(props: ContentProps<TElement>) {
+export const Content = <TElement extends HTMLElement = HTMLElement>(props: ContentProps<TElement>) => {
     // styles:
     const sheet = useContentSheet();
 
@@ -128,5 +128,5 @@ export default function Content<TElement extends HTMLElement = HTMLElement>(prop
             mainClass={props.mainClass ?? sheet.main}
         />
     );
-}
-export { Content }
+};
+export { Content as default }
