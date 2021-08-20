@@ -1018,7 +1018,7 @@ export const usesBasicComponent = () => {
             
             
             
-            // states & animations:
+            // animations:
             boxShadow   : animRefs.boxShadow,
             filter      : animRefs.filter,
             transf      : animRefs.transf,
