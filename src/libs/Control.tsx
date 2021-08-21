@@ -56,15 +56,15 @@ import {
     usesSizes,
     ThemeName,
     usesThemes,
-    themeDefault as basicComponentThemeDefault,
+    usesThemeDefault as basicComponentUsesThemeDefault,
     usesAnim,
 }                           from './BasicComponent'
 import {
     // hooks:
     isDisable,
     isActive,
-    markActive  as indicatorMarkActive,
-    themeActive as indicatorThemeActive,
+    markActive      as indicatorMarkActive,
+    usesThemeActive as indicatorUsesThemeActive,
     
     
     
@@ -99,15 +99,15 @@ export const markActive = () => composition([
     imports([
         indicatorMarkActive(),
         
-        themeActive(),     // switch to active theme
+        usesThemeActive(), // switch to active theme
     ]),
 ]);
 
 // change default parameter from `null` to 'secondary':
-export const themeDefault = (themeName: ThemeName|null = 'secondary') => basicComponentThemeDefault(themeName);
+export const usesThemeDefault = (themeName: ThemeName|null = 'secondary') => basicComponentUsesThemeDefault(themeName);
 
 // change default parameter from 'secondary' to 'primary':
-export const themeActive  = (themeName: ThemeName = 'primary') => indicatorThemeActive(themeName);
+export const usesThemeActive  = (themeName: ThemeName = 'primary') => indicatorUsesThemeActive(themeName);
 //#endregion activePassive
 
 //#region focusBlur
@@ -522,7 +522,7 @@ export const usesControl = () => {
             sizes(),
             
             // colors:
-            themeDefault(),
+            usesThemeDefault(),
             
             // states:
             focusBlur(),
