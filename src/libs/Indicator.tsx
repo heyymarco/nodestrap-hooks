@@ -59,7 +59,7 @@ import {
     // hooks:
     usesSizes,
     ThemeName,
-    themeCond,
+    usesThemeCond,
     outlinedOf,
     mildOf,
     usesAnim,
@@ -332,7 +332,7 @@ export const markActive = () => composition([
         outlinedOf(false), // kill outlined variant
         mildOf(false),     // kill mild     variant
         
-        themeActive(),     // switch to active theme
+        usesThemeActive(), // switch to active theme
     ]),
 ]);
 /**
@@ -340,7 +340,7 @@ export const markActive = () => composition([
  * @param themeName The name of active theme.
  * @returns A `StyleCollection` represents the conditional color definitions at active state.
  */
-export const themeActive = (themeName: ThemeName = 'secondary') => themeCond(themeName);
+export const usesThemeActive = (themeName: ThemeName = 'secondary') => usesThemeCond(themeName);
 
 export const useStateActivePassive = (props: IndicationProps & ElementProps, activeDn?: boolean) => {
     // fn props:
