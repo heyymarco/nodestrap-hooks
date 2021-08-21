@@ -24,8 +24,8 @@ import reportWebVitals from './reportWebVitals';
 //                 import ModalApp                     from './apps/ModalApp';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
-        import ControlApp                           from './apps/ControlApp';
-//             import ActionControlApp                 from './apps/ActionControlApp';
+//        import ControlApp                           from './apps/ControlApp';
+            import ActionControlApp                 from './apps/ActionControlApp';
 //                 import ButtonApp                    from './apps/ButtonApp';
 //                     import ButtonIconApp            from './apps/ButtonIconApp';
 //             import EditableControlApp               from './apps/EditableControlApp';
@@ -46,7 +46,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <ControlApp />
+    <ActionControlApp />
   ,
   document.getElementById('root')
 );
