@@ -120,19 +120,19 @@ export interface FocusBlurVars {
     /**
      * functional boxShadow color - at focus state.
      */
-    boxShadowFocusFn  : any
+    boxShadowFocusFn   : any
     /**
      * final boxShadow color - at focus state.
      */
-    boxShadowFocusCol : any
+    boxShadowFocusCol  : any
     /**
      * final boxShadow single layer - at focus state.
      */
-    boxShadowFocusLy  : any
+    boxShadowFocusLy   : any
     /**
      * toggles on boxShadow single layer - at focus state.
      */
-    boxShadowFocusTg : any
+    boxShadowFocusTg   : any
 }
 const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
 
@@ -170,7 +170,7 @@ export const isFocusBlurring = (styles: StyleCollection) => rule([selectorIsFocu
  * Uses focus & blur states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
  */
-export const usesFocusBlur = () => {
+export const usesFocusBlur   = () => {
     // dependencies:
     const [, themeRefs] = usesThemes();
     const [, animRefs ] = usesAnim();
@@ -190,15 +190,15 @@ export const usesFocusBlur = () => {
                 [focusBlurDecls.boxShadowFocusCol] : fallbacks(
                     // no toggle outlined nor toggle mild yet (might be added in the future)
                     
-                    focusBlurRefs.boxShadowFocusFn, // default => uses our `focusBoxShadowFn`
+                    focusBlurRefs.boxShadowFocusFn, // default => uses our `boxShadowFocusFn`
                 ),
                 [focusBlurDecls.boxShadowFocusLy]  : [[ // double array => makes the JSS treat as space separated values
                     // combining: pos width spread color ...
                     
-                    // focusBoxShadow pos, width, spread, etc:
+                    // boxShadowFocus pos, width, spread, etc:
                     cssProps.boxShadowFocus,
                     
-                    // focusBoxShadow color:
+                    // boxShadowFocus color:
                     focusBlurRefs.boxShadowFocusCol,
                 ]],
             }),
@@ -365,6 +365,10 @@ export const isArrive        = (styles: StyleCollection) => rule([selectorIsArri
 export const isLeave         = (styles: StyleCollection) => rule([selectorIsLeaving , selectorIsLeft    ], styles);
 export const isArriveLeaving = (styles: StyleCollection) => rule([selectorIsArriving, selectorIsArrived  , selectorIsLeaving], styles);
 
+/**
+ * Uses arrive (hover) & leave states.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents arrive (hover) & leave state definitions.
+ */
 export const usesArriveLeave = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
@@ -624,20 +628,20 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         to   : keyframesArrive.from,
     };
     //#endregion keyframes
-
+    
     
     
     return {
         // accessibility:
         cursor              : 'pointer',
         cursorDisable       : 'not-allowed',
-    
-    
-
+        
+        
+        
         //#region animations
         boxShadowFocus      : [[0, 0, 0, '0.25rem' ]], // supports for Control children's theming
         filterArrive        : [['brightness(85%)', 'drop-shadow(0 0 0.01px rgba(0,0,0,0.4))']],
-
+        
         '@keyframes focus'  : keyframesFocus,
         '@keyframes blur'   : keyframesBlur,
         '@keyframes arrive' : keyframesArrive,
