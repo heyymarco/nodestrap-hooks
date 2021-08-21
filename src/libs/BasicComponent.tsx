@@ -359,8 +359,8 @@ export const themeOptions = () => Object.keys(colorThemes) as ThemeName[];
  * @param themeName The theme name as the default, written in camel case -or- `null`.
  * @returns A `StyleCollection` represents color definitions for the default `themeName`.
  */
-export const themeDefault = (themeName: ThemeName|null = null) => {
-    if (themeName) return themeCond(themeName);
+export const usesThemeDefault = (themeName: ThemeName|null = null) => {
+    if (themeName) return usesThemeCond(themeName);
     
     
     
@@ -371,7 +371,7 @@ export const themeDefault = (themeName: ThemeName|null = null) => {
  * @param themeName The given theme name written in camel case.
  * @returns A `StyleCollection` represents the conditional color definitions for the given `themeName`.
  */
-export const themeCond = (themeName: ThemeName) => composition([
+export const usesThemeCond = (themeName: ThemeName) => composition([
     vars({
         [themeDecls.foregCond]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
         [themeDecls.backgCond]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
@@ -390,7 +390,7 @@ export const themeCond = (themeName: ThemeName) => composition([
  * @param themeName The given theme name written in camel case.
  * @returns A `StyleCollection` represents the important conditional color definitions for the given `themeName`.
  */
-export const themeImpt = (themeName: ThemeName) => composition([
+export const usesThemeImpt = (themeName: ThemeName) => composition([
     vars({
         [themeDecls.foregImpt]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
         [themeDecls.backgImpt]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
@@ -984,7 +984,7 @@ export const usesBasicComponent = () => {
             sizes(),
             
             // colors:
-            themeDefault(),
+            usesThemeDefault(),
             themes(),
             gradient(),
             outlined(),
