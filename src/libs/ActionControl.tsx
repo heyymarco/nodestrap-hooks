@@ -100,7 +100,7 @@ const [pressReleaseRefs, pressReleaseDecls] = createCssVar<PressReleaseVars>();
 const selectorIsPressed   =  '.pressed'
 // .press = programatically press, :active = user press:
 const selectorIsPressing  = ['.press',
-':active:not(.disabled):not(.disable):not(:disabled):not(.pressed):not(.release):not(.released)']
+                             ':active:not(.disabled):not(.disable):not(:disabled):not(.pressed):not(.release):not(.released)']
 // .release will be added after loosing press and will be removed after releasing-animation done:
 const selectorIsReleasing =  '.release'
 // if all above are not set => released
