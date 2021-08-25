@@ -499,11 +499,6 @@ export const usesEditableControl = () => {
             validInvalid(),
         ]),
         layout({
-            // accessibility:
-            userSelect : 'none', // disable selecting text (double clicking not causing selecting text)
-            
-            
-            
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
