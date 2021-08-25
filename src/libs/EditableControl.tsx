@@ -30,6 +30,7 @@ import {
     
     
     // rules:
+    variants,
     states,
     rule,
 }                           from './cssfn'       // cssfn core
@@ -55,6 +56,10 @@ import {
     usesSizes,
     ThemeName,
     usesThemeImpt,
+    isOutlined,
+    isMild,
+    usesMild,
+    usesForeg,
     usesBackg,
     usesAnim,
 }                           from './BasicComponent'
@@ -83,9 +88,6 @@ import {
     // react components:
     ValidationProps,
 }                           from './validations'
-import {
-    colors,
-}                           from './colors'      // configurable colors & theming defs
 
 
 
@@ -95,8 +97,11 @@ import {
 
 //#region validInvalid
 export interface ValidInvalidVars {
-    animValidUnvalid     : any
-    animInvalidUninvalid : any
+    animValidUnvalid       : any
+    animInvalidUninvalid   : any
+    
+    foregValidInvalidStart : any
+    backgValidInvalidStart : any
 }
 const [validInvalidRefs, validInvalidDecls] = createCssVar<ValidInvalidVars>();
 
@@ -160,7 +165,10 @@ export const isNoValidation   = (styles: StyleCollection) => rule(selectorIsNoVa
  */
 export const usesValidInvalid = () => {
     // dependencies:
-    const [, animRefs] = usesAnim();
+    const [, mildRefs ] = usesMild();
+    const [, foregRefs] = usesForeg();
+    const [, backgRefs] = usesBackg();
+    const [, animRefs ] = usesAnim();
     
     
     
@@ -190,6 +198,26 @@ export const usesValidInvalid = () => {
                 isUninvalidating([
                     vars({
                         [validInvalidDecls.animInvalidUninvalid] : cssProps.animUninvalid,
+                    }),
+                ]),
+            ]),
+            
+            
+            vars({
+                [validInvalidDecls.foregValidInvalidStart]: mildRefs.foregMildFn,
+                [validInvalidDecls.backgValidInvalidStart]: mildRefs.backgMildFn,
+            }),
+            variants([
+                isOutlined([
+                    vars({
+                        [validInvalidDecls.foregValidInvalidStart] : foregRefs.foregFn,
+                        [validInvalidDecls.backgValidInvalidStart] : backgRefs.backgFn,
+                    }),
+                ]),
+                isMild([
+                    vars({
+                        [validInvalidDecls.foregValidInvalidStart] : foregRefs.foregFn,
+                        [validInvalidDecls.backgValidInvalidStart] : backgRefs.backgFn,
                     }),
                 ]),
             ]),
@@ -529,31 +557,28 @@ export const useEditableControlSheet = createUseCssfnStyle(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
+    const [, {foreg}] = usesForeg();
     const [, {backg}] = usesBackg();
+    const [, {foregValidInvalidStart, backgValidInvalidStart}] = usesValidInvalid();
     
     
     
     //#region keyframes
     const keyframesValid     : PropEx.Keyframes = {
         from : {
-            backg: colors.success,
+            foreg : foregValidInvalidStart,
+            backg : backgValidInvalidStart,
         },
         to   : {
-            backg: backg,
+            foreg : foreg,
+            backg : backg,
         },
     };
     const keyframesUnvalid   : PropEx.Keyframes = {};
     
     
     
-    const keyframesInvalid   : PropEx.Keyframes = {
-        from : {
-            backg: colors.danger,
-        },
-        to   : {
-            backg: backg,
-        },
-    };
+    const keyframesInvalid   : PropEx.Keyframes = {...keyframesValid}; // copy but keeps different by reference
     const keyframesUninvalid : PropEx.Keyframes = {};
     //#endregion keyframes
     
