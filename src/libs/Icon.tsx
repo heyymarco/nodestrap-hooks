@@ -6,6 +6,9 @@ import {
 
 // cssfn:
 import type {
+    Factory,
+}                           from './types'       // cssfn's types
+import type {
     Cust,
 }                           from './css-types'   // ts defs support for cssfn
 import {
@@ -65,13 +68,16 @@ import {
     VariantSize    as BasicComponentVariantSize,
     useVariantSize as basicComponentUseVariantSize,
     
-    usesThemes,
+    ThemeName,
+    usesThemes     as basicComponentUsesThemes,
     VariantTheme,
     useVariantTheme,
     
     usesMild,
     VariantMild,
     useVariantMild,
+    
+    usesForeg      as basicComponentUsesForeg,
     
     
     
@@ -98,7 +104,23 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicComp
  * @param options Customize the size options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
-export const usesSizes = (factory = sizeOf, options = sizeOptions()) => basicComponentUsesSizes(factory, options as BasicComponentSizeName[]);
+export const usesSizes = (sizeOverwrite?: Cust.Ref, factory = sizeOf, options = sizeOptions()) => {
+    // dependencies:
+    const [sizes, sizeRefs, sizeDecls, ...restSizes] = basicComponentUsesSizes(factory, options as BasicComponentSizeName[]);
+    
+    
+    
+    return [
+        () => sizeOverwrite ? composition([
+            vars({
+                [cssDecls.size]: sizeOverwrite,
+            }),
+        ]) : sizes(),
+        sizeRefs,
+        sizeDecls,
+        ...restSizes,
+    ] as const;
+};
 /**
  * Creates sizing definitions for the given `sizeName`.
  * @param sizeName The given size name written in camel case.
@@ -121,6 +143,86 @@ export interface VariantSize {
 }
 export const useVariantSize = (props: VariantSize) => basicComponentUseVariantSize(props as BasicComponentVariantSize);
 //#endregion sizes
+
+
+// colors:
+
+//#region themes
+/**
+ * Uses theme colors.  
+ * For example: `primary`, `secondary`, `danger`, `success`, etc.
+ * @param factory Customize the callback to create color definitions for each color in `options`.
+ * @param options Customize the color options.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents color definitions for each color in `options`.
+ */
+export const usesThemes = (factory?: Factory<StyleCollection>, options?: ThemeName[]) => {
+    // dependencies:
+    const [themes, themeRefs, themeDecls, ...restThemes] = basicComponentUsesThemes(factory, options);
+    
+    
+    
+    return [
+        () => composition([
+            imports([
+                themes(),
+            ]),
+            vars({
+                // prevent theme from inheritance, so the Icon always use currentColor if the theme is not set
+                [themeDecls.backgTheme]     : 'initial',
+                [themeDecls.backgMildTheme] : 'initial',
+            }),
+        ]),
+        themeRefs,
+        themeDecls,
+        ...restThemes,
+    ] as const;
+};
+//#endregion themes
+
+//#region foreg
+/**
+ * Uses foreground color (icon color).
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents foreground color definitions.
+ */
+export const usesForeg = (foregOverwrite?: Cust.Ref) => {
+    // dependencies:
+    const [foreg, foregRefs, foregDecls, ...restForeg] = basicComponentUsesForeg();
+    const [     , themeRefs                          ] = usesThemes();
+    const [     , mildRefs                           ] = usesMild();
+    
+    
+    
+    return [
+        () => foregOverwrite ? composition([
+            vars({
+                [foregDecls.foreg]   : foregOverwrite,
+            }),
+        ]) : composition([
+            imports([
+                foreg(),
+            ]),
+            vars({
+                [foregDecls.foregFn] : fallbacks(
+                 // themeRefs.backgImpt,  // first  priority
+                    themeRefs.backgTheme, // second priority
+                 // themeRefs.backgCond,  // third  priority
+                    
+                    cssProps.foreg,       // default => uses config's foreground
+                ),
+                [foregDecls.foreg]   : fallbacks(
+                 // outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
+                    mildRefs.backgMildTg,         // toggle mild     (if `usesMild()` applied)
+                    
+                    foregRefs.foregFn,            // default => uses our `foregFn`
+                ),
+            }),
+        ]),
+        foregRefs,
+        foregDecls,
+        ...restForeg,
+    ] as const;
+};
+//#endregion foreg
 
 
 
@@ -173,28 +275,23 @@ export const formatOf = (fileName: string) => {
 // styles:
 export interface IconVars {
     /**
-     * functional foreground icon color.
-     */
-    foregFn : any
-    /**
-     * final foreground icon color.
-     */
-    foreg   : any
-    
-    
-    
-    /**
      * Icon's image url or icon's name.
      */
     img     : any
 }
 const [iconRefs, iconDecls] = createCssVar<IconVars>();
 
-export const usesIconBase = (foreg?: Cust.Ref) => {
+export const usesIconBase = (sizeOverwrite?: Cust.Ref, foregOverwrite?: Cust.Ref) => {
     // dependencies:
     
     // layouts:
-    const [sizes]                         = usesSizes();
+    const [sizes]              = usesSizes(sizeOverwrite);
+    
+    // colors:
+    const [themes]             = usesThemes();
+    const [mild]               = usesMild();
+    
+    const [foreg , foregRefs]  = usesForeg(foregOverwrite);
     
     
     
@@ -202,6 +299,12 @@ export const usesIconBase = (foreg?: Cust.Ref) => {
         imports([
             // layouts:
             sizes(),
+            
+            // colors:
+            themes(),
+            mild(),
+            
+            foreg(),
         ]),
         layout({
             // layouts:
@@ -246,48 +349,8 @@ export const usesIconBase = (foreg?: Cust.Ref) => {
             
             
             // foregrounds:
-            foreg : iconRefs.foreg,
+            foreg : foregRefs.foreg,
         }),
-        (foreg ? vars({
-            [iconDecls.foreg] : foreg,
-        }) : null),
-        (foreg ? null : (() => {
-            // dependencies:
-            
-            // colors:
-            const [themes, themeRefs, themeDecls] = usesThemes();
-            const [mild  , mildRefs             ] = usesMild();
-            
-            
-            
-            return composition([
-                imports([
-                    // colors:
-                    themes(),
-                    mild(),
-                ]),
-                vars({
-                    // prevent theme from inheritance, so the Icon always use currentColor if the theme is not set
-                    [themeDecls.backgTheme]     : 'initial',
-                    [themeDecls.backgMildTheme] : 'initial',
-                    
-                    
-                    
-                    [iconDecls.foregFn] : fallbacks(
-                     // themeRefs.backgImpt,  // first  priority
-                        themeRefs.backgTheme, // second priority
-                     // themeRefs.backgCond,  // third  priority
-                        
-                        cssProps.foreg,       // default => uses config's foreground
-                    ),
-                    [iconDecls.foreg]   : fallbacks(
-                        mildRefs.backgMildTg, // toggle mild (if `usesMild()` applied)
-                        
-                        iconRefs.foregFn,     // default => uses our `foregFn`
-                    ),
-                }),
-            ]);
-        })()),
     ]);
 };
 export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
@@ -301,7 +364,7 @@ export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
                     //#region custom font
                     rule('@font-face', composition([
                         imports([
-                            config.font.styles, // define the font's properties
+                            config.font.style, // define the font's properties
                         ]),
                         layout({
                             src: config.font.files.map((file) => `url("${concatUrl(config.font.path, file)}") ${formatOf(file)}`).join(','),
@@ -313,7 +376,7 @@ export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
         ]),
         imports([
             // use the loaded custom font:
-            config.font.styles, // apply the defined font's properties
+            config.font.style, // apply the defined font's properties
         ]),
         layout({
             ...children('::after', [
@@ -538,7 +601,7 @@ const config = {
         /**
          * The css style of icon-font to be loaded.
          */
-        styles : composition([
+        style : composition([
             layout({
                 fontFamily     : '"Material Icons"',
                 fontWeight     : 400,
