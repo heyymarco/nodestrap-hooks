@@ -12,6 +12,26 @@ import type {
 
 
 
+// utilities:
+type LiteralObject      = { [key: string]: any }
+const isLiteralObject   = (object: any): object is LiteralObject => object && (typeof(object) === 'object') && !Array.isArray(object);
+
+const isStyle           = (object: any): object is Style => isLiteralObject(object);
+
+const combineSelector   = (parent: string, children: string): string => {
+    if (!parent) return children;
+    
+    
+    
+    return (
+        children.split(/\s*,\s*/g)
+        .map((child) => `${parent} ${child.trim()}`)
+        .join(',')
+    );
+};
+
+
+
 const ruleGenerateId = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
 
 class GlobalStyleRule {
@@ -97,7 +117,44 @@ const onCreateRule = (key: string, style: Style, options: any): (Rule|any) => {
             return null;
     } // switch
 };
+const onProcessRule = (rule: Rule, sheet?: StyleSheet): void => {
+    if (!sheet)                return;
+    if (rule.type !== 'style') return;
+    
+    const style = (rule as any).style as (Style|null|undefined);
+    if (!style)                return;
+    
+    const globalStyle = (style as any)['@global'];
+    if (!isStyle(globalStyle)) return;
+    
+    
+    
+    const {options} = rule;
+    
+    
+    
+    for (const [propName, propValue] of Object.entries(globalStyle)) {
+        if (!isStyle(propValue)) continue;
+        
+        
+        
+        sheet.addRule(
+            propName,
+            propValue,
+            {
+                ...options,
+                selector: combineSelector((rule as any).selector ?? '', propName),
+            }
+        );
+    } // for
+    
+    
+    
+    // the `@global` operation has been completed => remove unused `@global` prop:
+    delete (style as any)['@global'];
+};
 
 export default function pluginGlobal(): Plugin { return {
     onCreateRule,
+    onProcessRule,
 }}
