@@ -468,6 +468,7 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 export const rule = (selectors: SelectorCollection, styles: StyleCollection): RuleEntry => [selectors, styles];
 // shortcut rule items:
 export const atRoot          = (styles: StyleCollection) => rule(':root'              , styles);
+export const atGlobal        = (styles: StyleCollection) => rule('@global'            , styles);
 export const isFirstChild    = (styles: StyleCollection) => rule(     ':first-child'  , styles);
 export const isNotFirstChild = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
 export const isLastChild     = (styles: StyleCollection) => rule(     ':last-child'   , styles);
