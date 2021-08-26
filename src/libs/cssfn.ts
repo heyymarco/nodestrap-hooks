@@ -469,6 +469,11 @@ export const rule = (selectors: SelectorCollection, styles: StyleCollection): Ru
 // shortcut rule items:
 export const atRoot          = (styles: StyleCollection) => rule(':root'              , styles);
 export const atGlobal        = (styles: StyleCollection) => rule('@global'            , styles);
+export const fontFace        = (styles: StyleCollection) => atGlobal(
+    rules([
+        rule('@font-face', styles),
+    ]),
+);
 export const isFirstChild    = (styles: StyleCollection) => rule(     ':first-child'  , styles);
 export const isNotFirstChild = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
 export const isLastChild     = (styles: StyleCollection) => rule(     ':last-child'   , styles);
