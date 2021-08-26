@@ -35,6 +35,7 @@ import {
     rules,
     variants,
     rule,
+    fontFace,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -359,20 +360,15 @@ export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
             usesIconBase(foreg),
         ]),
         rules([
-            /*rule('@global', composition([
-                rules([
-                    //#region custom font
-                    rule('@font-face', composition([
-                        imports([
-                            config.font.style, // define the font's properties
-                        ]),
-                        layout({
-                            src: config.font.files.map((file) => `url("${concatUrl(config.font.path, file)}") ${formatOf(file)}`).join(','),
-                        }),
-                    ])),
-                    //#endregion custom font
+            // custom font:
+            fontFace(composition([
+                imports([
+                    config.font.style, // define the font's properties
                 ]),
-            ])),*/
+                layout({
+                    src: config.font.files.map((file) => `url("${concatUrl(config.font.path, file)}") ${formatOf(file)}`).join(','),
+                }),
+            ])),
         ]),
         imports([
             // use the loaded custom font:
