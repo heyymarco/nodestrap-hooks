@@ -45,6 +45,7 @@ import {
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
+    fallbacks,
 }                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
@@ -58,16 +59,19 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    SizeName as BasicComponentSizeName,
-    isSize    as basicComponentIsSize,
-    usesSizes as basicComponentUsesSizes,
-    VariantSize as BasicComponentVariantSize,
+    SizeName       as BasicComponentSizeName,
+    isSize         as basicComponentIsSize,
+    usesSizes      as basicComponentUsesSizes,
+    VariantSize    as BasicComponentVariantSize,
     useVariantSize as basicComponentUseVariantSize,
+    
     usesThemes,
     VariantTheme,
+    useVariantTheme,
+    
     usesMild,
     VariantMild,
-    usesBackg,
+    useVariantMild,
     
     
     
@@ -169,14 +173,36 @@ export const formatOf = (fileName: string) => {
 // styles:
 export interface IconVars {
     /**
+     * functional foreground icon color.
+     */
+    foregFn : any
+    /**
+     * final foreground icon color.
+     */
+    foreg   : any
+    
+    
+    
+    /**
      * Icon's image url or icon's name.
      */
-    img : any
+    img     : any
 }
 const [iconRefs, iconDecls] = createCssVar<IconVars>();
 
-export const usesIconLayout = () => {
+export const usesIconBase = (foreg?: Cust.Ref) => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes]                         = usesSizes();
+    
+    
+    
     return composition([
+        imports([
+            // layouts:
+            sizes(),
+        ]),
         layout({
             // layouts:
             display       : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
@@ -217,51 +243,57 @@ export const usesIconLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
             
-            foreg         : null, // delete from cssProps; in img-icon: foreg => backgColor ; in font-icon: foreg => font-color
+            
+            
+            // foregrounds:
+            foreg : iconRefs.foreg,
         }),
-    ]);
-};
-export const usesIconBase = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes]                = usesSizes();
-    
-    // colors:
-    const [themes, , themeDecls] = usesThemes();
-    const [mild]                 = usesMild();
-    
-    
-    
-    return composition([
-        imports([
-            // layouts:
-            usesIconLayout(),
-            sizes(),
+        (foreg ? vars({
+            [iconDecls.foreg] : foreg,
+        }) : null),
+        (foreg ? null : (() => {
+            // dependencies:
             
             // colors:
-            themes(),
-            mild(),
-        ]),
-        vars({
-            // prevent theme from inheritance, so the Icon always use currentColor if the theme is not set
-            [themeDecls.backgTheme]     : 'initial',
-            [themeDecls.backgMildTheme] : 'initial',
-        }),
+            const [themes, themeRefs, themeDecls] = usesThemes();
+            const [mild  , mildRefs             ] = usesMild();
+            
+            
+            
+            return composition([
+                imports([
+                    // colors:
+                    themes(),
+                    mild(),
+                ]),
+                vars({
+                    // prevent theme from inheritance, so the Icon always use currentColor if the theme is not set
+                    [themeDecls.backgTheme]     : 'initial',
+                    [themeDecls.backgMildTheme] : 'initial',
+                    
+                    
+                    
+                    [iconDecls.foregFn] : fallbacks(
+                     // themeRefs.backgImpt,  // first  priority
+                        themeRefs.backgTheme, // second priority
+                     // themeRefs.backgCond,  // third  priority
+                        
+                        cssProps.foreg,       // default => uses config's foreground
+                    ),
+                    [iconDecls.foreg]   : fallbacks(
+                        mildRefs.backgMildTg, // toggle mild (if `usesMild()` applied)
+                        
+                        iconRefs.foregFn,     // default => uses our `foregFn`
+                    ),
+                }),
+            ]);
+        })()),
     ]);
 };
-export const usesFontIconBase = () => {
-    // dependencies:
-    
-    // colors:
-    const [backg , backgRefs]  = usesBackg();
-    
-    
-    
+export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
     return composition([
         imports([
-            // colors:
-            backg(),
+            usesIconBase(foreg),
         ]),
         rules([
             /*rule('@global', composition([
@@ -287,14 +319,13 @@ export const usesFontIconBase = () => {
             ...children('::after', [
                 layout({
                     // layouts:
-                    content       : iconRefs.img, // put the icon's name here, the font system will replace the name to the actual image
-                    display       : 'inline',     // use inline, so it takes the width & height automatically
+                    content       : img ?? iconRefs.img, // put the icon's name here, the font system will replace the name to the actual image
+                    display       : 'inline',            // use inline, so it takes the width & height automatically
                     
                     
                     
-                    // colors:
-                    backg         : 'transparent',   // set backg color
-                    foreg         : backgRefs.backg, // set icon's color
+                    // backgrounds:
+                    backg         : 'transparent', // set background as transparent
                     
                     
                     
@@ -336,22 +367,14 @@ export const usesFontIconBase = () => {
         }),
     ]);
 };
-export const usesImageIconBase = () => {
-    // dependencies:
-    
-    // colors:
-    const [backg , backgRefs]  = usesBackg();
-    
-    
-    
+export const usesIconImage = (img?: Cust.Ref, foreg?: Cust.Ref) => {
     return composition([
         imports([
-            // colors:
-            backg(),
+            usesIconBase(foreg),
         ]),
         layout({
-            // colors:
-            backg         : backgRefs.backg, // set icon's color
+            // backgrounds:
+            backg         : 'currentColor', // set background as icon's color
             
             
             
@@ -388,54 +411,24 @@ export const usesImageIconBase = () => {
             
             
             // image masking:
-            maskSize      : 'contain',    // image's size is as big as possible without being cropped
-            maskRepeat    : 'no-repeat',  // just one image, no repetition
-            maskPosition  : 'center',     // place the image at the center
-            maskImage     : iconRefs.img, // set icon's image
-        }),
-    ]);
-};
-export const usesImageIcon = (img: Cust.Ref, foreg?: Cust.Ref) => {
-    // dependencies:
-    
-    // colors:
-    const [, backgRefs, backgDecls] = usesBackg();
-    
-    
-    
-    return composition([
-        imports([
-            // layouts:
-            usesIconLayout(),
-            usesImageIconBase(),
-        ]),
-        vars({
-            // setup icon's image:
-            [iconDecls.img] : img,
-            
-            
-            
-            // setup icon's color:
-            ...((foreg && (foreg !== backgRefs.backg)) ? {
-                [backgDecls.backg] : foreg,
-            } : {}),
+            maskSize      : 'contain',           // image's size is as big as possible without being cropped
+            maskRepeat    : 'no-repeat',         // just one image, no repetition
+            maskPosition  : 'center',            // place the image at the center
+            maskImage     : img ?? iconRefs.img, // set icon's image
         }),
     ]);
 };
 export const usesIcon = () => {
     return composition([
-        imports([
-            usesIconBase(),
-        ]),
         variants([
             rule('.font', composition([
                 imports([
-                    usesFontIconBase(),
+                    usesIconFont(),
                 ]),
             ])),
             rule('.img', composition([
                 imports([
-                    usesImageIconBase(),
+                    usesIconImage(),
                 ]),
             ])),
         ]),
@@ -495,7 +488,7 @@ export const useIconSheet = createUseCssfnStyle(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const basics = {
-        // backg  : 'currentColor',
+        foreg  : 'currentColor',
         
         sizeNm : '24px',
     };
@@ -593,7 +586,15 @@ export interface IconProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProps<TElement>) => {
     // styles:
-    const sheet = useIconSheet();
+    const sheet        = useIconSheet();
+    
+    
+    
+    // variants:
+    const variSize     = useVariantSize(props);
+    
+    const variTheme    = useVariantTheme(props);
+    const variMild     = useVariantMild(props);
 
     
     
@@ -615,6 +616,12 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
 
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            variantClasses={[...(props.variantClasses ?? []),
+                variSize.class,
+
+                variTheme.class,
+                variMild.class,
+            ]}
             classes={[...(props.classes ?? []),
                 // appearances:
                 icon.class,
