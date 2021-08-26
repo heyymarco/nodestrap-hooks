@@ -265,15 +265,15 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
         return [
             ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
                 .map((ruleEntrySourceList: RuleEntrySource|RuleList): RuleEntry[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
-                    const isOptionalString          = (value: any): value is OptionalString => {
-                        if ((typeof value) === 'string') return true; // a `string` detected
+                    const isOptionalString                = (value: any): value is OptionalString => {
+                        if (value === null)      return true; // optional `null`
+                        if (value === undefined) return true; // optional `undefined`
                         
-                        if (value === null)              return true; // optional `null`
-                        if (value === undefined)         return true; // optional `undefined`
                         
-                        return false; // the value is not an `OptionalString`
+                        
+                        return ((typeof value) === 'string');
                     };
-                    const isOptionalStringDeepArr   = (value: any): value is OptionalString[] => {
+                    const isOptionalStringDeepArr         = (value: any): value is OptionalString[] => {
                         if (!Array.isArray(value)) return false;
                         
                         
@@ -292,10 +292,15 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         return true;
                     };
                     
-                    const isOptionalSelector        = (value: any): value is Optional<Selector>   => isOptionalString(value);
-                    const isOptionalSelectorDeepArr = (value: any): value is Optional<Selector>[] => isOptionalStringDeepArr(value);
+                    const isOptionalSelector              = (value: any): value is Optional<Selector>   => isOptionalString(value);
+                    const isOptionalSelectorDeepArr       = (value: any): value is Optional<Selector>[] => isOptionalStringDeepArr(value);
                     
-                    const isStyleOrFactory          = (value: any): value is ProductOrFactory<Style> => {
+                    const isOptionalStyleOrFactory        = (value: any): value is ProductOrFactory<Style> => {
+                        if (value === null)      return true; // optional `null`
+                        if (value === undefined) return true; // optional `undefined`
+                        
+                        
+                        
                         return (
                             value
                             &&
@@ -306,18 +311,18 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                             )
                         );
                     };
-                    const isStyleOrFactoryDeepArr   = (value: any): value is Style[] => {
+                    const isOptionalStyleOrFactoryDeepArr = (value: any): value is Style[] => {
                         if (!Array.isArray(value)) return false;
                         
                         
                         
-                        const nonStyleOrFactoryItems = value.filter((v) => !isStyleOrFactory(v));
+                        const nonStyleOrFactoryItems = value.filter((v) => !isOptionalStyleOrFactory(v));
                         if (nonStyleOrFactoryItems.length === 0) return true;
                         
                         
                         
                         for (const nonStyleOrFactoryItem of nonStyleOrFactoryItems) {
-                            if (!isStyleOrFactoryDeepArr(nonStyleOrFactoryItem)) return false;
+                            if (!isOptionalStyleOrFactoryDeepArr(nonStyleOrFactoryItem)) return false;
                         } // for
                         
                         
@@ -325,7 +330,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         return true;
                     };
                     
-                    const isRuleEntry               = (value: any): value is RuleEntry => {
+                    const isRuleEntry                     = (value: any): value is RuleEntry => {
                         if (value.length !== 2) return false; // not a tuple => not a `RuleEntry`
                         
                         
@@ -333,16 +338,16 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         const [first, second] = value;
                         
                         /*
-                            the first element must be:
+                            the first element must be `SelectorCollection`:
                             * `Optional<Selector>`
                             * DeepArrayOf< `Optional<Selector>` >
                             * empty array
                         */
                         // and
                         /*
-                            the second element must be:
-                            * `Style` | `Factory<Style>`
-                            * DeepArrayOf< `Style | Factory<Style>` >
+                            the second element must be `StyleCollection`:
+                            * `Optional<Style>` | `Factory<Optional<Style>>`
+                            * DeepArrayOf< `Optional<Style> | Factory<Optional<Style>>` >
                             * empty array
                         */
                         return (
@@ -353,9 +358,9 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                             )
                             &&
                             (
-                                isStyleOrFactory(second)
+                                isOptionalStyleOrFactory(second)
                                 ||
-                                isStyleOrFactoryDeepArr(second)
+                                isOptionalStyleOrFactoryDeepArr(second)
                             )
                         );
                     };
