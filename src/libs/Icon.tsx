@@ -496,39 +496,39 @@ export const usesIcon = () => {
 
 export const useIcon = <TElement extends HTMLElement = HTMLElement>(props: IconProps<TElement>) => {
     return useMemo(() => {
-        const imgIcon = (() => {
+        const iconImg = (() => {
             const file = config.img.files.find((file) => file.match(/[\w-.]+(?=\.\w+$)/)?.[0] === props.icon);
             if (!file) return null;
             return concatUrl(config.img.path, file);
         })();
 
-        const isFontIcon = config.font.items.includes(props.icon);
+        const isIconFont = config.font.items.includes(props.icon);
 
 
 
         return {
             class: (() => {
-                if (imgIcon)    return 'img';  // icon name is found in imgIcon
+                if (iconImg)    return 'img';  // icon name is found in iconImg
 
-                if (isFontIcon) return 'font'; // icon name is found in fontIcon
+                if (isIconFont) return 'font'; // icon name is found in iconFont
 
-                return null; // icon name is not found in both imgIcon & fontIcon
+                return null; // icon name is not found in both iconImg & iconFont
             })(),
 
             style: {
                 // appearances:
                 [iconDecls.img]: (() => {
-                    if (imgIcon)    return `url("${imgIcon}")`; // the url of the icon's image
+                    if (iconImg)    return `url("${iconImg}")`; // the url of the icon's image
 
-                    if (isFontIcon) return `"${props.icon}"`;   // the string of the icon's name
+                    if (isIconFont) return `"${props.icon}"`;   // the string of the icon's name
 
-                    return undefined; // icon name is not found in both imgIcon & fontIcon
+                    return undefined; // icon name is not found in both iconImg & iconFont
                 })(),
             },
 
             children: [
-                (imgIcon && (
-                    <img key='ico-img' src={imgIcon} alt='' />
+                (iconImg && (
+                    <img key='ico-img' src={iconImg} alt='' />
                 )),
             ].filter((child) => !!child) as React.ReactNode,
         };
