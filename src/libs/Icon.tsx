@@ -74,7 +74,7 @@ import {
     VariantTheme,
     useVariantTheme,
     
-    usesMild,
+    usesMild       as basicComponentUsesMild,
     VariantMild,
     useVariantMild,
     
@@ -179,6 +179,41 @@ export const usesThemes = (factory?: Factory<StyleCollection>, options?: ThemeNa
     ] as const;
 };
 //#endregion themes
+
+//#region mild
+/**
+ * Uses toggleable mildification.
+ * @param factory Customize the callback to create mildification definitions for each toggle state.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable mildification definitions.
+ */
+export const usesMild = (factory?: Factory<StyleCollection>) => {
+    // dependencies:
+    const [mild  , mildRefs, mildDecls, ...restMild] = basicComponentUsesMild();
+    const [themes, themeRefs                       ] = usesThemes();
+    
+    
+    
+    return [
+        () => composition([
+            imports([
+                mild(),
+            ]),
+            vars({
+                [mildDecls.backgMildFn] : fallbacks(
+                 // themeRefs.backgMildImpt,  // first  priority
+                    themeRefs.backgMildTheme, // second priority
+                 // themeRefs.backgMildCond,  // third  priority
+                    
+                    cssProps.foreg,           // default => uses config's foreground
+                ),
+            }),
+        ]),
+        mildRefs,
+        mildDecls,
+        ...restMild,
+    ] as const;
+};
+//#endregion mild
 
 //#region foreg
 /**
