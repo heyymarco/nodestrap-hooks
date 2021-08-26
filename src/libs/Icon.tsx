@@ -188,8 +188,8 @@ export const usesThemes = (factory?: Factory<StyleCollection>, options?: ThemeNa
  */
 export const usesMild = (factory?: Factory<StyleCollection>) => {
     // dependencies:
-    const [mild  , mildRefs, mildDecls, ...restMild] = basicComponentUsesMild();
-    const [themes, themeRefs                       ] = usesThemes();
+    const [mild, mildRefs, mildDecls, ...restMild] = basicComponentUsesMild(factory);
+    const [    , themeRefs                       ] = usesThemes();
     
     
     
