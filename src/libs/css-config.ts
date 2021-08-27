@@ -718,7 +718,7 @@ export { createCssConfig, createCssConfig as default }
  * @param cssProps The collection of the css vars to be filtered.
  * @returns A `PropList` which is the copy of the `cssProps` that only having *general* props.
  */
-export const usesGeneralProps = <TProps extends {}>(cssProps: Refs<TProps>): PropList => {
+export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` matching with following:
