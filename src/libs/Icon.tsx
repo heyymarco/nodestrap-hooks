@@ -168,6 +168,14 @@ export const usesThemes = (factory?: Factory<StyleCollection>, options?: ThemeNa
                 themes(),
             ]),
             vars({
+                // delete unused imported vars:
+                [themeDecls.foregTheme]         : null,
+                [themeDecls.borderTheme]        : null,
+                [themeDecls.foregOutlinedTheme] : null,
+                [themeDecls.foregMildTheme]     : null,
+                [themeDecls.focusTheme]         : null,
+            }),
+            vars({
                 // prevent theme from inheritance, so the Icon always use currentColor if the theme is not set
                 [themeDecls.backgTheme]     : 'initial',
                 [themeDecls.backgMildTheme] : 'initial',
@@ -188,8 +196,8 @@ export const usesThemes = (factory?: Factory<StyleCollection>, options?: ThemeNa
  */
 export const usesMild = (factory?: Factory<StyleCollection>) => {
     // dependencies:
-    const [mild, mildRefs, mildDecls, ...restMild] = basicComponentUsesMild(factory);
-    const [    , themeRefs                       ] = usesThemes();
+    const [mild, mildRefs , mildDecls, ...restMild] = basicComponentUsesMild(factory);
+    const [    , themeRefs                        ] = usesThemes();
     
     
     
@@ -198,6 +206,10 @@ export const usesMild = (factory?: Factory<StyleCollection>) => {
             imports([
                 mild(),
             ]),
+            vars({
+                // delete unused imported vars:
+                [mildDecls.foregMildFn] : null,
+            }),
             vars({
                 [mildDecls.backgMildFn] : fallbacks(
                  // themeRefs.backgMildImpt,  // first  priority
@@ -313,21 +325,21 @@ export interface IconVars {
     /**
      * Icon's image url or icon's name.
      */
-    img     : any
+    img : any
 }
 const [iconRefs, iconDecls] = createCssVar<IconVars>();
 
-export const usesIconBase = (sizeOverwrite?: Cust.Ref, foregOverwrite?: Cust.Ref) => {
+export const usesIconBase      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
     // dependencies:
     
     // layouts:
-    const [sizes]              = usesSizes(sizeOverwrite);
+    const [sizes]            = usesSizes(sizeOverwrite);
     
     // colors:
-    const [themes]             = usesThemes();
-    const [mild]               = usesMild();
+    const [themes]           = usesThemes();
+    const [mild]             = usesMild();
     
-    const [foreg , foregRefs]  = usesForeg(foregOverwrite);
+    const [foreg, foregRefs] = usesForeg(foregOverwrite);
     
     
     
@@ -389,13 +401,10 @@ export const usesIconBase = (sizeOverwrite?: Cust.Ref, foregOverwrite?: Cust.Ref
         }),
     ]);
 };
-export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
+export const usesIconFontBase  = (img?: Cust.Ref) => {
     return composition([
-        imports([
-            usesIconBase(foreg),
-        ]),
         rules([
-            // custom font:
+            // load a custom font:
             fontFace(composition([
                 imports([
                     config.font.style, // define the font's properties
@@ -410,7 +419,7 @@ export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
             config.font.style, // apply the defined font's properties
         ]),
         layout({
-            ...children('::after', [
+            ...children('::after', composition([
                 layout({
                     // layouts:
                     content       : img ?? iconRefs.img, // put the icon's name here, the font system will replace the name to the actual image
@@ -418,19 +427,19 @@ export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
                     
                     
                     
+                    // foregrounds:
+                    foreg         : 'currentColor', // set foreground as icon's color
+                    
+                    
+                    
                     // backgrounds:
-                    backg         : 'transparent', // set background as transparent
+                    backg         : 'transparent',  // set background as transparent
                     
                     
                     
                     // sizes:
                     fontSize      : cssProps.size, // set icon's size
                     overflowY     : 'hidden',      // hides the pseudo-inherited underline
-                    
-                    
-                    
-                    // transition:
-                    transition    : 'inherit',
                     
                     
                     
@@ -455,17 +464,13 @@ export const usesIconFont = (img?: Cust.Ref, foreg?: Cust.Ref) => {
                     '-moz-osx-font-smoothing' : 'grayscale',          // support for Firefox
                     fontFeatureSettings       : 'liga',               // support for IE
                     //#endregion turn on available browser features
-                    //#endregion fonts
                 }),
-            ]),
+            ])),
         }),
     ]);
 };
-export const usesIconImage = (img?: Cust.Ref, foreg?: Cust.Ref) => {
+export const usesIconImageBase = (img?: Cust.Ref) => {
     return composition([
-        imports([
-            usesIconBase(foreg),
-        ]),
         layout({
             // backgrounds:
             backg         : 'currentColor', // set background as icon's color
@@ -474,7 +479,7 @@ export const usesIconImage = (img?: Cust.Ref, foreg?: Cust.Ref) => {
             
             // sizes:
             // a dummy element, for making the image's width
-            ...children('img', [
+            ...children('img', composition([
                 layout({
                     // layouts:
                     display    : 'inline-block', // use inline-block, so it takes the width & height as we set
@@ -500,7 +505,7 @@ export const usesIconImage = (img?: Cust.Ref, foreg?: Cust.Ref) => {
                     // accessibility:
                     userSelect : 'none', // disable selecting icon's img
                 }),
-            ]),
+            ])),
             
             
             
@@ -512,17 +517,30 @@ export const usesIconImage = (img?: Cust.Ref, foreg?: Cust.Ref) => {
         }),
     ]);
 };
+
+export const usesIconImage     = (img: Cust.Ref, foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
+    return composition([
+        imports([
+            usesIconBase(foregOverwrite, sizeOverwrite),
+            usesIconImageBase(img),
+        ]),
+    ]);
+};
+
 export const usesIcon = () => {
     return composition([
+        imports([
+            usesIconBase(),
+        ]),
         variants([
             rule('.font', composition([
                 imports([
-                    usesIconFont(),
+                    usesIconFontBase(),
                 ]),
             ])),
             rule('.img', composition([
                 imports([
-                    usesIconImage(),
+                    usesIconImageBase(),
                 ]),
             ])),
         ]),
@@ -536,7 +554,7 @@ export const useIcon = <TElement extends HTMLElement = HTMLElement>(props: IconP
             if (!file) return null;
             return concatUrl(config.img.path, file);
         })();
-
+        
         const isIconFont = config.font.items.includes(props.icon);
 
 
@@ -689,14 +707,14 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
     
     const variTheme    = useVariantTheme(props);
     const variMild     = useVariantMild(props);
-
+    
     
     
     // appearances:
-    const icon  = useIcon(props);
-
-
-
+    const icon         = useIcon(props);
+    
+    
+    
     // jsx:
     return (
         <Element<TElement>
