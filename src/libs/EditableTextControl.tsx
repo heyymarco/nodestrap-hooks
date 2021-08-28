@@ -324,8 +324,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         // accessibility:
         cursor       : 'text',
-
-
+        
+        
         
         //#region animations
         iconSize     : '1em',
@@ -348,8 +348,8 @@ export interface EditableTextControlProps<TElement extends EditableTextControlEl
     // validations:
     minLength? : number
     maxLength? : number
-
-
+    
+    
     // events:
     onChange?  : React.ChangeEventHandler<TElement>
 }
