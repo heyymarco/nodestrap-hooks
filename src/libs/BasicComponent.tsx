@@ -148,7 +148,12 @@ export interface OrientationVars {
 }
 const [orientationRefs, orientationDecls] = createCssVar<OrientationVars>();
 
+export const noOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`:not(.${orientationName})`, styles);
 export const isOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`.${orientationName}`, styles);
+export const noOrientationBlock  = (styles: StyleCollection) => noOrientation('block' , styles);
+export const noOrientationInline = (styles: StyleCollection) => noOrientation('inline', styles);
+export const isOrientationBlock  = (styles: StyleCollection) => isOrientation('block' , styles);
+export const isOrientationInline = (styles: StyleCollection) => isOrientation('inline', styles);
 
 /**
  * Uses configurable orientation.  
