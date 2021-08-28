@@ -52,8 +52,19 @@ import {
     usesSizes,
     usesOutlined,
     isMild,
+    mildOf,
     usesForeg,
 }                           from './BasicComponent'
+import {
+    // hooks:
+    isActive,
+}                           from './Indicator'
+import {
+    // hooks:
+    markActive as controlMarkActive,
+    isFocus,
+    isArrive,
+}                           from './Control'
 import {
     // hooks:
     ValidInvalidVars as EditableControlValidInvalidVars,
@@ -135,6 +146,16 @@ export const usesIconColor = () => {
 
 
 // states:
+
+//#region activePassive
+export const markActive = () => composition([
+    imports([
+        controlMarkActive(),
+        
+        mildOf(null), // keeps mild variant
+    ]),
+]);
+//#endregion activePassive
 
 //#region validInvalid
 export interface ValidInvalidVars extends EditableControlValidInvalidVars {
@@ -261,6 +282,21 @@ export const usesEditableTextControl = () => {
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
         states([
+            isActive([
+                imports([
+                    markActive(),
+                ]),
+            ]),
+            isFocus([
+                imports([
+                    markActive(),
+                ]),
+            ]),
+            isArrive([
+                imports([
+                    markActive(),
+                ]),
+            ]),
             isNoValidation([
                 layout({
                     ...children('::after', composition([
