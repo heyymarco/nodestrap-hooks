@@ -62,6 +62,11 @@ import {
     isArrive,
 }                           from './Control'
 import {
+    // hooks:
+    isPress,
+    
+    
+    
     // styles:
     usesActionControl,
     
@@ -95,6 +100,43 @@ export const useVariantButton = (props: VariantButton) => {
 
 
 // styles:
+export const noBackground = () => {
+    return composition([
+        variants([
+            noOutlined([
+                imports([
+                    outlinedOf(true), // keeps outlined variant
+                ]),
+                layout({
+                    // borders:
+                    border : 'none', // noBorder if not explicitly `.outlined`
+                }),
+            ]),
+        ]),
+        states([
+            isActive([
+                imports([
+                    outlinedOf(true), // keeps outlined variant
+                ]),
+            ]),
+            isFocus([
+                imports([
+                    outlinedOf(true), // keeps outlined variant
+                ]),
+            ]),
+            isArrive([
+                imports([
+                    outlinedOf(true), // keeps outlined variant
+                ]),
+            ]),
+            isPress([
+                imports([
+                    outlinedOf(true), // keeps outlined variant
+                ]),
+            ]),
+        ]),
+    ]);
+};
 export const usesButton = () => {
     // dependencies:
     
@@ -160,35 +202,7 @@ export const usesButton = () => {
             
             rule(['.link', '.ghost'], [
                 imports([
-                    outlinedOf(true), // activate the outlining
-                ]),
-                variants([
-                    noOutlined([
-                        imports([
-                            outlinedOf(true), // keeps outlined variant
-                        ]),
-                        layout({
-                            // borders:
-                            border : 'none', // no_border if no_outlined
-                        }),
-                    ]),
-                ]),
-                states([
-                    isActive([
-                        imports([
-                            outlinedOf(true), // keeps outlined variant
-                        ]),
-                    ]),
-                    isFocus([
-                        imports([
-                            outlinedOf(true), // keeps outlined variant
-                        ]),
-                    ]),
-                    isArrive([
-                        imports([
-                            outlinedOf(true), // keeps outlined variant
-                        ]),
-                    ]),
+                    noBackground(),
                 ]),
             ]),
             rule('.link', [
@@ -217,10 +231,10 @@ export const usesButton = () => {
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
                 }),
                 variants([
-                    noOutlined([ // fully link style without outlined:
+                    noOutlined([ // fully link style without `.outlined`:
                         imports([
                             // backgrounds:
-                            gradientOf(false), // gradient is not supported if no_outlined
+                            gradientOf(false), // gradient is not supported if not `.outlined`
                         ]),
                     ]),
                 ]),
@@ -245,7 +259,7 @@ export const usesButton = () => {
                     isArrive([
                         layout({
                             // appearances:
-                            opacity: cssProps.ghostOpacityArrive,
+                            opacity: cssProps.ghostOpacityArrive, // increase the opacity to increase visibility
                         }),
                     ]),
                 ]),
