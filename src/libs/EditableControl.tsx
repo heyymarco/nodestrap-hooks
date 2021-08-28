@@ -64,6 +64,10 @@ import {
     usesAnim,
 }                           from './BasicComponent'
 import {
+    // hooks:
+    isActive,
+}                           from './Indicator'
+import {
     // styles:
     usesControl,
     
@@ -204,8 +208,8 @@ export const usesValidInvalid = () => {
             
             
             vars({
-                [validInvalidDecls.foregValidInvalidStart]: mildRefs.foregMildFn,
-                [validInvalidDecls.backgValidInvalidStart]: mildRefs.backgMildFn,
+                [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregMildFn,
+                [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgMildFn,
             }),
             variants([
                 isOutlined([
@@ -218,6 +222,14 @@ export const usesValidInvalid = () => {
                     vars({
                         [validInvalidDecls.foregValidInvalidStart] : foregRefs.foregFn,
                         [validInvalidDecls.backgValidInvalidStart] : backgRefs.backgFn,
+                    }),
+                ]),
+            ]),
+            states([
+                isActive([
+                    vars({
+                        [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregMildFn,
+                        [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgMildFn,
                     }),
                 ]),
             ]),
