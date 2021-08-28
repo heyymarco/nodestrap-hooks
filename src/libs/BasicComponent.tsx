@@ -450,13 +450,13 @@ export const usesGradient = (factory = gradientOf) => {
 };
 /**
  * Creates gradient definitions based on the given `toggle`.
- * @param toggle `true` to activate the gradient -or- `false` to deactivate.
+ * @param toggle `true` to activate the gradient -or- `false` to deactivate -or- `null` to keep the original.
  * @returns A `StyleCollection` represents gradient definitions based on the given `toggle`.
  */
-export const gradientOf = (toggle = true) => composition([
+export const gradientOf = (toggle: (boolean|null) = true) => composition([
     vars({
         // *toggle on/off* the background gradient prop:
-        [gradientDecls.backgGradTg] : toggle ? cssProps.backgGrad : 'initial',
+        [gradientDecls.backgGradTg] : toggle ? cssProps.backgGrad : ((toggle !== null) ? 'initial' : null),
     }),
 ]);
 
@@ -540,14 +540,14 @@ export const usesOutlined = (factory = outlinedOf) => {
 };
 /**
  * Creates outlining definitions based on the given `toggle`.
- * @param toggle `true` to activate the outlining -or- `false` to deactivate.
+ * @param toggle `true` to activate the outlining -or- `false` to deactivate -or- `null` to keep the original.
  * @returns A `StyleCollection` represents outlining definitions based on the given `toggle`.
  */
-export const outlinedOf = (toggle = true) => composition([
+export const outlinedOf = (toggle: (boolean|null) = true) => composition([
     vars({
         // *toggle on/off* the outlined props:
-        [outlinedDecls.foregOutlinedTg] : toggle ? outlinedRefs.foregOutlinedFn : 'initial',
-        [outlinedDecls.backgOutlinedTg] : toggle ? outlinedRefs.backgOutlinedFn : 'initial',
+        [outlinedDecls.foregOutlinedTg] : toggle ? outlinedRefs.foregOutlinedFn : ((toggle !== null) ? 'initial' : null),
+        [outlinedDecls.backgOutlinedTg] : toggle ? outlinedRefs.backgOutlinedFn : ((toggle !== null) ? 'initial' : null),
     }),
 ]);
 
@@ -637,14 +637,14 @@ export const usesMild = (factory = mildOf) => {
 };
 /**
  * Creates mildification definitions based on the given `toggle`.
- * @param toggle `true` to activate the mildification -or- `false` to deactivate.
+ * @param toggle `true` to activate the mildification -or- `false` to deactivate -or- `null` to keep the original.
  * @returns A `StyleCollection` represents mildification definitions based on the given `toggle`.
  */
-export const mildOf = (toggle = true) => composition([
+export const mildOf = (toggle: (boolean|null) = true) => composition([
     vars({
         // *toggle on/off* the mildification props:
-        [mildDecls.foregMildTg] : toggle ? mildRefs.foregMildFn : 'initial',
-        [mildDecls.backgMildTg] : toggle ? mildRefs.backgMildFn : 'initial',
+        [mildDecls.foregMildTg] : toggle ? mildRefs.foregMildFn : ((toggle !== null) ? 'initial' : null),
+        [mildDecls.backgMildTg] : toggle ? mildRefs.backgMildFn : ((toggle !== null) ? 'initial' : null),
     }),
 ]);
 
