@@ -29,9 +29,9 @@ import reportWebVitals from './reportWebVitals';
 //                 import ButtonApp                    from './apps/ButtonApp';
 //                     import ButtonIconApp            from './apps/ButtonIconApp';
 //            import EditableControlApp               from './apps/EditableControlApp';
-                import EditableTextControlApp       from './apps/EditableTextControlApp';
+//                import EditableTextControlApp       from './apps/EditableTextControlApp';
 //                     import InputApp                 from './apps/InputApp';
-//                 import EditableActionControlApp     from './apps/EditableActionControlApp';
+                import EditableActionControlApp     from './apps/EditableActionControlApp';
 //                     import CheckApp                 from './apps/CheckApp';
 //                         import RadioApp             from './apps/RadioApp';
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';
@@ -46,7 +46,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <EditableTextControlApp />
+    <EditableActionControlApp />
   ,
   document.getElementById('root')
 );
