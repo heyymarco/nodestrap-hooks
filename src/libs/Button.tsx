@@ -46,7 +46,6 @@ import {
     isOrientationBlock,
     VariantOrientation,
     useVariantOrientation,
-    usesThemeDefault,
     gradientOf,
     noOutlined,
     outlinedOf,
@@ -57,6 +56,7 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
+    usesThemeActive,
     isFocus,
     isLeft,
     isArrive,
@@ -76,10 +76,10 @@ import {
     ActionControlProps,
     ActionControl,
 }                           from './ActionControl'
-import spacers              from './spacers'     // configurable spaces defs
 import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
+import spacers              from './spacers'     // configurable spaces defs
 
 
 
@@ -208,7 +208,7 @@ export const usesButton = () => {
             rule('.link', [
                 imports([
                     // colors:
-                    usesThemeDefault('primary'), // set the active theme as the default theme
+                    usesThemeActive(), // set the active theme as the default theme
                 ]),
                 layout({
                     // typos:
