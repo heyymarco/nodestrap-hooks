@@ -22,6 +22,7 @@ import {
     variants,
     states,
     rule,
+    isNotHover,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -250,7 +251,7 @@ export const usesButton = () => {
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'ghost')), // apply general cssProps starting with ghost***
                 }),
                 states([
-                    isLeft([
+                    isNotHover([
                         imports([
                             // backgrounds:
                             gradientOf(false), // hides the gradient to increase invisibility
