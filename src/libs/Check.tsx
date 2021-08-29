@@ -208,6 +208,14 @@ export const usesCheckAnim = () => {
         checkPropsManager,
     ] as const;
 };
+
+{
+    const [, animRefs] = usesAnim();
+    
+    checkPropsManager.registerFilter(animRefs.filterNone);
+    checkPropsManager.registerTransf(animRefs.transfNone);
+    checkPropsManager.registerAnim(animRefs.animNone);
+}
 //#endregion check animations
 
 
