@@ -2,7 +2,7 @@
 import {
     default as React,
     useState,
-    useEffect,
+    useLayoutEffect,
     useRef,
 }                           from 'react'         // base technology of our nodestrap components
 
@@ -417,7 +417,7 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
     
     
     // watch the changes once (only at startup):
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (valided === undefined) {
             // now validator has been loaded => re-*set the initial* state of `valided` with any values other than `undefined`
             // once set, this effect will never be executed again
