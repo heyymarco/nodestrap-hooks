@@ -651,24 +651,24 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const keyframesCheck         : PropEx.Keyframes = {
         from : {
             filter    : [[ // double array => makes the JSS treat as space separated values
-                ...filters.filter((f) => (f !== filterCheckClearOut)),
+                ...filters.filter((f) => ![filterCheckClearIn, filterCheckClearOut].includes(f)),
 
                 filterCheckClearOut,
             ].map(defaultFilter)],
             transform : [[ // double array => makes the JSS treat as space separated values
-                ...transfs.filter((t) => (t !== transfCheckClearOut)),
+                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
 
                 transfCheckClearOut,
             ].map(defaultTransf)],
         },
         to   : {
             filter    : [[ // double array => makes the JSS treat as space separated values
-                ...filters.filter((f) => (f !== filterCheckClearIn)),
+                ...filters.filter((f) => ![filterCheckClearIn, filterCheckClearOut].includes(f)),
 
                 filterCheckClearIn,
             ].map(defaultFilter)],
             transform : [[ // double array => makes the JSS treat as space separated values
-                ...transfs.filter((t) => (t !== transfCheckClearIn)),
+                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
 
                 transfCheckClearIn,
             ].map(defaultTransf)],
