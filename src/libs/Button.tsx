@@ -59,7 +59,6 @@ import {
     // hooks:
     usesThemeActive,
     isFocus,
-    isLeft,
     isArrive,
 }                           from './Control'
 import {
