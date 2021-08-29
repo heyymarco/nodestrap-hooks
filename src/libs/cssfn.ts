@@ -500,6 +500,8 @@ export const isActive        = (styles: StyleCollection) => rule(     ':active' 
 export const isNotActive     = (styles: StyleCollection) => rule(':not(:active)'      , styles);
 export const isFocus         = (styles: StyleCollection) => rule(     ':focus'        , styles);
 export const isNotFocus      = (styles: StyleCollection) => rule(':not(:focus)'       , styles);
+export const isHover         = (styles: StyleCollection) => rule(     ':hover'        , styles);
+export const isNotHover      = (styles: StyleCollection) => rule(':not(:hover)'       , styles);
 
 
 
