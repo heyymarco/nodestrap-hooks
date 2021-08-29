@@ -1,0 +1,6 @@
+.txtInp:valid {
+    background-color: lightgreen !important;
+}
+.txtInp:invalid {
+    background-color: pink !important;
+}

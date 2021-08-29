@@ -26,11 +26,11 @@ import reportWebVitals from './reportWebVitals';
 //             import AlertApp                         from './apps/AlertApp';
 //        import ControlApp                           from './apps/ControlApp'; // done
 //            import ActionControlApp                 from './apps/ActionControlApp'; // done
-                import ButtonApp                    from './apps/ButtonApp'; // done
+//                import ButtonApp                    from './apps/ButtonApp'; // done
 //                     import ButtonIconApp            from './apps/ButtonIconApp';
 //            import EditableControlApp               from './apps/EditableControlApp'; // done
 //                import EditableTextControlApp       from './apps/EditableTextControlApp'; // done
-//                     import InputApp                 from './apps/InputApp';
+                    import InputApp                 from './apps/InputApp'; // done
 //                import EditableActionControlApp     from './apps/EditableActionControlApp'; // done
 //                     import CheckApp                 from './apps/CheckApp';
 //                         import RadioApp             from './apps/RadioApp';
@@ -46,7 +46,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <ButtonApp />
+    <InputApp />
   ,
   document.getElementById('root')
 );
