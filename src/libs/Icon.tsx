@@ -370,7 +370,7 @@ export const usesIconBase      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cus
             
             // a dummy text content, for making parent's height as tall as line-height
             // the dummy is also used for calibrating the flex's vertical position
-            ...children('::before', [
+            ...children('::before', composition([
                 layout({
                     // layouts:
                     content    : '"\xa0"',       // &nbsp;
@@ -387,7 +387,7 @@ export const usesIconBase      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cus
                     // sizes:
                     inlineSize : 0,        // kill the width, we just need the height
                 }),
-            ]),
+            ])),
             
             
             
