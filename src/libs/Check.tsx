@@ -57,6 +57,7 @@ import {
 import {
     // hooks:
     usesSizes,
+    usesMild,
     usesForeg,
     usesAnim,
 }                           from './BasicComponent'
@@ -315,6 +316,7 @@ export const usesCheck = () => {
     ]));
     
     // colors:
+    const [, mildRefs ] = usesMild();
     const [, foregRefs] = usesForeg();
     
     // animations:
@@ -351,6 +353,16 @@ export const usesCheck = () => {
             
             // positions:
             verticalAlign  : 'baseline', // check's text should be aligned with sibling text, so the check behave like <span> wrapper
+            
+            
+            
+            // foregrounds:
+            foreg          : mildRefs.foregMildFn,
+            
+            
+            
+            // backgrounds:
+            backg          : 'initial !important', // no valid/invalid animation
             
             
             
