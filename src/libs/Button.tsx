@@ -137,7 +137,7 @@ export const noBackground = () => {
         ]),
     ]);
 };
-export const usesButton = () => {
+export const usesButtonLayout = () => {
     // dependencies:
     
     // layouts:
@@ -152,11 +152,19 @@ export const usesButton = () => {
     
     return composition([
         imports([
+            // layouts:
+            sizes(),
+        ]),
+    ]);
+};
+export const usesButton = () => {
+    return composition([
+        imports([
             // bases:
             usesActionControl(),
             
             // layouts:
-            sizes(),
+            usesButtonLayout(),
         ]),
         layout({
             // layouts:
