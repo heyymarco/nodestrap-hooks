@@ -155,17 +155,6 @@ export const usesButtonLayout = () => {
             // layouts:
             sizes(),
         ]),
-    ]);
-};
-export const usesButton = () => {
-    return composition([
-        imports([
-            // bases:
-            usesActionControl(),
-            
-            // layouts:
-            usesButtonLayout(),
-        ]),
         layout({
             // layouts:
             display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
@@ -194,6 +183,17 @@ export const usesButton = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+    ]);
+};
+export const usesButton = () => {
+    return composition([
+        imports([
+            // bases:
+            usesActionControl(),
+            
+            // layouts:
+            usesButtonLayout(),
+        ]),
         variants([
             noOrientationBlock([
                 layout({
