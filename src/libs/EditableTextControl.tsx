@@ -209,6 +209,7 @@ export const usesValidInvalid = () => {
 
 
 // styles:
+const iconElm = '::after';
 export const usesEditableTextControl = () => {
     // dependencies:
     
@@ -243,7 +244,7 @@ export const usesEditableTextControl = () => {
             validInvalid(),
         ]),
         layout({
-            ...children('::after', composition([
+            ...children(iconElm, composition([
                 imports([
                     usesIconImage(
                         /*iconImage: */validInvalidRefs.iconImgValidInvalid,
@@ -299,7 +300,7 @@ export const usesEditableTextControl = () => {
             ]),
             isNoValidation([
                 layout({
-                    ...children('::after', composition([
+                    ...children(iconElm, composition([
                         layout({
                             display: 'none',
                         }),
