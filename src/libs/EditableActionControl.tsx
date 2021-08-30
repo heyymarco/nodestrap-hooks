@@ -21,7 +21,8 @@ import {
     
     
     // styles:
-    usesEditableControl,
+    usesEditableControlLayout,
+    usesEditableControlStates,
     
     
     
@@ -36,7 +37,8 @@ import {
     
     
     // styles:
-    usesActionControl,
+    usesActionControlLayout,
+    usesActionControlStates,
     
     
     
@@ -47,15 +49,36 @@ import {
 
 
 // styles:
+export const usesEditableActionControlLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesEditableControlLayout(),
+            usesActionControlLayout(),
+        ]),
+    ]);
+};
+export const usesEditableActionControlStates = () => {
+    return composition([
+        imports([
+            // states:
+            usesEditableControlStates(),
+            usesActionControlStates(),
+        ]),
+    ]);
+};
 export const usesEditableActionControl = () => {
     return composition([
         imports([
-            // bases:
-            usesEditableControl(),
-            usesActionControl(),
+            // layouts:
+            usesEditableActionControlLayout(),
+            
+            // states:
+            usesEditableActionControlStates(),
         ]),
     ]);
-}
+};
+
 export const useEditableActionControlSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
