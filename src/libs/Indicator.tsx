@@ -67,7 +67,7 @@ import {
     
     
     // styles:
-    usesBasicComponent,
+    usesBasicComponentLayout,
     
     
     
@@ -483,7 +483,7 @@ export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: 
 
 
 // styles:
-export const usesIndicator = () => {
+export const usesIndicatorLayout = () => {
     // dependencies:
     
     // layouts:
@@ -494,6 +494,23 @@ export const usesIndicator = () => {
         }),
     ]));
     
+    
+    
+    return composition([
+        imports([
+            // layouts:
+            usesBasicComponentLayout(),
+            sizes(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesIndicatorStates = () => {
+    // dependencies:
+    
     // states:
     const [enableDisable] = usesEnableDisable();
     const [activePassive] = usesActivePassive();
@@ -502,20 +519,10 @@ export const usesIndicator = () => {
     
     return composition([
         imports([
-            // bases:
-            usesBasicComponent(),
-            
-            // layouts:
-            sizes(),
-            
             // states:
             enableDisable(),
             activePassive(),
         ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
         states([
             isActive([
                 imports([
@@ -524,7 +531,19 @@ export const usesIndicator = () => {
             ]),
         ]),
     ]);
-}
+};
+export const usesIndicator = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesIndicatorLayout(),
+            
+            // states:
+            usesIndicatorStates(),
+        ]),
+    ]);
+};
+
 export const useIndicatorSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
