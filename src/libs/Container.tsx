@@ -41,6 +41,7 @@ import {
 import {
     // hooks:
     usesBasicComponentLayout,
+    usesBasicComponentVariants,
     
     
     
@@ -130,10 +131,19 @@ export const usesContainerLayout = () => composition([
         ...usesGeneralProps(cssProps), // apply general cssProps
     }),
 ]);
+export const usesContainerVariants = () => composition([
+    imports([
+        // variants:
+        usesBasicComponentVariants(),
+    ]),
+]);
 export const usesContainer = () => composition([
     imports([
         // layouts:
         usesContainerLayout(),
+        
+        // variants:
+        usesContainerVariants(),
     ]),
 ]);
 
