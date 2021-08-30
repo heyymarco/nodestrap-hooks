@@ -35,7 +35,7 @@ function App() {
 	const [enableVal, setEnableVal  ] = useState(false);
 	const [isValid,   setIsValid    ] = useState<boolean|null|undefined>(undefined);
 
-	const chkStyles = [undefined, 'btn', 'switch'];
+	const chkStyles = [undefined, 'btn', 'togglerBtn', 'switch'];
 	const [chkStyle,    setChkStyle     ] = useState<Checks.ChkStyle|undefined>(undefined);
 
 

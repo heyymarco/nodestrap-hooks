@@ -72,10 +72,6 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    usesFocusBlur,
-}                           from './Control'
-import {
-    // hooks:
     usesPressRelease,
     
     
@@ -85,7 +81,8 @@ import {
 }                           from './ActionControl'
 import {
     // styles:
-    usesEditableActionControl,
+    usesEditableActionControlLayout,
+    usesEditableActionControlStates,
     
     
     
@@ -316,7 +313,7 @@ export const usesCheckClear = () => {
 const checkElm = '::before';
 const inputElm = ':first-child';
 const labelElm = ':nth-child(1n+2)';
-export const usesCheck = () => {
+export const usesCheckLayout = () => {
     // dependencies:
     
     // layouts:
@@ -334,24 +331,16 @@ export const usesCheck = () => {
     // animations:
     const [checkAnim, checkAnimRefs] = usesCheckAnim();
     
-    // states:
-    const [checkClear] = usesCheckClear();
-    
     
     
     return composition([
         imports([
-            // bases:
-            usesEditableActionControl(),
-            
             // layouts:
+            usesEditableActionControlLayout(),
             sizes(),
             
             // animations:
             checkAnim(),
-            
-            // states:
-            checkClear(),
         ]),
         layout({
             // layouts:
@@ -418,21 +407,9 @@ export const usesCheck = () => {
             ])),
             ...children(inputElm, composition([
                 imports([
-                    // bases:
-                    usesEditableActionControl(),
+                    // layouts:
+                    usesEditableActionControlLayout(),
                 ]),
-                // makes focus/blur state inherit from parent:
-                (() => {
-                    // dependencies:
-                    const [, , focusBlurDecls] = usesFocusBlur();
-                    
-                    
-                    
-                    return vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
-                        [focusBlurDecls.animFocusBlur]      : 'inherit',
-                    });
-                })(),
                 layout({
                     // layouts:
                     display       : 'inline-block', // use inline-block, so it takes the width & height as we set
@@ -529,6 +506,10 @@ export const usesCheck = () => {
                 }),
             ])),
         }),
+    ]);
+};
+export const usesCheckVariants = () => {
+    return composition([
         variants([
             rule(['.btn', '.togglerBtn'], [
                 layout({
@@ -579,7 +560,7 @@ export const usesCheck = () => {
                     ])),
                 }),
             ]),
-            rule('.togglerBtn', [
+            rule('.togglerBtn', [ // todo: fix blinky when mouseUp
                 (() => {
                     // dependencies:
                     
@@ -589,30 +570,25 @@ export const usesCheck = () => {
                     
                     
                     return composition([
-                        layout({
-                            // children:
-                            ...children(labelElm, composition([
-                                states([
-                                    isActived([
-                                        vars({
-                                            [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
-                                        }),
-                                    ]),
-                                    isActivating([
-                                        vars({
-                                            [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
-                                            [pressReleaseDecls.animPressRelease]   : acssProps.animPress,
-                                        }),
-                                    ]),
-                                    isPassivating([
-                                        vars({
-                                            [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
-                                            [pressReleaseDecls.animPressRelease]   : acssProps.animRelease,
-                                        }),
-                                    ]),
-                                ]),
-                            ])),
-                        }),
+                        states([
+                            isActived([
+                                vars({
+                                    [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
+                                }),
+                            ]),
+                            isActivating([
+                                vars({
+                                    [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
+                                    [pressReleaseDecls.animPressRelease]   : acssProps.animPress,
+                                }),
+                            ]),
+                            isPassivating([
+                                vars({
+                                    [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
+                                    [pressReleaseDecls.animPressRelease]   : acssProps.animRelease,
+                                }),
+                            ]),
+                        ]),
                     ]);
                 })(),
             ]),
@@ -644,7 +620,38 @@ export const usesCheck = () => {
             ]),
         ]),
     ]);
-}
+};
+export const usesCheckStates = () => {
+    // dependencies:
+    
+    // states:
+    const [checkClear] = usesCheckClear();
+    
+    
+    
+    return composition([
+        imports([
+            // states:
+            usesEditableActionControlStates(),
+            checkClear(),
+        ]),
+    ]);
+};
+export const usesCheck = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesCheckLayout(),
+            
+            // variants:
+            usesCheckVariants(),
+            
+            // states:
+            usesCheckStates(),
+        ]),
+    ]);
+};
+
 export const useCheckSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
