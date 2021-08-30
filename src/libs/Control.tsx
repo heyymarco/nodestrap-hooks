@@ -69,7 +69,8 @@ import {
     
     
     // styles:
-    usesIndicator,
+    usesIndicatorLayout,
+    usesIndicatorStates,
     
     
     
@@ -494,7 +495,7 @@ export const useStateArriveLeave = <TElement extends HTMLElement = HTMLElement>(
 
 
 // styles:
-export const usesControl = () => {
+export const usesControlLayout = () => {
     // dependencies:
     
     // layouts:
@@ -505,6 +506,29 @@ export const usesControl = () => {
         }),
     ]));
     
+    
+    
+    return composition([
+        imports([
+            // resets:
+            stripOutControl(), // clear browser's default styles
+            
+            // layouts:
+            usesIndicatorLayout(),
+            sizes(),
+            
+            // colors:
+            usesThemeDefault(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesControlStates = () => {
+    // dependencies:
+    
     // states:
     const [focusBlur]   = usesFocusBlur();
     const [arriveLeave] = usesArriveLeave();
@@ -513,26 +537,11 @@ export const usesControl = () => {
     
     return composition([
         imports([
-            // resets:
-            stripOutControl(), // clear browser's default styles
-            
-            // bases:
-            usesIndicator(),
-            
-            // layouts:
-            sizes(),
-            
-            // colors:
-            usesThemeDefault(),
-            
             // states:
+            usesIndicatorStates(),
             focusBlur(),
             arriveLeave(),
         ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
         states([
             isDisable([
                 layout({
@@ -558,7 +567,19 @@ export const usesControl = () => {
             ]),
         ]),
     ]);
-}
+};
+export const usesControl = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesControlLayout(),
+            
+            // states:
+            usesControlStates(),
+        ]),
+    ]);
+};
+
 export const useControlSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
