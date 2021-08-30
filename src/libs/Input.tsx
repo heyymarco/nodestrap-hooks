@@ -43,7 +43,8 @@ import {
 }                           from './BasicComponent'
 import {
     // styles:
-    usesEditableTextControl,
+    usesEditableTextControlLayout,
+    usesEditableTextControlStates,
     
     
     
@@ -64,7 +65,7 @@ import {
 
 // styles:
 const inputElm = ':first-child';
-export const usesInput = () => {
+export const usesInputLayout = () => {
     // dependencies:
     
     // layouts:
@@ -87,10 +88,8 @@ export const usesInput = () => {
     
     return composition([
         imports([
-            // bases:
-            usesEditableTextControl(),
-            
             // layouts:
+            usesEditableTextControlLayout(),
             sizes(),
             
             // colors:
@@ -149,7 +148,27 @@ export const usesInput = () => {
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
     ]);
-}
+};
+export const usesInputStates = () => {
+    return composition([
+        imports([
+            // states:
+            usesEditableTextControlStates(),
+        ]),
+    ]);
+};
+export const usesInput = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesInputLayout(),
+            
+            // states:
+            usesInputStates(),
+        ]),
+    ]);
+};
+
 export const useInputSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
