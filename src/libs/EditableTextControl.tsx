@@ -76,7 +76,8 @@ import {
     
     
     // styles:
-    usesEditableControl,
+    usesEditableControlLayout,
+    usesEditableControlStates,
     
     
     
@@ -210,7 +211,7 @@ export const usesValidInvalid = () => {
 
 // styles:
 const iconElm = '::after';
-export const usesEditableTextControl = () => {
+export const usesEditableTextControlLayout = () => {
     // dependencies:
     
     // layouts:
@@ -225,23 +226,18 @@ export const usesEditableTextControl = () => {
     const [iconColor   , iconColorRefs   ] = usesIconColor();
     
     // states:
-    const [validInvalid, validInvalidRefs] = usesValidInvalid();
+    const [            , validInvalidRefs] = usesValidInvalid();
     
     
     
     return composition([
         imports([
-            // bases:
-            usesEditableControl(),
-            
             // layouts:
+            usesEditableControlLayout(),
             sizes(),
             
             // colors:
             iconColor(),
-            
-            // states:
-            validInvalid(),
         ]),
         layout({
             ...children(iconElm, composition([
@@ -282,6 +278,22 @@ export const usesEditableTextControl = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+    ]);
+};
+export const usesEditableTextControlStates = () => {
+    // dependencies:
+    
+    // states:
+    const [validInvalid] = usesValidInvalid();
+    
+    
+    
+    return composition([
+        imports([
+            // states:
+            usesEditableControlStates(),
+            validInvalid(),
+        ]),
         states([
             isActive([
                 imports([
@@ -309,7 +321,19 @@ export const usesEditableTextControl = () => {
             ]),
         ]),
     ]);
-}
+};
+export const usesEditableTextControl = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesEditableTextControlLayout(),
+            
+            // states:
+            usesEditableTextControlStates(),
+        ]),
+    ]);
+};
+
 export const useEditableTextControlSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
