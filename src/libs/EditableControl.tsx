@@ -69,7 +69,8 @@ import {
 }                           from './Indicator'
 import {
     // styles:
-    usesControl,
+    usesControlLayout,
+    usesControlStates,
     
     
     
@@ -511,7 +512,7 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
 
 
 // styles:
-export const usesEditableControl = () => {
+export const usesEditableControlLayout = () => {
     // dependencies:
     
     // layouts:
@@ -522,6 +523,23 @@ export const usesEditableControl = () => {
         }),
     ]));
     
+    
+    
+    return composition([
+        imports([
+            // layouts:
+            usesControlLayout(),
+            sizes(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesEditableControlStates = () => {
+    // dependencies:
+    
     // states:
     const [validInvalid] = usesValidInvalid();
     
@@ -529,19 +547,10 @@ export const usesEditableControl = () => {
     
     return composition([
         imports([
-            // bases:
-            usesControl(),
-            
-            // layouts:
-            sizes(),
-            
             // states:
+            usesControlStates(),
             validInvalid(),
         ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
         states([
             isValid([
                 imports([
@@ -555,7 +564,19 @@ export const usesEditableControl = () => {
             ]),
         ]),
     ]);
-}
+};
+export const usesEditableControl = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesEditableControlLayout(),
+            
+            // states:
+            usesEditableControlStates(),
+        ]),
+    ]);
+};
+
 export const useEditableControlSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
