@@ -40,7 +40,7 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    usesBasicComponent,
+    usesBasicComponentLayout,
     
     
     
@@ -113,9 +113,11 @@ export const usesResponsiveContainerGridLayout = () => composition([
         paddingBlock  : null,
     }),
 ]);
-export const usesContainer = () => composition([
+
+export const usesContainerLayout = () => composition([
     imports([
-        usesBasicComponent(),
+        // layouts:
+        usesBasicComponentLayout(),
         usesResponsiveContainerLayout(),
     ]),
     layout({
@@ -128,6 +130,13 @@ export const usesContainer = () => composition([
         ...usesGeneralProps(cssProps), // apply general cssProps
     }),
 ]);
+export const usesContainer = () => composition([
+    imports([
+        // layouts:
+        usesContainerLayout(),
+    ]),
+]);
+
 export const useContainerSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
