@@ -965,15 +965,7 @@ export const usesAnim = () => {
 export const usesBasicComponentLayout = () => {
     // dependencies:
     
-    // layouts:
-    const [sizes]              = usesSizes();
-    
     // colors:
-    const [themes]             = usesThemes();
-    const [gradient]           = usesGradient();
-    const [outlined]           = usesOutlined();
-    const [mild]               = usesMild();
-    
     const [foreg , foregRefs]  = usesForeg();
     const [backg , backgRefs]  = usesBackg();
     const [border, borderRefs] = usesBorder();
@@ -985,15 +977,8 @@ export const usesBasicComponentLayout = () => {
     
     return composition([
         imports([
-            // layouts:
-            sizes(),
-            
             // colors:
             usesThemeDefault(),
-            themes(),
-            gradient(),
-            outlined(),
-            mild(),
             
             foreg(),
             backg(),
@@ -1031,11 +1016,41 @@ export const usesBasicComponentLayout = () => {
         }),
     ]);
 };
+export const usesBasicComponentVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes]              = usesSizes();
+    
+    // colors:
+    const [themes]             = usesThemes();
+    const [gradient]           = usesGradient();
+    const [outlined]           = usesOutlined();
+    const [mild]               = usesMild();
+    
+    
+    
+    return composition([
+        imports([
+            // layouts:
+            sizes(),
+            
+            // colors:
+            themes(),
+            gradient(),
+            outlined(),
+            mild(),
+        ]),
+    ]);
+};
 export const usesBasicComponent = () => {
     return composition([
         imports([
             // layouts:
             usesBasicComponentLayout(),
+            
+            // variants:
+            usesBasicComponentVariants(),
         ]),
     ]);
 };
