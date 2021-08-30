@@ -63,7 +63,8 @@ import {
     
     
     // styles:
-    usesControl,
+    usesControlLayout,
+    usesControlStates,
     
     
     
@@ -273,7 +274,7 @@ export const useStatePressRelease = (props: ActionControlProps, mouses: number[]
 
 
 // styles:
-export const usesActionControl = () => {
+export const usesActionControlLayout = () => {
     // dependencies:
     
     // layouts:
@@ -284,21 +285,13 @@ export const usesActionControl = () => {
         }),
     ]));
     
-    // states:
-    const [pressRelease] = usesPressRelease();
-    
     
     
     return composition([
         imports([
-            // bases:
-            usesControl(),
-            
             // layouts:
+            usesControlLayout(),
             sizes(),
-            
-            // states:
-            pressRelease(),
         ]),
         layout({
             // accessibility:
@@ -309,6 +302,22 @@ export const usesActionControl = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+    ]);
+};
+export const usesActionControlStates = () => {
+    // dependencies:
+    
+    // states:
+    const [pressRelease] = usesPressRelease();
+    
+    
+    
+    return composition([
+        imports([
+            // states:
+            usesControlStates(),
+            pressRelease(),
+        ]),
         states([
             isPress([
                 imports([
@@ -317,7 +326,19 @@ export const usesActionControl = () => {
             ]),
         ]),
     ]);
-}
+};
+export const usesActionControl = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesActionControlLayout(),
+            
+            // states:
+            usesActionControlStates(),
+        ]),
+    ]);
+};
+
 export const useActionControlSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
