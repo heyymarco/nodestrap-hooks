@@ -558,6 +558,11 @@ export const usesCheckVariants = () => {
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'btn')), // apply general cssProps starting with btn***
                         }),
                     ])),
+                    
+                    
+                    
+                    // overwrites propName = {btn}propName:
+                    ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'btn')),
                 }),
             ]),
             rule('.togglerBtn', [ // todo: fix blinky when mouseUp
@@ -591,6 +596,19 @@ export const usesCheckVariants = () => {
                         ]),
                     ]);
                 })(),
+                layout({
+                    ...children(labelElm, composition([
+                        layout({
+                            // customize:
+                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'togglerBtn')), // apply general cssProps starting with togglerBtn***
+                        }),
+                    ])),
+                    
+                    
+                    
+                    // overwrites propName = {togglerBtn}propName:
+                    ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'togglerBtn')),
+                }),
             ]),
             
             rule('.switch', [
@@ -609,13 +627,13 @@ export const usesCheckVariants = () => {
                             
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'switch')), // apply general cssProps starting with switch***
-                            
-                            
-                            
-                            // overwrites propName = {switch}propName:
-                            ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'switch')),
                         }),
                     ])),
+                    
+                    
+                    
+                    // overwrites propName = {switch}propName:
+                    ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'switch')),
                 }),
             ]),
         ]),
