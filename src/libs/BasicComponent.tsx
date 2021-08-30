@@ -962,7 +962,7 @@ export const usesAnim = () => {
 
 
 // styles:
-export const usesBasicComponent = () => {
+export const usesBasicComponentLayout = () => {
     // dependencies:
     
     // layouts:
@@ -1031,6 +1031,15 @@ export const usesBasicComponent = () => {
         }),
     ]);
 };
+export const usesBasicComponent = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesBasicComponentLayout(),
+        ]),
+    ]);
+};
+
 export const useBasicComponentSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
