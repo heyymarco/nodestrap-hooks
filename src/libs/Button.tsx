@@ -68,7 +68,8 @@ import {
     
     
     // styles:
-    usesActionControl,
+    usesActionControlLayout,
+    usesActionControlStates,
     
     
     
@@ -137,6 +138,7 @@ export const noBackground = () => {
         ]),
     ]);
 };
+
 export const usesButtonLayout = () => {
     // dependencies:
     
@@ -153,6 +155,7 @@ export const usesButtonLayout = () => {
     return composition([
         imports([
             // layouts:
+            usesActionControlLayout(),
             sizes(),
         ]),
         layout({
@@ -185,15 +188,8 @@ export const usesButtonLayout = () => {
         }),
     ]);
 };
-export const usesButton = () => {
+export const usesButtonVariants = () => {
     return composition([
-        imports([
-            // bases:
-            usesActionControl(),
-            
-            // layouts:
-            usesButtonLayout(),
-        ]),
         variants([
             noOrientationBlock([
                 layout({
@@ -274,7 +270,30 @@ export const usesButton = () => {
             ]),
         ]),
     ]);
-}
+};
+export const usesButtonStates = () => {
+    return composition([
+        imports([
+            // states:
+            usesActionControlStates(),
+        ]),
+    ]);
+};
+export const usesButton = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesButtonLayout(),
+            
+            // variants:
+            usesButtonVariants(),
+            
+            // states:
+            usesButtonStates(),
+        ]),
+    ]);
+};
+
 export const useButtonSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
