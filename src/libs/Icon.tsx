@@ -329,7 +329,7 @@ export interface IconVars {
 }
 const [iconRefs, iconDecls] = createCssVar<IconVars>();
 
-export const usesIconBase      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
+export const usesIconLayout      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
     // dependencies:
     
     // layouts:
@@ -401,7 +401,7 @@ export const usesIconBase      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cus
         }),
     ]);
 };
-export const usesIconFontBase  = (img?: Cust.Ref) => {
+export const usesIconFontLayout  = (img?: Cust.Ref) => {
     return composition([
         rules([
             // load a custom font:
@@ -469,7 +469,7 @@ export const usesIconFontBase  = (img?: Cust.Ref) => {
         }),
     ]);
 };
-export const usesIconImageBase = (img?: Cust.Ref) => {
+export const usesIconImageLayout = (img?: Cust.Ref) => {
     return composition([
         layout({
             // backgrounds:
@@ -518,11 +518,12 @@ export const usesIconImageBase = (img?: Cust.Ref) => {
     ]);
 };
 
-export const usesIconImage     = (img: Cust.Ref, foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
+export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
     return composition([
         imports([
-            usesIconBase(foregOverwrite, sizeOverwrite),
-            usesIconImageBase(img),
+            // layouts:
+            usesIconLayout(foregOverwrite, sizeOverwrite),
+            usesIconImageLayout(img),
         ]),
     ]);
 };
@@ -530,17 +531,20 @@ export const usesIconImage     = (img: Cust.Ref, foregOverwrite?: Cust.Ref, size
 export const usesIcon = () => {
     return composition([
         imports([
-            usesIconBase(),
+            // layouts:
+            usesIconLayout(),
         ]),
         variants([
             rule('.font', composition([
                 imports([
-                    usesIconFontBase(),
+                    // layouts:
+                    usesIconFontLayout(),
                 ]),
             ])),
             rule('.img', composition([
                 imports([
-                    usesIconImageBase(),
+                    // layouts:
+                    usesIconImageLayout(),
                 ]),
             ])),
         ]),
