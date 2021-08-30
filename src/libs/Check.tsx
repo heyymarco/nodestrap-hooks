@@ -72,6 +72,10 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
+    usesFocusBlur,
+}                           from './Control'
+import {
+    // hooks:
     usesPressRelease,
     
     
@@ -365,7 +369,7 @@ export const usesCheck = () => {
             
             
             // foregrounds:
-            foreg          : mildRefs.foregMildFn,
+            foreg          : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
             
             
             
@@ -417,6 +421,18 @@ export const usesCheck = () => {
                     // bases:
                     usesEditableActionControl(),
                 ]),
+                // makes focus/blur state inherit from parent:
+                (() => {
+                    // dependencies:
+                    const [, , focusBlurDecls] = usesFocusBlur();
+                    
+                    
+                    
+                    return vars({
+                        [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
+                        [focusBlurDecls.animFocusBlur]      : 'inherit',
+                    });
+                })(),
                 layout({
                     // layouts:
                     display       : 'inline-block', // use inline-block, so it takes the width & height as we set
@@ -444,6 +460,11 @@ export const usesCheck = () => {
                     
                     // accessibility:
                     pointerEvents : 'none', // just an overlay element (ghost), no mouse interaction, clicking on it will focus on the parent
+                    
+                    
+                    
+                    // animations:
+                    filter        : 'initial !important', // uses parent filter
                     
                     
                     
@@ -652,24 +673,24 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         from : {
             filter    : [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => ![filterCheckClearIn, filterCheckClearOut].includes(f)),
-
+                
                 filterCheckClearOut,
             ].map(defaultFilter)],
             transform : [[ // double array => makes the JSS treat as space separated values
                 ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
-
+                
                 transfCheckClearOut,
             ].map(defaultTransf)],
         },
         to   : {
             filter    : [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => ![filterCheckClearIn, filterCheckClearOut].includes(f)),
-
+                
                 filterCheckClearIn,
             ].map(defaultFilter)],
             transform : [[ // double array => makes the JSS treat as space separated values
                 ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
-
+                
                 transfCheckClearIn,
             ].map(defaultTransf)],
         },
@@ -685,9 +706,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         from : keyframesCheck.from,
         '75%': {
             transformOrigin: 'left', // todo: orientation aware transform => left will be top if the element rotated 90deg clockwise
-            transform: [[
-                'scaleX(1.2)', // add a bumpy effect
+            transform: [[ // double array => makes the JSS treat as space separated values
+                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
+                
                 transfCheckClearIn,
+                'scaleX(1.2)', // add a bumpy effect
             ]],
         },
         to   : keyframesCheck.to,
@@ -696,9 +719,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         from : keyframesSwitchCheck.to,
         '75%': {
             transformOrigin: 'right', // todo: orientation aware transform => right will be bottom if the element rotated 90deg clockwise
-            transform: [[
-                'scaleX(1.2)', // add a bumpy effect
+            transform: [[ // double array => makes the JSS treat as space separated values
+                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
+                
                 transfCheckClearOut,
+                'scaleX(1.2)', // add a bumpy effect
             ]],
         },
         to   : keyframesSwitchCheck.from,
