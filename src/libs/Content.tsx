@@ -36,7 +36,8 @@ import {
 }                           from './BasicComponent'
 import {
     // styles:
-    usesIndicator,
+    usesIndicatorLayout,
+    usesIndicatorStates,
     
     
     
@@ -49,7 +50,7 @@ import spacers              from './spacers'     // configurable spaces defs
 
 
 // styles:
-export const usesContent = () => {
+export const usesContentLayout = () => {
     // dependencies:
     
     // layouts:
@@ -64,10 +65,8 @@ export const usesContent = () => {
     
     return composition([
         imports([
-            // bases:
-            usesIndicator(),
-            
             // layouts:
+            usesIndicatorLayout(),
             sizes(),
         ]),
         layout({
@@ -75,7 +74,27 @@ export const usesContent = () => {
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
     ]);
-}
+};
+export const usesContentStates = () => {
+    return composition([
+        imports([
+            // states:
+            usesIndicatorStates(),
+        ]),
+    ]);
+};
+export const usesContent = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesContentLayout(),
+            
+            // states:
+            usesContentStates(),
+        ]),
+    ]);
+};
+
 export const useContentSheet = createUseCssfnStyle(() => [
     mainComposition([
         imports([
