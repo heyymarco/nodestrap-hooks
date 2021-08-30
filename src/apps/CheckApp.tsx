@@ -12,6 +12,8 @@ import {
 } 					from '../libs/BasicComponent';
 import Check, * as Checks   from '../libs/Check';
 import EditableControl from '../libs/EditableControl';
+import ActionControl from '../libs/ActionControl';
+import EditableActionControl from '../libs/EditableActionControl';
 
 
 
@@ -67,8 +69,48 @@ function App() {
 					enableValidation={enableVal}
 					isValid={isValid}
 				>
-                    editable control
+                    editable control mild
                 </EditableControl>
+				<ActionControl
+					theme='primary' size={size} gradient={enableGrad}
+					outlined={outlined}
+
+					enabled={enabled} active={active}
+
+					focus={focus}
+				>
+                    action control
+                </ActionControl>
+				<ActionControl
+					theme='primary' size={size} gradient={enableGrad}
+					outlined={outlined} mild={false}
+
+					enabled={enabled} active={active}
+
+					focus={focus}
+				>
+                    action control mild
+                </ActionControl>
+				<EditableActionControl
+					theme='primary' size={size} gradient={enableGrad}
+					outlined={outlined}
+
+					enabled={enabled} active={active}
+
+					focus={focus}
+				>
+                    editable action control
+                </EditableActionControl>
+				<EditableActionControl
+					theme='primary' size={size} gradient={enableGrad}
+					outlined={outlined} mild={false}
+
+					enabled={enabled} active={active}
+
+					focus={focus}
+				>
+                    editable action control mild
+                </EditableActionControl>
 				<hr style={{flexBasis: '100%'}} />
 				<Check
 					key={theme ?? 'none'}
