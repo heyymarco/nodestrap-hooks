@@ -64,6 +64,7 @@ import {
     
     // styles:
     usesControlLayout,
+    usesControlVariants,
     usesControlStates,
     
     
@@ -304,6 +305,14 @@ export const usesActionControlLayout = () => {
         }),
     ]);
 };
+export const usesActionControlVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesControlVariants(),
+        ]),
+    ]);
+};
 export const usesActionControlStates = () => {
     // dependencies:
     
@@ -332,6 +341,9 @@ export const usesActionControl = () => {
         imports([
             // layouts:
             usesActionControlLayout(),
+            
+            // variants:
+            usesActionControlVariants(),
             
             // states:
             usesActionControlStates(),
