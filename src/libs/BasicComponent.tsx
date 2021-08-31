@@ -856,7 +856,7 @@ export interface AnimVars {
      * final filter.
      */
     filter        : any
-
+    
     /**
      * none transform.
      */
@@ -865,7 +865,7 @@ export interface AnimVars {
      * final transform.
      */
     transf        : any
-
+    
     /**
      * none animation.
      */
