@@ -37,6 +37,7 @@ import {
 import {
     // styles:
     usesIndicatorLayout,
+    usesIndicatorVariants,
     usesIndicatorStates,
     
     
@@ -75,6 +76,14 @@ export const usesContentLayout = () => {
         }),
     ]);
 };
+export const usesContentVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesIndicatorVariants(),
+        ]),
+    ]);
+};
 export const usesContentStates = () => {
     return composition([
         imports([
@@ -88,6 +97,9 @@ export const usesContent = () => {
         imports([
             // layouts:
             usesContentLayout(),
+            
+            // variants:
+            usesContentVariants(),
             
             // states:
             usesContentStates(),
