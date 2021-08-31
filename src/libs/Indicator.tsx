@@ -68,6 +68,7 @@ import {
     
     // styles:
     usesBasicComponentLayout,
+    usesBasicComponentVariants,
     
     
     
@@ -508,6 +509,14 @@ export const usesIndicatorLayout = () => {
         }),
     ]);
 };
+export const usesIndicatorVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesBasicComponentVariants(),
+        ]),
+    ]);
+};
 export const usesIndicatorStates = () => {
     // dependencies:
     
@@ -537,6 +546,9 @@ export const usesIndicator = () => {
         imports([
             // layouts:
             usesIndicatorLayout(),
+            
+            // variants:
+            usesIndicatorVariants(),
             
             // states:
             usesIndicatorStates(),
