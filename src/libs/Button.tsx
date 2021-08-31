@@ -69,6 +69,7 @@ import {
     
     // styles:
     usesActionControlLayout,
+    usesActionControlVariants,
     usesActionControlStates,
     
     
@@ -190,6 +191,10 @@ export const usesButtonLayout = () => {
 };
 export const usesButtonVariants = () => {
     return composition([
+        imports([
+            // variants:
+            usesActionControlVariants(),
+        ]),
         variants([
             noOrientationBlock([
                 layout({
