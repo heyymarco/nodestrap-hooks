@@ -113,8 +113,6 @@ function App() {
                 </EditableActionControl>
 				<hr style={{flexBasis: '100%'}} />
 				<Check
-					key={theme ?? 'none'}
-
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 
 					enabled={enabled}
