@@ -22,6 +22,7 @@ import {
     
     // styles:
     usesEditableControlLayout,
+    usesEditableControlVariants,
     usesEditableControlStates,
     
     
@@ -38,6 +39,7 @@ import {
     
     // styles:
     usesActionControlLayout,
+    usesActionControlVariants,
     usesActionControlStates,
     
     
@@ -58,6 +60,15 @@ export const usesEditableActionControlLayout = () => {
         ]),
     ]);
 };
+export const usesEditableActionControlVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesEditableControlVariants(),
+            usesActionControlVariants(),
+        ]),
+    ]);
+};
 export const usesEditableActionControlStates = () => {
     return composition([
         imports([
@@ -72,6 +83,9 @@ export const usesEditableActionControl = () => {
         imports([
             // layouts:
             usesEditableActionControlLayout(),
+            
+            // variants:
+            usesEditableActionControlVariants(),
             
             // states:
             usesEditableActionControlStates(),
