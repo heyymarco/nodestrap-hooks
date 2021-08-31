@@ -44,6 +44,7 @@ import {
 import {
     // styles:
     usesEditableTextControlLayout,
+    usesEditableTextControlVariants,
     usesEditableTextControlStates,
     
     
@@ -149,6 +150,14 @@ export const usesInputLayout = () => {
         }),
     ]);
 };
+export const usesInputVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesEditableTextControlVariants(),
+        ]),
+    ]);
+};
 export const usesInputStates = () => {
     return composition([
         imports([
@@ -162,6 +171,9 @@ export const usesInput = () => {
         imports([
             // layouts:
             usesInputLayout(),
+            
+            // variants:
+            usesInputVariants(),
             
             // states:
             usesInputStates(),
