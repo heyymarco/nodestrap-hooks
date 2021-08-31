@@ -512,7 +512,7 @@ export const usesIconImageLayout = (img?: Cust.Ref) => {
     ]);
 };
 
-export const usesIconVariants     = () => {
+export const usesIconVariants    = () => {
     // dependencies:
     
     // layouts:
