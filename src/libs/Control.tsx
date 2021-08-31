@@ -70,6 +70,7 @@ import {
     
     // styles:
     usesIndicatorLayout,
+    usesIndicatorVariants,
     usesIndicatorStates,
     
     
@@ -526,6 +527,14 @@ export const usesControlLayout = () => {
         }),
     ]);
 };
+export const usesControlVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesIndicatorVariants(),
+        ]),
+    ]);
+};
 export const usesControlStates = () => {
     // dependencies:
     
@@ -573,6 +582,9 @@ export const usesControl = () => {
         imports([
             // layouts:
             usesControlLayout(),
+            
+            // variants:
+            usesControlVariants(),
             
             // states:
             usesControlStates(),
