@@ -82,6 +82,7 @@ import {
 import {
     // styles:
     usesEditableActionControlLayout,
+    usesEditableActionControlVariants,
     usesEditableActionControlStates,
     
     
@@ -510,6 +511,10 @@ export const usesCheckLayout = () => {
 };
 export const usesCheckVariants = () => {
     return composition([
+        imports([
+            // variants:
+            usesEditableActionControlVariants(),
+        ]),
         variants([
             rule(['.btn', '.togglerBtn'], [
                 layout({

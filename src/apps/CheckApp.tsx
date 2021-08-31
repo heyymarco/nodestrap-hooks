@@ -46,7 +46,7 @@ function App() {
         <div className="App">
             <Container>
 				<EditableControl
-					theme='primary' size={size} gradient={enableGrad}
+					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
 
 					enabled={enabled} active={active}
@@ -59,7 +59,7 @@ function App() {
                     editable control
                 </EditableControl>
 				<EditableControl
-					theme='primary' size={size} gradient={enableGrad}
+					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={false}
 
 					enabled={enabled} active={active}
@@ -72,7 +72,7 @@ function App() {
                     editable control mild
                 </EditableControl>
 				<ActionControl
-					theme='primary' size={size} gradient={enableGrad}
+					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
 
 					enabled={enabled} active={active}
@@ -82,7 +82,7 @@ function App() {
                     action control
                 </ActionControl>
 				<ActionControl
-					theme='primary' size={size} gradient={enableGrad}
+					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={false}
 
 					enabled={enabled} active={active}
@@ -92,7 +92,7 @@ function App() {
                     action control mild
                 </ActionControl>
 				<EditableActionControl
-					theme='primary' size={size} gradient={enableGrad}
+					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
 
 					enabled={enabled} active={active}
@@ -102,7 +102,7 @@ function App() {
                     editable action control
                 </EditableActionControl>
 				<EditableActionControl
-					theme='primary' size={size} gradient={enableGrad}
+					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={false}
 
 					enabled={enabled} active={active}
