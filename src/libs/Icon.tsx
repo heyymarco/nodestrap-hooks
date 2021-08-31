@@ -329,29 +329,17 @@ export interface IconVars {
 }
 const [iconRefs, iconDecls] = createCssVar<IconVars>();
 
-export const usesIconLayout      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
+export const usesIconLayout      = (foregOverwrite?: Cust.Ref) => {
     // dependencies:
     
-    // layouts:
-    const [sizes]            = usesSizes(sizeOverwrite);
-    
     // colors:
-    const [themes]           = usesThemes();
-    const [mild]             = usesMild();
-    
     const [foreg, foregRefs] = usesForeg(foregOverwrite);
     
     
     
     return composition([
         imports([
-            // layouts:
-            sizes(),
-            
             // colors:
-            themes(),
-            mild(),
-            
             foreg(),
         ]),
         layout({
@@ -518,12 +506,39 @@ export const usesIconImageLayout = (img?: Cust.Ref) => {
     ]);
 };
 
+export const usesIconVariants     = (sizeOverwrite?: Cust.Ref) => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes]            = usesSizes(sizeOverwrite);
+    
+    // colors:
+    const [themes]           = usesThemes();
+    const [mild]             = usesMild();
+    
+    
+    
+    return composition([
+        imports([
+            // layouts:
+            sizes(),
+            
+            // colors:
+            themes(),
+            mild(),
+        ]),
+    ]);
+};
+
 export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
     return composition([
         imports([
             // layouts:
-            usesIconLayout(foregOverwrite, sizeOverwrite),
+            usesIconLayout(foregOverwrite),
             usesIconImageLayout(img),
+            
+            // variants:
+            usesIconVariants(sizeOverwrite),
         ]),
     ]);
 };
@@ -533,6 +548,9 @@ export const usesIcon = () => {
         imports([
             // layouts:
             usesIconLayout(),
+            
+            // variants:
+            usesIconVariants(),
         ]),
         variants([
             rule('.font', composition([
