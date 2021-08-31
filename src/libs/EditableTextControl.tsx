@@ -77,6 +77,7 @@ import {
     
     // styles:
     usesEditableControlLayout,
+    usesEditableControlVariants,
     usesEditableControlStates,
     
     
@@ -280,6 +281,14 @@ export const usesEditableTextControlLayout = () => {
         }),
     ]);
 };
+export const usesEditableTextControlVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesEditableControlVariants(),
+        ]),
+    ]);
+};
 export const usesEditableTextControlStates = () => {
     // dependencies:
     
@@ -327,6 +336,9 @@ export const usesEditableTextControl = () => {
         imports([
             // layouts:
             usesEditableTextControlLayout(),
+            
+            // variants:
+            usesEditableTextControlVariants(),
             
             // states:
             usesEditableTextControlStates(),
