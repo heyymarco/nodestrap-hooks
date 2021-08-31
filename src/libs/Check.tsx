@@ -526,7 +526,8 @@ export const usesCheckVariants = () => {
                             
                             
                             // appearances:
-                            visibility : 'hidden', // invisible but still exists
+                         // visibility : 'hidden', // invisible but still exists (not recommended, causing uneven transition)
+                            opacity    : 0, // invisible but still exists & smooth transition between visible & hidden
                             
                             
                             
