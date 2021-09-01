@@ -115,25 +115,25 @@ export interface CheckAnimVars {
      */
     filterNone  : any
     /**
-     * final filter.
+     * final filter for the checkbox.
      */
     checkFilter : any
-
+    
     /**
      * none transform.
      */
     transfNone  : any
     /**
-     * final transform.
+     * final transform for the checkbox.
      */
     checkTransf : any
-
+    
     /**
      * none animation.
      */
     animNone    : any
     /**
-     * final animation.
+     * final animation for the checkbox.
      */
     checkAnim   : any
 }
@@ -311,8 +311,8 @@ export const usesCheckClear = () => {
 
 
 // styles:
-const checkElm = '::before';
 const inputElm = ':first-child';
+const checkElm = '::before';
 const labelElm = ':nth-child(1n+2)';
 export const usesCheckLayout = () => {
     // dependencies:
@@ -326,8 +326,8 @@ export const usesCheckLayout = () => {
     ]));
     
     // colors:
-    const [, mildRefs ] = usesMild();
-    const [, foregRefs] = usesForeg();
+    const [         , mildRefs     ] = usesMild();
+    const [foreg    , foregRefs    ] = usesForeg();
     
     // animations:
     const [checkAnim, checkAnimRefs] = usesCheckAnim();
@@ -339,6 +339,9 @@ export const usesCheckLayout = () => {
             // layouts:
             usesEditableActionControlLayout(),
             sizes(),
+            
+            // colors:
+            foreg(),
             
             // animations:
             checkAnim(),
@@ -449,7 +452,7 @@ export const usesCheckLayout = () => {
                     // children:
                     ...children(checkElm, composition([
                         imports([
-                            // check icon:
+                            // check indicator:
                             usesIconImage(
                                 /*iconImage: */cssProps.img,
                                 /*iconColor: */foregRefs.foreg,
@@ -619,6 +622,7 @@ export const usesCheckVariants = () => {
             
             rule('.switch', [
                 layout({
+                    // children:
                     ...children(inputElm, composition([
                         layout({
                             // sizes:
@@ -700,6 +704,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     
     
+    //#region keyframes
     const keyframesCheck         : PropEx.Keyframes = {
         from : {
             filter    : [[ // double array => makes the JSS treat as space separated values
@@ -737,12 +742,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         from : keyframesCheck.from,
         '75%': {
             transformOrigin: 'left', // todo: orientation aware transform => left will be top if the element rotated 90deg clockwise
-            transform: [[ // double array => makes the JSS treat as space separated values
+            transform : [[ // double array => makes the JSS treat as space separated values
                 ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
                 
                 transfCheckClearIn,
                 'scaleX(1.2)', // add a bumpy effect
-            ]],
+            ].map(defaultTransf)],
         },
         to   : keyframesCheck.to,
     };
@@ -750,15 +755,16 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         from : keyframesSwitchCheck.to,
         '75%': {
             transformOrigin: 'right', // todo: orientation aware transform => right will be bottom if the element rotated 90deg clockwise
-            transform: [[ // double array => makes the JSS treat as space separated values
+            transform : [[ // double array => makes the JSS treat as space separated values
                 ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
                 
                 transfCheckClearOut,
                 'scaleX(1.2)', // add a bumpy effect
-            ]],
+            ].map(defaultTransf)],
         },
         to   : keyframesSwitchCheck.from,
     };
+    //#endregion keyframes
     
     
     
