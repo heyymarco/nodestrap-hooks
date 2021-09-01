@@ -58,6 +58,12 @@ import {
 }                           from './BasicComponent'
 import {
     // hooks:
+    isActived,
+    isActivating,
+    isPassivating,
+}                           from './Indicator'
+import {
+    // hooks:
     markActive,
     
     
@@ -271,6 +277,51 @@ export const useStatePressRelease = (props: ActionControlProps, mouses: number[]
     };
 };
 //#endregion pressRelease
+
+//#region activePassive as pressRelease
+/**
+ * Uses active & passive states as press & release states.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
+ */
+export const usesActivePassiveAsPressRelease = () => {
+    // dependencies:
+    
+    // states:
+    const [pressRelease, pressReleaseRefs, pressReleaseDecls, ...restPressRelease] = usesPressRelease();
+    
+    
+    
+    return [
+        () => composition([
+            imports([
+                pressRelease(),
+            ]),
+            states([
+                isActived([
+                    vars({
+                        [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
+                    }),
+                ]),
+                isActivating([
+                    vars({
+                        [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
+                        [pressReleaseDecls.animPressRelease]   : cssProps.animPress,
+                    }),
+                ]),
+                isPassivating([
+                    vars({
+                        [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
+                        [pressReleaseDecls.animPressRelease]   : cssProps.animRelease,
+                    }),
+                ]),
+            ]),
+        ]),
+        pressReleaseRefs,
+        pressReleaseDecls,
+        ...restPressRelease,
+    ] as const;
+};
+//#endregion activePassive as pressRelease
 
 
 
