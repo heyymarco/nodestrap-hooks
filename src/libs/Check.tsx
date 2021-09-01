@@ -310,7 +310,9 @@ export const usesCheckClear = () => {
 
 
 
-export type ChkStyle = 'btn' | 'togglerBtn' | 'switch' // might be added more styles in the future
+// appearances:
+
+export type ChkStyle = 'btn'|'togglerBtn'|'switch' // might be added more styles in the future
 export interface VariantCheck {
     chkStyle?: ChkStyle
 }
@@ -831,96 +833,96 @@ export interface CheckProps
     extends
         EditableActionControlProps<HTMLInputElement>,
         TogglerActiveProps,
-
+        
         VariantCheck
 {
     // values:
     defaultChecked? : boolean
     checked?        : boolean
-
-
+    
+    
     // formats:
     type?           : 'checkbox' | 'radio'
-
-
+    
+    
     // accessibility:
     label?          : string
     text?           : string
-
-
+    
+    
     // events:
     onChange?       : React.ChangeEventHandler<HTMLInputElement>
-
-
+    
+    
     // children:
     children?       : React.ReactNode
 }
 export const Check = (props: CheckProps) => {
     // styles:
     const sheet     = useCheckSheet();
-
+    
     
     
     // variants:
     const variCheck = useVariantCheck(props);
-
+    
     
     
     // states:
     const inputRef  = useRef<HTMLInputElement|null>(null);
     const [isActive, setActive] = useTogglerActive({
         ...props,
-
+        
         defaultActive : props.defaultActive ?? props.defaultChecked, // forwards `defaultChecked` to `defaultActive`
         active        : props.active        ?? props.checked,        // forwards `checked`        to `active`
     }, /*changeEventTarget :*/inputRef);
-
     
-
+    
+    
     // rest props:
     const {
         // essentials:
         elmRef,
-
-
+        
+        
         // accessibility:
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
-
+        
         defaultChecked, // delete, already forwarded to `defaultActive`
         checked,        // delete, already forwarded to `active`
         onChange,       // forwards to `input[type='checkbox']`
-
-
+        
+        
         // values:
         defaultValue,
         value,
-
-
+        
+        
         // validations:
         required,
-
-
+        
+        
         // formats:
         type,
     ...restProps}  = props;
-
-
-
+    
+    
+    
     // handlers:
     const handleToggleActive = () => {
         setActive(!isActive); // toggle active
     }
-
-
-
+    
+    
+    
     // fn props:
     const propEnabled = usePropEnabled(props);
-
+    
     const ariaRole    = props.role            ?? 'checkbox';
     const ariaChecked = props['aria-checked'] ?? ((ariaRole === 'checkbox') ? isActive : undefined);
-
+    
     
     
     // jsx:
@@ -928,30 +930,30 @@ export const Check = (props: CheckProps) => {
         <EditableActionControl<HTMLInputElement>
             // other props:
             {...restProps}
-
-
+            
+            
             // essentials:
             tag={props.tag ?? 'span'}
-
-
+            
+            
             // accessibility:
             role={ariaRole}
             aria-checked={ariaChecked}
             aria-label={props.label}
             active={isActive}
-
-
+            
+            
             // variants:
             mild={props.mild ?? false}
-
-
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 variCheck.class,
             ]}
-
-
+            
+            
             // events:
             onClick={(e) => {
                 // backwards:
@@ -967,9 +969,9 @@ export const Check = (props: CheckProps) => {
             onKeyUp={(e) => {
                 // backwards:
                 props.onKeyUp?.(e);
-
-
-
+                
+                
+                
                 if (!e.defaultPrevented) {
                     if ((e.key === ' ') || (e.code === 'Space')) {
                         handleToggleActive();
@@ -982,8 +984,8 @@ export const Check = (props: CheckProps) => {
                 // essentials:
                 ref={(elm) => {
                     inputRef.current = elm;
-    
-    
+                    
+                    
                     // forwards:
                     if (elmRef) {
                         if (typeof(elmRef) === 'function') {
@@ -994,8 +996,8 @@ export const Check = (props: CheckProps) => {
                         } // if
                     } // if
                 }}
-
-
+                
+                
                 // accessibility:
                 aria-hidden={true} // the input just for check indicator & storing value
                 tabIndex={-1}      // non focusable
@@ -1003,27 +1005,27 @@ export const Check = (props: CheckProps) => {
                 disabled={!propEnabled} // do not submit the value if disabled
                 readOnly={true}    // for satisfying React of **controllable readOnly check**
                 checked={isActive} // **controllable check**
-
-
+                
+                
                 // values:
                 defaultValue={defaultValue}
                 value={value}
-
-
+                
+                
                 // validations:
                 required={required}
-
-
+                
+                
                 // formats:
                 type={type ?? 'checkbox'}
-
-
+                
+                
                 // events:
                 onAnimationEnd={(e) => {
                     // triggers `Check`'s onAnimationEnd event
                     e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
                 }}
-
+                
                 onChange={onChange} // forwards `onChange` event
                 onClick={(e) => e.stopPropagation()} // prevents firing `change` event triggering parent's `onClick`
             />
