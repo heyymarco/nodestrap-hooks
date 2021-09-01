@@ -215,14 +215,6 @@ const iconElm = '::after';
 export const usesEditableTextControlLayout = () => {
     // dependencies:
     
-    // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
-        vars({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
     // colors:
     const [iconColor   , iconColorRefs   ] = usesIconColor();
     
@@ -235,7 +227,6 @@ export const usesEditableTextControlLayout = () => {
         imports([
             // layouts:
             usesEditableControlLayout(),
-            sizes(),
             
             // colors:
             iconColor(),
@@ -282,10 +273,25 @@ export const usesEditableTextControlLayout = () => {
     ]);
 };
 export const usesEditableTextControlVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizes((sizeName) => composition([
+        vars({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    
+    
     return composition([
         imports([
             // variants:
             usesEditableControlVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
     ]);
 };
