@@ -497,6 +497,24 @@ export const useStateArriveLeave = <TElement extends HTMLElement = HTMLElement>(
 
 // styles:
 export const usesControlLayout = () => {
+    return composition([
+        imports([
+            // resets:
+            stripOutControl(), // clear browser's default styles
+            
+            // layouts:
+            usesIndicatorLayout(),
+            
+            // colors:
+            usesThemeDefault(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesControlVariants = () => {
     // dependencies:
     
     // layouts:
@@ -511,27 +529,11 @@ export const usesControlLayout = () => {
     
     return composition([
         imports([
-            // resets:
-            stripOutControl(), // clear browser's default styles
-            
-            // layouts:
-            usesIndicatorLayout(),
-            sizes(),
-            
-            // colors:
-            usesThemeDefault(),
-        ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-};
-export const usesControlVariants = () => {
-    return composition([
-        imports([
             // variants:
             usesIndicatorVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
     ]);
 };
