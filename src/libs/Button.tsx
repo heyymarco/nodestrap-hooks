@@ -141,23 +141,10 @@ export const noBackground = () => {
 };
 
 export const usesButtonLayout = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
-        vars({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
-    
-    
     return composition([
         imports([
             // layouts:
             usesActionControlLayout(),
-            sizes(),
         ]),
         layout({
             // layouts:
@@ -190,10 +177,25 @@ export const usesButtonLayout = () => {
     ]);
 };
 export const usesButtonVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizes((sizeName) => composition([
+        vars({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    
+    
     return composition([
         imports([
             // variants:
             usesActionControlVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
         variants([
             noOrientationBlock([
