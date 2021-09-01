@@ -72,12 +72,7 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    usesPressRelease,
-    
-    
-    
-    // configs:
-    cssProps as acssProps,
+    usesActivePassiveAsPressRelease,
 }                           from './ActionControl'
 import {
     // styles:
@@ -589,36 +584,9 @@ export const usesCheckVariants = () => {
                 }),
             ]),
             rule('.togglerBtn', [ // todo: fix blinky when mouseUp
-                (() => {
-                    // dependencies:
-                    
-                    // states:
-                    const [, , pressReleaseDecls] = usesPressRelease();
-                    
-                    
-                    
-                    return composition([
-                        states([
-                            isActived([
-                                vars({
-                                    [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
-                                }),
-                            ]),
-                            isActivating([
-                                vars({
-                                    [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
-                                    [pressReleaseDecls.animPressRelease]   : acssProps.animPress,
-                                }),
-                            ]),
-                            isPassivating([
-                                vars({
-                                    [pressReleaseDecls.filterPressRelease] : acssProps.filterPress,
-                                    [pressReleaseDecls.animPressRelease]   : acssProps.animRelease,
-                                }),
-                            ]),
-                        ]),
-                    ]);
-                })(),
+                imports([
+                    usesActivePassiveAsPressRelease(),
+                ]),
                 layout({
                     ...children(labelElm, composition([
                         layout({
