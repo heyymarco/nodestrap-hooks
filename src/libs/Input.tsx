@@ -77,14 +77,6 @@ export const usesInputLayout = () => {
         }),
     ]));
     
-    // colors:
-    const [gradient, , gradientDecls] = usesGradient((toggle) => composition([
-        vars({
-            // *toggle on/off* the background gradient prop:
-            [gradientDecls.backgGradTg] : toggle ? cssProps.backgGrad : ((toggle !== null) ? 'initial' : null),
-        }),
-    ]));
-    
     
     
     return composition([
@@ -92,9 +84,6 @@ export const usesInputLayout = () => {
             // layouts:
             usesEditableTextControlLayout(),
             sizes(),
-            
-            // colors:
-            gradient(),
         ]),
         layout({
             // layouts:
@@ -151,10 +140,25 @@ export const usesInputLayout = () => {
     ]);
 };
 export const usesInputVariants = () => {
+    // dependencies:
+    
+    // colors:
+    const [gradient, , gradientDecls] = usesGradient((toggle) => composition([
+        vars({
+            // *toggle on/off* the background gradient prop:
+            [gradientDecls.backgGradTg] : toggle ? cssProps.backgGrad : ((toggle !== null) ? 'initial' : null),
+        }),
+    ]));
+    
+    
+    
     return composition([
         imports([
             // variants:
             usesEditableTextControlVariants(),
+            
+            // colors:
+            gradient(),
         ]),
     ]);
 };
