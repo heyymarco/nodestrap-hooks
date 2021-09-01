@@ -699,6 +699,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     const defaultFilter = (filter : Cust.Ref) => fallbacks(filter, checkAnimRefs.filterNone);
     const defaultTransf = (transf : Cust.Ref) => fallbacks(transf, checkAnimRefs.transfNone);
+    const isRef         = (expr   : Cust.Expr): expr is Cust.Ref => (typeof(expr) === 'string') && expr.startsWith('var(--');
     
     const [, {filterCheckClearIn, filterCheckClearOut, transfCheckClearIn, transfCheckClearOut}] = usesCheckClear();
     
@@ -747,7 +748,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 
                 transfCheckClearIn,
                 'scaleX(1.2)', // add a bumpy effect
-            ].map(defaultTransf)],
+            ].map((t) => isRef(t) ? defaultTransf(t) : t)],
         },
         to   : keyframesCheck.to,
     };
@@ -760,7 +761,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 
                 transfCheckClearOut,
                 'scaleX(1.2)', // add a bumpy effect
-            ].map(defaultTransf)],
+            ].map((t) => isRef(t) ? defaultTransf(t) : t)],
         },
         to   : keyframesSwitchCheck.from,
     };
