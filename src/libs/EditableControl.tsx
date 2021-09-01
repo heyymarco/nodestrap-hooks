@@ -514,6 +514,18 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
 
 // styles:
 export const usesEditableControlLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesControlLayout(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesEditableControlVariants = () => {
     // dependencies:
     
     // layouts:
@@ -528,21 +540,11 @@ export const usesEditableControlLayout = () => {
     
     return composition([
         imports([
-            // layouts:
-            usesControlLayout(),
-            sizes(),
-        ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-};
-export const usesEditableControlVariants = () => {
-    return composition([
-        imports([
             // variants:
             usesControlVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
     ]);
 };
