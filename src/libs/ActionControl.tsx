@@ -319,6 +319,23 @@ export const usesActivePassiveAsPressRelease = () => {
 
 // styles:
 export const usesActionControlLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesControlLayout(),
+        ]),
+        layout({
+            // accessibility:
+            userSelect : 'none', // disable selecting text (double clicking not causing selecting text)
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesActionControlVariants = () => {
     // dependencies:
     
     // layouts:
@@ -333,26 +350,11 @@ export const usesActionControlLayout = () => {
     
     return composition([
         imports([
-            // layouts:
-            usesControlLayout(),
-            sizes(),
-        ]),
-        layout({
-            // accessibility:
-            userSelect : 'none', // disable selecting text (double clicking not causing selecting text)
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-};
-export const usesActionControlVariants = () => {
-    return composition([
-        imports([
             // variants:
             usesControlVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
     ]);
 };
