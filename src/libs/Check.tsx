@@ -310,6 +310,18 @@ export const usesCheckClear = () => {
 
 
 
+export type ChkStyle = 'btn' | 'togglerBtn' | 'switch' // might be added more styles in the future
+export interface VariantCheck {
+    chkStyle?: ChkStyle
+}
+export const useVariantCheck = (props: VariantCheck) => {
+    return {
+        class: props.chkStyle ? props.chkStyle : null,
+    };
+};
+
+
+
 // styles:
 const inputElm = ':first-child';
 const checkElm = '::before';
@@ -813,20 +825,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
-// hooks:
-
-export type ChkStyle = 'btn' | 'togglerBtn' | 'switch' // might be added more styles in the future
-export interface VariantCheck {
-    chkStyle?: ChkStyle
-}
-export function useVariantCheck(props: VariantCheck) {
-    return {
-        class: props.chkStyle ? props.chkStyle : null,
-    };
-}
-
-
-
 // react components:
 
 export interface CheckProps
@@ -857,7 +855,7 @@ export interface CheckProps
     // children:
     children?       : React.ReactNode
 }
-export default function Check(props: CheckProps) {
+export const Check = (props: CheckProps) => {
     // styles:
     const sheet     = useCheckSheet();
 
@@ -1044,5 +1042,5 @@ export default function Check(props: CheckProps) {
             }
         </EditableActionControl>
     );
-}
-export { Check }
+};
+export { Check as default }
