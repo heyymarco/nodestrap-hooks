@@ -52,6 +52,18 @@ import spacers              from './spacers'     // configurable spaces defs
 
 // styles:
 export const usesContentLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesIndicatorLayout(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesContentVariants = () => {
     // dependencies:
     
     // layouts:
@@ -66,21 +78,11 @@ export const usesContentLayout = () => {
     
     return composition([
         imports([
-            // layouts:
-            usesIndicatorLayout(),
-            sizes(),
-        ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-};
-export const usesContentVariants = () => {
-    return composition([
-        imports([
             // variants:
             usesIndicatorVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
     ]);
 };
