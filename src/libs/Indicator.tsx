@@ -485,6 +485,18 @@ export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: 
 
 // styles:
 export const usesIndicatorLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesBasicComponentLayout(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesIndicatorVariants = () => {
     // dependencies:
     
     // layouts:
@@ -499,21 +511,11 @@ export const usesIndicatorLayout = () => {
     
     return composition([
         imports([
-            // layouts:
-            usesBasicComponentLayout(),
-            sizes(),
-        ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-};
-export const usesIndicatorVariants = () => {
-    return composition([
-        imports([
             // variants:
             usesBasicComponentVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
     ]);
 };
