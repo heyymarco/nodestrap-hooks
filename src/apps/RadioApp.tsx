@@ -70,14 +70,15 @@ function App() {
                     editable control
                 </EditableControl>
 				<hr style={{flexBasis: '100%'}} />
+				<p>controllable:</p>
 				<Radio
 					name='bleh'
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 
 					enabled={enabled}
 					
-					active={active}
-					onActiveChange={(act) => setActive(act)}
+					active={active === false}
+					onActiveChange={(act) => act && setActive(false)}
 
 					focus={focus}
 
@@ -86,8 +87,87 @@ function App() {
 
 					chkStyle={chkStyle}
 				>
-						test
+						test 1
 				</Radio>
+				<Radio
+					name='bleh'
+					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
+
+					enabled={enabled}
+					
+					active={active === true}
+					onActiveChange={(act) => act && setActive(true)}
+
+					focus={focus}
+
+					enableValidation={enableVal}
+					isValid={isValid}
+
+					chkStyle={chkStyle}
+				>
+						test 2
+				</Radio>
+                <hr style={{flexBasis: '100%'}} />
+				<Radio
+					name='meow'
+					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
+
+					enabled={enabled}
+					
+					defaultActive={active === false}
+					onActiveChange={(act) => act && setActive(false)}
+
+					focus={focus}
+
+					enableValidation={enableVal}
+					isValid={isValid}
+
+					chkStyle={chkStyle}
+				>
+						test 1
+				</Radio>
+				<Radio
+					name='meow'
+					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
+
+					enabled={enabled}
+					
+					defaultActive={active === true}
+					onActiveChange={(act) => act && setActive(true)}
+
+					focus={focus}
+
+					enableValidation={enableVal}
+					isValid={isValid}
+
+					chkStyle={chkStyle}
+				>
+						test 2
+				</Radio>
+                <hr style={{flexBasis: '100%'}} />
+				<p>controllable:</p>
+				<input type='radio'
+					name='foo'
+					checked={active === false}
+					onChange={() => setActive(false)}
+				/>
+				<input type='radio'
+					name='foo'
+					checked={active === true}
+					onChange={() => setActive(true)}
+				/>
+                <hr style={{flexBasis: '100%'}} />
+				<p>uncontrollable:</p>
+				<input type='radio'
+					name='boo'
+					defaultChecked={active === false}
+					onChange={() => setActive(false)}
+				/>
+				<input type='radio'
+					name='boo'
+					defaultChecked={active === true}
+					onChange={() => setActive(true)}
+				/>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

@@ -1,6 +1,7 @@
 // react (builds html using javascript):
 import {
     default as React,
+    useRef,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -40,6 +41,10 @@ import {
     // hooks:
     usesSizes,
 }                           from './BasicComponent'
+import {
+    // hooks:
+    useTogglerActive,
+}                           from './Indicator'
 import {
     // hooks:
     ChkStyle,
@@ -172,11 +177,58 @@ export const Radio = (props: RadioProps) => {
     
     
     
+    // states:
+    const inputRef  = useRef<HTMLInputElement|null>(null);
+    const [isActive, setActive] = useTogglerActive({
+        ...props,
+        
+        defaultActive : props.defaultActive ?? props.defaultChecked, // forwards `defaultChecked` to `defaultActive`
+        active        : props.active        ?? props.checked,        // forwards `checked`        to `active`
+    }, /*changeEventTarget :*/inputRef);
+    
+    
+    
+    // rest props:
+    const {
+        // essentials:
+        elmRef,
+    ...restProps}  = props;
+    
+    
+    
+    // handlers:
+    const handleSelected = () => {
+        setActive(true); // toggle active
+    }
+    
+    
+    
     // jsx:
     return (
         <Check
             // other props:
-            {...props}
+            {...restProps}
+            
+            
+            // essentials:
+            elmRef={(elm) => {
+                inputRef.current = elm;
+                
+                
+                // forwards:
+                if (elmRef) {
+                    if (typeof(elmRef) === 'function') {
+                        elmRef(elm);
+                    }
+                    else {
+                        (elmRef as React.MutableRefObject<HTMLInputElement|null>).current = elm;
+                    } // if
+                } // if
+            }}
+            
+            
+            // accessibility:
+            active={isActive}
             
             
             // classes:
@@ -185,6 +237,33 @@ export const Radio = (props: RadioProps) => {
             
             // formats:
             type={props.type ?? 'radio'}
+            
+            
+            // events:
+            onClick={(e) => {
+                // backwards:
+                props.onClick?.(e);
+                
+                
+                
+                if (!e.defaultPrevented) {
+                    handleSelected();
+                    e.preventDefault();
+                } // if
+            }}
+            onKeyUp={(e) => {
+                // backwards:
+                props.onKeyUp?.(e);
+                
+                
+                
+                if (!e.defaultPrevented) {
+                    if ((e.key === ' ') || (e.code === 'Space')) {
+                        handleSelected();
+                        e.preventDefault();
+                    } // if
+                } // if
+            }}
         />
     );
 };
