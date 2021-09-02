@@ -67,23 +67,10 @@ import {
 // styles:
 const inputElm = ':first-child';
 export const usesInputLayout = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
-        vars({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
-    
-    
     return composition([
         imports([
             // layouts:
             usesEditableTextControlLayout(),
-            sizes(),
         ]),
         layout({
             // layouts:
@@ -142,6 +129,14 @@ export const usesInputLayout = () => {
 export const usesInputVariants = () => {
     // dependencies:
     
+    // layouts:
+    const [sizes] = usesSizes((sizeName) => composition([
+        vars({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
     // colors:
     const [gradient, , gradientDecls] = usesGradient((toggle) => composition([
         vars({
@@ -156,6 +151,9 @@ export const usesInputVariants = () => {
         imports([
             // variants:
             usesEditableTextControlVariants(),
+            
+            // layouts:
+            sizes(),
             
             // colors:
             gradient(),
