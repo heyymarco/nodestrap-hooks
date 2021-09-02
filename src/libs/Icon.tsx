@@ -329,22 +329,16 @@ export interface IconVars {
 }
 const [iconRefs, iconDecls] = createCssVar<IconVars>();
 
-export const usesIconLayout      = (foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
+export const usesIconLayout      = () => {
     // dependencies:
     
-    // layouts:
-    const [sizes]            = sizeOverwrite ? usesSizes(sizeOverwrite) : [null];
-    
     // colors:
-    const [foreg, foregRefs] = usesForeg(foregOverwrite);
+    const [foreg, foregRefs] = usesForeg();
     
     
     
     return composition([
         imports([
-            // layouts:
-            sizes?.(),
-            
             // colors:
             foreg(),
         ]),
@@ -537,11 +531,24 @@ export const usesIconVariants    = () => {
 };
 
 export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, sizeOverwrite?: Cust.Ref) => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = sizeOverwrite  ? usesSizes(sizeOverwrite)  : [null];
+    
+    // colors:
+    const [foreg] = foregOverwrite ? usesForeg(foregOverwrite) : [null];
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesIconLayout(foregOverwrite, sizeOverwrite),
             usesIconImageLayout(img),
+            sizes?.(),
+            
+            // colors:
+            foreg?.(),
         ]),
     ]);
 };
