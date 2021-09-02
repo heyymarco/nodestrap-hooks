@@ -870,6 +870,7 @@ export const Check = (props: CheckProps) => {
         
         
         // values:
+        name,
         defaultValue,
         value,
         
@@ -990,6 +991,7 @@ export const Check = (props: CheckProps) => {
                 
                 
                 // values:
+                name={name}
                 defaultValue={defaultValue}
                 value={value}
                 

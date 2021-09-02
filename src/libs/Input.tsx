@@ -246,6 +246,7 @@ export const Input = (props: InputProps) => {
         
         
         // values:
+        name,
         defaultValue,
         value,
         onChange, // forwards to `input[type]`
@@ -304,6 +305,7 @@ export const Input = (props: InputProps) => {
                 
                 
                 // values:
+                name={name}
                 defaultValue={defaultValue}
                 value={value}
                 
