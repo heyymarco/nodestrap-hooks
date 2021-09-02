@@ -71,12 +71,12 @@ function App() {
                 </EditableControl>
 				<hr style={{flexBasis: '100%'}} />
 				<Radio
-					name='color'
-
+					name='bleh'
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 
 					enabled={enabled}
 					
+					active={active}
 					onActiveChange={(act) => setActive(act)}
 
 					focus={focus}
