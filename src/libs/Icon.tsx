@@ -114,7 +114,7 @@ export const usesSizes = (sizeOverwrite?: Cust.Ref, factory = sizeOf, options = 
     return [
         () => sizeOverwrite ? composition([
             vars({
-                [cssDecls.size]: sizeOverwrite,
+                [cssDecls.size]: ((sizeOverwrite !== cssProps.size) ? sizeOverwrite : null),
             }),
         ]) : sizes(),
         sizeRefs,
@@ -243,7 +243,7 @@ export const usesForeg = (foregOverwrite?: Cust.Ref) => {
     return [
         () => foregOverwrite ? composition([
             vars({
-                [foregDecls.foreg]   : foregOverwrite,
+                [foregDecls.foreg]   : ((foregOverwrite !== foregRefs.foreg) ? foregOverwrite : null),
             }),
         ]) : composition([
             imports([
