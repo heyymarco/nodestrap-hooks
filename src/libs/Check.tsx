@@ -326,14 +326,6 @@ const labelElm = ':nth-child(1n+2)';
 export const usesCheckLayout = () => {
     // dependencies:
     
-    // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
-        vars({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
     // colors:
     const [         , mildRefs     ] = usesMild();
     const [foreg    , foregRefs    ] = usesForeg();
@@ -347,7 +339,6 @@ export const usesCheckLayout = () => {
         imports([
             // layouts:
             usesEditableActionControlLayout(),
-            sizes(),
             
             // colors:
             foreg(),
@@ -522,10 +513,25 @@ export const usesCheckLayout = () => {
     ]);
 };
 export const usesCheckVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizes((sizeName) => composition([
+        vars({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    
+    
     return composition([
         imports([
             // variants:
             usesEditableActionControlVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
         variants([
             rule(['.btn', '.togglerBtn'], [
