@@ -2,6 +2,7 @@
 import {
     default as React,
     useState,
+    useReducer,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -435,7 +436,39 @@ export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: 
 
 
     // states:
-    const [activeTg, setActiveTg] = useState<boolean>(props.defaultActive ?? false); // uncontrollable (dynamic) state: true => user activate, false => user deactivate
+    const [activeTg, setActive] = useReducer((oldActive: boolean, newActive: React.SetStateAction<boolean>): boolean => {
+        if (!propEnabled) return oldActive; // control is disabled => no response required
+        if (propReadOnly) return oldActive; // control is readOnly => no response required
+        
+        
+        
+        const activeFn: boolean = propActive /*controllable*/ ?? oldActive /*uncontrollable*/;
+        const newActiveValue = (typeof newActive === 'function') ? newActive(activeFn) : newActive;
+        if (newActiveValue === activeFn) return oldActive; // no change needed
+        
+        
+        
+        setTimeout(() => {
+            // fire change event:
+            props.onActiveChange?.(newActiveValue); // notify changed -or- request to change
+            
+            // fire change event:
+            if (changeEventTarget?.current) {
+                changeEventTarget.current.checked = newActiveValue;
+                triggerChange(changeEventTarget.current);
+            } // if
+        }, 0);
+        
+        
+        
+        // save the changes:
+        if (propActive !== null) { // controllable [active] is set => no set uncontrollable required
+            return oldActive; // discard changes
+        }
+        else {
+            return newActiveValue; // set dynamic (uncontrollable)
+        } // if
+    }, /*initialState: */props.defaultActive ?? false); // uncontrollable (dynamic) state: true => user activate, false => user deactivate
 
 
 
@@ -446,34 +479,6 @@ export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: 
 
 
 
-    const setActive: React.Dispatch<React.SetStateAction<boolean>> = (newActive) => {
-        if (!propEnabled) return; // control is disabled => no response required
-        if (propReadOnly) return; // control is readOnly => no response required
-
-        
-        
-        const newActiveValue = (typeof newActive === 'function') ? newActive(activeFn) : newActive;
-        if (newActiveValue === activeFn) return; // no change needed
-
-        
-        
-        if (propActive === null) { // controllable [active] is set => no uncontrollable required, otherwise do it
-            setActiveTg(newActiveValue); // set dynamic (uncontrollable)
-        } // if
-        
-        
-        
-        // fire change event:
-        props.onActiveChange?.(newActiveValue); // notify changed -or- request to change
-        
-        
-        
-        // fire change event:
-        if (changeEventTarget?.current) {
-            changeEventTarget.current.checked = newActiveValue;
-            triggerChange(changeEventTarget.current);
-        } // if
-    };
     return [
         activeFn,
         setActive,
