@@ -940,6 +940,14 @@ export const Check = (props: CheckProps) => {
                     e.preventDefault();
                 } // if
             }}
+            onKeyDown={(e) => {
+                // backwards:
+                props.onKeyDown?.(e);
+                
+                
+                
+                if (!e.defaultPrevented) e.preventDefault(); // prevents pressing space for scrolling page
+            }}
             onKeyUp={(e) => {
                 // backwards:
                 props.onKeyUp?.(e);
