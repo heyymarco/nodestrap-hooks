@@ -108,6 +108,7 @@ function App() {
 						test 2
 				</Radio>
                 <hr style={{flexBasis: '100%'}} />
+				<p>uncontrollable:</p>
 				<Radio
 					name='meow'
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}

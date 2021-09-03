@@ -2,6 +2,7 @@
 import {
     default as React,
     useRef,
+    useEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -188,6 +189,34 @@ export const Radio = (props: RadioProps) => {
     
     
     
+    // dom effects:
+    useEffect(() => {
+        const radio = inputRef.current;
+        if (!radio) return; // radio was unloaded => nothing to do
+        if (props.active !== undefined) return; // controllable [active] is set => no uncontrollable required
+        
+        
+        
+        // handlers:
+        const handleClear = () => {
+            setActive(false); // set as inactive
+        };
+        
+        
+        
+        // setups:
+        radio.addEventListener('clear', handleClear);
+        
+        
+        
+        // cleanups:
+        return () => {
+            radio.removeEventListener('clear', handleClear);
+        };
+    }, [props.active, setActive]);
+    
+    
+    
     // rest props:
     const {
         // essentials:
@@ -197,8 +226,8 @@ export const Radio = (props: RadioProps) => {
     
     
     // handlers:
-    const handleSelected = () => {
-        setActive(true); // toggle active
+    const handleCheck = () => {
+        setActive(true); // set as active
     }
     
     
@@ -247,7 +276,7 @@ export const Radio = (props: RadioProps) => {
                 
                 
                 if (!e.defaultPrevented) {
-                    handleSelected();
+                    handleCheck();
                     e.preventDefault();
                 } // if
             }}
@@ -259,9 +288,40 @@ export const Radio = (props: RadioProps) => {
                 
                 if (!e.defaultPrevented) {
                     if ((e.key === ' ') || (e.code === 'Space')) {
-                        handleSelected();
+                        handleCheck();
                         e.preventDefault();
                     } // if
+                } // if
+            }}
+            
+            onChange={(e) => {
+                if (!props.name) return;
+                if (!e.target.checked) return;
+                
+                
+                
+                let parentGroup = e.target.parentElement;
+                //#region find nearest `<form>` or grandGrandParent
+                while (parentGroup) {
+                    if (parentGroup.tagName === 'FORM') break;
+                    
+                    const grandParent = parentGroup.parentElement;
+                    if (!grandParent) break;
+                    parentGroup = grandParent;
+                } // while
+                //#endregion find nearest `<form>` or grandGrandParent
+                
+                
+                
+                if (parentGroup) {
+                    for (const radio of (Array.from(parentGroup.querySelectorAll('input[type=radio]')) as HTMLInputElement[])) {
+                        if (radio === e.target) continue; // radio is self => skip
+                        if (radio.name !== props.name) continue; // radio's name is different to us => skip
+                        
+                        
+                        
+                        radio.dispatchEvent(new Event('clear', { bubbles: false }));
+                    } // for
                 } // if
             }}
         />
