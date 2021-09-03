@@ -3,6 +3,7 @@ import {
     default as React,
     useState,
     useReducer,
+    useCallback,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -436,7 +437,8 @@ export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: 
 
 
     // states:
-    const [activeTg, setActive] = useReducer((oldActive: boolean, newActive: React.SetStateAction<boolean>): boolean => {
+    const { onActiveChange } = props;
+    const reducer = useCallback((oldActive: boolean, newActive: React.SetStateAction<boolean>): boolean => {
         if (!propEnabled) return oldActive; // control is disabled => no response required
         if (propReadOnly) return oldActive; // control is readOnly => no response required
         
@@ -450,7 +452,7 @@ export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: 
         
         setTimeout(() => {
             // fire change event:
-            props.onActiveChange?.(newActiveValue); // notify changed -or- request to change
+            onActiveChange?.(newActiveValue); // __notify_changed__ -or- __request_to_change__
             
             // fire change event:
             if (changeEventTarget?.current) {
@@ -464,11 +466,14 @@ export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: 
         // save the changes:
         if (propActive !== null) { // controllable [active] is set => no set uncontrollable required
             return oldActive; // discard changes
+            // the actual changes relies on __request_to_change__
         }
         else {
             return newActiveValue; // set dynamic (uncontrollable)
+            // and then firing event __notify_changed__
         } // if
-    }, /*initialState: */props.defaultActive ?? false); // uncontrollable (dynamic) state: true => user activate, false => user deactivate
+    }, [propEnabled, propReadOnly, propActive, onActiveChange, changeEventTarget]);
+    const [activeTg, setActive] = useReducer(reducer, /*initialState: */props.defaultActive ?? false); // uncontrollable (dynamic) state: true => user activate, false => user deactivate
 
 
 
