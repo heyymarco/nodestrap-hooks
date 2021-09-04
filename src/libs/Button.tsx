@@ -346,7 +346,10 @@ export interface ButtonProps
     extends
         ActionControlProps<HTMLButtonElement>,
         
+        // layouts:
         VariantOrientation,
+        
+        // appearances:
         VariantButton
 {
     // actions:
