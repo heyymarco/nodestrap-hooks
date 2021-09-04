@@ -809,6 +809,7 @@ export interface CheckProps
         EditableActionControlProps<HTMLInputElement>,
         TogglerActiveProps,
         
+        // appearances:
         VariantCheck
 {
     // values:
