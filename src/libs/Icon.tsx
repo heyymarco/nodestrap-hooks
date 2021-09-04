@@ -94,7 +94,7 @@ import fontItems            from './Icon-font-material'
 // layouts:
 
 //#region sizes
-export type SizeName = 'sm'|'nm'|'md'|'lg'|'1em'
+export type SizeName = 'sm'|'nm'|'md'|'lg'|'1em' | string
 
 export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicComponentIsSize(sizeName as BasicComponentSizeName, styles);
 
