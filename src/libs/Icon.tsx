@@ -402,12 +402,12 @@ export const usesIconFontLayout  = (img?: Cust.Ref) => {
                 }),
             ])),
         ]),
-        imports([
-            // use the loaded custom font:
-            config.font.style, // apply the defined font's properties
-        ]),
         layout({
             ...children('::after', composition([
+                imports([
+                    // use the loaded custom font:
+                    config.font.style, // apply the defined font's properties
+                ]),
                 layout({
                     // layouts:
                     content       : img ?? iconRefs.img, // put the icon's name here, the font system will replace the name to the actual image
