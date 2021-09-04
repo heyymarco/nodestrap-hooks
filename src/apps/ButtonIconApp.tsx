@@ -13,6 +13,9 @@ import {
 import Control 			from '../libs/Control';
 import ActionControl	from '../libs/ActionControl';
 import {
+	Button,
+}						from '../libs/Button';
+import {
 	ButtonIcon,
 	BtnStyle,
 }						from '../libs/ButtonIcon';
@@ -162,6 +165,23 @@ function App() {
 				>
                     button icon
                 </ButtonIcon>
+				<Button
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+					
+					press={press}
+
+					orientation={orientation}
+					btnStyle={btnStyle}
+				>
+                    button
+                </Button>
+				<span>button</span>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

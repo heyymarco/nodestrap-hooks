@@ -280,7 +280,7 @@ export interface ButtonIconProps
     // appearances:
     icon?: string
 }
-export default function ButtonIcon(props: ButtonIconProps) {
+export const ButtonIcon = (props: ButtonIconProps) => {
     // styles:
     const sheet   = useButtonIconSheet();
     
@@ -317,9 +317,9 @@ export default function ButtonIcon(props: ButtonIconProps) {
             { children }
         </Button>
     );
-}
+};
 ButtonIcon.prototype = Button.prototype; // mark as Button compatible
-export { ButtonIcon }
+export { ButtonIcon as default }
 
 export type { OrientationName, VariantOrientation }
 export type { BtnStyle, VariantButton, BtnType }

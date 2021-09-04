@@ -27,7 +27,7 @@ import reportWebVitals from './reportWebVitals';
 //        import ControlApp                           from './apps/ControlApp'; // done
 //            import ActionControlApp                 from './apps/ActionControlApp'; // done
 //                import ButtonApp                    from './apps/ButtonApp'; // done
-                    import ButtonIconApp            from './apps/ButtonIconApp';
+                    import ButtonIconApp            from './apps/ButtonIconApp'; // done
 //            import EditableControlApp               from './apps/EditableControlApp'; // done
 //                import EditableTextControlApp       from './apps/EditableTextControlApp'; // done
 //                    import InputApp                 from './apps/InputApp'; // done
