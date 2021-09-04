@@ -3,7 +3,6 @@ import {
     default as React,
     useState,
     useReducer,
-    useCallback,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -80,6 +79,7 @@ import {
 }                           from './BasicComponent'
 import {
     // hooks:
+    TAccessibility,
     usePropAccessibility,
     usePropEnabled,
     usePropActive,
@@ -427,63 +427,85 @@ export interface TogglerActiveProps
     defaultActive?  : boolean
     onActiveChange? : (active: boolean) => void
 }
+interface TogglerActiveState  {
+    propAccess         : TAccessibility<boolean, boolean, null>
+    
+    onActiveChange?    : (active: boolean) => void
+    changeEventTarget? : (React.RefObject<HTMLInputElement>|null)
+    
+    activeTg           : boolean
+}
+const togglerActiveReducer = (state: TogglerActiveState, newActive: React.SetStateAction<boolean>): TogglerActiveState => {
+    // fn props:
+    const { enabled, readOnly, active } = state.propAccess;
+    
+    
+    
+    if (!enabled) return state; // control is disabled => no response required
+    if (readOnly) return state; // control is readOnly => no response required
+    
+    
+    
+    const activeFn: boolean = active /*controllable*/ ?? state.activeTg /*uncontrollable*/;
+    const newActiveValue = (typeof newActive === 'function') ? newActive(activeFn) : newActive;
+    if (newActiveValue === activeFn) return state; // no change needed
+    
+    
+    
+    {
+        const { onActiveChange, changeEventTarget } = state;
+        
+        // fire change event:
+        onActiveChange?.(newActiveValue); // __notify_changed__ -or- __request_to_change__
+        
+        // fire change event:
+        if (changeEventTarget?.current) {
+            changeEventTarget.current.checked = newActiveValue;
+            triggerChange(changeEventTarget.current);
+        } // if
+    }
+    
+    
+    
+    // save the changes:
+    if (active !== null) { // controllable [active] is set => no set uncontrollable required
+        return state; // discard changes
+        // the actual changes relies on __request_to_change__
+    }
+    else {
+        return { ...state, activeTg: newActiveValue }; // set dynamic (uncontrollable)
+    } // if
+};
 export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: (React.RefObject<HTMLInputElement>|null)): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
     // fn props:
-    const propAccess   = usePropAccessibility<boolean, boolean, null>(props, undefined, undefined, null);
-    const propEnabled  = propAccess.enabled;
-    const propReadOnly = propAccess.readOnly;
-    const propActive   = propAccess.active;
-
-
-
+    const propAccess = usePropAccessibility<boolean, boolean, null>(props, undefined, undefined, null);
+    
+    
+    
     // states:
-    const { onActiveChange } = props;
-    const reducer = useCallback((oldActive: boolean, newActive: React.SetStateAction<boolean>): boolean => {
-        if (!propEnabled) return oldActive; // control is disabled => no response required
-        if (propReadOnly) return oldActive; // control is readOnly => no response required
+    const [state, setActive] = useReducer(togglerActiveReducer, /*initialState: */{
+        propAccess        : propAccess,
         
+        onActiveChange    : props.onActiveChange,
+        changeEventTarget : changeEventTarget,
         
-        
-        const activeFn: boolean = propActive /*controllable*/ ?? oldActive /*uncontrollable*/;
-        const newActiveValue = (typeof newActive === 'function') ? newActive(activeFn) : newActive;
-        if (newActiveValue === activeFn) return oldActive; // no change needed
-        
-        
-        
-        setTimeout(() => {
-            // fire change event:
-            onActiveChange?.(newActiveValue); // __notify_changed__ -or- __request_to_change__
-            
-            // fire change event:
-            if (changeEventTarget?.current) {
-                changeEventTarget.current.checked = newActiveValue;
-                triggerChange(changeEventTarget.current);
-            } // if
-        }, 0);
-        
-        
-        
-        // save the changes:
-        if (propActive !== null) { // controllable [active] is set => no set uncontrollable required
-            return oldActive; // discard changes
-            // the actual changes relies on __request_to_change__
-        }
-        else {
-            return newActiveValue; // set dynamic (uncontrollable)
-            // and then firing event __notify_changed__
-        } // if
-    }, [propEnabled, propReadOnly, propActive, onActiveChange, changeEventTarget]);
-    const [activeTg, setActive] = useReducer(reducer, /*initialState: */props.defaultActive ?? false); // uncontrollable (dynamic) state: true => user activate, false => user deactivate
-
-
-
+        activeTg          : props.defaultActive ?? false, // uncontrollable (dynamic) state: true => user activate, false => user deactivate
+    } as TogglerActiveState);
+    
+    state.propAccess        = propAccess;
+    
+    state.onActiveChange    = props.onActiveChange;
+    state.changeEventTarget = changeEventTarget;
+    
+    
+    
     /*
      * state is active/passive based on [controllable active] (if set) and fallback to [uncontrollable active]
      */
-    const activeFn: boolean = propActive /*controllable*/ ?? activeTg /*uncontrollable*/;
-
-
-
+    const activeFn: boolean = propAccess.active /*controllable*/ ?? state.activeTg /*uncontrollable*/;
+    
+    
+    
     return [
         activeFn,
         setActive,
