@@ -40,7 +40,7 @@ function App() {
 
 
 
-    return (
+	return (
         <div className="App">
             <Container>
 				<EditableControl
@@ -73,12 +73,18 @@ function App() {
 				<p>controllable:</p>
 				<Radio
 					name='bleh'
+					value='first'
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 
 					enabled={enabled}
 					
 					active={active === false}
-					onActiveChange={(act) => act && setActive(false)}
+					onActiveChange={(act) => {
+						console.log('OFF', act);
+						if (act) {
+							setActive(false);
+						} // if
+					}}
 
 					focus={focus}
 
@@ -91,12 +97,18 @@ function App() {
 				</Radio>
 				<Radio
 					name='bleh'
+					value='second'
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 
 					enabled={enabled}
 					
 					active={active === true}
-					onActiveChange={(act) => act && setActive(true)}
+					onActiveChange={(act) => {
+						console.log('ON', act);
+						if (act) {
+							setActive(true);
+						} // if
+					}}
 
 					focus={focus}
 
@@ -111,12 +123,18 @@ function App() {
 				<p>uncontrollable:</p>
 				<Radio
 					name='meow'
+					value='first'
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 
 					enabled={enabled}
 					
 					defaultActive={active === false}
-					onActiveChange={(act) => act && setActive(false)}
+					onActiveChange={(act) => {
+						console.log('off', act);
+						if (act) {
+							setActive(false);
+						} // if
+					}}
 
 					focus={focus}
 
@@ -129,12 +147,18 @@ function App() {
 				</Radio>
 				<Radio
 					name='meow'
+					value='second'
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 
 					enabled={enabled}
 					
 					defaultActive={active === true}
-					onActiveChange={(act) => act && setActive(true)}
+					onActiveChange={(act) => {
+						console.log('on', act);
+						if (act) {
+							setActive(true);
+						} // if
+					}}
 
 					focus={focus}
 

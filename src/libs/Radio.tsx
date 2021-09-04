@@ -81,6 +81,7 @@ export const usesRadioLayout = () => {
             usesCheckLayout(),
         ]),
         layout({
+            // children:
             ...children(inputElm, composition([
                 layout({
                     // borders:
@@ -158,6 +159,7 @@ export const useRadioSheet = createUseCssfnStyle(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region indicators
+        // forked from Bootstrap 5:
         img                      : `url("data:image/svg+xml,${escapeSvg("<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='#000'/></svg>")}")`,
         //#endregion indicators
     };
@@ -193,7 +195,6 @@ export const Radio = (props: RadioProps) => {
     useEffect(() => {
         const radio = inputRef.current;
         if (!radio) return; // radio was unloaded => nothing to do
-        if (props.active !== undefined) return; // controllable [active] is set => no uncontrollable required
         
         
         
@@ -213,7 +214,7 @@ export const Radio = (props: RadioProps) => {
         return () => {
             radio.removeEventListener('clear', handleClear);
         };
-    }, [props.active, setActive]);
+    }, [setActive]);
     
     
     
@@ -295,16 +296,17 @@ export const Radio = (props: RadioProps) => {
             }}
             
             onChange={(e) => {
-                if (!props.name) return;
-                if (!e.target.checked) return;
+                if (!props.name)       return; // the radio must have a name
+                if (!e.target.checked) return; // the radio is checked not cleared
                 
                 
                 
                 let parentGroup = e.target.parentElement;
                 //#region find nearest `<form>` or grandGrandParent
                 while (parentGroup) {
-                    if (parentGroup.tagName === 'FORM') break;
+                    if (parentGroup.tagName === 'FORM') break; // found nearest `<form>`
                     
+                    // find next:
                     const grandParent = parentGroup.parentElement;
                     if (!grandParent) break;
                     parentGroup = grandParent;
