@@ -87,6 +87,7 @@ import {
     EditableControl,
 }                           from './EditableControl'
 import {
+    // styles:
     usesIconImage,
 }                           from './Icon'
 
