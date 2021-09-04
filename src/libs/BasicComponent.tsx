@@ -82,7 +82,7 @@ import typos                from './typos/index' // configurable typography (tex
 // layouts:
 
 //#region sizes
-export type SizeName = 'sm'|'lg'
+export type SizeName = 'sm'|'lg' | string
 export interface SizeVars {
     // empty (might be added soon)
 }
@@ -208,7 +208,7 @@ export const useVariantOrientation = (props: VariantOrientation) => {
 // colors:
 
 //#region themes
-export type ThemeName = (keyof typeof colorThemes)
+export type ThemeName = (keyof typeof colorThemes) | string
 export interface ThemeVars {
     /**
      * themed foreground color.
