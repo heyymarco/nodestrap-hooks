@@ -478,24 +478,36 @@ export const isFirstChild    = (styles: StyleCollection) => rule(     ':first-ch
 export const isNotFirstChild = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
 export const isLastChild     = (styles: StyleCollection) => rule(     ':last-child'   , styles);
 export const isNotLastChild  = (styles: StyleCollection) => rule(':not(:last-child)'  , styles);
-/*export const isNthChild    = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
-    if (step <= 0) { // no step
-        if (offset <= 0) return rule(':none', {}); // element indices are starting from 1 => never match => return empty style
-
+export const isNthChild      = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+    if (step === 0) { // no step
+        if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        
         if (offset === 1) return isFirstChild(styles);
-
-        return rule(`:nth-child(${offset})`, {});
+        
+        return rule(`:nth-child(${offset})`, styles);
     }
-    else if (step === 1) {
-
+    else if (step === 1) { // 1 step
+        return rule(`:nth-child(n+${offset})`, styles);
     }
-    
-    
-    
-    if(offset <= 0) {
-
+    else { // 2+ steps
+        return rule(`:nth-child(${step}n+${offset})`, styles);
     } // if
-};*/
+};
+export const isNthLastChild  = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+    if (step === 0) { // no step
+        if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        
+        if (offset === 1) return isLastChild(styles);
+        
+        return rule(`:nth-last-child(${offset})`, styles);
+    }
+    else if (step === 1) { // 1 step
+        return rule(`:nth-last-child(n+${offset})`, styles);
+    }
+    else { // 2+ steps
+        return rule(`:nth-last-child(${step}n+${offset})`, styles);
+    } // if
+};
 export const isActive        = (styles: StyleCollection) => rule(     ':active'       , styles);
 export const isNotActive     = (styles: StyleCollection) => rule(':not(:active)'      , styles);
 export const isFocus         = (styles: StyleCollection) => rule(     ':focus'        , styles);
