@@ -271,24 +271,24 @@ export type CustomValidatorHandler = (state: ValidityState, value: string) => Va
 export const useInputValidator     = (customValidator?: CustomValidatorHandler) => {
     // states:
     let [isValid, setIsValid] = useState<ValResult>(null);
-
-
+    
+    
     
     const handleValidation = (target: EditableControlElement, immediately = false) => {
         const update = (validity: ValidityState, valuePrev?: string) => {
             const valueNow = target.value;
             if ((valuePrev !== undefined) && (valuePrev !== valueNow)) return; // the value has been modified during waiting => abort further validating
             
-
+            
             
             // instantly update variable `isValid` without waiting state to refresh (re-render)
             // because the value is needed immediately by `useStateValidInvalid` at startup
             isValid = (customValidator ? customValidator(validity, valueNow) : validity.valid);
             setIsValid(isValid);
         };
-
-
-
+        
+        
+        
         if (immediately) {
             // instant validate:
             update(target.validity);
@@ -296,7 +296,7 @@ export const useInputValidator     = (customValidator?: CustomValidatorHandler) 
         else {
             const validity  = target.validity;
             const valuePrev = target.value;
-        
+            
             // delay a while for the further validating, to avoid unpleasant splash effect
             setTimeout(
                 () => update(validity, valuePrev),
@@ -319,7 +319,7 @@ export const useInputValidator     = (customValidator?: CustomValidatorHandler) 
          * `false` = invalid.
          */
         validator    : ((): ValResult => isValid) as ValidatorHandler,
-
+        
         handleInit   : handleInit,
         handleChange : handleChange,
     };
@@ -329,35 +329,35 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
     const propValidation = usePropValidation(props);
     const propEnabled    = usePropEnabled(props);
     const propReadOnly   = usePropReadOnly(props);
-
-
-
+    
+    
+    
     // defaults:
     const defaultValided: ValResult         = null; // if [isValid] was not specified => the default value is [isValid=null] (neither valid nor invalid)
-
-
+    
+    
     
     // states:
     const [valided,       setValided      ] = useState<ValResult|undefined>((): (ValResult|undefined) => {
         // if disabled or readOnly => no validation
         if (!propEnabled || propReadOnly)         return null;
-
-
-
+        
+        
+        
         // use prop as the primary validator:
         if (propValidation.isValid !== undefined) return propValidation.isValid; // validity is set => set state to uncheck/valid/invalid
-
+        
         
         
         // use input validator as secondary:
         if (validator)                            return undefined; // undefined means => evaluate the validator *at startup*
-
+        
         
         
         // use default value as fallback:
         return defaultValided;
     });
-
+    
     const [succAnimating, setSuccAnimating] = useState<boolean|null>(null); // null => no-succ-animation, true => succ-animation, false => unsucc-animation
     const [errAnimating,  setErrAnimating ] = useState<boolean|null>(null); // null => no-err-animation,  true => err-animation,  false => unerr-animation
     
@@ -371,51 +371,51 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
     const validFn = ((): (ValResult|undefined) => {
         // if disabled or readOnly => no validation
         if (!propEnabled || propReadOnly)         return null;
-
-
-
+        
+        
+        
         // use prop as the primary validator:
         if (propValidation.isValid !== undefined) return propValidation.isValid; // validity is set => set state to uncheck/valid/invalid
-
+        
         
         
         // use input validator as secondary:
         if ((valided !== undefined)) return (validator ? validator() : defaultValided); // if validator has loaded => evaluate the validator *now*
-
+        
         
         
         // no change needed:
         return undefined;
     })();
-
+    
     if ((validFn !== undefined) && (valided !== validFn)) { // change detected => apply the change & start animating
         setValided(validFn);   // remember the last change
-
+        
         switch (validFn) {
             case true: // success
                 // if was error => un-error:
                 if (valided === false) setErrAnimating(false);  // start unerr-animation
-
+                
                 setSuccAnimating(true); // start succ-animation
                 break;
-
+            
             case false: // error
                 // if was success => un-success:
                 if (valided === true)  setSuccAnimating(false); // start unsucc-animation
-
+                
                 setErrAnimating(true);  // start err-animation
                 break;
-                
+            
             case null: // uncheck
                 // if was success => un-success:
                 if (valided === true)  setSuccAnimating(false); // start unsucc-animation
-
+                
                 // if was error => un-error:
                 if (valided === false) setErrAnimating(false);  // start unerr-animation
                 break;
         } // switch
     }
-
+    
     
     
     // watch the changes once (only at startup):
@@ -426,17 +426,17 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
             setValided(validator ? validator() : defaultValided);
         }
     }, [valided, validator]);
-
+    
     
     
     const handleIdleSucc = () => {
         // clean up finished animation
-
+        
         setSuccAnimating(null); // stop succ-animation/unsucc-animation
     }
     const handleIdleErr = () => {
         // clean up finished animation
-
+        
         setErrAnimating(null);  // stop err-animation/unerr-animation
     }
     const noValidation = // causing the validFn *always* `null`:
@@ -453,32 +453,32 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
         */
         valid        : (valided ?? null) as ValResult,
         noValidation : noValidation,
-
+        
         class: [
             // valid classes:
             ((): string|null => {
                 if (succAnimating === true)  return   'val';
                 if (succAnimating === false) return 'unval';
-    
+                
                 if (valided === true)        return   'vald';
-    
+                
                 return null;
             })(),
-
-
-
+            
+            
+            
             // invalid classes:
             ((): string|null => {
                 if (errAnimating === true)   return   'inv';
                 if (errAnimating === false)  return 'uninv';
-    
+                
                 if (valided === false)       return   'invd';
-    
+                
                 return null;
             })(),
-
-
-
+            
+            
+            
             // neutral classes:
             ((): string|null => {
                 if (valided === null) {
@@ -488,17 +488,17 @@ export const useStateValidInvalid  = (props: ValidationProps, validator?: Valida
                     // else {
                     //     return null; // discard all classes above
                     // } // if
-
+                    
                     return 'noval';
                 } // if
-    
+                
                 return null;
             })(),
         ].filter((c) => !!c).join(' ') || undefined,
         
         handleAnimationEnd : (e: React.AnimationEvent<HTMLElement>) => {
             if (e.target !== e.currentTarget) return; // no bubbling
-
+            
             if (/((?<![a-z])(valid|unvalid)|(?<=[a-z])(Valid|Unvalid))(?![a-z])/.test(e.animationName)) {
                 handleIdleSucc();
             }
