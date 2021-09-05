@@ -54,6 +54,7 @@ import {
     
     
     // styles:
+    inputElm,
     usesCheckLayout,
     usesCheckVariants,
     usesCheckStates,
@@ -73,7 +74,6 @@ import {
 
 
 // styles:
-const inputElm = ':first-child';
 export const usesRadioLayout = () => {
     return composition([
         imports([
