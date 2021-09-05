@@ -63,6 +63,12 @@ import {
     isPassivating,
     isPassived,
     isActive,
+    
+    
+    
+    // configs:
+    cssProps as icssProps,
+    cssDecls as icssDecls,
 }                           from './Indicator'
 import {
     // hooks:
@@ -83,6 +89,7 @@ import {
 import typos                from './typos/index' // configurable typography (texting) defs
 import {
     // styles:
+    labelElm,
     usesCheckLayout,
     usesCheckVariants,
     usesCheckStates,
@@ -97,6 +104,8 @@ import {
 
 
 // hooks:
+
+// states:
 
 //#region activePassive
 export const markActive = () => composition([
@@ -171,8 +180,11 @@ export const usesSvgAnim = () => {
     // dependencies:
     
     // animations:
-    const [anim, animRefs, ] = usesAnim();
+    const [anim, animRefs] = usesAnim();
     
+    
+    
+    // css vars:
     const transfNoneVars = () => vars({
         [svgAnimDecls.svgTopTransfIn]  : animRefs.transfNone,
         [svgAnimDecls.svgMidTransfIn]  : animRefs.transfNone,
@@ -182,31 +194,31 @@ export const usesSvgAnim = () => {
         [svgAnimDecls.svgMidTransfOut] : animRefs.transfNone,
         [svgAnimDecls.svgBtmTransfOut] : animRefs.transfNone,
     });
-    const transfInVars = () => vars({
-        [svgAnimDecls.svgTopTransfIn]  : cssProps.svgTopTransfOn,
-        [svgAnimDecls.svgMidTransfIn]  : cssProps.svgMidTransfOn,
-        [svgAnimDecls.svgBtmTransfIn]  : cssProps.svgBtmTransfOn,
+    const transfInVars   = () => vars({
+        [svgAnimDecls.svgTopTransfIn]  : cssProps.svgTopTransfIn,
+        [svgAnimDecls.svgMidTransfIn]  : cssProps.svgMidTransfIn,
+        [svgAnimDecls.svgBtmTransfIn]  : cssProps.svgBtmTransfIn,
     });
-    const transfOutVars = () => vars({
-        [svgAnimDecls.svgTopTransfOut] : cssProps.svgTopTransfOff,
-        [svgAnimDecls.svgMidTransfOut] : cssProps.svgMidTransfOff,
-        [svgAnimDecls.svgBtmTransfOut] : cssProps.svgBtmTransfOff,
+    const transfOutVars  = () => vars({
+        [svgAnimDecls.svgTopTransfOut] : cssProps.svgTopTransfOut,
+        [svgAnimDecls.svgMidTransfOut] : cssProps.svgMidTransfOut,
+        [svgAnimDecls.svgBtmTransfOut] : cssProps.svgBtmTransfOut,
     });
     
-    const animNoneVars = () => vars({
+    const animNoneVars   = () => vars({
         [svgAnimDecls.svgTopAnim]   : animRefs.animNone,
         [svgAnimDecls.svgMidAnim]   : animRefs.animNone,
         [svgAnimDecls.svgBtmAnim]   : animRefs.animNone,
     });
-    const animInVars = () => vars({
-        [svgAnimDecls.svgTopAnim]   : cssProps.svgTopAnimOn,
-        [svgAnimDecls.svgMidAnim]   : cssProps.svgMidAnimOn,
-        [svgAnimDecls.svgBtmAnim]   : cssProps.svgBtmAnimOn,
+    const animInVars     = () => vars({
+        [svgAnimDecls.svgTopAnim]   : cssProps.svgTopAnimIn,
+        [svgAnimDecls.svgMidAnim]   : cssProps.svgMidAnimIn,
+        [svgAnimDecls.svgBtmAnim]   : cssProps.svgBtmAnimIn,
     });
-    const animOutVars = () => vars({
-        [svgAnimDecls.svgTopAnim]   : cssProps.svgTopAnimOff,
-        [svgAnimDecls.svgMidAnim]   : cssProps.svgMidAnimOff,
-        [svgAnimDecls.svgBtmAnim]   : cssProps.svgBtmAnimOff,
+    const animOutVars    = () => vars({
+        [svgAnimDecls.svgTopAnim]   : cssProps.svgTopAnimOut,
+        [svgAnimDecls.svgMidAnim]   : cssProps.svgMidAnimOut,
+        [svgAnimDecls.svgBtmAnim]   : cssProps.svgBtmAnimOut,
     });
     
     
@@ -216,7 +228,7 @@ export const usesSvgAnim = () => {
             imports([
                 // animations:
                 anim(),
-
+                
                 transfNoneVars(),
                 animNoneVars(),
             ]),
@@ -272,8 +284,7 @@ export const usesSvgAnim = () => {
 
 
 // styles:
-const labelElm = ':nth-child(1n+2)';
-const svgElm   = 'svg';
+const svgElm = 'svg';
 export const usesSvgLayout = () => {
     // dependencies:
     
@@ -360,6 +371,10 @@ export const usesTogglerMenuButtonLayout = () => {
                     ...usesGeneralProps(cssProps), // apply general cssProps
                 }),
             ])),
+        }),
+        vars({
+            [icssDecls.animActive ] : cssProps.animActive,
+            [icssDecls.animPassive] : cssProps.animPassive,
         }),
     ]);
 };
@@ -458,102 +473,108 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     
     
-    // transforms hamburger menu to cross menu
-    const keyframesSvgTopOn  : PropEx.Keyframes = {
+    //#region transforms hamburger menu to cross menu
+    const keyframesSvgTopIn  : PropEx.Keyframes = {
         from : {
             transform : svgAnimRefs.svgTopTransfOut,
         },
         '43%': {
-            transform : [['rotate(-45deg)', 'scaleX(1.35)', 'translate(0, 37.5%)', ]],
+            transform : [['rotate(-45deg)', 'scaleX(1.35)', 'translate(0, 37.5%)' ]],
         },
         '71%': {
-            transform : [['rotate(-60deg)', 'scaleX(1.35)', 'translate(0, 37.5%)', ]],
+            transform : [['rotate(-60deg)', 'scaleX(1.35)', 'translate(0, 37.5%)' ]],
         },
         to   : {
             transform : svgAnimRefs.svgTopTransfIn,
         },
     };
-    const keyframesSvgMidOn  : PropEx.Keyframes = {
+    const keyframesSvgMidIn  : PropEx.Keyframes = {
         from : {
             transform : svgAnimRefs.svgMidTransfOut,
         },
         '19%': {
-            transform : [['scaleX(1.35)',]],
+            transform : [[                  'scaleX(1.35)'                        ]],
         },
         to   : {
             transform : svgAnimRefs.svgMidTransfIn,
         },
     };
-    const keyframesSvgBtmOn  : PropEx.Keyframes = {
+    const keyframesSvgBtmIn  : PropEx.Keyframes = {
         from : {
             transform : svgAnimRefs.svgBtmTransfOut,
         },
         '43%': {
-            transform : [['rotate(45deg)',  'scaleX(1.35)', 'translate(0, -37.5%)',]],
+            transform : [['rotate(45deg)' , 'scaleX(1.35)', 'translate(0, -37.5%)']],
         },
         '71%': {
-            transform : [['rotate(60deg)',  'scaleX(1.35)', 'translate(0, -37.5%)',]],
+            transform : [['rotate(60deg)' , 'scaleX(1.35)', 'translate(0, -37.5%)']],
         },
         to   : {
             transform : svgAnimRefs.svgBtmTransfIn,
         },
     };
+    //#endregion transforms hamburger menu to cross menu
     
     
     
-    const keyframesSvgTopOff : PropEx.Keyframes = {
-        from : keyframesSvgTopOn.to,
-        '43%': keyframesSvgTopOn.from,
+    //#region transforms cross menu to hamburger menu
+    const keyframesSvgTopOut : PropEx.Keyframes = {
+        from : keyframesSvgTopIn.to,
+        '43%': keyframesSvgTopIn.from,
         '71%': {
             transformOrigin : '91.7% 12.5%',
-            transform       : [['rotate(15deg)',  'scaleX(1)',    'translate(0, 0)',     ]],
+            transform : [['rotate(15deg)' , 'scaleX(1)'   , 'translate(0, 0)',     ]],
         },
-        to   : keyframesSvgTopOn.from,
+        to   : keyframesSvgTopIn.from,
     };
-    const keyframesSvgMidOff : PropEx.Keyframes = {
-        from : keyframesSvgMidOn.to,
-        '81%': keyframesSvgMidOn['19%'],
-        to   : keyframesSvgMidOn.from,
+    const keyframesSvgMidOut : PropEx.Keyframes = {
+        from : keyframesSvgMidIn.to,
+        '81%': keyframesSvgMidIn['19%'],
+        to   : keyframesSvgMidIn.from,
     };
-    const keyframesSvgBtmOff : PropEx.Keyframes = {
-        from : keyframesSvgBtmOn.to,
-        '43%': keyframesSvgBtmOn.from,
+    const keyframesSvgBtmOut : PropEx.Keyframes = {
+        from : keyframesSvgBtmIn.to,
+        '43%': keyframesSvgBtmIn.from,
         '71%': {
             transformOrigin : '91.7% 87.5%',
-            transform       : [['rotate(-15deg)', 'scaleX(1)',    'translate(0, 0)',     ]],
+            transform : [['rotate(-15deg)', 'scaleX(1)'   , 'translate(0, 0)',     ]],
         },
-        to   : keyframesSvgBtmOn.from,
+        to   : keyframesSvgBtmIn.from,
     };
+    //#endregion transforms cross menu to hamburger menu
     
     
     
     const animDuration = '300ms';
     
-    
-    
     return {
         //#region animations
-        svgTopTransfOn         : [['rotate(-45deg)', 'scaleX(1.35)', 'translate(0, 37.5%)', ]],
-        svgMidTransfOn         : [['scaleX(0)',   ]],
-        svgBtmTransfOn         : [['rotate(45deg)',  'scaleX(1.35)', 'translate(0, -37.5%)',]],
+        svgTopTransfIn         : [['rotate(-45deg)', 'scaleX(1.35)', 'translate(0, 37.5%)' ]],
+        svgMidTransfIn         : [[                  'scaleX(0)'   ,                       ]],
+        svgBtmTransfIn         : [['rotate(45deg)' , 'scaleX(1.35)', 'translate(0, -37.5%)']],
         
-        svgTopTransfOff        : [['rotate(0deg)',   'scaleX(1)',    'translate(0, 0)',     ]],
-        svgMidTransfOff        : [['scaleX(1)',   ]],
-        svgBtmTransfOff        : [['rotate(0deg)',   'scaleX(1)',    'translate(0, 0)',     ]],
+        svgTopTransfOut        : [['rotate(0deg)'  , 'scaleX(1)'   , 'translate(0, 0)'     ]],
+        svgMidTransfOut        : [[                  'scaleX(1)'   ,                       ]],
+        svgBtmTransfOut        : [['rotate(0deg)'  , 'scaleX(1)'   , 'translate(0, 0)'     ]],
         
-        '@keyframes svgTopOn'  : keyframesSvgTopOn,
-        '@keyframes svgMidOn'  : keyframesSvgMidOn,
-        '@keyframes svgBtmOn'  : keyframesSvgBtmOn,
-        '@keyframes svgTopOff' : keyframesSvgTopOff,
-        '@keyframes svgMidOff' : keyframesSvgMidOff,
-        '@keyframes svgBtmOff' : keyframesSvgBtmOff,
+        '@keyframes svgTopIn'  : keyframesSvgTopIn,
+        '@keyframes svgMidIn'  : keyframesSvgMidIn,
+        '@keyframes svgBtmIn'  : keyframesSvgBtmIn,
+        '@keyframes svgTopOut' : keyframesSvgTopOut,
+        '@keyframes svgMidOut' : keyframesSvgMidOut,
+        '@keyframes svgBtmOut' : keyframesSvgBtmOut,
         svgAnimDuration        :   animDuration,
-        svgTopAnimOn           : [[animDuration, 'ease-out', 'both', keyframesSvgTopOn ]],
-        svgMidAnimOn           : [[animDuration, 'ease-out', 'both', keyframesSvgMidOn ]],
-        svgBtmAnimOn           : [[animDuration, 'ease-out', 'both', keyframesSvgBtmOn ]],
-        svgTopAnimOff          : [[animDuration, 'ease-out', 'both', keyframesSvgTopOff]],
-        svgMidAnimOff          : [[animDuration, 'ease-out', 'both', keyframesSvgMidOff]],
-        svgBtmAnimOff          : [[animDuration, 'ease-out', 'both', keyframesSvgBtmOff]],
+        svgTopAnimIn           : [[animDuration, 'ease-out', 'both', keyframesSvgTopIn ]],
+        svgMidAnimIn           : [[animDuration, 'ease-out', 'both', keyframesSvgMidIn ]],
+        svgBtmAnimIn           : [[animDuration, 'ease-out', 'both', keyframesSvgBtmIn ]],
+        svgTopAnimOut          : [[animDuration, 'ease-out', 'both', keyframesSvgTopOut]],
+        svgMidAnimOut          : [[animDuration, 'ease-out', 'both', keyframesSvgMidOut]],
+        svgBtmAnimOut          : [[animDuration, 'ease-out', 'both', keyframesSvgBtmOut]],
+        
+        
+        
+        animActive             : [[animDuration, 'ease-out', 'both', icssProps['@keyframes active']  ]],
+        animPassive            : [[animDuration, 'ease-out', 'both', icssProps['@keyframes passive'] ]],
         //#endregion animations
     };
 }, { prefix: 'tgmn' });
@@ -570,9 +591,9 @@ export interface TogglerMenuButtonProps
 export const TogglerMenuButton = (props: TogglerMenuButtonProps) => {
     // styles:
     const sheet       = useTogglerMenuButtonSheet();
-
-
-
+    
+    
+    
     // jsx fn props:
     const childrenFn  = (() => {
         // default (unset):
@@ -583,45 +604,45 @@ export const TogglerMenuButton = (props: TogglerMenuButtonProps) => {
                 <polyline points='2,21 22,21' />
             </svg>
         );
-
-
-
+        
+        
+        
         // other component:
         return props.children;
     })();
-
-
-
+    
+    
+    
     // fn props:
     const propActive  = usePropActive(props);
     
     const ariaRole    = props.role            ?? 'button';
     const ariaPressed = props['aria-pressed'] ?? ((ariaRole === 'button') ? propActive : undefined);
-
-
-
+    
+    
+    
     // jsx:
     return (
         <Check
             // other props:
             {...props}
-
-
+            
+            
             // accessibility:
             role={ariaRole}
             aria-pressed={ariaPressed}
             aria-expanded={props['aria-expanded'] ?? propActive}
             label={props.label ?? 'Toggle navigation'}
-
-
+            
+            
             // validations:
             enableValidation={props.enableValidation ?? false}
-
-
+            
+            
             // variants:
             chkStyle={props.chkStyle ?? 'btn'}
-
-
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
         >

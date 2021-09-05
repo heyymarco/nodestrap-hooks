@@ -35,7 +35,7 @@ import reportWebVitals from './reportWebVitals';
 //                import EditableActionControlApp     from './apps/EditableActionControlApp'; // done
 //                    import CheckApp                 from './apps/CheckApp'; // done
 //                         import RadioApp             from './apps/RadioApp';
-                        import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';
+                        import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp'; // done
 //                 import FormApp                      from './apps/FormApp';
 //    import IconApp                                  from './apps/IconApp'; // done
 //     import MasonryApp                               from './apps/MasonryApp';
