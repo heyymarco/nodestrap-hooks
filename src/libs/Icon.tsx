@@ -550,10 +550,10 @@ export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, si
             // colors:
             foreg?.(),
         ]),
-        layout({
+        (foregRefs ? layout({
             // foregrounds:
-            foreg : foregRefs?.foreg ?? null,
-        }),
+            foreg : foregRefs.foreg,
+        }) : null),
     ]);
 };
 
