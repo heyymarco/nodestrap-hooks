@@ -373,11 +373,11 @@ export const usesThemeDefault = (themeName: ThemeName|null = null) => {
 };
 /**
  * Creates a conditional color definitions for the given `themeName`.
- * @param themeName The given theme name written in camel case.
+ * @param themeName The given theme name written in camel case -or- `null` to keep the current theme.
  * @returns A `StyleCollection` represents the conditional color definitions for the given `themeName`.
  */
-export const usesThemeCond = (themeName: ThemeName) => composition([
-    vars({
+export const usesThemeCond = (themeName: ThemeName|null) => composition([
+    (themeName ? vars({
         [themeDecls.foregCond]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
         [themeDecls.backgCond]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
         [themeDecls.borderCond]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
@@ -388,15 +388,26 @@ export const usesThemeCond = (themeName: ThemeName) => composition([
         [themeDecls.backgMildCond]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
         [themeDecls.focusCond]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
-    }),
+    }) : vars({
+        [themeDecls.foregCond]          : null,
+        [themeDecls.backgCond]          : null,
+        [themeDecls.borderCond]         : null,
+        
+        [themeDecls.foregOutlinedCond]  : null,
+        
+        [themeDecls.foregMildCond]      : null,
+        [themeDecls.backgMildCond]      : null,
+        
+        [themeDecls.focusCond]          : null,
+    })),
 ]);
 /**
  * Creates an important conditional color definitions for the given `themeName`.
- * @param themeName The given theme name written in camel case.
+ * @param themeName The given theme name written in camel case -or- `null` to keep the current theme.
  * @returns A `StyleCollection` represents the important conditional color definitions for the given `themeName`.
  */
-export const usesThemeImpt = (themeName: ThemeName) => composition([
-    vars({
+export const usesThemeImpt = (themeName: ThemeName|null) => composition([
+    (themeName ? vars({
         [themeDecls.foregImpt]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
         [themeDecls.backgImpt]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
         [themeDecls.borderImpt]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
@@ -407,7 +418,18 @@ export const usesThemeImpt = (themeName: ThemeName) => composition([
         [themeDecls.backgMildImpt]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
         [themeDecls.focusImpt]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
-    }),
+    }) : vars({
+        [themeDecls.foregImpt]          : null,
+        [themeDecls.backgImpt]          : null,
+        [themeDecls.borderImpt]         : null,
+        
+        [themeDecls.foregOutlinedImpt]  : null,
+        
+        [themeDecls.foregMildImpt]      : null,
+        [themeDecls.backgMildImpt]      : null,
+        
+        [themeDecls.focusImpt]          : null,
+    })),
 ]);
 
 export interface VariantTheme {
