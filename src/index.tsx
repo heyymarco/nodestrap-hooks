@@ -34,9 +34,9 @@ import reportWebVitals from './reportWebVitals';
 //                    import InputApp                 from './apps/InputApp'; // done
 //                import EditableActionControlApp     from './apps/EditableActionControlApp'; // done
 //                    import CheckApp                 from './apps/CheckApp'; // done
-//                         import RadioApp             from './apps/RadioApp';
-                        import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp'; // done
-//                 import FormApp                      from './apps/FormApp';
+//                         import RadioApp             from './apps/RadioApp'; // done
+//                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp'; // done
+                import FormApp                      from './apps/FormApp'; // done
 //    import IconApp                                  from './apps/IconApp'; // done
 //     import MasonryApp                               from './apps/MasonryApp';
 //     import CarouselApp                              from './apps/CarouselApp';
@@ -47,7 +47,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <TogglerMenuButtonApp />
+    <FormApp />
   ,
   document.getElementById('root')
 );
