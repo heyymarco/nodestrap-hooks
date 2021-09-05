@@ -122,7 +122,7 @@ export const markActive = () => composition([
 export const usesThemeDefault = (themeName: ThemeName|null = null) => controlUsesThemeDefault(themeName);
 
 // change default parameter from 'primary' to 'secondary':
-export const usesThemeActive  = (themeName: ThemeName = 'secondary') => controlUsesThemeActive(themeName);
+export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => controlUsesThemeActive(themeName);
 //#endregion activePassive
 
 

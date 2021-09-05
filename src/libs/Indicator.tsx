@@ -343,7 +343,7 @@ export const markActive = () => composition([
  * @param themeName The name of active theme.
  * @returns A `StyleCollection` represents the conditional color definitions at active state.
  */
-export const usesThemeActive = (themeName: ThemeName = 'secondary') => usesThemeCond(themeName);
+export const usesThemeActive = (themeName: ThemeName|null = 'secondary') => usesThemeCond(themeName);
 
 export const useStateActivePassive = (props: IndicationProps & ElementProps, activeDn?: boolean) => {
     // fn props:

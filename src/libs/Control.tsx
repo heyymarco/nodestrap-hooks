@@ -109,7 +109,7 @@ export const markActive = () => composition([
 export const usesThemeDefault = (themeName: ThemeName|null = 'secondary') => basicComponentUsesThemeDefault(themeName);
 
 // change default parameter from 'secondary' to 'primary':
-export const usesThemeActive  = (themeName: ThemeName = 'primary') => indicatorUsesThemeActive(themeName);
+export const usesThemeActive  = (themeName: ThemeName|null = 'primary') => indicatorUsesThemeActive(themeName);
 //#endregion activePassive
 
 //#region focusBlur
