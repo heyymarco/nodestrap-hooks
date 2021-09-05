@@ -65,7 +65,7 @@ import {
 
 
 // styles:
-const inputElm = ':first-child';
+export const inputElm = ':first-child';
 export const usesInputLayout = () => {
     return composition([
         imports([
