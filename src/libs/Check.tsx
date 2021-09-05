@@ -321,9 +321,10 @@ export const useVariantCheck = (props: VariantCheck) => {
 
 
 // styles:
-const inputElm = ':first-child';
-const checkElm = '::before';
-const labelElm = ':nth-child(1n+2)';
+export const inputElm = ':first-child';
+export const checkElm = '::before';
+export const labelElm = ':nth-child(1n+2)';
+
 export const usesCheckLayout = () => {
     // dependencies:
     
