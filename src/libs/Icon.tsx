@@ -537,7 +537,7 @@ export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, si
     const [sizes] = sizeOverwrite  ? usesSizes(sizeOverwrite)  : [null];
     
     // colors:
-    const [foreg] = foregOverwrite ? usesForeg(foregOverwrite) : [null];
+    const [foreg, foregRefs] = foregOverwrite ? usesForeg(foregOverwrite) : [null, null];
     
     
     
@@ -550,6 +550,10 @@ export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, si
             // colors:
             foreg?.(),
         ]),
+        layout({
+            // foregrounds:
+            foreg : foregRefs?.foreg ?? null,
+        }),
     ]);
 };
 
