@@ -25,11 +25,6 @@ import {
 import {
     // hooks:
     createUseCssfnStyle,
-    
-    
-    
-    // react components:
-    ElementProps,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -69,6 +64,7 @@ import {
     usesValidInvalid,
     markValid,
     markInvalid,
+    ValidatorHandler,
     useStateValidInvalid,
 }                           from './EditableControl'
 import {
@@ -89,10 +85,9 @@ import {
 
 // states:
 
-//#region validInvalids
-export type ValidatorHandler       = () => ValResult
+//#region validInvalid
 export type CustomValidatorHandler = (isValid: ValResult) => ValResult
-export const useFormValidator = (customValidator?: CustomValidatorHandler) => {
+export const useFormValidator      = (customValidator?: CustomValidatorHandler) => {
     // states:
     let [isValid, setIsValid] = useState<ValResult>(null);
     
