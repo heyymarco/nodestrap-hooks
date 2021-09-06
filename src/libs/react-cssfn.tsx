@@ -96,7 +96,7 @@ export const createUseCssfnStyle = <TClassName extends ClassName = ClassName>(cl
 
 
 
-// utils:
+// utilities:
 
 export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React.JSXElementConstructor<TProps>): element is React.ReactElement<TProps, React.JSXElementConstructor<TProps>> => {
     return (
