@@ -50,6 +50,8 @@ import {
     gradientOf,
     noOutlined,
     outlinedOf,
+    usesMild,
+    usesForeg,
 }                           from './BasicComponent'
 import {
     // hooks:
@@ -89,7 +91,7 @@ import spacers              from './spacers'     // configurable spaces defs
 
 // appearances:
 
-export type BtnStyle = 'link'|'ghost' // might be added more styles in the future
+export type BtnStyle = 'link'|'icon'|'ghost' // might be added more styles in the future
 export interface VariantButton {
     btnStyle?: BtnStyle
 }
@@ -187,6 +189,10 @@ export const usesButtonVariants = () => {
         }),
     ]));
     
+    // colors:
+    const [, mildRefs            ] = usesMild();
+    const [,         , foregDecls] = usesForeg();
+    
     
     
     return composition([
@@ -211,12 +217,12 @@ export const usesButtonVariants = () => {
                 }),
             ]),
             
-            rule(['.link', '.ghost'], [
+            rule(['.link', '.icon', '.ghost'], [
                 imports([
                     noBackground(),
                 ]),
             ]),
-            rule('.link', [
+            rule(['.link', '.icon'], [
                 imports([
                     // colors:
                     usesThemeActive(), // set the active theme as the default theme
@@ -249,6 +255,11 @@ export const usesButtonVariants = () => {
                         ]),
                     ]),
                 ]),
+            ]),
+            rule('.icon', [
+                vars({
+                    [foregDecls.foreg] : mildRefs.foregMildFn,
+                }),
             ]),
             rule('.ghost', [
                 layout({
