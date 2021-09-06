@@ -28,7 +28,7 @@ import {
     rule,
 }                           from './cssfn'      // cssfn core
 
-// utils:
+// utilities:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
 import { camelCase }        from 'camel-case'   // camel-case  support for jss
 
