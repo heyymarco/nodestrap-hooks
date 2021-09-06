@@ -493,6 +493,21 @@ export const isNthChild      = (step: number, offset: number, styles: StyleColle
         return rule(`:nth-child(${step}n+${offset})`, styles);
     } // if
 };
+export const isNotNthChild   = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+    if (step === 0) { // no step
+        // if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        
+        if (offset === 1) return isNotFirstChild(styles);
+        
+        return rule(`:not(:nth-child(${offset}))`, styles);
+    }
+    else if (step === 1) { // 1 step
+        return rule(`:not(:nth-child(n+${offset}))`, styles);
+    }
+    else { // 2+ steps
+        return rule(`:not(:nth-child(${step}n+${offset}))`, styles);
+    } // if
+};
 export const isNthLastChild  = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
         if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
@@ -506,6 +521,21 @@ export const isNthLastChild  = (step: number, offset: number, styles: StyleColle
     }
     else { // 2+ steps
         return rule(`:nth-last-child(${step}n+${offset})`, styles);
+    } // if
+};
+export const isNotNthLastChild = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+    if (step === 0) { // no step
+        // if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        
+        if (offset === 1) return isNotLastChild(styles);
+        
+        return rule(`:not(:nth-last-child(${offset}))`, styles);
+    }
+    else if (step === 1) { // 1 step
+        return rule(`:not(:nth-last-child(n+${offset}))`, styles);
+    }
+    else { // 2+ steps
+        return rule(`:not(:nth-last-child(${step}n+${offset}))`, styles);
     } // if
 };
 export const isActive        = (styles: StyleCollection) => rule(     ':active'       , styles);
