@@ -124,7 +124,7 @@ export { createCssVar, createCssVar as default }
 
 
 
-// utils:
+// utilities:
 export const fallbacks = (first: Cust.Ref, ...next: Cust.Ref[]): Cust.Ref => {
     if (!next || !next.length) return first;
 
