@@ -204,13 +204,13 @@ export const usesButtonVariants = () => {
             sizes(),
         ]),
         variants([
-            noOrientationBlock([
+            noOrientationBlock([ // inline
                 layout({
                     // layouts:
                     flexDirection  : 'row',    // items are stacked horizontally
                 }),
             ]),
-            isOrientationBlock([
+            isOrientationBlock([ // block
                 layout({
                     // layouts:
                     flexDirection  : 'column', // items are stacked vertically
