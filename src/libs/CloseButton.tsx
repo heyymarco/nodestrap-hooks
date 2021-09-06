@@ -46,8 +46,7 @@ export const CloseButton = (props: CloseButtonProps) => {
             
             
             // variants:
-            theme={props.theme ?? 'secondary'}
-            btnStyle={props.btnStyle ?? 'link'}
+            btnStyle={props.btnStyle ?? 'icon'}
         />
     );
 };
