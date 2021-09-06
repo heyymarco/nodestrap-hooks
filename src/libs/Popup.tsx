@@ -250,7 +250,7 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) => {
     // styles:
-    const sheet        = usePopupSheet();
+    const sheet = usePopupSheet();
     
     
     
