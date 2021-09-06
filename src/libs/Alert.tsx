@@ -281,8 +281,8 @@ export const Alert = <TElement extends HTMLElement = HTMLElement>(props: AlertPr
                 
                 
                 // variants:
-                theme={props.theme}
                 size='md'
+                theme={props.theme}
                 mild={!mildFn}
                 
                 
