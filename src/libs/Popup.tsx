@@ -18,7 +18,6 @@ import {
     // layouts:
     layout,
     vars,
-    children,
     
     
     
@@ -42,27 +41,22 @@ import {
 import {
     // hooks:
     usesSizes,
-    outlinedOf,
-    mildOf,
 }                           from './BasicComponent'
 import {
     // hooks:
+    usesEnableDisable,
+    
+    isActived,
+    isActivating,
+    isPassivating,
     isPassived,
-    isActive,
-    usesThemeActive,
+    usesActivePassive as indicatorUsesActivePassive,
     
     
     
     // styles:
     usesIndicatorLayout,
     usesIndicatorVariants,
-    usesIndicatorStates,
-    
-    
-    
-    // configs:
-    cssProps as icssProps,
-    cssDecls as icssDecls,
     
     
     
@@ -78,14 +72,46 @@ import {
 // states:
 
 //#region activePassive
-export const markActive = () => composition([
-    imports([
-        outlinedOf(null),      // keeps outlined variant
-        mildOf(null),          // keeps mild variant
-        
-        usesThemeActive(null), // keeps current theme
-    ]),
-]);
+/**
+ * Uses active & passive states.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
+ */
+export const usesActivePassive = () => {
+    // dependencies:
+    const [activePassive, activePassiveRefs, activePassiveDecls, ...restActivePassive] = indicatorUsesActivePassive();
+    
+    
+    
+    return [
+        () => composition([
+            imports([
+                activePassive(),
+            ]),
+            states([
+                isActived([
+                    vars({
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                    }),
+                ]),
+                isActivating([
+                    vars({
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.animActivePassive]   : cssProps.animActive,
+                    }),
+                ]),
+                isPassivating([
+                    vars({
+                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
+                    }),
+                ]),
+            ]),
+        ]),
+        activePassiveRefs,
+        activePassiveDecls,
+        ...restActivePassive,
+    ] as const;
+};
 //#endregion activePassive
 
 
@@ -100,20 +126,6 @@ export const usesPopupLayout = () => {
         layout({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-        vars({
-            [icssDecls.filterActive] : cssProps.filterActive,
-            [icssDecls.animActive  ] : cssProps.animActive,
-            [icssDecls.animPassive ] : cssProps.animPassive,
-        }),
-        layout({
-            ...children('*', composition([
-                vars({
-                    [icssDecls.filterActive] : icssProps.filterActive,
-                    [icssDecls.animActive  ] : icssProps.animActive,
-                    [icssDecls.animPassive ] : icssProps.animPassive,
-                }),
-            ])),
         }),
     ]);
 };
@@ -141,10 +153,19 @@ export const usesPopupVariants = () => {
     ]);
 };
 export const usesPopupStates = () => {
+    // dependencies:
+    
+    // states:
+    const [enableDisable] = usesEnableDisable();
+    const [activePassive] = usesActivePassive();
+    
+    
+    
     return composition([
         imports([
             // states:
-            usesIndicatorStates(),
+            enableDisable(),
+            activePassive(),
         ]),
         states([
             isPassived([
@@ -152,11 +173,6 @@ export const usesPopupStates = () => {
                     // appearances:
                     display: 'none', // hide the popup
                 }),
-            ]),
-            isActive([
-                imports([
-                    markActive(),
-                ]),
             ]),
         ]),
     ]);
@@ -234,7 +250,7 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) => {
     // styles:
-    const sheet = usePopupSheet();
+    const sheet        = usePopupSheet();
     
     
     
