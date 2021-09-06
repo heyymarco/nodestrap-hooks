@@ -41,7 +41,7 @@ import type {
     Cust,
 }                           from './css-types'  // ts defs support for jss
 
-// utils:
+// utilities:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
 import { camelCase }        from 'camel-case'   // camel-case  support for jss
 
