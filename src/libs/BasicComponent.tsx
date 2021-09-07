@@ -854,6 +854,27 @@ export const usesBorder = () => {
         borderDecls,
     ] as const;
 };
+
+export const usesBorderStroke = () => {
+    // dependencies:
+    
+    // colors:
+    const [border, borderRefs] = usesBorder();
+    
+    
+    
+    return composition([
+        imports([
+            // colors:
+            border(),
+        ]),
+        layout({
+            // borders:
+            border      : cssProps.border,
+            borderColor : borderRefs.borderCol,
+        }),
+    ]);
+};
 //#endregion border
 
 
