@@ -148,6 +148,8 @@ function App() {
 						'dolor sit amet'
 				>
 					<img src='https://picsum.photos/300/200' alt='' />
+					<img src='https://picsum.photos/300/200' alt='' />
+					<img src='https://picsum.photos/300/200' alt='' />
 					<h5>Card title</h5>
 					<p>This is a wider card with supporting text below as a natural lead-in to additional content.<br>
 					</br>This content is a little bit longer.</p>

@@ -25,9 +25,7 @@ import {
     variants,
     rule,
     isFirstChild,
-    isNotFirstChild,
     isLastChild,
-    isNotLastChild,
     isNotNthLastChild,
 }                           from './cssfn'       // cssfn core
 import {
@@ -53,7 +51,6 @@ import {
     isOrientationInline,
     VariantOrientation,
     useVariantOrientation,
-    usesBorder,
     usesBorderStroke,
     
     
@@ -91,7 +88,60 @@ import spacers              from './spacers'     // configurable spaces defs
 
 // layouts:
 
-//#region border
+export const usesImageFill = () => {
+    return composition([
+        layout({
+            // layouts:
+            display: 'block', // fills the entire parent's width
+            
+            
+            
+            // sizes:
+            // span to maximum width including parent's paddings:
+            boxSizing      : 'border-box', // the final size is including borders & paddings
+            inlineSize     : 'fill-available',
+            fallbacks      : {
+                inlineSize : [['calc(100% + (', cssProps.itemPaddingInline, ' * 2))']],
+            },
+            
+            
+            
+            // spacings:
+            marginInline   : [['calc(0px -', cssProps.itemPaddingInline, ')']], // cancel out parent's padding with negative margin
+            
+            // add a spacing to the next sibling:
+            marginBlockEnd : cssProps.itemPaddingBlock,
+            
+            
+            
+            // children:
+            // make sibling image closer (cancel out prev sibling's spacing):
+            ...adjacentSiblings(cardImgElm, composition([
+                layout({
+                    // spacings:
+                    marginBlockStart : [['calc(0px -', cssProps.itemPaddingBlock,  ')']], // cancel out prev sibling's spacing with negative margin
+                }),
+            ])),
+        }),
+        variants([
+            isFirstChild(composition([
+                layout({
+                    // spacings:
+                    marginBlockStart : [['calc(0px -', cssProps.itemPaddingBlock,  ')']], // cancel out parent's padding with negative margin
+                }),
+            ])),
+            isLastChild(composition([
+                layout({
+                    // spacings:
+                    marginBlockEnd   : [['calc(0px -', cssProps.itemPaddingBlock,  ')']], // cancel out parent's padding with negative margin
+                }),
+            ])),
+        ]),
+    ]);
+};
+
+
+// borders:
 export const usesBorderAsContainer = () => {
     return composition([
         imports([
@@ -110,7 +160,7 @@ export const usesBorderAsContainer = () => {
         }),
     ]);
 };
-export const usesBorderAsSeparatorBlock = () => {
+export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
     return composition([
         imports([
             // borders:
@@ -137,7 +187,7 @@ export const usesBorderAsSeparatorBlock = () => {
             // remove double border by removing bottom-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
-            isNotNthLastChild(0, 2, composition([
+            isNotNthLastChild(0, (replaceLast ? 2 : 0), composition([
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
@@ -148,7 +198,7 @@ export const usesBorderAsSeparatorBlock = () => {
             
             // remove top-border at the header, so that it wouldn't collide with the Card's top-border
             // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
-            rule([':first-child', ':last-child'], composition([
+            rule([':first-child', ...(replaceLast ? [':last-child'] : [])], composition([
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
@@ -157,7 +207,7 @@ export const usesBorderAsSeparatorBlock = () => {
         ]),
     ]);
 };
-export const usesBorderAsSeparatorInline = () => {
+export const usesBorderAsSeparatorInline = (replaceLast = false) => {
     return composition([
         imports([
             // borders:
@@ -184,7 +234,7 @@ export const usesBorderAsSeparatorInline = () => {
             // remove double border by removing right-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
-            isNotNthLastChild(0, 2, composition([
+            isNotNthLastChild(0, (replaceLast ? 2 : 0), composition([
                 layout({
                     // borders:
                     borderInlineEndWidth   : 0, // remove right-border
@@ -195,7 +245,7 @@ export const usesBorderAsSeparatorInline = () => {
             
             // remove left-border at the header, so that it wouldn't collide with the Card's left-border
             // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
-            rule([':first-child', ':last-child'], composition([
+            rule([':first-child', ...(replaceLast ? [':last-child'] : [])], composition([
                 layout({
                     // borders:
                     borderInlineStartWidth : 0, // remove left-border
@@ -204,100 +254,68 @@ export const usesBorderAsSeparatorInline = () => {
         ]),
     ]);
 };
-//#endregion border
+
+export const usesImageBorder = () => {
+    return composition([
+        imports([
+            // borders:
+            usesBorderAsSeparatorBlock(),
+        ]),
+        layout({
+            // children:
+            // make sibling image closer:
+            // remove double border by removing top-border to the adjacent images
+            ...adjacentSiblings(cardImgElm, composition([
+                layout({
+                    // borders:
+                    borderBlockStartWidth  : 0, // remove top-border
+                }),
+            ])),
+        }),
+        variants([
+            // because we avoid modifying paragraph's top-border, we delegate top-border to the image
+            // so, we need to restore bottom-border that was removed by `usesBorderAsSeparatorBlock()`
+            isNotNthLastChild(0, 0, composition([
+                layout({
+                    // borders:
+                    borderBlockEndWidth    : undefined, // restore bottom-border
+                }),
+            ])),
+            // then replace the algoritm above with this one:
+            // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
+            isLastChild(composition([
+                layout({
+                    // borders:
+                    borderBlockEndWidth    : 0, // remove bottom-border
+                }),
+            ])),
+        ]),
+    ]);
+};
 
 
 
 // styles:
-const headerElm = 'header';
-const footerElm = 'footer';
-const bodyElm   = '.body';
+const headerElm  = 'header';
+const footerElm  = 'footer';
+const bodyElm    = '.body';
+const cardImgElm = ['figure', 'img'];
 
 export const usesCardImageLayout = () => {
-    // dependencies:
-    
-    // colors:
-    const [, borderRefs] = usesBorder();
-    
-    
-    
     return composition([
         imports([
             stripOutImage(), // clear browser's default styling on image
-        ]),
-        layout({
+            
             // layouts:
-            display: 'block', // fills the entire parent's width
-            
-            
-            
-            // sizes:
-            // span to maximum width including parent's paddings:
-            boxSizing      : 'border-box', // the final size is including borders & paddings
-            inlineSize     : 'fill-available',
-            fallbacks      : {
-                inlineSize : [['calc(100% + (', cssProps.itemPaddingInline, ' * 2))']],
-            },
-            
-            
-            
-            // spacings:
-            //#region no parent paddings
-            // cancel-out parent's padding with negative margin:
-            marginInline   : [['calc(0px -', cssProps.itemPaddingInline, ')']],
-            marginBlock    : [['calc(0px -', cssProps.itemPaddingBlock,  ')']],
-            //#endregion no parent paddings
-            
-            
+            usesImageFill(),
             
             // borders:
-            //#region border-strokes as a separator
-            border       : bcssProps.border,     // copy from children (can't inherit because border(Inline|Block)Width might have been modified)
-            borderColor  : borderRefs.borderCol, // copy from children (can't inherit because border(Inline|Block)Width might have been modified)
-            
-            borderInlineWidth         : 0, // remove (left|right)-border for all-images
-            //#endregion border-strokes as a separator
-            
-            
-            
+            usesImageBorder(),
+        ]),
+        layout({
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'img')), // apply general cssProps starting with img***
         }),
-        variants([
-            //#region no parent paddings
-            // kill the top negative margin so the prev sibling can add a bottom space:
-            isNotFirstChild(composition([
-                layout({
-                    marginBlockStart : 0,
-                }),
-            ])),
-            
-            // add a bottom space to the next sibling:
-            isNotLastChild(composition([
-                layout({
-                    marginBlockEnd   : cssProps.itemPaddingBlock,
-                }),
-            ])),
-            //#endregion no parent paddings
-            
-            
-            
-            //#region border-strokes as a separator
-            // remove top-border at the first-image, so that it wouldn't collide with the (header|body|footer)'s top-border
-            isFirstChild(composition([
-                layout({
-                    borderBlockStartWidth : 0,
-                }),
-            ])),
-            
-            // remove bottom-border at the last-image, so that it wouldn't collide with the (header|body|footer)'s bottom-border
-            isLastChild(composition([
-                layout({
-                    borderBlockEndWidth   : 0,
-                }),
-            ])),
-            //#endregion border-strokes as a separator
-        ]),
     ]);
 }
 export const usesCardItemLayout = () => {
@@ -361,7 +379,7 @@ export const usesCardItemLayout = () => {
             //#endregion first: reset top_level <figure> and inner <img>
             
             // then: styling top_level <figure> & top_level <img>:
-            ...children(['figure', 'img'], composition([
+            ...children(cardImgElm, composition([
                 imports([
                     usesCardImageLayout(),
                 ]),
@@ -471,6 +489,11 @@ export const usesCardLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+
+
+            // debugs:
+            margin: '1em',
+            '--bsc-border': [['solid', '5px', 'red']],
         }),
     ]);
 };
@@ -508,7 +531,7 @@ export const usesCardVariants = () => {
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorBlock(),
+                            usesBorderAsSeparatorBlock(true),
                         ]),
                     ])),
                 }),
@@ -525,7 +548,7 @@ export const usesCardVariants = () => {
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorInline(),
+                            usesBorderAsSeparatorInline(true),
                         ]),
                     ])),
                 }),
