@@ -54,6 +54,7 @@ import {
     VariantOrientation,
     useVariantOrientation,
     usesBorder,
+    usesBorderStroke,
     
     
     
@@ -83,6 +84,127 @@ import {
     stripOutImage,
 }                           from './strip-outs'
 import spacers              from './spacers'     // configurable spaces defs
+
+
+
+// hooks:
+
+// layouts:
+
+//#region border
+export const usesBorderAsContainer = () => {
+    return composition([
+        imports([
+            // borders:
+            usesBorderStroke(),
+        ]),
+        layout({
+            // border radiuses:
+            borderRadius : bcssProps.borderRadius,
+            overflow     : 'hidden', // clip the children at the rounded corners
+            
+            
+            
+            // shadows:
+            boxShadow    : bcssProps.boxShadow,
+        }),
+    ]);
+};
+export const usesBorderAsSeparatorBlock = () => {
+    return composition([
+        imports([
+            // borders:
+            usesBorderStroke(),
+        ]),
+        layout({
+            // borders:
+            borderInlineWidth : 0, // remove (left|right)-border
+            
+            
+            
+            // border radiuses:
+            borderRadius      : 0, // remove border radius
+            
+            
+            
+            // shadows:
+            boxShadow         : undefined,
+        }),
+        variants([
+            // assumes the card *always* have a body, so the second-last-item is always a body
+            // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
+            // and
+            // remove double border by removing bottom-border starting from the third-last-item to the first-item
+            // and
+            // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
+            isNotNthLastChild(0, 2, composition([
+                layout({
+                    // borders:
+                    borderBlockEndWidth    : 0, // remove bottom-border
+                }),
+            ])),
+            
+            
+            
+            // remove top-border at the header, so that it wouldn't collide with the Card's top-border
+            // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
+            rule([':first-child', ':last-child'], composition([
+                layout({
+                    // borders:
+                    borderBlockStartWidth  : 0, // remove top-border
+                }),
+            ])),
+        ]),
+    ]);
+};
+export const usesBorderAsSeparatorInline = () => {
+    return composition([
+        imports([
+            // borders:
+            usesBorderStroke(),
+        ]),
+        layout({
+            // borders:
+            borderBlockWidth  : 0, // remove (top|bottom)-border
+            
+            
+            
+            // border radiuses:
+            borderRadius      : 0, // remove border radius
+            
+            
+            
+            // shadows:
+            boxShadow         : undefined,
+        }),
+        variants([
+            // assumes the card *always* have a body, so the second-last-item is always a body
+            // remove right-border at the last-item, so that it wouldn't collide with the Card's right-border
+            // and
+            // remove double border by removing right-border starting from the third-last-item to the first-item
+            // and
+            // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
+            isNotNthLastChild(0, 2, composition([
+                layout({
+                    // borders:
+                    borderInlineEndWidth   : 0, // remove right-border
+                }),
+            ])),
+            
+            
+            
+            // remove left-border at the header, so that it wouldn't collide with the Card's left-border
+            // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
+            rule([':first-child', ':last-child'], composition([
+                layout({
+                    // borders:
+                    borderInlineStartWidth : 0, // remove left-border
+                }),
+            ])),
+        ]),
+    ]);
+};
+//#endregion border
 
 
 
@@ -187,12 +309,6 @@ export const usesCardItemLayout = () => {
         layout({
             // layouts:
             display   : 'block', // fills the entire parent's width
-            
-            
-            
-            // strip out shadows:
-            // moved from here to parent,
-            boxShadow : undefined,
             
             
             
@@ -304,95 +420,11 @@ export const usesCardBodyLayout = () => {
     ]);
 };
 
-export const usesBorderAsSeparatorBlock = () => {
-    return composition([
-        layout({
-            // borders:
-            borderInlineWidth : 0, // remove (left|right)-border
-            
-            
-            
-            // border radiuses:
-            borderRadius      : 0, // remove border radius
-        }),
-        variants([
-            // assumes the card *always* have a body, so the second-last-item is always a body
-            // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
-            // and
-            // remove double border by removing bottom-border starting from the third-last-item to the first-item
-            // and
-            // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
-            isNotNthLastChild(0, 2, composition([
-                layout({
-                    // borders:
-                    borderBlockEndWidth    : 0, // remove bottom-border
-                }),
-            ])),
-            
-            
-            
-            // remove top-border at the header, so that it wouldn't collide with the Card's top-border
-            // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
-            rule([':first-child', ':last-child'], composition([
-                layout({
-                    // borders:
-                    borderBlockStartWidth  : 0, // remove top-border
-                }),
-            ])),
-        ]),
-    ]);
-};
-export const usesBorderAsSeparatorInline = () => {
-    return composition([
-        layout({
-            // borders:
-            borderBlockWidth  : 0, // remove (top|bottom)-border
-            
-            
-            
-            // border radiuses:
-            borderRadius      : 0, // remove border radius
-        }),
-        variants([
-            // assumes the card *always* have a body, so the second-last-item is always a body
-            // remove right-border at the last-item, so that it wouldn't collide with the Card's right-border
-            // and
-            // remove double border by removing right-border starting from the third-last-item to the first-item
-            // and
-            // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
-            isNotNthLastChild(0, 2, composition([
-                layout({
-                    // borders:
-                    borderInlineEndWidth   : 0, // remove right-border
-                }),
-            ])),
-            
-            
-            
-            // remove left-border at the header, so that it wouldn't collide with the Card's left-border
-            // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
-            rule([':first-child', ':last-child'], composition([
-                layout({
-                    // borders:
-                    borderInlineStartWidth : 0, // remove left-border
-                }),
-            ])),
-        ]),
-    ]);
-};
-
 export const usesCardLayout = () => {
-    // dependencies:
-    
-    // colors:
-    const [border, borderRefs] = usesBorder();
-    
-    
-    
     return composition([
         imports([
-            // colors:
-            border(),
+            // borders:
+            usesBorderAsContainer(), // make a nicely rounded corners
         ]),
         layout({
             // layouts:
@@ -405,36 +437,6 @@ export const usesCardLayout = () => {
             
             // sizes:
             minInlineSize  : 0, // See https://github.com/twbs/bootstrap/pull/22740#issuecomment-305868106
-            
-            
-            
-            // borders:
-            //#region make a nicely rounded corners
-            /*
-                border & borderRadius are moved from children to here,
-                for making consistent border color when the children's color are filtered.
-                so we need to reconstruct the border & borderRadius here.
-            */
-            
-            
-            
-            //#region border-strokes
-            border       : bcssProps.border,     // moved in from children
-            borderColor  : borderRefs.borderCol, // moved in from children
-            //#endregion border-strokes
-            
-            
-            
-            //#region border radiuses
-            borderRadius : bcssProps.borderRadius, // moved in from children
-            overflow     : 'hidden',               // clip the children at the rounded corners
-            //#endregion border radiuses
-            //#endregion make a nicely rounded corners
-            
-            
-            
-            // shadows:
-            boxShadow    : bcssProps.boxShadow, // moved in from children
             
             
             
@@ -505,6 +507,7 @@ export const usesCardVariants = () => {
                     // children:
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
+                            // borders:
                             usesBorderAsSeparatorBlock(),
                         ]),
                     ])),
@@ -521,6 +524,7 @@ export const usesCardVariants = () => {
                     // children:
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
+                            // borders:
                             usesBorderAsSeparatorInline(),
                         ]),
                     ])),
