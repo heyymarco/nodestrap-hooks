@@ -451,7 +451,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
  * Defines component's variants.
  * @returns A `StyleCollection` represents the component's variants.
  */
-export const variants = (variants: RuleCollection): StyleCollection => rules(variants);
+export const variants = (variants: RuleCollection, minSpecificityWeight: number = 0): StyleCollection => rules(variants, minSpecificityWeight);
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
