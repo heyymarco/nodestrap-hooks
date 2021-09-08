@@ -365,11 +365,7 @@ export const themeOptions = () => Object.keys(colorThemes) as ThemeName[];
  * @returns A `StyleCollection` represents color definitions for the default `themeName`.
  */
 export const usesThemeDefault = (themeName: ThemeName|null = null) => {
-    if (themeName) return usesThemeCond(themeName);
-    
-    
-    
-    return composition([]);
+    return usesThemeCond(themeName);
 };
 /**
  * Creates a conditional color definitions for the given `themeName`.
