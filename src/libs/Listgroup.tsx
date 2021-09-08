@@ -21,6 +21,7 @@ import {
     
     // rules:
     variants,
+    states,
     rule,
 }                           from './cssfn'       // cssfn core
 import {
@@ -56,11 +57,14 @@ import {
     isOrientationInline,
     VariantOrientation,
     useVariantOrientation,
+    ThemeName,
+    outlinedOf,
+    mildOf,
     usesBorder,
 }                           from './BasicComponent'
 import {
-    // react components:
-    Indicator,
+    // hooks:
+    isActive,
 }                           from './Indicator'
 import {
     // styles:
@@ -75,6 +79,18 @@ import {
     Content,
 }                           from './Content'
 import {
+    // hooks:
+    usesThemeDefault as controlUsesThemeDefault,
+    usesThemeActive  as controlUsesThemeActive,
+    isFocus,
+    isArrive,
+}                           from './Control'
+import {
+    // hooks:
+    isPress,
+    
+    
+    
     // styles:
     usesActionControlLayout,
     usesActionControlVariants,
@@ -99,6 +115,37 @@ import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
+
+
+
+// hooks:
+
+// states:
+
+//#region activePassive
+export const markActive = () => composition([
+    imports([
+        outlinedOf(null), // keeps outlined variant
+        mildOf(null),     // keeps mild variant
+        
+        usesThemeActive(), // switch to active theme
+    ]),
+]);
+export const dontMarkActive = () => composition([
+    imports([
+        outlinedOf(null), // keeps outlined variant
+        mildOf(null),     // keeps mild variant
+        
+        usesThemeActive(null), // keeps current theme
+    ]),
+]);
+
+// change default parameter from 'secondary' to `null`:
+export const usesThemeDefault = (themeName: ThemeName|null = null) => controlUsesThemeDefault(themeName);
+
+// change default parameter from 'primary' to 'secondary':
+export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => controlUsesThemeActive(themeName);
+//#endregion activePassive
 
 
 
@@ -180,6 +227,9 @@ export const usesListgroupActionItemLayout = () => {
             // layouts:
             // usesListgroupItemLayout(),
             usesActionControlLayout(),
+            
+            // colors:
+            usesThemeDefault(),
         ]),
     ]);
 };
@@ -198,6 +248,34 @@ export const usesListgroupActionItemStates = () => {
             // states:
             // usesListgroupItemStates(),
             usesActionControlStates(),
+        ]),
+        states([
+            isFocus([
+                layout({
+                    zIndex: 1, // prevent boxShadowFocus from clipping
+                }),
+            ]),
+            
+            isActive([
+                imports([
+                    markActive(),
+                ]),
+            ]),
+            isFocus([
+                imports([
+                    dontMarkActive(),
+                ]),
+            ]),
+            isArrive([
+                imports([
+                    dontMarkActive(),
+                ]),
+            ]),
+            isPress([
+                imports([
+                    dontMarkActive(),
+                ]),
+            ]),
         ]),
     ]);
 };
@@ -221,9 +299,6 @@ export const usesListgroupLayout = () => {
         imports([
             // resets:
             stripOutList(),
-            
-            // layouts:
-            usesContentLayout(),
             
             // borders:
             usesBorderAsContainer(), // make a nicely rounded corners
@@ -319,9 +394,13 @@ export const usesListgroupVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
-                                imports([
-                                    // borders:
-                                    usesBorderAsSeparatorBlock(),
+                                variants([
+                                    rule([':nth-child(n)'], composition([
+                                        imports([
+                                            // borders:
+                                            usesBorderAsSeparatorBlock(),
+                                        ]),
+                                    ])),
                                 ]),
                             ])),
                         }),
@@ -539,7 +618,7 @@ export const ListgroupItem = <TElement extends HTMLElement = HTMLElement>(props:
             ]}
         />
         :
-        <Indicator<TElement>
+        <Content<TElement>
             // other props:
             {...props}
             
