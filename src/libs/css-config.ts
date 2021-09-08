@@ -798,7 +798,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `prefix` name.  
  * The returning props has been normalized (renamed), so they don't start with `prefix`.
  */
-export const usesPrefixedProps = <TProps extends {}>(cssProps: Refs<TProps>, prefix: string): PropList => {
+export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): PropList => {
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` not starting with specified `prefix`:
@@ -826,7 +826,7 @@ export const usesPrefixedProps = <TProps extends {}>(cssProps: Refs<TProps>, pre
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `suffix` name.  
  * The returning props has been normalized (renamed), so they don't end with `suffix`.
  */
-export const usesSuffixedProps = <TProps extends {}>(cssProps: Refs<TProps>, suffix: string): PropList => {
+export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string): PropList => {
     suffix = pascalCase(suffix);
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
@@ -856,7 +856,7 @@ export const usesSuffixedProps = <TProps extends {}>(cssProps: Refs<TProps>, suf
  * --com-backgBak     : var(--com-backg)  
  * --com-boxShadowBak : var(--com-boxShadow)
  */
-export const backupProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSuff: string = 'Bak'): PropList => {
+export const backupProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): PropList => {
     backupSuff = pascalCase(backupSuff);
     const propList: PropList = {};
     for (const propName of Object.keys(cssProps)) {
@@ -874,7 +874,7 @@ export const backupProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSuf
  * --com-backg     : var(--com-backgBak)  
  * --com-boxShadow : var(--com-boxShadowBak)
  */
-export const restoreProps = <TProps extends {}>(cssProps: Refs<TProps>, backupSuff: string = 'Bak'): PropList => {
+export const restoreProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): PropList => {
     const propList: PropList = {};
     for (const propName of Object.keys(cssProps)) {
         propList[propName] = `var(${propName}${backupSuff})`;
@@ -906,7 +906,7 @@ export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssPr
  * The order must be from the most specific parent to the least specific one.
  * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDeclss`.
  */
-export const overwriteParentProps = <TProps extends {}>(cssProps: Refs<TProps>, ...cssDeclss: Decls<{}>[]): PropList => {
+export const overwriteParentProps = (cssProps: Refs<{}>, ...cssDeclss: Decls<{}>[]): PropList => {
     const propList: PropList = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         const targetPropName = ((): Cust.Decl => {
