@@ -394,13 +394,9 @@ export const usesListgroupVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
-                                variants([
-                                    rule([':nth-child(n)'], composition([
-                                        imports([
-                                            // borders:
-                                            usesBorderAsSeparatorBlock(),
-                                        ]),
-                                    ])),
+                                imports([
+                                    // borders:
+                                    usesBorderAsSeparatorBlock(),
                                 ]),
                             ])),
                         }),
@@ -438,7 +434,8 @@ export const usesListgroupVariants = () => {
                     ])),
                 }),
             ]),
-            
+        ], /*minSpecificityWeight: */2),
+        variants([
             rule('.bullet', (() => {
                 // dependencies:
                 
@@ -495,7 +492,7 @@ export const usesListgroupVariants = () => {
                                         overflow     : 'hidden',            // clip the children at the rounded corners
                                         
                                         // customize:
-                                        ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
+                                        ...usesGeneralProps(usesPrefixedProps(cssProps, 'bullet')), // apply general cssProps starting with bullet***
                                     }),
                                 ])),
                             }),
@@ -503,7 +500,7 @@ export const usesListgroupVariants = () => {
                     }),
                 ]);
             })()),
-        ]),
+        ], /*minSpecificityWeight: */3),
     ]);
 };
 export const usesListgroupStates = () => {
