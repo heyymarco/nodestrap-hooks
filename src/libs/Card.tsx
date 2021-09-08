@@ -21,7 +21,6 @@ import {
     
     
     // rules:
-    rules,
     variants,
     rule,
     isFirstChild,
@@ -92,7 +91,7 @@ export const usesImageFill = () => {
     return composition([
         layout({
             // layouts:
-            display: 'block', // fills the entire parent's width
+            display        : 'block', // fills the entire parent's width
             
             
             
@@ -109,17 +108,16 @@ export const usesImageFill = () => {
             // spacings:
             marginInline   : [['calc(0px -', cssProps.itemPaddingInline, ')']], // cancel out parent's padding with negative margin
             
-            // add a spacing to the next sibling:
-            marginBlockEnd : cssProps.itemPaddingBlock,
+            marginBlockEnd : cssProps.itemPaddingBlock, // add a spacing to the next sibling
             
             
             
             // children:
             // make sibling image closer (cancel out prev sibling's spacing):
-            ...adjacentSiblings(cardImgElm, composition([
+            ...adjacentSiblings(imgElm, composition([
                 layout({
                     // spacings:
-                    marginBlockStart : [['calc(0px -', cssProps.itemPaddingBlock,  ')']], // cancel out prev sibling's spacing with negative margin
+                    marginBlockStart : [['calc(0px -', cssProps.itemPaddingBlock, ')']], // cancel out prev sibling's spacing with negative margin
                 }),
             ])),
         }),
@@ -127,13 +125,13 @@ export const usesImageFill = () => {
             isFirstChild(composition([
                 layout({
                     // spacings:
-                    marginBlockStart : [['calc(0px -', cssProps.itemPaddingBlock,  ')']], // cancel out parent's padding with negative margin
+                    marginBlockStart : [['calc(0px -', cssProps.itemPaddingBlock, ')']], // cancel out parent's padding with negative margin
                 }),
             ])),
             isLastChild(composition([
                 layout({
                     // spacings:
-                    marginBlockEnd   : [['calc(0px -', cssProps.itemPaddingBlock,  ')']], // cancel out parent's padding with negative margin
+                    marginBlockEnd   : [['calc(0px -', cssProps.itemPaddingBlock, ')']], // cancel out parent's padding with negative margin
                 }),
             ])),
         ]),
@@ -178,7 +176,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             
             
             // shadows:
-            boxShadow         : undefined,
+            boxShadow         : undefined, // remove shadow
         }),
         variants([
             // assumes the card *always* have a body, so the second-last-item is always a body
@@ -225,7 +223,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             
             
             // shadows:
-            boxShadow         : undefined,
+            boxShadow         : undefined, // remove shadow
         }),
         variants([
             // assumes the card *always* have a body, so the second-last-item is always a body
@@ -264,8 +262,8 @@ export const usesImageBorder = () => {
         layout({
             // children:
             // make sibling image closer:
-            // remove double border by removing top-border to the adjacent images
-            ...adjacentSiblings(cardImgElm, composition([
+            // remove double border by removing top-border at the adjacent images
+            ...adjacentSiblings(imgElm, composition([
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
@@ -273,7 +271,7 @@ export const usesImageBorder = () => {
             ])),
         }),
         variants([
-            // because we avoid modifying paragraph's top-border, we delegate top-border to the image
+            // because we avoid modifying paragraph's top-border, we delegate the top-border to the image
             // so, we need to restore bottom-border that was removed by `usesBorderAsSeparatorBlock()`
             isNotNthLastChild(0, 0, composition([
                 layout({
@@ -296,10 +294,10 @@ export const usesImageBorder = () => {
 
 
 // styles:
-const headerElm  = 'header';
-const footerElm  = 'footer';
-const bodyElm    = '.body';
-const cardImgElm = ['figure', 'img'];
+const headerElm = 'header';
+const footerElm = 'footer';
+const bodyElm   = '.body';
+const imgElm    = ['figure', 'img'];
 
 export const usesCardImageLayout = () => {
     return composition([
@@ -317,7 +315,7 @@ export const usesCardImageLayout = () => {
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'img')), // apply general cssProps starting with img***
         }),
     ]);
-}
+};
 export const usesCardItemLayout = () => {
     return composition([
         imports([
@@ -333,6 +331,7 @@ export const usesCardItemLayout = () => {
             // children:
             //#region links
             // handle <a> as card-link:
+            
             ...children('a', composition([
                 layout({
                     // children:
@@ -350,8 +349,6 @@ export const usesCardItemLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
                 }),
-                rules([
-                ]),
             ])),
             //#endregion links
             
@@ -379,7 +376,7 @@ export const usesCardItemLayout = () => {
             //#endregion first: reset top_level <figure> and inner <img>
             
             // then: styling top_level <figure> & top_level <img>:
-            ...children(cardImgElm, composition([
+            ...children(imgElm, composition([
                 imports([
                     usesCardImageLayout(),
                 ]),
@@ -489,11 +486,6 @@ export const usesCardLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
-
-
-            // debugs:
-            margin: '1em',
-            '--bsc-border': [['solid', '5px', 'red']],
         }),
     ]);
 };
@@ -627,6 +619,7 @@ export interface CardProps<TElement extends HTMLElement = HTMLElement>
     extends
         ContentProps<TElement>,
         
+        // layouts:
         VariantOrientation
 {
     // children:
