@@ -227,6 +227,7 @@ export const usesListgroupActionItemLayout = () => {
             // layouts:
             // usesListgroupItemLayout(),
             usesActionControlLayout(),
+            usesContentLayout(),
             
             // colors:
             usesThemeDefault(),
@@ -239,6 +240,7 @@ export const usesListgroupActionItemVariants = () => {
             // variants:
             // usesListgroupItemVariants(),
             usesActionControlVariants(),
+            usesContentVariants(),
         ]),
     ]);
 };
@@ -248,6 +250,7 @@ export const usesListgroupActionItemStates = () => {
             // states:
             // usesListgroupItemStates(),
             usesActionControlStates(),
+            usesContentStates(),
         ]),
         states([
             isFocus([
