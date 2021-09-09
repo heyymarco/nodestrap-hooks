@@ -60,7 +60,7 @@ import {
     ThemeName,
     outlinedOf,
     mildOf,
-    usesBorder,
+    usesBorderStroke,
 }                           from './BasicComponent'
 import {
     // hooks:
@@ -126,7 +126,7 @@ import spacers              from './spacers'     // configurable spaces defs
 export const markActive = () => composition([
     imports([
         outlinedOf(null), // keeps outlined variant
-        mildOf(null),     // keeps mild variant
+        mildOf(null),     // keeps mild     variant
         
         usesThemeActive(), // switch to active theme
     ]),
@@ -134,7 +134,7 @@ export const markActive = () => composition([
 export const dontMarkActive = () => composition([
     imports([
         outlinedOf(null), // keeps outlined variant
-        mildOf(null),     // keeps mild variant
+        mildOf(null),     // keeps mild     variant
         
         usesThemeActive(null), // keeps current theme
     ]),
@@ -146,6 +146,19 @@ export const usesThemeDefault = (themeName: ThemeName|null = null) => controlUse
 // change default parameter from 'primary' to 'secondary':
 export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => controlUsesThemeActive(themeName);
 //#endregion activePassive
+
+
+// appearances:
+
+export type ListStyle = 'bullet' // might be added more styles in the future
+export interface VariantList {
+    listStyle?: ListStyle
+}
+export const useVariantList = (props: VariantList) => {
+    return {
+        class: props.listStyle ? props.listStyle : null,
+    };
+};
 
 
 
@@ -225,7 +238,6 @@ export const usesListgroupActionItemLayout = () => {
     return composition([
         imports([
             // layouts:
-            // usesListgroupItemLayout(),
             usesActionControlLayout(),
             usesContentLayout(),
             
@@ -238,7 +250,6 @@ export const usesListgroupActionItemVariants = () => {
     return composition([
         imports([
             // variants:
-            // usesListgroupItemVariants(),
             usesActionControlVariants(),
             usesContentVariants(),
         ]),
@@ -248,14 +259,13 @@ export const usesListgroupActionItemStates = () => {
     return composition([
         imports([
             // states:
-            // usesListgroupItemStates(),
             usesActionControlStates(),
             usesContentStates(),
         ]),
         states([
             isFocus([
                 layout({
-                    zIndex: 1, // prevent boxShadowFocus from clipping
+                    zIndex: 1, // prevents boxShadowFocus from clipping
                 }),
             ]),
             
@@ -439,70 +449,61 @@ export const usesListgroupVariants = () => {
             ]),
         ], /*minSpecificityWeight: */2),
         variants([
-            rule('.bullet', (() => {
-                // dependencies:
-                
-                // colors:
-                const [border, borderRefs] = usesBorder();
-                
-                
-                
-                return composition([
-                    imports([
-                        // colors:
-                        border(),
-                    ]),
-                    layout({
-                        // layouts:
-                        alignItems   : 'center', // child items are centered horizontally
-                        
-                        
-                        
-                        // borders:
-                        // kill borders surrounding Listgroup:
-                        borderWidth  : 0,
-                        borderRadius : 0,
-                        overflow     : 'unset',
-                        
-                        
-                        
-                        // spacings:
-                        // add space between bullets:
-                        gap          : cssProps.bulletSpacing,
-                        
-                        
-                        
-                        // children:
-                        ...children(wrapperElm, composition([
-                            layout({
-                                // borders:
-                                // kill separator between bullets:
-                                borderWidth : 0,
-                                
-                                
-                                
-                                // children:
-                                ...children(listItemElm, composition([
-                                    imports([
-                                        // borders:
-                                        usesBorderAsSeparatorBlock(),
+            rule('.bullet', [
+                layout({
+                    // layouts:
+                    alignItems   : 'center', // child items are centered horizontally
+                    
+                    
+                    
+                    // borders:
+                    // kill borders surrounding Listgroup:
+                    borderWidth  : 0,
+                    borderRadius : 0,
+                    overflow     : 'unset',
+                    
+                    
+                    
+                    // spacings:
+                    // add space between bullets:
+                    gap          : cssProps.bulletSpacing,
+                    
+                    
+                    
+                    // children:
+                    ...children(wrapperElm, composition([
+                        layout({
+                            // borders:
+                            // kill separator between bullets:
+                            borderWidth : 0,
+                            
+                            
+                            
+                            // children:
+                            ...children(listItemElm, composition([
+                                layout({
+                                    // borders:
+                                    borderRadius : borderRadiuses.pill, // big rounded corner
+                                    overflow     : 'hidden',            // clip the children at the rounded corners
+                                    
+                                    
+                                    
+                                    // customize:
+                                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'bullet')), // apply general cssProps starting with bullet***
+                                }),
+                                variants([
+                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
+                                        imports([
+                                            // borders:
+                                            usesBorderStroke(),
+                                        ]),
                                     ]),
-                                    layout({
-                                        // borders:
-                                        borderColor  : borderRefs.borderCol,
-                                        
-                                        borderRadius : borderRadiuses.pill, // big rounded corner
-                                        overflow     : 'hidden',            // clip the children at the rounded corners
-                                        
-                                        // customize:
-                                        ...usesGeneralProps(usesPrefixedProps(cssProps, 'bullet')), // apply general cssProps starting with bullet***
-                                    }),
-                                ])),
-                            }),
-                        ])),
-                    }),
-                ]);
-            })()),
+                                ]),
+                            ])),
+                        }),
+                    ])),
+                }),
+            ]),
         ], /*minSpecificityWeight: */3),
     ]);
 };
@@ -553,20 +554,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         //#endregion spacings
     };
 }, { prefix: 'lg' });
-
-
-
-// hooks:
-
-export type ListStyle = 'bullet' // might be added more styles in the future
-export interface VariantList {
-    listStyle?: ListStyle
-}
-export const useVariantList = (props: VariantList) => {
-    return {
-        class: props.listStyle ? props.listStyle : null,
-    };
-};
 
 
 
@@ -636,7 +623,6 @@ export const ListgroupItem = <TElement extends HTMLElement = HTMLElement>(props:
         />
     );
 };
-
 export type { ListgroupItemProps as ItemProps }
 export { ListgroupItem as Item }
 
