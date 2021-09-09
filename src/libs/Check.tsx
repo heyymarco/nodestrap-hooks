@@ -305,7 +305,6 @@ export const usesCheckClear = () => {
 //#endregion checkClear
 
 
-
 // appearances:
 
 export type ChkStyle = 'btn'|'togglerBtn'|'switch' // might be added more styles in the future
