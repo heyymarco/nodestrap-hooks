@@ -9,7 +9,6 @@ import {
 // cssfn:
 import type {
     Prop,
-    Cust,
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
@@ -67,7 +66,7 @@ import {
     cssDecls as bcssDecls,
 }                           from './BasicComponent'
 import {
-    // hooks:
+    // styles:
     usesResponsiveContainerGridLayout,
 }                           from './Container'
 import {
@@ -104,11 +103,6 @@ import {
     
     
     
-    // configs:
-    cssProps as pcssProps,
-    
-    
-    
     // react components:
     Popup,
 }                           from './Popup'
@@ -137,7 +131,7 @@ interface OverlayAnimVars {
      */
     filterNone       : any
     /**
-     * final transform for the svg top.
+     * final filter for the overlay.
      */
     overlayFilter    : any
     
@@ -146,7 +140,7 @@ interface OverlayAnimVars {
      */
     animNone         : any
     /**
-     * final animation for the svg top.
+     * final animation for the overlay.
      */
     overlayAnim      : any
 }
@@ -214,6 +208,32 @@ export const usesOverlayAnim = () => {
 //#endregion overlay animations
 
 
+// appearances:
+
+export type ModalStyle = 'scrollable' // might be added more styles in the future
+export interface VariantModal {
+    modalStyle? : ModalStyle
+}
+export function useVariantModal(props: VariantModal) {
+    return {
+        class: props.modalStyle ? props.modalStyle : null,
+    };
+}
+
+export interface AlignModal {
+    horzAlign? : Prop.JustifyItems
+    vertAlign? : Prop.AlignItems
+}
+export function useAlignModal(props: AlignModal) {
+    return {
+        style: {
+            [cssDecls.horzAlign] : props.horzAlign,
+            [cssDecls.vertAlign] : props.vertAlign,
+        },
+    };
+}
+
+
 
 // styles:
 const cardElm      = '*';
@@ -222,7 +242,7 @@ const cardBodyElm  = '.body';
 
 export const usesCard = () => {
     // dependencies:
-
+    
     // animations:
     const [, animRefs] = usesAnim();
     
@@ -282,14 +302,14 @@ export const usesModalLayout = () => {
     // dependencies:
     
     // animations:
-    const [anim] = usesAnim();
+    const [anim                 ] = usesAnim();
+    const [    , overlayAnimRefs] = usesOverlayAnim();
     
     
     
     return composition([
         imports([
             // layouts:
-            // usesPopupLayout(),
             usesResponsiveContainerGridLayout(), // applies responsive container functionality using css grid
             
             // animations:
@@ -305,19 +325,19 @@ export const usesModalLayout = () => {
             
             // sizes:
             // fills the entire screen:
-            boxSizing : 'border-box', // the final size is including borders & paddings
-            position  : 'fixed',
-            inset     : 0,
-            width     : '100vw',
-            height    : '100vh',
-         // maxWidth  : 'fill-available', // hack to excluding scrollbar // not needed since all html pages are virtually full width
-         // maxHeight : 'fill-available', // hack to excluding scrollbar // will be handle by javascript soon
+            boxSizing    : 'border-box', // the final size is including borders & paddings
+            position     : 'fixed',
+            inset        : 0,
+            width        : '100vw',
+            height       : '100vh',
+         // maxWidth     : 'fill-available', // hack to excluding scrollbar // not needed since all html pages are virtually full width
+         // maxHeight    : 'fill-available', // hack to excluding scrollbar // will be handle by javascript soon
             
             
             
             // animations:
-            filter      : overlayAnimRefs.overlayFilter,
-            anim        : overlayAnimRefs.overlayAnim,
+            filter       : overlayAnimRefs.overlayFilter,
+            anim         : overlayAnimRefs.overlayAnim,
             
             
             
@@ -535,6 +555,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     
     
+    //#region keyframes
     const keyframesOverlayActive  : PropEx.Keyframes = {
         from : {
             filter : overlayAnimRefs.overlayFilterPassive,
@@ -547,6 +568,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         from : keyframesOverlayActive.to,
         to   : keyframesOverlayActive.from,
     };
+    //#endregion keyframes
     
     
     
@@ -566,11 +588,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         //#region animations
-        animActive                  : pcssProps.animActive,
-        animPassive                 : pcssProps.animPassive,
-        
-        
-        
         overlayFilterActive         : [['opacity(1)']],
         overlayFilterPassive        : [['opacity(0)']],
         
@@ -581,33 +598,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         //#endregion animations
     };
 }, { prefix: 'mdl' });
-
-
-
-// hooks:
-
-export type ModalStyle = 'scrollable' // might be added more styles in the future
-export interface VariantModal {
-    modalStyle? : ModalStyle
-}
-export function useVariantModal(props: VariantModal) {
-    return {
-        class: props.modalStyle ? props.modalStyle : null,
-    };
-}
-
-export interface AlignModal {
-    horzAlign? : Prop.JustifyItems | Cust.Ref
-    vertAlign? : Prop.AlignItems   | Cust.Ref
-}
-export function useAlignModal(props: AlignModal) {
-    return {
-        style: {
-            [cssDecls.horzAlign] : props.horzAlign,
-            [cssDecls.vertAlign] : props.vertAlign,
-        },
-    };
-}
 
 
 
@@ -639,8 +629,8 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
     
     
     // variants:
-    const variModal    = useVariantModal(props);
     const alignModal   = useAlignModal(props);
+    const variModal    = useVariantModal(props);
     
     
     
@@ -678,23 +668,23 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
     
     
     // dom effects:
-    const cardRef      = useRef<TElement|null>(null);
+    const cardRef = useRef<TElement|null>(null);
+    
     useLayoutEffect(() => {
-        if (isVisible) {
-            if (cardRef.current && navigator.userAgent.toLowerCase().includes('firefox')) {
+        if (cardRef.current && navigator.userAgent.toLowerCase().includes('firefox')) {
+            if (isVisible) {
                 cardRef.current.style.overflow = (modalStyle === 'scrollable') ? '' : 'visible';
                 
                 // setTimeout(() => {
                 //     if (cardRef.current) cardRef.current.style.overflow = 'clip';
                 // }, 0);
-            } // if firefox
-        }
-        else {
-            if (cardRef.current && navigator.userAgent.toLowerCase().includes('firefox')) {
+            }
+            else {
                 cardRef.current.style.overflow = '';
-            } // if firefox
-        } // if
+            } // if
+        } // if firefox
     }, [isVisible, modalStyle]);
+    
     useEffect(() => {
         if (isVisible) {
             document.body.classList.add(sheet.body);
@@ -702,10 +692,14 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             
             
             cardRef.current?.focus(); // when actived => focus the dialog, so the user able to use [esc] key to close the dialog
-        }
-        else {
-            document.body.classList.remove(sheet.body);
-        } // if
+            
+            
+            
+            // cleanups:
+            return () => {
+                document.body.classList.remove(sheet.body);
+            };
+        } // if isVisible
     }, [isVisible, sheet.body]);
     
     
@@ -740,7 +734,14 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
                 className={sheet.actionBar}
             >
                 { footer }
-                <Button text='Close' onClick={() => props.onClose?.('ui')} />
+                <Button
+                    // accessibility:
+                    text='Close'
+                    
+                    
+                    // actions:
+                    onClick={() => props.onClose?.('ui')}
+                />
             </p>
         );
         
