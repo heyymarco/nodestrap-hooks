@@ -18,10 +18,10 @@ import reportWebVitals from './reportWebVitals';
 //     import IndicatorApp                             from './apps/IndicatorApp'; // done
 //         import ContentApp                           from './apps/ContentApp'; // done
 //            import ListgroupApp                      from './apps/ListgroupApp'; // done
-//                 import AccordionApp                 from './apps/AccordionApp';
+                import AccordionApp                 from './apps/AccordionApp'; // done
 //                 import NavscrollApp                 from './apps/NavscrollApp';
 //             import CardApp                          from './apps/CardApp'; // done
-                import ModalApp                     from './apps/ModalApp'; // done
+//                 import ModalApp                     from './apps/ModalApp'; // done
 //         import PopupApp                             from './apps/PopupApp'; // done
 //             import AlertApp                         from './apps/AlertApp'; // done
 //        import ControlApp                           from './apps/ControlApp'; // done
@@ -47,7 +47,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <ModalApp />
+    <AccordionApp />
   ,
   document.getElementById('root')
 );
