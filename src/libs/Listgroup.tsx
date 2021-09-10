@@ -209,6 +209,20 @@ export const usesListgroupItemVariants = () => {
             // layouts:
             sizes(),
         ]),
+        variants([
+            rule(':not(.inline)&', [ // block
+                imports([
+                    // borders:
+                    usesBorderAsSeparatorBlock(),
+                ]),
+            ]),
+            rule('.inline&', [ // inline
+                imports([
+                    // borders:
+                    usesBorderAsSeparatorInline(),
+                ]),
+            ]),
+        ], /*minSpecificityWeight: */2), // increase specificity to combat with '.actionCtrl'
     ]);
 };
 export const usesListgroupItemStates = () => {
@@ -402,16 +416,6 @@ export const usesListgroupVariants = () => {
                         layout({
                             // layouts:
                             flexDirection : 'column', // listItems are stacked vertically (supports for the Accordion at blockStyle)
-                            
-                            
-                            
-                            // children:
-                            ...children(listItemElm, composition([
-                                imports([
-                                    // borders:
-                                    usesBorderAsSeparatorBlock(),
-                                ]),
-                            ])),
                         }),
                     ])),
                 }),
@@ -433,21 +437,11 @@ export const usesListgroupVariants = () => {
                         layout({
                             // layouts:
                             flexDirection : 'row', // listItems are stacked horizontally (supports for the Accordion at inlineStyle)
-                            
-                            
-                            
-                            // children:
-                            ...children(listItemElm, composition([
-                                imports([
-                                    // borders:
-                                    usesBorderAsSeparatorInline(),
-                                ]),
-                            ])),
                         }),
                     ])),
                 }),
             ]),
-        ], /*minSpecificityWeight: */2),
+        ], /*minSpecificityWeight: */2), // increase specificity to combat with '.actionCtrl'
         variants([
             rule('.bullet', [
                 layout({
