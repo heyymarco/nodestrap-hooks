@@ -164,7 +164,7 @@ export const useVariantList = (props: VariantList) => {
 
 // styles:
 const wrapperElm  = ['li', '*'];
-const listItemElm = '*';
+const listItemElm = ':first-child';
 
 export const usesListgroupItemLayout = () => {
     return composition([
