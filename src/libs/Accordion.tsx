@@ -22,6 +22,7 @@ import {
     
     
     // rules:
+    rules,
     variants,
     states,
     rule,
@@ -232,15 +233,19 @@ export const usesAccordionItemStates = () => {
 };
 export const usesAccordionItem = () => {
     return composition([
-        imports([
-            // layouts:
-            usesAccordionItemLayout(),
-            
-            // variants:
-            usesAccordionItemVariants(),
-            
-            // states:
-            usesAccordionItemStates(),
+        rules([
+            rule('&&', [ // makes AccordionItem more specific than ListGroupItem
+                imports([
+                    // layouts:
+                    usesAccordionItemLayout(),
+                    
+                    // variants:
+                    usesAccordionItemVariants(),
+                    
+                    // states:
+                    usesAccordionItemStates(),
+                ]),
+            ]),
         ]),
     ]);
 };
