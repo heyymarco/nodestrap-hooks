@@ -87,7 +87,6 @@ import {
     // styles:
     usesListgroupItemLayout,
     usesListgroupItemVariants,
-    usesListgroupItemStates,
     
     
     
@@ -226,7 +225,6 @@ export const usesAccordionItemStates = () => {
         imports([
             // states:
             usesPopupStates(),
-            usesListgroupItemStates(),
             activePassive(),
         ]),
     ]);
