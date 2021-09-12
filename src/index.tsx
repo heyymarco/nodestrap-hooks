@@ -18,26 +18,26 @@ import reportWebVitals from './reportWebVitals';
 //     import IndicatorApp                             from './apps/IndicatorApp'; // done
 //         import ContentApp                           from './apps/ContentApp'; // done
 //            import ListgroupApp                      from './apps/ListgroupApp'; // done
-                import AccordionApp                 from './apps/AccordionApp'; // done
-//                 import NavscrollApp                 from './apps/NavscrollApp';
+//                 import AccordionApp                 from './apps/AccordionApp'; // done
+                import NavscrollApp                 from './apps/NavscrollApp';
 //             import CardApp                          from './apps/CardApp'; // done
 //                 import ModalApp                     from './apps/ModalApp'; // done
 //         import PopupApp                             from './apps/PopupApp'; // done
 //             import AlertApp                         from './apps/AlertApp'; // done
-//        import ControlApp                           from './apps/ControlApp'; // done
-//            import ActionControlApp                 from './apps/ActionControlApp'; // done
-//                import ButtonApp                    from './apps/ButtonApp'; // done
+//         import ControlApp                           from './apps/ControlApp'; // done
+//             import ActionControlApp                 from './apps/ActionControlApp'; // done
+//                 import ButtonApp                    from './apps/ButtonApp'; // done
 //                     import ButtonIconApp            from './apps/ButtonIconApp'; // done
-//                        import CloseButtonApp         from './apps/CloseButtonApp'; // done
-//            import EditableControlApp               from './apps/EditableControlApp'; // done
-//                import EditableTextControlApp       from './apps/EditableTextControlApp'; // done
-//                    import InputApp                 from './apps/InputApp'; // done
-//                import EditableActionControlApp     from './apps/EditableActionControlApp'; // done
-//                    import CheckApp                 from './apps/CheckApp'; // done
+//                         import CloseButtonApp       from './apps/CloseButtonApp'; // done
+//             import EditableControlApp               from './apps/EditableControlApp'; // done
+//                 import EditableTextControlApp       from './apps/EditableTextControlApp'; // done
+//                     import InputApp                 from './apps/InputApp'; // done
+//                 import EditableActionControlApp     from './apps/EditableActionControlApp'; // done
+//                     import CheckApp                 from './apps/CheckApp'; // done
 //                         import RadioApp             from './apps/RadioApp'; // done
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp'; // done
 //                 import FormApp                      from './apps/FormApp'; // done
-//    import IconApp                                  from './apps/IconApp'; // done
+//     import IconApp                                  from './apps/IconApp'; // done
 //     import MasonryApp                               from './apps/MasonryApp';
 //     import CarouselApp                              from './apps/CarouselApp';
 //     import NavbarApp                                from './apps/NavbarApp';
@@ -47,7 +47,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <AccordionApp />
+    <NavscrollApp />
   ,
   document.getElementById('root')
 );
