@@ -76,11 +76,11 @@ import {
 }                           from './Popup'
 import {
     // hooks:
-    OrientationName,
-    VariantOrientation,
-    
     ListStyle,
     VariantList,
+    
+    OrientationName,
+    VariantOrientation,
     
     
     
@@ -288,7 +288,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         },
         '99%': {
             overflow      : 'hidden',
-            maxInlineSize : '100vh',
+            maxInlineSize : '100vw',
         },
         to   : {
             overflow      : 'unset',
@@ -349,14 +349,21 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
         // accessibility:
         label,          // delete, moved to children
         
-        defaultActive,  // delete, already handled by useTogglerActive
-        onActiveChange, // delete, already handled by useTogglerActive
-        active,         // delete, already handled by useTogglerActive
+        defaultActive,  // delete, already handled by `useTogglerActive`
+        active,         // delete, already handled by `useTogglerActive`
+        onActiveChange, // delete, already handled by `useTogglerActive`
         
         
         // children:
         children,
     ...restProps} = props;
+    
+    
+    
+    // handlers:
+    const handleToggleActive = () => {
+        setActive(!isActive); // toggle active
+    }
     
     
     
@@ -393,8 +400,29 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
                 
                 
                 if (!e.defaultPrevented) {
-                    setActive(!isActive); // toggle active
+                    handleToggleActive();
                     e.preventDefault();
+                } // if
+            }}
+            onKeyDown={(e) => {
+                // backwards:
+                props.onKeyDown?.(e);
+                
+                
+                
+                if (!e.defaultPrevented) e.preventDefault(); // prevents pressing space for scrolling page
+            }}
+            onKeyUp={(e) => {
+                // backwards:
+                props.onKeyUp?.(e);
+                
+                
+                
+                if (!e.defaultPrevented) {
+                    if ((e.key === ' ') || (e.code === 'Space')) {
+                        handleToggleActive();
+                        e.preventDefault();
+                    } // if
                 } // if
             }}
         >
@@ -435,5 +463,5 @@ export { AccordionItem as Item }
 export type { ListgroupProps, ListgroupProps as AccordionProps }
 export { Listgroup as default, Listgroup as Accordion }
 
-export type { OrientationName, VariantOrientation }
 export type { ListStyle, VariantList }
+export type { OrientationName, VariantOrientation }
