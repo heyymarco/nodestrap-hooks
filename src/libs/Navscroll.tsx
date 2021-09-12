@@ -412,6 +412,27 @@ export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: Nav
         
         // functions:
         const handleUpdate = async () => { // keeps the UI responsive (not blocking) while handling the event
+            const containsUncroppedSection = (viewport: Viewport, children: Dimension[]): [Dimension, number]|null => {
+                for (const [child, index] of children.map((child, index) => [child, index] as const)) {
+                    // find current:
+                    if (child.isFullyVisible(viewport)) return [child, index]; // found
+                    
+                    
+                    
+                    // find nested:
+                    const childViewport = child.isPartiallyVisible(viewport)?.toViewport();
+                    if (childViewport) {
+                        const grandChildren = child.toViewport().children(props.targetFilter);
+                        if (grandChildren.length && containsUncroppedSection(childViewport, grandChildren)) {
+                            return [child, index]; // found in nested
+                        } // if
+                    } // if
+                } // foreach child
+                
+                
+                
+                return null; // not found
+            }
             const getVisibleChildIndices = (viewport: Viewport, accumResults: number[] = []): number[] => {
                 const children = viewport.children(props.targetFilter);
                 const visibleChild = ((): [Dimension, number]|null => {
@@ -423,7 +444,7 @@ export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: Nav
                             ??
                             
                             // the first uncropped section always win:
-                            findFirst(children, (child) => child.isFullyVisible(viewport))
+                            containsUncroppedSection(viewport, children)
                             
                             ??
                             

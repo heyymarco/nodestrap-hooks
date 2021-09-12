@@ -31,7 +31,7 @@ function App() {
 	const [active,      setActive   ] = useState(false);
 
 	const actionCtrls = [false, undefined, true];
-	const [actionCtrl,      setActionCtrl   ] = useState<boolean|undefined>(undefined);
+	const [actionCtrl,      setActionCtrl   ] = useState<boolean|undefined>(true);
 
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Navscrolls.OrientationName|undefined>(undefined);
@@ -47,7 +47,7 @@ function App() {
         <div className="App">
             <Container>
 				<div style={{display: 'flex', flexDirection: 'row'}}>
-					<Navscroll classes={['nav']} style={{flex: '1 1'}}
+					{/* <Navscroll classes={['nav']} style={{flex: '1 1'}}
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined}
 
@@ -80,7 +80,7 @@ function App() {
 						<NavscrollItem>Sixth heading</NavscrollItem>
 						<NavscrollItem actionCtrl={true}>Seventh heading</NavscrollItem>
 						<NavscrollItem>Last heading</NavscrollItem>
-					</Navscroll>
+					</Navscroll> */}
 
 					<Navscroll classes={['nav']} style={{flex: '1 1'}}
 						theme={theme} size={size} gradient={enableGrad}
@@ -158,7 +158,7 @@ function App() {
 							Second sub heading 4
 						</section>
 					</section>
-					<section style={{ height: '40px' }}>
+					<section style={{ height: '100px' }}>
 						<h6>Thrid heading</h6>
 					</section>
 					<section style={{ height: '300px' }}>
