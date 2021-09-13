@@ -19,7 +19,7 @@ import reportWebVitals from './reportWebVitals';
 //         import ContentApp                           from './apps/ContentApp'; // done
 //            import ListgroupApp                      from './apps/ListgroupApp'; // done
 //                 import AccordionApp                 from './apps/AccordionApp'; // done
-                import NavscrollApp                 from './apps/NavscrollApp';
+//                 import NavscrollApp                 from './apps/NavscrollApp'; // done
 //             import CardApp                          from './apps/CardApp'; // done
 //                 import ModalApp                     from './apps/ModalApp'; // done
 //         import PopupApp                             from './apps/PopupApp'; // done
@@ -38,7 +38,7 @@ import reportWebVitals from './reportWebVitals';
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp'; // done
 //                 import FormApp                      from './apps/FormApp'; // done
 //     import IconApp                                  from './apps/IconApp'; // done
-//     import MasonryApp                               from './apps/MasonryApp';
+    import MasonryApp                               from './apps/MasonryApp'; // done
 //     import CarouselApp                              from './apps/CarouselApp';
 //     import NavbarApp                                from './apps/NavbarApp';
 
@@ -47,7 +47,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <NavscrollApp />
+    <MasonryApp />
   ,
   document.getElementById('root')
 );

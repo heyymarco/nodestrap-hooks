@@ -1,0 +1,15 @@
+.inline {
+  height: 70vh;
+}
+
+
+img {
+  display: inline-block;
+}
+:not(.inline)>img {
+  max-width: 100%;
+}
+.inline>img {
+  height: 100%;
+}
+  
