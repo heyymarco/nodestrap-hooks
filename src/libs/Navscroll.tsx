@@ -420,11 +420,12 @@ export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: Nav
                     
                     
                     // find nested:
-                    const childViewport = child.isPartiallyVisible(viewport)?.toViewport();
-                    if (childViewport) {
-                        const grandChildren = child.toViewport().children(props.targetFilter);
+                    const childCropped = child.isPartiallyVisible(viewport);
+                    if (childCropped) {
+                        const childViewport = childCropped.toViewport();
+                        const grandChildren = childViewport.children(props.targetFilter);
                         if (grandChildren.length && containsUncroppedSection(childViewport, grandChildren)) {
-                            return [child, index]; // found in nested
+                            return [childCropped, index]; // found in nested
                         } // if
                     } // if
                 } // foreach child
