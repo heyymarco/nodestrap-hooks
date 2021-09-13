@@ -110,7 +110,7 @@ export const usesMasonryVariants = () => {
             noOrientationInline([ // block
                 layout({
                     // layouts:
-                    display             : 'grid', // use css grid for layouting, the core of our Masonry layout
+                    display             : 'grid', // use css block grid for layouting, the core of our Masonry layout
                     gridAutoFlow        : 'row', // masonry's direction is to row
                     gridAutoRows        : cssProps.itemsRaiseSize,
                     gridTemplateColumns : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
@@ -148,7 +148,7 @@ export const usesMasonryVariants = () => {
             isOrientationInline([ // inline
                 layout({
                     // layouts:
-                    display             : 'inline-grid',
+                    display             : 'inline-grid', // use css inline grid for layouting, the core of our Masonry layout
                     gridAutoFlow        : 'column', // masonry's direction is to column
                     gridAutoColumns     : cssProps.itemsRaiseSize,
                     gridTemplateRows    : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
@@ -253,6 +253,7 @@ export interface MasonryProps<TElement extends HTMLElement = HTMLElement>
     extends
         BasicComponentProps<TElement>,
         
+        // layouts:
         VariantOrientation
 {
     // children:
