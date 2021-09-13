@@ -129,21 +129,21 @@ export const usesMasonryVariants = () => {
                         layout({
                             gridColumnEnd : [['unset'], '!important'], // clear from residual effect from inlineStyle (if was)
                         }),
+                        variants([
+                            rule(':not(.firstRow)', [
+                                layout({
+                                    /*
+                                    * we use `marginBlockStart` as the replacement of the stripped out `rowGap`
+                                    * we use `marginBlockStart` instead of `marginBlockEnd`
+                                    * because finding grid's items at the first row is much easier than at the last row
+                                    * (we don't need to count the number of grid's item)
+                                    */
+                                    marginBlockStart : cssProps.rowGap,
+                                }),
+                            ]),
+                        ]),
                     ])),
                 }),
-                variants([
-                    rule(':not(.firstRow)', [
-                        layout({
-                            /*
-                            * we use `marginBlockStart` as the replacement of the stripped out `rowGap`
-                            * we use `marginBlockStart` instead of `marginBlockEnd`
-                            * because finding grid's items at the first row is much easier than at the last row
-                            * (we don't need to count the number of grid's item)
-                            */
-                            marginBlockStart : cssProps.rowGap,
-                        }),
-                    ]),
-                ]),
             ]),
             isOrientationInline([ // inline
                 layout({
@@ -167,21 +167,21 @@ export const usesMasonryVariants = () => {
                         layout({
                             gridRowEnd : [['unset'], '!important'], // clear from residual effect from blockStyle (if was)
                         }),
+                        variants([
+                            rule(':not(.firstRow)', [
+                                layout({
+                                    /*
+                                    * we use `marginInlineStart` as the replacement of the stripped out `columnGap`
+                                    * we use `marginInlineStart` instead of `marginInlineEnd`
+                                    * because finding grid's items at the first row is much easier than at the last row
+                                    * (we don't need to count the number of grid's item)
+                                    */
+                                    marginInlineStart : cssProps.rowGap,
+                                }),
+                            ]),
+                        ]),
                     ])),
                 }),
-                variants([
-                    rule(':not(.firstRow)', [
-                        layout({
-                            /*
-                            * we use `marginInlineStart` as the replacement of the stripped out `columnGap`
-                            * we use `marginInlineStart` instead of `marginInlineEnd`
-                            * because finding grid's items at the first row is much easier than at the last row
-                            * (we don't need to count the number of grid's item)
-                            */
-                            marginInlineStart : cssProps.rowGap,
-                        }),
-                    ]),
-                ]),
             ]),
         ]),
     ]);
