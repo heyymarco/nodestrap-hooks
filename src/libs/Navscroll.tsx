@@ -30,7 +30,7 @@ import {
 
 
 
-// utils:
+// utilities:
 
 export class Viewport {
     /**
