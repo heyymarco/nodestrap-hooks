@@ -38,8 +38,8 @@ import reportWebVitals from './reportWebVitals';
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp'; // done
 //                 import FormApp                      from './apps/FormApp'; // done
 //     import IconApp                                  from './apps/IconApp'; // done
-    import MasonryApp                               from './apps/MasonryApp'; // done
-//     import CarouselApp                              from './apps/CarouselApp';
+//     import MasonryApp                               from './apps/MasonryApp'; // done
+    import CarouselApp                              from './apps/CarouselApp'; // done
 //     import NavbarApp                                from './apps/NavbarApp';
 
 
@@ -47,7 +47,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <MasonryApp />
+    <CarouselApp />
   ,
   document.getElementById('root')
 );
