@@ -325,7 +325,7 @@ export const usesListgroupLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutList(),
+            stripOutList(), // clear browser's default styles
             
             // borders:
             usesBorderAsContainer(), // make a nicely rounded corners
