@@ -303,7 +303,7 @@ export const usesListgroupActionItemStates = () => {
                     dontMarkActive(),
                 ]),
             ]),
-        ]),
+        ], undefined, /*minSpecificityWeight: */4),
     ]);
 };
 export const usesListgroupActionItem = () => {
