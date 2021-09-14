@@ -1,5 +1,4 @@
 import './App.css';
-import './MasonryApp.css';
 
 import {
 	default as React,

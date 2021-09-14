@@ -71,6 +71,11 @@ import {
     usesContentLayout,
     usesContentVariants,
     usesContentStates,
+    
+    
+    
+    // configs:
+    cssProps as ccssProps,
 }                           from './Content'
 import {
     // react components:
@@ -393,14 +398,18 @@ export const useCarouselSheet = createUseCssfnStyle(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region spacings
-        paddingInline      : 0,
-        paddingBlock       : 0,
+        paddingInline       : 0,
+        paddingBlock        : 0,
+        
+        navMarginBlockEnd   : ccssProps.paddingBlock,
+        navMarginBlockEndSm : ccssProps.paddingBlockSm,
+        navMarginBlockEndLg : ccssProps.paddingBlockLg,
         //#endregion spacings
         
         
         
         //#region borders
-        navBtnBorderRadius : 0,
+        navBtnBorderRadius  : 0,
         //#endregion borders
     };
 }, { prefix: 'crsl' });
