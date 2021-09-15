@@ -103,12 +103,12 @@ import {
 
 
 // styles:
-const mediaElm   = ['img', 'svg', 'video'];
-const itemsElm   = '.items';    // .items is the slideList
+const itemsElm   = '.items';    // `.items` is the slideList
 const itemElm    = ['li', '*']; // any children inside the slideList are slideItem
-const navElm     = '.nav';
+const mediaElm   = ['img', 'svg', 'video'];
 const prevBtnElm = '.prevBtn';
 const nextBtnElm = '.nextBtn';
+const navElm     = '.nav';
 
 export const usesCarouselItemsLayout = () => {
     return composition([
@@ -145,6 +145,15 @@ export const usesCarouselItemsLayout = () => {
             scrollSnapType : [['inline', 'mandatory']], // enable horizontal scroll snap
             scrollBehavior : 'smooth',                  // smooth scrolling when it's triggered by the navigation or CSSOM scrolling APIs
             '-webkit-overflow-scrolling': 'touch',      // supports for iOS Safari
+            
+            
+            
+            // children:
+            ...children(itemElm, composition([
+                imports([
+                    usesCarouselItemLayout(),
+                ]),
+            ])),
             
             
             
@@ -298,14 +307,6 @@ export const usesCarouselLayout = () => {
                 imports([
                     usesCarouselItemsLayout(),
                 ]),
-                layout({
-                    // children:
-                    ...children(itemElm, composition([
-                        imports([
-                            usesCarouselItemLayout(),
-                        ]),
-                    ])),
-                }),
             ])),
             
             ...children([prevBtnElm, nextBtnElm], composition([
@@ -463,7 +464,7 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) => {
     // styles:
-    const sheet     = useCarouselSheet();
+    const sheet      = useCarouselSheet();
     
     
     
@@ -491,12 +492,12 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
     
     
     // dom effects:
-    const listRef   = useRef<HTMLElement|null>(null);
+    const listRef    = useRef<HTMLElement|null>(null);
     
     
     
     // functions:
-    const scrollBy  = (itemsElm: HTMLElement, nextSlide: boolean) => {
+    const scrollBy   = (itemsElm: HTMLElement, nextSlide: boolean) => {
         const parent = itemsElm;
         
         
@@ -519,7 +520,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
             behavior : 'smooth',
         });
     }
-    const scrollTo  = (targetSlide: HTMLElement|null) => {
+    const scrollTo   = (targetSlide: HTMLElement|null) => {
         if (!targetSlide) return;
         const parent = targetSlide.parentElement! as HTMLElement;
         
