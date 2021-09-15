@@ -50,12 +50,6 @@ import {
     
     
     
-    // styles:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
-    
-    
-    
     // react components:
     BasicComponentProps,
     BasicComponent,
@@ -75,7 +69,6 @@ export const usesMasonryLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
             usesContentLayout(),
         ]),
         layout({
@@ -100,7 +93,6 @@ export const usesMasonryVariants = () => {
     return composition([
         imports([
             // variants:
-            usesBasicComponentVariants(),
             usesContentVariants(),
             
             // layouts:
