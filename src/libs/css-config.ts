@@ -151,7 +151,16 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
      * The source of truth.  
      * If modified, causing the `genProps` & `genKeyframes` need to `refresh()`.
      */
-    const props       : Dictionary</*original: */TValue> = ((typeof(initialProps) === 'function') ? (initialProps as Factory<TProps>)() : initialProps);
+    let _propsCache    : Dictionary</*original: */TValue>|null = null;
+    const getProps    = (): Dictionary</*original: */TValue> => {
+        if (!_propsCache) {
+            _propsCache = ((typeof(initialProps) === 'function') ? (initialProps as Factory<TProps>)() : initialProps);
+        } // if
+        
+        
+        
+        return _propsCache;
+    }
 
 
 
@@ -476,6 +485,10 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
         // const oldGenKeyframes = genKeyframes;
         // const oldGenProps     = genProps;
 
+
+
+        const props = getProps();
+
         
         
         // transform the `props`:
@@ -666,6 +679,8 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
      * @returns Always return `true`.
      */
     const setDirect = (propName: string, newValue: TValue): boolean => {
+        const props = getProps();
+
         if ((newValue === undefined) || (newValue === null)) {
             delete props[propName];
 
@@ -684,7 +699,7 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
     }
 
     const getPropList = (): ArrayLike<string|symbol> => {
-        return Object.keys(props);
+        return Object.keys(getProps());
     }
 
     const getPropDescDecl = (propName: string): PropertyDescriptor|undefined => {
