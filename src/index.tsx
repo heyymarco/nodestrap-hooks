@@ -39,15 +39,15 @@ import reportWebVitals from './reportWebVitals';
 //                 import FormApp                      from './apps/FormApp'; // done
 //     import IconApp                                  from './apps/IconApp'; // done
 //     import MasonryApp                               from './apps/MasonryApp'; // done
-    import CarouselApp                              from './apps/CarouselApp'; // done
-//     import NavbarApp                                from './apps/NavbarApp';
+//     import CarouselApp                              from './apps/CarouselApp'; // done
+    import NavbarApp                                from './apps/NavbarApp'; // done
 
 
 
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>
-    <CarouselApp />
+    <NavbarApp />
   ,
   document.getElementById('root')
 );
