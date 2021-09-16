@@ -73,16 +73,16 @@ import {
     
     
     
-    // styles:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
-    
-    
-    
     // configs:
     cssProps as bcssProps,
 }                           from './BasicComponent'
 import {
+    // styles:
+    usesContainerLayout,
+    usesContainerVariants,
+    
+    
+    
     // configs:
     cssProps as ccssProps,
 }                           from './Container'
@@ -433,7 +433,7 @@ export const usesNavbarLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
+            usesContainerLayout(),
         ]),
         layout({
             // layouts:
@@ -517,7 +517,7 @@ export const usesNavbarVariants = () => {
     return composition([
         imports([
             // variants:
-            usesBasicComponentVariants(),
+            usesContainerVariants(),
             
             // layouts:
             sizes(),
