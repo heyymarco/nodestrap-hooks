@@ -67,6 +67,7 @@ import {
     // hooks:
     usesSizes,
     ThemeName,
+    outlinedOf,
     mildOf,
     usesAnim,
     
@@ -147,6 +148,14 @@ export const markActive = () => composition([
         mildOf(null), // keeps mild variant
         
         usesThemeActive(), // switch to active theme
+    ]),
+]);
+export const dontMarkActive = () => composition([
+    imports([
+        outlinedOf(null), // keeps outlined variant
+        mildOf(null),     // keeps mild     variant
+        
+        usesThemeActive(null), // keeps current theme
     ]),
 ]);
 
@@ -309,7 +318,7 @@ export const usesMenusLayout = () => {
             
             
             // children:
-            ...children('*', composition([ // menus section
+            ...children('*', composition([ // menu section
                 imports([
                     usesMenuLayout(),
                     usesMenuVariants(),
@@ -403,17 +412,17 @@ export const usesMenuStates = () => {
             ]),
             isFocus([
                 imports([
-                    markActive(),
+                    dontMarkActive(),
                 ]),
             ]),
             isArrive([
                 imports([
-                    markActive(),
+                    dontMarkActive(),
                 ]),
             ]),
             isPress([
                 imports([
-                    markActive(),
+                    dontMarkActive(),
                 ]),
             ]),
         ]),
@@ -532,32 +541,97 @@ export const usesNavbarStates = () => {
             rule(':not(.compact)', [ // full
                 layout({
                     // children:
+                    ...children([logoElm, togglerElm, menusElm], composition([ // all sections
+                        layout({
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'item'), 'full')), // apply general cssProps starting with item*** and ending with ***Full
+                        }),
+                    ])),
+                    ...children(logoElm, composition([ // logo section
+                        layout({
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'logo'), 'full')), // apply general cssProps starting with logo*** and ending with ***Full
+                        }),
+                    ])),
                     ...children(togglerElm, composition([ // toggler section
                         layout({
                             // appearances:
                             display: 'none', // hides toggler on full mode
+                            
+                            
+                            
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'toggler'), 'full')), // apply general cssProps starting with toggler*** and ending with ***Full
+                        }),
+                    ])),
+                    ...children(menusElm, composition([ // menus section
+                        layout({
+                            // children:
+                            ...children('*', composition([ // menu section
+                                layout({
+                                    // customize:
+                                    ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'full')), // apply general cssProps starting with menu*** and ending with ***Full
+                                }),
+                            ])),
+                            
+                            
+                            
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menus'), 'full')), // apply general cssProps starting with menus*** and ending with ***Full
                         }),
                     ])),
                     
                     
                     
-                    // overwrites propName = propName{Full}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'full')),
+                    // customize:
+                    ...usesGeneralProps(usesSuffixedProps(cssProps, 'full')), // apply general cssProps ending with ***Full
                 }),
             ]),
             rule('.compact', [ // compact
                 layout({
                     // children:
+                    ...children([logoElm, togglerElm, menusElm], composition([ // all sections
+                        layout({
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'item'), 'compact')), // apply general cssProps starting with item*** and ending with ***Compact
+                        }),
+                    ])),
+                    ...children(logoElm, composition([ // logo section
+                        layout({
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'logo'), 'compact')), // apply general cssProps starting with logo*** and ending with ***Compact
+                        }),
+                    ])),
+                    ...children(togglerElm, composition([ // toggler section
+                        layout({
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'toggler'), 'compact')), // apply general cssProps starting with toggler*** and ending with ***Compact
+                        }),
+                    ])),
                     ...children(menusElm, composition([ // menus section
                         imports([
                             usesMenusCompactLayout(),
                         ]),
+                        layout({
+                            // children:
+                            ...children('*', composition([ // menu section
+                                layout({
+                                    // customize:
+                                    ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'compact')), // apply general cssProps starting with menu*** and ending with ***Compact
+                                }),
+                            ])),
+                            
+                            
+                            
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menus'), 'compact')), // apply general cssProps starting with menus*** and ending with ***Compact
+                        }),
                     ])),
                     
                     
                     
-                    // overwrites propName = propName{Compact}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'compact')),
+                    // customize:
+                    ...usesGeneralProps(usesSuffixedProps(cssProps, 'compact')), // apply general cssProps ending with ***Compact
                 }),
                 rules([
                     isPassived([
