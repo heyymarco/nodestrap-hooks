@@ -77,6 +77,7 @@ const _defaultRule   = ':root';
 
 
 // global proxy's handlers:
+const unusedObj = {};
 const settingsHandler: ProxyHandler<CssConfigSettings> = {
     set : (settings, propName: string, newValue: any): boolean => {
         if (!(propName in settings)) return false; // the requested prop does not exist
@@ -682,23 +683,73 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
         return true; // notify update was successful
     }
 
+    const getPropList = (): ArrayLike<string|symbol> => {
+        return Object.keys(props);
+    }
+
+    const getPropDescDecl = (propName: string): PropertyDescriptor|undefined => {
+        const propDecl = getDecl(propName);
+        if (!propDecl) return undefined; // not found
+
+        return {
+            value        : propDecl,
+
+            writable     : true,
+            enumerable   : true,
+            configurable : true,
+        };
+    }
+    const getPropDescRef = (propName: string): PropertyDescriptor|undefined => {
+        const propRef = getRef(propName);
+        if (!propRef) return undefined; // not found
+
+        return {
+            value        : propRef,
+
+            writable     : true,
+            enumerable   : true,
+            configurable : true,
+        };
+    }
+    const getPropDescVal = (propName: string): PropertyDescriptor|undefined => {
+        const propVal = getVal(propName);
+        if (!propVal) return undefined; // not found
+
+        return {
+            value        : propVal,
+
+            writable     : true,
+            enumerable   : true,
+            configurable : true,
+        };
+    }
+
 
 
     return [
         //#region proxies - representing data in various formats
-        new Proxy<Dictionary</*getter: */          Cust.Ref | /*setter: */TValue>>(props, {
-            get: (_props, propName: string)                   => getRef(propName),
-            set: (_props, propName: string, newValue: TValue) => setDirect(propName, newValue),
+        new Proxy<Dictionary</*getter: */          Cust.Ref | /*setter: */TValue>>(unusedObj, {
+            get                      : (_unusedObj, propName: string)                   => getRef(propName),
+            set                      : (_unusedObj, propName: string, newValue: TValue) => setDirect(propName, newValue),
+            
+            ownKeys                  : (_unusedObj)                                     => getPropList(),
+            getOwnPropertyDescriptor : (_unusedObj, propName: string)                   => getPropDescRef(propName),
         }) as Refs<TProps>,
 
-        new Proxy<Dictionary</*getter: */         Cust.Decl | /*setter: */TValue>>(props, {
-            get: (_props, propName: string)                   => getDecl(propName),
-            set: (_props, propName: string, newValue: TValue) => setDirect(propName, newValue),
+        new Proxy<Dictionary</*getter: */         Cust.Decl | /*setter: */TValue>>(unusedObj, {
+            get                      : (_unusedObj, propName: string)                   => getDecl(propName),
+            set                      : (_unusedObj, propName: string, newValue: TValue) => setDirect(propName, newValue),
+            
+            ownKeys                  : (_unusedObj)                                     => getPropList(),
+            getOwnPropertyDescriptor : (_unusedObj, propName: string)                   => getPropDescDecl(propName),
         }) as Decls<TProps>,
 
-        new Proxy<Dictionary</*getter: */TValue | Cust.Expr | /*setter: */TValue>>(props, {
-            get: (_props, propName: string)                   => getVal(propName),
-            set: (_props, propName: string, newValue: TValue) => setDirect(propName, newValue),
+        new Proxy<Dictionary</*getter: */TValue | Cust.Expr | /*setter: */TValue>>(unusedObj, {
+            get                      : (_unusedObj, propName: string)                   => getVal(propName),
+            set                      : (_unusedObj, propName: string, newValue: TValue) => setDirect(propName, newValue),
+            
+            ownKeys                  : (_unusedObj)                                     => getPropList(),
+            getOwnPropertyDescriptor : (_unusedObj, propName: string)                   => getPropDescVal(propName),
         }) as Vals<TProps>,
         //#endregion proxies - representing data in various formats
 
