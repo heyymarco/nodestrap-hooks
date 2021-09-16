@@ -619,6 +619,10 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
      * @returns A `Cust.Decl` represents the declaration name of the specified `propName` -or- `undefined` if it doesn't exist.
      */
     const getDecl   = (propName: string): Cust.Decl|undefined => {
+        if (propName === '$$typeof') return undefined; // react runtime type check
+        
+        
+        
         /*
             source    props:
             {
