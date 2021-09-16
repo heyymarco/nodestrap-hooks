@@ -8,9 +8,15 @@ import type {
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
+    // styles:
+    createCssfnStyle,
+    
+    
+    
     // compositions:
     composition,
     mainComposition,
+    global,
     imports,
     
     
@@ -23,6 +29,7 @@ import {
     
     // rules:
     rules,
+    atRoot,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -58,29 +65,10 @@ import {
 
 // styles:
 /**
- * Applies a responsive sizing based on screen width.
- * @returns A `Style` represents a responsive sizing based on screen width.
- */
-export const usesResponsiveSize = () => composition([
-    rules([
-        // the container size is determined by screen width:
-        Object.keys(breakpoints)
-        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, composition([
-            vars({
-                // overwrites propName = propName{BreakpointName}:
-                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
-            }),
-        ]))),
-    ]),
-]);
-/**
  * Applies a responsive container layout.
  * @returns A `Style` represents a responsive container layout.
  */
 export const usesResponsiveContainerLayout = () => composition([
-    imports([
-        usesResponsiveSize(),
-    ]),
     layout({
         // spacings:
         paddingInline : cssProps.paddingInline,
@@ -92,9 +80,6 @@ export const usesResponsiveContainerLayout = () => composition([
  * @returns A `Style` represents a responsive container using grid layout.
  */
 export const usesResponsiveContainerGridLayout = () => composition([
-    imports([
-        usesResponsiveSize(),
-    ]),
     layout({
         // layouts:
         display             : 'grid', // use css grid for layouting
@@ -188,6 +173,27 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         //#endregion spacings
     };
 }, { prefix: 'con' });
+
+
+
+// create a new styleSheet & attach:
+createCssfnStyle(() => [
+    global([
+        // the container size is determined by screen width:
+        Object.keys(breakpoints)
+        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, composition([
+            rules([
+                atRoot(composition([
+                    vars({
+                        // overwrites propName = propName{BreakpointName}:
+                        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
+                    }),
+                ])),
+            ], /*minSpecificityWeight: */2),
+        ]))),
+    ]),
+])
+.attach();
 
 
 
