@@ -71,10 +71,8 @@ import {
 }                           from './Container'
 import {
     // hooks:
-    isActived,
     isActivating,
     isPassivating,
-    isPassived,
     useStateActivePassive,
     
     
@@ -121,28 +119,14 @@ import typos                from './typos/index' // configurable typography (tex
 
 //#region overlay animations
 interface OverlayAnimVars {
-    overlayFilterActive  : any
-    overlayFilterPassive : any
-    
-    
-    
-    /**
-     * none filter.
-     */
-    filterNone       : any
-    /**
-     * final filter for the overlay.
-     */
-    overlayFilter    : any
-    
     /**
      * none animation.
      */
-    animNone         : any
+    animNone    : any
     /**
      * final animation for the overlay.
      */
-    overlayAnim      : any
+    overlayAnim : any
 }
 const [overlayAnimRefs, overlayAnimDecls] = createCssVar<OverlayAnimVars>();
 
@@ -161,45 +145,20 @@ export const usesOverlayAnim = () => {
                 anim(),
             ]),
             vars({
-                [overlayAnimDecls.overlayFilterActive]  : animRefs.filterNone,
-                [overlayAnimDecls.overlayFilterPassive] : animRefs.filterNone,
-                
-                [overlayAnimDecls.overlayAnim]          : animRefs.animNone,
+                [overlayAnimDecls.overlayAnim] : animRefs.animNone,
             }),
             states([
-                isActived([
-                    vars({
-                        [overlayAnimDecls.overlayFilterActive]  : cssProps.overlayFilterActive,
-                    }),
-                ]),
                 isActivating([
                     vars({
-                        [overlayAnimDecls.overlayFilterActive]  : cssProps.overlayFilterActive,
-                        [overlayAnimDecls.overlayFilterPassive] : cssProps.overlayFilterPassive,
-                        
-                        [overlayAnimDecls.overlayAnim]          : cssProps.overlayAnimActive,
+                        [overlayAnimDecls.overlayAnim] : cssProps.overlayAnimActive,
                     }),
                 ]),
                 isPassivating([
                     vars({
-                        [overlayAnimDecls.overlayFilterActive]  : cssProps.overlayFilterActive,
-                        [overlayAnimDecls.overlayFilterPassive] : cssProps.overlayFilterPassive,
-                        
-                        [overlayAnimDecls.overlayAnim]          : cssProps.overlayAnimPassive,
-                    }),
-                ]),
-                isPassived([
-                    vars({
-                        [overlayAnimDecls.overlayFilterPassive] : cssProps.overlayFilterPassive,
+                        [overlayAnimDecls.overlayAnim] : cssProps.overlayAnimPassive,
                     }),
                 ]),
             ]),
-            vars({
-                [overlayAnimDecls.overlayFilter] : [[ // double array => makes the JSS treat as space separated values
-                    overlayAnimRefs.overlayFilterActive,
-                    overlayAnimRefs.overlayFilterPassive,
-                ]],
-            }),
         ]),
         overlayAnimRefs,
         overlayAnimDecls,
@@ -336,7 +295,6 @@ export const usesModalLayout = () => {
             
             
             // animations:
-            filter       : overlayAnimRefs.overlayFilter,
             anim         : overlayAnimRefs.overlayAnim,
             
             
@@ -550,18 +508,17 @@ export const useModalSheet = createUseCssfnStyle(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    // dependencies:
-    const [, overlayAnimRefs] = usesOverlayAnim();
-    
-    
-    
     //#region keyframes
     const keyframesOverlayActive  : PropEx.Keyframes = {
         from : {
-            filter : overlayAnimRefs.overlayFilterPassive,
+            filter : [[ // double array => makes the JSS treat as space separated values
+                'opacity(0)',
+            ]],
         },
         to   : {
-            filter : overlayAnimRefs.overlayFilterActive,
+            filter : [[ // double array => makes the JSS treat as space separated values
+                'opacity(1)',
+            ]],
         },
     };
     const keyframesOverlayPassive : PropEx.Keyframes = {
@@ -588,9 +545,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         //#region animations
-        overlayFilterActive         : [['opacity(1)']],
-        overlayFilterPassive        : [['opacity(0)']],
-        
         '@keyframes overlayActive'  : keyframesOverlayActive,
         '@keyframes overlayPassive' : keyframesOverlayPassive,
         overlayAnimActive           : [['300ms', 'ease-out', 'both', keyframesOverlayActive ]],
