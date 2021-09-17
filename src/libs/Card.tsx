@@ -14,7 +14,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     adjacentSiblings,
     
@@ -494,7 +493,7 @@ export const usesCardVariants = () => {
     
     // layouts:
     const [sizes] = usesSizes((sizeName) => composition([
-        vars({
+        layout({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
         }),
