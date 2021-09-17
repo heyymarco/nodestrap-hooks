@@ -23,7 +23,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     
     
     
@@ -184,7 +183,7 @@ createCssfnStyle(() => [
         .map((breakpointName) => isScreenWidthAtLeast(breakpointName, composition([
             rules([
                 atRoot(composition([
-                    vars({
+                    layout({
                         // overwrites propName = propName{BreakpointName}:
                         ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
                     }),
