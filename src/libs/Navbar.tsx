@@ -107,6 +107,7 @@ import {
     usesThemeDefault as controlUsesThemeDefault,
     usesThemeActive  as controlUsesThemeActive,
     isFocus,
+    isFocusBlurring,
     isArrive,
 }                           from './Control'
 import {
@@ -399,7 +400,7 @@ export const usesMenuStates = () => {
             usesActivePassiveAsPressRelease(),
         ]),
         states([
-            isFocus([
+            isFocusBlurring([
                 layout({
                     zIndex: 1, // prevents boxShadowFocus from clipping
                 }),
