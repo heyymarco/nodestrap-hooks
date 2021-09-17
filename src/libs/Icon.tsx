@@ -128,7 +128,7 @@ export const usesSizes = (sizeOverwrite?: Cust.Ref, factory = sizeOf, options = 
  * @returns A `StyleCollection` represents sizing definitions for the given `sizeName`.
  */
 export const sizeOf = (sizeName: SizeName) => composition([
-    vars({
+    layout({
         // overwrites propName = propName{SizeName}:
         ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
     }),
