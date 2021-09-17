@@ -183,7 +183,7 @@ export const usesButtonVariants = () => {
     
     // layouts:
     const [sizes] = usesSizes((sizeName) => composition([
-        vars({
+        layout({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
         }),
