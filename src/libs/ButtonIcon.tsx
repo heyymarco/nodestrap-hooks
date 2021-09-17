@@ -292,7 +292,7 @@ export const ButtonIcon = (props: ButtonIconProps) => {
         icon,
         
         
-        // accessibility:
+        // accessibilities:
         text,
         
         

@@ -440,7 +440,7 @@ export const usesCheckLayout = () => {
                     
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     pointerEvents : 'none', // just an overlay element (ghost), no mouse interaction, clicking on it will focus on the parent
                     
                     
@@ -821,7 +821,7 @@ export interface CheckProps
     type?           : 'checkbox' | 'radio'
     
     
-    // accessibility:
+    // accessibilities:
     label?          : string
     text?           : string
     
@@ -861,7 +861,7 @@ export const Check = (props: CheckProps) => {
         elmRef,
         
         
-        // accessibility:
+        // accessibilities:
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
@@ -913,7 +913,7 @@ export const Check = (props: CheckProps) => {
             tag={props.tag ?? 'span'}
             
             
-            // accessibility:
+            // accessibilities:
             role={ariaRole}
             aria-checked={ariaChecked}
             aria-label={props.label}
@@ -983,7 +983,7 @@ export const Check = (props: CheckProps) => {
                 }}
                 
                 
-                // accessibility:
+                // accessibilities:
                 aria-hidden={true} // the input just for check indicator & storing value
                 tabIndex={-1}      // non focusable
                 

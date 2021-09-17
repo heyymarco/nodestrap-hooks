@@ -257,7 +257,7 @@ export const Radio = (props: RadioProps) => {
             }}
             
             
-            // accessibility:
+            // accessibilities:
             active={isActive}
             
             

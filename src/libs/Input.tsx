@@ -241,7 +241,7 @@ export const Input = (props: InputProps) => {
         elmRef,
         
         
-        // accessibility:
+        // accessibilities:
         tabIndex,
         
         
@@ -285,7 +285,7 @@ export const Input = (props: InputProps) => {
             tag={props.tag ?? 'span'}
             
             
-            // accessibility:
+            // accessibilities:
             tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
             
             
@@ -297,7 +297,7 @@ export const Input = (props: InputProps) => {
                 ref={elmRef}
                 
                 
-                // accessibility:
+                // accessibilities:
                 tabIndex={tabIndex} // focusable
                 
                 disabled={!propEnabled} // do not submit the value if disabled

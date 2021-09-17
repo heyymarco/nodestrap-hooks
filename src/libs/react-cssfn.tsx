@@ -247,7 +247,7 @@ const htmlPropList = [
     'title',
     'translate',
     
-    // accessibility:
+    // accessibilities:
     'tabIndex',
 
     // values:
@@ -270,7 +270,7 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
     id?             : string
 
 
-    // accessibility:
+    // accessibilities:
     role?           : React.AriaRole
 
 
@@ -310,7 +310,7 @@ export const Element = <TElement extends HTMLElement = HTMLElement>(props: Eleme
             {...htmlProps}
 
 
-            // accessibility:
+            // accessibilities:
             role={props.role}
 
 

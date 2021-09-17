@@ -742,7 +742,7 @@ export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: Nav
                     key={child.key ?? index}
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     active={child.props.active ?? (index === activeIndices[deepLevelsCurrent.length - 1])}
                     
                     
@@ -775,7 +775,7 @@ export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: Nav
                     key={index}
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     active={(index === activeIndices[deepLevelsCurrent.length - 1])}
                     
                     

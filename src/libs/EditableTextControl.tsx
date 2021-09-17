@@ -256,7 +256,7 @@ export const usesEditableTextControlLayout = () => {
                     
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     pointerEvents     : 'none', // just an overlay element (ghost), no mouse interaction, clicking on it will focus on the parent
                     
                     
@@ -366,7 +366,7 @@ export const useEditableTextControlSheet = createUseCssfnStyle(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        // accessibility:
+        // accessibilities:
         cursor       : 'text',
         
         

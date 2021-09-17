@@ -563,7 +563,7 @@ export interface ListgroupItemProps<TElement extends HTMLElement = HTMLElement>
     extends
         ActionControlProps<TElement>
 {
-    // accessibility:
+    // accessibilities:
     // change default value to `true`
     /**
      * `undefined` : same as `true`.  
@@ -590,7 +590,7 @@ export const ListgroupItem = <TElement extends HTMLElement = HTMLElement>(props:
             {...props}
             
             
-            // accessibility:
+            // accessibilities:
             inheritActive={props.inheritActive ?? true} // change default value to `true`
             
             
@@ -610,7 +610,7 @@ export const ListgroupItem = <TElement extends HTMLElement = HTMLElement>(props:
             {...props}
             
             
-            // accessibility:
+            // accessibilities:
             inheritActive={props.inheritActive ?? true} // change default value to `true`
             
             

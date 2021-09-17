@@ -556,7 +556,7 @@ export const usesControlStates = () => {
         states([
             isDisable([
                 layout({
-                    // accessibility:
+                    // accessibilities:
                     cursor     : cssProps.cursorDisable,
                     userSelect : 'none',
                 }),
@@ -668,7 +668,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     
     return {
-        // accessibility:
+        // accessibilities:
         cursor              : 'pointer',
         cursorDisable       : 'not-allowed',
         
@@ -698,7 +698,7 @@ export interface ControlProps<TElement extends HTMLElement = HTMLElement>
     extends
         IndicatorProps<TElement>
 {
-    // accessibility:
+    // accessibilities:
     focus?    : boolean
     tabIndex? : number
 
@@ -738,7 +738,7 @@ export const Control = <TElement extends HTMLElement = HTMLElement>(props: Contr
 
             // Control props:
             {...{
-                // accessibility:
+                // accessibilities:
                 tabIndex : props.tabIndex ?? (propEnabled ? 0 : -1),
             }}
         

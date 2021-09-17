@@ -628,7 +628,7 @@ export const TogglerMenuButton = (props: TogglerMenuButtonProps) => {
             {...props}
             
             
-            // accessibility:
+            // accessibilities:
             role={ariaRole}
             aria-pressed={ariaPressed}
             aria-expanded={props['aria-expanded'] ?? propActive}

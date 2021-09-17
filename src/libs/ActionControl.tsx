@@ -325,7 +325,7 @@ export const usesActionControlLayout = () => {
             usesControlLayout(),
         ]),
         layout({
-            // accessibility:
+            // accessibilities:
             userSelect : 'none', // disable selecting text (double clicking not causing selecting text)
             
             
@@ -463,7 +463,7 @@ export interface ActionControlProps<TElement extends HTMLElement = HTMLElement>
     extends
         ControlProps<TElement>
 {
-    // accessibility:
+    // accessibilities:
     press?   : boolean
 }
 export const ActionControl = <TElement extends HTMLElement = HTMLElement>(props: ActionControlProps<TElement>) => {

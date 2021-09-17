@@ -37,7 +37,7 @@ export const CloseButton = (props: CloseButtonProps) => {
             {...props}
             
             
-            // accessibility:
+            // accessibilities:
             label={props.label ?? 'Close'}
             
             

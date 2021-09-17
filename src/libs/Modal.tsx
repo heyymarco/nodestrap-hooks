@@ -615,7 +615,7 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement>
         // appearances:
         VariantModal
 {
-    // accessibility:
+    // accessibilities:
     tabIndex?   : number
     
     
@@ -646,7 +646,7 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
         elmRef,
         
         
-        // accessibility:
+        // accessibilities:
         active,         // from accessibilities
         inheritActive,  // from accessibilities
         tabIndex,       // from Modal
@@ -735,7 +735,7 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             >
                 { footer }
                 <Button
-                    // accessibility:
+                    // accessibilities:
                     text='Close'
                     
                     
@@ -756,7 +756,7 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
     // jsx:
     return (
         <Popup
-            // accessibility:
+            // accessibilities:
             role={active ? 'dialog' : undefined}
             aria-modal={active ? true : undefined}
             active={active}
@@ -817,7 +817,7 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
                 
                 // Control props:
                 {...{
-                    // accessibility:
+                    // accessibilities:
                     tabIndex : tabIndex ?? -1,
                 }}
                 

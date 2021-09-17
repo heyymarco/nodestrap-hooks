@@ -423,7 +423,7 @@ export interface TogglerActiveProps
     extends
         IndicationProps
 {
-    // accessibility:
+    // accessibilities:
     defaultActive?  : boolean
     onActiveChange? : (active: boolean) => void
 }

@@ -367,7 +367,7 @@ export interface ButtonProps
     type?        : BtnType
     
     
-    // accessibility:
+    // accessibilities:
     label?       : string
     text?        : string
     
@@ -397,7 +397,7 @@ export const Button = (props: ButtonProps) => {
         type,
         
         
-        // accessibility:
+        // accessibilities:
         active,
     ...restProps} = props;
     
@@ -420,7 +420,7 @@ export const Button = (props: ButtonProps) => {
             tag={tagFn}
             
             
-            // accessibility:
+            // accessibilities:
             aria-label={props.label}
             press={props.press ?? active}
             

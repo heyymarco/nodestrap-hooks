@@ -626,7 +626,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
                     ]}
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     label='Previous'
                     
                     
@@ -675,7 +675,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
                     ]}
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     label='Next'
                     
                     
@@ -768,7 +768,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
                             tag='button'
                             
                             
-                            // accessibility:
+                            // accessibilities:
                             {...(React.isValidElement<React.HTMLAttributes<HTMLElement>>(child) ? ({
                                 title : child.props.title,
                             } as React.HTMLAttributes<HTMLElement>) : {})}

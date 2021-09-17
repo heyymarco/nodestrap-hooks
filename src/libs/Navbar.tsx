@@ -986,7 +986,7 @@ export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     // rest props:
     const {
-        // accessibility:
+        // accessibilities:
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
@@ -1038,7 +1038,7 @@ export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: Navbar
         // default (unset):
         if (toggler === undefined) return (
             <TogglerMenuButton
-                // accessibility:
+                // accessibilities:
                 active={isActive}
                 onActiveChange={(newActive) => {
                     setActive(newActive);
@@ -1072,13 +1072,13 @@ export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: Navbar
                 
                 
                 {...(isTypeOf(toggler, Indicator) ? ({
-                    // accessibility:
+                    // accessibilities:
                     active         : (toggler.props as IndicatorProps).active ?? isActive,
                 } as IndicatorProps) : {})}
                 
                 
                 {...(isTypeOf(toggler, Check) ? ({
-                    // accessibility:
+                    // accessibilities:
                     onActiveChange : (toggler.props as CheckProps).onActiveChange ?? ((newActive) => {
                         setActive(newActive);
                     }),
@@ -1127,7 +1127,7 @@ export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: Navbar
             }}
             
             
-            // accessibility:
+            // accessibilities:
             active={isActive}
             
             

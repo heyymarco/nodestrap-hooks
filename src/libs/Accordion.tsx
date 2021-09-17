@@ -330,7 +330,7 @@ export interface AccordionItemProps<TElement extends HTMLElement = HTMLElement>
         ListgroupItemProps<TElement>,
         TogglerActiveProps
 {
-    // accessibility:
+    // accessibilities:
     label?          : string | React.ReactNode
 }
 export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props: AccordionItemProps<TElement>) => {
@@ -346,7 +346,7 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
     
     // rest props:
     const {
-        // accessibility:
+        // accessibilities:
         label,          // delete, moved to children
         
         defaultActive,  // delete, already handled by `useTogglerActive`
@@ -383,7 +383,7 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
             tag={props.tag ?? 'h1'}
             
             
-            // accessibility:
+            // accessibilities:
             aria-expanded={isActive}
             active={isActive}
             
@@ -437,7 +437,7 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
             mild={props.mild}
             
             
-            // accessibility:
+            // accessibilities:
             inheritEnabled={props.inheritEnabled}
             enabled={propEnabled}
             inheritActive={props.inheritActive ?? true} // change default value to `true`

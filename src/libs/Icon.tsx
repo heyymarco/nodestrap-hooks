@@ -431,7 +431,7 @@ export const usesIconFontLayout  = (img?: Cust.Ref) => {
                     
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     userSelect    : 'none', // disable selecting icon's text
                     
                     
@@ -490,7 +490,7 @@ export const usesIconImageLayout = (img?: Cust.Ref) => {
                     
                     
                     
-                    // accessibility:
+                    // accessibilities:
                     userSelect : 'none', // disable selecting icon's img
                 }),
             ])),
