@@ -14,7 +14,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     
     
@@ -194,7 +193,7 @@ export const usesListgroupItemVariants = () => {
     
     // layouts:
     const [sizes] = usesSizes((sizeName) => composition([
-        vars({
+        layout({
             // overwrites propName = {item}PropName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(usesPrefixedProps(cssProps, 'item'), sizeName)),
         }),
@@ -388,7 +387,7 @@ export const usesListgroupVariants = () => {
     
     // layouts:
     const [sizes] = usesSizes((sizeName) => composition([
-        vars({
+        layout({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
         }),
