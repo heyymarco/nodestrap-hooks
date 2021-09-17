@@ -5,7 +5,7 @@ import type {
 }                           from '../css-types'  // ts defs support for jss
 import {
     // styles:
-    createCssfnStyle,
+    createSheet,
 
 
     // compositions:
@@ -62,7 +62,7 @@ export default cssProps;
 
 
 // create a new styleSheet & attach:
-createCssfnStyle(() => [
+createSheet(() => [
     global([
         rule(['code', '.code', 'var', '.var', 'samp', '.samp'], [
             layout({

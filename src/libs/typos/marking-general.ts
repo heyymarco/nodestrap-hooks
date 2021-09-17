@@ -1,7 +1,7 @@
 // cssfn:
 import {
     // styles:
-    createCssfnStyle,
+    createSheet,
 
 
     // compositions:
@@ -20,7 +20,7 @@ import gens                 from './general'
 
 
 // create a new styleSheet & attach:
-createCssfnStyle(() => [
+createSheet(() => [
     global([
         rule(['del', 's', 'ins', 'u', 'small', '.small', 'strong', 'b', 'em', 'i'], [
             layout({

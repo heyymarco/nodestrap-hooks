@@ -42,7 +42,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
     
     
     
@@ -1094,7 +1094,7 @@ export const usesBasicComponent = () => {
     ]);
 };
 
-export const useBasicComponentSheet = createUseCssfnStyle(() => [
+export const useBasicComponentSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesBasicComponent(),

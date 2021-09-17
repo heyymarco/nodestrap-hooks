@@ -100,13 +100,13 @@ const customJss = createJss().setup({plugins:[
 
 
 // styles:
-export const createStyle = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): StyleSheet<TClassName> => {
+export const createJssSheet = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): StyleSheet<TClassName> => {
     return customJss.createStyleSheet(
         ((typeof(styles) === 'function') ? styles() : styles)
     );
 }
-export const createCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): StyleSheet<TClassName> => {
-    return createStyle(
+export const createSheet    = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): StyleSheet<TClassName> => {
+    return createJssSheet(
         () => usesCssfn(classes)
     );
 }

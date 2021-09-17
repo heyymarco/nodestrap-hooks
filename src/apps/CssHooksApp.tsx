@@ -19,7 +19,7 @@ import {
 }                           from '../libs/cssfn'           // cssfn core
 import {
     // components:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from '../libs/react-cssfn'     // cssfn for react
 import createCssConfig      from '../libs/css-config'      // Stores & retrieves configuration using *css custom properties* (css variables)
 
@@ -68,7 +68,7 @@ export default App;
 
 
 
-const useAwesomeButtonStyle = createUseCssfnStyle([
+const useAwesomeButtonStyle = createUseSheet([
     mainComposition([
         layout({
             backg: 'red',
@@ -119,7 +119,7 @@ const useAwesomeButtonStyle = createUseCssfnStyle([
     ]),
 ]);
 
-const useChildStyleSheet = createUseCssfnStyle([
+const useChildStyleSheet = createUseSheet([
     mainComposition([
         layout({
             '--child-': '"child"',

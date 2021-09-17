@@ -39,7 +39,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
     
     
     
@@ -623,7 +623,7 @@ export const useIcon = <TElement extends HTMLElement = HTMLElement>(props: IconP
         };
     }, [props.icon]);
 };
-export const useIconSheet = createUseCssfnStyle(() => [
+export const useIconSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesIcon(),

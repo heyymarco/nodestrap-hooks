@@ -18,7 +18,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
     
     
     
@@ -200,7 +200,7 @@ export const usesAlert = () => {
     ]);
 };
 
-export const useAlertSheet = createUseCssfnStyle(() => [
+export const useAlertSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesAlert(),

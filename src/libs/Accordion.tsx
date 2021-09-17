@@ -29,7 +29,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -248,7 +248,7 @@ export const usesAccordionItem = () => {
     ]);
 };
 
-export const useAccordionItemSheet = createUseCssfnStyle(() => [
+export const useAccordionItemSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesAccordionItem(),

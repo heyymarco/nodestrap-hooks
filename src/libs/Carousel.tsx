@@ -26,7 +26,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
     
     
     
@@ -385,7 +385,7 @@ export const usesCarousel = () => {
     ]);
 };
 
-export const useCarouselSheet = createUseCssfnStyle(() => [
+export const useCarouselSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesCarousel(),

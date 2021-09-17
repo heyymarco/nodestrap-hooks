@@ -35,7 +35,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -594,7 +594,7 @@ export const usesControl = () => {
     ]);
 };
 
-export const useControlSheet = createUseCssfnStyle(() => [
+export const useControlSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesControl(),

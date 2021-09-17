@@ -25,7 +25,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
     
     
     
@@ -529,7 +529,7 @@ export const usesListgroup = () => {
     ]);
 };
 
-export const useListgroupSheet = createUseCssfnStyle(() => [
+export const useListgroupSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesListgroup(),

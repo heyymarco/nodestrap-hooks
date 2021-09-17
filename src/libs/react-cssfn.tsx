@@ -27,7 +27,7 @@ import {
 
     
     // styles:
-    createStyle,
+    createJssSheet,
 
     
     // cssfn hooks:
@@ -38,7 +38,7 @@ import {
 
 // hooks:
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
-export const createUseStyle      = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
+export const createUseJssSheet = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
     const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
 
     
@@ -51,7 +51,7 @@ export const createUseStyle      = <TClassName extends ClassName = ClassName>(st
             // or create a new one:
             (() => { // expensive operation
                 // create a new styleSheet using our pre-configured `customJss`:
-                const newStyleSheet = createStyle(styles);
+                const newStyleSheet = createJssSheet(styles);
                 
                 
                 
@@ -88,8 +88,8 @@ export const createUseStyle      = <TClassName extends ClassName = ClassName>(st
         return styleSheet.classes;
     };
 }
-export const createUseCssfnStyle = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): Factory<Classes<TClassName>> => {
-    return createUseStyle(
+export const createUseSheet    = <TClassName extends ClassName = ClassName>(classes: ProductOrFactory<ClassList<TClassName>>): Factory<Classes<TClassName>> => {
+    return createUseJssSheet(
         () => usesCssfn(classes)
     );
 }

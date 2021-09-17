@@ -19,7 +19,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -183,7 +183,7 @@ export const usesInput = () => {
     ]);
 };
 
-export const useInputSheet = createUseCssfnStyle(() => [
+export const useInputSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesInput(),

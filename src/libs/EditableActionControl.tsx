@@ -12,7 +12,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     // hooks:
@@ -93,7 +93,7 @@ export const usesEditableActionControl = () => {
     ]);
 };
 
-export const useEditableActionControlSheet = createUseCssfnStyle(() => [
+export const useEditableActionControlSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesEditableActionControl(),

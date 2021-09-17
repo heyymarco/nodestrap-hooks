@@ -17,7 +17,7 @@ import {
 
     
     // styles:
-    createCssfnStyle,
+    createSheet,
 
 
     // compositions:
@@ -553,7 +553,7 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
         genStyleSheet?.detach();
 
         // create a new styleSheet & attach:
-        genStyleSheet = createCssfnStyle([
+        genStyleSheet = createSheet([
             global([
                 rule(settings.rule, genProps    ),
                 rule(null         , genKeyframes),

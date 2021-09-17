@@ -26,7 +26,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -192,7 +192,7 @@ export const usesPopup = () => {
     ]);
 };
 
-export const usePopupSheet = createUseCssfnStyle(() => [
+export const usePopupSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesPopup(),

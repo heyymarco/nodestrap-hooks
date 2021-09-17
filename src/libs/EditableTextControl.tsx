@@ -30,7 +30,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -353,7 +353,7 @@ export const usesEditableTextControl = () => {
     ]);
 };
 
-export const useEditableTextControlSheet = createUseCssfnStyle(() => [
+export const useEditableTextControlSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesEditableTextControl(),

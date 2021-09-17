@@ -28,7 +28,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -570,7 +570,7 @@ export const usesCard = () => {
     ]);
 };
 
-export const useCardSheet = createUseCssfnStyle(() => [
+export const useCardSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesCard(),

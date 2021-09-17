@@ -35,7 +35,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
     
     
     
@@ -590,7 +590,7 @@ export const usesIndicator = () => {
     ]);
 };
 
-export const useIndicatorSheet = createUseCssfnStyle(() => [
+export const useIndicatorSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesIndicator(),

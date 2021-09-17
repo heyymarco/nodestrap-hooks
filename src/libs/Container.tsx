@@ -9,7 +9,7 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // styles:
-    createCssfnStyle,
+    createSheet,
     
     
     
@@ -32,7 +32,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -131,7 +131,7 @@ export const usesContainer = () => composition([
     ]),
 ]);
 
-export const useContainerSheet = createUseCssfnStyle(() => [
+export const useContainerSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesContainer(),
@@ -176,7 +176,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 // create a new styleSheet & attach:
-createCssfnStyle(() => [
+createSheet(() => [
     global([
         // the container size is determined by screen width:
         Object.keys(breakpoints)

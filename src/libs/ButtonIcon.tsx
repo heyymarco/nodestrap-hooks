@@ -23,7 +23,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -205,7 +205,7 @@ export const usesButtonIcon = () => {
     ]);
 };
 
-export const useButtonIconSheet = createUseCssfnStyle(() => [
+export const useButtonIconSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesButtonIcon(),

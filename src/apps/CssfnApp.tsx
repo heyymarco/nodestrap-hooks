@@ -6,7 +6,7 @@ import {
 // cssfn:
 import {
     // createStyle,
-    createStyle,
+    createJssSheet,
     // createCssfnStyle,
     // global,
     Style,
@@ -44,7 +44,7 @@ const keyframesFadeOut = {
 };
 
 
-createStyle({
+createJssSheet({
     // @global:
     '': {
         '&:root': {

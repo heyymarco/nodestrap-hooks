@@ -5,7 +5,7 @@ import {
 
 // cssfn:
 import {
-    createCssfnStyle,
+    createSheet,
     global,
     rule,
     layout,
@@ -18,7 +18,7 @@ import {
 
 
 
-createCssfnStyle(() => [
+createSheet(() => [
     global([
         rule('.btn', [
             layout({

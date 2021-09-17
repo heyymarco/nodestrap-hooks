@@ -34,7 +34,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -486,7 +486,7 @@ export const usesActionBarLayout = () => {
     ]);
 };
 
-export const useModalSheet = createUseCssfnStyle(() => [
+export const useModalSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesModal(),

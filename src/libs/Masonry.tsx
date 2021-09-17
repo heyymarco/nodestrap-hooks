@@ -27,7 +27,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -201,7 +201,7 @@ export const usesMasonry = () => {
     ]);
 };
 
-export const useMasonrySheet = createUseCssfnStyle(() => [
+export const useMasonrySheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesMasonry(),

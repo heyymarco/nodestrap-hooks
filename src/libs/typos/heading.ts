@@ -12,7 +12,7 @@ import {
 
 
     // styles:
-    createCssfnStyle,
+    createSheet,
 
 
     // compositions:
@@ -154,7 +154,7 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
         ])),
     ];
 };
-createCssfnStyle(() => [
+createSheet(() => [
     global([
         usesLevelingRule(cssProps, cssDecls, ['h', '.h']),
     ]),

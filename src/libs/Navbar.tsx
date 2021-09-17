@@ -37,7 +37,7 @@ import {
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
-    createUseCssfnStyle,
+    createUseSheet,
     
     
     
@@ -820,7 +820,7 @@ export const usesNavbar = () => {
     ]);
 };
 
-export const useNavbarSheet = createUseCssfnStyle(() => [
+export const useNavbarSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesNavbar(),
