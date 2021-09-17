@@ -82,8 +82,8 @@ import {
     // hooks:
     usesThemeDefault as controlUsesThemeDefault,
     usesThemeActive  as controlUsesThemeActive,
+    isBlurring,
     isFocus,
-    isFocusBlurring,
     isArrive,
 }                           from './Control'
 import {
@@ -278,9 +278,14 @@ export const usesListgroupActionItemStates = () => {
             usesContentStates(),
         ]),
         states([
-            isFocusBlurring([
+            isFocus([
                 layout({
-                    zIndex: 1, // prevents boxShadowFocus from clipping
+                    zIndex: 2, // prevents boxShadowFocus from clipping
+                }),
+            ]),
+            isBlurring([
+                layout({
+                    zIndex: 1, // prevents boxShadowFocus from clipping but below the active one
                 }),
             ]),
             
