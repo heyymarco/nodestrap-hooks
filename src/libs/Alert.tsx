@@ -14,7 +14,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
 }                           from './cssfn'       // cssfn core
 import {
@@ -159,7 +158,7 @@ export const usesAlertVariants = () => {
     
     // layouts:
     const [sizes] = usesSizes((sizeName) => composition([
-        vars({
+        layout({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
         }),
