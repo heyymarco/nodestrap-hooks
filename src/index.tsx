@@ -13,43 +13,44 @@ import reportWebVitals from './reportWebVitals';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
-// import BasicComponentApp                            from './apps/BasicComponentApp'; // ok
-//     import ContainerApp                             from './apps/ContainerApp'; // ok
-//     import IndicatorApp                             from './apps/IndicatorApp'; // ok
-//         import ContentApp                           from './apps/ContentApp'; // ok
-//            import ListgroupApp                      from './apps/ListgroupApp'; // ok
-//                 import AccordionApp                 from './apps/AccordionApp'; // ok
-//                 import NavscrollApp                 from './apps/NavscrollApp'; // ok
-//             import CardApp                          from './apps/CardApp'; // ok
-                import ModalApp                     from './apps/ModalApp'; // ok
-//         import PopupApp                             from './apps/PopupApp'; // ok
-//             import AlertApp                         from './apps/AlertApp'; // ok
-//         import ControlApp                           from './apps/ControlApp'; // ok
-//             import ActionControlApp                 from './apps/ActionControlApp'; // ok
-//                 import ButtonApp                    from './apps/ButtonApp'; // ok
-//                     import ButtonIconApp            from './apps/ButtonIconApp'; // ok
-//                         import CloseButtonApp       from './apps/CloseButtonApp'; // ok
-//             import EditableControlApp               from './apps/EditableControlApp'; // ok
-//                 import EditableTextControlApp       from './apps/EditableTextControlApp'; // ok
-//                     import InputApp                 from './apps/InputApp'; // ok
-//                 import EditableActionControlApp     from './apps/EditableActionControlApp'; // ok
-//                     import CheckApp                 from './apps/CheckApp'; // ok
-//                         import RadioApp             from './apps/RadioApp'; // ok
-//                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp'; // ok
-//                 import FormApp                      from './apps/FormApp'; // ok
-//     import IconApp                                  from './apps/IconApp'; // ok
-//     import MasonryApp                               from './apps/MasonryApp'; // ok
-//     import CarouselApp                              from './apps/CarouselApp'; // ok
-//     import NavbarApp                                from './apps/NavbarApp'; // ok
+// import BasicComponentApp                            from './apps/BasicComponentApp';
+//     import ContainerApp                             from './apps/ContainerApp';
+//     import IndicatorApp                             from './apps/IndicatorApp';
+//         import ContentApp                           from './apps/ContentApp';
+//            import ListgroupApp                      from './apps/ListgroupApp';
+//                 import AccordionApp                 from './apps/AccordionApp';
+//                 import NavscrollApp                 from './apps/NavscrollApp';
+//             import CardApp                          from './apps/CardApp';
+//                 import ModalApp                     from './apps/ModalApp';
+//         import PopupApp                             from './apps/PopupApp';
+//             import AlertApp                         from './apps/AlertApp';
+            import BadgeApp                         from './apps/BadgeApp';
+//         import ControlApp                           from './apps/ControlApp';
+//             import ActionControlApp                 from './apps/ActionControlApp';
+//                 import ButtonApp                    from './apps/ButtonApp';
+//                     import ButtonIconApp            from './apps/ButtonIconApp';
+//                         import CloseButtonApp       from './apps/CloseButtonApp';
+//             import EditableControlApp               from './apps/EditableControlApp';
+//                 import EditableTextControlApp       from './apps/EditableTextControlApp';
+//                     import InputApp                 from './apps/InputApp';
+//                 import EditableActionControlApp     from './apps/EditableActionControlApp';
+//                     import CheckApp                 from './apps/CheckApp';
+//                         import RadioApp             from './apps/RadioApp';
+//                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';
+//                 import FormApp                      from './apps/FormApp';
+//     import IconApp                                  from './apps/IconApp';
+//     import MasonryApp                               from './apps/MasonryApp';
+//     import CarouselApp                              from './apps/CarouselApp';
+//     import NavbarApp                                from './apps/NavbarApp';
 
 
 
 ReactDOM.render(
-  // <React.StrictMode>
-  // </React.StrictMode>
-    <ModalApp />
-  ,
-  document.getElementById('root')
+    // <React.StrictMode>
+    // </React.StrictMode>
+    <BadgeApp />
+    ,
+    document.getElementById('root')
 );
 
 
