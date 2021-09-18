@@ -24,7 +24,8 @@ import reportWebVitals from './reportWebVitals';
 //                 import ModalApp                     from './apps/ModalApp';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
-            import BadgeApp                         from './apps/BadgeApp';
+            import CollapseApp                      from './apps/CollapseApp';
+//             import BadgeApp                         from './apps/BadgeApp';
 //         import ControlApp                           from './apps/ControlApp';
 //             import ActionControlApp                 from './apps/ActionControlApp';
 //                 import ButtonApp                    from './apps/ButtonApp';
@@ -48,7 +49,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <BadgeApp />
+    <CollapseApp />
     ,
     document.getElementById('root')
 );
