@@ -3,6 +3,7 @@ import './App.css';
 import {
 	default as React,
     useState,
+	useRef,
 }                          from 'react';
 
 import Container from '../libs/Container';
@@ -31,9 +32,12 @@ function App() {
 
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
+	const [active2,      setActive2   ] = useState(false);
 
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<OrientationName|undefined>(undefined);
+
+	const targetButtonRef = useRef<HTMLButtonElement>(null);
 
 	
 
@@ -44,6 +48,16 @@ function App() {
 				<Collapse theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} orientation={orientation}
 				
 					active={active}
+				>
+					<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsam quisquam soluta reprehenderit obcaecati culpa officiis dolorem, totam alias ex eligendi necessitatibus ad natus velit eius corrupti quis, magnam inventore tenetur?</p>
+					<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse natus voluptas corporis quasi doloribus enim numquam at ipsum aliquid explicabo cum reiciendis quos ullam delectus cumque sit, doloremque maxime dolore!</p>
+				</Collapse>
+				<hr style={{flexBasis: '100%'}} />
+
+				<Button elmRef={targetButtonRef} onClick={() => setActive2(!active2)}>Toggle collapse</Button>
+				<Collapse targetRef={targetButtonRef} popupPlacement='bottom' theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} orientation={orientation}
+				
+					active={active2}
 				>
 					<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsam quisquam soluta reprehenderit obcaecati culpa officiis dolorem, totam alias ex eligendi necessitatibus ad natus velit eius corrupti quis, magnam inventore tenetur?</p>
 					<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse natus voluptas corporis quasi doloribus enim numquam at ipsum aliquid explicabo cum reiciendis quos ullam delectus cumque sit, doloremque maxime dolore!</p>

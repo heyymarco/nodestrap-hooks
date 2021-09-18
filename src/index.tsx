@@ -22,9 +22,9 @@ import reportWebVitals from './reportWebVitals';
 //                 import NavscrollApp                 from './apps/NavscrollApp';
 //             import CardApp                          from './apps/CardApp';
 //                 import ModalApp                     from './apps/ModalApp';
-        import PopupApp                             from './apps/PopupApp';
+//         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
-//             import CollapseApp                      from './apps/CollapseApp';
+            import CollapseApp                      from './apps/CollapseApp';
 //             import BadgeApp                         from './apps/BadgeApp';
 //         import ControlApp                           from './apps/ControlApp';
 //             import ActionControlApp                 from './apps/ActionControlApp';
@@ -49,7 +49,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <PopupApp />
+    <CollapseApp />
     ,
     document.getElementById('root')
 );
