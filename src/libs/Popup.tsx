@@ -138,6 +138,11 @@ export const usesPopupLayout = () => {
             usesIndicatorLayout(),
         ]),
         layout({
+            // layouts:
+            display: 'block',
+            
+            
+            
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
