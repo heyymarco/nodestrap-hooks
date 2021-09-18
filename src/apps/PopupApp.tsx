@@ -3,6 +3,7 @@ import './App.css';
 import {
 	default as React,
     useState,
+	useRef,
 }                          from 'react';
 
 import Container from '../libs/Container';
@@ -28,6 +29,9 @@ function App() {
 
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
+	const [active2,      setActive2   ] = useState(false);
+
+	const targetButtonRef = useRef<HTMLButtonElement>(null);
 
 	
 
@@ -38,6 +42,15 @@ function App() {
 				<Popup theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 				
 					active={active}
+				>
+					Hopla!
+				</Popup>
+				<hr style={{flexBasis: '100%'}} />
+				
+				<Button elmRef={targetButtonRef} onClick={() => setActive2(!active2)}>Toggle popup at this button</Button>
+				<Popup targetRef={targetButtonRef} popupPlacement='right' theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				
+					active={active2}
 				>
 					Hopla!
 				</Popup>

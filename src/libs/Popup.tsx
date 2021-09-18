@@ -1,6 +1,8 @@
 // react (builds html using javascript):
 import {
     default as React,
+    useRef,
+    useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -51,6 +53,7 @@ import {
     isPassivating,
     isPassived,
     usesActivePassive as indicatorUsesActivePassive,
+    useStateActivePassive,
     
     
     
@@ -64,6 +67,17 @@ import {
     IndicatorProps,
     Indicator,
 }                           from './Indicator'
+import {
+    // general types:
+    Instance            as Popper,
+    Placement           as PopupPlacement,
+    Modifier            as PopupModifier,
+    PositioningStrategy as PopupPosition,
+    
+    
+    
+    createPopper,
+}                           from '@popperjs/core'
 
 
 
@@ -135,6 +149,11 @@ export const usesPopupVariants = () => {
     // layouts:
     const [sizes] = usesSizes((sizeName) => composition([
         layout({
+            // layouts:
+            display : 'block',
+            
+            
+            
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
         }),
@@ -247,6 +266,11 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     extends
         IndicatorProps<TElement>
 {
+    // popups:
+    targetRef?      : React.RefObject<HTMLElement> // getter ref
+    popupPlacement? : PopupPlacement
+    popupModifiers? : PopupModifier<string, any>[]
+    popupPosition?  : PopupPosition
 }
 export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) => {
     // styles:
@@ -254,8 +278,56 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     
     
+    // states:
+    const stateActPass = useStateActivePassive(props);
+    const isVisible    = stateActPass.active || (!!stateActPass.class);
+    
+    
+    
+    // dom effects:
+    const popupRef  = useRef<HTMLDivElement|null>(null);
+    const popperRef = useRef<Popper|null>(null);
+    useLayoutEffect(() => {
+        const target = props.targetRef?.current;
+        const popup  = popupRef.current;
+        if (!target) return; // target was not specified => nothing to do
+        if (!popup)  return; // popup was unloaded       => nothing to do
+        
+        
+        
+        popperRef.current = createPopper(target, popup, {
+            ...(props.popupPlacement ? { placement : props.popupPlacement } : {}),
+            ...(props.popupModifiers ? { modifiers : props.popupModifiers } : {}),
+            ...(props.popupPosition  ? { strategy  : props.popupPosition  } : {}),
+        });
+        
+        
+        
+        // cleanups:
+        return () => {
+            popperRef.current?.destroy();
+            popperRef.current = null;
+        };
+    }, [props.targetRef, props.popupPlacement, props.popupModifiers, props.popupPosition]);
+    
+    useLayoutEffect(() => {
+        popperRef.current?.setOptions((options) => ({
+            ...options,
+            modifiers: [
+                ...(options.modifiers ?? []),
+                
+                { name: 'eventListeners', enabled: isVisible },
+            ],
+        }));
+        
+        if (isVisible) popperRef.current?.update();
+    }, [isVisible]);
+    
+    
+    
+    
     // jsx:
-    return (
+    const Popup = (
         <Indicator<TElement>
             // other props:
             {...props}
@@ -263,7 +335,24 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            
+            onAnimationEnd={(e) => {
+                // states:
+                stateActPass.handleAnimationEnd(e);
+            }}
         />
+    );
+    
+    // no `targetRef` specified => no `popper` needed:
+    if (!props.targetRef) return Popup;
+    
+    // wrap with another element, so the `popper` won't modify the `Popup`'s style:
+    return (
+        <div
+            ref={popupRef}
+        >
+            { Popup }
+        </div>
     );
 };
 export { Popup as default }
