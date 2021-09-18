@@ -4,9 +4,6 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
-import type {
-    PropEx,
-}                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
     composition,
@@ -17,14 +14,12 @@ import {
     
     // layouts:
     layout,
-    vars,
     
     
     
     // rules:
     rules,
     variants,
-    states,
     rule,
 }                           from './cssfn'       // cssfn core
 import {
@@ -47,33 +42,20 @@ import {
 }                           from './BasicComponent'
 import {
     // hooks:
-    isActived,
-    isActivating,
-    isPassivating,
     TogglerActiveProps,
     useTogglerActive,
 }                           from './Indicator'
 import {
-    // hooks:
-    usesActivePassive as popupUsesActivePassive,
-    
-    
-    
     // styles:
-    usesPopupLayout,
-    usesPopupVariants,
-    usesPopupStates,
-    
-    
-    
-    // configs:
-    cssProps as pcssProps,
+    usesCollapseLayout,
+    usesCollapseVariants,
+    usesCollapseStates,
     
     
     
     // react components:
-    Popup,
-}                           from './Popup'
+    Collapse,
+}                           from './Collapse'
 import {
     // hooks:
     ListStyle,
@@ -104,69 +86,20 @@ import {
 
 
 
-// hooks:
-
-// states:
-
-//#region activePassive
-/**
- * Uses active & passive states.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
- */
-export const usesActivePassive = () => {
-    // dependencies:
-    const [activePassive, activePassiveRefs, activePassiveDecls, ...restActivePassive] = popupUsesActivePassive();
-    
-    
-    
-    return [
-        () => composition([
-            imports([
-                activePassive(),
-            ]),
-            states([
-                isActived([
-                    vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                    }),
-                ]),
-                isActivating([
-                    vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animActive,
-                    }),
-                ]),
-                isPassivating([
-                    vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
-                    }),
-                ]),
-            ]),
-        ]),
-        activePassiveRefs,
-        activePassiveDecls,
-        ...restActivePassive,
-    ] as const;
-};
-//#endregion activePassive
-
-
-
 // styles:
 
 /*
     AccordionItem is just a composite component made of
     ListGroupItem
     and
-    *modified* Popup
+    *modified* Collapse
 */
 
 export const usesAccordionItemLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesPopupLayout(),
+            usesCollapseLayout(),
             usesListgroupItemLayout(),
         ]),
         layout({
@@ -191,7 +124,7 @@ export const usesAccordionItemVariants = () => {
     return composition([
         imports([
             // variants:
-            usesPopupVariants(),
+            usesCollapseVariants(':not(.inline)>*>&', '.inline>*>&'),
             usesListgroupItemVariants(),
             
             // layouts:
@@ -214,18 +147,10 @@ export const usesAccordionItemVariants = () => {
     ]);
 };
 export const usesAccordionItemStates = () => {
-    // dependencies:
-    
-    // states:
-    const [activePassive] = usesActivePassive();
-    
-    
-    
     return composition([
         imports([
             // states:
-            usesPopupStates(),
-            activePassive(),
+            usesCollapseStates(),
         ]),
     ]);
 };
@@ -260,64 +185,8 @@ export const useAccordionItemSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    //#region keyframes
-    const keyframesActive        : PropEx.Keyframes = {
-        from : {
-            overflow     : 'hidden',
-            maxBlockSize : 0,
-        },
-        '99%': {
-            overflow     : 'hidden',
-            maxBlockSize : '100vh',
-        },
-        to   : {
-            overflow     : 'unset',
-            maxBlockSize : 'unset',
-        },
-    };
-    const keyframesPassive       : PropEx.Keyframes = {
-        from : keyframesActive.to,
-        '1%' : keyframesActive['99%'],
-        to   : keyframesActive.from,
-    };
-    
-    const keyframesActiveInline  : PropEx.Keyframes = {
-        from : {
-            overflow      : 'hidden',
-            maxInlineSize : 0,
-        },
-        '99%': {
-            overflow      : 'hidden',
-            maxInlineSize : '100vw',
-        },
-        to   : {
-            overflow      : 'unset',
-            maxInlineSize : 'unset',
-        },
-    };
-    const keyframesPassiveInline : PropEx.Keyframes = {
-        from : keyframesActiveInline.to,
-        '1%' : keyframesActiveInline['99%'],
-        to   : keyframesActiveInline.from,
-    };
-    //#endregion keyframes
-    
-    
-    
     return {
-        //#region animations
-        filterActive               : pcssProps.filterActive,
-        
-        '@keyframes active'        : keyframesActive,
-        '@keyframes passive'       : keyframesPassive,
-        animActive                 : [['300ms', 'ease-out', 'both', keyframesActive ]],
-        animPassive                : [['300ms', 'ease-out', 'both', keyframesPassive]],
-        
-        '@keyframes activeInline'  : keyframesActiveInline,
-        '@keyframes passiveInline' : keyframesPassiveInline,
-        animActiveInline           : [['300ms', 'ease-out', 'both', keyframesActiveInline ]],
-        animPassiveInline          : [['300ms', 'ease-out', 'both', keyframesPassiveInline]],
-        //#endregion animations
+        /* no config props yet */
     };
 }, { prefix: 'accr' });
 
@@ -428,7 +297,7 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
         >
             { label }
         </ListgroupItem>
-        <Popup<TElement>
+        <Collapse<TElement>
             // variants:
             theme={props.theme}
             size={props.size}
@@ -448,7 +317,7 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
             mainClass={props.mainClass ?? sheet.main}
         >
             { children }
-        </Popup>
+        </Collapse>
     </>);
 };
 AccordionItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
