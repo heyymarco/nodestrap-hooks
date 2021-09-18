@@ -45,8 +45,6 @@ import {
     // hooks:
     usesSizes,
     OrientationName,
-    noOrientationInline,
-    isOrientationInline,
     VariantOrientation,
     useVariantOrientation,
 }                           from './BasicComponent'
@@ -143,7 +141,7 @@ export const usesCollapseLayout = () => {
         }),
     ]);
 };
-export const usesCollapseVariants = () => {
+export const usesCollapseVariants = (blockSelector = ':not(.inline)', inlineSelector = '.inline') => {
     // dependencies:
     
     // layouts:
@@ -165,13 +163,13 @@ export const usesCollapseVariants = () => {
             sizes(),
         ]),
         variants([
-            noOrientationInline([ // block
+            rule(blockSelector, [ // block
                 layout({
                     // overwrites propName = propName{Block}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
                 }),
             ]),
-            isOrientationInline([ // inline
+            rule(inlineSelector, [ // inline
                 layout({
                     // overwrites propName = propName{Inline}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
