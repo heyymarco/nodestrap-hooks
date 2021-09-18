@@ -80,9 +80,52 @@ function App() {
 				</Badge></h6>
 				<hr style={{flexBasis: '100%'}} />
 				<Button
+					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
 				>
-					Click me <Badge theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}>{counter && `${counter}`}</Badge>
+					Click me <Badge
+						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						>
+							{counter && `${counter}`}
+					</Badge>
+				</Button>
+				<br />
+				<Button
+					style={{margin: '1em'}}
+					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+				>
+					Click me <Badge
+						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						>
+							{counter && `${counter}`}
+					</Badge>
+				</Button>
+				<br />
+				<Button
+					style={{margin: '1em'}}
+					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+				>
+					Click me <Badge
+						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						badgeStyle='pill'
+						>
+							{counter && `${counter}`}
+					</Badge>
+				</Button>
+				<br />
+				<Button
+					style={{margin: '1em'}}
+					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+				>
+					Click me <Badge
+						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						badgeStyle='pill'
+						active={counter > 0}
+						>
+					</Badge>
 				</Button>
 				<hr style={{flexBasis: '100%'}} />
 				<p>

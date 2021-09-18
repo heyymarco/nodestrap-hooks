@@ -14,6 +14,14 @@ import {
     
     // layouts:
     layout,
+    children,
+    
+    
+    
+    // rules:
+    variants,
+    rule,
+    isEmpty,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -26,6 +34,7 @@ import {
     
     // utilities:
     usesGeneralProps,
+    usesPrefixedProps,
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
@@ -46,6 +55,25 @@ import {
     Popup,
 }                           from './Popup'
 import typos                from './typos/index' // configurable typography (texting) defs
+import {
+    borderRadiuses,
+}                           from './borders'     // configurable borders & border radiuses defs
+
+
+
+// hooks:
+
+// appearances:
+
+export type BadgeStyle = 'pill' // might be added more styles in the future
+export interface BadgeVariant {
+    badgeStyle?: BadgeStyle
+}
+export const useBadgeVariant = (props: BadgeVariant) => {
+    return {
+        class: props.badgeStyle ? props.badgeStyle : null,
+    };
+};
 
 
 
@@ -83,6 +111,58 @@ export const usesBadgeLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+        variants([
+            isEmpty([
+                layout({
+                    // layouts:
+                    display       : 'inline-grid', // required for filling the width & height using `::before` & `::after`
+                    
+                    
+                    
+                    // // sizes:
+                    // width   : '1em', // not working, (font-width  !== 1em) if the font-size is fractional number
+                    // height  : '1em', // not working, (font-height !== 1em) if the font-size is fractional number
+                    
+                    // children:
+                    // a dummy text content, for making parent's height as tall as line-height
+                    // the dummy is also used for calibrating the flex's vertical position
+                    ...children(['::before', '::after'], composition([
+                        layout({
+                            // layouts:
+                            content     : '"\xa0"',       // &nbsp;
+                            display     : 'inline-block', // use inline-block, so we can kill the width
+                            
+                            
+                            
+                            // appearances:
+                            overflow    : 'hidden', // crop the text width (&nbsp;)
+                            visibility  : 'hidden', // hide the element, but still consumes the dimension
+                            
+                            
+                            
+                            // sizes:
+                            inlineSize  : 0,        // kill the width, we just need the height
+                        }),
+                    ])),
+                    ...children('::after', composition([
+                        layout({
+                            // layouts:
+                            writingMode : 'vertical-lr', // rotate the element 90°
+                            
+                            
+                            
+                            // appearances:
+                            overflow    : 'unset', // fix Firefox bug
+                        }),
+                    ])),
+                    
+                    
+                    
+                    // spacings:
+                    padding : cssProps.paddingBlock, // set paddingInline = paddingBlock
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesBadgeVariants = () => {
@@ -105,6 +185,19 @@ export const usesBadgeVariants = () => {
             
             // layouts:
             sizes(),
+        ]),
+        variants([
+            rule('.pill', [
+                layout({
+                    // borders:
+                    borderRadius : borderRadiuses.pill, // big rounded corner
+                    
+                    
+                    
+                    // customize:
+                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'pill')), // apply general cssProps starting with pill***
+                }),
+            ]),
         ]),
     ]);
 };
@@ -183,14 +276,22 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface BadgeProps<TElement extends HTMLElement = HTMLElement>
     extends
-        PopupProps<TElement>
+        PopupProps<TElement>,
+        
+        // appearances:
+        BadgeVariant
 {
     // accessibilities:
     label? : string
 }
 export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgeProps<TElement>) => {
     // styles:
-    const sheet = useBadgeSheet();
+    const sheet        = useBadgeSheet();
+    
+    
+    
+    // variants:
+    const badgeVariant = useBadgeVariant(props);
     
     
     
@@ -203,7 +304,7 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
     
     
     // fn props:
-    const activeFn = (active ?? true) && !!(props.children ?? false);
+    const activeFn = active ?? !!(props.children ?? false);
     
     
     
@@ -222,6 +323,9 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            variantClasses={[...(props.variantClasses ?? []),
+                badgeVariant.class,
+            ]}
         >
             { props.children }
         </Popup>

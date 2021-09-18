@@ -544,6 +544,8 @@ export const isFocus         = (styles: StyleCollection) => rule(     ':focus'  
 export const isNotFocus      = (styles: StyleCollection) => rule(':not(:focus)'       , styles);
 export const isHover         = (styles: StyleCollection) => rule(     ':hover'        , styles);
 export const isNotHover      = (styles: StyleCollection) => rule(':not(:hover)'       , styles);
+export const isEmpty         = (styles: StyleCollection) => rule(     ':empty'        , styles);
+export const isNotEmpty      = (styles: StyleCollection) => rule(':not(:empty)'       , styles);
 
 
 
