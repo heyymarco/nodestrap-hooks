@@ -319,7 +319,6 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
             tag={props.tag ?? 'span'}
             
             
-            
             // accessibilities:
             aria-label={props.label}
             active={activeFn}
