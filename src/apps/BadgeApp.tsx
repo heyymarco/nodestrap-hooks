@@ -29,6 +29,8 @@ function App() {
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(true);
 
+	const [counter, setCounter] = useState(0);
+
 	
 
     return (
@@ -76,7 +78,12 @@ function App() {
 				>
 					New!
 				</Badge></h6>
-				
+				<hr style={{flexBasis: '100%'}} />
+				<Button
+					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+				>
+					Click me <Badge theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}>{counter && `${counter}`}</Badge>
+				</Button>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

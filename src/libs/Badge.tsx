@@ -58,8 +58,7 @@ export const usesBadgeLayout = () => {
         ]),
         layout({
             // layouts:
-            display       : 'inline',
-            
+            display       : 'inline-block', // use inline block, so it takes the width & height as needed
             
             
             
@@ -195,16 +194,30 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
     
     
     
+    // rest props:
+    const {
+        // accessibilities:
+        active,
+    ...restProps}  = props;
+    
+    
+    
+    // fn props:
+    const activeFn = (active ?? true) && !!(props.children ?? false);
+    
+    
+    
     // jsx:
     return (
         <Popup<TElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             
             // accessibilities:
             aria-label={props.label}
+            active={activeFn}
             
             
             // classes:
