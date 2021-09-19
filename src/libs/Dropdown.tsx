@@ -7,6 +7,10 @@ import {
 
 // cssfn:
 import {
+    // utilities:
+    isTypeOf,
+}                           from './react-cssfn' // cssfn for react
+import {
     // hooks:
     useStateActivePassive,
 }                           from './Indicator'
@@ -32,6 +36,10 @@ import {
     ListgroupProps,
     Listgroup,
 }                           from './Listgroup'
+import {
+    // hooks:
+    usePropEnabled,
+}                           from './accessibilities'
 
 
 
@@ -76,12 +84,25 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
         tabIndex,       // from Dropdown
         
         
+        // behaviors:
+        actionCtrl = true,
+        
+        
         // popups:
         targetRef,
         popupPlacement,
         popupModifiers,
         popupPosition,
+        
+        
+        // children:
+        children,
     ...restProps} = props;
+    
+    
+    
+    // fn props:
+    const propEnabled = usePropEnabled(props);
     
     
     
@@ -141,7 +162,7 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
                 
                 
                 // behaviors:
-                actionCtrl={props.actionCtrl ?? true}
+                actionCtrl={actionCtrl}
                 
                 
                 // Control props:
@@ -152,17 +173,6 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
                 
                 
                 // events:
-                onClick={(e) => {
-                    // backwards:
-                    props.onClick?.(e);
-                    
-                    
-                    
-                    if (!e.defaultPrevented) {
-                        props.onClose?.('ui');
-                        e.preventDefault();
-                    } // if
-                }}
                 onKeyUp={(e) => {
                     // backwards:
                     props.onKeyUp?.(e);
@@ -176,19 +186,69 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
                         } // if
                     } // if
                 }}
-                onBlur={(e) => {
-                    // backwards:
-                    props.onBlur?.(e);
-                    
-                    
-                    
-                    if (!e.defaultPrevented) {
-                        props.onClose?.('blur');
-                        e.preventDefault();
-                    } // if
-                }}
             >
-                { props.children }
+                {
+                    propEnabled
+                    ?
+                    (
+                        children && (Array.isArray(children) ? children : [children]).map((child, index) => (
+                            isTypeOf(child, ListgroupItem)
+                            ?
+                            (
+                                ((child.props.enabled ?? true) && (child.props.actionCtrl ?? actionCtrl))
+                                ?
+                                <child.type
+                                    // other props:
+                                    {...child.props}
+                                    
+                                    
+                                    // essentials:
+                                    key={child.key ?? index}
+                                    
+                                    
+                                    // events:
+                                    onClick={(e) => {
+                                        // backwards:
+                                        child.props.onClick?.(e);
+                                        
+                                        
+                                        
+                                        if (!e.defaultPrevented) {
+                                            props.onClose?.('ui');
+                                            e.preventDefault();
+                                        } // if
+                                    }}
+                                />
+                                :
+                                child
+                            )
+                            :
+                            (
+                                actionCtrl
+                                ?
+                                <ListgroupItem
+                                    // essentials:
+                                    key={index}
+                                    
+                                    
+                                    // events:
+                                    onClick={(e) => {
+                                        if (!e.defaultPrevented) {
+                                            props.onClose?.('ui');
+                                            e.preventDefault();
+                                        } // if
+                                    }}
+                                >
+                                    { child }
+                                </ListgroupItem>
+                                :
+                                child
+                            )
+                        ))
+                    )
+                    :
+                    children
+                }
             </Listgroup>
         </Collapse>
     );
