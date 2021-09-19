@@ -24,7 +24,9 @@ import {
     
     
     // rules:
+    variants,
     states,
+    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -129,6 +131,19 @@ export const usesActivePassive = () => {
 //#endregion activePassive
 
 
+// appearances:
+
+export type PopupStyle = 'wrapper' // might be added more styles in the future
+export interface PopupVariant {
+    popupStyle?: PopupStyle
+}
+export const usePopupVariant = (props: PopupVariant) => {
+    return {
+        class: props.popupStyle ? props.popupStyle : null,
+    };
+};
+
+
 
 // styles:
 export const usesPopupLayout = () => {
@@ -173,6 +188,33 @@ export const usesPopupVariants = () => {
             
             // layouts:
             sizes(),
+        ]),
+        variants([
+            rule('.wrapper', [
+                layout({
+                    // backgrounds:
+                    backg         : 'none', // discard Indicator's background
+                    
+                    
+                    
+                    // borders:
+                    border        : 'none', // discard Indicator's border
+                    
+                    
+                    
+                    // spacings:
+                    paddingInline : 0,      // discard Indicator's paddingInline
+                    paddingBlock  : 0,      // discard Indicator's paddingBlock
+                    
+                    marginInline  : 0,      // discard Indicator's marginInline
+                    marginBlock   : 0,      // discard Indicator's marginBlock
+                    
+                    
+                    
+                    // animations:
+                    boxShadow     : 'none', // discard Indicator's boxShadow
+                }),
+            ]),
         ]),
     ]);
 };
@@ -269,7 +311,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     extends
-        IndicatorProps<TElement>
+        IndicatorProps<TElement>,
+        
+        // appearances:
+        PopupVariant
 {
     // popups:
     targetRef?      : React.RefObject<HTMLElement> // getter ref
@@ -280,6 +325,11 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
 export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) => {
     // styles:
     const sheet = usePopupSheet();
+    
+    
+    
+    // variants:
+    const popupVariant = usePopupVariant(props);
     
     
     
@@ -341,6 +391,9 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            variantClasses={[...(props.variantClasses ?? []),
+                popupVariant.class,
+            ]}
             
             
             // events:
