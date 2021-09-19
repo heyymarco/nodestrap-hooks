@@ -110,6 +110,7 @@ import {
 }                           from './Card'
 import {
     stripOutList,
+    stripOutFocusableElement,
 }                           from './strip-outs'
 import {
     borderRadiuses,
@@ -169,6 +170,9 @@ const listItemElm = ':first-child';
 export const usesListgroupItemLayout = () => {
     return composition([
         imports([
+            // resets:
+            stripOutFocusableElement(), // clear browser's default styles
+            
             // layouts:
             usesContentLayout(),
         ]),
