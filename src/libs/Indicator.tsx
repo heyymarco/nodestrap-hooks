@@ -639,10 +639,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     const keyframesActive  : PropEx.Keyframes = {
         from : {
-            // foreg       : fallbacks(outlinedRefs.foregOutlinedTg, mildRefs.foregMildTg,  foregRefs.foregFn),
-            // backg       : fallbacks(outlinedRefs.backgOutlinedTg, mildRefs.backgMildTg,  backgRefs.backgFn),
-            // borderColor : fallbacks(outlinedRefs.foregOutlinedTg,                       borderRefs.borderFn),
-
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterActivePassive)),
 
@@ -650,10 +646,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             ].map(defaultFilter)],
         },
         to   : {
-            // foreg       : foregRefs.foregFn,
-            // backg       : backgRefs.backgFn,
-            // borderColor : borderRefs.borderFn,
-
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterActivePassive)),
 
