@@ -344,6 +344,10 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             onAnimationEnd={(e) => {
                 // states:
                 stateActPass.handleAnimationEnd(e);
+                
+                
+                // forwards:
+                props.onAnimationEnd?.(e);
             }}
         />
     );
