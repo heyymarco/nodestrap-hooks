@@ -538,14 +538,16 @@ export const isNotNthLastChild = (step: number, offset: number, styles: StyleCol
         return rule(`:not(:nth-last-child(${step}n+${offset}))`, styles);
     } // if
 };
-export const isActive        = (styles: StyleCollection) => rule(     ':active'       , styles);
-export const isNotActive     = (styles: StyleCollection) => rule(':not(:active)'      , styles);
-export const isFocus         = (styles: StyleCollection) => rule(     ':focus'        , styles);
-export const isNotFocus      = (styles: StyleCollection) => rule(':not(:focus)'       , styles);
-export const isHover         = (styles: StyleCollection) => rule(     ':hover'        , styles);
-export const isNotHover      = (styles: StyleCollection) => rule(':not(:hover)'       , styles);
-export const isEmpty         = (styles: StyleCollection) => rule(     ':empty'        , styles);
-export const isNotEmpty      = (styles: StyleCollection) => rule(':not(:empty)'       , styles);
+export const isActive          = (styles: StyleCollection) => rule(     ':active'        , styles);
+export const isNotActive       = (styles: StyleCollection) => rule(':not(:active)'       , styles);
+export const isFocus           = (styles: StyleCollection) => rule(     ':focus'         , styles);
+export const isNotFocus        = (styles: StyleCollection) => rule(':not(:focus)'        , styles);
+export const isFocusVisible    = (styles: StyleCollection) => rule(     ':focus-visible' , styles);
+export const isNotFocusVisible = (styles: StyleCollection) => rule(':not(:focus-visible)', styles);
+export const isHover           = (styles: StyleCollection) => rule(     ':hover'         , styles);
+export const isNotHover        = (styles: StyleCollection) => rule(':not(:hover)'        , styles);
+export const isEmpty           = (styles: StyleCollection) => rule(     ':empty'         , styles);
+export const isNotEmpty        = (styles: StyleCollection) => rule(':not(:empty)'        , styles);
 
 
 
