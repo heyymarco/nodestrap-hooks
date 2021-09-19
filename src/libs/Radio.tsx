@@ -191,6 +191,14 @@ export const Radio = (props: RadioProps) => {
     
     
     
+    // rest props:
+    const {
+        // essentials:
+        elmRef,
+    ...restProps}  = props;
+    
+    
+    
     // dom effects:
     useEffect(() => {
         const radio = inputRef.current;
@@ -215,14 +223,6 @@ export const Radio = (props: RadioProps) => {
             radio.removeEventListener('clear', handleClear);
         };
     }, [setActive]);
-    
-    
-    
-    // rest props:
-    const {
-        // essentials:
-        elmRef,
-    ...restProps}  = props;
     
     
     
