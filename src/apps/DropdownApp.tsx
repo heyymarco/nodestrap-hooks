@@ -12,6 +12,7 @@ import {
 	SizeName,
 } 					from '../libs/BasicComponent';
 import Button   from '../libs/Button';
+import {TextInput}   from '../libs/Input';
 import Dropdown, {DropdownItem, OrientationName} from '../libs/Dropdown';
 
 
@@ -76,7 +77,7 @@ function App() {
 					<DropdownItem>i'm controllable</DropdownItem>
 					<DropdownItem active={true}>i'm controllable</DropdownItem>
 					<DropdownItem actionCtrl={false}>
-						<Button>click me</Button>
+						<TextInput placeholder='type here' enableValidation={false} />
 					</DropdownItem>
                 </Dropdown>
                 <hr style={{flexBasis: '100%'}} />
