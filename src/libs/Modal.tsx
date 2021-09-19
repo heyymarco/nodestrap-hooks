@@ -224,6 +224,7 @@ export const usesCard = () => {
         
         ...children(cardElm, composition([
             imports([
+                // resets:
                 stripOutFocusableElement(), // clear browser's default styles
             ]),
             layout({
