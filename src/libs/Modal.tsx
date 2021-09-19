@@ -669,7 +669,12 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
                 { header }
                 <CloseButton
                     // actions:
-                    onClick={() => props.onClose?.('ui')}
+                    onClick={(e) => {
+                        if (!e.defaultPrevented) {
+                            props.onClose?.('ui');
+                            e.preventDefault();
+                        } // if
+                    }}
                 />
             </h5>
         );
@@ -694,7 +699,12 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
                     
                     
                     // actions:
-                    onClick={() => props.onClose?.('ui')}
+                    onClick={(e) => {
+                        if (!e.defaultPrevented) {
+                            props.onClose?.('ui');
+                            e.preventDefault();
+                        } // if
+                    }}
                 />
             </p>
         );
@@ -734,12 +744,22 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             // events:
             // watch left click on the overlay only (not at the Card):
             onClick={(e) => {
-                if (e.target === e.currentTarget) props.onClose?.('overlay');
+                if (!e.defaultPrevented) {
+                    if (e.target === e.currentTarget) {
+                        props.onClose?.('overlay');
+                        e.preventDefault();
+                    } // if
+                } // if
             }}
             
             // watch [escape key] on the whole Modal, including Card & Card's children:
             onKeyUp={(e) => {
-                if ((e.key === 'Escape') || (e.code === 'Escape')) props.onClose?.('shortcut');
+                if (!e.defaultPrevented) {
+                    if ((e.key === 'Escape') || (e.code === 'Escape')) {
+                        props.onClose?.('shortcut');
+                        e.preventDefault();
+                    } // if
+                } // if
             }}
             
             onAnimationEnd={(e) => {
