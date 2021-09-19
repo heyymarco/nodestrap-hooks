@@ -170,9 +170,6 @@ const listItemElm = ':first-child';
 export const usesListgroupItemLayout = () => {
     return composition([
         imports([
-            // resets:
-            stripOutFocusableElement(), // clear browser's default styles
-            
             // layouts:
             usesContentLayout(),
         ]),
@@ -334,7 +331,8 @@ export const usesListgroupLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutList(), // clear browser's default styles
+            stripOutFocusableElement(), // clear browser's default styles
+            stripOutList(),             // clear browser's default styles
             
             // borders:
             usesBorderAsContainer(), // make a nicely rounded corners
