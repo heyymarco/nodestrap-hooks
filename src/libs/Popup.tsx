@@ -332,6 +332,7 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     
     // jsx:
+    // the `Popup` take care of the *popup animation*:
     const Popup = (
         <Indicator<TElement>
             // other props:
@@ -357,7 +358,7 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     // no `targetRef` specified => no `popper` needed:
     if (!props.targetRef) return Popup;
     
-    // wrap with another element, so the `popper` won't modify the `Popup`'s style:
+    // wrap with a `<div>` for positioning, so the `popper` (position engine) won't modify the `Popup`'s css:
     return (
         <div
             ref={popupRef}
