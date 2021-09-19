@@ -341,6 +341,8 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             
+            
+            // events:
             onAnimationEnd={(e) => {
                 // states:
                 stateActPass.handleAnimationEnd(e);
