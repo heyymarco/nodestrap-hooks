@@ -36,7 +36,6 @@ function App() {
 	const [actionCtrl,      setActionCtrl   ] = useState<boolean|undefined>(undefined);
 
 	const [childEnabled,    setChildEnabled   ] = useState(false);
-	const [childActive,      setChildActive   ] = useState(true);
 
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<OrientationName|undefined>(undefined);
@@ -61,8 +60,6 @@ function App() {
 					onClose={() => setActive(false)}
 				>
 					<>hello</>
-					<></>
-					<>hey</>
 					<DropdownItem enabled={childEnabled}>
 						i'm {childEnabled ? 'enabled' : 'disabled'}
 						<input type='checkbox'
@@ -70,39 +67,16 @@ function App() {
 							onChange={(e) => setChildEnabled(e.target.checked)}
 						/>
 					</DropdownItem>
-					'hoho'
-					<DropdownItem active={childActive}>
-						i'm {childActive ? 'active' : 'passive'}
-						<input type='checkbox'
-							checked={childActive}
-							onChange={(e) => setChildActive(e.target.checked)}
-						/>
-					</DropdownItem>
-					<DropdownItem enabled={childEnabled} active={childActive}>
-						i'm {childEnabled ? 'enabled' : 'disabled'}
-						<input type='checkbox'
-							checked={childEnabled}
-							onChange={(e) => setChildEnabled(e.target.checked)}
-						/>
-						&amp; i'm {childActive ? 'active' : 'passive'}
-						<input type='checkbox'
-							checked={childActive}
-							onChange={(e) => setChildActive(e.target.checked)}
-						/>
-					</DropdownItem>
 					<DropdownItem theme='danger'>i'm angry</DropdownItem>
-					<DropdownItem theme='success'>i'm fine</DropdownItem>
+					<DropdownItem actionCtrl={false} theme='success'>i'm fine</DropdownItem>
 					<DropdownItem size='sm'>i'm small</DropdownItem>
 					<DropdownItem size='lg'>i'm big</DropdownItem>
 					<DropdownItem gradient={true}>i'm 3d</DropdownItem>
 					<DropdownItem outlined={true}>i'm transparent</DropdownItem>
-					<DropdownItem actionCtrl={true}>i'm controllable</DropdownItem>
-					<DropdownItem actionCtrl={true} active={true}>i'm controllable</DropdownItem>
-					<DropdownItem>
-						<Button>button</Button>
-					</DropdownItem>
-					<DropdownItem active={true}>
-						<Button>button</Button>
+					<DropdownItem>i'm controllable</DropdownItem>
+					<DropdownItem active={true}>i'm controllable</DropdownItem>
+					<DropdownItem actionCtrl={false}>
+						<Button>click me</Button>
 					</DropdownItem>
                 </Dropdown>
                 <hr style={{flexBasis: '100%'}} />

@@ -7,41 +7,6 @@ import {
 
 // cssfn:
 import {
-    // compositions:
-    composition,
-    mainComposition,
-    imports,
-    
-    
-    
-    // layouts:
-    layout,
-    
-    
-    
-    // rules:
-    rules,
-    rule,
-}                           from './cssfn'       // cssfn core
-import {
-    // hooks:
-    createUseSheet,
-}                           from './react-cssfn' // cssfn for react
-import {
-    createCssConfig,
-    
-    
-    
-    // utilities:
-    usesGeneralProps,
-    usesSuffixedProps,
-    overwriteProps,
-}                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
-import {
-    // hooks:
-    usesSizes,
-}                           from './BasicComponent'
-import {
     // hooks:
     useStateActivePassive,
 }                           from './Indicator'
@@ -60,13 +25,6 @@ import {
     
     
     
-    // styles:
-    usesListgroupLayout,
-    usesListgroupVariants,
-    usesListgroupStates,
-    
-    
-    
     // react components:
     ListgroupItemProps,
     ListgroupItem,
@@ -74,101 +32,6 @@ import {
     ListgroupProps,
     Listgroup,
 }                           from './Listgroup'
-import {
-    stripOutFocusableElement,
-}                           from './strip-outs'
-
-
-
-// styles:
-
-/*
-    Dropdown is just a composite component made of
-    *modified* ListGroup
-    and
-    Collapse
-*/
-
-export const usesDropdownLayout = () => {
-    return composition([
-        imports([
-            stripOutFocusableElement(), // clear browser's default styles
-            
-            // layouts:
-            usesListgroupLayout(),
-        ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-};
-export const usesDropdownVariants = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
-    
-    
-    return composition([
-        imports([
-            // variants:
-            usesListgroupVariants(),
-            
-            // layouts:
-            sizes(),
-        ]),
-    ]);
-};
-export const usesDropdownStates = () => {
-    return composition([
-        imports([
-            // states:
-            usesListgroupStates(),
-        ]),
-    ]);
-};
-export const usesDropdown = () => {
-    return composition([
-        rules([
-            rule('&&', [ // makes Dropdown more specific than ListGroupItem
-                imports([
-                    // layouts:
-                    usesDropdownLayout(),
-                    
-                    // variants:
-                    usesDropdownVariants(),
-                    
-                    // states:
-                    usesDropdownStates(),
-                ]),
-            ]),
-        ]),
-    ]);
-};
-
-export const useDropdownSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesDropdown(),
-        ]),
-    ]),
-]);
-
-
-
-// configs:
-export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    return {
-        /* no config props yet */
-    };
-}, { prefix: 'ddwn' });
 
 
 
@@ -195,11 +58,6 @@ export interface DropdownProps<TElement extends HTMLElement = HTMLElement>
     onClose? : (closeType: CloseType) => void
 }
 export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: DropdownProps<TElement>) => {
-    // styles:
-    const sheet = useDropdownSheet();
-    
-    
-    
     // states:
     const stateActPass = useStateActivePassive(props);
     const isVisible    = stateActPass.active || (!!stateActPass.class);
@@ -251,6 +109,7 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
             popupPlacement={popupPlacement}
             popupModifiers={popupModifiers}
             popupPosition={popupPosition}
+            popupStyle='wrapper'
             
             
             // events:
@@ -283,10 +142,6 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
                 
                 // behaviors:
                 actionCtrl={props.actionCtrl ?? true}
-                
-                
-                // classes:
-                mainClass={props.mainClass ?? sheet.main}
                 
                 
                 // Control props:
