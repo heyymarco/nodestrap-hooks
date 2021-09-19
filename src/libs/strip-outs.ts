@@ -14,6 +14,7 @@ import {
     rule,
     isActive,
     isFocus,
+    isFocusVisible,
 }                           from './cssfn'      // cssfn core
 
 
@@ -27,6 +28,9 @@ const none  = 'none';
  * removes browser's default styling on hyperlink (`a`).
  */
 export const stripOutLink = () => composition([
+    imports([
+        stripOutFocusableElement(),
+    ]),
     layout({
         color                 : unset, // reset blue color
         textDecoration        : unset, // reset underline
@@ -38,12 +42,6 @@ export const stripOutLink = () => composition([
                 color         : unset, // reset blue color
             }),
         ]),
-        isFocus([
-            layout({
-                outline       : unset, // reset focus outline
-                outlineOffset : unset, // reset focus outline
-            }),
-        ]),
     ]),
 ]);
 
@@ -52,6 +50,9 @@ export const stripOutLink = () => composition([
  * removes browser's default styling on control (`input`, `textarea`, `button`, etc).
  */
 export const stripOutControl = () => composition([
+    imports([
+        stripOutFocusableElement(),
+    ]),
     layout({
         appearance            : none,
         
@@ -71,14 +72,6 @@ export const stripOutControl = () => composition([
         border                : unset,
         boxSizing             : unset,
     }),
-    variants([
-        isFocus([
-            layout({
-                outline       : unset, // reset focus outline
-                outlineOffset : unset, // reset focus outline
-            }),
-        ]),
-    ]),
 ]);
 
 /**
@@ -154,7 +147,14 @@ export const stripOutFocusableElement = () => composition([
     variants([
         isFocus([
             layout({
-                outline: unset,
+                outline       : unset, // reset focus outline
+                outlineOffset : unset, // reset focus outline
+            }),
+        ]),
+        isFocusVisible([
+            layout({
+                outline       : unset, // reset focus outline
+                outlineOffset : unset, // reset focus outline
             }),
         ]),
     ]),
