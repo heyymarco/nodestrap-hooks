@@ -331,7 +331,7 @@ function App() {
 					}
 				</p>
 				<p>
-					BtnStyle:
+					ButtonStyle:
 					{
 						btnStyles.map(st =>
 							<label key={st ?? ''}>

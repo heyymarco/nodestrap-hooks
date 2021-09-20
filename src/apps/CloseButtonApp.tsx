@@ -20,7 +20,7 @@ import {
 }						from '../libs/ButtonIcon';
 import {
 	CloseButton,
-	BtnStyle,
+	ButtonStyle,
 }						from '../libs/CloseButton';
 import type * as Buttons from '../libs/ButtonIcon';
 
@@ -56,7 +56,7 @@ function App() {
 	const [orientation,    setOrientation     ] = useState<Buttons.OrientationName|undefined>(undefined);
 
 	const btnStyles = [undefined, 'link', 'ghost'];
-	const [btnStyle,    setBtnStyle     ] = useState<BtnStyle|undefined>(undefined);
+	const [btnStyle,    setBtnStyle     ] = useState<ButtonStyle|undefined>(undefined);
 
 
 
@@ -405,14 +405,14 @@ function App() {
 					}
 				</p>
 				<p>
-					BtnStyle:
+					ButtonStyle:
 					{
 						btnStyles.map(st =>
 							<label key={st ?? ''}>
 								<input type='radio'
 									value={st}
 									checked={btnStyle===st}
-									onChange={(e) => setBtnStyle((e.target.value || undefined) as (BtnStyle|undefined))}
+									onChange={(e) => setBtnStyle((e.target.value || undefined) as (ButtonStyle|undefined))}
 								/>
 								{`${st}`}
 							</label>
