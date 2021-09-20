@@ -152,10 +152,10 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 // appearances:
 
 export type ListStyle = 'bullet' // might be added more styles in the future
-export interface VariantList {
+export interface ListVariant {
     listStyle?: ListStyle
 }
-export const useVariantList = (props: VariantList) => {
+export const useListVariant = (props: ListVariant) => {
     return {
         class: props.listStyle ? props.listStyle : null,
     };
@@ -637,7 +637,7 @@ export interface ListgroupProps<TElement extends HTMLElement = HTMLElement>
         VariantOrientation,
         
         // appearances:
-        VariantList
+        ListVariant
 {
     // behaviors:
     actionCtrl? : boolean
@@ -650,7 +650,7 @@ export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: Lis
     
     // variants:
     const variOrientation = useVariantOrientation(props);
-    const variList        = useVariantList(props);
+    const listVariant     = useListVariant(props);
     
     
     
@@ -691,7 +691,7 @@ export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: Lis
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 variOrientation.class,
-                variList.class,
+                listVariant.class,
             ]}
         >
             {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
