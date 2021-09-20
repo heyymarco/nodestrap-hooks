@@ -574,10 +574,10 @@ export const outlinedOf = (toggle: (boolean|null) = true) => composition([
     }),
 ]);
 
-export interface VariantOutlined {
+export interface OutlinedVariant {
     outlined?: boolean
 }
-export const useVariantOutlined = (props: VariantOutlined) => {
+export const useOutlinedVariant = (props: OutlinedVariant) => {
     return {
         class: props.outlined ? 'outlined' : null,
     };
@@ -1195,7 +1195,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         // colors:
         ThemeVariant,
         GradientVariant,
-        VariantOutlined,
+        OutlinedVariant,
         VariantMild
 {
 }
@@ -1210,7 +1210,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
     
     const themeVariant    = useThemeVariant(props);
     const gradientVariant = useGradientVariant(props);
-    const variOutlined    = useVariantOutlined(props);
+    const outlinedVariant = useOutlinedVariant(props);
     const variMild        = useVariantMild(props);
     
     
@@ -1230,7 +1230,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
 
                 themeVariant.class,
                 gradientVariant.class,
-                variOutlined.class,
+                outlinedVariant.class,
                 variMild.class,
             ]}
         />
