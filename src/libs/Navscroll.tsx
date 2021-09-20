@@ -13,7 +13,7 @@ import {
 import {
     // hooks:
     ListStyle,
-    VariantList,
+    ListVariant,
     
     OrientationName,
     VariantOrientation,
@@ -807,5 +807,5 @@ export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: Nav
 Navscroll.prototype = Listgroup.prototype; // mark as Listgroup compatible
 export { Navscroll as default }
 
-export type { ListStyle, VariantList }
+export type { ListStyle, ListVariant }
 export type { OrientationName, VariantOrientation }
