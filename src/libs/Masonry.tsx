@@ -45,8 +45,8 @@ import {
     OrientationName,
     noOrientationInline,
     isOrientationInline,
-    VariantOrientation,
-    useVariantOrientation,
+    OrientationVariant,
+    useOrientationVariant,
     
     
     
@@ -246,24 +246,24 @@ export interface MasonryProps<TElement extends HTMLElement = HTMLElement>
         BasicComponentProps<TElement>,
         
         // layouts:
-        VariantOrientation
+        OrientationVariant
 {
     // children:
     children? : React.ReactNode
 }
 export const Masonry = <TElement extends HTMLElement = HTMLElement>(props: MasonryProps<TElement>) => {
     // styles:
-    const sheet           = useMasonrySheet();
+    const sheet              = useMasonrySheet();
     
     
     
     // variants:
-    const variOrientation = useVariantOrientation(props);
+    const orientationVariant = useOrientationVariant(props);
     
     
     
     // dom effects:
-    const masonryRef      = useRef<TElement|null>(null);
+    const masonryRef         = useRef<TElement|null>(null);
     useLayoutEffect(() => {
         const masonry = masonryRef.current;
         if (!masonry) return; // masonry was unloaded => nothing to do
@@ -509,7 +509,7 @@ export const Masonry = <TElement extends HTMLElement = HTMLElement>(props: Mason
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variOrientation.class,
+                orientationVariant.class,
             ]}
         >
             { props.children }
@@ -518,4 +518,4 @@ export const Masonry = <TElement extends HTMLElement = HTMLElement>(props: Mason
 };
 export { Masonry as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

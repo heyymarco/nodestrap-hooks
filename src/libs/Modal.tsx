@@ -57,7 +57,7 @@ import {
     // hooks:
     usesSizes,
     OrientationName,
-    VariantOrientation,
+    OrientationVariant,
     usesAnim,
     
     
@@ -806,4 +806,4 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
 };
 export { Modal as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

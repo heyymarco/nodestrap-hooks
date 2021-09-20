@@ -54,8 +54,8 @@ import {
     OrientationName,
     noOrientationInline,
     isOrientationInline,
-    VariantOrientation,
-    useVariantOrientation,
+    OrientationVariant,
+    useOrientationVariant,
     ThemeName,
     outlinedOf,
     mildOf,
@@ -634,7 +634,7 @@ export interface ListgroupProps<TElement extends HTMLElement = HTMLElement>
         ContentProps<TElement>,
         
         // layouts:
-        VariantOrientation,
+        OrientationVariant,
         
         // appearances:
         ListVariant
@@ -644,13 +644,13 @@ export interface ListgroupProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: ListgroupProps<TElement>) => {
     // styles:
-    const sheet           = useListgroupSheet();
+    const sheet              = useListgroupSheet();
     
     
     
     // variants:
-    const variOrientation = useVariantOrientation(props);
-    const listVariant     = useListVariant(props);
+    const orientationVariant = useOrientationVariant(props);
+    const listVariant        = useListVariant(props);
     
     
     
@@ -690,7 +690,7 @@ export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: Lis
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variOrientation.class,
+                orientationVariant.class,
                 listVariant.class,
             ]}
         >
@@ -744,4 +744,4 @@ export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: Lis
 };
 export { Listgroup as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

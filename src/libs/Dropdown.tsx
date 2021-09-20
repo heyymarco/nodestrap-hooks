@@ -25,7 +25,7 @@ import {
     ListVariant,
     
     OrientationName,
-    VariantOrientation,
+    OrientationVariant,
     
     
     
@@ -322,4 +322,4 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
 export { Dropdown as default }
 
 export type { ListStyle, ListVariant }
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

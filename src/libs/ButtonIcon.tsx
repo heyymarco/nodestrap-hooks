@@ -44,7 +44,7 @@ import {
     useSizeVariant as basicComponentUseSizeVariant,
     
     OrientationName,
-    VariantOrientation,
+    OrientationVariant,
     
     
     
@@ -321,5 +321,5 @@ export const ButtonIcon = (props: ButtonIconProps) => {
 ButtonIcon.prototype = Button.prototype; // mark as Button compatible
 export { ButtonIcon as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }
 export type { ButtonStyle, ButtonVariant, ButtonType }

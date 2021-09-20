@@ -45,8 +45,8 @@ import {
     // hooks:
     usesSizes,
     OrientationName,
-    VariantOrientation,
-    useVariantOrientation,
+    OrientationVariant,
+    useOrientationVariant,
 }                           from './BasicComponent'
 import {
     // hooks:
@@ -295,17 +295,17 @@ export interface CollapseProps<TElement extends HTMLElement = HTMLElement>
         PopupProps<TElement>,
         
         // layouts:
-        VariantOrientation
+        OrientationVariant
 {
 }
 export const Collapse = <TElement extends HTMLElement = HTMLElement>(props: CollapseProps<TElement>) => {
     // styles:
-    const sheet = useCollapseSheet();
+    const sheet              = useCollapseSheet();
     
     
     
     // variants:
-    const variOrientation = useVariantOrientation(props);
+    const orientationVariant = useOrientationVariant(props);
     
     
     
@@ -319,11 +319,11 @@ export const Collapse = <TElement extends HTMLElement = HTMLElement>(props: Coll
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variOrientation.class,
+                orientationVariant.class,
             ]}
         />
     );
 };
 export { Collapse as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

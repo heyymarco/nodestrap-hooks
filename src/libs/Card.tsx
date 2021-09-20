@@ -47,8 +47,8 @@ import {
     OrientationName,
     noOrientationInline,
     isOrientationInline,
-    VariantOrientation,
-    useVariantOrientation,
+    OrientationVariant,
+    useOrientationVariant,
     usesBorderStroke,
     
     
@@ -619,7 +619,7 @@ export interface CardProps<TElement extends HTMLElement = HTMLElement>
         ContentProps<TElement>,
         
         // layouts:
-        VariantOrientation
+        OrientationVariant
 {
     // children:
     header? : React.ReactNode
@@ -627,12 +627,12 @@ export interface CardProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Card = <TElement extends HTMLElement = HTMLElement>(props: CardProps<TElement>) => {
     // styles:
-    const sheet = useCardSheet();
+    const sheet              = useCardSheet();
     
     
     
     // variants:
-    const variOrientation = useVariantOrientation(props);
+    const orientationVariant = useOrientationVariant(props);
     
     
     
@@ -668,7 +668,7 @@ export const Card = <TElement extends HTMLElement = HTMLElement>(props: CardProp
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variOrientation.class,
+                orientationVariant.class,
             ]}
         >
             { header && <header
@@ -712,4 +712,4 @@ export const Card = <TElement extends HTMLElement = HTMLElement>(props: CardProp
 };
 export { Card as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

@@ -194,10 +194,10 @@ export const orientationOf = (orientationName: OrientationName) => composition([
  */
 export const orientationOptions = (): OrientationName[] => ['block', 'inline'];
 
-export interface VariantOrientation {
+export interface OrientationVariant {
     orientation?: OrientationName
 }
-export const useVariantOrientation = (props: VariantOrientation) => {
+export const useOrientationVariant = (props: OrientationVariant) => {
     return {
         class: props.orientation ? props.orientation : null,
     };
@@ -1190,7 +1190,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         
         // layouts:
         SizeVariant,
-        // VariantOrientation,
+        // OrientationVariant,
         
         // colors:
         VariantTheme,

@@ -7,7 +7,7 @@ import {
 import {
     // hooks:
     OrientationName,
-    VariantOrientation,
+    OrientationVariant,
     
     BtnStyle,
     VariantButton,
@@ -53,5 +53,5 @@ export const CloseButton = (props: CloseButtonProps) => {
 CloseButton.prototype = ButtonIcon.prototype; // mark as ButtonIcon compatible
 export { CloseButton as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }
 export type { BtnStyle, VariantButton, BtnType }

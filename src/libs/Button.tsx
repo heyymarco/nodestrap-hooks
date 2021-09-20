@@ -45,8 +45,8 @@ import {
     OrientationName,
     noOrientationBlock,
     isOrientationBlock,
-    VariantOrientation,
-    useVariantOrientation,
+    OrientationVariant,
+    useOrientationVariant,
     gradientOf,
     noOutlined,
     outlinedOf,
@@ -358,7 +358,7 @@ export interface ButtonProps
         ActionControlProps<HTMLButtonElement>,
         
         // layouts:
-        VariantOrientation,
+        OrientationVariant,
         
         // appearances:
         ButtonVariant
@@ -377,13 +377,13 @@ export interface ButtonProps
 }
 export const Button = (props: ButtonProps) => {
     // styles:
-    const sheet           = useButtonSheet();
+    const sheet              = useButtonSheet();
     
     
     
     // variants:
-    const variOrientation = useVariantOrientation(props);
-    const buttonVariant   = useButtonVariant(props);
+    const orientationVariant = useOrientationVariant(props);
+    const buttonVariant      = useButtonVariant(props);
     
     
     
@@ -432,7 +432,7 @@ export const Button = (props: ButtonProps) => {
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variOrientation.class,
+                orientationVariant.class,
                 buttonVariant.class,
             ]}
             
@@ -450,4 +450,4 @@ export const Button = (props: ButtonProps) => {
 };
 export { Button as default }
 
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

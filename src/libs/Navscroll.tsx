@@ -16,7 +16,7 @@ import {
     ListVariant,
     
     OrientationName,
-    VariantOrientation,
+    OrientationVariant,
     
     
     
@@ -808,4 +808,4 @@ Navscroll.prototype = Listgroup.prototype; // mark as Listgroup compatible
 export { Navscroll as default }
 
 export type { ListStyle, ListVariant }
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }

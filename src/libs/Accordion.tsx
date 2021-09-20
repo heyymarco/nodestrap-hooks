@@ -62,7 +62,7 @@ import {
     ListVariant,
     
     OrientationName,
-    VariantOrientation,
+    OrientationVariant,
     
     
     
@@ -333,4 +333,4 @@ export type { ListgroupProps, ListgroupProps as AccordionProps }
 export { Listgroup as default, Listgroup as Accordion }
 
 export type { ListStyle, ListVariant }
-export type { OrientationName, VariantOrientation }
+export type { OrientationName, OrientationVariant }
