@@ -75,8 +75,8 @@ import {
     useThemeVariant,
     
     usesMild       as basicComponentUsesMild,
-    VariantMild,
-    useVariantMild,
+    MildVariant,
+    useMildVariant,
     
     usesForeg      as basicComponentUsesForeg,
     
@@ -727,7 +727,7 @@ export interface IconProps<TElement extends HTMLElement = HTMLElement>
         
         // colors:
         ThemeVariant,
-        VariantMild
+        MildVariant
 {
     // appearances:
     icon: string
@@ -742,7 +742,7 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
     const sizeVariant  = useSizeVariant(props);
     
     const themeVariant = useThemeVariant(props);
-    const variMild     = useVariantMild(props);
+    const mildVariant  = useMildVariant(props);
     
     
     
@@ -768,7 +768,7 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
                 sizeVariant.class,
 
                 themeVariant.class,
-                variMild.class,
+                mildVariant.class,
             ]}
             classes={[...(props.classes ?? []),
                 // appearances:

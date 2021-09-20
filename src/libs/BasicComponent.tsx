@@ -671,10 +671,10 @@ export const mildOf = (toggle: (boolean|null) = true) => composition([
     }),
 ]);
 
-export interface VariantMild {
+export interface MildVariant {
     mild?: boolean
 }
-export const useVariantMild = (props: VariantMild) => {
+export const useMildVariant = (props: MildVariant) => {
     return {
         class: props.mild ? 'mild' : null,
     };
@@ -1196,7 +1196,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         ThemeVariant,
         GradientVariant,
         OutlinedVariant,
-        VariantMild
+        MildVariant
 {
 }
 export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) => {
@@ -1211,7 +1211,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
     const themeVariant    = useThemeVariant(props);
     const gradientVariant = useGradientVariant(props);
     const outlinedVariant = useOutlinedVariant(props);
-    const variMild        = useVariantMild(props);
+    const mildVariant     = useMildVariant(props);
     
     
     
@@ -1231,7 +1231,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
                 themeVariant.class,
                 gradientVariant.class,
                 outlinedVariant.class,
-                variMild.class,
+                mildVariant.class,
             ]}
         />
     );
