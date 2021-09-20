@@ -22,7 +22,7 @@ import {
 import {
     // hooks:
     ListStyle,
-    VariantList,
+    ListVariant,
     
     OrientationName,
     VariantOrientation,
@@ -321,5 +321,5 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
 };
 export { Dropdown as default }
 
-export type { ListStyle, VariantList }
+export type { ListStyle, ListVariant }
 export type { OrientationName, VariantOrientation }
