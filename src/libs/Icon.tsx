@@ -66,8 +66,8 @@ import {
     SizeName       as BasicComponentSizeName,
     isSize         as basicComponentIsSize,
     usesSizes      as basicComponentUsesSizes,
-    VariantSize    as BasicComponentVariantSize,
-    useVariantSize as basicComponentUseVariantSize,
+    SizeVariant    as BasicComponentSizeVariant,
+    useSizeVariant as basicComponentUseSizeVariant,
     
     ThemeName,
     usesThemes     as basicComponentUsesThemes,
@@ -139,10 +139,10 @@ export const sizeOf = (sizeName: SizeName) => composition([
  */
 export const sizeOptions = (): SizeName[] => ['sm', 'nm', 'md', 'lg', '1em'];
 
-export interface VariantSize {
+export interface SizeVariant {
     size?: SizeName
 }
-export const useVariantSize = (props: VariantSize) => basicComponentUseVariantSize(props as BasicComponentVariantSize);
+export const useSizeVariant = (props: SizeVariant) => basicComponentUseSizeVariant(props as BasicComponentSizeVariant);
 //#endregion sizes
 
 
@@ -723,7 +723,7 @@ export interface IconProps<TElement extends HTMLElement = HTMLElement>
         ElementProps<TElement>,
         
         // layouts:
-        VariantSize,
+        SizeVariant,
         
         // colors:
         VariantTheme,
@@ -739,7 +739,7 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
     
     
     // variants:
-    const variSize     = useVariantSize(props);
+    const sizeVariant  = useSizeVariant(props);
     
     const variTheme    = useVariantTheme(props);
     const variMild     = useVariantMild(props);
@@ -765,7 +765,7 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variSize.class,
+                sizeVariant.class,
 
                 variTheme.class,
                 variMild.class,

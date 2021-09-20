@@ -127,10 +127,10 @@ export const sizeOf = (sizeName: SizeName) => composition([
  */
 export const sizeOptions = (): SizeName[] => ['sm', 'lg'];
 
-export interface VariantSize {
+export interface SizeVariant {
     size?: SizeName
 }
-export const useVariantSize = (props: VariantSize) => {
+export const useSizeVariant = (props: SizeVariant) => {
     const sizeName = props.size;
     return {
         class: sizeName ? `sz${pascalCase(sizeName)}` : null,
@@ -1189,7 +1189,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         ElementProps<TElement>,
         
         // layouts:
-        VariantSize,
+        SizeVariant,
         // VariantOrientation,
         
         // colors:
@@ -1206,7 +1206,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
     
     
     // variants:
-    const variSize     = useVariantSize(props);
+    const sizeVariant  = useSizeVariant(props);
 
     const variTheme    = useVariantTheme(props);
     const variGradient = useVariantGradient(props);
@@ -1226,7 +1226,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variSize.class,
+                sizeVariant.class,
 
                 variTheme.class,
                 variGradient.class,

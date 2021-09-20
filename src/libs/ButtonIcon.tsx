@@ -40,8 +40,8 @@ import {
     SizeName       as BasicComponentSizeName,
     isSize         as basicComponentIsSize,
     usesSizes      as basicComponentUsesSizes,
-    VariantSize    as BasicComponentVariantSize,
-    useVariantSize as basicComponentUseVariantSize,
+    SizeVariant    as BasicComponentSizeVariant,
+    useSizeVariant as basicComponentUseSizeVariant,
     
     OrientationName,
     VariantOrientation,
@@ -124,10 +124,10 @@ export const sizeOf = (sizeName: SizeName) => composition([
  */
 export const sizeOptions = (): SizeName[] => ['xs', 'sm', 'lg', 'xl'];
 
-export interface VariantSize {
+export interface SizeVariant {
     size?: SizeName
 }
-export const useVariantSize = (props: VariantSize) => basicComponentUseVariantSize(props as BasicComponentVariantSize);
+export const useSizeVariant = (props: SizeVariant) => basicComponentUseSizeVariant(props as BasicComponentSizeVariant);
 //#endregion sizes
 
 
@@ -275,7 +275,7 @@ export interface ButtonIconProps
         ButtonProps,
         
         // layouts:
-        VariantSize
+        SizeVariant
 {
     // appearances:
     icon?: string
