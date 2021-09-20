@@ -48,7 +48,11 @@ function App() {
     return (
         <div className="App">
             <Container>
-				<Button elmRef={targetButtonRef} onClick={() => setActive(!active)}>Toggle dropdown</Button>
+				<Button elmRef={targetButtonRef} onClick={(e) => {
+					if (e.buttons) return; // no other button(s) being pressed
+					
+					setActive(!active);
+				}}>Toggle dropdown</Button>
 				<Dropdown
 					targetRef={targetButtonRef}
 					popupPlacement='bottom'
@@ -58,7 +62,10 @@ function App() {
 
 					enabled={enabled} active={active} actionCtrl={actionCtrl}
 					orientation={orientation}
-					onClose={() => setActive(false)}
+					onClose={() => {
+						// if (document.activeElement === targetButtonRef.current) return; // dropdown lost focus because the toggler button got focus => ignore
+						setActive(false);
+					}}
 				>
 					<>hello</>
 					<DropdownItem enabled={childEnabled}>
