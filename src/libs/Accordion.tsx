@@ -59,7 +59,7 @@ import {
 import {
     // hooks:
     ListStyle,
-    VariantList,
+    ListVariant,
     
     OrientationName,
     VariantOrientation,
@@ -332,5 +332,5 @@ export { AccordionItem as Item }
 export type { ListgroupProps, ListgroupProps as AccordionProps }
 export { Listgroup as default, Listgroup as Accordion }
 
-export type { ListStyle, VariantList }
+export type { ListStyle, ListVariant }
 export type { OrientationName, VariantOrientation }
