@@ -564,11 +564,9 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement>
     extends
         CardProps<TElement>,
         
-        // layouts:
-        ModalAlign,
-        
         // appearances:
-        ModalVariant
+        ModalVariant,
+        ModalAlign
 {
     // accessibilities:
     tabIndex?   : number
@@ -584,8 +582,8 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
     
     
     // variants:
-    const modalAlign   = useModalAlign(props);
     const modalVariant = useModalVariant(props);
+    const modalAlign   = useModalAlign(props);
     
     
     
