@@ -170,20 +170,20 @@ export const usesOverlayAnim = () => {
 // appearances:
 
 export type ModalStyle = 'scrollable' // might be added more styles in the future
-export interface VariantModal {
+export interface ModalVariant {
     modalStyle? : ModalStyle
 }
-export function useVariantModal(props: VariantModal) {
+export function useModalVariant(props: ModalVariant) {
     return {
         class: props.modalStyle ? props.modalStyle : null,
     };
 }
 
-export interface AlignModal {
+export interface ModalAlign {
     horzAlign? : Prop.JustifyItems
     vertAlign? : Prop.AlignItems
 }
-export function useAlignModal(props: AlignModal) {
+export function useModalAlign(props: ModalAlign) {
     return {
         style: {
             [cssDecls.horzAlign] : props.horzAlign,
@@ -565,10 +565,10 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement>
         CardProps<TElement>,
         
         // layouts:
-        AlignModal,
+        ModalAlign,
         
         // appearances:
-        VariantModal
+        ModalVariant
 {
     // accessibilities:
     tabIndex?   : number
@@ -584,8 +584,8 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
     
     
     // variants:
-    const alignModal   = useAlignModal(props);
-    const variModal    = useVariantModal(props);
+    const modalAlign   = useModalAlign(props);
+    const modalVariant = useModalVariant(props);
     
     
     
@@ -731,14 +731,14 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variModal.class,
+                modalVariant.class,
             ]}
             
             
             // styles:
             style={{...(props.style ?? {}),
                 // variants:
-                ...alignModal.style,
+                ...modalAlign.style,
             }}
             
             
