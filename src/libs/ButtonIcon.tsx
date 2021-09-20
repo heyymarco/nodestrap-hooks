@@ -72,7 +72,7 @@ import {
     
     
     // react components:
-    BtnType,
+    ButtonType,
     ButtonProps,
     Button,
 }                           from './Button'
@@ -322,4 +322,4 @@ ButtonIcon.prototype = Button.prototype; // mark as Button compatible
 export { ButtonIcon as default }
 
 export type { OrientationName, VariantOrientation }
-export type { ButtonStyle, ButtonVariant, BtnType }
+export type { ButtonStyle, ButtonVariant, ButtonType }
