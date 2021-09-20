@@ -37,8 +37,8 @@ function App() {
 	const [enableVal, setEnableVal  ] = useState(false);
 	const [isValid,   setIsValid    ] = useState<boolean|null|undefined>(undefined);
 
-	const chkStyles = [undefined, 'btn', 'togglerBtn', 'switch'];
-	const [chkStyle,    setChkStyle     ] = useState<Checks.ChkStyle|undefined>(undefined);
+	const checkStyles = [undefined, 'btn', 'togglerBtn', 'switch'];
+	const [checkStyle,    setCheckStyle     ] = useState<Checks.CheckStyle|undefined>(undefined);
 
 
 
@@ -125,7 +125,7 @@ function App() {
 					enableValidation={enableVal}
 					isValid={isValid}
 
-					chkStyle={chkStyle}
+					checkStyle={checkStyle}
 				>
 					test
 				</Check>
@@ -255,12 +255,12 @@ function App() {
 				<p>
 					ChkStyle:
 					{
-						chkStyles.map(st =>
+						checkStyles.map(st =>
 							<label key={st ?? ''}>
 								<input type='radio'
 									value={st}
-									checked={chkStyle===st}
-									onChange={(e) => setChkStyle((e.target.value || undefined) as (Checks.ChkStyle|undefined))}
+									checked={checkStyle===st}
+									onChange={(e) => setCheckStyle((e.target.value || undefined) as (Checks.CheckStyle|undefined))}
 								/>
 								{`${st}`}
 							</label>

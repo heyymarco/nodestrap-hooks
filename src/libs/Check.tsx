@@ -307,13 +307,13 @@ export const usesCheckClear = () => {
 
 // appearances:
 
-export type ChkStyle = 'btn'|'togglerBtn'|'switch' // might be added more styles in the future
-export interface VariantCheck {
-    chkStyle?: ChkStyle
+export type CheckStyle = 'btn'|'togglerBtn'|'switch' // might be added more styles in the future
+export interface CheckVariant {
+    checkStyle?: CheckStyle
 }
-export const useVariantCheck = (props: VariantCheck) => {
+export const useCheckVariant = (props: CheckVariant) => {
     return {
-        class: props.chkStyle ? props.chkStyle : null,
+        class: props.checkStyle ? props.checkStyle : null,
     };
 };
 
@@ -810,7 +810,7 @@ export interface CheckProps
         TogglerActiveProps,
         
         // appearances:
-        VariantCheck
+        CheckVariant
 {
     // values:
     defaultChecked? : boolean
@@ -835,12 +835,12 @@ export interface CheckProps
 }
 export const Check = (props: CheckProps) => {
     // styles:
-    const sheet     = useCheckSheet();
+    const sheet        = useCheckSheet();
     
     
     
     // variants:
-    const variCheck = useVariantCheck(props);
+    const checkVariant = useCheckVariant(props);
     
     
     
@@ -927,7 +927,7 @@ export const Check = (props: CheckProps) => {
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                variCheck.class,
+                checkVariant.class,
             ]}
             
             
