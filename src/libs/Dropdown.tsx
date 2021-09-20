@@ -62,7 +62,7 @@ const isSelfOrDescendantOf = (element: HTMLElement, desired: HTMLElement): boole
 
 // react components:
 
-export type CloseType = 'ui'|'shortcut'|'blur'
+export type CloseType = number|'shortcut'|'blur'
 
 // ListgroupItem => DropdownItem
 export type { ListgroupItemProps, ListgroupItemProps as DropdownItemProps, ListgroupItemProps as ItemProps }
@@ -280,7 +280,7 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
                                         
                                         
                                         if (!e.defaultPrevented) {
-                                            onClose?.('ui');
+                                            onClose?.(index);
                                             e.preventDefault();
                                         } // if
                                     }}
@@ -300,7 +300,7 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
                                     // events:
                                     onClick={(e) => {
                                         if (!e.defaultPrevented) {
-                                            onClose?.('ui');
+                                            onClose?.(index);
                                             e.preventDefault();
                                         } // if
                                     }}
