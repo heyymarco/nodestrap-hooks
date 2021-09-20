@@ -9,13 +9,13 @@ import {
     OrientationName,
     OrientationVariant,
     
-    BtnStyle,
-    VariantButton,
+    ButtonStyle,
+    ButtonVariant,
     
     
     
     // react components:
-    BtnType,
+    ButtonType,
     ButtonIconProps,
     ButtonIcon,
 }                           from './ButtonIcon'
@@ -54,4 +54,4 @@ CloseButton.prototype = ButtonIcon.prototype; // mark as ButtonIcon compatible
 export { CloseButton as default }
 
 export type { OrientationName, OrientationVariant }
-export type { BtnStyle, VariantButton, BtnType }
+export type { ButtonStyle, ButtonVariant, ButtonType }
