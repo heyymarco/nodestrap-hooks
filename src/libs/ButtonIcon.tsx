@@ -54,8 +54,8 @@ import {
 }                           from './BasicComponent'
 import {
     // hooks:
-    BtnStyle,
-    VariantButton,
+    ButtonStyle,
+    ButtonVariant,
     
     
     
@@ -322,4 +322,4 @@ ButtonIcon.prototype = Button.prototype; // mark as Button compatible
 export { ButtonIcon as default }
 
 export type { OrientationName, VariantOrientation }
-export type { BtnStyle, VariantButton, BtnType }
+export type { ButtonStyle, ButtonVariant, BtnType }
