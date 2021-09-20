@@ -483,10 +483,10 @@ export const gradientOf = (toggle: (boolean|null) = true) => composition([
     }),
 ]);
 
-export interface VariantGradient {
+export interface GradientVariant {
     gradient?: boolean
 }
-export const useVariantGradient = (props: VariantGradient) => {
+export const useGradientVariant = (props: GradientVariant) => {
     return {
         class: props.gradient ? 'gradient' : null,
     };
@@ -1194,24 +1194,24 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         
         // colors:
         ThemeVariant,
-        VariantGradient,
+        GradientVariant,
         VariantOutlined,
         VariantMild
 {
 }
 export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) => {
     // styles:
-    const sheet        = useBasicComponentSheet();
+    const sheet           = useBasicComponentSheet();
     
     
     
     // variants:
-    const sizeVariant  = useSizeVariant(props);
-
-    const themeVariant = useThemeVariant(props);
-    const variGradient = useVariantGradient(props);
-    const variOutlined = useVariantOutlined(props);
-    const variMild     = useVariantMild(props);
+    const sizeVariant     = useSizeVariant(props);
+    
+    const themeVariant    = useThemeVariant(props);
+    const gradientVariant = useGradientVariant(props);
+    const variOutlined    = useVariantOutlined(props);
+    const variMild        = useVariantMild(props);
     
     
     
@@ -1229,7 +1229,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
                 sizeVariant.class,
 
                 themeVariant.class,
-                variGradient.class,
+                gradientVariant.class,
                 variOutlined.class,
                 variMild.class,
             ]}
