@@ -428,10 +428,10 @@ export const usesThemeImpt = (themeName: ThemeName|null) => composition([
     })),
 ]);
 
-export interface VariantTheme {
+export interface ThemeVariant {
     theme?: ThemeName
 }
-export const useVariantTheme = (props: VariantTheme, themeDefault?: ThemeName) => {
+export const useThemeVariant = (props: ThemeVariant, themeDefault?: ThemeName) => {
     const themeName = props.theme ?? themeDefault;
     return {
         class: themeName ? `th${pascalCase(themeName)}` : null,
@@ -1193,7 +1193,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         // OrientationVariant,
         
         // colors:
-        VariantTheme,
+        ThemeVariant,
         VariantGradient,
         VariantOutlined,
         VariantMild
@@ -1208,7 +1208,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
     // variants:
     const sizeVariant  = useSizeVariant(props);
 
-    const variTheme    = useVariantTheme(props);
+    const themeVariant = useThemeVariant(props);
     const variGradient = useVariantGradient(props);
     const variOutlined = useVariantOutlined(props);
     const variMild     = useVariantMild(props);
@@ -1228,7 +1228,7 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
             variantClasses={[...(props.variantClasses ?? []),
                 sizeVariant.class,
 
-                variTheme.class,
+                themeVariant.class,
                 variGradient.class,
                 variOutlined.class,
                 variMild.class,

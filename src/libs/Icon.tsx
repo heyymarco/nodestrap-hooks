@@ -71,8 +71,8 @@ import {
     
     ThemeName,
     usesThemes     as basicComponentUsesThemes,
-    VariantTheme,
-    useVariantTheme,
+    ThemeVariant,
+    useThemeVariant,
     
     usesMild       as basicComponentUsesMild,
     VariantMild,
@@ -726,7 +726,7 @@ export interface IconProps<TElement extends HTMLElement = HTMLElement>
         SizeVariant,
         
         // colors:
-        VariantTheme,
+        ThemeVariant,
         VariantMild
 {
     // appearances:
@@ -741,7 +741,7 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
     // variants:
     const sizeVariant  = useSizeVariant(props);
     
-    const variTheme    = useVariantTheme(props);
+    const themeVariant = useThemeVariant(props);
     const variMild     = useVariantMild(props);
     
     
@@ -767,7 +767,7 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
             variantClasses={[...(props.variantClasses ?? []),
                 sizeVariant.class,
 
-                variTheme.class,
+                themeVariant.class,
                 variMild.class,
             ]}
             classes={[...(props.classes ?? []),
