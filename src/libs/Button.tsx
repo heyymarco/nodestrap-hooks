@@ -351,7 +351,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export type BtnType = 'button'|'submit'|'reset'
+export type ButtonType = 'button'|'submit'|'reset'
 
 export interface ButtonProps
     extends
@@ -364,7 +364,7 @@ export interface ButtonProps
         ButtonVariant
 {
     // actions:
-    type?        : BtnType
+    type?        : ButtonType
     
     
     // accessibilities:
