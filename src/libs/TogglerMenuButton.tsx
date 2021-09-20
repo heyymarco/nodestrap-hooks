@@ -640,7 +640,7 @@ export const TogglerMenuButton = (props: TogglerMenuButtonProps) => {
             
             
             // variants:
-            chkStyle={props.chkStyle ?? 'btn'}
+            checkStyle={props.checkStyle ?? 'btn'}
             
             
             // classes:
