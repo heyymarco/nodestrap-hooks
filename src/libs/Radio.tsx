@@ -48,8 +48,8 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    ChkStyle,
-    VariantCheck,
+    CheckStyle,
+    CheckVariant,
     
     
     
@@ -331,4 +331,4 @@ export const Radio = (props: RadioProps) => {
 };
 export { Radio as default }
 
-export type { ChkStyle, VariantCheck }
+export type { CheckStyle, CheckVariant }
