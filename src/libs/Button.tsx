@@ -91,11 +91,11 @@ import spacers              from './spacers'     // configurable spaces defs
 
 // appearances:
 
-export type BtnStyle = 'link'|'icon'|'ghost' // might be added more styles in the future
-export interface VariantButton {
-    btnStyle?: BtnStyle
+export type ButtonStyle = 'link'|'icon'|'ghost' // might be added more styles in the future
+export interface ButtonVariant {
+    btnStyle?: ButtonStyle
 }
-export const useVariantButton = (props: VariantButton) => {
+export const useButtonVariant = (props: ButtonVariant) => {
     return {
         class: props.btnStyle ? props.btnStyle : null,
     };
@@ -361,7 +361,7 @@ export interface ButtonProps
         VariantOrientation,
         
         // appearances:
-        VariantButton
+        ButtonVariant
 {
     // actions:
     type?        : BtnType
@@ -383,7 +383,7 @@ export const Button = (props: ButtonProps) => {
     
     // variants:
     const variOrientation = useVariantOrientation(props);
-    const variButton      = useVariantButton(props);
+    const buttonVariant   = useButtonVariant(props);
     
     
     
@@ -433,7 +433,7 @@ export const Button = (props: ButtonProps) => {
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 variOrientation.class,
-                variButton.class,
+                buttonVariant.class,
             ]}
             
             
