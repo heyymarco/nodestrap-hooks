@@ -207,7 +207,7 @@ export const useOrientationVariant = (props: OrientationVariant) => {
 //#region nude
 export const noNude = (styles: StyleCollection) => rule(':not(.nude)', styles);
 export const isNude = (styles: StyleCollection) => rule('.nude', styles);
-export const usesNude = () => {
+export const usesNudeVariant = () => {
     return composition([
         variants([
             isNude([
