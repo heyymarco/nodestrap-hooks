@@ -41,6 +41,7 @@ import {
 import {
     // hooks:
     usesSizes,
+    noNude,
 }                           from './BasicComponent'
 import {
     // styles:
@@ -199,10 +200,14 @@ export const usesBadgeVariants = () => {
                 }),
             ]),
             rule(['.square', '.circle'], [
-                layout({
-                    // spacings:
-                    padding : cssProps.paddingBlock, // set paddingInline = paddingBlock
-                }),
+                variants([
+                    noNude([
+                        layout({
+                            // spacings:
+                            padding : cssProps.paddingBlock, // set paddingInline = paddingBlock
+                        }),
+                    ]),
+                ]),
             ]),
             rule('.square', [
                 layout({
