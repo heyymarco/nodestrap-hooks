@@ -298,6 +298,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     };
 }, { prefix: 'bge' });
 
+const defaultPopupModifiers = [
+    { name: 'flip', enabled: false },
+    { name: 'preventOverflow', enabled: false },
+];
+
 
 
 // react components:
@@ -350,6 +355,12 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
             // accessibilities:
             aria-label={props.label}
             active={activeFn}
+            
+            
+            // popups:
+            popupModifiers={[...defaultPopupModifiers,
+                ...(props.popupModifiers ?? []),
+            ]}
             
             
             // classes:
