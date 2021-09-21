@@ -127,7 +127,23 @@ export const useBusySheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    const basics = {
+        //#region typos
+        fontSize      : '1em',
+        //#endregion typos
+    };
     return {
+        ...basics,
+        
+        
+        
+        //#region typos
+        fontSizeSm      : [['calc(', basics.fontSize     , '/', 1.25, ')']],
+        fontSizeLg      : [['calc(', basics.fontSize     , '*', 1.25, ')']],
+        //#endregion typos
+        
+        
+        
         //#region indicators
         icon : 'busy',
         //#endregion indicators
@@ -169,7 +185,7 @@ export const Busy = <TElement extends HTMLElement = HTMLElement>(props: BusyProp
             // classes:
             mainClass={props.mainClass ?? sheet.main}
         >
-            <Icon icon='busy' />
+            <Icon icon='busy' size='1em' />
             { ((props.children ?? false) !== false) && <VisuallyHidden>
                 { props.children }
             </VisuallyHidden> }
