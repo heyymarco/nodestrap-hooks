@@ -162,7 +162,7 @@ export const isOrientationInline = (styles: StyleCollection) => isOrientation('i
  * @param options Customize the orientation options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents orientation definitions for each orientation in `options`.
  */
-export const usesOrientations = (factory = orientationOf, options = orientationOptions()) => {
+export const usesOrientationVariant = (factory = orientationOf, options = orientationOptions()) => {
     return [
         () => composition([
             variants([
