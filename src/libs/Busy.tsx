@@ -161,7 +161,9 @@ export const Busy = <TElement extends HTMLElement = HTMLElement>(props: BusyProp
             
             
             // appearances:
+            nude={props.nude ?? true}
             badgeStyle={props.badgeStyle ?? 'circle'}
+            outlined={props.outlined ?? true}
             
             
             // classes:

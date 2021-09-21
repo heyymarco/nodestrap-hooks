@@ -18,7 +18,7 @@ import Busy from '../libs/Busy';
 
 function App() {
     const themes = [undefined,'primary','secondary','success','info','warning','danger','light','dark'];
-    const [theme, 	   setTheme     ] = useState<ThemeName|undefined>('primary');
+    const [theme, 	   setTheme     ] = useState<ThemeName|undefined>('danger');
 
     const sizes = ['sm', undefined, 'lg'];
 	const [size, 	   setSize      ] = useState<SizeName|undefined>(undefined);
@@ -42,42 +42,42 @@ function App() {
         <div className="App">
             <Container>
 				<Button onClick={() => setActive(!active)}>Toggle badge</Button>
-				<h1>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				<h1>Example heading <Busy size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 					
 					active={active}
 				>
 					New!
 				</Busy></h1>
 				<span></span>
-				<h2>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				<h2 style={{ color: 'blue', }}>Example heading <Busy size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 					
 					active={active}
 				>
 					New!
 				</Busy></h2>
 				<span></span>
-				<h3>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				<h3 style={{ color: 'darkGreen', }}>Example heading <Busy size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 					
 					active={active}
 				>
 					New!
 				</Busy></h3>
 				<span></span>
-				<h4>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				<h4 style={{ color: 'orange', }}>Example heading <Busy size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 					
 					active={active}
 				>
 					New!
 				</Busy></h4>
 				<span></span>
-				<h5>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				<h5>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={true} mild={mild} enabled={enabled}
 					
 					active={active}
 				>
 					New!
 				</Busy></h5>
 				<span></span>
-				<h6>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				<h6>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={true} mild={mild} enabled={enabled}
 					
 					active={active}
 				>
@@ -85,17 +85,23 @@ function App() {
 				</Busy></h6>
 				<hr style={{flexBasis: '100%'}} />
 				<Button
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
 				>
 					Click me <Busy
-						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						size={size} gradient={enableGrad} outlined={false} mild={mild} enabled={enabled}
 						>
 							{counter && `${counter}`}
 					</Busy>
 				</Button>
 				<br />
 				<Button
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
 					elmRef={targetButton1Ref}
@@ -104,13 +110,16 @@ function App() {
 						targetRef={targetButton1Ref}
 						popupPlacement='right-start'
 						style={{position: 'relative', left:'-10px', top:'-10px'}}
-						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						nude={false} outlined={false} theme={theme} size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 						>
 							{counter && `${counter}`}
 					</Busy>
 				</Button>
 				<br />
 				<Button
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
 					elmRef={targetButton2Ref}
@@ -119,22 +128,25 @@ function App() {
 						targetRef={targetButton2Ref}
 						popupPlacement='right-start'
 						style={{position: 'relative', left:'-10px', top:'-10px'}}
-						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						nude={false} outlined={false} theme={theme} size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 						>
 							{counter && `${counter}`}
 					</Busy>
 				</Button>
 				<br />
 				<Button
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
 					elmRef={targetButton3Ref}
 				>
 					Click me <Busy
 						targetRef={targetButton3Ref}
-						popupPlacement='right-start'
-						style={{position: 'relative', left:'-10px', top:'-10px'}}
-						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+						popupPlacement='right'
+						style={{position: 'relative', left:'1em'}}
+						theme={theme} size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 						active={counter > 0}
 						>
 					</Busy>
