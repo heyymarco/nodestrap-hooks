@@ -47,6 +47,9 @@ import {
 import {
     // hooks:
     usesSizes,
+    usesNudeVariant,
+    NudeVariant,
+    useNudeVariant,
 }                           from './BasicComponent'
 import {
     // hooks:
@@ -185,6 +188,7 @@ export const usesPopupVariants = () => {
             
             // layouts:
             sizes(),
+            usesNudeVariant(),
         ]),
         variants([
             rule('.wrapper', [
@@ -310,6 +314,9 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     extends
         IndicatorProps<TElement>,
         
+        // layouts:
+        NudeVariant,
+        
         // appearances:
         PopupVariant
 {
@@ -326,6 +333,7 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     
     // variants:
+    const nudeVariant  = useNudeVariant(props);
     const popupVariant = usePopupVariant(props);
     
     
@@ -401,6 +409,7 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
+                nudeVariant.class,
                 popupVariant.class,
             ]}
             
