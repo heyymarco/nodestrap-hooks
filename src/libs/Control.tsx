@@ -172,7 +172,7 @@ export const isFocusBlurring = (styles: StyleCollection) => rule([selectorIsFocu
  * Uses focus & blur states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents focus & blur state definitions.
  */
-export const usesFocusBlur   = () => {
+export const usesFocusBlurState = () => {
     // dependencies:
     const [, themeRefs] = usesThemeVariant();
     const [, animRefs ] = usesAnim();
@@ -233,7 +233,7 @@ export const usesFocusBlur   = () => {
     ] as const;
 };
 
-export const useFocusBlurState = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
+export const useFocusBlurState  = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
     // fn props:
     const propEnabled = usePropEnabled(props);
 
@@ -371,7 +371,7 @@ export const isArriveLeaving = (styles: StyleCollection) => rule([selectorIsArri
  * Uses arrive (hover) & leave states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents arrive (hover) & leave state definitions.
  */
-export const usesArriveLeave = () => {
+export const usesArriveLeaveState = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
     
@@ -408,7 +408,7 @@ export const usesArriveLeave = () => {
     ] as const;
 };
 
-export const useArriveLeaveState = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>, focusBlurState: { focus: boolean }) => {
+export const useArriveLeaveState  = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>, focusBlurState: { focus: boolean }) => {
     // fn props:
     const propEnabled = usePropEnabled(props);
 
@@ -541,8 +541,8 @@ export const usesControlStates = () => {
     // dependencies:
     
     // states:
-    const [focusBlur]   = usesFocusBlur();
-    const [arriveLeave] = usesArriveLeave();
+    const [focusBlur]   = usesFocusBlurState();
+    const [arriveLeave] = usesArriveLeaveState();
     
     
     
@@ -614,8 +614,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const defaultBoxShadow = (boxShadow : Cust.Ref) => fallbacks(boxShadow, animRefs.boxShadowNone);
     const defaultFilter    = (filter    : Cust.Ref) => fallbacks(filter   , animRefs.filterNone);
     
-    const [, {boxShadowFocusBlur}] = usesFocusBlur();
-    const [, {filterArriveLeave} ] = usesArriveLeave();
+    const [, {boxShadowFocusBlur}] = usesFocusBlurState();
+    const [, {filterArriveLeave} ] = usesArriveLeaveState();
     
     
     
