@@ -169,11 +169,6 @@ export const usesPopupVariants = () => {
     // layouts:
     const [sizes] = usesSizes((sizeName) => composition([
         layout({
-            // layouts:
-            display : 'block',
-            
-            
-            
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
         }),
