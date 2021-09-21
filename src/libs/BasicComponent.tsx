@@ -204,6 +204,43 @@ export const useOrientationVariant = (props: OrientationVariant) => {
 };
 //#endregion orientation
 
+//#region nude
+export const noNude = (styles: StyleCollection) => rule(':not(.nude)', styles);
+export const isNude = (styles: StyleCollection) => rule('.nude', styles);
+export const usesNude = () => {
+    return composition([
+        variants([
+            isNude([
+                layout({
+                    // backgrounds:
+                    backg         : 'none', // discard background
+                    
+                    
+                    
+                    // borders:
+                    border        : 'none', // discard border
+                    
+                    
+                    
+                    // spacings:
+                    paddingInline : 0,      // discard paddingInline
+                    paddingBlock  : 0,      // discard paddingBlock
+                }),
+            ]),
+        ]),
+    ]);
+};
+
+export interface NudeVariant {
+    nude?: boolean
+}
+export const useNudeVariant = (props: NudeVariant) => {
+    return {
+        class: props.nude ? 'nude' : null,
+    };
+};
+//#endregion nude
+
 
 // colors:
 
@@ -1191,6 +1228,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         // layouts:
         SizeVariant,
         // OrientationVariant,
+        // NudeVariant,
         
         // colors:
         ThemeVariant,
