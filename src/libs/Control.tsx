@@ -233,7 +233,7 @@ export const usesFocusBlur   = () => {
     ] as const;
 };
 
-export const useStateFocusBlur = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
+export const useFocusBlurState = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
     // fn props:
     const propEnabled = usePropEnabled(props);
 
@@ -408,7 +408,7 @@ export const usesArriveLeave = () => {
     ] as const;
 };
 
-export const useStateArriveLeave = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>, stateFocusBlur: { focus: boolean }) => {
+export const useArriveLeaveState = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>, focusBlurState: { focus: boolean }) => {
     // fn props:
     const propEnabled = usePropEnabled(props);
 
@@ -426,7 +426,7 @@ export const useStateArriveLeave = <TElement extends HTMLElement = HTMLElement>(
      * state is always leave if disabled
      * state is arrive/leave based on [controllable arrive] (if set) and fallback to ([uncontrollable hover] || [uncontrollable focus])
      */
-    const arriveFn: boolean = propEnabled && (props.arrive /*controllable*/ ?? (hoverDn /*uncontrollable*/ || stateFocusBlur.focus /*uncontrollable*/));
+    const arriveFn: boolean = propEnabled && (props.arrive /*controllable*/ ?? (hoverDn /*uncontrollable*/ || focusBlurState.focus /*uncontrollable*/));
 
     if (arrived !== arriveFn) { // change detected => apply the change & start animating
         setArrived(arriveFn);   // remember the last change
@@ -707,53 +707,53 @@ export interface ControlProps<TElement extends HTMLElement = HTMLElement>
 export const Control = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
     // styles:
     const sheet            = useControlSheet();
-
+    
     
     
     // states:
-    const stateFocusBlur   = useStateFocusBlur(props);
-    const stateArriveLeave = useStateArriveLeave(props, stateFocusBlur);
-
-
-
+    const focusBlurState   = useFocusBlurState(props);
+    const arriveLeaveState = useArriveLeaveState(props, focusBlurState);
+    
+    
+    
     // fn props:
     const propEnabled      = usePropEnabled(props);
-
     
-
+    
+    
     // jsx:
     return (
         <Indicator<TElement>
             // other props:
             {...props}
-
-
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                stateFocusBlur.class,
-                stateArriveLeave.class,
+                focusBlurState.class,
+                arriveLeaveState.class,
             ]}
-
-
+            
+            
             // Control props:
             {...{
                 // accessibilities:
                 tabIndex : props.tabIndex ?? (propEnabled ? 0 : -1),
             }}
-        
-
+            
+            
             // events:
-            onFocus=        {(e) => { stateFocusBlur.handleFocus();        props.onFocus?.(e);      }}
-            onBlur=         {(e) => { stateFocusBlur.handleBlur();         props.onBlur?.(e);       }}
-            onMouseEnter=   {(e) => { stateArriveLeave.handleMouseEnter(); props.onMouseEnter?.(e); }}
-            onMouseLeave=   {(e) => { stateArriveLeave.handleMouseLeave(); props.onMouseLeave?.(e); }}
+            onFocus=        {(e) => { focusBlurState.handleFocus();        props.onFocus?.(e);      }}
+            onBlur=         {(e) => { focusBlurState.handleBlur();         props.onBlur?.(e);       }}
+            onMouseEnter=   {(e) => { arriveLeaveState.handleMouseEnter(); props.onMouseEnter?.(e); }}
+            onMouseLeave=   {(e) => { arriveLeaveState.handleMouseLeave(); props.onMouseLeave?.(e); }}
             onAnimationEnd= {(e) => {
                 // states:
-                stateFocusBlur.handleAnimationEnd(e);
-                stateArriveLeave.handleAnimationEnd(e);
-
-
+                focusBlurState.handleAnimationEnd(e);
+                arriveLeaveState.handleAnimationEnd(e);
+                
+                
                 // forwards:
                 props.onAnimationEnd?.(e);
             }}
