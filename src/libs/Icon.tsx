@@ -70,7 +70,7 @@ import {
     useSizeVariant  as basicComponentUseSizeVariant,
     
     ThemeName,
-    usesThemes      as basicComponentUsesThemes,
+    usesThemeVariant      as basicComponentUsesThemeVariant,
     ThemeVariant,
     useThemeVariant,
     
@@ -156,9 +156,9 @@ export const useSizeVariant = (props: SizeVariant) => basicComponentUseSizeVaria
  * @param options Customize the color options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents color definitions for each color in `options`.
  */
-export const usesThemes = (factory?: Factory<StyleCollection>, options?: ThemeName[]) => {
+export const usesThemeVariant = (factory?: Factory<StyleCollection>, options?: ThemeName[]) => {
     // dependencies:
-    const [themes, themeRefs, themeDecls, ...restThemes] = basicComponentUsesThemes(factory, options);
+    const [themes, themeRefs, themeDecls, ...restThemes] = basicComponentUsesThemeVariant(factory, options);
     
     
     
@@ -197,7 +197,7 @@ export const usesThemes = (factory?: Factory<StyleCollection>, options?: ThemeNa
 export const usesMild = (factory?: Factory<StyleCollection>) => {
     // dependencies:
     const [mild, mildRefs , mildDecls, ...restMild] = basicComponentUsesMild(factory);
-    const [    , themeRefs                        ] = usesThemes();
+    const [    , themeRefs                        ] = usesThemeVariant();
     
     
     
@@ -235,7 +235,7 @@ export const usesMild = (factory?: Factory<StyleCollection>) => {
 export const usesForeg = (foregOverwrite?: Cust.Ref) => {
     // dependencies:
     const [foreg, foregRefs, foregDecls, ...restForeg] = basicComponentUsesForeg();
-    const [     , themeRefs                          ] = usesThemes();
+    const [     , themeRefs                          ] = usesThemeVariant();
     const [     , mildRefs                           ] = usesMild();
     
     
@@ -513,7 +513,7 @@ export const usesIconVariants    = () => {
     const [sizes]            = usesSizeVariant();
     
     // colors:
-    const [themes]           = usesThemes();
+    const [themes]           = usesThemeVariant();
     const [mild]             = usesMild();
     
     

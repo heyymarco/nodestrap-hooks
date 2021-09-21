@@ -358,7 +358,7 @@ export const isTheme = (themeName: ThemeName, styles: StyleCollection) => rule(`
  * @param options Customize the color options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents color definitions for each color in `options`.
  */
-export const usesThemes = (factory = themeOf, options = themeOptions()) => {
+export const usesThemeVariant = (factory = themeOf, options = themeOptions()) => {
     return [
         () => composition([
             variants([
@@ -567,15 +567,15 @@ export const isOutlined = (styles: StyleCollection) => rule(['.outlined.outlined
  */
 export const usesOutlined = (factory = outlinedOf) => {
     // dependencies:
-    const [themes, themeRefs] = usesThemes();
+    const [themes, themeRefs] = usesThemeVariant();
     
     
     
     return [
         () => composition([
             imports([
-                // `usesOutlined()` implicitly `usesThemes()`
-                // `usesOutlined()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
+                // `usesOutlined()` implicitly `usesThemeVariant()`
+                // `usesOutlined()` requires `usesThemeVariant()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes(),
             ]),
             vars({
@@ -658,15 +658,15 @@ export const isMild = (styles: StyleCollection) => rule([    '.mild&',  '&.mild'
  */
 export const usesMild = (factory = mildOf) => {
     // dependencies:
-    const [themes, themeRefs] = usesThemes();
+    const [themes, themeRefs] = usesThemeVariant();
     
     
     
     return [
         () => composition([
             imports([
-                // `usesMild()` implicitly `usesThemes()`
-                // `usesMild()` requires `usesThemes()` to work correctly, otherwise it uses the parent themes (that's not intented)
+                // `usesMild()` implicitly `usesThemeVariant()`
+                // `usesMild()` requires `usesThemeVariant()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes(),
             ]),
             vars({
@@ -738,7 +738,7 @@ const [foregRefs, foregDecls] = createCssVar<ForegVars>();
  */
 export const usesForeg = () => {
     // dependencies:
-    const [, themeRefs   ] = usesThemes();
+    const [, themeRefs   ] = usesThemeVariant();
     const [, outlinedRefs] = usesOutlined();
     const [, mildRefs    ] = usesMild();
     
@@ -796,7 +796,7 @@ const [backgRefs, backgDecls] = createCssVar<BackgVars>();
  */
 export const usesBackg = () => {
     // dependencies:
-    const [, themeRefs   ] = usesThemes();
+    const [, themeRefs   ] = usesThemeVariant();
     const [, gradientRefs] = usesGradient();
     const [, outlinedRefs] = usesOutlined();
     const [, mildRefs    ] = usesMild();
@@ -861,7 +861,7 @@ const [borderRefs, borderDecls] = createCssVar<BorderVars>();
 
 export const usesBorder = () => {
     // dependencies:
-    const [, themeRefs   ] = usesThemes();
+    const [, themeRefs   ] = usesThemeVariant();
     const [, outlinedRefs] = usesOutlined();
     
     
@@ -1099,7 +1099,7 @@ export const usesBasicComponentVariants = () => {
     const [sizes]              = usesSizeVariant();
     
     // colors:
-    const [themes]             = usesThemes();
+    const [themes]             = usesThemeVariant();
     const [gradient]           = usesGradient();
     const [outlined]           = usesOutlined();
     const [mild]               = usesMild();

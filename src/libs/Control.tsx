@@ -55,7 +55,7 @@ import {
     // hooks:
     usesSizeVariant,
     ThemeName,
-    usesThemes,
+    usesThemeVariant,
     usesThemeDefault as basicComponentUsesThemeDefault,
     usesAnim,
 }                           from './BasicComponent'
@@ -174,7 +174,7 @@ export const isFocusBlurring = (styles: StyleCollection) => rule([selectorIsFocu
  */
 export const usesFocusBlur   = () => {
     // dependencies:
-    const [, themeRefs] = usesThemes();
+    const [, themeRefs] = usesThemeVariant();
     const [, animRefs ] = usesAnim();
     
     
