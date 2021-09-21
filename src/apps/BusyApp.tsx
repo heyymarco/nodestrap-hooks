@@ -3,6 +3,7 @@ import './App.css';
 import {
 	default as React,
     useState,
+	useRef,
 }                          from 'react';
 
 import Container from '../libs/Container';
@@ -31,41 +32,57 @@ function App() {
 
 	const [counter, setCounter] = useState(0);
 
+	const targetButton1Ref = useRef<HTMLButtonElement>(null);
+	const targetButton2Ref = useRef<HTMLButtonElement>(null);
+	const targetButton3Ref = useRef<HTMLButtonElement>(null);
+
 	
 
     return (
         <div className="App">
             <Container>
-				<Button onClick={() => setActive(!active)}>Toggle busy</Button>
+				<Button onClick={() => setActive(!active)}>Toggle badge</Button>
 				<h1>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 					
 					active={active}
-				/></h1>
+				>
+					New!
+				</Busy></h1>
 				<span></span>
 				<h2>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 					
 					active={active}
-				/></h2>
+				>
+					New!
+				</Busy></h2>
 				<span></span>
 				<h3>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 					
 					active={active}
-				/></h3>
+				>
+					New!
+				</Busy></h3>
 				<span></span>
 				<h4>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 					
 					active={active}
-				/></h4>
+				>
+					New!
+				</Busy></h4>
 				<span></span>
 				<h5>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 					
 					active={active}
-				/></h5>
+				>
+					New!
+				</Busy></h5>
 				<span></span>
 				<h6>Example heading <Busy theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 					
 					active={active}
-				/></h6>
+				>
+					New!
+				</Busy></h6>
 				<hr style={{flexBasis: '100%'}} />
 				<Button
 					style={{margin: '1em'}}
@@ -73,40 +90,54 @@ function App() {
 				>
 					Click me <Busy
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
-					/>
+						>
+							{counter && `${counter}`}
+					</Busy>
 				</Button>
 				<br />
 				<Button
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+					elmRef={targetButton1Ref}
 				>
 					Click me <Busy
-						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						targetRef={targetButton1Ref}
+						popupPlacement='right-start'
+						style={{position: 'relative', left:'-10px', top:'-10px'}}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
-					/>
+						>
+							{counter && `${counter}`}
+					</Busy>
 				</Button>
 				<br />
 				<Button
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+					elmRef={targetButton2Ref}
 				>
 					Click me <Busy
-						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						targetRef={targetButton2Ref}
+						popupPlacement='right-start'
+						style={{position: 'relative', left:'-10px', top:'-10px'}}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
-						badgeStyle='circle'
-					/>
+						>
+							{counter && `${counter}`}
+					</Busy>
 				</Button>
 				<br />
 				<Button
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+					elmRef={targetButton3Ref}
 				>
 					Click me <Busy
-						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						targetRef={targetButton3Ref}
+						popupPlacement='right-start'
+						style={{position: 'relative', left:'-10px', top:'-10px'}}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
-						badgeStyle='circle'
 						active={counter > 0}
-					/>
+						>
+					</Busy>
 				</Button>
 				<hr style={{flexBasis: '100%'}} />
 				<p>

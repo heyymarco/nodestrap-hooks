@@ -161,14 +161,14 @@ export const Busy = <TElement extends HTMLElement = HTMLElement>(props: BusyProp
             
             
             // appearances:
-            badgeStyle={props.badgeStyle ?? 'square'}
+            badgeStyle={props.badgeStyle ?? 'circle'}
             
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
         >
             <Icon icon='busy' />
-            { props.children && <VisuallyHidden>
+            { ((props.children ?? false) !== false) && <VisuallyHidden>
                 { props.children }
             </VisuallyHidden> }
         </Badge>
