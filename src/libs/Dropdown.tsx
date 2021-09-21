@@ -12,7 +12,7 @@ import {
 }                           from './react-cssfn' // cssfn for react
 import {
     // hooks:
-    useStateActivePassive,
+    useActivePassiveState,
 }                           from './Indicator'
 import {
     // react components:
@@ -84,8 +84,8 @@ export interface DropdownProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: DropdownProps<TElement>) => {
     // states:
-    const stateActPass = useStateActivePassive(props);
-    const isVisible    = stateActPass.active || (!!stateActPass.class);
+    const activePassiveState = useActivePassiveState(props);
+    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
     
     
     
@@ -202,7 +202,7 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
             // events:
             onAnimationEnd={(e) => {
                 // states:
-                stateActPass.handleAnimationEnd(e);
+                activePassiveState.handleAnimationEnd(e);
             }}
         >
             <Listgroup

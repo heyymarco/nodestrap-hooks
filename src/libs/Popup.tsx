@@ -60,7 +60,7 @@ import {
     isPassivating,
     isPassived,
     usesActivePassive as indicatorUsesActivePassive,
-    useStateActivePassive,
+    useActivePassiveState,
     
     
     
@@ -328,19 +328,19 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) => {
     // styles:
-    const sheet = usePopupSheet();
+    const sheet              = usePopupSheet();
     
     
     
     // variants:
-    const nudeVariant  = useNudeVariant(props);
-    const popupVariant = usePopupVariant(props);
+    const nudeVariant        = useNudeVariant(props);
+    const popupVariant       = usePopupVariant(props);
     
     
     
     // states:
-    const stateActPass = useStateActivePassive(props);
-    const isVisible    = stateActPass.active || (!!stateActPass.class);
+    const activePassiveState = useActivePassiveState(props);
+    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
     
     
     
@@ -417,7 +417,7 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             // events:
             onAnimationEnd={(e) => {
                 // states:
-                stateActPass.handleAnimationEnd(e);
+                activePassiveState.handleAnimationEnd(e);
                 
                 
                 // forwards:

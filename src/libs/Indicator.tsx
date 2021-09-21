@@ -174,7 +174,7 @@ export const usesEnableDisable = () => {
     ] as const;
 };
 
-export const useStateEnableDisable = (props: IndicationProps & ElementProps) => {
+export const useEnableDisableState = (props: IndicationProps & ElementProps) => {
     // fn props:
     const propEnabled = usePropEnabled(props);
     const htmlCtrls   = [
@@ -345,7 +345,7 @@ export const markActive = () => composition([
  */
 export const usesThemeActive = (themeName: ThemeName|null = 'secondary') => usesThemeCond(themeName);
 
-export const useStateActivePassive = (props: IndicationProps & ElementProps, activeDn?: boolean) => {
+export const useActivePassiveState = (props: IndicationProps & ElementProps, activeDn?: boolean) => {
     // fn props:
     const propActive = usePropActive(props, null);
     const isCheckbox = (props.tag === 'input') && ((props as any).type === 'checkbox');
@@ -696,18 +696,18 @@ export interface IndicatorProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Indicator = <TElement extends HTMLElement = HTMLElement>(props: IndicatorProps<TElement>) => {
     // styles:
-    const sheet        = useIndicatorSheet();
+    const sheet              = useIndicatorSheet();
     
     
     
     // states:
-    const stateEnbDis  = useStateEnableDisable(props);
-    const stateActPass = useStateActivePassive(props);
+    const enableDisableState = useEnableDisableState(props);
+    const activePassiveState = useActivePassiveState(props);
     
     
     
     // fn props:
-    const propAccess   = usePropAccessibility(props);
+    const propAccess         = usePropAccessibility(props);
     
     
     
@@ -727,27 +727,27 @@ export const Indicator = <TElement extends HTMLElement = HTMLElement>(props: Ind
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                stateEnbDis.class,
-                stateActPass.class,
+                enableDisableState.class,
+                activePassiveState.class,
             ]}
             
             
             
             // Control::disabled:
-            {...stateEnbDis.props}
+            {...enableDisableState.props}
             
             
             
             // Check::checked:
-            {...stateActPass.props}
+            {...activePassiveState.props}
             
             
             
             // events:
             onAnimationEnd={(e) => {
                 // states:
-                stateEnbDis.handleAnimationEnd(e);
-                stateActPass.handleAnimationEnd(e);
+                enableDisableState.handleAnimationEnd(e);
+                activePassiveState.handleAnimationEnd(e);
                 
                 
                 

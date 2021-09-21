@@ -73,7 +73,7 @@ import {
     // hooks:
     isActivating,
     isPassivating,
-    useStateActivePassive,
+    useActivePassiveState,
     
     
     
@@ -577,19 +577,19 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement>
 }
 export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalProps<TElement>) => {
     // styles:
-    const sheet        = useModalSheet();
+    const sheet              = useModalSheet();
     
     
     
     // variants:
-    const modalVariant = useModalVariant(props);
-    const modalAlign   = useModalAlign(props);
+    const modalVariant       = useModalVariant(props);
+    const modalAlign         = useModalAlign(props);
     
     
     
     // states:
-    const stateActPass = useStateActivePassive(props);
-    const isVisible    = stateActPass.active || (!!stateActPass.class);
+    const activePassiveState = useActivePassiveState(props);
+    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
     
     
     
@@ -763,7 +763,7 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             
             onAnimationEnd={(e) => {
                 // states:
-                stateActPass.handleAnimationEnd(e);
+                activePassiveState.handleAnimationEnd(e);
             }}
         >
             <Card<TElement>
