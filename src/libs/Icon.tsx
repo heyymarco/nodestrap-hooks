@@ -710,6 +710,7 @@ const config = {
             'instagram.svg',
             'whatsapp.svg',
             'close.svg',
+            'busy.svg',
         ],
     },
 };
