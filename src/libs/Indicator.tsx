@@ -137,7 +137,7 @@ export const isEnablingDisable = (styles: StyleCollection) => rule([selectorIsEn
  * Uses enable & disable states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents enable & disable state definitions.
  */
-export const usesEnableDisable = () => {
+export const usesEnableDisableState = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
     
@@ -293,7 +293,7 @@ export const isActivePassivating = (styles: StyleCollection) => rule([selectorIs
  * Uses active & passive states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
  */
-export const usesActivePassive = () => {
+export const usesActivePassiveState = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
     
@@ -555,8 +555,8 @@ export const usesIndicatorStates = () => {
     // dependencies:
     
     // states:
-    const [enableDisable] = usesEnableDisable();
-    const [activePassive] = usesActivePassive();
+    const [enableDisable] = usesEnableDisableState();
+    const [activePassive] = usesActivePassiveState();
     
     
     
@@ -608,8 +608,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     const defaultFilter = (filter: Cust.Ref) => fallbacks(filter, animRefs.filterNone);
     
-    const [, {filterEnableDisable}] = usesEnableDisable();
-    const [, {filterActivePassive}] = usesActivePassive();
+    const [, {filterEnableDisable}] = usesEnableDisableState();
+    const [, {filterActivePassive}] = usesActivePassiveState();
     
     
     

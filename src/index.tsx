@@ -13,9 +13,9 @@ import reportWebVitals from './reportWebVitals';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
-// import BasicComponentApp                            from './apps/BasicComponentApp';
-//     import ContainerApp                             from './apps/ContainerApp';
-//     import IndicatorApp                             from './apps/IndicatorApp';
+// import BasicComponentApp                            from './apps/BasicComponentApp'; // ok
+//     import ContainerApp                             from './apps/ContainerApp'; // ok
+//     import IndicatorApp                             from './apps/IndicatorApp'; // ok
 //         import ContentApp                           from './apps/ContentApp';
 //            import ListgroupApp                      from './apps/ListgroupApp';
 //                 import AccordionApp                 from './apps/AccordionApp';

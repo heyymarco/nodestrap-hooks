@@ -56,7 +56,7 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    usesActivePassive as popupUsesActivePassive,
+    usesActivePassiveState as popupUsesActivePassiveState,
     
     
     
@@ -88,9 +88,9 @@ import {
  * Uses active & passive states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
  */
-export const usesActivePassive = () => {
+export const usesActivePassiveState = () => {
     // dependencies:
-    const [activePassive, activePassiveRefs, activePassiveDecls, ...restActivePassive] = popupUsesActivePassive();
+    const [activePassive, activePassiveRefs, activePassiveDecls, ...restActivePassive] = popupUsesActivePassiveState();
     
     
     
@@ -182,7 +182,7 @@ export const usesCollapseStates = () => {
     // dependencies:
     
     // states:
-    const [activePassive] = usesActivePassive();
+    const [activePassive] = usesActivePassiveState();
     
     
     

@@ -53,13 +53,13 @@ import {
 }                           from './BasicComponent'
 import {
     // hooks:
-    usesEnableDisable,
+    usesEnableDisableState,
     
     isActived,
     isActivating,
     isPassivating,
     isPassived,
-    usesActivePassive as indicatorUsesActivePassive,
+    usesActivePassiveState as indicatorUsesActivePassiveState,
     useActivePassiveState,
     
     
@@ -97,9 +97,9 @@ import {
  * Uses active & passive states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
  */
-export const usesActivePassive = () => {
+export const usesActivePassiveState = () => {
     // dependencies:
-    const [activePassive, activePassiveRefs, activePassiveDecls, ...restActivePassive] = indicatorUsesActivePassive();
+    const [activePassive, activePassiveRefs, activePassiveDecls, ...restActivePassive] = indicatorUsesActivePassiveState();
     
     
     
@@ -223,8 +223,8 @@ export const usesPopupStates = () => {
     // dependencies:
     
     // states:
-    const [enableDisable] = usesEnableDisable();
-    const [activePassive] = usesActivePassive();
+    const [enableDisable] = usesEnableDisableState();
+    const [activePassive] = usesActivePassiveState();
     
     
     
