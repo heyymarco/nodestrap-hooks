@@ -3,6 +3,7 @@ import './App.css';
 import {
 	default as React,
     useState,
+	useRef,
 }                          from 'react';
 
 import Container from '../libs/Container';
@@ -30,6 +31,10 @@ function App() {
 	const [active,      setActive   ] = useState(true);
 
 	const [counter, setCounter] = useState(0);
+
+	const targetButton1Ref = useRef<HTMLButtonElement>(null);
+	const targetButton2Ref = useRef<HTMLButtonElement>(null);
+	const targetButton3Ref = useRef<HTMLButtonElement>(null);
 
 	
 
@@ -93,9 +98,12 @@ function App() {
 				<Button
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+					elmRef={targetButton1Ref}
 				>
 					Click me <Badge
-						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						targetRef={targetButton1Ref}
+						popupPlacement='right-start'
+						style={{position: 'relative', left:'-10px', top:'-10px'}}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 						>
 							{counter && `${counter}`}
@@ -105,9 +113,12 @@ function App() {
 				<Button
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+					elmRef={targetButton2Ref}
 				>
 					Click me <Badge
-						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						targetRef={targetButton2Ref}
+						popupPlacement='right-start'
+						style={{position: 'relative', left:'-10px', top:'-10px'}}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 						badgeStyle='pill'
 						>
@@ -118,9 +129,12 @@ function App() {
 				<Button
 					style={{margin: '1em'}}
 					onClick={() => setCounter((counter < 5) ? (counter + 1) : 0 )}
+					elmRef={targetButton3Ref}
 				>
 					Click me <Badge
-						style={{position: 'absolute', left: '100%', top: 0, transform: 'translate(-50%, -50%)'}}
+						targetRef={targetButton3Ref}
+						popupPlacement='right-start'
+						style={{position: 'relative', left:'-10px', top:'-10px'}}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 						badgeStyle='pill'
 						active={counter > 0}
