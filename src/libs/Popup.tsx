@@ -2,6 +2,8 @@
 import {
     default as React,
     useRef,
+    useCallback,
+    useEffect,
     useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
@@ -337,7 +339,11 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     // dom effects:
     const popupRef  = useRef<HTMLDivElement|null>(null);
     const popperRef = useRef<Popper|null>(null);
-    useLayoutEffect(() => {
+    const createPopperCb = useCallback(() => {
+        if (popperRef.current) return; // popper is already been created => nothing to do
+        
+        
+        
         const target = props.targetRef?.current;
         const popup  = popupRef.current;
         if (!target) return; // target was not specified => nothing to do
@@ -359,9 +365,15 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             popperRef.current = null;
         };
     }, [props.targetRef, props.popupPlacement, props.popupModifiers, props.popupPosition]);
+    useLayoutEffect(createPopperCb, [createPopperCb]); // primary chance   (in case of `targetRef` is not the parent element)
+    useEffect(createPopperCb, [createPopperCb]);       // secondary chance (in case of `targetRef` is the parent element)
     
-    useLayoutEffect(() => {
-        popperRef.current?.setOptions((options) => ({
+    const updatePopperOptionsCb = useCallback(() => {
+        if (!popperRef.current) return; // popper was not already created => nothing to do
+        
+        
+        
+        popperRef.current.setOptions((options) => ({
             ...options,
             modifiers: [
                 ...(options.modifiers ?? []),
@@ -370,8 +382,10 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             ],
         }));
         
-        if (isVisible) popperRef.current?.update();
+        if (isVisible) popperRef.current.update();
     }, [isVisible]);
+    useLayoutEffect(updatePopperOptionsCb, [updatePopperOptionsCb]); // primary chance   (in case of `targetRef` is not the parent element)
+    useEffect(updatePopperOptionsCb, [updatePopperOptionsCb]);       // secondary chance (in case of `targetRef` is the parent element)
     
     
     
