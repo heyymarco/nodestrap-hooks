@@ -33,7 +33,7 @@ import {
 }                           from './EditableControl'
 import {
     // hooks:
-    useStatePressRelease,
+    usePressReleaseState,
     
     
     
@@ -115,12 +115,12 @@ export interface EditableActionControlProps<TElement extends EditableControlElem
 }
 export const EditableActionControl = <TElement extends EditableControlElement = EditableControlElement>(props: EditableActionControlProps<TElement>) => {
     // styles:
-    const sheet        = useEditableActionControlSheet();
+    const sheet             = useEditableActionControlSheet();
     
     
     
     // states:
-    const statePrssRls = useStatePressRelease(props);
+    const pressReleaseState = usePressReleaseState(props);
     
     
     
@@ -134,16 +134,16 @@ export const EditableActionControl = <TElement extends EditableControlElement = 
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                statePrssRls.class,
+                pressReleaseState.class,
             ]}
             
             
             // events:
-            onMouseDown={(e) => { statePrssRls.handleMouseDown(e); props.onMouseDown?.(e); }}
-            onKeyDown=  {(e) => { statePrssRls.handleKeyDown(e);   props.onKeyDown?.(e);   }}
+            onMouseDown={(e) => { pressReleaseState.handleMouseDown(e); props.onMouseDown?.(e); }}
+            onKeyDown=  {(e) => { pressReleaseState.handleKeyDown(e);   props.onKeyDown?.(e);   }}
             onAnimationEnd={(e) => {
                 // states:
-                statePrssRls.handleAnimationEnd(e);
+                pressReleaseState.handleAnimationEnd(e);
                 
                 
                 // forwards:

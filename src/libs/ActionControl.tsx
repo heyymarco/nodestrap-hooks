@@ -169,7 +169,7 @@ export const usesPressRelease = () => {
     ] as const;
 };
 
-export const useStatePressRelease = (props: ActionControlProps, mouses: number[]|null = [0], keys: string[]|null = ['space']) => {
+export const usePressReleaseState = (props: ActionControlProps, mouses: number[]|null = [0], keys: string[]|null = ['space']) => {
     // fn props:
     const propEnabled  = usePropEnabled(props);
     const propReadOnly = usePropReadOnly(props);
@@ -468,12 +468,12 @@ export interface ActionControlProps<TElement extends HTMLElement = HTMLElement>
 }
 export const ActionControl = <TElement extends HTMLElement = HTMLElement>(props: ActionControlProps<TElement>) => {
     // styles:
-    const sheet        = useActionControlSheet();
+    const sheet             = useActionControlSheet();
 
     
     
     // states:
-    const statePrssRls = useStatePressRelease(props);
+    const pressReleaseState = usePressReleaseState(props);
 
 
 
@@ -487,16 +487,16 @@ export const ActionControl = <TElement extends HTMLElement = HTMLElement>(props:
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                statePrssRls.class,
+                pressReleaseState.class,
             ]}
         
 
             // events:
-            onMouseDown={(e) => { statePrssRls.handleMouseDown(e); props.onMouseDown?.(e); }}
-            onKeyDown=  {(e) => { statePrssRls.handleKeyDown(e);   props.onKeyDown?.(e);   }}
+            onMouseDown={(e) => { pressReleaseState.handleMouseDown(e); props.onMouseDown?.(e); }}
+            onKeyDown=  {(e) => { pressReleaseState.handleKeyDown(e);   props.onKeyDown?.(e);   }}
             onAnimationEnd={(e) => {
                 // states:
-                statePrssRls.handleAnimationEnd(e);
+                pressReleaseState.handleAnimationEnd(e);
 
 
                 // forwards:
