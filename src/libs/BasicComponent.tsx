@@ -565,7 +565,7 @@ export const isOutlined = (styles: StyleCollection) => rule(['.outlined.outlined
  * @param factory Customize the callback to create outlining definitions for each toggle state.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable outlining definitions.
  */
-export const usesOutlined = (factory = outlinedOf) => {
+export const usesOutlinedVariant = (factory = outlinedOf) => {
     // dependencies:
     const [themes, themeRefs] = usesThemeVariant();
     
@@ -574,8 +574,8 @@ export const usesOutlined = (factory = outlinedOf) => {
     return [
         () => composition([
             imports([
-                // `usesOutlined()` implicitly `usesThemeVariant()`
-                // `usesOutlined()` requires `usesThemeVariant()` to work correctly, otherwise it uses the parent themes (that's not intented)
+                // `usesOutlinedVariant()` implicitly `usesThemeVariant()`
+                // `usesOutlinedVariant()` requires `usesThemeVariant()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes(),
             ]),
             vars({
@@ -739,7 +739,7 @@ const [foregRefs, foregDecls] = createCssVar<ForegVars>();
 export const usesForeg = () => {
     // dependencies:
     const [, themeRefs   ] = usesThemeVariant();
-    const [, outlinedRefs] = usesOutlined();
+    const [, outlinedRefs] = usesOutlinedVariant();
     const [, mildRefs    ] = usesMild();
     
     
@@ -755,7 +755,7 @@ export const usesForeg = () => {
                     cssProps.foreg,       // default => uses config's foreground
                 ),
                 [foregDecls.foreg]   : fallbacks(
-                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
+                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
                     mildRefs.foregMildTg,         // toggle mild     (if `usesMild()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
@@ -798,7 +798,7 @@ export const usesBackg = () => {
     // dependencies:
     const [, themeRefs   ] = usesThemeVariant();
     const [, gradientRefs] = usesGradientVariant();
-    const [, outlinedRefs] = usesOutlined();
+    const [, outlinedRefs] = usesOutlinedVariant();
     const [, mildRefs    ] = usesMild();
     
     
@@ -816,7 +816,7 @@ export const usesBackg = () => {
                     cssProps.backg,       // default => uses config's background
                 ),
                 [backgDecls.backgCol]  : fallbacks(
-                    outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
+                    outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
                     mildRefs.backgMildTg,         // toggle mild     (if `usesMild()` applied)
                     
                     backgRefs.backgFn,            // default => uses our `backgFn`
@@ -862,7 +862,7 @@ const [borderRefs, borderDecls] = createCssVar<BorderVars>();
 export const usesBorder = () => {
     // dependencies:
     const [, themeRefs   ] = usesThemeVariant();
-    const [, outlinedRefs] = usesOutlined();
+    const [, outlinedRefs] = usesOutlinedVariant();
     
     
     
@@ -877,7 +877,7 @@ export const usesBorder = () => {
                     cssProps.borderColor,  // default => uses config's border color
                 ),
                 [borderDecls.borderCol] : fallbacks(
-                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
+                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
                     
                     borderRefs.borderFn,          // default => uses our `borderFn`
                 ),
@@ -1101,7 +1101,7 @@ export const usesBasicComponentVariants = () => {
     // colors:
     const [themes]             = usesThemeVariant();
     const [gradient]           = usesGradientVariant();
-    const [outlined]           = usesOutlined();
+    const [outlined]           = usesOutlinedVariant();
     const [mild]               = usesMild();
     
     

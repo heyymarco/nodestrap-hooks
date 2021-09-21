@@ -258,7 +258,7 @@ export const usesForeg = (foregOverwrite?: Cust.Ref) => {
                     cssProps.foreg,       // default => uses config's foreground
                 ),
                 [foregDecls.foreg]   : fallbacks(
-                 // outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
+                 // outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
                     mildRefs.backgMildTg,         // toggle mild     (if `usesMild()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`

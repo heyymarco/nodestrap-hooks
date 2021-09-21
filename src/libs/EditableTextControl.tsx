@@ -50,7 +50,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesOutlined,
+    usesOutlinedVariant,
     isMild,
     mildOf,
     usesForeg,
@@ -116,7 +116,7 @@ const [iconColorRefs, iconColorDecls] = createCssVar<IconColorVars>();
  */
 export const usesIconColor = () => {
     // dependencies:
-    const [, outlinedRefs] = usesOutlined();
+    const [, outlinedRefs] = usesOutlinedVariant();
     const [, foregRefs   ] = usesForeg();
     
     
@@ -125,7 +125,7 @@ export const usesIconColor = () => {
         () => composition([
             vars({
                 [iconColorDecls.iconCol]       : fallbacks(
-                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlined()` applied)
+                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
                     iconColorRefs.iconColMildTg,  // toggle mild     (if `usesMild()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
