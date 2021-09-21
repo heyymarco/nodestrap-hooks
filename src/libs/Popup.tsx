@@ -314,7 +314,7 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     // popups:
     targetRef?      : React.RefObject<HTMLElement> // getter ref
     popupPlacement? : PopupPlacement
-    popupModifiers? : PopupModifier<string, any>[]
+    popupModifiers? : Partial<PopupModifier<string, any>>[]
     popupPosition?  : PopupPosition
 }
 export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) => {
