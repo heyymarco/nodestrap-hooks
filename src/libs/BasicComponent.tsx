@@ -496,7 +496,7 @@ export const isGradient = (styles: StyleCollection) => rule(['.gradient.gradient
  * @param factory Customize the callback to create gradient definitions for each toggle state.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable gradient definitions.
  */
-export const usesGradient = (factory = gradientOf) => {
+export const usesGradientVariant = (factory = gradientOf) => {
     return [
         () => composition([
             variants([
@@ -797,7 +797,7 @@ const [backgRefs, backgDecls] = createCssVar<BackgVars>();
 export const usesBackg = () => {
     // dependencies:
     const [, themeRefs   ] = usesThemeVariant();
-    const [, gradientRefs] = usesGradient();
+    const [, gradientRefs] = usesGradientVariant();
     const [, outlinedRefs] = usesOutlined();
     const [, mildRefs    ] = usesMild();
     
@@ -826,7 +826,7 @@ export const usesBackg = () => {
                     
                     // top layer:
                     fallbacks(
-                        gradientRefs.backgGradTg, // toggle gradient (if `usesGradient()` applied)
+                        gradientRefs.backgGradTg, // toggle gradient (if `usesGradientVariant()` applied)
                         
                         backgRefs.backgNone,      // default => no top layer
                     ),
@@ -1100,7 +1100,7 @@ export const usesBasicComponentVariants = () => {
     
     // colors:
     const [themes]             = usesThemeVariant();
-    const [gradient]           = usesGradient();
+    const [gradient]           = usesGradientVariant();
     const [outlined]           = usesOutlined();
     const [mild]               = usesMild();
     

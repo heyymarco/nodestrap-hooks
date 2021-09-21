@@ -34,7 +34,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesGradient,
+    usesGradientVariant,
     
     
     
@@ -138,7 +138,7 @@ export const usesInputVariants = () => {
     ]));
     
     // colors:
-    const [gradient, , gradientDecls] = usesGradient((toggle) => composition([
+    const [gradient, , gradientDecls] = usesGradientVariant((toggle) => composition([
         vars({
             // *toggle on/off* the background gradient prop:
             [gradientDecls.backgGradTg] : toggle ? cssProps.backgGrad : ((toggle !== null) ? 'initial' : null),
