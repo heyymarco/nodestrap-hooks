@@ -37,11 +37,11 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    SizeName       as BasicComponentSizeName,
-    isSize         as basicComponentIsSize,
-    usesSizes      as basicComponentUsesSizes,
-    SizeVariant    as BasicComponentSizeVariant,
-    useSizeVariant as basicComponentUseSizeVariant,
+    SizeName        as BasicComponentSizeName,
+    isSize          as basicComponentIsSize,
+    usesSizeVariant as basicComponentUsesSizeVariant,
+    SizeVariant     as BasicComponentSizeVariant,
+    useSizeVariant  as basicComponentUseSizeVariant,
     
     OrientationName,
     OrientationVariant,
@@ -106,7 +106,7 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicComp
  * @param options Customize the size options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
-export const usesSizes = (factory = sizeOf, options = sizeOptions()) => basicComponentUsesSizes(factory, options as BasicComponentSizeName[]);
+export const usesSizeVariant = (factory = sizeOf, options = sizeOptions()) => basicComponentUsesSizeVariant(factory, options as BasicComponentSizeName[]);
 /**
  * Creates sizing definitions for the given `sizeName`.
  * @param sizeName The given size name written in camel case.
@@ -168,7 +168,7 @@ export const usesButtonIconVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizes();
+    const [sizes] = usesSizeVariant();
     
     
     

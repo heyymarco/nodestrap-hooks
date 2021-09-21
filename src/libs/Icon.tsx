@@ -63,22 +63,22 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    SizeName       as BasicComponentSizeName,
-    isSize         as basicComponentIsSize,
-    usesSizes      as basicComponentUsesSizes,
-    SizeVariant    as BasicComponentSizeVariant,
-    useSizeVariant as basicComponentUseSizeVariant,
+    SizeName        as BasicComponentSizeName,
+    isSize          as basicComponentIsSize,
+    usesSizeVariant as basicComponentUsesSizeVariant,
+    SizeVariant     as BasicComponentSizeVariant,
+    useSizeVariant  as basicComponentUseSizeVariant,
     
     ThemeName,
-    usesThemes     as basicComponentUsesThemes,
+    usesThemes      as basicComponentUsesThemes,
     ThemeVariant,
     useThemeVariant,
     
-    usesMild       as basicComponentUsesMild,
+    usesMild        as basicComponentUsesMild,
     MildVariant,
     useMildVariant,
     
-    usesForeg      as basicComponentUsesForeg,
+    usesForeg       as basicComponentUsesForeg,
     
     
     
@@ -105,9 +105,9 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicComp
  * @param options Customize the size options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
-export const usesSizes = (sizeOverwrite?: Cust.Ref, factory = sizeOf, options = sizeOptions()) => {
+export const usesSizeVariant = (sizeOverwrite?: Cust.Ref, factory = sizeOf, options = sizeOptions()) => {
     // dependencies:
-    const [sizes, sizeRefs, sizeDecls, ...restSizes] = basicComponentUsesSizes(factory, options as BasicComponentSizeName[]);
+    const [sizes, sizeRefs, sizeDecls, ...restSizes] = basicComponentUsesSizeVariant(factory, options as BasicComponentSizeName[]);
     
     
     
@@ -510,7 +510,7 @@ export const usesIconVariants    = () => {
     // dependencies:
     
     // layouts:
-    const [sizes]            = usesSizes();
+    const [sizes]            = usesSizeVariant();
     
     // colors:
     const [themes]           = usesThemes();
@@ -534,7 +534,7 @@ export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, si
     // dependencies:
     
     // layouts:
-    const [sizes] = sizeOverwrite  ? usesSizes(sizeOverwrite)  : [null];
+    const [sizes] = sizeOverwrite  ? usesSizeVariant(sizeOverwrite)  : [null];
     
     // colors:
     const [foreg, foregRefs] = foregOverwrite ? usesForeg(foregOverwrite) : [null, null];

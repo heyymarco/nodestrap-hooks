@@ -97,7 +97,7 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => rule(`.sz
  * @param options Customize the size options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
-export const usesSizes = (factory = sizeOf, options = sizeOptions()) => {
+export const usesSizeVariant = (factory = sizeOf, options = sizeOptions()) => {
     return [
         () => composition([
             variants([
@@ -1096,7 +1096,7 @@ export const usesBasicComponentVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes]              = usesSizes();
+    const [sizes]              = usesSizeVariant();
     
     // colors:
     const [themes]             = usesThemes();

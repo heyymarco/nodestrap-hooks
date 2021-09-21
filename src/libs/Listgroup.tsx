@@ -50,7 +50,7 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    usesSizes,
+    usesSizeVariant,
     OrientationName,
     noOrientationInline,
     isOrientationInline,
@@ -193,7 +193,7 @@ export const usesListgroupItemVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
+    const [sizes] = usesSizeVariant((sizeName) => composition([
         layout({
             // overwrites propName = {item}PropName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(usesPrefixedProps(cssProps, 'item'), sizeName)),
@@ -388,7 +388,7 @@ export const usesListgroupVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
+    const [sizes] = usesSizeVariant((sizeName) => composition([
         layout({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),

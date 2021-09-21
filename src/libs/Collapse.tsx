@@ -43,7 +43,7 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    usesSizes,
+    usesSizeVariant,
     OrientationName,
     OrientationVariant,
     useOrientationVariant,
@@ -145,7 +145,7 @@ export const usesCollapseVariants = (blockSelector = ':not(.inline)', inlineSele
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
+    const [sizes] = usesSizeVariant((sizeName) => composition([
         layout({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),

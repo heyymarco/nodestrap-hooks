@@ -40,7 +40,7 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    usesSizes,
+    usesSizeVariant,
     noNude,
 }                           from './BasicComponent'
 import {
@@ -170,7 +170,7 @@ export const usesBadgeVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizes((sizeName) => composition([
+    const [sizes] = usesSizeVariant((sizeName) => composition([
         layout({
             // overwrites propName = propName{SizeName}:
             ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
