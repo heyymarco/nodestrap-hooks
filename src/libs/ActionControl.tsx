@@ -132,7 +132,7 @@ export const isPressReleasing = (styles: StyleCollection) => rule([selectorIsPre
  * Uses press & release states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents press & release state definitions.
  */
-export const usesPressRelease = () => {
+export const usesPressReleaseState = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
     
@@ -169,7 +169,7 @@ export const usesPressRelease = () => {
     ] as const;
 };
 
-export const usePressReleaseState = (props: ActionControlProps, mouses: number[]|null = [0], keys: string[]|null = ['space']) => {
+export const usePressReleaseState  = (props: ActionControlProps, mouses: number[]|null = [0], keys: string[]|null = ['space']) => {
     // fn props:
     const propEnabled  = usePropEnabled(props);
     const propReadOnly = usePropReadOnly(props);
@@ -287,7 +287,7 @@ export const usesActivePassiveAsPressRelease = () => {
     // dependencies:
     
     // states:
-    const [, , pressReleaseDecls] = usesPressRelease();
+    const [, , pressReleaseDecls] = usesPressReleaseState();
     
     
     
@@ -362,7 +362,7 @@ export const usesActionControlStates = () => {
     // dependencies:
     
     // states:
-    const [pressRelease] = usesPressRelease();
+    const [pressRelease] = usesPressReleaseState();
     
     
     
@@ -414,7 +414,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     const defaultFilter = (filter: Cust.Ref) => fallbacks(filter, animRefs.filterNone);
     
-    const [, {filterPressRelease}] = usesPressRelease();
+    const [, {filterPressRelease}] = usesPressReleaseState();
     
     
     
