@@ -65,7 +65,7 @@ import {
 
 // appearances:
 
-export type BadgeStyle = 'pill' // might be added more styles in the future
+export type BadgeStyle = 'pill'|'square'|'circle' // might be added more styles in the future
 export interface BadgeVariant {
     badgeStyle?: BadgeStyle
 }
@@ -196,6 +196,29 @@ export const usesBadgeVariants = () => {
                     
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'pill')), // apply general cssProps starting with pill***
+                }),
+            ]),
+            rule(['.square', '.circle'], [
+                layout({
+                    // spacings:
+                    padding : cssProps.paddingBlock, // set paddingInline = paddingBlock
+                }),
+            ]),
+            rule('.square', [
+                layout({
+                    // customize:
+                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'square')), // apply general cssProps starting with square***
+                }),
+            ]),
+            rule('.circle', [
+                layout({
+                    // borders:
+                    borderRadius : borderRadiuses.pill, // big rounded corner
+                    
+                    
+                    
+                    // customize:
+                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'circle')), // apply general cssProps starting with circle***
                 }),
             ]),
         ]),
