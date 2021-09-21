@@ -58,7 +58,7 @@ import {
     usesThemeImpt,
     isOutlined,
     isMild,
-    usesMild,
+    usesMildVariant,
     usesForeg,
     usesBackg,
     usesAnim,
@@ -171,7 +171,7 @@ export const isNoValidation   = (styles: StyleCollection) => rule(selectorIsNoVa
  */
 export const usesValidInvalid = () => {
     // dependencies:
-    const [, mildRefs ] = usesMild();
+    const [, mildRefs ] = usesMildVariant();
     const [, foregRefs] = usesForeg();
     const [, backgRefs] = usesBackg();
     const [, animRefs ] = usesAnim();

@@ -74,7 +74,7 @@ import {
     ThemeVariant,
     useThemeVariant,
     
-    usesMild        as basicComponentUsesMild,
+    usesMildVariant        as basicComponentUsesMildVariant,
     MildVariant,
     useMildVariant,
     
@@ -194,9 +194,9 @@ export const usesThemeVariant = (factory?: Factory<StyleCollection>, options?: T
  * @param factory Customize the callback to create mildification definitions for each toggle state.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable mildification definitions.
  */
-export const usesMild = (factory?: Factory<StyleCollection>) => {
+export const usesMildVariant = (factory?: Factory<StyleCollection>) => {
     // dependencies:
-    const [mild, mildRefs , mildDecls, ...restMild] = basicComponentUsesMild(factory);
+    const [mild, mildRefs , mildDecls, ...restMild] = basicComponentUsesMildVariant(factory);
     const [    , themeRefs                        ] = usesThemeVariant();
     
     
@@ -236,7 +236,7 @@ export const usesForeg = (foregOverwrite?: Cust.Ref) => {
     // dependencies:
     const [foreg, foregRefs, foregDecls, ...restForeg] = basicComponentUsesForeg();
     const [     , themeRefs                          ] = usesThemeVariant();
-    const [     , mildRefs                           ] = usesMild();
+    const [     , mildRefs                           ] = usesMildVariant();
     
     
     
@@ -259,7 +259,7 @@ export const usesForeg = (foregOverwrite?: Cust.Ref) => {
                 ),
                 [foregDecls.foreg]   : fallbacks(
                  // outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
-                    mildRefs.backgMildTg,         // toggle mild     (if `usesMild()` applied)
+                    mildRefs.backgMildTg,         // toggle mild     (if `usesMildVariant()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
                 ),
@@ -514,7 +514,7 @@ export const usesIconVariants    = () => {
     
     // colors:
     const [themes]           = usesThemeVariant();
-    const [mild]             = usesMild();
+    const [mild]             = usesMildVariant();
     
     
     

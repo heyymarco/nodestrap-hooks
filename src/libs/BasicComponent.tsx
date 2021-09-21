@@ -656,7 +656,7 @@ export const isMild = (styles: StyleCollection) => rule([    '.mild&',  '&.mild'
  * @param factory Customize the callback to create mildification definitions for each toggle state.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents toggleable mildification definitions.
  */
-export const usesMild = (factory = mildOf) => {
+export const usesMildVariant = (factory = mildOf) => {
     // dependencies:
     const [themes, themeRefs] = usesThemeVariant();
     
@@ -665,8 +665,8 @@ export const usesMild = (factory = mildOf) => {
     return [
         () => composition([
             imports([
-                // `usesMild()` implicitly `usesThemeVariant()`
-                // `usesMild()` requires `usesThemeVariant()` to work correctly, otherwise it uses the parent themes (that's not intented)
+                // `usesMildVariant()` implicitly `usesThemeVariant()`
+                // `usesMildVariant()` requires `usesThemeVariant()` to work correctly, otherwise it uses the parent themes (that's not intented)
                 themes(),
             ]),
             vars({
@@ -740,7 +740,7 @@ export const usesForeg = () => {
     // dependencies:
     const [, themeRefs   ] = usesThemeVariant();
     const [, outlinedRefs] = usesOutlinedVariant();
-    const [, mildRefs    ] = usesMild();
+    const [, mildRefs    ] = usesMildVariant();
     
     
     
@@ -756,7 +756,7 @@ export const usesForeg = () => {
                 ),
                 [foregDecls.foreg]   : fallbacks(
                     outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
-                    mildRefs.foregMildTg,         // toggle mild     (if `usesMild()` applied)
+                    mildRefs.foregMildTg,         // toggle mild     (if `usesMildVariant()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
                 ),
@@ -799,7 +799,7 @@ export const usesBackg = () => {
     const [, themeRefs   ] = usesThemeVariant();
     const [, gradientRefs] = usesGradientVariant();
     const [, outlinedRefs] = usesOutlinedVariant();
-    const [, mildRefs    ] = usesMild();
+    const [, mildRefs    ] = usesMildVariant();
     
     
     
@@ -817,7 +817,7 @@ export const usesBackg = () => {
                 ),
                 [backgDecls.backgCol]  : fallbacks(
                     outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
-                    mildRefs.backgMildTg,         // toggle mild     (if `usesMild()` applied)
+                    mildRefs.backgMildTg,         // toggle mild     (if `usesMildVariant()` applied)
                     
                     backgRefs.backgFn,            // default => uses our `backgFn`
                 ),
@@ -1102,7 +1102,7 @@ export const usesBasicComponentVariants = () => {
     const [themes]             = usesThemeVariant();
     const [gradient]           = usesGradientVariant();
     const [outlined]           = usesOutlinedVariant();
-    const [mild]               = usesMild();
+    const [mild]               = usesMildVariant();
     
     
     

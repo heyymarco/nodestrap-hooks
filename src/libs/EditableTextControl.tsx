@@ -126,7 +126,7 @@ export const usesIconColor = () => {
             vars({
                 [iconColorDecls.iconCol]       : fallbacks(
                     outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
-                    iconColorRefs.iconColMildTg,  // toggle mild     (if `usesMild()` applied)
+                    iconColorRefs.iconColMildTg,  // toggle mild     (if `usesMildVariant()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
                 ),

@@ -57,7 +57,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesMild,
+    usesMildVariant,
     usesForeg,
     usesAnim,
 }                           from './BasicComponent'
@@ -328,7 +328,7 @@ export const usesCheckLayout = () => {
     // dependencies:
     
     // colors:
-    const [         , mildRefs     ] = usesMild();
+    const [         , mildRefs     ] = usesMildVariant();
     const [foreg    , foregRefs    ] = usesForeg();
     
     // animations:

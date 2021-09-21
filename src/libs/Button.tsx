@@ -50,7 +50,7 @@ import {
     gradientOf,
     noOutlined,
     outlinedOf,
-    usesMild,
+    usesMildVariant,
     usesForeg,
 }                           from './BasicComponent'
 import {
@@ -190,7 +190,7 @@ export const usesButtonVariants = () => {
     ]));
     
     // colors:
-    const [, mildRefs            ] = usesMild();
+    const [, mildRefs            ] = usesMildVariant();
     const [,         , foregDecls] = usesForeg();
     
     
