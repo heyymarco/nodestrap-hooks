@@ -71,7 +71,7 @@ import {
     isValid,
     isInvalid,
     isNoValidation,
-    usesValidInvalid as editableControlUsesValidInvalid,
+    usesValidInvalidState as editableControlUsesValidInvalidState,
     
     
     
@@ -173,9 +173,9 @@ const [validInvalidRefs, validInvalidDecls] = createCssVar<ValidInvalidVars>();
  * Uses valid & invalid states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents valid & invalid state definitions.
  */
-export const usesValidInvalid = () => {
+export const usesValidInvalidState = () => {
     // dependencies:
-    const [validInvalid, , , ...restValidInvalid] = editableControlUsesValidInvalid();
+    const [validInvalid, , , ...restValidInvalid] = editableControlUsesValidInvalidState();
     
     
     
@@ -220,7 +220,7 @@ export const usesEditableTextControlLayout = () => {
     const [iconColor   , iconColorRefs   ] = usesIconColor();
     
     // states:
-    const [            , validInvalidRefs] = usesValidInvalid();
+    const [            , validInvalidRefs] = usesValidInvalidState();
     
     
     
@@ -300,7 +300,7 @@ export const usesEditableTextControlStates = () => {
     // dependencies:
     
     // states:
-    const [validInvalid] = usesValidInvalid();
+    const [validInvalid] = usesValidInvalidState();
     
     
     

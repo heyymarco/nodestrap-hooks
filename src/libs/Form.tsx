@@ -60,7 +60,7 @@ import {
     // hooks:
     isValid,
     isInvalid,
-    usesValidInvalid,
+    usesValidInvalidState,
     markValid,
     markInvalid,
     ValidatorHandler,
@@ -191,7 +191,7 @@ export const usesFormStates = () => {
     // dependencies:
     
     // states:
-    const [validInvalid] = usesValidInvalid();
+    const [validInvalid] = usesValidInvalidState();
     
     
     

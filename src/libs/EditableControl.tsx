@@ -169,7 +169,7 @@ export const isNoValidation   = (styles: StyleCollection) => rule(selectorIsNoVa
  * Uses valid & invalid states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents valid & invalid state definitions.
  */
-export const usesValidInvalid = () => {
+export const usesValidInvalidState = () => {
     // dependencies:
     const [, mildRefs ] = usesMildVariant();
     const [, foregRefs] = usesForeg();
@@ -552,7 +552,7 @@ export const usesEditableControlStates = () => {
     // dependencies:
     
     // states:
-    const [validInvalid] = usesValidInvalid();
+    const [validInvalid] = usesValidInvalidState();
     
     
     
@@ -606,7 +606,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
     const [, {foreg}] = usesForeg();
     const [, {backg}] = usesBackg();
-    const [, {foregValidInvalidStart, backgValidInvalidStart}] = usesValidInvalid();
+    const [, {foregValidInvalidStart, backgValidInvalidStart}] = usesValidInvalidState();
     
     
     
