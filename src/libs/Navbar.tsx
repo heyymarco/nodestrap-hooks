@@ -168,10 +168,10 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 //#endregion activePassive
 
 //#region compact
-export interface StateCompact {
+export interface CompactState {
     compact? : boolean
 }
-export const useStateCompact = <TElement extends HTMLElement = HTMLElement>(props: StateCompact, navbarRef: React.RefObject<TElement>) => {
+export const useCompactState = <TElement extends HTMLElement = HTMLElement>(props: CompactState, navbarRef: React.RefObject<TElement>) => {
     // states:
     const [compactDn, setCompactDn] = useState<boolean>(false); // uncontrollable (dynamic) state: true => compact mode, false => full mode
     
@@ -964,7 +964,7 @@ export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
         TogglerActiveProps,
         
         // states:
-        StateCompact
+        CompactState
 {
     // children:
     logo?     : React.ReactChild | boolean | null
@@ -979,7 +979,7 @@ export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     // states:
     const navbarRef             = useRef<TElement|null>(null);
-    const stateCompact          = useStateCompact(props, navbarRef);
+    const compactState          = useCompactState(props, navbarRef);
     const [isActive, setActive] = useTogglerActive(props);
     
     
@@ -1138,7 +1138,7 @@ export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: Navbar
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                stateCompact.class,
+                compactState.class,
             ]}
             
             
