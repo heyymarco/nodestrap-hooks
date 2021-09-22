@@ -67,7 +67,7 @@ Context.displayName  = 'Validation';
 
 // hooks:
 
-export function usePropValidation(props: ValidationProps): Validation {
+export const useValidation = (props: ValidationProps): Validation => {
     // contexts:
     const valContext = useContext(Context);
 
@@ -107,13 +107,13 @@ export function usePropValidation(props: ValidationProps): Validation {
         enableValidation : enableValidation,
         isValid          : isValid,
     };
-}
+};
 
 
 
 // react components:
 
-export interface ValidationProps
+export interface ValidationProps extends Partial<Validation>
 {
     /**
      * `undefined` : same as `true`.  
@@ -142,7 +142,7 @@ export interface ValidationProps
     // children:
     children?          : React.ReactNode
 }
-export default function ValidationProvider(props: ValidationProps) {
+export const ValidationProvider = (props: ValidationProps) => {
     return (
         <Context.Provider value={{
             enableValidation : props.enableValidation ?? _defaultEnableValidation,
@@ -151,5 +151,5 @@ export default function ValidationProvider(props: ValidationProps) {
             {props.children}
         </Context.Provider>
     );
-}
-export { ValidationProvider }
+};
+export { ValidationProvider as default }

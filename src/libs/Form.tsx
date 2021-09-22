@@ -69,7 +69,7 @@ import {
 import {
     // hooks:
     Result as ValResult,
-    usePropValidation,
+    useValidation,
     
     
     
@@ -277,7 +277,7 @@ export const Form = (props: FormProps) => {
     
     
     // fn props:
-    const propValidation    = usePropValidation(props);
+    const validation        = useValidation(props);
     
     
     
@@ -341,7 +341,7 @@ export const Form = (props: FormProps) => {
                 props.onAnimationEnd?.(e);
             }}
         >
-            { props.children && <ValidationProvider {...propValidation}>
+            { props.children && <ValidationProvider {...validation}>
                 { props.children }
             </ValidationProvider> }
         </BasicComponent>
