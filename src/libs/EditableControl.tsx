@@ -282,7 +282,7 @@ export const useInputValidator     = (customValidator?: CustomValidatorHandler) 
             
             
             // instantly update variable `isValid` without waiting state to refresh (re-render)
-            // because the value is needed immediately by `useStateValidInvalid` at startup
+            // because the value is needed immediately by `useValidInvalidState` at startup
             isValid = (customValidator ? customValidator(validity, valueNow) : validity.valid);
             setIsValid(isValid);
         };
@@ -324,7 +324,7 @@ export const useInputValidator     = (customValidator?: CustomValidatorHandler) 
         handleChange : handleChange,
     };
 };
-export const useStateValidInvalid  = (props: ValidationProps, validator?: ValidatorHandler) => {
+export const useValidInvalidState  = (props: ValidationProps, validator?: ValidatorHandler) => {
     // fn props:
     const propValidation = usePropValidation(props);
     const propEnabled    = usePropEnabled(props);
@@ -670,18 +670,18 @@ export interface EditableControlProps<TElement extends EditableControlElement = 
 }
 export const EditableControl = <TElement extends EditableControlElement = EditableControlElement>(props: EditableControlProps<TElement>) => {
     // styles:
-    const sheet          = useEditableControlSheet();
+    const sheet             = useEditableControlSheet();
 
     
     
     // states:
-    const inputValidator = useInputValidator(props.customValidator);
-    const stateValInval  = useStateValidInvalid(props, inputValidator.validator);
+    const inputValidator    = useInputValidator(props.customValidator);
+    const validInvalidState = useValidInvalidState(props, inputValidator.validator);
 
 
     
     // jsx:
-    const inputRef       = useRef<TElement|null>(null);
+    const inputRef          = useRef<TElement|null>(null);
     return (
         <Control<TElement>
             // other props:
@@ -691,7 +691,7 @@ export const EditableControl = <TElement extends EditableControlElement = Editab
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                stateValInval.class,
+                validInvalidState.class,
             ]}
 
 
@@ -734,7 +734,7 @@ export const EditableControl = <TElement extends EditableControlElement = Editab
             // events:
             onAnimationEnd={(e) => {
                 // validations:
-                stateValInval.handleAnimationEnd(e);
+                validInvalidState.handleAnimationEnd(e);
 
 
                 // forwards:

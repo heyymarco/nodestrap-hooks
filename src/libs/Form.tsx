@@ -64,7 +64,7 @@ import {
     markValid,
     markInvalid,
     ValidatorHandler,
-    useStateValidInvalid,
+    useValidInvalidState,
 }                           from './EditableControl'
 import {
     // hooks:
@@ -104,7 +104,7 @@ export const useFormValidator      = (customValidator?: CustomValidatorHandler) 
             
             
             // instantly update variable `isValid` without waiting state to refresh (re-render)
-            // because the value is needed immediately by `useStateValidInvalid` at startup
+            // because the value is needed immediately by `useValidInvalidState` at startup
             isValid = (customValidator ? customValidator(validNow) : validNow);
             setIsValid(isValid);
         };
@@ -266,18 +266,18 @@ export interface FormProps
 }
 export const Form = (props: FormProps) => {
     // styles:
-    const sheet          = useFormSheet();
+    const sheet             = useFormSheet();
     
     
     
     // states:
-    const formValidator  = useFormValidator(props.customValidator);
-    const stateValInval  = useStateValidInvalid(props, formValidator.validator);
+    const formValidator     = useFormValidator(props.customValidator);
+    const validInvalidState = useValidInvalidState(props, formValidator.validator);
     
     
     
     // fn props:
-    const propValidation = usePropValidation(props);
+    const propValidation    = usePropValidation(props);
     
     
     
@@ -299,7 +299,7 @@ export const Form = (props: FormProps) => {
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                stateValInval.class,
+                validInvalidState.class,
             ]}
             
             
@@ -334,7 +334,7 @@ export const Form = (props: FormProps) => {
             // events:
             onAnimationEnd={(e) => {
                 // validations:
-                stateValInval.handleAnimationEnd(e);
+                validInvalidState.handleAnimationEnd(e);
                 
                 
                 // forwards:
