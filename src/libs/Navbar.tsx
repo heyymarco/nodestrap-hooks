@@ -113,7 +113,7 @@ import {
 import {
     // hooks:
     isPress,
-    usesActivePassiveAsPressRelease,
+    usesActivePassiveAsPressReleaseState,
     
     
     
@@ -546,7 +546,7 @@ export const usesMenuStates = () => {
         imports([
             // states:
             usesActionControlStates(),
-            usesActivePassiveAsPressRelease(),
+            usesActivePassiveAsPressReleaseState(),
         ]),
         states([
             isFocus([

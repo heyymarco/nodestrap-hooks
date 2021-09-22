@@ -72,7 +72,7 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    usesActivePassiveAsPressRelease,
+    usesActivePassiveAsPressReleaseState,
 }                           from './ActionControl'
 import {
     // styles:
@@ -592,7 +592,8 @@ export const usesCheckVariants = () => {
             ]),
             rule('.togglerBtn', [ // todo: fix blinky when mouseUp
                 imports([
-                    usesActivePassiveAsPressRelease(),
+                    // states:
+                    usesActivePassiveAsPressReleaseState(),
                 ]),
                 layout({
                     ...children(labelElm, composition([

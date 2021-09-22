@@ -283,7 +283,7 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
  * Uses active & passive states as press & release states.
  * @returns A `StyleCollection` represents active & passive state definitions.
  */
-export const usesActivePassiveAsPressRelease = () => {
+export const usesActivePassiveAsPressReleaseState = () => {
     // dependencies:
     
     // states:
