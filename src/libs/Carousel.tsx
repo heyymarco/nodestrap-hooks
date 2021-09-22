@@ -15,7 +15,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     
     
@@ -53,12 +52,6 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    
-    
-    
-    // styles:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
     
     
     
@@ -273,7 +266,6 @@ export const usesCarouselLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
             usesContentLayout(),
         ]),
         layout({
@@ -354,7 +346,6 @@ export const usesCarouselVariants = () => {
     return composition([
         imports([
             // variants:
-            usesBasicComponentVariants(),
             usesContentVariants(),
             
             // layouts:
