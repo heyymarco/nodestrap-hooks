@@ -242,7 +242,7 @@ const [checkClearRefs, checkClearDecls] = createCssVar<CheckClearVars>();
  * Uses check & clear states.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents check & clear state definitions.
  */
-export const usesCheckClear = () => {
+export const usesCheckClearState = () => {
     // dependencies:
     const [, animRefs] = usesAnim();
     
@@ -643,7 +643,7 @@ export const usesCheckStates = () => {
     // dependencies:
     
     // states:
-    const [checkClear] = usesCheckClear();
+    const [checkClear] = usesCheckClearState();
     
     
     
@@ -691,7 +691,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const defaultTransf = (transf : Cust.Ref) => fallbacks(transf, checkAnimRefs.transfNone);
     const isRef         = (expr   : Cust.Expr): expr is Cust.Ref => (typeof(expr) === 'string') && expr.startsWith('var(--');
     
-    const [, {filterCheckClearIn, filterCheckClearOut, transfCheckClearIn, transfCheckClearOut}] = usesCheckClear();
+    const [, {filterCheckClearIn, filterCheckClearOut, transfCheckClearIn, transfCheckClearOut}] = usesCheckClearState();
     
     
     
