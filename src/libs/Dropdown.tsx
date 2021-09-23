@@ -15,6 +15,13 @@ import {
     useActivePassiveState,
 }                           from './Indicator'
 import {
+    // general types:
+    PopupPlacement,
+    PopupModifier,
+    PopupPosition,
+    
+    
+    
     // react components:
     CollapseProps,
     Collapse,
@@ -328,3 +335,5 @@ export { Dropdown as default }
 
 export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }
