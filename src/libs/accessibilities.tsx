@@ -62,7 +62,7 @@ Context.displayName  = 'Accessibility';
 
 
 // hooks:
-export function usePropAccessibility<TDefaultEnabled = boolean, TDefaultReadOnly = boolean, TDefaultActive = boolean>(props: AccessibilityProps, defaultEnabled: boolean|TDefaultEnabled = _defaultEnabled, defaultReadOnly: boolean|TDefaultReadOnly = _defaultReadOnly, defaultActive: boolean|TDefaultActive = _defaultActive): Accessibility|TAccessibility<TDefaultEnabled, TDefaultReadOnly, TDefaultActive> {
+export const usePropAccessibility = <TDefaultEnabled extends unknown = boolean, TDefaultReadOnly = boolean, TDefaultActive = boolean>(props: AccessibilityProps, defaultEnabled: boolean|TDefaultEnabled = _defaultEnabled, defaultReadOnly: boolean|TDefaultReadOnly = _defaultReadOnly, defaultActive: boolean|TDefaultActive = _defaultActive): Accessibility|TAccessibility<TDefaultEnabled, TDefaultReadOnly, TDefaultActive> => {
     // contexts:
     const accessContext = useContext(Context);
 
@@ -103,9 +103,9 @@ export function usePropAccessibility<TDefaultEnabled = boolean, TDefaultReadOnly
             (props.active ?? defaultActive)
         ),
     };
-}
+};
 
-export function usePropEnabled<TDefaultEnabled = boolean>(props: AccessibilityProps, defaultEnabled: boolean|TDefaultEnabled = _defaultEnabled): boolean|TDefaultEnabled {
+export const usePropEnabled = <TDefaultEnabled extends unknown = boolean>(props: AccessibilityProps, defaultEnabled: boolean|TDefaultEnabled = _defaultEnabled): boolean|TDefaultEnabled => {
     // contexts:
     const accessContext = useContext(Context);
 
@@ -122,9 +122,9 @@ export function usePropEnabled<TDefaultEnabled = boolean>(props: AccessibilityPr
         &&
         (props.enabled ?? defaultEnabled)
     );
-}
+};
 
-export function usePropReadOnly<TDefaultReadOnly = boolean>(props: AccessibilityProps, defaultReadOnly: boolean|TDefaultReadOnly = _defaultReadOnly): boolean|TDefaultReadOnly {
+export const usePropReadOnly = <TDefaultReadOnly extends unknown = boolean>(props: AccessibilityProps, defaultReadOnly: boolean|TDefaultReadOnly = _defaultReadOnly): boolean|TDefaultReadOnly => {
     // contexts:
     const accessContext = useContext(Context);
 
@@ -141,9 +141,9 @@ export function usePropReadOnly<TDefaultReadOnly = boolean>(props: Accessibility
         ||
         (props.readOnly ?? defaultReadOnly)
     );
-}
+};
 
-export function usePropActive<TDefaultActive = boolean>(props: AccessibilityProps, defaultActive: boolean|TDefaultActive = _defaultActive): boolean|TDefaultActive {
+export const usePropActive = <TDefaultActive extends unknown = boolean>(props: AccessibilityProps, defaultActive: boolean|TDefaultActive = _defaultActive): boolean|TDefaultActive => {
     // contexts:
     const accessContext = useContext(Context);
 
@@ -160,13 +160,13 @@ export function usePropActive<TDefaultActive = boolean>(props: AccessibilityProp
         ||
         (props.active ?? defaultActive)
     );
-}
+};
 
 
 
 // react components:
 
-export interface AccessibilityProps
+export interface AccessibilityProps extends Partial<Accessibility>
 {
     /**
      * `undefined` : same as `true`.  
@@ -219,7 +219,7 @@ export interface AccessibilityProps
     // children:
     children?        : React.ReactNode
 }
-export default function AccessibilityProvider(props: AccessibilityProps) {
+export const AccessibilityProvider = (props: AccessibilityProps) => {
     return (
         <Context.Provider value={{
             enabled  : props.enabled  ?? _defaultEnabled,
@@ -229,5 +229,5 @@ export default function AccessibilityProvider(props: AccessibilityProps) {
             {props.children}
         </Context.Provider>
     );
-}
-export { AccessibilityProvider }
+};
+export { AccessibilityProvider as default }
