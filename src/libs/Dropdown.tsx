@@ -189,7 +189,7 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
             // accessibilities:
             {...{
                 active,
-                inheritActive,
+                inheritActive : false,
             }}
             
             
