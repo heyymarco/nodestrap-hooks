@@ -13,9 +13,9 @@ import reportWebVitals from './reportWebVitals';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
-// import BasicComponentApp                            from './apps/BasicComponentApp'; // ok
-//     import ContainerApp                             from './apps/ContainerApp'; // ok
-//     import IndicatorApp                             from './apps/IndicatorApp'; // ok
+// import BasicComponentApp                            from './apps/BasicComponentApp';
+//     import ContainerApp                             from './apps/ContainerApp';
+//     import IndicatorApp                             from './apps/IndicatorApp';
 //         import ContentApp                           from './apps/ContentApp';
 //            import ListgroupApp                      from './apps/ListgroupApp';
 //                 import AccordionApp                 from './apps/AccordionApp';
@@ -27,7 +27,8 @@ import reportWebVitals from './reportWebVitals';
 //             import CollapseApp                      from './apps/CollapseApp';
 //                 import DropdownApp                  from './apps/DropdownApp';
 //             import BadgeApp                         from './apps/BadgeApp';
-                import BusyApp                          from './apps/BusyApp';
+//                 import BusyApp                          from './apps/BusyApp';
+            import TooltipApp                       from './apps/TooltipApp';
 //         import ControlApp                           from './apps/ControlApp';
 //             import ActionControlApp                 from './apps/ActionControlApp';
 //                 import ButtonApp                    from './apps/ButtonApp';
@@ -51,7 +52,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <BusyApp />
+    <TooltipApp />
     ,
     document.getElementById('root')
 );
