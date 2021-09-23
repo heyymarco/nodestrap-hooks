@@ -173,24 +173,24 @@ export type ModalStyle = 'scrollable' // might be added more styles in the futur
 export interface ModalVariant {
     modalStyle? : ModalStyle
 }
-export function useModalVariant(props: ModalVariant) {
+export const useModalVariant = (props: ModalVariant) => {
     return {
         class: props.modalStyle ? props.modalStyle : null,
     };
-}
+};
 
 export interface ModalAlign {
     horzAlign? : Prop.JustifyItems
     vertAlign? : Prop.AlignItems
 }
-export function useModalAlign(props: ModalAlign) {
+export const useModalAlign = (props: ModalAlign) => {
     return {
         style: {
             [cssDecls.horzAlign] : props.horzAlign,
             [cssDecls.vertAlign] : props.vertAlign,
         },
     };
-}
+};
 
 
 
