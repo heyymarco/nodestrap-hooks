@@ -798,8 +798,10 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
                 
                 
                 // children:
-                header={headerFn}
-                footer={footerFn}
+                {...{
+                    header : headerFn,
+                    footer : footerFn,
+                }}
             />
         </Popup>
     );
