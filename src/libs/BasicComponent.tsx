@@ -1167,8 +1167,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         backg             : 'transparent',
         backgGrad         : [['linear-gradient(180deg, rgba(255,255,255, 0.2), rgba(0,0,0, 0.2))', 'border-box']],
         
-        border            : borders.default,
+        border            : [[borders.style, borders.defaultWidth, borders.color]],
+        borderStyle       : borders.style,
+        borderWidth       : borders.defaultWidth,
         borderColor       : borders.color,
+        
         borderRadius      : borderRadiuses.md,
         borderRadiusSm    : borderRadiuses.sm,
         borderRadiusLg    : borderRadiuses.lg,
