@@ -439,3 +439,5 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     );
 };
 export { Popup as default }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }
