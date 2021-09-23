@@ -298,34 +298,44 @@ export const Input = (props: InputProps) => {
                 
                 
                 // accessibilities:
-                tabIndex={tabIndex} // focusable
+                {...{
+                    tabIndex,
+                }}
                 
                 disabled={!propEnabled} // do not submit the value if disabled
                 readOnly={propReadOnly} // locks the value if readOnly
                 
                 
                 // values:
-                name={name}
-                defaultValue={defaultValue}
-                value={value}
+                {...{
+                    name,
+                    defaultValue,
+                    value,
+                }}
                 
                 
                 // validations:
-                required={required}
-                minLength={minLength}
-                maxLength={maxLength}
-                min={min}
-                max={max}
-                pattern={pattern}
+                {...{
+                    required,
+                    minLength,
+                    maxLength,
+                    min,
+                    max,
+                    pattern,
+                }}
                 
                 
                 // formats:
-                type={type}
-                placeholder={placeholder}
+                {...{
+                    type,
+                    placeholder,
+                }}
                 
                 
                 // events:
-                onChange={onChange} // forwards `onChange` event
+                {...{
+                    onChange,
+                }}
             />
         </EditableTextControl>
     );

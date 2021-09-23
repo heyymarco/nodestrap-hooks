@@ -883,7 +883,7 @@ export const Check = (props: CheckProps) => {
         
         
         // formats:
-        type,
+        type = 'checkbox',
     ...restProps}  = props;
     
     
@@ -994,17 +994,23 @@ export const Check = (props: CheckProps) => {
                 
                 
                 // values:
-                name={name}
-                defaultValue={defaultValue}
-                value={value}
+                {...{
+                    name,
+                    defaultValue,
+                    value,
+                }}
                 
                 
                 // validations:
-                required={required}
+                {...{
+                    required,
+                }}
                 
                 
                 // formats:
-                type={type ?? 'checkbox'}
+                {...{
+                    type,
+                }}
                 
                 
                 // events:
@@ -1013,7 +1019,9 @@ export const Check = (props: CheckProps) => {
                     e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
                 }}
                 
-                onChange={onChange} // forwards `onChange` event
+                {...{
+                    onChange,
+                }}
                 onClick={(e) => e.stopPropagation()} // prevents firing `change` event triggering parent's `onClick`
             />
             { (props.text || props.children) &&
