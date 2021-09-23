@@ -51,6 +51,13 @@ import {
     usesContentVariants,
 }                           from './Content'
 import {
+    // general types:
+    PopupPlacement,
+    PopupModifier,
+    PopupPosition,
+    
+    
+    
     // styles:
     usesPopupLayout,
     usesPopupVariants,
@@ -409,3 +416,5 @@ export const Alert = <TElement extends HTMLElement = HTMLElement>(props: AlertPr
     );
 };
 export { Alert as default }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }
