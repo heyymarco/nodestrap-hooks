@@ -187,16 +187,21 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
     return (
         <Collapse<TElement>
             // accessibilities:
-            active={active}
-            inheritActive={inheritActive}
+            {...{
+                active,
+                inheritActive,
+            }}
             
             
             // popups:
-            targetRef={targetRef}
-            popupPlacement={popupPlacement}
-            popupModifiers={popupModifiers}
-            popupPosition={popupPosition}
-            popupStyle='wrapper'
+            {...{
+                targetRef,
+                popupPlacement,
+                popupModifiers,
+                popupPosition,
+                
+                popupStyle: 'wrapper',
+            }}
             
             
             // events:
