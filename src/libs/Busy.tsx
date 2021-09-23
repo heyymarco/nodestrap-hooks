@@ -34,6 +34,13 @@ import {
     usesSizeVariant,
 }                           from './BasicComponent'
 import {
+    // general types:
+    PopupPlacement,
+    PopupModifier,
+    PopupPosition,
+    
+    
+    
     // styles:
     usesBadgeLayout,
     usesBadgeVariants,
@@ -193,3 +200,5 @@ export const Busy = <TElement extends HTMLElement = HTMLElement>(props: BusyProp
     );
 };
 export { Busy as default }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }
