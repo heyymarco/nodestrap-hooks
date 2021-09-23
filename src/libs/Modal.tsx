@@ -722,8 +722,10 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             // accessibilities:
             role={active ? 'dialog' : undefined}
             aria-modal={active ? true : undefined}
-            active={active}
-            inheritActive={inheritActive}
+            {...{
+                active,
+                inheritActive,
+            }}
             
             
             // classes:
