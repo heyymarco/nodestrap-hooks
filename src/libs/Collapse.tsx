@@ -55,6 +55,13 @@ import {
     isPassivating,
 }                           from './Indicator'
 import {
+    // general types:
+    PopupPlacement,
+    PopupModifier,
+    PopupPosition,
+    
+    
+    
     // hooks:
     usesActivePassiveState as popupUsesActivePassiveState,
     
@@ -327,3 +334,5 @@ export const Collapse = <TElement extends HTMLElement = HTMLElement>(props: Coll
 export { Collapse as default }
 
 export type { OrientationName, OrientationVariant }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }
