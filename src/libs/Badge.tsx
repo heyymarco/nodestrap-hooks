@@ -44,6 +44,13 @@ import {
     noNude,
 }                           from './BasicComponent'
 import {
+    // general types:
+    PopupPlacement,
+    PopupModifier,
+    PopupPosition,
+    
+    
+    
     // styles:
     usesPopupLayout,
     usesPopupVariants,
@@ -378,3 +385,5 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
     );
 };
 export { Badge as default }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }
