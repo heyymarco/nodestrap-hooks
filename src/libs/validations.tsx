@@ -67,7 +67,7 @@ Context.displayName  = 'Validation';
 
 // hooks:
 
-export const useValidation = (props: ValidationProps): Validation => {
+export const usePropValidation = (props: ValidationProps): Validation => {
     // contexts:
     const valContext = useContext(Context);
 

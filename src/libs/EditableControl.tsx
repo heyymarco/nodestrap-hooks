@@ -87,7 +87,7 @@ import {
 import {
     // hooks:
     Result as ValResult,
-    useValidation,
+    usePropValidation,
     
     
     
@@ -326,9 +326,9 @@ export const useInputValidator     = (customValidator?: CustomValidatorHandler) 
 };
 export const useValidInvalidState  = (props: ValidationProps, validator?: ValidatorHandler) => {
     // fn props:
-    const validation   = useValidation(props);
-    const propEnabled  = usePropEnabled(props);
-    const propReadOnly = usePropReadOnly(props);
+    const propValidation = usePropValidation(props);
+    const propEnabled    = usePropEnabled(props);
+    const propReadOnly   = usePropReadOnly(props);
     
     
     
@@ -340,17 +340,17 @@ export const useValidInvalidState  = (props: ValidationProps, validator?: Valida
     // states:
     const [valided,       setValided      ] = useState<ValResult|undefined>((): (ValResult|undefined) => {
         // if disabled or readOnly => no validation
-        if (!propEnabled || propReadOnly)     return null;
+        if (!propEnabled || propReadOnly)         return null;
         
         
         
         // use prop as the primary validator:
-        if (validation.isValid !== undefined) return validation.isValid; // validity is set => set state to uncheck/valid/invalid
+        if (propValidation.isValid !== undefined) return propValidation.isValid; // validity is set => set state to uncheck/valid/invalid
         
         
         
         // use input validator as secondary:
-        if (validator)                        return undefined; // undefined means => evaluate the validator *at startup*
+        if (validator)                            return undefined; // undefined means => evaluate the validator *at startup*
         
         
         
@@ -370,17 +370,17 @@ export const useValidInvalidState  = (props: ValidationProps, validator?: Valida
      */
     const validFn = ((): (ValResult|undefined) => {
         // if disabled or readOnly => no validation
-        if (!propEnabled || propReadOnly)     return null;
+        if (!propEnabled || propReadOnly)         return null;
         
         
         
         // use prop as the primary validator:
-        if (validation.isValid !== undefined) return validation.isValid; // validity is set => set state to uncheck/valid/invalid
+        if (propValidation.isValid !== undefined) return propValidation.isValid; // validity is set => set state to uncheck/valid/invalid
         
         
         
         // use input validator as secondary:
-        if ((valided !== undefined))          return (validator ? validator() : defaultValided); // if validator has loaded => evaluate the validator *now*
+        if ((valided !== undefined))              return (validator ? validator() : defaultValided); // if validator has loaded => evaluate the validator *now*
         
         
         
@@ -442,7 +442,7 @@ export const useValidInvalidState  = (props: ValidationProps, validator?: Valida
     const noValidation = // causing the validFn *always* `null`:
         (!propEnabled || propReadOnly)
         ||
-        (validation.isValid === null)
+        (propValidation.isValid === null)
         ||
         (!validator);
     return {
