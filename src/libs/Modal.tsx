@@ -724,7 +724,7 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             aria-modal={active ? true : undefined}
             {...{
                 active,
-                inheritActive,
+                inheritActive : false,
             }}
             
             
