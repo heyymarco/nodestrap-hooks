@@ -52,23 +52,22 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    
-    
-    
-    // react components:
-    BasicComponentProps,
-    BasicComponent,
 }                           from './BasicComponent'
 import {
     // styles:
     usesContentLayout,
     usesContentVariants,
-    usesContentStates,
     
     
     
     // configs:
     cssProps as ccssProps,
+    
+    
+    
+    // react components:
+    ContentProps,
+    Content,
 }                           from './Content'
 import {
     // react components:
@@ -353,14 +352,6 @@ export const usesCarouselVariants = () => {
         ]),
     ]);
 };
-export const usesCarouselStates = () => {
-    return composition([
-        imports([
-            // states:
-            usesContentStates(),
-        ]),
-    ]);
-};
 export const usesCarousel = () => {
     return composition([
         imports([
@@ -369,9 +360,6 @@ export const usesCarousel = () => {
             
             // variants:
             usesCarouselVariants(),
-            
-            // states:
-            usesCarouselStates(),
         ]),
     ]);
 };
@@ -440,7 +428,7 @@ export { CarouselItem as Item }
 
 export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
     extends
-        BasicComponentProps<TElement>
+        ContentProps<TElement>
 {
     // essentials:
     itemsTag? : keyof JSX.IntrinsicElements
@@ -544,7 +532,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
     
     // jsx:
     return (
-        <BasicComponent<TElement>
+        <Content<TElement>
             // other props:
             {...restProps}
             
@@ -767,7 +755,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
                     ))}
                 </Navscroll>
             }
-        </BasicComponent>
+        </Content>
     );
 };
 export { Carousel as default }
