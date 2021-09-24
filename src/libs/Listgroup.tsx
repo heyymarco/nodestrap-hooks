@@ -64,18 +64,24 @@ import {
 import {
     // hooks:
     isActive,
+    
+    
+    
+    // styles:
+    usesIndicatorLayout,
+    usesIndicatorVariants,
+    usesIndicatorStates,
+    
+    
+    
+    // react components:
+    IndicatorProps,
+    Indicator,
 }                           from './Indicator'
 import {
     // styles:
     usesContentLayout,
     usesContentVariants,
-    usesContentStates,
-    
-    
-    
-    // react components:
-    ContentProps,
-    Content,
 }                           from './Content'
 import {
     // hooks:
@@ -151,7 +157,7 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 // appearances:
 
-export type ListStyle = 'bullet' // might be added more styles in the future
+export type ListStyle = 'content'|'bullet' // might be added more styles in the future
 export interface ListVariant {
     listStyle?: ListStyle
 }
@@ -171,7 +177,7 @@ export const usesListgroupItemLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesContentLayout(),
+            usesIndicatorLayout(),
         ]),
         layout({
             // layouts:
@@ -205,7 +211,7 @@ export const usesListgroupItemVariants = () => {
     return composition([
         imports([
             // variants:
-            usesContentVariants(),
+            usesIndicatorVariants(),
             
             // layouts:
             sizes(),
@@ -230,7 +236,7 @@ export const usesListgroupItemStates = () => {
     return composition([
         imports([
             // states:
-            usesContentStates(),
+            usesIndicatorStates(),
         ]),
     ]);
 };
@@ -254,7 +260,6 @@ export const usesListgroupActionItemLayout = () => {
         imports([
             // layouts:
             usesActionControlLayout(),
-            usesContentLayout(),
             
             // colors:
             usesThemeDefault(),
@@ -266,7 +271,6 @@ export const usesListgroupActionItemVariants = () => {
         imports([
             // variants:
             usesActionControlVariants(),
-            usesContentVariants(),
         ]),
     ]);
 };
@@ -275,7 +279,6 @@ export const usesListgroupActionItemStates = () => {
         imports([
             // states:
             usesActionControlStates(),
-            usesContentStates(),
         ]),
         states([
             isFocus([
@@ -400,12 +403,31 @@ export const usesListgroupVariants = () => {
     return composition([
         imports([
             // variants:
-            usesContentVariants(),
+            usesIndicatorVariants(),
             
             // layouts:
             sizes(),
         ]),
         variants([
+            rule('.content', [
+                imports([
+                    usesContentVariants(),
+                ]),
+                layout({
+                    // children:
+                    ...children(wrapperElm, composition([
+                        layout({
+                            // children:
+                            ...children(listItemElm, composition([
+                                imports([
+                                    usesContentLayout(),
+                                    usesContentVariants(),
+                                ]),
+                            ])),
+                        }),
+                    ])),
+                }),
+            ]),
             noOrientationInline([ // block
                 layout({
                     // layouts:
@@ -512,7 +534,7 @@ export const usesListgroupStates = () => {
     return composition([
         imports([
             // states:
-            usesContentStates(),
+            usesIndicatorStates(),
         ]),
     ]);
 };
@@ -606,7 +628,7 @@ export const ListgroupItem = <TElement extends HTMLElement = HTMLElement>(props:
             ]}
         />
         :
-        <Content<TElement>
+        <Indicator<TElement>
             // other props:
             {...props}
             
@@ -631,7 +653,7 @@ export { ListgroupItem as Item }
 
 export interface ListgroupProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ContentProps<TElement>,
+        IndicatorProps<TElement>,
         
         // layouts:
         OrientationVariant,
@@ -678,7 +700,7 @@ export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: Lis
     
     // jsx:
     return (
-        <Content<TElement>
+        <Indicator<TElement>
             // other props:
             {...restProps}
             
@@ -739,7 +761,7 @@ export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: Lis
                     }
                 </Element>
             ))}
-        </Content>
+        </Indicator>
     );
 };
 export { Listgroup as default }

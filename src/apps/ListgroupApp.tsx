@@ -46,7 +46,7 @@ function App() {
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Listgroups.OrientationName|undefined>(undefined);
 
-	const listStyles = [undefined, 'bullet'];
+	const listStyles = [undefined, 'content', 'bullet'];
 	const [listStyle,    setListStyle     ] = useState<Listgroups.ListStyle|undefined>(undefined);
 
 	
