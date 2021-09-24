@@ -433,6 +433,7 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     return (
         <div
             ref={popupRef}
+            style={{ zIndex: 1080 }}
         >
             { Popup }
         </div>
