@@ -32,18 +32,22 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-}                           from './BasicComponent'
-import {
+    
+    
+    
     // styles:
-    usesIndicatorLayout,
-    usesIndicatorVariants,
-    usesIndicatorStates,
+    usesBasicComponentLayout,
+    usesBasicComponentVariants,
     
     
     
     // react components:
-    IndicatorProps,
-    Indicator,
+    BasicComponentProps,
+    BasicComponent,
+}                           from './BasicComponent'
+import {
+    // styles:
+    usesIndicatorStates,
 }                           from './Indicator'
 import spacers              from './spacers'     // configurable spaces defs
 
@@ -54,7 +58,7 @@ export const usesContentLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesIndicatorLayout(),
+            usesBasicComponentLayout(),
         ]),
         layout({
             // customize:
@@ -78,7 +82,7 @@ export const usesContentVariants = () => {
     return composition([
         imports([
             // variants:
-            usesIndicatorVariants(),
+            usesBasicComponentVariants(),
             
             // layouts:
             sizes(),
@@ -138,7 +142,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface ContentProps<TElement extends HTMLElement = HTMLElement>
     extends
-        IndicatorProps<TElement>
+        BasicComponentProps<TElement>
 {
     // children:
     children? : React.ReactNode
@@ -151,7 +155,7 @@ export const Content = <TElement extends HTMLElement = HTMLElement>(props: Conte
     
     // jsx:
     return (
-        <Indicator<TElement>
+        <BasicComponent<TElement>
             // other props:
             {...props}
 

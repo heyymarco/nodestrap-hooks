@@ -74,8 +74,6 @@ function App() {
                 <Content
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
-
-					enabled={enabled}
 				>
 					content
 					<Icon icon='face'               size={size} mild={mild} />
@@ -86,8 +84,6 @@ function App() {
 				<Content
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
-
-					enabled={enabled} active={true}
 				>
 					content active
 					<Icon icon='face'               size={size} mild={mild} />

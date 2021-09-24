@@ -50,8 +50,6 @@ function App() {
                 <Content
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
-
-					enabled={enabled} active={active}
 				>
                     content
 
@@ -59,12 +57,6 @@ function App() {
 						<Content
 							theme={theme} size={size} gradient={enableGrad}
 							outlined={outlined}
-
-							inheritEnabled={false}
-							enabled={childEnabled}
-							
-							inheritActive={false}
-							active={childActive}
 
 							style={{display: 'inline-block'}}
 						>
@@ -74,12 +66,6 @@ function App() {
 						<Content
 							theme={theme} size={size} gradient={enableGrad}
 							outlined={outlined}
-
-							inheritEnabled={true}
-							enabled={childEnabled}
-							
-							inheritActive={true}
-							active={childActive}
 
 							style={{display: 'inline-block'}}
 						>

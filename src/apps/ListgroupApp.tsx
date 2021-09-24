@@ -60,6 +60,12 @@ function App() {
 				>
                     element
                 </BasicComponent>
+                <Content
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined}
+				>
+                    content
+                </Content>
                 <Indicator
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
@@ -68,14 +74,6 @@ function App() {
 				>
                     indicator
                 </Indicator>
-                <Content
-					theme={theme} size={size} gradient={enableGrad}
-					outlined={outlined}
-
-					enabled={enabled} active={active}
-				>
-                    content
-                </Content>
 				<Control
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}

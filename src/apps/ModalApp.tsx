@@ -67,8 +67,6 @@ function App() {
                 <Content
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
-
-					enabled={enabled} active={active}
 				>
                         test
                 </Content>
