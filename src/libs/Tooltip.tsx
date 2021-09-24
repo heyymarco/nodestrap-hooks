@@ -1,6 +1,8 @@
 // react (builds html using javascript):
 import {
     default as React,
+    useState,
+    useEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -68,6 +70,15 @@ import {
     Popup,
 }                           from './Popup'
 import typos                from './typos/index' // configurable typography (texting) defs
+        
+        
+        
+// utilities:
+const isEnabled = (target: HTMLElement|null|undefined) => {
+    if (!target) return false; // if no target => assumes target as disabled
+    
+    return !target.matches(':disabled, .disable, .disabled')
+};
 
 
 
@@ -249,6 +260,13 @@ export const Tooltip = <TElement extends HTMLElement = HTMLElement>(props: Toolt
     
     
     
+    // states:
+    const [isHover , setIsHover ] = useState<boolean>(false);
+    const [isFocus , setIsFocus ] = useState<boolean>(false);
+    const [activeDn, setActiveDn] = useState<boolean>(false);
+    
+    
+    
     // rest props:
     const {
         // accessibilities:
@@ -259,7 +277,79 @@ export const Tooltip = <TElement extends HTMLElement = HTMLElement>(props: Toolt
     
     
     // fn props:
-    const activeFn = active ?? !!(props.children ?? false);
+    const newActiveDn = isEnabled(props.targetRef?.current) && (isHover || isFocus);
+    if (activeDn !== newActiveDn) { // change detected => apply the change
+        setActiveDn(newActiveDn); // remember the last change
+    }
+    
+    const activeFn = (
+        active // controllable active
+        ??
+        (
+            !!(props.children ?? false) // tootlip has a content
+            &&
+            activeDn // uncontrollable active
+        )
+    );
+    
+    
+    
+    // dom effects:
+    useEffect(() => {
+        const target = props.targetRef?.current;
+        if (!target) return; // target was not specified => nothing to do
+        if (active !== undefined) return; // controllable [active] is set => no set uncontrollable required
+        
+        
+        
+        // handlers:
+        const handleHover = () => {
+            if (!isEnabled(target)) return; // control is disabled => no response required
+            
+            
+            
+            setIsHover(true);
+        }
+        const handleLeave  = () => {
+            if (!isEnabled(target)) return; // control is disabled => no response required
+            
+            
+            
+            setIsHover(false);
+        }
+        const handleFocus = () => {
+            if (!isEnabled(target)) return; // control is disabled => no response required
+            
+            
+            
+            setIsFocus(true);
+        }
+        const handleBlur  = () => {
+            if (!isEnabled(target)) return; // control is disabled => no response required
+            
+            
+            
+            setIsFocus(false);
+        }
+        
+        
+        
+        // setups:
+        target.addEventListener('mouseenter', handleHover);
+        target.addEventListener('mouseleave', handleLeave);
+        target.addEventListener('focus', handleFocus, { capture: true }); // force `focus` as bubbling
+        target.addEventListener('blur', handleBlur, { capture: true }); // force `blur` as bubbling
+        
+        
+        
+        // cleanups:
+        return () => {
+            target.removeEventListener('mouseenter', handleHover);
+            target.removeEventListener('mouseleave', handleLeave);
+            target.removeEventListener('focus', handleFocus);
+            target.removeEventListener('blur', handleBlur);
+        };
+    }, [props.targetRef, active]);
     
     
     

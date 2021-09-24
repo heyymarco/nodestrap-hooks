@@ -34,26 +34,41 @@ function App() {
     const [placement, setPlacement] = useState<PopupPlacement|undefined>('top');
 
 	const targetButton1Ref = useRef<HTMLButtonElement>(null);
+	const targetButton2Ref = useRef<HTMLButtonElement>(null);
 
 	
 
     return (
         <div className="App">
             <Container>
-				<Button onClick={() => setActive(!active)}>Toggle badge</Button>
+				<Button onClick={() => setActive(!active)}>Toggle tooltip</Button>
 				<Button
 					style={{margin: '1em'}}
 					elmRef={targetButton1Ref}
 				>
-					Click me <Tooltip
-						targetRef={targetButton1Ref}
-						popupPlacement={placement}
-						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
-						active={active}
-					>
-							Hi, what's up?
-					</Tooltip>
+					Click me
 				</Button>
+				<Tooltip
+					targetRef={targetButton1Ref}
+					popupPlacement={placement}
+					theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+					active={active}
+				>
+					Hi, what's up?
+				</Tooltip>
+				<Button
+					style={{margin: '1em'}}
+					elmRef={targetButton2Ref}
+				>
+					Click me
+				</Button>
+				<Tooltip
+					targetRef={targetButton2Ref}
+					popupPlacement={placement}
+					theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				>
+					<p>Hi, how are you? Everything is <strong>good</strong>?</p>
+				</Tooltip>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
