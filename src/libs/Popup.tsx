@@ -207,8 +207,8 @@ export const usesPopupVariants = () => {
                     paddingInline : 0,      // discard Indicator's paddingInline
                     paddingBlock  : 0,      // discard Indicator's paddingBlock
                     
-                    marginInline  : 0,      // discard Indicator's marginInline
-                    marginBlock   : 0,      // discard Indicator's marginBlock
+                    // marginInline  : 0,      // discard Indicator's marginInline
+                    // marginBlock   : 0,      // discard Indicator's marginBlock
                     
                     
                     
