@@ -151,7 +151,7 @@ export const usesTooltipLayout = () => {
                                 ...children(arrowElm, composition([
                                     layout({
                                         // customize:
-                                        ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'arrow'), tooltipPos)), // apply general cssProps starting with arrow*** and ending with ***${tooltipPos}
+                                        ...usesGeneralProps(usesPrefixedProps(usesPrefixedProps(cssProps, 'arrow'), tooltipPos)), // apply general cssProps starting with arrow*** and then starting with ***${tooltipPos}
                                     }),
                                 ])),
                             }),
@@ -229,6 +229,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
+        // backgrounds:
+        boxShadow            : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
+        
+        
+        
         // spacings:
         margin               : '0.6rem',
         
@@ -238,10 +243,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         arrowInlineSize      : '0.8rem',
         arrowBlockSize       : '0.8rem',
         arrowClipPath        : 'polygon(100% 0%,100% 100%,0 100%)',
-        arrowTransformTop    : [['scaleX(0.7)', 'translateY(-50%)', 'rotate(45deg)' ]],
-        arrowTransformRight  : [['scaleY(0.7)', 'translateX(50%)' , 'rotate(135deg)']],
-        arrowTransformBottom : [['scaleX(0.7)', 'translateY(50%)' , 'rotate(225deg)']],
-        arrowTransformLeft   : [['scaleY(0.7)', 'translateX(-50%)', 'rotate(315deg)']],
+        arrowTopTransform    : [['scaleX(0.7)', 'translateY(-50%)', 'rotate(45deg)' ]],
+        arrowRightTransform  : [['scaleY(0.7)', 'translateX(50%)' , 'rotate(135deg)']],
+        arrowBottomTransform : [['scaleX(0.7)', 'translateY(50%)' , 'rotate(225deg)']],
+        arrowLeftTransform   : [['scaleY(0.7)', 'translateX(-50%)', 'rotate(315deg)']],
     };
 }, { prefix: 'ttip' });
 

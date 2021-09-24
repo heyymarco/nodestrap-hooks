@@ -13,6 +13,7 @@ import {
 } 					from '../libs/BasicComponent';
 import Button from '../libs/Button';
 import { Tooltip, PopupPlacement, } from '../libs/Tooltip';
+import { Card } from '../libs/Card';
 
 
 
@@ -35,6 +36,7 @@ function App() {
 
 	const targetButton1Ref = useRef<HTMLButtonElement>(null);
 	const targetButton2Ref = useRef<HTMLButtonElement>(null);
+	const targetButton3Ref = useRef<HTMLButtonElement>(null);
 
 	
 
@@ -68,6 +70,28 @@ function App() {
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 				>
 					<p>Hi, how are you? Everything is <strong>good</strong>?</p>
+				</Tooltip>
+				<Button
+					style={{margin: '1em'}}
+					elmRef={targetButton3Ref}
+				>
+					Click me
+				</Button>
+				<Tooltip
+					targetRef={targetButton3Ref}
+					popupPlacement={placement}
+					nude={true}
+					theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				>
+					<Card
+						header={
+							<h6>Beautiful Image</h6>
+						}
+					>
+						<p>Hi, how are you? Everything is <strong>good</strong>?</p>
+						<p>See this beautiful landscape:</p>
+						<img src="https://assets.codepen.io/12005/windmill.jpg" alt="A windmill" style={{width: '300px'}} />
+					</Card>
 				</Tooltip>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
