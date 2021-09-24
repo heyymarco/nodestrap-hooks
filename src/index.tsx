@@ -14,21 +14,22 @@ import reportWebVitals from './reportWebVitals';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
 // import BasicComponentApp                            from './apps/BasicComponentApp';
+//     import ContentApp                               from './apps/ContentApp';
 //     import ContainerApp                             from './apps/ContainerApp';
 //     import IndicatorApp                             from './apps/IndicatorApp';
-//         import ContentApp                           from './apps/ContentApp';
-//            import ListgroupApp                      from './apps/ListgroupApp';
-//                 import AccordionApp                 from './apps/AccordionApp';
-//                 import NavscrollApp                 from './apps/NavscrollApp';
-//             import CardApp                          from './apps/CardApp';
-//                 import ModalApp                     from './apps/ModalApp';
+//         import ListgroupApp                         from './apps/ListgroupApp';
+//             import AccordionApp                     from './apps/AccordionApp';
+//             import NavscrollApp                     from './apps/NavscrollApp';
+            import PaginationApp                    from './apps/PaginationApp';
+//         import CardApp                              from './apps/CardApp';
+//             import ModalApp                         from './apps/ModalApp';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
 //             import CollapseApp                      from './apps/CollapseApp';
 //                 import DropdownApp                  from './apps/DropdownApp';
 //             import BadgeApp                         from './apps/BadgeApp';
-//                 import BusyApp                          from './apps/BusyApp';
-            import TooltipApp                       from './apps/TooltipApp';
+//                 import BusyApp                      from './apps/BusyApp';
+//             import TooltipApp                       from './apps/TooltipApp';
 //         import ControlApp                           from './apps/ControlApp';
 //             import ActionControlApp                 from './apps/ActionControlApp';
 //                 import ButtonApp                    from './apps/ButtonApp';
@@ -52,7 +53,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <TooltipApp />
+    <PaginationApp />
     ,
     document.getElementById('root')
 );
