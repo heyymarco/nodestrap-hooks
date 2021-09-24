@@ -16,7 +16,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     
     
@@ -47,18 +46,17 @@ import {
     isOrientationInline,
     OrientationVariant,
     useOrientationVariant,
-    
-    
-    
-    // react components:
-    BasicComponentProps,
-    BasicComponent,
 }                           from './BasicComponent'
 import {
     // styles:
     usesContentLayout,
     usesContentVariants,
-    usesContentStates,
+    
+    
+    
+    // react components:
+    ContentProps,
+    Content,
 }                           from './Content'
 import spacers              from './spacers'     // configurable spaces defs
 
@@ -178,14 +176,6 @@ export const usesMasonryVariants = () => {
         ]),
     ]);
 };
-export const usesMasonryStates = () => {
-    return composition([
-        imports([
-            // states:
-            usesContentStates(),
-        ]),
-    ]);
-};
 export const usesMasonry = () => {
     return composition([
         imports([
@@ -194,9 +184,6 @@ export const usesMasonry = () => {
             
             // variants:
             usesMasonryVariants(),
-            
-            // states:
-            usesMasonryStates(),
         ]),
     ]);
 };
@@ -243,7 +230,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface MasonryProps<TElement extends HTMLElement = HTMLElement>
     extends
-        BasicComponentProps<TElement>,
+        ContentProps<TElement>,
         
         // layouts:
         OrientationVariant
@@ -479,7 +466,7 @@ export const Masonry = <TElement extends HTMLElement = HTMLElement>(props: Mason
     
     // jsx:
     return (
-        <BasicComponent<TElement>
+        <Content<TElement>
             // other props:
             {...props}
             
@@ -513,7 +500,7 @@ export const Masonry = <TElement extends HTMLElement = HTMLElement>(props: Mason
             ]}
         >
             { props.children }
-        </BasicComponent>
+        </Content>
     );
 };
 export { Masonry as default }
