@@ -45,10 +45,6 @@ import {
     BasicComponentProps,
     BasicComponent,
 }                           from './BasicComponent'
-import {
-    // styles:
-    usesIndicatorStates,
-}                           from './Indicator'
 import spacers              from './spacers'     // configurable spaces defs
 
 
@@ -89,14 +85,6 @@ export const usesContentVariants = () => {
         ]),
     ]);
 };
-export const usesContentStates = () => {
-    return composition([
-        imports([
-            // states:
-            usesIndicatorStates(),
-        ]),
-    ]);
-};
 export const usesContent = () => {
     return composition([
         imports([
@@ -105,9 +93,6 @@ export const usesContent = () => {
             
             // variants:
             usesContentVariants(),
-            
-            // states:
-            usesContentStates(),
         ]),
     ]);
 };
