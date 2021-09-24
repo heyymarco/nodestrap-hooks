@@ -60,19 +60,24 @@ import {
     // styles:
     usesContentLayout,
     usesContentVariants,
-    usesContentStates,
     
     
     
     // configs:
     cssProps as ccssProps,
+}                           from './Content'
+import {
+    // styles:
+    usesIndicatorLayout,
+    usesIndicatorVariants,
+    usesIndicatorStates,
     
     
     
     // react components:
-    ContentProps,
-    Content,
-}                           from './Content'
+    IndicatorProps,
+    Indicator,
+}                           from './Indicator'
 import Button               from './Button'
 import {
     stripOutFigure,
@@ -319,6 +324,7 @@ export const usesCardItemLayout = () => {
     return composition([
         imports([
             // layouts:
+            usesIndicatorLayout(),
             usesContentLayout(),
         ]),
         layout({
@@ -504,6 +510,7 @@ export const usesCardVariants = () => {
     return composition([
         imports([
             // variants:
+            usesIndicatorVariants(),
             usesContentVariants(),
             
             // layouts:
@@ -551,7 +558,7 @@ export const usesCardStates = () => {
     return composition([
         imports([
             // states:
-            usesContentStates(),
+            usesIndicatorStates(),
         ]),
     ]);
 };
@@ -616,7 +623,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface CardProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ContentProps<TElement>,
+        IndicatorProps<TElement>,
         
         // layouts:
         OrientationVariant
@@ -656,7 +663,7 @@ export const Card = <TElement extends HTMLElement = HTMLElement>(props: CardProp
     
     // jsx:
     return (
-        <Content<TElement>
+        <Indicator<TElement>
             // other props:
             {...restProps}
             
@@ -707,7 +714,7 @@ export const Card = <TElement extends HTMLElement = HTMLElement>(props: CardProp
             >
                 { footer }
             </footer> }
-        </Content>
+        </Indicator>
     );
 };
 export { Card as default }

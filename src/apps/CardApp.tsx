@@ -48,6 +48,12 @@ function App() {
 				>
                         test
                 </BasicComponent>
+                <Content
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+				>
+                        test
+                </Content>
                 <Indicator
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
@@ -56,14 +62,6 @@ function App() {
 				>
                         test
                 </Indicator>
-                <Content
-					theme={theme} size={size} gradient={enableGrad}
-					outlined={outlined} mild={mild}
-
-					enabled={enabled} active={active}
-				>
-                        test
-                </Content>
 				<Card
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
