@@ -26,9 +26,7 @@ import {
     
     
     // rules:
-    variants,
     states,
-    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -136,19 +134,6 @@ export const usesActivePassiveState = () => {
 //#endregion activePassive
 
 
-// appearances:
-
-export type PopupStyle = 'wrapper' // might be added more styles in the future
-export interface PopupVariant {
-    popupStyle?: PopupStyle
-}
-export const usePopupVariant = (props: PopupVariant) => {
-    return {
-        class: props.popupStyle ? props.popupStyle : null,
-    };
-};
-
-
 
 // styles:
 export const usesPopupLayout = () => {
@@ -189,33 +174,6 @@ export const usesPopupVariants = () => {
             // layouts:
             sizes(),
             usesNudeVariant(),
-        ]),
-        variants([
-            rule('.wrapper', [
-                layout({
-                    // backgrounds:
-                    backg         : 'none', // discard Indicator's background
-                    
-                    
-                    
-                    // borders:
-                    border        : 'none', // discard Indicator's border
-                    
-                    
-                    
-                    // spacings:
-                    paddingInline : 0,      // discard Indicator's paddingInline
-                    paddingBlock  : 0,      // discard Indicator's paddingBlock
-                    
-                    // marginInline  : 0,      // discard Indicator's marginInline
-                    // marginBlock   : 0,      // discard Indicator's marginBlock
-                    
-                    
-                    
-                    // animations:
-                    boxShadow     : 'none', // discard Indicator's boxShadow
-                }),
-            ]),
         ]),
     ]);
 };
@@ -315,10 +273,7 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
         IndicatorProps<TElement>,
         
         // layouts:
-        NudeVariant,
-        
-        // appearances:
-        PopupVariant
+        NudeVariant
 {
     // popups:
     targetRef?      : React.RefObject<HTMLElement> // getter ref
@@ -334,7 +289,6 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     // variants:
     const nudeVariant        = useNudeVariant(props);
-    const popupVariant       = usePopupVariant(props);
     
     
     
@@ -410,7 +364,6 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 nudeVariant.class,
-                popupVariant.class,
             ]}
             
             
