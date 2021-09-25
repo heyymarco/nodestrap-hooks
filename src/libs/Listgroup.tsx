@@ -118,6 +118,9 @@ import {
     usesBorderAsSeparatorInline,
 }                           from './Card'
 import {
+    usesButtonLayout,
+}                           from './Button'
+import {
     stripOutList,
     stripOutFocusableElement,
 }                           from './strip-outs'
@@ -160,7 +163,7 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 // appearances:
 
-export type ListStyle = 'content'|'flat'|'flush'|'bullet' // might be added more styles in the future
+export type ListStyle = 'content'|'flat'|'flush'|'btn'|'bullet' // might be added more styles in the future
 export interface ListVariant {
     listStyle?: SingleOrArray<ListStyle>
 }
@@ -468,7 +471,7 @@ export const usesListgroupVariants = () => {
             ]),
         ]),
         variants([
-            rule(['.flat', '.flush', '.bullet'], [
+            rule(['.flat', '.flush', '.btn', '.bullet'], [
                 layout({
                     // borders:
                     // kill borders surrounding Listgroup:
@@ -485,6 +488,54 @@ export const usesListgroupVariants = () => {
                             // borders:
                             // kill separator between items:
                             borderWidth : 0,
+                            
+                            
+                            
+                            // children:
+                            ...children(listItemElm, composition([
+                                variants([
+                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
+                                        layout({
+                                            // borders:
+                                            // kill separator between items:
+                                            borderWidth : 0,
+                                        }),
+                                    ]),
+                                ]),
+                            ])),
+                        }),
+                    ])),
+                }),
+            ]),
+            
+            rule('.btn', [
+                layout({
+                    // spacings:
+                    // add space between bullets:
+                    gap : cssProps.bulletSpacing,
+                    
+                    
+                    
+                    // children:
+                    ...children(wrapperElm, composition([
+                        layout({
+                            // borders:
+                            // kill separator between buttons:
+                            borderWidth : 0,
+                            
+                            
+                            
+                            // children:
+                            ...children(listItemElm, composition([
+                                variants([
+                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
+                                        imports([
+                                            // layouts:
+                                            usesButtonLayout(),
+                                        ]),
+                                    ]),
+                                ]),
+                            ])),
                         }),
                     ])),
                 }),
@@ -576,6 +627,12 @@ export const useListgroupSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region spacings
+        btnSpacing      : spacers.sm,
+        btnSpacingSm    : spacers.xs,
+        btnSpacingLg    : spacers.md,
+        
+        
+        
         bulletSpacing   : spacers.sm,
         bulletSpacingSm : spacers.xs,
         bulletSpacingLg : spacers.md,
