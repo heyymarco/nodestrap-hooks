@@ -711,6 +711,8 @@ const config = {
             'whatsapp.svg',
             'close.svg',
             'busy.svg',
+            'prev.svg',
+            'next.svg',
         ],
     },
 };
