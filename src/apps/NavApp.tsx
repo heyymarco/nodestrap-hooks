@@ -92,6 +92,62 @@ function App() {
 					<NextItem />
                 </Nav>
                 <hr style={{flexBasis: '100%'}} />
+				<Nav
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation={orientation}
+					listStyle={listStyle ?? ['content', 'flat']}
+				>
+					<Item active={true}>Active</Item>
+					<Item href='http://www.google.com'>Link</Item>
+					<Item onClick={() => alert('hello world')}>Link</Item>
+					<Item enabled={false}>Disabled</Item>
+                </Nav>
+                <hr style={{flexBasis: '100%'}} />
+				<Nav
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation='block'
+					listStyle={listStyle ?? ['content', 'flush']}
+				>
+					<Item active={true}>Active</Item>
+					<Item href='http://www.google.com'>Link</Item>
+					<Item onClick={() => alert('hello world')}>Link</Item>
+					<Item enabled={false}>Disabled</Item>
+                </Nav>
+                <hr style={{flexBasis: '100%'}} />
+				<Nav
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={true} mild={mild}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation={orientation}
+					listStyle={listStyle ?? ['content', 'btn']}
+				>
+					<Item active={true}>Active</Item>
+					<Item href='http://www.google.com'>Link</Item>
+					<Item onClick={() => alert('hello world')}>Link</Item>
+					<Item enabled={false}>Disabled</Item>
+                </Nav>
+                <hr style={{flexBasis: '100%'}} />
+				<Nav
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={true} mild={mild}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation={orientation}
+					listStyle={listStyle ?? ['content', 'btn', 'flat']}
+				>
+					<Item active={true}>Active</Item>
+					<Item href='http://www.google.com'>Link</Item>
+					<Item onClick={() => alert('hello world')}>Link</Item>
+					<Item enabled={false}>Disabled</Item>
+                </Nav>
+                <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
 					{
