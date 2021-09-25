@@ -217,6 +217,19 @@ export const usesListgroupItemVariants = () => {
             sizes(),
         ]),
         variants([
+            rule('.actionCtrl', [
+                imports([
+                    usesListgroupActionItem(),
+                ]),
+            ]),
+            
+            rule('.content&', [ // content
+                imports([
+                    usesContentLayout(),
+                    usesContentVariants(),
+                ]),
+            ]),
+            
             rule(':not(.inline)&', [ // block
                 imports([
                     // borders:
@@ -229,7 +242,7 @@ export const usesListgroupItemVariants = () => {
                     usesBorderAsSeparatorInline(),
                 ]),
             ]),
-        ], /*minSpecificityWeight: */2), // increase specificity to combat with '.actionCtrl'
+        ]),
     ]);
 };
 export const usesListgroupItemStates = () => {
@@ -312,7 +325,7 @@ export const usesListgroupActionItemStates = () => {
                     dontMarkActive(),
                 ]),
             ]),
-        ], undefined, /*minSpecificityWeight: */4),
+        ]),
     ]);
 };
 export const usesListgroupActionItem = () => {
@@ -369,13 +382,6 @@ export const usesListgroupLayout = () => {
                         imports([
                             usesListgroupItem(),
                         ]),
-                        variants([
-                            rule('.actionCtrl', composition([
-                                imports([
-                                    usesListgroupActionItem(),
-                                ]),
-                            ])),
-                        ]),
                     ])),
                 }),
             ])),
@@ -409,25 +415,12 @@ export const usesListgroupVariants = () => {
             sizes(),
         ]),
         variants([
-            rule('.content', [
+            rule('.content', [ // content
                 imports([
                     usesContentVariants(),
                 ]),
-                layout({
-                    // children:
-                    ...children(wrapperElm, composition([
-                        layout({
-                            // children:
-                            ...children(listItemElm, composition([
-                                imports([
-                                    usesContentLayout(),
-                                    usesContentVariants(),
-                                ]),
-                            ])),
-                        }),
-                    ])),
-                }),
             ]),
+            
             noOrientationInline([ // block
                 layout({
                     // layouts:
@@ -470,7 +463,7 @@ export const usesListgroupVariants = () => {
                     ])),
                 }),
             ]),
-        ], /*minSpecificityWeight: */2), // increase specificity to combat with '.actionCtrl'
+        ]),
         variants([
             rule('.bullet', [
                 layout({
@@ -527,7 +520,7 @@ export const usesListgroupVariants = () => {
                     ])),
                 }),
             ]),
-        ], /*minSpecificityWeight: */3),
+        ], /*minSpecificityWeight: */2),
     ]);
 };
 export const usesListgroupStates = () => {
