@@ -4,6 +4,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    SingleOrArray,
+}                           from './types'      // cssfn's types
 import {
     // compositions:
     composition,
@@ -157,13 +160,13 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 // appearances:
 
-export type ListStyle = 'content'|'bullet' // might be added more styles in the future
+export type ListStyle = 'content'|'flat'|'flush'|'bullet' // might be added more styles in the future
 export interface ListVariant {
-    listStyle?: ListStyle
+    listStyle?: SingleOrArray<ListStyle>
 }
 export const useListVariant = (props: ListVariant) => {
     return {
-        class: props.listStyle ? props.listStyle : null,
+        class: props.listStyle ? ((Array.isArray(props.listStyle) ? props.listStyle : [props.listStyle]).join(' ') || null) : null,
     };
 };
 
@@ -465,18 +468,31 @@ export const usesListgroupVariants = () => {
             ]),
         ]),
         variants([
-            rule('.bullet', [
+            rule(['.flat', '.flush', '.bullet'], [
                 layout({
-                    // layouts:
-                    alignItems   : 'center', // child items are centered horizontally
-                    
-                    
-                    
                     // borders:
                     // kill borders surrounding Listgroup:
                     borderWidth  : 0,
                     borderRadius : 0,
                     overflow     : 'unset',
+                }),
+            ]),
+            rule('.flat', [
+                layout({
+                    // children:
+                    ...children(wrapperElm, composition([
+                        layout({
+                            // borders:
+                            // kill separator between items:
+                            borderWidth : 0,
+                        }),
+                    ])),
+                }),
+            ]),
+            rule('.bullet', [
+                layout({
+                    // layouts:
+                    alignItems   : 'center', // child items are centered horizontally
                     
                     
                     
