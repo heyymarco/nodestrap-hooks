@@ -62,11 +62,18 @@ import {
     ThemeName,
     outlinedOf,
     mildOf,
+    usesBackg,
     usesBorderStroke,
+    
+    
+    
+    // configs:
+    cssProps as bcssProps,
 }                           from './BasicComponent'
 import {
     // hooks:
     isActive,
+    isPassive,
     
     
     
@@ -163,7 +170,7 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 // appearances:
 
-export type ListStyle = 'content'|'flat'|'flush'|'btn'|'bullet' // might be added more styles in the future
+export type ListStyle = 'content'|'flat'|'flush'|'btn'|'tab'|'bullet' // might be added more styles in the future
 export interface ListVariant {
     listStyle?: SingleOrArray<ListStyle>
 }
@@ -410,6 +417,9 @@ export const usesListgroupVariants = () => {
         }),
     ]));
     
+    // colors:
+    const [, backgRefs] = usesBackg();
+    
     
     
     return composition([
@@ -540,6 +550,145 @@ export const usesListgroupVariants = () => {
                     ])),
                 }),
             ]),
+            rule('.tab', [
+                layout({
+                    // layouts:
+                    justifyContent : 'start', // items are placed starting from the left
+                    
+                    
+                    
+                    // borders:
+                    // allow the items to overflow, so the `active item` can hide the `border(Bottom|Right)`:
+                    overflow: 'visible',
+                    
+                    
+                    
+                    // children:
+                    ...children(wrapperElm, composition([
+                        layout({
+                            // borders:
+                            // kill separator between tabs:
+                            borderWidth : 0,
+                            
+                            
+                            
+                            // children:
+                            ...children(listItemElm, composition([
+                                variants([
+                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
+                                        imports([
+                                            // borders:
+                                            usesBorderStroke(),
+                                        ]),
+                                        layout({
+                                            // borders:
+                                            backgroundClip : 'padding-box',
+                                        }),
+                                    ]),
+                                    isPassive([
+                                        variants([
+                                            rule(':not(.inline)&', [ // block
+                                                layout({
+                                                    // borders:
+                                                    // show parent border right:
+                                                    borderBlockWidth       : 0,
+                                                    borderInlineStartColor : 'transparent',
+                                                }),
+                                            ]),
+                                            rule('.inline&', [ // inline
+                                                layout({
+                                                    // borders:
+                                                    // show parent border bottom:
+                                                    borderInlineWidth      : 0,
+                                                    borderBlockStartColor  : 'transparent',
+                                                }),
+                                            ]),
+                                        ]),
+                                    ]),
+                                    isActive([
+                                        variants([
+                                            rule(':not(.inline)&', [ // block
+                                                layout({
+                                                    // borders:
+                                                    // hide parent border right:
+                                                    borderInlineEndColor   : backgRefs.backgCol,
+                                                    // add rounded corners on left:
+                                                    borderStartStartRadius : cssProps.tabBorderRadius,
+                                                    borderEndStartRadius   : cssProps.tabBorderRadius,
+                                                }),
+                                            ]),
+                                            rule('.inline&', [ // inline
+                                                layout({
+                                                    // borders:
+                                                    // hide parent border bottom:
+                                                    borderBlockEndColor    : backgRefs.backgCol,
+                                                    // add rounded corners on top:
+                                                    borderStartStartRadius : cssProps.tabBorderRadius,
+                                                    borderStartEndRadius   : cssProps.tabBorderRadius,
+                                                }),
+                                            ]),
+                                        ]),
+                                    ]),
+                                ]),
+                            ])),
+                        }),
+                    ])),
+                }),
+                variants([
+                    noOrientationInline([ // block
+                        layout({
+                            // layouts:
+                            // tab directions are block but listgroup direction are inline:
+                            display                : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+                            
+                            
+                            
+                            // borders:
+                            // kill border [top, left, bottom] surrounding tab:
+                            borderBlockWidth       : 0,
+                            borderInlineStartWidth : 0,
+                            borderRadius           : 0,
+                            
+                            
+                            
+                            // children:
+                            ...children(wrapperElm, composition([
+                                layout({
+                                    // spacings:
+                                    // shift the items to right a bit, so the `active item` can hide the `borderRight`:
+                                    marginInlineEnd : `calc(0px - ${bcssProps.borderWidth})`,
+                                }),
+                            ])),
+                        }),
+                    ]),
+                    isOrientationInline([ // inline
+                        layout({
+                            // layouts:
+                            // tab directions are inline but listgroup direction are block:
+                            display                : 'flex',        // use block flexbox, so it takes the entire parent's width
+                            
+                            
+                            
+                            // borders:
+                            // kill border [left, top, right] surrounding tab:
+                            borderInlineWidth      : 0,
+                            borderBlockStartWidth  : 0,
+                            borderRadius           : 0,
+                            
+                            
+                            
+                            // children:
+                            ...children(wrapperElm, composition([
+                                layout({
+                                    // spacings:
+                                    // shift the items to bottom a bit, so the `active item` can hide the `borderBottom`:
+                                    marginBlockEnd : `calc(0px - ${bcssProps.borderWidth})`,
+                                }),
+                            ])),
+                        }),
+                    ]),
+                ]),
+            ]),
             rule('.bullet', [
                 layout({
                     // layouts:
@@ -627,19 +776,25 @@ export const useListgroupSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region spacings
-        btnSpacing      : spacers.sm,
-        btnSpacingSm    : spacers.xs,
-        btnSpacingLg    : spacers.md,
+        btnSpacing        : spacers.sm,
+        btnSpacingSm      : spacers.xs,
+        btnSpacingLg      : spacers.md,
         
         
         
-        bulletSpacing   : spacers.sm,
-        bulletSpacingSm : spacers.xs,
-        bulletSpacingLg : spacers.md,
+        tabBorderRadius   : bcssProps.borderRadius,
+        tabBorderRadiusSm : bcssProps.borderRadiusSm,
+        tabBorderRadiusLg : bcssProps.borderRadiusLg,
         
-        bulletPadding   : spacers.xs,
-        bulletPaddingSm : spacers.xxs,
-        bulletPaddingLg : spacers.sm,
+        
+        
+        bulletSpacing     : spacers.sm,
+        bulletSpacingSm   : spacers.xs,
+        bulletSpacingLg   : spacers.md,
+        
+        bulletPadding     : spacers.xs,
+        bulletPaddingSm   : spacers.xxs,
+        bulletPaddingLg   : spacers.sm,
         //#endregion spacings
     };
 }, { prefix: 'lg' });
