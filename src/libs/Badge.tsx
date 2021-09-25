@@ -338,6 +338,8 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
     // rest props:
     const {
         // accessibilities:
+        label,
+        
         active,         // from accessibilities
         inheritActive,  // from accessibilities
     ...restProps}  = props;
@@ -361,7 +363,7 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
             
             
             // accessibilities:
-            aria-label={props.label}
+            aria-label={label}
             {...{
                 active        : activeFn,
                 inheritActive : false,
