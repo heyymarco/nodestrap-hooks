@@ -111,7 +111,7 @@ function App() {
 					outlined={outlined} mild={mild}
 
 					enabled={enabled} active={active} actionCtrl={actionCtrl}
-					orientation='block'
+					orientation={orientation}
 					listStyle={listStyle ?? ['content', 'flush']}
 				>
 					<Item active={true}>Active</Item>
@@ -141,6 +141,34 @@ function App() {
 					enabled={enabled} active={active} actionCtrl={actionCtrl}
 					orientation={orientation}
 					listStyle={listStyle ?? ['content', 'btn', 'flat']}
+				>
+					<Item active={true}>Active</Item>
+					<Item href='http://www.google.com'>Link</Item>
+					<Item onClick={() => alert('hello world')}>Link</Item>
+					<Item enabled={false}>Disabled</Item>
+                </Nav>
+                <hr style={{flexBasis: '100%'}} />
+				<Nav
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={true} mild={false}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation={orientation}
+					listStyle={listStyle ?? ['content', 'tab']}
+				>
+					<Item active={true}>Active</Item>
+					<Item href='http://www.google.com'>Link</Item>
+					<Item onClick={() => alert('hello world')}>Link</Item>
+					<Item enabled={false}>Disabled</Item>
+                </Nav>
+                <hr style={{flexBasis: '100%'}} />
+				<Nav
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={false} mild={true}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation={orientation}
+					listStyle={listStyle ?? ['content', 'tab']}
 				>
 					<Item active={true}>Active</Item>
 					<Item href='http://www.google.com'>Link</Item>
