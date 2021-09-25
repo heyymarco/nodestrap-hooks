@@ -20,7 +20,7 @@ import reportWebVitals from './reportWebVitals';
 //         import ListgroupApp                         from './apps/ListgroupApp';
 //             import AccordionApp                     from './apps/AccordionApp';
 //             import NavscrollApp                     from './apps/NavscrollApp';
-            import PaginationApp                    from './apps/PaginationApp';
+            import NavApp                           from './apps/NavApp';
 //         import CardApp                              from './apps/CardApp';
 //             import ModalApp                         from './apps/ModalApp';
 //         import PopupApp                             from './apps/PopupApp';
@@ -53,7 +53,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <PaginationApp />
+    <NavApp />
     ,
     document.getElementById('root')
 );

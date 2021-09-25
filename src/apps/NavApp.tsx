@@ -10,8 +10,8 @@ import {
 	ThemeName,
 	SizeName,
 } 					from '../libs/BasicComponent';
-import Pagination, {Item, NextItem, PrevItem} from '../libs/Pagination';
-import type * as Paginations from '../libs/Pagination';
+import Nav, {Item, NextItem, PrevItem} from '../libs/Nav';
+import type * as Navs from '../libs/Nav';
 
 
 
@@ -35,17 +35,17 @@ function App() {
 	const [actionCtrl,      setActionCtrl   ] = useState<boolean|undefined>(undefined);
 
 	const orientations = [undefined, 'block', 'inline'];
-	const [orientation,    setOrientation     ] = useState<Paginations.OrientationName|undefined>(undefined);
+	const [orientation,    setOrientation     ] = useState<Navs.OrientationName|undefined>(undefined);
 
 	const listStyles = [undefined, 'content', 'bullet'];
-	const [listStyle,    setListStyle     ] = useState<Paginations.ListStyle|undefined>(undefined);
+	const [listStyle,    setListStyle     ] = useState<Navs.ListStyle|undefined>(undefined);
 
 	
 
     return (
         <div className="App">
             <Container>
-				<Pagination
+				<Nav
 					label='Page navigation example'
 					
 					theme={theme} size={size} gradient={enableGrad}
@@ -60,9 +60,9 @@ function App() {
 					<>2</>
 					<>3</>
 					<>Next</>
-                </Pagination>
+                </Nav>
                 <hr style={{flexBasis: '100%'}} />
-				<Pagination
+				<Nav
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 
@@ -75,9 +75,9 @@ function App() {
 					<Item active={true}>2</Item>
 					<Item>3</Item>
 					<Item>Next</Item>
-                </Pagination>
+                </Nav>
                 <hr style={{flexBasis: '100%'}} />
-				<Pagination
+				<Nav
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 
@@ -90,7 +90,7 @@ function App() {
 					<Item active={true}>2</Item>
 					<Item onClick={() => alert('hello world')}>3</Item>
 					<NextItem />
-                </Pagination>
+                </Nav>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
@@ -212,7 +212,7 @@ function App() {
 								<input type='radio'
 									value={ori}
 									checked={orientation===ori}
-									onChange={(e) => setOrientation((e.target.value || undefined) as (Paginations.OrientationName|undefined))}
+									onChange={(e) => setOrientation((e.target.value || undefined) as (Navs.OrientationName|undefined))}
 								/>
 								{`${ori}`}
 							</label>
@@ -227,7 +227,7 @@ function App() {
 								<input type='radio'
 									value={st}
 									checked={listStyle===st}
-									onChange={(e) => setListStyle((e.target.value || undefined) as (Paginations.ListStyle|undefined))}
+									onChange={(e) => setListStyle((e.target.value || undefined) as (Navs.ListStyle|undefined))}
 								/>
 								{`${st}`}
 							</label>

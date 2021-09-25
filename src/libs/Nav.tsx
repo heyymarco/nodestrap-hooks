@@ -27,12 +27,12 @@ import Icon                 from './Icon'
 
 // react components:
 
-export interface PaginationItemProps<TElement extends HTMLElement = HTMLElement>
+export interface NavItemProps<TElement extends HTMLElement = HTMLElement>
     extends
         ListgroupItemProps<TElement>
 {
 }
-export const PaginationItem = <TElement extends HTMLElement = HTMLElement>(props: PaginationItemProps<TElement>) => {
+export const NavItem = <TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) => {
     // jsx:
     return (
         <ListgroupItem
@@ -49,15 +49,15 @@ export const PaginationItem = <TElement extends HTMLElement = HTMLElement>(props
         />
     );
 }
-PaginationItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
+NavItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
 
-export type { PaginationItemProps as ItemProps }
-export { PaginationItem as Item }
+export type { NavItemProps as ItemProps }
+export { NavItem as Item }
 
-export const PaginationPrevItem = <TElement extends HTMLElement = HTMLElement>(props: PaginationItemProps<TElement>) => {
+export const NavPrevItem = <TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) => {
     // jsx:
     return (
-        <PaginationItem
+        <NavItem
             // other props:
             {...props}
             
@@ -77,13 +77,13 @@ export const PaginationPrevItem = <TElement extends HTMLElement = HTMLElement>(p
                     size='1em'
                 />
             }
-        </PaginationItem>
+        </NavItem>
     );
 }
-export const PaginationNextItem = <TElement extends HTMLElement = HTMLElement>(props: PaginationItemProps<TElement>) => {
+export const NavNextItem = <TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) => {
     // jsx:
     return (
-        <PaginationItem
+        <NavItem
             // other props:
             {...props}
             
@@ -103,27 +103,27 @@ export const PaginationNextItem = <TElement extends HTMLElement = HTMLElement>(p
                     size='1em'
                 />
             }
-        </PaginationItem>
+        </NavItem>
     );
 }
 export {
-    PaginationPrevItem as PrevItem,
-    PaginationPrevItem as PrevPage,
+    NavPrevItem as PrevItem,
+    NavPrevItem as PrevPage,
     
-    PaginationNextItem as NextItem,
-    PaginationNextItem as NextPage,
+    NavNextItem as NextItem,
+    NavNextItem as NextPage,
 }
 
 
 
-export interface PaginationProps<TElement extends HTMLElement = HTMLElement>
+export interface NavProps<TElement extends HTMLElement = HTMLElement>
     extends
         ListgroupProps<TElement>
 {
     // accessibilities:
     label?       : string
 }
-export const Pagination = <TElement extends HTMLElement = HTMLElement>(props: PaginationProps<TElement>) => {
+export const Nav = <TElement extends HTMLElement = HTMLElement>(props: NavProps<TElement>) => {
     // rest props:
     const {
         // accessibilities:
@@ -158,8 +158,8 @@ export const Pagination = <TElement extends HTMLElement = HTMLElement>(props: Pa
         </Listgroup>
     );
 };
-Pagination.prototype = Listgroup.prototype; // mark as Listgroup compatible
-export { Pagination as default }
+Nav.prototype = Listgroup.prototype; // mark as Listgroup compatible
+export { Nav as default }
 
 export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
