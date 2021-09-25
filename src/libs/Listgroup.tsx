@@ -577,7 +577,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface ListgroupItemProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ActionControlProps<TElement>
+        ActionControlProps<TElement>,
+        React.AnchorHTMLAttributes<TElement>
 {
     // accessibilities:
     // change default value to `true`
