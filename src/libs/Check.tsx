@@ -863,6 +863,9 @@ export const Check = (props: CheckProps) => {
         
         
         // accessibilities:
+        label,
+        text,
+        
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
@@ -917,7 +920,7 @@ export const Check = (props: CheckProps) => {
             // accessibilities:
             role={ariaRole}
             aria-checked={ariaChecked}
-            aria-label={props.label}
+            aria-label={label}
             active={isActive}
             
             
@@ -1024,7 +1027,7 @@ export const Check = (props: CheckProps) => {
                 }}
                 onClick={(e) => e.stopPropagation()} // prevents firing `change` event triggering parent's `onClick`
             />
-            { (props.text || props.children) &&
+            { (text || props.children) &&
                 <span
                     // events:
                     // listening input's onAnimationEnd is enough
@@ -1033,7 +1036,7 @@ export const Check = (props: CheckProps) => {
                     //     e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
                     // }}
                 >
-                    { props.text }
+                    { text }
                     { props.children }
                 </span>
             }
