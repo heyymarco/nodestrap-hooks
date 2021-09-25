@@ -398,6 +398,9 @@ export const Button = (props: ButtonProps) => {
         
         
         // accessibilities:
+        label,
+        text,
+        
         active,
     ...restProps} = props;
     
@@ -421,7 +424,7 @@ export const Button = (props: ButtonProps) => {
             
             
             // accessibilities:
-            aria-label={props.label}
+            aria-label={label}
             press={props.press ?? active}
             
             
@@ -443,7 +446,7 @@ export const Button = (props: ButtonProps) => {
                 type    : typeFn,
             }}
         >
-            { props.text }
+            { text }
             { props.children }
         </ActionControl>
     );
