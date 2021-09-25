@@ -10,9 +10,8 @@ import {
 	ThemeName,
 	SizeName,
 } 					from '../libs/BasicComponent';
-import Pagination, {Item} from '../libs/Pagination';
+import Pagination, {Item, NextItem, PrevItem} from '../libs/Pagination';
 import type * as Paginations from '../libs/Pagination';
-import Icon from '../libs/Icon'
 
 
 
@@ -86,15 +85,11 @@ function App() {
 					orientation={orientation}
 					listStyle={listStyle}
 				>
-					<Item enabled={false}>
-						<Icon icon='arrow_back_ios' />
-					</Item>
-					<Item tag='a' href='http://www.google.com'>1</Item>
+					<PrevItem />
+					<Item href='http://www.google.com'>1</Item>
 					<Item active={true}>2</Item>
 					<Item onClick={() => alert('hello world')}>3</Item>
-					<Item>
-						<Icon icon='arrow_forward_ios' />
-					</Item>
+					<NextItem />
                 </Pagination>
                 <hr style={{flexBasis: '100%'}} />
 				<p>

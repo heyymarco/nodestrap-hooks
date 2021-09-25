@@ -21,6 +21,7 @@ import {
     ListgroupProps,
     Listgroup,
 }                           from './Listgroup'
+import Icon                 from './Icon'
 
 
 
@@ -39,6 +40,10 @@ export const PaginationItem = <TElement extends HTMLElement = HTMLElement>(props
             {...props}
             
             
+            // essentials:
+            tag={props.tag ?? (props.href ? 'a' : undefined)}
+            
+            
             // accessibilities:
             aria-current={props['aria-current'] ?? (props.active ? 'page' : undefined)}
         />
@@ -48,6 +53,66 @@ PaginationItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem com
 
 export type { PaginationItemProps as ItemProps }
 export { PaginationItem as Item }
+
+export const PaginationPrevItem = <TElement extends HTMLElement = HTMLElement>(props: PaginationItemProps<TElement>) => {
+    // jsx:
+    return (
+        <PaginationItem
+            // other props:
+            {...props}
+            
+            
+            // accessibilities:
+            aria-label={props['aria-label'] ?? 'Previous'}
+        >
+            {
+                props.children
+                ??
+                <Icon
+                    // appearances:
+                    icon='prev'
+                    
+                    
+                    // variants:
+                    size='1em'
+                />
+            }
+        </PaginationItem>
+    );
+}
+export const PaginationNextItem = <TElement extends HTMLElement = HTMLElement>(props: PaginationItemProps<TElement>) => {
+    // jsx:
+    return (
+        <PaginationItem
+            // other props:
+            {...props}
+            
+            
+            // accessibilities:
+            aria-label={props['aria-label'] ?? 'Next'}
+        >
+            {
+                props.children
+                ??
+                <Icon
+                    // appearances:
+                    icon='next'
+                    
+                    
+                    // variants:
+                    size='1em'
+                />
+            }
+        </PaginationItem>
+    );
+}
+export {
+    PaginationPrevItem as PrevItem,
+    PaginationPrevItem as PrevPage,
+    
+    PaginationNextItem as NextItem,
+    PaginationNextItem as NextPage,
+}
 
 
 
