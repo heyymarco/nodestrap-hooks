@@ -610,7 +610,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // appearances:
-                    icon='arrow_back_ios'
+                    icon='prev'
                     
                     
                     // events:
@@ -659,7 +659,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // appearances:
-                    icon='arrow_forward_ios'
+                    icon='next'
                     
                     
                     // events:
