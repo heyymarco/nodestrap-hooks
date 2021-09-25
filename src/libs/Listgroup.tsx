@@ -511,7 +511,7 @@ export const usesListgroupVariants = () => {
             rule('.btn', [
                 layout({
                     // spacings:
-                    // add space between bullets:
+                    // add space between buttons:
                     gap : cssProps.bulletSpacing,
                     
                     
