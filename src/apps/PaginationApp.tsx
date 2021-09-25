@@ -12,6 +12,7 @@ import {
 } 					from '../libs/BasicComponent';
 import Pagination, {Item} from '../libs/Pagination';
 import type * as Paginations from '../libs/Pagination';
+import Icon from '../libs/Icon'
 
 
 
@@ -34,9 +35,6 @@ function App() {
 	const actionCtrls = [false, undefined, true];
 	const [actionCtrl,      setActionCtrl   ] = useState<boolean|undefined>(undefined);
 
-	const [childEnabled,    setChildEnabled   ] = useState(false);
-	const [childActive,      setChildActive   ] = useState(true);
-
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Paginations.OrientationName|undefined>(undefined);
 
@@ -49,6 +47,8 @@ function App() {
         <div className="App">
             <Container>
 				<Pagination
+					label='Page navigation example'
+					
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 
@@ -76,6 +76,25 @@ function App() {
 					<Item active={true}>2</Item>
 					<Item>3</Item>
 					<Item>Next</Item>
+                </Pagination>
+                <hr style={{flexBasis: '100%'}} />
+				<Pagination
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation={orientation}
+					listStyle={listStyle}
+				>
+					<Item enabled={false}>
+						<Icon icon='arrow_back_ios' />
+					</Item>
+					<Item tag='a' href='http://www.google.com'>1</Item>
+					<Item active={true}>2</Item>
+					<Item onClick={() => alert('hello world')}>3</Item>
+					<Item>
+						<Icon icon='arrow_forward_ios' />
+					</Item>
                 </Pagination>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
