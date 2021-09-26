@@ -176,6 +176,20 @@ function App() {
 					<Item enabled={false}>Disabled</Item>
                 </Nav>
                 <hr style={{flexBasis: '100%'}} />
+				<Nav
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active} actionCtrl={actionCtrl}
+					orientation={orientation}
+					listStyle={listStyle ?? ['breadcrumb']}
+				>
+					<Item href='http://www.google.com'>Link</Item>
+					<Item onClick={() => alert('hello world')}>Link</Item>
+					<Item active={true}>Active</Item>
+					<Item enabled={false}>Disabled</Item>
+                </Nav>
+                <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
 					{
