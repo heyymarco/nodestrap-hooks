@@ -221,8 +221,8 @@ export const useAlertSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region spacings
-        gapX : spacers.default,
-        gapY : spacers.default,
+        gapInline : spacers.default,
+        gapBlock  : spacers.default,
         //#endregion spacings
     };
 }, { prefix: 'alrt' });
