@@ -37,7 +37,7 @@ function App() {
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Navs.OrientationName|undefined>(undefined);
 
-	const listStyles = [undefined, 'content', 'bullet'];
+	const listStyles = [undefined, 'content','flat','flush','btn','tab','breadcrumb','bullet'];
 	const [listStyle,    setListStyle     ] = useState<Navs.ListStyle|undefined>(undefined);
 
 	

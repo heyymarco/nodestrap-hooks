@@ -16,7 +16,7 @@ import {
 	OrientationName,
 }						from '../libs/Button';
 import {
-	Buttongroup,
+	Buttongroup, ListStyle,
 }						from '../libs/Buttongroup';
 
 
@@ -53,6 +53,9 @@ function App() {
 	const btnStyles = [undefined, 'link', 'ghost'];
 	const [btnStyle,    setBtnStyle     ] = useState<ButtonStyle|undefined>(undefined);
 
+	const listStyles = [undefined, 'content','flat','flush','btn','tab','breadcrumb','bullet'];
+	const [listStyle,    setListStyle     ] = useState<ListStyle|undefined>(undefined);
+
 
 
     return (
@@ -79,7 +82,9 @@ function App() {
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 
+					enabled={enabled} active={active}
 					orientation={orientation}
+					listStyle={listStyle}
 				>
                     <Button
 						theme={theme} size={size} gradient={enableGrad}
@@ -97,16 +102,16 @@ function App() {
 					>
 						button
 					</Button>
-						<Button
-							theme='success'
-						>
-							button
-						</Button>
-						<Button
-							theme='danger'
-						>
-							button
-						</Button>
+					<Button
+						theme='success'
+					>
+						button
+					</Button>
+					<Button
+						theme='danger'
+					>
+						button
+					</Button>
                 </Buttongroup>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
@@ -305,6 +310,21 @@ function App() {
 									value={st}
 									checked={btnStyle===st}
 									onChange={(e) => setBtnStyle((e.target.value || undefined) as (ButtonStyle|undefined))}
+								/>
+								{`${st}`}
+							</label>
+						)
+					}
+				</p>
+				<p>
+					ListStyle:
+					{
+						listStyles.map(st =>
+							<label key={st ?? ''}>
+								<input type='radio'
+									value={st}
+									checked={listStyle===st}
+									onChange={(e) => setListStyle((e.target.value || undefined) as (ListStyle|undefined))}
 								/>
 								{`${st}`}
 							</label>
