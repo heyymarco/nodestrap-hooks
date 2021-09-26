@@ -111,7 +111,13 @@ export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React
                 (
                     (element.type.prototype instanceof funcComponent)
                     ||
-                    (element.type.prototype === funcComponent.prototype)
+                    (
+                        element.type.prototype
+                        &&
+                        funcComponent.prototype
+                        &&
+                        (element.type.prototype === funcComponent.prototype)
+                    )
                 )
             )
         )
@@ -283,8 +289,8 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
 export const Element = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>) => {
     // html props:
     const htmlProps = useMemo(() => {
-        const htmlProps = {
-            ref : props.elmRef as any,
+        const htmlProps : {} = {
+            ref : props.elmRef,
         };
 
         for (const name in props) {
