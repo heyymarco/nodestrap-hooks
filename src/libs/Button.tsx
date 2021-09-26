@@ -331,12 +331,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         //#region spacings
-        gapX        : spacers.sm,
-        gapY        : spacers.sm,
-        gapXSm      : spacers.xs,
-        gapYSm      : spacers.xs,
-        gapXLg      : spacers.md,
-        gapYLg      : spacers.md,
+        gapInline   : spacers.sm,
+        gapBlock    : spacers.sm,
+        gapInlineSm : spacers.xs,
+        gapBlockSm  : spacers.xs,
+        gapInlineLg : spacers.md,
+        gapBlockLg  : spacers.md,
         //#endregion spacings
         
         
