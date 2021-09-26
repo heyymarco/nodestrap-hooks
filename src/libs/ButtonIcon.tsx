@@ -252,16 +252,16 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
-        gapX              : btcssProps.gapX,
-        gapY              : btcssProps.gapY,
-        gapXXs            : btcssProps.gapXSm,
-        gapYXs            : btcssProps.gapYSm,
-        gapXSm            : btcssProps.gapXSm,
-        gapYSm            : btcssProps.gapYSm,
-        gapXLg            : btcssProps.gapXLg,
-        gapYLg            : btcssProps.gapYLg,
-        gapXXl            : btcssProps.gapXLg,
-        gapYXl            : btcssProps.gapYLg,
+        gapInline         : btcssProps.gapInline,
+        gapBlock          : btcssProps.gapBlock,
+        gapInlineXs       : btcssProps.gapInlineSm,
+        gapBlockXs        : btcssProps.gapBlockSm,
+        gapInlineSm       : btcssProps.gapInlineSm,
+        gapBlockSm        : btcssProps.gapBlockSm,
+        gapInlineLg       : btcssProps.gapInlineLg,
+        gapBlockLg        : btcssProps.gapBlockLg,
+        gapInlineXl       : btcssProps.gapInlineLg,
+        gapBlockXl        : btcssProps.gapBlockLg,
         //#endregion spacings
     };
 }, { prefix: 'btni' });
