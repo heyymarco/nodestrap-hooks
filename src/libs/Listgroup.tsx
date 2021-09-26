@@ -25,6 +25,12 @@ import {
     variants,
     states,
     rule,
+    isNotFirstChild,
+    
+    
+    
+    // utilities:
+    escapeSvg,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -62,6 +68,7 @@ import {
     ThemeName,
     outlinedOf,
     mildOf,
+    usesForeg,
     usesBackg,
     usesBorderStroke,
     
@@ -128,6 +135,10 @@ import {
     usesButtonLayout,
 }                           from './Button'
 import {
+    // styles:
+    usesIconImage,
+}                           from './Icon'
+import {
     stripOutList,
     stripOutFocusableElement,
 }                           from './strip-outs'
@@ -170,7 +181,7 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 // appearances:
 
-export type ListStyle = 'content'|'flat'|'flush'|'btn'|'tab'|'bullet' // might be added more styles in the future
+export type ListStyle = 'content'|'flat'|'flush'|'btn'|'tab'|'breadcrumb'|'bullet' // might be added more styles in the future
 export interface ListVariant {
     listStyle?: SingleOrArray<ListStyle>
 }
@@ -418,7 +429,8 @@ export const usesListgroupVariants = () => {
     ]));
     
     // colors:
-    const [, backgRefs] = usesBackg();
+    const [foreg, foregRefs] = usesForeg();
+    const [     , backgRefs] = usesBackg();
     
     
     
@@ -481,7 +493,7 @@ export const usesListgroupVariants = () => {
             ]),
         ]),
         variants([
-            rule(['.flat', '.flush', '.btn', '.bullet'], [
+            rule(['.flat', '.breadcrumb', '.flush', '.btn', '.bullet'], [
                 layout({
                     // borders:
                     // kill borders surrounding Listgroup:
@@ -490,7 +502,7 @@ export const usesListgroupVariants = () => {
                     overflow     : 'unset',
                 }),
             ]),
-            rule('.flat', [
+            rule(['.flat', '.breadcrumb'], [
                 layout({
                     // children:
                     ...children(wrapperElm, composition([
@@ -507,7 +519,7 @@ export const usesListgroupVariants = () => {
                                     rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
                                         layout({
                                             // borders:
-                                            // kill separator between items:
+                                            // kill border on each item:
                                             borderWidth : 0,
                                         }),
                                     ]),
@@ -689,6 +701,56 @@ export const usesListgroupVariants = () => {
                     ]),
                 ]),
             ]),
+            rule('.breadcrumb', [
+                layout({
+                    // children:
+                    ...children(wrapperElm, composition([
+                        layout({
+                            // children:
+                            ...children(listItemElm, composition([
+                                layout({
+                                    // typos:
+                                    lineHeight    : 1,
+                                    
+                                    
+                                    
+                                    // customize:
+                                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'breadcrumb')), // apply general cssProps starting with breadcrumb***
+                                }),
+                            ])),
+                        }),
+                        variants([
+                            isNotFirstChild([
+                                imports([
+                                    // colors:
+                                    foreg(),
+                                ]),
+                                layout({
+                                    // children:
+                                    ...children('::before', composition([
+                                        imports([
+                                            usesIconImage(
+                                                /*iconImage: */cssProps.breadcrumbSeparatorImg,
+                                                /*iconColor: */foregRefs.foreg,
+                                            ),
+                                        ]),
+                                        layout({
+                                            // layouts:
+                                            display    : 'block', // fills the entire wrapper's width
+                                            content    : '""',
+                                            
+                                            
+                                            
+                                            // customize:
+                                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'breadcrumbSeparator')), // apply general cssProps starting with breadcrumbSeparator***
+                                        }),
+                                    ])),
+                                }),
+                            ]),
+                        ]),
+                    ])),
+                }),
+            ]),
             rule('.bullet', [
                 layout({
                     // layouts:
@@ -785,6 +847,19 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         tabBorderRadius   : bcssProps.borderRadius,
         tabBorderRadiusSm : bcssProps.borderRadiusSm,
         tabBorderRadiusLg : bcssProps.borderRadiusLg,
+        
+        
+        
+        breadcrumbPaddingInline         : bcssProps.paddingBlock,
+        breadcrumbPaddingBlock          : bcssProps.paddingBlock,
+        breadcrumbPaddingInlineSm       : bcssProps.paddingBlockSm,
+        breadcrumbPaddingBlockSm        : bcssProps.paddingBlockSm,
+        breadcrumbPaddingInlineLg       : bcssProps.paddingBlockLg,
+        breadcrumbPaddingBlockLg        : bcssProps.paddingBlockLg,
+        
+        breadcrumbSeparatorImg          : `url("data:image/svg+xml,${escapeSvg("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><polyline points='7.5 3 16.5 12 7.5 21' fill='none' stroke='#000' stroke-linecap='square' stroke-width='3'/></svg>")}")`,
+        breadcrumbSeparatorInlineSize   : '0.8em',
+        breadcrumbSeparatorMarginInline : '0.25em',
         
         
         
