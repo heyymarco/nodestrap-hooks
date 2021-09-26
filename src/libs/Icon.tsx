@@ -552,7 +552,7 @@ export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, si
         ]),
         (foregRefs ? layout({
             // foregrounds:
-            foreg : foregRefs.foreg,
+            foreg : foregRefs.foreg, // foreg => color => currentColor => backg
         }) : null),
     ]);
 };
