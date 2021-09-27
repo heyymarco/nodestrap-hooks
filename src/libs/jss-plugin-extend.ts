@@ -90,6 +90,11 @@ const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?:
 
 
 
+        // delete the old prop (if any), so the new prop always placed at the end of LiteralObject:
+        delete style[name];
+
+
+
         if (!isStyle(newValue)) {
             // `newValue` is not a `Style` => unmergeable => add/overwrite `newValue` into `style`:
             style[name] = newValue; // add/overwrite
