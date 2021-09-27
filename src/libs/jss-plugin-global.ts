@@ -76,6 +76,7 @@ class GlobalStyleRule {
             // exceptions:
             if (propName.includes('&')) continue; // do not process nested rule
             if (propName === 'extend')  continue; // do not process `extend` prop
+            if (!isStyle(propValue))    continue; // invalid value => can't be processed
             
             
             
@@ -134,7 +135,7 @@ const onProcessRule = (rule: Rule, sheet?: StyleSheet): void => {
     
     
     for (const [propName, propValue] of Object.entries(globalStyle)) {
-        if (!isStyle(propValue)) continue;
+        if (!isStyle(propValue)) continue; // invalid value => can't be processed
         
         
         
