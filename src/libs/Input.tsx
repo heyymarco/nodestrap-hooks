@@ -99,7 +99,7 @@ export const usesInputLayout = () => {
                     
                     
                     // sizes:
-                    flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% width
+                    flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% wrapper's width
                     alignSelf      : 'stretch', // fill the parent height
                     // // strip out input's prop [size]:
                     // // span to maximum width including parent's paddings:
