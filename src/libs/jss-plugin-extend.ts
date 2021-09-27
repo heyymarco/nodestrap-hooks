@@ -87,16 +87,12 @@ const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?:
     for (const [propName, newPropValue] of Object.entries(newStyle)) { // loop through `newStyle`'s props
         // `extend` is a special prop name that we don't handle here:
         if (propName === 'extend') continue; // skip `extend` prop
-
-
-
-        // delete the old prop (if any), so the new prop always placed at the end of LiteralObject:
-        delete style[propName];
-
-
-
+        
+        
+        
         if (!isStyle(newPropValue)) {
             // `newPropValue` is not a `Style` => unmergeable => add/overwrite `newPropValue` into `style`:
+            delete style[propName]; // delete the old prop (if any), so the new prop always placed at the end of LiteralObject
             style[propName] = newPropValue; // add/overwrite
         }
         else {
@@ -105,6 +101,7 @@ const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?:
             const currentPropValue = style[propName];
             if (!isStyle(currentPropValue)) {
                 // `currentPropValue` is not a `Style` => unmergeable => add/overwrite `newPropValue` into `style`:
+                delete style[propName]; // delete the old prop (if any), so the new prop always placed at the end of LiteralObject
                 style[propName] = newPropValue; // add/overwrite
             }
             else {
@@ -112,6 +109,8 @@ const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?:
 
                 const currentValueClone = {...currentPropValue} as Style; // clone the `currentPropValue` to avoid side effect, because the `currentPropValue` is not **the primary object** we're working on
                 mergeStyle(currentValueClone, newPropValue, rule, sheet);
+                
+                // merging style prop no need to rearrange the prop position
                 style[propName] = currentValueClone; // set the mutated `currentValueClone` back to `style`
             } // if
         } // if
