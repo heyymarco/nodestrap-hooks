@@ -228,12 +228,6 @@ export const usesButtonVariants = () => {
                     usesThemeActive(), // set the active theme as the default theme
                 ]),
                 layout({
-                    // typos:
-                    textDecoration : 'underline',
-                    lineHeight     : 1,
-                    
-                    
-                    
                     // borders:
                     borderRadius   : borderRadiuses.sm,
                     
@@ -241,6 +235,12 @@ export const usesButtonVariants = () => {
                     
                     // spacings:
                     padding        : spacers.xs,
+                    
+                    
+                    
+                    // typos:
+                    textDecoration : 'underline',
+                    lineHeight     : 1,
                     
                     
                     
@@ -325,11 +325,6 @@ export const useButtonSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        // typos:
-        whiteSpace  : 'normal',
-        
-        
-        
         //#region spacings
         gapInline   : spacers.sm,
         gapBlock    : spacers.sm,
@@ -338,6 +333,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         gapInlineLg : spacers.md,
         gapBlockLg  : spacers.md,
         //#endregion spacings
+        
+        
+        
+        // typos:
+        whiteSpace : 'normal',
         
         
         
