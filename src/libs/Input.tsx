@@ -358,18 +358,18 @@ export function DateTimeInput (props: InputProps) { return <Input {...props} typ
 export function MonthInput    (props: InputProps) { return <Input {...props} type='month' />          }
 
 // mark as Input compatible:
-TextInput     .prototype = Input.prototype;
-SearchInput   .prototype = Input.prototype;
-PasswordInput .prototype = Input.prototype;
-EmailInput    .prototype = Input.prototype;
-TelInput      .prototype = Input.prototype;
-UrlInput      .prototype = Input.prototype;
-NumberInput   .prototype = Input.prototype;
-TimeInput     .prototype = Input.prototype;
-WeekInput     .prototype = Input.prototype;
-DateInput     .prototype = Input.prototype;
-DateTimeInput .prototype = Input.prototype;
-MonthInput    .prototype = Input.prototype;
+TextInput.prototype     = Input.prototype;
+SearchInput.prototype   = Input.prototype;
+PasswordInput.prototype = Input.prototype;
+EmailInput.prototype    = Input.prototype;
+TelInput.prototype      = Input.prototype;
+UrlInput.prototype      = Input.prototype;
+NumberInput.prototype   = Input.prototype;
+TimeInput.prototype     = Input.prototype;
+WeekInput.prototype     = Input.prototype;
+DateInput.prototype     = Input.prototype;
+DateTimeInput.prototype = Input.prototype;
+MonthInput.prototype    = Input.prototype;
 
 
 
