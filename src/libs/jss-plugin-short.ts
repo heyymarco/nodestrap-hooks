@@ -22,19 +22,23 @@ const shorts: { [key: string]: string } = {
 };
 
 const onProcessStyle = (style: JssStyle & { [key: string]: JssStyle[keyof JssStyle] }, rule: Rule, sheet?: StyleSheet): JssStyle => {
-    for (const name in style) {
-        if (name in shorts) {
-            // set the expanded name:
-            style[shorts[name]] = style[name];
-
-            // delete the original name:
-            delete style[name];
+    // convert LiteralObject to Array, so the prop order preserved:
+    let styleArrLazy : [string, any][]|null = null;
+    
+    for (const [propName, index] of Object.keys(style).map((key, index) => [key, index] as const)) {
+        if (propName in shorts) {
+            // initialize styleArrLazy:
+            if (!styleArrLazy) styleArrLazy = Object.entries(style);
+            
+            // set the expanded propName:
+            styleArrLazy[index][0] = shorts[propName];
         } // if
     } // for
-
-
-
-    return style;
+    
+    
+    
+    if (styleArrLazy) return Object.fromEntries(styleArrLazy); // return the modified
+    return style; // return the original
 };
 
 export default function pluginShort(): Plugin { return {
