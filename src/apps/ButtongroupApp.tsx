@@ -18,6 +18,9 @@ import {
 import {
 	Buttongroup, ListStyle,
 }						from '../libs/Buttongroup';
+import { Check } from '../libs/Check';
+import { TogglerMenuButton } from '../libs/TogglerMenuButton';
+import { Radio } from '../libs/Radio';
 
 
 
@@ -97,11 +100,84 @@ function App() {
 						
 						press={press}
 
-						orientation={orientation}
 						btnStyle={btnStyle}
 					>
 						button
 					</Button>
+                    <Check
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active} enableValidation={false}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						checkStyle='togglerBtn'
+					>
+						check btn
+					</Check>
+                    <TogglerMenuButton
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+					/>
+                    <Radio
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active} enableValidation={false}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						checkStyle='togglerBtn'
+						name='option'
+					>
+						opt 1
+					</Radio>
+                    <Radio
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active} enableValidation={false}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						checkStyle='togglerBtn'
+						name='option'
+					>
+						opt 2
+					</Radio>
+                    <Radio
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active} enableValidation={false}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						checkStyle='togglerBtn'
+						name='option'
+					>
+						opt 3
+					</Radio>
 					<Button
 						theme='success'
 					>
