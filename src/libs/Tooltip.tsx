@@ -221,14 +221,6 @@ export const useTooltipSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        // typos:
-        whiteSpace           : 'nowrap',
-        fontSize             : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
-        fontSizeSm           : typos.fontSizeSm,
-        fontSizeLg           : typos.fontSizeNm,
-        
-        
-        
         // backgrounds:
         boxShadow            : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
         
@@ -236,6 +228,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         // spacings:
         margin               : '0.6rem',
+        
+        
+        
+        // typos:
+        whiteSpace           : 'nowrap',
+        fontSize             : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
+        fontSizeSm           : typos.fontSizeSm,
+        fontSizeLg           : typos.fontSizeNm,
         
         
         
