@@ -84,35 +84,35 @@ const mergeExtend       = (style: Style, rule?: Rule, sheet?: StyleSheet): void 
     delete style.extend; // delete `extend` prop, so another plugins won't see this
 }
 const mergeLiteral      = (style: Style & LiteralObject, newStyle: Style, rule?: Rule, sheet?: StyleSheet): void => {
-    for (const [name, newValue] of Object.entries(newStyle)) { // loop through `newStyle`'s props
-        // `extend` is a special prop that we don't handle here:
-        if (name === 'extend') continue; // skip `extend` prop
+    for (const [propName, newPropValue] of Object.entries(newStyle)) { // loop through `newStyle`'s props
+        // `extend` is a special prop name that we don't handle here:
+        if (propName === 'extend') continue; // skip `extend` prop
 
 
 
         // delete the old prop (if any), so the new prop always placed at the end of LiteralObject:
-        delete style[name];
+        delete style[propName];
 
 
 
-        if (!isStyle(newValue)) {
-            // `newValue` is not a `Style` => unmergeable => add/overwrite `newValue` into `style`:
-            style[name] = newValue; // add/overwrite
+        if (!isStyle(newPropValue)) {
+            // `newPropValue` is not a `Style` => unmergeable => add/overwrite `newPropValue` into `style`:
+            style[propName] = newPropValue; // add/overwrite
         }
         else {
-            // `newValue` is a `Style` => possibility to merge with `currentValue`
+            // `newPropValue` is a `Style` => possibility to merge with `currentPropValue`
 
-            const currentValue = style[name];
-            if (!isStyle(currentValue)) {
-                // `currentValue` is not a `Style` => unmergeable => add/overwrite `newValue` into `style`:
-                style[name] = newValue; // add/overwrite
+            const currentPropValue = style[propName];
+            if (!isStyle(currentPropValue)) {
+                // `currentPropValue` is not a `Style` => unmergeable => add/overwrite `newPropValue` into `style`:
+                style[propName] = newPropValue; // add/overwrite
             }
             else {
-                // both `newValue` & `currentValue` are `Style` => merge them recursively (deeply):
+                // both `newPropValue` & `currentPropValue` are `Style` => merge them recursively (deeply):
 
-                const currentValueClone = {...currentValue} as Style; // clone the `currentValue` to avoid side effect, because the `currentValue` is not **the primary object** we're working on
-                mergeStyle(currentValueClone, newValue, rule, sheet);
-                style[name] = currentValueClone; // set the mutated `currentValueClone` back to `style`
+                const currentValueClone = {...currentPropValue} as Style; // clone the `currentPropValue` to avoid side effect, because the `currentPropValue` is not **the primary object** we're working on
+                mergeStyle(currentValueClone, newPropValue, rule, sheet);
+                style[propName] = currentValueClone; // set the mutated `currentValueClone` back to `style`
             } // if
         } // if
     } // for
@@ -164,8 +164,8 @@ const onChangeValue  = (value: any, prop: string, rule: Rule): string|null|false
     if (typeof(value) === 'object') {
         const ruleProp = (rule as any).prop;
         if (typeof(ruleProp) === 'function') {
-            for (const [propName, propVal] of Object.entries(value)) {
-                ruleProp(propName, propVal);
+            for (const [propName, propValue] of Object.entries(value)) {
+                ruleProp(propName, propValue);
             } // for
 
 
