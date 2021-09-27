@@ -213,18 +213,17 @@ export const usesNudeVariant = () => {
             isNude([
                 layout({
                     // backgrounds:
-                    backg         : 'none', // discard background
+                    backg   : 'none', // discard background
                     
                     
                     
                     // borders:
-                    border        : 'none', // discard border
+                    border  : 'none', // discard border
                     
                     
                     
                     // spacings:
-                    paddingInline : 0,      // discard paddingInline
-                    paddingBlock  : 0,      // discard paddingBlock
+                    padding : 0,      // discard padding
                 }),
             ]),
         ]),
