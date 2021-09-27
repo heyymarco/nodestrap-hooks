@@ -353,7 +353,7 @@ export const usesCheckLayout = () => {
             flexDirection  : 'row',         // flow to the document's writting flow
             justifyContent : 'center',      // items are placed starting from the center (in case of input & label are wrapped, each placed at the center)
             alignItems     : 'center',      // center items vertically
-            flexWrap       : 'wrap',        // allows the children to wrap to the next row
+            flexWrap       : 'wrap',        // allows the label to wrap to the next row
             
             
             
@@ -537,6 +537,11 @@ export const usesCheckVariants = () => {
         variants([
             rule(['.btn', '.togglerBtn'], [
                 layout({
+                    // layouts:
+                    flexWrap       : 'nowrap', // because the input is visually hidden => prevents the label to wrap to the next row
+                    
+                    
+                    
                     // children:
                     ...children(inputElm, composition([
                         layout({
