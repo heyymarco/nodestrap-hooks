@@ -203,19 +203,15 @@ export const usesCollapseStates = () => {
 };
 export const usesCollapse = () => {
     return composition([
-        rules([
-            rule('&&', [ // makes Collapse more specific than ListGroupItem
-                imports([
-                    // layouts:
-                    usesCollapseLayout(),
-                    
-                    // variants:
-                    usesCollapseVariants(),
-                    
-                    // states:
-                    usesCollapseStates(),
-                ]),
-            ]),
+        imports([
+            // layouts:
+            usesCollapseLayout(),
+            
+            // variants:
+            usesCollapseVariants(),
+            
+            // states:
+            usesCollapseStates(),
         ]),
     ]);
 };
