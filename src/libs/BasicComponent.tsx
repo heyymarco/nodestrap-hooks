@@ -218,7 +218,7 @@ export const usesNudeVariant = () => {
                     
                     
                     // borders:
-                    border  : 'none', // discard border
+                    border  : 0,      // discard border
                     
                     
                     
