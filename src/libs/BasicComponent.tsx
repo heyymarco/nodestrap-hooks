@@ -1146,21 +1146,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const keyframesNone : PropEx.Keyframes = { };
 
     
+    const transDuration = '300ms';
     
     return {
-        //#region typos
-        fontSize          : typos.fontSizeNm,
-        fontSizeSm        : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
-        fontSizeLg        : typos.fontSizeMd,
-        fontFamily        : 'inherit',
-        fontWeight        : 'inherit',
-        fontStyle         : 'inherit',
-        textDecoration    : 'inherit',
-        lineHeight        : 'inherit',
-        //#endregion typos
-
-        
-        
         //#region foreg, backg, borders
         foreg             : 'currentColor',
         
@@ -1192,18 +1180,42 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         // appearances:
         opacity           : 1,
-
-
+        
+        
+        
+        //#region typos
+        fontSize          : typos.fontSizeNm,
+        fontSizeSm        : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
+        fontSizeLg        : typos.fontSizeMd,
+        fontFamily        : 'inherit',
+        fontWeight        : 'inherit',
+        fontStyle         : 'inherit',
+        textDecoration    : 'inherit',
+        lineHeight        : 'inherit',
+        //#endregion typos
+        
+        
         
         //#region animations
+        transDuration     : transDuration,
         transition        : [
-            ['color'      , '300ms', 'ease-out'],
-            ['background' , '300ms', 'ease-out'],
-            ['border'     , '300ms', 'ease-out'],
-            ['inline-size', '300ms', 'ease-out'],
-            ['block-size' , '300ms', 'ease-out'],
-            ['font-size'  , '300ms', 'ease-out'],
-            ['opacity'    , '300ms', 'ease-out'],
+            // foreg, backg, borders:
+            ['color'      , transDuration, 'ease-out'],
+            ['background' , transDuration, 'ease-out'],
+            ['border'     , transDuration, 'ease-out'],
+            
+            // sizes:
+            ['inline-size', transDuration, 'ease-out'],
+            ['block-size' , transDuration, 'ease-out'],
+            
+            // spacings:
+            ['padding'    , transDuration, 'ease-out'],
+            
+            // appearances:
+            ['opacity'    , transDuration, 'ease-out'],
+            
+            // typos:
+            ['font-size'  , transDuration, 'ease-out'],
         ],
 
         boxShadow         : [[0, 0, 'transparent']],
