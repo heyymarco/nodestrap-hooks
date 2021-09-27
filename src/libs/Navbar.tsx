@@ -931,7 +931,7 @@ export interface NavbarMenuProps<TElement extends HTMLElement = HTMLElement>
         React.AnchorHTMLAttributes<TElement>
 {
 }
-export const NavbarMenu = <TElement extends HTMLElement = HTMLElement>(props: NavbarMenuProps<TElement>) => {
+export function NavbarMenu<TElement extends HTMLElement = HTMLElement>(props: NavbarMenuProps<TElement>) {
     // jsx:
     return (
         <ActionControl<TElement>
@@ -951,7 +951,7 @@ export const NavbarMenu = <TElement extends HTMLElement = HTMLElement>(props: Na
             mainClass={props.mainClass ?? ''}
         />
     );
-};
+}
 
 export type { NavbarMenuProps as MenuProps }
 export { NavbarMenu as Menu }
@@ -971,7 +971,7 @@ export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
     toggler?  : React.ReactChild | boolean | null
     children? : React.ReactNode
 }
-export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) => {
+export function Navbar<TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) {
     // styles:
     const sheet                 = useNavbarSheet();
     
@@ -1200,5 +1200,5 @@ export const Navbar = <TElement extends HTMLElement = HTMLElement>(props: Navbar
             </div> }
         </Indicator>
     );
-};
+}
 export { Navbar as default }

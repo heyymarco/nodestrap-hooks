@@ -264,7 +264,7 @@ export interface FormProps
     // children:
     children?        : React.ReactNode
 }
-export const Form = (props: FormProps) => {
+export function Form(props: FormProps) {
     // styles:
     const sheet             = useFormSheet();
     
@@ -346,5 +346,5 @@ export const Form = (props: FormProps) => {
             </ValidationProvider> }
         </BasicComponent>
     );
-};
+}
 export { Form as default }

@@ -174,7 +174,7 @@ export interface RadioProps
         CheckProps
 {
 }
-export const Radio = (props: RadioProps) => {
+export function Radio(props: RadioProps) {
     // styles:
     const sheet = useRadioSheet();
     
@@ -328,7 +328,7 @@ export const Radio = (props: RadioProps) => {
             }}
         />
     );
-};
+}
 export { Radio as default }
 
 export type { CheckStyle, CheckVariant }

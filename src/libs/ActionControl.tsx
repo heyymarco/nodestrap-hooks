@@ -466,7 +466,7 @@ export interface ActionControlProps<TElement extends HTMLElement = HTMLElement>
     // accessibilities:
     press?   : boolean
 }
-export const ActionControl = <TElement extends HTMLElement = HTMLElement>(props: ActionControlProps<TElement>) => {
+export function ActionControl<TElement extends HTMLElement = HTMLElement>(props: ActionControlProps<TElement>) {
     // styles:
     const sheet             = useActionControlSheet();
 
@@ -504,5 +504,5 @@ export const ActionControl = <TElement extends HTMLElement = HTMLElement>(props:
             }}
         />
     );
-};
+}
 export { ActionControl as default }

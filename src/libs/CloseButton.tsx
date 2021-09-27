@@ -29,7 +29,7 @@ export interface CloseButtonProps
         ButtonIconProps
 {
 }
-export const CloseButton = (props: CloseButtonProps) => {
+export function CloseButton(props: CloseButtonProps) {
     // jsx:
     return (
         <ButtonIcon
@@ -49,7 +49,7 @@ export const CloseButton = (props: CloseButtonProps) => {
             btnStyle={props.btnStyle ?? 'icon'}
         />
     );
-};
+}
 CloseButton.prototype = ButtonIcon.prototype; // mark as ButtonIcon compatible
 export { CloseButton as default }
 

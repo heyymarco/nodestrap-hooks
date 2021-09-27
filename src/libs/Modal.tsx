@@ -575,7 +575,7 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement>
     // actions:
     onClose?    : (closeType: CloseType) => void
 }
-export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalProps<TElement>) => {
+export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalProps<TElement>) {
     // styles:
     const sheet              = useModalSheet();
     
@@ -805,7 +805,7 @@ export const Modal = <TElement extends HTMLElement = HTMLElement>(props: ModalPr
             />
         </Popup>
     );
-};
+}
 export { Modal as default }
 
 export type { OrientationName, OrientationVariant }

@@ -305,7 +305,7 @@ export interface CollapseProps<TElement extends HTMLElement = HTMLElement>
         OrientationVariant
 {
 }
-export const Collapse = <TElement extends HTMLElement = HTMLElement>(props: CollapseProps<TElement>) => {
+export function Collapse<TElement extends HTMLElement = HTMLElement>(props: CollapseProps<TElement>) {
     // styles:
     const sheet              = useCollapseSheet();
     
@@ -330,7 +330,7 @@ export const Collapse = <TElement extends HTMLElement = HTMLElement>(props: Coll
             ]}
         />
     );
-};
+}
 export { Collapse as default }
 
 export type { OrientationName, OrientationVariant }

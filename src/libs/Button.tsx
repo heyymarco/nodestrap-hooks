@@ -375,7 +375,7 @@ export interface ButtonProps
     // children:
     children?    : React.ReactNode
 }
-export const Button = (props: ButtonProps) => {
+export function Button(props: ButtonProps) {
     // styles:
     const sheet              = useButtonSheet();
     
@@ -450,7 +450,7 @@ export const Button = (props: ButtonProps) => {
             { props.children }
         </ActionControl>
     );
-};
+}
 export { Button as default }
 
 export type { OrientationName, OrientationVariant }

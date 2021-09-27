@@ -324,7 +324,7 @@ export interface BadgeProps<TElement extends HTMLElement = HTMLElement>
     // accessibilities:
     label? : string
 }
-export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgeProps<TElement>) => {
+export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgeProps<TElement>) {
     // styles:
     const sheet        = useBadgeSheet();
     
@@ -385,7 +385,7 @@ export const Badge = <TElement extends HTMLElement = HTMLElement>(props: BadgePr
             { props.children }
         </Popup>
     );
-};
+}
 export { Badge as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }

@@ -93,7 +93,7 @@ export interface VisuallyHiddenProps<TElement extends HTMLElement = HTMLElement>
         ElementProps<TElement>
 {
 }
-export const VisuallyHidden = <TElement extends HTMLElement = HTMLElement>(props: VisuallyHiddenProps<TElement>) => {
+export function VisuallyHidden<TElement extends HTMLElement = HTMLElement>(props: VisuallyHiddenProps<TElement>) {
     // styles:
     const sheet = useVisuallyHiddenSheet();
     
@@ -116,5 +116,5 @@ export const VisuallyHidden = <TElement extends HTMLElement = HTMLElement>(props
             { props.children }
         </Element>
     );
-};
+}
 export { VisuallyHidden as default }

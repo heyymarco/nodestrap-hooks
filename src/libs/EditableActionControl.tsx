@@ -113,7 +113,7 @@ export interface EditableActionControlProps<TElement extends EditableControlElem
         ActionControlProps<TElement>
 {
 }
-export const EditableActionControl = <TElement extends EditableControlElement = EditableControlElement>(props: EditableActionControlProps<TElement>) => {
+export function EditableActionControl<TElement extends EditableControlElement = EditableControlElement>(props: EditableActionControlProps<TElement>) {
     // styles:
     const sheet             = useEditableActionControlSheet();
     
@@ -151,5 +151,5 @@ export const EditableActionControl = <TElement extends EditableControlElement = 
             }}
         />
     );
-};
+}
 export { EditableActionControl as default }

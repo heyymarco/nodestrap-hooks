@@ -32,7 +32,7 @@ export interface NavItemProps<TElement extends HTMLElement = HTMLElement>
         ListgroupItemProps<TElement>
 {
 }
-export const NavItem = <TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) => {
+export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
     // jsx:
     return (
         <ListgroupItem
@@ -54,7 +54,7 @@ NavItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
 export type { NavItemProps as ItemProps }
 export { NavItem as Item }
 
-export const NavPrevItem = <TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) => {
+export function NavPrevItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
     // jsx:
     return (
         <NavItem
@@ -80,7 +80,7 @@ export const NavPrevItem = <TElement extends HTMLElement = HTMLElement>(props: N
         </NavItem>
     );
 }
-export const NavNextItem = <TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) => {
+export function NavNextItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
     // jsx:
     return (
         <NavItem
@@ -106,6 +106,8 @@ export const NavNextItem = <TElement extends HTMLElement = HTMLElement>(props: N
         </NavItem>
     );
 }
+NavPrevItem.prototype = NavItem.prototype; // mark as NavItem compatible
+NavNextItem.prototype = NavItem.prototype; // mark as NavItem compatible
 export {
     NavPrevItem as PrevItem,
     NavPrevItem as PrevPage,
@@ -123,7 +125,7 @@ export interface NavProps<TElement extends HTMLElement = HTMLElement>
     // accessibilities:
     label?       : string
 }
-export const Nav = <TElement extends HTMLElement = HTMLElement>(props: NavProps<TElement>) => {
+export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<TElement>) {
     // rest props:
     const {
         // accessibilities:
@@ -157,7 +159,7 @@ export const Nav = <TElement extends HTMLElement = HTMLElement>(props: NavProps<
             { props.children }
         </Listgroup>
     );
-};
+}
 Nav.prototype = Listgroup.prototype; // mark as Listgroup compatible
 export { Nav as default }
 

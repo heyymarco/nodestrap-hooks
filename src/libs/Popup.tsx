@@ -281,7 +281,7 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     popupModifiers? : Partial<PopupModifier<string, any>>[]
     popupPosition?  : PopupPosition
 }
-export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) => {
+export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) {
     // styles:
     const sheet              = usePopupSheet();
     
@@ -391,7 +391,7 @@ export const Popup = <TElement extends HTMLElement = HTMLElement>(props: PopupPr
             { Popup }
         </div>
     );
-};
+}
 export { Popup as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }

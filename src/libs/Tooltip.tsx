@@ -259,7 +259,7 @@ export interface TooltipProps<TElement extends HTMLElement = HTMLElement>
         PopupProps<TElement>
 {
 }
-export const Tooltip = <TElement extends HTMLElement = HTMLElement>(props: TooltipProps<TElement>) => {
+export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: TooltipProps<TElement>) {
     // styles:
     const sheet        = useTooltipSheet();
     
@@ -384,7 +384,7 @@ export const Tooltip = <TElement extends HTMLElement = HTMLElement>(props: Toolt
             <div data-popper-arrow></div>
         </Popup>
     );
-};
+}
 export { Tooltip as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }

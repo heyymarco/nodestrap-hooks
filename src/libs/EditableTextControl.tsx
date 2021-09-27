@@ -397,7 +397,7 @@ export interface EditableTextControlProps<TElement extends EditableTextControlEl
     // events:
     onChange?  : React.ChangeEventHandler<TElement>
 }
-export const EditableTextControl = <TElement extends EditableTextControlElement = EditableTextControlElement>(props: EditableTextControlProps<TElement>) => {
+export function EditableTextControl<TElement extends EditableTextControlElement = EditableTextControlElement>(props: EditableTextControlProps<TElement>) {
     // styles:
     const sheet = useEditableTextControlSheet();
     

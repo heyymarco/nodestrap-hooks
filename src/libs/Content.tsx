@@ -132,7 +132,7 @@ export interface ContentProps<TElement extends HTMLElement = HTMLElement>
     // children:
     children? : React.ReactNode
 }
-export const Content = <TElement extends HTMLElement = HTMLElement>(props: ContentProps<TElement>) => {
+export function Content<TElement extends HTMLElement = HTMLElement>(props: ContentProps<TElement>) {
     // styles:
     const sheet = useContentSheet();
 
@@ -149,5 +149,5 @@ export const Content = <TElement extends HTMLElement = HTMLElement>(props: Conte
             mainClass={props.mainClass ?? sheet.main}
         />
     );
-};
+}
 export { Content as default }

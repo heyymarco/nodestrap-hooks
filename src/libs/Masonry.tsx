@@ -238,7 +238,7 @@ export interface MasonryProps<TElement extends HTMLElement = HTMLElement>
     // children:
     children? : React.ReactNode
 }
-export const Masonry = <TElement extends HTMLElement = HTMLElement>(props: MasonryProps<TElement>) => {
+export function Masonry<TElement extends HTMLElement = HTMLElement>(props: MasonryProps<TElement>) {
     // styles:
     const sheet              = useMasonrySheet();
     
@@ -502,7 +502,7 @@ export const Masonry = <TElement extends HTMLElement = HTMLElement>(props: Mason
             { props.children }
         </Content>
     );
-};
+}
 export { Masonry as default }
 
 export type { OrientationName, OrientationVariant }

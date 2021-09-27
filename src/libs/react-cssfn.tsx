@@ -286,7 +286,7 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
     variantClasses? : Optional<string>[]
     stateClasses?   : Optional<string>[]
 }
-export const Element = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>) => {
+export function Element<TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>) {
     // html props:
     const htmlProps = useMemo(() => {
         const htmlProps : {} = {
@@ -341,5 +341,5 @@ export const Element = <TElement extends HTMLElement = HTMLElement>(props: Eleme
             { props.children }
         </Tag>
     );
-};
+}
 export { Element as default }

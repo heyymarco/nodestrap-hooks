@@ -704,7 +704,7 @@ export interface ControlProps<TElement extends HTMLElement = HTMLElement>
 
     arrive?   : boolean
 }
-export const Control = <TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) => {
+export function Control<TElement extends HTMLElement = HTMLElement>(props: ControlProps<TElement>) {
     // styles:
     const sheet            = useControlSheet();
     
@@ -759,5 +759,5 @@ export const Control = <TElement extends HTMLElement = HTMLElement>(props: Contr
             }}
         />
     );
-};
+}
 export { Control as default }

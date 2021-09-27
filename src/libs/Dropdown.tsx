@@ -89,7 +89,7 @@ export interface DropdownProps<TElement extends HTMLElement = HTMLElement>
     // actions:
     onClose?    : (closeType: CloseType) => void
 }
-export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: DropdownProps<TElement>) => {
+export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: DropdownProps<TElement>) {
     // states:
     const activePassiveState = useActivePassiveState(props);
     const isVisible          = activePassiveState.active || (!!activePassiveState.class);
@@ -330,7 +330,7 @@ export const Dropdown = <TElement extends HTMLElement = HTMLElement>(props: Drop
             </Listgroup>
         </Collapse>
     );
-};
+}
 export { Dropdown as default }
 
 export type { ListStyle, ListVariant }

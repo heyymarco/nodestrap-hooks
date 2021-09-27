@@ -735,7 +735,7 @@ export interface IconProps<TElement extends HTMLElement = HTMLElement>
     // appearances:
     icon: string
 }
-export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProps<TElement>) => {
+export function Icon<TElement extends HTMLElement = HTMLElement>(props: IconProps<TElement>) {
     // styles:
     const sheet        = useIconSheet();
     
@@ -789,5 +789,5 @@ export const Icon = <TElement extends HTMLElement = HTMLElement>(props: IconProp
             { props.children }
         </Element>
     );
-};
+}
 export { Icon as default }

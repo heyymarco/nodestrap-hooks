@@ -385,7 +385,7 @@ export interface NavscrollProps<TElement extends HTMLElement = HTMLElement>
     targetFilter?    : (e: HTMLElement) => boolean
     interpolation?   : boolean
 }
-export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: NavscrollProps<TElement>) => {
+export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: NavscrollProps<TElement>) {
     // states:
     const [activeIndices, setActiveIndices] = useReducer((indices: number[], newIndices: number[]): number[] => {
         if (((): boolean => {
@@ -803,7 +803,7 @@ export const Navscroll = <TElement extends HTMLElement = HTMLElement>(props: Nav
             { mutateListgroupItems(props.children, /*deepLevelsParent: */[]) }
         </Listgroup>
     );
-};
+}
 Navscroll.prototype = Listgroup.prototype; // mark as Listgroup compatible
 export { Navscroll as default }
 

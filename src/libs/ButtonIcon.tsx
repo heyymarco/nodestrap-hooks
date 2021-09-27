@@ -280,7 +280,7 @@ export interface ButtonIconProps
     // appearances:
     icon?: string
 }
-export const ButtonIcon = (props: ButtonIconProps) => {
+export function ButtonIcon(props: ButtonIconProps) {
     // styles:
     const sheet   = useButtonIconSheet();
     
@@ -317,7 +317,7 @@ export const ButtonIcon = (props: ButtonIconProps) => {
             { children }
         </Button>
     );
-};
+}
 ButtonIcon.prototype = Button.prototype; // mark as Button compatible
 export { ButtonIcon as default }
 

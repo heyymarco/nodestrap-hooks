@@ -694,7 +694,7 @@ export interface IndicatorProps<TElement extends HTMLElement = HTMLElement>
         IndicationProps
 {
 }
-export const Indicator = <TElement extends HTMLElement = HTMLElement>(props: IndicatorProps<TElement>) => {
+export function Indicator<TElement extends HTMLElement = HTMLElement>(props: IndicatorProps<TElement>) {
     // styles:
     const sheet              = useIndicatorSheet();
     
@@ -760,5 +760,5 @@ export const Indicator = <TElement extends HTMLElement = HTMLElement>(props: Ind
             </AccessibilityProvider> }
         </BasicComponent>
     );
-};
+}
 export { Indicator as default }

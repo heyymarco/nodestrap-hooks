@@ -142,7 +142,7 @@ export interface ValidationProps extends Partial<Validation>
     // children:
     children?          : React.ReactNode
 }
-export const ValidationProvider = (props: ValidationProps) => {
+export function ValidationProvider(props: ValidationProps) {
     return (
         <Context.Provider value={{
             enableValidation : props.enableValidation ?? _defaultEnableValidation,
@@ -151,5 +151,5 @@ export const ValidationProvider = (props: ValidationProps) => {
             {props.children}
         </Context.Provider>
     );
-};
+}
 export { ValidationProvider as default }

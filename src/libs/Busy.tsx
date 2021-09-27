@@ -166,7 +166,7 @@ export interface BusyProps<TElement extends HTMLElement = HTMLElement>
         BadgeProps<TElement>
 {
 }
-export const Busy = <TElement extends HTMLElement = HTMLElement>(props: BusyProps<TElement>) => {
+export function Busy<TElement extends HTMLElement = HTMLElement>(props: BusyProps<TElement>) {
     // styles:
     const sheet = useBusySheet();
     
@@ -198,7 +198,7 @@ export const Busy = <TElement extends HTMLElement = HTMLElement>(props: BusyProp
             </VisuallyHidden> }
         </Badge>
     );
-};
+}
 export { Busy as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }

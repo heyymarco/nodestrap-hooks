@@ -588,7 +588,7 @@ export interface TogglerMenuButtonProps
         CheckProps
 {
 }
-export const TogglerMenuButton = (props: TogglerMenuButtonProps) => {
+export function TogglerMenuButton(props: TogglerMenuButtonProps) {
     // styles:
     const sheet       = useTogglerMenuButtonSheet();
     
@@ -649,6 +649,6 @@ export const TogglerMenuButton = (props: TogglerMenuButtonProps) => {
             { childrenFn }
         </Check>
     );
-};
+}
 TogglerMenuButton.prototype = Check.prototype; // mark as Check compatible
 export { TogglerMenuButton as default }

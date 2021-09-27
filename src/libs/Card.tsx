@@ -632,7 +632,7 @@ export interface CardProps<TElement extends HTMLElement = HTMLElement>
     header? : React.ReactNode
     footer? : React.ReactNode
 }
-export const Card = <TElement extends HTMLElement = HTMLElement>(props: CardProps<TElement>) => {
+export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProps<TElement>) {
     // styles:
     const sheet              = useCardSheet();
     
@@ -716,7 +716,7 @@ export const Card = <TElement extends HTMLElement = HTMLElement>(props: CardProp
             </footer> }
         </Indicator>
     );
-};
+}
 export { Card as default }
 
 export type { OrientationName, OrientationVariant }

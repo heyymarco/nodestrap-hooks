@@ -900,7 +900,7 @@ export interface ListgroupItemProps<TElement extends HTMLElement = HTMLElement>
     // children:
     children?      : React.ReactNode
 }
-export const ListgroupItem = <TElement extends HTMLElement = HTMLElement>(props: ListgroupItemProps<TElement>) => {
+export function ListgroupItem<TElement extends HTMLElement = HTMLElement>(props: ListgroupItemProps<TElement>) {
     // jsx:
     return (
         props.actionCtrl
@@ -942,7 +942,7 @@ export const ListgroupItem = <TElement extends HTMLElement = HTMLElement>(props:
             mainClass={props.mainClass ?? ''}
         />
     );
-};
+}
 export type { ListgroupItemProps as ItemProps }
 export { ListgroupItem as Item }
 
@@ -961,7 +961,7 @@ export interface ListgroupProps<TElement extends HTMLElement = HTMLElement>
     // behaviors:
     actionCtrl? : boolean
 }
-export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: ListgroupProps<TElement>) => {
+export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: ListgroupProps<TElement>) {
     // styles:
     const sheet              = useListgroupSheet();
     
@@ -1060,7 +1060,7 @@ export const Listgroup = <TElement extends HTMLElement = HTMLElement>(props: Lis
             ))}
         </Indicator>
     );
-};
+}
 export { Listgroup as default }
 
 export type { OrientationName, OrientationVariant }

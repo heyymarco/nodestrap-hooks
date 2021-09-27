@@ -834,7 +834,7 @@ export interface CheckProps
     // children:
     children?       : React.ReactNode
 }
-export const Check = (props: CheckProps) => {
+export function Check(props: CheckProps) {
     // styles:
     const sheet        = useCheckSheet();
     
@@ -1042,5 +1042,5 @@ export const Check = (props: CheckProps) => {
             }
         </EditableActionControl>
     );
-};
+}
 export { Check as default }

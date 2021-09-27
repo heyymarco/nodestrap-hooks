@@ -1240,7 +1240,7 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         MildVariant
 {
 }
-export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) => {
+export function BasicComponent<TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) {
     // styles:
     const sheet           = useBasicComponentSheet();
     
@@ -1276,5 +1276,5 @@ export const BasicComponent = <TElement extends HTMLElement = HTMLElement>(props
             ]}
         />
     );
-};
+}
 export { BasicComponent as default }

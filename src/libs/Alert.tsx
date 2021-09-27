@@ -244,7 +244,7 @@ export interface AlertProps<TElement extends HTMLElement = HTMLElement>
     children? : React.ReactNode
     control?  : React.ReactChild | boolean | null
 }
-export const Alert = <TElement extends HTMLElement = HTMLElement>(props: AlertProps<TElement>) => {
+export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertProps<TElement>) {
     // styles:
     const sheet   = useAlertSheet();
     
@@ -414,7 +414,7 @@ export const Alert = <TElement extends HTMLElement = HTMLElement>(props: AlertPr
             { controlFn }
         </Popup>
     );
-};
+}
 export { Alert as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }

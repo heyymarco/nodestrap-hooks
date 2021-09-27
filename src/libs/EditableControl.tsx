@@ -668,7 +668,7 @@ export interface EditableControlProps<TElement extends EditableControlElement = 
     customValidator? : CustomValidatorHandler
     required?        : boolean
 }
-export const EditableControl = <TElement extends EditableControlElement = EditableControlElement>(props: EditableControlProps<TElement>) => {
+export function EditableControl<TElement extends EditableControlElement = EditableControlElement>(props: EditableControlProps<TElement>) {
     // styles:
     const sheet             = useEditableControlSheet();
 
@@ -742,5 +742,5 @@ export const EditableControl = <TElement extends EditableControlElement = Editab
             }}
         />
     );
-};
+}
 export { EditableControl as default }

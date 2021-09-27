@@ -27,27 +27,15 @@ import Icon                 from './Icon'
 
 // react components:
 
-interface ButtongroupItemProps<TElement extends HTMLElement = HTMLElement>
-    extends
-        ListgroupItemProps<TElement>
+interface ButtongroupItemProps
 {
+    children: React.ReactNode
 }
-const ButtongroupItem = <TElement extends HTMLElement = HTMLElement>(props: ButtongroupItemProps<TElement>) => {
+function ButtongroupItem(props: ButtongroupItemProps) {
     // jsx:
-    return (
-        <ListgroupItem
-            // other props:
-            {...props}
-            
-            
-            // essentials:
-            tag={props.tag ?? (props.href ? 'a' : undefined)}
-            
-            
-            // accessibilities:
-            aria-current={props['aria-current'] ?? (props.active ? 'page' : undefined)}
-        />
-    );
+    return (<>
+        { props.children }
+    </>);
 }
 ButtongroupItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
 
@@ -60,12 +48,16 @@ export interface ButtongroupProps<TElement extends HTMLElement = HTMLElement>
     // accessibilities:
     label?       : string
 }
-export const Buttongroup = <TElement extends HTMLElement = HTMLElement>(props: ButtongroupProps<TElement>) => {
+export function Buttongroup<TElement extends HTMLElement = HTMLElement>(props: ButtongroupProps<TElement>) {
     // rest props:
     const {
         // accessibilities:
         role,
         label,
+        
+        
+        // children:
+        children,
     ...restProps} = props;
     
     
@@ -89,10 +81,17 @@ export const Buttongroup = <TElement extends HTMLElement = HTMLElement>(props: B
             // variants:
             mild={props.mild ?? false}
         >
-            { props.children }
+            {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
+                <ButtongroupItem
+                    // essentials:
+                    key={index}
+                >
+                    { child }
+                </ButtongroupItem>
+            ))}
         </Listgroup>
     );
-};
+}
 Buttongroup.prototype = Listgroup.prototype; // mark as Listgroup compatible
 export { Buttongroup as default }
 

@@ -398,12 +398,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export interface CarouselItemProps<TElement extends HTMLElement = HTMLDivElement>
+export interface CarouselItemProps<TElement extends HTMLElement = HTMLElement>
     extends
         ElementProps<TElement>
 {
 }
-export const CarouselItem = <TElement extends HTMLElement = HTMLDivElement>(props: CarouselItemProps<TElement>) => {
+export function CarouselItem<TElement extends HTMLElement = HTMLElement>(props: CarouselItemProps<TElement>) {
     // jsx:
     return (
         <Element<TElement>
@@ -419,7 +419,7 @@ export const CarouselItem = <TElement extends HTMLElement = HTMLDivElement>(prop
             mainClass={props.mainClass ?? ''}
         />
     );
-};
+}
 
 export type { CarouselItemProps as ItemProps }
 export { CarouselItem as Item }
@@ -441,7 +441,7 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
     nextBtn?  : React.ReactChild | boolean | null
     nav?      : React.ReactChild | boolean | null
 }
-export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) => {
+export function Carousel<TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) {
     // styles:
     const sheet      = useCarouselSheet();
     
@@ -757,7 +757,7 @@ export const Carousel = <TElement extends HTMLElement = HTMLElement>(props: Caro
             }
         </Content>
     );
-};
+}
 export { Carousel as default }
 
 
@@ -767,7 +767,7 @@ interface NavButtonProps
         ButtonIconProps
 {
 }
-const NavButton = (props: NavButtonProps) => {
+function NavButton(props: NavButtonProps) {
     // jsx:
     return (
         <ButtonIcon
@@ -781,4 +781,4 @@ const NavButton = (props: NavButtonProps) => {
             btnStyle={props.btnStyle ?? 'ghost'}
         />
     );
-};
+}

@@ -205,7 +205,7 @@ export interface ContainerProps<TElement extends HTMLElement = HTMLElement>
     // children:
     children? : React.ReactNode
 }
-export const Container = <TElement extends HTMLElement = HTMLElement>(props: ContainerProps<TElement>) => {
+export function Container<TElement extends HTMLElement = HTMLElement>(props: ContainerProps<TElement>) {
     // styles:
     const sheet = useContainerSheet();
     
@@ -228,5 +228,5 @@ export const Container = <TElement extends HTMLElement = HTMLElement>(props: Con
             mainClass={props.mainClass ?? sheet.main}
         />
     );
-};
+}
 export { Container as default }

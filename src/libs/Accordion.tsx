@@ -202,7 +202,7 @@ export interface AccordionItemProps<TElement extends HTMLElement = HTMLElement>
     // accessibilities:
     label?          : string | React.ReactNode
 }
-export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props: AccordionItemProps<TElement>) => {
+export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props: AccordionItemProps<TElement>) {
     // styles:
     const sheet                 = useAccordionItemSheet();
     
@@ -319,7 +319,7 @@ export const AccordionItem = <TElement extends HTMLElement = HTMLElement>(props:
             { children }
         </Collapse>
     </>);
-};
+}
 AccordionItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
 
 export type { AccordionItemProps as ItemProps }

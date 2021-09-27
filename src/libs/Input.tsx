@@ -229,7 +229,7 @@ export interface InputProps
     type?         : InputType
     placeholder?  : string
 }
-export const Input = (props: InputProps) => {
+export function Input(props: InputProps) {
     // styles:
     const sheet    = useInputSheet();
     
@@ -339,23 +339,37 @@ export const Input = (props: InputProps) => {
             />
         </EditableTextControl>
     );
-};
+}
 export { Input as default }
 
 
 
-export const TextInput     = (props: InputProps) => <Input {...props} type='text' />
-export const SearchInput   = (props: InputProps) => <Input {...props} type='search' />
-export const PasswordInput = (props: InputProps) => <Input {...props} type='password' />
-export const EmailInput    = (props: InputProps) => <Input {...props} type='email' />
-export const TelInput      = (props: InputProps) => <Input {...props} type='tel' />
-export const UrlInput      = (props: InputProps) => <Input {...props} type='url' />
-export const NumberInput   = (props: InputProps) => <Input {...props} type='number' />
-export const TimeInput     = (props: InputProps) => <Input {...props} type='time' />
-export const WeekInput     = (props: InputProps) => <Input {...props} type='week' />
-export const DateInput     = (props: InputProps) => <Input {...props} type='date' />
-export const DateTimeInput = (props: InputProps) => <Input {...props} type='datetime-local' />
-export const MonthInput    = (props: InputProps) => <Input {...props} type='month' />
+export function TextInput     (props: InputProps) { return <Input {...props} type='text' />           }
+export function SearchInput   (props: InputProps) { return <Input {...props} type='search' />         }
+export function PasswordInput (props: InputProps) { return <Input {...props} type='password' />       }
+export function EmailInput    (props: InputProps) { return <Input {...props} type='email' />          }
+export function TelInput      (props: InputProps) { return <Input {...props} type='tel' />            }
+export function UrlInput      (props: InputProps) { return <Input {...props} type='url' />            }
+export function NumberInput   (props: InputProps) { return <Input {...props} type='number' />         }
+export function TimeInput     (props: InputProps) { return <Input {...props} type='time' />           }
+export function WeekInput     (props: InputProps) { return <Input {...props} type='week' />           }
+export function DateInput     (props: InputProps) { return <Input {...props} type='date' />           }
+export function DateTimeInput (props: InputProps) { return <Input {...props} type='datetime-local' /> }
+export function MonthInput    (props: InputProps) { return <Input {...props} type='month' />          }
+
+// mark as Input compatible:
+TextInput     .prototype = Input.prototype;
+SearchInput   .prototype = Input.prototype;
+PasswordInput .prototype = Input.prototype;
+EmailInput    .prototype = Input.prototype;
+TelInput      .prototype = Input.prototype;
+UrlInput      .prototype = Input.prototype;
+NumberInput   .prototype = Input.prototype;
+TimeInput     .prototype = Input.prototype;
+WeekInput     .prototype = Input.prototype;
+DateInput     .prototype = Input.prototype;
+DateTimeInput .prototype = Input.prototype;
+MonthInput    .prototype = Input.prototype;
 
 
 
