@@ -109,8 +109,6 @@ export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React
                 (typeof element.type === 'function')
                 &&
                 (
-                    (element.type.prototype instanceof funcComponent)
-                    ||
                     (
                         element.type.prototype
                         &&
@@ -118,6 +116,8 @@ export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React
                         &&
                         (element.type.prototype === funcComponent.prototype)
                     )
+                    ||
+                    (element.type.prototype instanceof funcComponent)
                 )
             )
         )
