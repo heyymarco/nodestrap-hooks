@@ -219,7 +219,7 @@ export const usesNudeVariant = () => {
                     
                     // borders:
                     border       : 0,      // discard border
-                    borderRadius : 0,      // discard borderRadius
+                 // borderRadius : 0,      // do not discard borderRadius, causing boxShadow looks weird
                     
                     
                     
