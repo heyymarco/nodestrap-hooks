@@ -75,9 +75,10 @@ export const usesInputLayout = () => {
         layout({
             // layouts:
             display        : 'flex',   // use block flexbox, so it takes the entire parent's width
-            flexDirection  : 'row',    // items are stacked horizontally
+            flexDirection  : 'row',    // flow to the document's writting flow
             justifyContent : 'center', // center items horizontally
             alignItems     : 'center', // center items vertically
+            flexWrap       : 'nowrap', // prevents the input & icon to wrap to the next row
             
             
             
@@ -98,13 +99,15 @@ export const usesInputLayout = () => {
                     
                     
                     // sizes:
-                    // strip out input's prop [size]:
-                    // span to maximum width including parent's paddings:
-                    boxSizing      : 'border-box', // the final size is including borders & paddings
-                    inlineSize     : 'fill-available',
-                    fallbacks      : {
-                        inlineSize : [['calc(100% + (', cssProps.paddingInline, ' * 2))']],
-                    },
+                    flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% width
+                    alignSelf      : 'stretch', // fill the parent height
+                    // // strip out input's prop [size]:
+                    // // span to maximum width including parent's paddings:
+                    // boxSizing      : 'border-box', // the final size is including borders & paddings
+                    // inlineSize     : 'fill-available',
+                    // fallbacks      : {
+                    //     inlineSize : [['calc(100% + (', cssProps.paddingInline, ' * 2))']],
+                    // },
                     
                     
                     
