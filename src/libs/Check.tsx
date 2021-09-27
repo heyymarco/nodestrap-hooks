@@ -373,14 +373,13 @@ export const usesCheckLayout = () => {
             
             
             // borders:
-            border         : undefined as unknown as null, // discard layout's border
-            borderRadius   : undefined as unknown as null, // discard layout's borderRadius
+            border         : 0, // discard border
+            borderRadius   : 0, // discard borderRadius
             
             
             
             // spacings:
-            paddingInline  : undefined as unknown as null, // discard layout's paddingInline
-            paddingBlock   : undefined as unknown as null, // discard layout's paddingBlock
+            padding        : 0, // discard padding
             
             
             
@@ -430,8 +429,7 @@ export const usesCheckLayout = () => {
                     
                     
                     // spacings:
-                    paddingInline : undefined as unknown as null, // discard layout's paddingInline
-                    paddingBlock  : undefined as unknown as null, // discard layout's paddingBlock
+                    padding       : 0, // discard padding
                     
                     
                     
