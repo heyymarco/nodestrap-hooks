@@ -168,7 +168,7 @@ export const usesCarouselItemLayout = () => {
             // sizes:
             boxSizing       : 'border-box',     // the final size is including borders & paddings
             inlineSize      : '100%',           // fills the entire parent's width
-            flex            : [[0, 0, '100%']], // not growing, not shrinking, fills the entire parent's width
+            flex            : [[0, 0, '100%']], // ungrowable, unshrinkable, initial 100% parent's width
             
             
             
