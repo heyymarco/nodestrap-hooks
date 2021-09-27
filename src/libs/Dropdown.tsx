@@ -7,9 +7,39 @@ import {
 
 // cssfn:
 import {
+    // compositions:
+    composition,
+    mainComposition,
+    imports,
+    
+    
+    
+    // layouts:
+    layout,
+}                           from './cssfn'       // cssfn core
+import {
+    // hooks:
+    createUseSheet,
+    
+    
+    
     // utilities:
     isTypeOf,
 }                           from './react-cssfn' // cssfn for react
+import {
+    createCssConfig,
+    
+    
+    
+    // utilities:
+    usesGeneralProps,
+    usesSuffixedProps,
+    overwriteProps,
+}                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+import {
+    // hooks:
+    usesSizeVariant,
+}                           from './BasicComponent'
 import {
     // hooks:
     useActivePassiveState,
@@ -19,6 +49,13 @@ import {
     PopupPlacement,
     PopupModifier,
     PopupPosition,
+    
+    
+    
+    // styles:
+    usesCollapseLayout,
+    usesCollapseVariants,
+    usesCollapseStates,
     
     
     
@@ -47,6 +84,85 @@ import {
     // hooks:
     usePropEnabled,
 }                           from './accessibilities'
+
+
+
+// styles:
+export const usesDropdownLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesCollapseLayout(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesDropdownVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizeVariant((sizeName) => composition([
+        layout({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    
+    
+    return composition([
+        imports([
+            // variants:
+            usesCollapseVariants(),
+            
+            // layouts:
+            sizes(),
+        ]),
+    ]);
+};
+export const usesDropdownStates = () => {
+    return composition([
+        imports([
+            // states:
+            usesCollapseStates(),
+        ]),
+    ]);
+};
+export const usesDropdown = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesDropdownLayout(),
+            
+            // variants:
+            usesDropdownVariants(),
+            
+            // states:
+            usesDropdownStates(),
+        ]),
+    ]);
+};
+
+export const useDropdownSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesDropdown(),
+        ]),
+    ]),
+]);
+
+
+
+// configs:
+export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    return {
+        // backgrounds:
+        boxShadow : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
+    };
+}, { prefix: 'ddwn' });
 
 
 
@@ -90,6 +206,11 @@ export interface DropdownProps<TElement extends HTMLElement = HTMLElement>
     onClose?    : (closeType: CloseType) => void
 }
 export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: DropdownProps<TElement>) {
+    // styles:
+    const sheet              = useDropdownSheet();
+    
+    
+    
     // states:
     const activePassiveState = useActivePassiveState(props);
     const isVisible          = activePassiveState.active || (!!activePassiveState.class);
@@ -206,9 +327,15 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
                 popupPlacement,
                 popupModifiers,
                 popupPosition,
-                
-                popupStyle: 'wrapper',
             }}
+            
+            
+            // variants:
+            nude={props.nude ?? true}
+            
+            
+            // classes:
+            mainClass={props.mainClass ?? sheet.main}
             
             
             // events:
