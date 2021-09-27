@@ -523,8 +523,8 @@ export const usesMenuLayout = () => {
         ]),
         layout({
             // borders:
-            border       : undefined as unknown as null, // discard ActionControl's border
-            borderRadius : undefined as unknown as null, // discard ActionControl's borderRadius
+            border       : 0, // discard border
+            borderRadius : 0, // discard borderRadius
             
             
             
