@@ -22,7 +22,6 @@ import {
     
     
     // rules:
-    rules,
     variants,
     states,
     rule,
