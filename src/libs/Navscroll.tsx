@@ -11,6 +11,11 @@ import {
     isTypeOf,
 }                           from './react-cssfn' // cssfn for react
 import {
+    // react components:
+    ListgroupItemProps,
+    ListgroupItem,
+}                           from './Listgroup'
+import {
     // hooks:
     ListStyle,
     ListVariant,
@@ -21,12 +26,9 @@ import {
     
     
     // react components:
-    ListgroupItemProps,
-    ListgroupItem,
-    
-    ListgroupProps,
-    Listgroup,
-}                           from './Listgroup'
+    NavProps,
+    Nav,
+}                           from './Nav'
 
 
 
@@ -367,7 +369,7 @@ const findLast  = <T,R>(array: T[], predicate: (value: T) => R|null): [R, number
 // react components:
 
 /*
-    Navscroll is just a Listgroup with *manipulated active* on its items
+    Navscroll is just a Nav with *manipulated active* on its items
 */
 
 // ListgroupItem => NavscrollItem
@@ -378,7 +380,7 @@ export { ListgroupItem, ListgroupItem as NavscrollItem, ListgroupItem as Item }
 
 export interface NavscrollProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListgroupProps<TElement>
+        NavProps<TElement>
 {
     // scrolls:
     targetRef?       : React.RefObject<HTMLElement> // getter ref
@@ -400,6 +402,19 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
         
         return newIndices; // update with the new one
     }, []);
+    
+    
+    
+    // rest props:
+    const {
+        // accessibilities:
+        orientation = 'block',
+    ...restProps} = props;
+
+    const defaultProps = {
+        // accessibilities:
+        orientation,
+    };
     
     
     
@@ -705,10 +720,10 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
     
     // jsx functions:
     const mutateNestedNavscroll = (nestNavProps: NavscrollProps, key: React.Key|null, deepLevelsParent: number[]) => (
-        <Listgroup
+        <Nav
             // other props:
             {...((): {} => {
-                const combinedProps: { [name: string]: any } = { ...props };
+                const combinedProps: { [name: string]: any } = { ...props, ...defaultProps, };
                 
                 for (const [name, value] of Object.entries(nestNavProps)) {
                     if (value === undefined) continue;
@@ -724,7 +739,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
             key={key}
         >
             { mutateListgroupItems(nestNavProps.children, /*deepLevelsParent: */deepLevelsParent) }
-        </Listgroup>
+        </Nav>
     );
     const mutateListgroupItems = (children: React.ReactNode, deepLevelsParent: number[]) => (
         children && (Array.isArray(children) ? children : [children]).map((child, index) => {
@@ -796,15 +811,16 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
     
     // jsx:
     return (
-        <Listgroup
+        <Nav
             // other props:
-            {...props}
+            {...restProps}
+            {...defaultProps}
         >
             { mutateListgroupItems(props.children, /*deepLevelsParent: */[]) }
-        </Listgroup>
+        </Nav>
     );
 }
-Navscroll.prototype = Listgroup.prototype; // mark as Listgroup compatible
+Navscroll.prototype = Nav.prototype; // mark as Nav compatible
 export { Navscroll as default }
 
 export type { ListStyle, ListVariant }
