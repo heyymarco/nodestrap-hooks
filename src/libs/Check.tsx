@@ -351,7 +351,7 @@ export const usesCheckLayout = () => {
             // layouts:
             display        : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
             flexDirection  : 'row',         // flow to the document's writting flow
-            justifyContent : 'start',       // items are placed starting from the left
+            justifyContent : 'center',      // items are placed starting from the center (in case of input & label are wrapped, each placed at the center)
             alignItems     : 'center',      // center items vertically
             flexWrap       : 'wrap',        // allows the children to wrap to the next row
             
