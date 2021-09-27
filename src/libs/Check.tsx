@@ -417,6 +417,7 @@ export const usesCheckLayout = () => {
                 layout({
                     // layouts:
                     display       : 'inline-block', // use inline-block, so it takes the width & height as we set
+                    flex          : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's width
                     
                     
                     
@@ -496,6 +497,7 @@ export const usesCheckLayout = () => {
                 layout({
                     // layouts:
                     display       : 'inline', // use inline, so it takes the width & height automatically
+                    flex          : [[1, 1, 0]], // growable, shrinkable, initial from 0
                     
                     
                     
