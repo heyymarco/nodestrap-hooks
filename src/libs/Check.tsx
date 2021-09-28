@@ -588,6 +588,11 @@ export const usesCheckVariants = () => {
                             usesButtonLayout(),
                         ]),
                         layout({
+                            // sizes:
+                            alignSelf : 'stretch', // follows wrapper's height
+                            
+                            
+                            
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'btn')), // apply general cssProps starting with btn***
                         }),
