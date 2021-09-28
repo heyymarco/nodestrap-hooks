@@ -400,7 +400,7 @@ export const usesCardCaptionLayout = () => {
         layout({
             // sizes:
             // default card's items height are unresizeable (excepts for the card's body):
-            flex: [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height
+            flex : [[0, 1, 'auto']], // ungrowable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
             
             
             
@@ -430,7 +430,7 @@ export const usesCardBodyLayout = () => {
         layout({
             // sizes:
             // default card's body height is resizeable, ensuring footers are aligned to the bottom:
-            flex: [[1, 1, 'auto']], // growable, shrinkable, initial from it's height
+            flex : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
             
             
             
@@ -448,10 +448,10 @@ export const usesCardLayout = () => {
         ]),
         layout({
             // layouts:
-         // display        : 'flex',        // customizable orientation // already defined in block()/inline()
-         // flexDirection  : 'column',      // customizable orientation // already defined in block()/inline()
-            justifyContent : 'start',       // items are placed starting from the top
-            alignItems     : 'stretch',     // items width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
+         // display        : 'flex',    // customizable orientation // already defined in variant `.block`/`.inline`
+         // flexDirection  : 'column',  // customizable orientation // already defined in variant `.block`/`.inline`
+            justifyContent : 'start',   // if items are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first item should be visible first
+            alignItems     : 'stretch', // items width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
             
             
             
