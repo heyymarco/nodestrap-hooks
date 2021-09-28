@@ -383,6 +383,7 @@ export const usesListgroupLayout = () => {
          // flexDirection  : 'column',  // customizable orientation // already defined in variant `.block`/`.inline`
             justifyContent : 'start',   // if wrappers are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first wrapper should be visible first
             alignItems     : 'stretch', // wrappers width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
+            flexWrap       : 'nowrap',  // no wrapping
             
             
             
@@ -398,6 +399,7 @@ export const usesListgroupLayout = () => {
                     display        : 'flex',    // use block flexbox, so it takes the entire Listgroup's width
                     justifyContent : 'start',   // if listItems are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first listItem should be visible first
                     alignItems     : 'stretch', // listItems width are 100% of the wrapper (for variant `.block`) or height (for variant `.inline`)
+                    flexWrap       : 'nowrap',  // no wrapping
                     
                     
                     
@@ -470,7 +472,7 @@ export const usesListgroupVariants = () => {
                         ]),
                         layout({
                             // layouts:
-                            flexDirection : 'column', // listItems are stacked vertically (supports for the Accordion at blockStyle)
+                            flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
                         }),
                     ])),
                 }),
@@ -491,7 +493,7 @@ export const usesListgroupVariants = () => {
                         ]),
                         layout({
                             // layouts:
-                            flexDirection : 'row', // listItems are stacked horizontally (supports for the Accordion at inlineStyle)
+                            flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
                         }),
                     ])),
                 }),
@@ -650,7 +652,7 @@ export const usesListgroupVariants = () => {
                     noOrientationInline([ // block
                         layout({
                             // layouts:
-                            // tab directions are block but listgroup direction are inline:
+                            // tab directions are block (down) but listgroup direction are inline:
                             display                : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
                             
                             
@@ -676,7 +678,7 @@ export const usesListgroupVariants = () => {
                     isOrientationInline([ // inline
                         layout({
                             // layouts:
-                            // tab directions are inline but listgroup direction are block:
+                            // tab directions are inline (right) but listgroup direction are block:
                             display                : 'flex',        // use block flexbox, so it takes the entire parent's width
                             
                             
@@ -754,13 +756,14 @@ export const usesListgroupVariants = () => {
             rule('.bullet', [
                 layout({
                     // layouts:
-                    alignItems   : 'center', // child items are centered horizontally
+                    justifyContent : 'space-between', // separates each bullet as far as possible
+                    alignItems     : 'center',        // each bullet might have different size, so center it instead of stretch it
                     
                     
                     
                     // spacings:
                     // add space between bullets:
-                    gap          : cssProps.bulletSpacing,
+                    gap            : cssProps.bulletSpacing,
                     
                     
                     
@@ -770,6 +773,11 @@ export const usesListgroupVariants = () => {
                             // borders:
                             // kill separator between bullets:
                             borderWidth : 0,
+                            
+                            
+                            
+                            // sizes:
+                            flex        : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
                             
                             
                             
