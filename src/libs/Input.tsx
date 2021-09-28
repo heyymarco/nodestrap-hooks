@@ -101,13 +101,13 @@ export const usesInputLayout = () => {
                     // sizes:
                     flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
                     alignSelf      : 'stretch', // fill the parent height
-                    // // strip out input's prop [size]:
-                    // // span to maximum width including parent's paddings:
-                    // boxSizing      : 'border-box', // the final size is including borders & paddings
-                    // inlineSize     : 'fill-available',
-                    // fallbacks      : {
-                    //     inlineSize : [['calc(100% + (', cssProps.paddingInline, ' * 2))']],
-                    // },
+                    // strip out the *weird input's prop [size]* so it can follow flex behavior:
+                    // span to maximum width including parent's paddings:
+                    boxSizing      : 'border-box', // the final size is including borders & paddings
+                    inlineSize     : 'fill-available',
+                    fallbacks      : {
+                        inlineSize : [['calc(100% + (', cssProps.paddingInline, ' * 2))']],
+                    },
                     
                     
                     
