@@ -75,7 +75,7 @@ export const usesInputLayout = () => {
         layout({
             // layouts:
             display        : 'flex',   // use block flexbox, so it takes the entire parent's width
-            flexDirection  : 'row',    // flow to the document's writting flow
+            flexDirection  : 'row',    // flow to the document's writing flow
             justifyContent : 'start',  // if input is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the input's first letter should be visible first
             alignItems     : 'center', // default center items vertically (expecially for the validation icon indicator)
             flexWrap       : 'nowrap', // prevents the input & icon to wrap to the next row
