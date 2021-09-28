@@ -379,7 +379,7 @@ export const usesListgroupLayout = () => {
         ]),
         layout({
             // layouts:
-         // display        : 'flex',           // customizable orientation // already defined in variant `.block`/`.inline`
+         // display        : 'flex',    // customizable orientation // already defined in variant `.block`/`.inline`
          // flexDirection  : 'column',  // customizable orientation // already defined in variant `.block`/`.inline`
             justifyContent : 'start',   // if wrappers are not growable, the remaining space (if any) placed at the end, and if no space available => the first wrapper should be visible first
             alignItems     : 'stretch', // wrappers width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
