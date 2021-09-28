@@ -210,7 +210,7 @@ export const usesListgroupItemLayout = () => {
             
             
             // sizes:
-            flex      : [[1, 1]], // growable & shrinkable, fills the entire wrapper's height
+            flex      : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
             
             
             
@@ -379,10 +379,10 @@ export const usesListgroupLayout = () => {
         ]),
         layout({
             // layouts:
-         // display        : 'flex',           // customizable orientation // already defined in block()/inline()
-         // flexDirection  : 'column',         // customizable orientation // already defined in block()/inline()
-            justifyContent : 'center',         // items are placed starting from the center and then spread to both sides
-            alignItems     : 'stretch',        // items width are 100% of the parent
+         // display        : 'flex',           // customizable orientation // already defined in variant `.block`/`.inline`
+         // flexDirection  : 'column',  // customizable orientation // already defined in variant `.block`/`.inline`
+            justifyContent : 'start',   // if wrappers are not growable, the remaining space (if any) placed at the end, and if no space available => the first wrapper should be visible first
+            alignItems     : 'stretch', // wrappers width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
             
             
             
@@ -396,8 +396,13 @@ export const usesListgroupLayout = () => {
                 layout({
                     // layouts:
                     display        : 'flex',    // use block flexbox, so it takes the entire Listgroup's width
-                    justifyContent : 'stretch', // listItems height are 100% of the wrapper (the listItems also need to have growable & shrinkable)
-                    alignItems     : 'stretch', // listItems width  are 100% of the wrapper
+                    justifyContent : 'start',   // if listItems are not growable, the remaining space (if any) placed at the end, and if no space available => the first listItem should be visible first
+                    alignItems     : 'stretch', // listItems width are 100% of the wrapper (for variant `.block`) or height (for variant `.inline`)
+                    
+                    
+                    
+                    // sizes:
+                    flex           : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
                     
                     
                     
@@ -564,11 +569,6 @@ export const usesListgroupVariants = () => {
             ]),
             rule('.tab', [
                 layout({
-                    // layouts:
-                    justifyContent : 'start', // items are placed starting from the left
-                    
-                    
-                    
                     // borders:
                     // allow the items to overflow, so the `active item` can hide the `border(Bottom|Right)`:
                     overflow: 'visible',
