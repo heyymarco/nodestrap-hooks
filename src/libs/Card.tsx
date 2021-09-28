@@ -451,7 +451,7 @@ export const usesCardLayout = () => {
          // display        : 'flex',        // customizable orientation // already defined in block()/inline()
          // flexDirection  : 'column',      // customizable orientation // already defined in block()/inline()
             justifyContent : 'start',       // items are placed starting from the top
-            alignItems     : 'stretch',     // items width are 100% of the parent
+            alignItems     : 'stretch',     // items width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
             
             
             
