@@ -383,8 +383,8 @@ export const usesWrapperLayout = () => {
             // layouts:
             display        : 'flex',   // use block flexbox, so it takes the entire parent's width
             flexDirection  : 'row',    // the flex direction to horz, so we can adjust the content's height
-            justifyContent : 'center', // center items horizontally
-            alignItems     : 'center', // if the content's height is shorter than the section, place it at the center
+            justifyContent : 'center', // center contents (text, logo, etc) horizontally
+            alignItems     : 'center', // center contents (text, logo, etc) vertically (if the content's height is shorter than the section)
             
             
             
@@ -456,8 +456,8 @@ export const usesMenusLayout = () => {
             // layouts:
             gridArea       : 'menus',   // place at the defined `menus` area
             display        : 'flex',    // use flexbox to place the menus sequentially
-            flexDirection  : 'row',     // menus are stacked horizontally
-            justifyContent : 'start',   // menus are placed starting from the left, leaving a free space (if any) at the end
+            flexDirection  : 'row',     // menus are stacked horizontally according to the document's writing flow
+            justifyContent : 'start',   // if menus are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first menu should be visible first
             alignItems     : 'stretch', // menus height are follow the tallest one
             
             
