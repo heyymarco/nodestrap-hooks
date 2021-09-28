@@ -252,7 +252,12 @@ export const usesNavLayout = () => {
     return composition([
         layout({
             // layouts:
-            gridArea : 'nav',
+            gridArea    : 'nav',
+            
+            
+            
+            // sizes:
+            justifySelf : 'center', // do not stretch the nav, just place it at the center horizontally
             
             
             
