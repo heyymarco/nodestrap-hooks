@@ -400,7 +400,7 @@ export const usesCardCaptionLayout = () => {
         layout({
             // sizes:
             // default card's items height are unresizeable (excepts for the card's body):
-            flex: [[0, 0]], // not growing, not shrinking
+            flex: [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height
             
             
             
@@ -430,7 +430,7 @@ export const usesCardBodyLayout = () => {
         layout({
             // sizes:
             // default card's body height is resizeable, ensuring footers are aligned to the bottom:
-            flex: [[1, 1]], // allows growing, allows shrinking
+            flex: [[1, 1, 'auto']], // growable, shrinkable, initial from it's height
             
             
             
