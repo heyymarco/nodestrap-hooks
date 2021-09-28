@@ -76,8 +76,8 @@ export const usesInputLayout = () => {
             // layouts:
             display        : 'flex',   // use block flexbox, so it takes the entire parent's width
             flexDirection  : 'row',    // flow to the document's writting flow
-            justifyContent : 'center', // center items horizontally
-            alignItems     : 'center', // center items vertically
+            justifyContent : 'start',  // if input is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the input's first letter should be visible first
+            alignItems     : 'center', // default center items vertically (expecially for the validation icon indicator)
             flexWrap       : 'nowrap', // prevents the input & icon to wrap to the next row
             
             
@@ -100,7 +100,7 @@ export const usesInputLayout = () => {
                     
                     // sizes:
                     flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
-                    alignSelf      : 'stretch', // fill the parent height
+                    alignSelf      : 'stretch', // follows parent's height
                     // strip out the *weird input's prop [size]* so it can follow flex behavior:
                     // span to maximum width including parent's paddings:
                     boxSizing      : 'border-box', // the final size is including borders & paddings
