@@ -467,7 +467,7 @@ export const usesActionBarLayout = () => {
             // layouts:
             display        : 'flex',          // use block flexbox, so it takes the entire parent's width
             flexDirection  : 'row',           // items are stacked horizontally
-            justifyContent : 'space-between', // items are separated horizontally
+            justifyContent : 'space-between', // items are separated horizontally as far as possible
             alignItems     : 'center',        // items are centered vertically
             
             
