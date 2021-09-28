@@ -457,7 +457,7 @@ export const usesMenusLayout = () => {
             gridArea       : 'menus',   // place at the defined `menus` area
             display        : 'flex',    // use flexbox to place the menus sequentially
             flexDirection  : 'row',     // menus are stacked horizontally according to the document's writing flow
-            justifyContent : 'start',   // if menus are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first menu should be visible first
+            justifyContent : 'end',     // if menus are not growable, the excess space (if any) placed at the front, and if no sufficient space available => the last menu should be visible first
             alignItems     : 'stretch', // menus height are follow the tallest one
             
             
@@ -525,6 +525,11 @@ export const usesMenuLayout = () => {
             // borders:
             border       : 0, // discard border
             borderRadius : 0, // discard borderRadius
+            
+            
+            
+            // sizes:
+            flex         : [[0, 1, 'auto']], // ungrowable, shrinkable (if menu allows wrap), initial from it's width
             
             
             
@@ -902,6 +907,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         // menu:
         menuWhiteSpace            : 'nowrap',
+        menuTextAlign             : 'center',
         
         
         
