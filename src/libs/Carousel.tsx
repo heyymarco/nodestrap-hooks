@@ -114,9 +114,9 @@ export const usesCarouselItemsLayout = () => {
             gridArea       : '1 / 1 / -1 / -1', // fills the entire grid areas, from the first row/column to the last row/column
             display        : 'flex',            // use block flexbox, so it takes the entire parent's width
             flexDirection  : 'row',             // items are stacked horizontally
-            justifyContent : 'start',           // items are placed starting from the left
+            justifyContent : 'start',           // items are placed starting from the left, so the first item is initially visible
             alignItems     : 'stretch',         // items height are follow the tallest one
-            flexWrap       : 'nowrap',          // no wrapping
+            flexWrap       : 'nowrap',          // no wrapping, so the sliding works
             
             
             
@@ -161,14 +161,15 @@ export const usesCarouselItemLayout = () => {
             display         : 'flex',   // use block flexbox, so it takes the entire parent's width
             flexDirection   : 'row',    // the flex direction to horz, so we can adjust the content's height
             justifyContent  : 'center', // center items horizontally
-            alignItems      : 'center', // if the content's height is shorter than the section, place it at the center
+            alignItems      : 'center', // if the content's height is shorter than the section, place it at the center vertically
             
             
             
             // sizes:
+            flex            : [[0, 0, '100%']], // ungrowable, unshrinkable, initial 100% parent's width
+            // (important) force the media follow the <li> width, so it doesn't break the flex width:
             boxSizing       : 'border-box',     // the final size is including borders & paddings
             inlineSize      : '100%',           // fills the entire parent's width
-            flex            : [[0, 0, '100%']], // ungrowable, unshrinkable, initial 100% parent's width
             
             
             
