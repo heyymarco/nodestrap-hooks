@@ -125,7 +125,7 @@ export const usesAccordionItemVariants = () => {
         imports([
             // variants:
             usesCollapseVariants(':not(.inline)>*>&', '.inline>*>&'),
-            usesListgroupItemVariants(),
+            usesListgroupItemVariants(), // todo: doesn't work as expected
             
             // layouts:
             sizes(),

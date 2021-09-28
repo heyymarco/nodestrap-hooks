@@ -10,7 +10,6 @@ import {
 	ThemeName,
 	SizeName,
 } 					from '../libs/BasicComponent';
-import Button   from '../libs/Button';
 import {ListgroupItem} from '../libs/Listgroup';
 import Accordion, {AccordionItem} from '../libs/Accordion';
 import type * as Accordions from '../libs/Accordion';
@@ -34,7 +33,6 @@ function App() {
 	const [actionCtrl,      setActionCtrl   ] = useState<boolean|undefined>(undefined);
 
 	const [childEnabled,    setChildEnabled   ] = useState(false);
-	const [childActive,      setChildActive   ] = useState(true);
 
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Accordions.OrientationName|undefined>(undefined);
@@ -47,10 +45,6 @@ function App() {
     return (
         <div className="App">
             <Container>
-				<AccordionItem label='test'>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
-				</AccordionItem>
 				<hr style={{flexBasis: '100%'}} />
                 <Accordion
 					theme={theme} size={size} gradient={enableGrad}
@@ -64,7 +58,7 @@ function App() {
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 					</AccordionItem>
-					<AccordionItem label='hey'>
+					<AccordionItem theme='danger' label='hey'>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 					</AccordionItem>
@@ -79,52 +73,7 @@ function App() {
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 					</AccordionItem>
-					'hoho'
-					<ListgroupItem active={childActive}>
-						i'm {childActive ? 'active' : 'passive'}
-						<input type='checkbox'
-							checked={childActive}
-							onChange={(e) => setChildActive(e.target.checked)}
-						/>
-					</ListgroupItem>
-					<ListgroupItem enabled={childEnabled} active={childActive}>
-						i'm {childEnabled ? 'enabled' : 'disabled'}
-						<input type='checkbox'
-							checked={childEnabled}
-							onChange={(e) => setChildEnabled(e.target.checked)}
-						/>
-						&amp; i'm {childActive ? 'active' : 'passive'}
-						<input type='checkbox'
-							checked={childActive}
-							onChange={(e) => setChildActive(e.target.checked)}
-						/>
-					</ListgroupItem>
-					<ListgroupItem enabled={childEnabled} active={childActive} inheritActive={false}>
-						i'm {childEnabled ? 'enabled' : 'disabled'}
-						<input type='checkbox'
-							checked={childEnabled}
-							onChange={(e) => setChildEnabled(e.target.checked)}
-						/>
-						&amp; i'm (independent) {childActive ? 'active' : 'passive'}
-						<input type='checkbox'
-							checked={childActive}
-							onChange={(e) => setChildActive(e.target.checked)}
-						/>
-					</ListgroupItem>
-					<ListgroupItem theme='danger'>i'm angry</ListgroupItem>
-					<ListgroupItem theme='success'>i'm fine</ListgroupItem>
-					<ListgroupItem size='sm'>i'm small</ListgroupItem>
-					<ListgroupItem size='lg'>i'm big</ListgroupItem>
-					<ListgroupItem gradient={true}>i'm 3d</ListgroupItem>
-					<ListgroupItem outlined={true}>i'm transparent</ListgroupItem>
-					<ListgroupItem actionCtrl={true}>i'm controllable</ListgroupItem>
-					<ListgroupItem actionCtrl={true} active={true}>i'm controllable</ListgroupItem>
-					<ListgroupItem>
-						<Button>button</Button>
-					</ListgroupItem>
-					<ListgroupItem active={true}>
-						<Button>button</Button>
-					</ListgroupItem>
+					<ListgroupItem>hoho</ListgroupItem>
                 </Accordion>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
