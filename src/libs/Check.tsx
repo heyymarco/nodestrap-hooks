@@ -501,7 +501,7 @@ export const usesCheckLayout = () => {
                     
                     
                     // sizes:
-                    flex          : [[1, 1, 0]], // growable, shrinkable, initial from 0
+                    flex          : [[1, 1, 'auto']], // growable, shrinkable, initial from it's width
                     
                     
                     
