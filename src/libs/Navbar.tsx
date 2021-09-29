@@ -385,6 +385,7 @@ export const usesWrapperLayout = () => {
             flexDirection  : 'row',    // the flex direction to horz, so we can adjust the content's height
             justifyContent : 'center', // center contents (text, logo, etc) horizontally
             alignItems     : 'center', // center contents (text, logo, etc) vertically (if the content's height is shorter than the section)
+            flexWrap       : 'nowrap', // no wrapping
             
             
             
@@ -459,6 +460,7 @@ export const usesMenusLayout = () => {
             flexDirection  : 'row',     // menus are stacked horizontally according to the document's writing flow
             justifyContent : 'end',     // if menus are not growable, the excess space (if any) placed at the front, and if no sufficient space available => the last menu should be visible first
             alignItems     : 'stretch', // menus height are follow the tallest one
+            flexWrap       : 'nowrap',  // no wrapping
             
             
             
@@ -616,7 +618,7 @@ export const usesNavbarLayout = () => {
             gridAutoColumns     : 'min-content', // other areas than `menus` should take the minimum required width
             // the gridArea's size configured as *minimum* content's size required => no free space left to distribute => so (justify|algin)Content is *not required*
             
-            // child alignments:
+            // child default sizes:
             justifyItems        : 'stretch', // each section fills the entire area's width
             alignItems          : 'stretch', // each section fills the entire area's height (the shorter sections follow the tallest one)
             
