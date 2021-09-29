@@ -108,7 +108,7 @@ export const usesAlertLayout = () => {
             gridAutoColumns     : 'min-content', // other areas than `body` should take the minimum required width
             // the gridArea's size configured as *minimum* content's size required => no free space left to distribute => so (justify|algin)Content is *not required*
             
-            // child alignments:
+            // child default sizes:
             justifyItems        : 'stretch', // each section fills the entire area's width
             alignItems          : 'stretch', // each section fills the entire area's height
             
@@ -119,6 +119,10 @@ export const usesAlertLayout = () => {
                 layout({
                     // layouts:
                     gridArea    : '1 / -3', // the first row / the third column starting from the last
+                    
+                    
+                    
+                    // sizes:
                     justifySelf : 'center', // align horizontally to center
                     alignSelf   : 'start',  // align vertically   to top
                     
@@ -143,6 +147,10 @@ export const usesAlertLayout = () => {
                 layout({
                     // layouts:
                     gridArea    : '1 / 2',  // the first row / the second column
+                    
+                    
+                    
+                    // sizes:
                     justifySelf : 'center', // align horizontally to center
                     alignSelf   : 'start',  // align vertically   to top
                     
