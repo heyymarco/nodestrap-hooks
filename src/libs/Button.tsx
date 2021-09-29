@@ -150,10 +150,11 @@ export const usesButtonLayout = () => {
         ]),
         layout({
             // layouts:
-            display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+            display        : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
          // flexDirection  : 'row',         // customizable orientation // already defined in variant `.block`/`.inline`
             justifyContent : 'center',      // center items (text, icon, etc) horizontally
             alignItems     : 'center',      // center items (text, icon, etc) vertically
+            flexWrap       : 'wrap',        // allows the items (text, icon, etc) to wrap to the next row if no sufficient width available
             
             
             
