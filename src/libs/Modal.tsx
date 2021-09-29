@@ -278,6 +278,8 @@ export const usesModalLayout = () => {
         layout({
             // layouts:
          // display      : 'grid',             // already defined in `usesResponsiveContainerGridLayout()`. We use a grid for the layout, so we can align the Card both horizontally & vertically
+            
+            // child default sizes:
             justifyItems : cssProps.horzAlign, // align (default center) horizontally
             alignItems   : cssProps.vertAlign, // align (default center) vertically
             
@@ -469,6 +471,7 @@ export const usesActionBarLayout = () => {
             flexDirection  : 'row',           // items are stacked horizontally
             justifyContent : 'space-between', // items are separated horizontally as far as possible
             alignItems     : 'center',        // items are centered vertically
+            flexWrap       : 'nowrap',        // no wrapping
             
             
             
