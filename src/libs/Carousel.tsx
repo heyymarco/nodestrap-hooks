@@ -162,6 +162,7 @@ export const usesCarouselItemLayout = () => {
             flexDirection   : 'row',    // the flex direction to horz, so we can adjust the content's height
             justifyContent  : 'center', // center items horizontally
             alignItems      : 'center', // if the content's height is shorter than the section, place it at the center vertically
+            flexWrap        : 'nowrap', // no wrapping
             
             
             
@@ -288,7 +289,7 @@ export const usesCarouselLayout = () => {
                 '"prevBtn nav  nextBtn"',
             ]],
             
-            // child alignments:
+            // child default sizes:
             justifyItems        : 'stretch', // each section fills the entire area's width
             alignItems          : 'stretch', // each section fills the entire area's height
             
