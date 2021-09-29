@@ -101,9 +101,12 @@ export const usesMasonryVariants = () => {
                 layout({
                     // layouts:
                     display             : 'grid', // use css block grid for layouting, the core of our Masonry layout
-                    gridAutoFlow        : 'row', // masonry's direction is to row
+                    gridAutoFlow        : 'row', // items direction is to inline & masonry's direction is to block
                     gridAutoRows        : cssProps.itemsRaiseSize,
                     gridTemplateColumns : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
+                    
+                    // child default sizes:
+                    justifyItems        : 'stretch', // each item fills the entire Masonry's column width
                  // alignItems          : 'stretch', // distorting the item's height a bit for consistent multiplies of `itemsRaiseSize` // causing the ResizeObserver doesn't work
                     alignItems          : 'start',   // let's the item to resize so the esizeObserver will work
                     
@@ -139,9 +142,12 @@ export const usesMasonryVariants = () => {
                 layout({
                     // layouts:
                     display             : 'inline-grid', // use css inline grid for layouting, the core of our Masonry layout
-                    gridAutoFlow        : 'column', // masonry's direction is to column
+                    gridAutoFlow        : 'column', // items direction is to block & masonry's direction is to inline
                     gridAutoColumns     : cssProps.itemsRaiseSize,
                     gridTemplateRows    : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
+                    
+                    // child default sizes:
+                    alignItems          : 'stretch', // each item fills the entire Masonry's column height
                  // justifyItems        : 'stretch', // distorting the item's width a bit for consistent multiplies of `itemsRaiseSize` // causing the ResizeObserver doesn't work
                     justifyItems        : 'start',   // let's the item to resize so the esizeObserver will work
                     
