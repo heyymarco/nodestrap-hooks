@@ -352,8 +352,8 @@ export const usesCheckLayout = () => {
             display        : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
             flexDirection  : 'row',         // flow to the document's writing flow
             justifyContent : 'center',      // items are placed starting from the center (in case of input & label are wrapped, each placed at the center)
-            alignItems     : 'center',      // center items vertically
-            flexWrap       : 'wrap',        // allows the label to wrap to the next row
+            alignItems     : 'center',      // center items vertically (indicator & label are always at center no matter how tall is the wrapper)
+            flexWrap       : 'wrap',        // allows the label to wrap to the next row if no sufficient width available
             
             
             
@@ -542,7 +542,7 @@ export const usesCheckVariants = () => {
             rule(['.btn', '.togglerBtn'], [
                 layout({
                     // layouts:
-                    flexWrap       : 'nowrap', // because the input is visually hidden => prevents the label to wrap to the next row
+                    flexWrap       : 'nowrap', // because the input is visually hidden => prevents the label from wrapping to the next row
                     
                     
                     
@@ -589,7 +589,8 @@ export const usesCheckVariants = () => {
                         ]),
                         layout({
                             // sizes:
-                            alignSelf : 'stretch', // follows wrapper's height
+                            flex      : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
+                            alignSelf : 'stretch',        // follows parent's height
                             
                             
                             
