@@ -197,6 +197,21 @@ export const useListVariant = (props: ListVariant) => {
 const wrapperElm  = ['li', '*'];
 const listItemElm = ':first-child';
 
+export const usesListgroupInheritVariants = () => {
+    return composition([
+        variants([
+            // double `.mild.mild` to combat with `:not(.mild)&:not(.mild)`
+            rule('.mild.mild>*>&', [ // content
+                imports([
+                    mildOf(true),
+                ]),
+            ]),
+        ]),
+    ]);
+};
+
+
+
 export const usesListgroupItemLayout = () => {
     return composition([
         imports([
@@ -236,31 +251,26 @@ export const usesListgroupItemVariants = () => {
         imports([
             // variants:
             usesIndicatorVariants(),
+            usesListgroupInheritVariants(),
             
             // layouts:
             sizes(),
         ]),
         variants([
-            rule('.actionCtrl', [
-                imports([
-                    usesListgroupActionItem(),
-                ]),
-            ]),
-            
-            rule('.content&', [ // content
+            rule('.content>*>&', [ // content
                 imports([
                     usesContentLayout(),
                     usesContentVariants(),
                 ]),
             ]),
             
-            rule(':not(.inline)&', [ // block
+            rule(':not(.inline)>*>&', [ // block
                 imports([
                     // borders:
                     usesBorderAsSeparatorBlock(),
                 ]),
             ]),
-            rule('.inline&', [ // inline
+            rule('.inline>*>&', [ // inline
                 imports([
                     // borders:
                     usesBorderAsSeparatorInline(),
@@ -292,6 +302,16 @@ export const usesListgroupItem = () => {
     ]);
 };
 
+export const useListgroupItemSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesListgroupItem(),
+        ]),
+    ]),
+]);
+
+
+
 export const usesListgroupActionItemLayout = () => {
     return composition([
         imports([
@@ -308,6 +328,7 @@ export const usesListgroupActionItemVariants = () => {
         imports([
             // variants:
             usesActionControlVariants(),
+            usesListgroupInheritVariants(),
         ]),
     ]);
 };
@@ -367,6 +388,16 @@ export const usesListgroupActionItem = () => {
     ]);
 };
 
+export const useListgroupActionItemSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesListgroupActionItem(),
+        ]),
+    ]),
+]);
+
+
+
 export const usesListgroupLayout = () => {
     return composition([
         imports([
@@ -405,15 +436,6 @@ export const usesListgroupLayout = () => {
                     
                     // sizes:
                     flex           : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
-                    
-                    
-                    
-                    // children:
-                    ...children(listItemElm, composition([
-                        imports([
-                            usesListgroupItem(),
-                        ]),
-                    ])),
                 }),
             ])),
             
@@ -909,6 +931,12 @@ export interface ListgroupItemProps<TElement extends HTMLElement = HTMLElement>
     children?      : React.ReactNode
 }
 export function ListgroupItem<TElement extends HTMLElement = HTMLElement>(props: ListgroupItemProps<TElement>) {
+    // styles:
+    const sheet       = useListgroupItemSheet();
+    const sheetAction = useListgroupActionItemSheet();
+    
+    
+    
     // jsx:
     return (
         props.actionCtrl
@@ -927,10 +955,7 @@ export function ListgroupItem<TElement extends HTMLElement = HTMLElement>(props:
             
             
             // classes:
-            mainClass={props.mainClass ?? ''}
-            classes={[...(props.classes ?? []),
-                'actionCtrl',
-            ]}
+            mainClass={props.mainClass ?? [sheet.main, sheetAction.main].join(' ')}
         />
         :
         <Indicator<TElement>
@@ -947,7 +972,7 @@ export function ListgroupItem<TElement extends HTMLElement = HTMLElement>(props:
             
             
             // classes:
-            mainClass={props.mainClass ?? ''}
+            mainClass={props.mainClass ?? sheet.main}
         />
     );
 }
