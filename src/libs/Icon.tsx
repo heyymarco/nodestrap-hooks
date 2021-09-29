@@ -344,10 +344,11 @@ export const usesIconLayout      = () => {
         ]),
         layout({
             // layouts:
-            display       : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
-            flexDirection : 'row',         // flow to the document's writing flow
-            alignItems    : 'center',      // center items vertically
-            flexWrap      : 'nowrap',      // do not wrap the children to the next row
+            display        : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
+            flexDirection  : 'row',         // flow to the document's writing flow
+            justifyContent : 'center',      // center items horizontally
+            alignItems     : 'center',      // center items vertically
+            flexWrap       : 'nowrap',      // no wrapping
             
             
             
