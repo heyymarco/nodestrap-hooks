@@ -118,7 +118,10 @@ function App() {
 					enabled={enabled}
 					
 					active={active}
-					onActiveChange={(act) => setActive(act)}
+					onActiveChange={(act) => {
+						console.log('onActiveChange', act);
+						setActive(act);
+					}}
 
 					focus={focus}
 
