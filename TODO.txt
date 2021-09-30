@@ -4,4 +4,3 @@ Offcanvas
 
 fix modal close btn
 fix focus-visible
-fix accordion => variants => imports usesListgroupItemVariants()

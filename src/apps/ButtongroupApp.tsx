@@ -80,6 +80,22 @@ function App() {
 				>
                     button
                 </Button>
+				
+				<Check
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active} enableValidation={false}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						checkStyle='togglerBtn'
+					>
+					check btn
+				</Check>
 				<hr style={{flexBasis: '100%'}} />
 				<Buttongroup
 					theme={theme} size={size} gradient={enableGrad}
