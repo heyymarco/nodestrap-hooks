@@ -545,15 +545,11 @@ export const usesListgroupVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
-                                variants([
-                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
-                                        layout({
-                                            // borders:
-                                            // kill border on each item:
-                                            borderWidth : 0,
-                                        }),
-                                    ]),
-                                ]),
+                                layout({
+                                    // borders:
+                                    // kill border on each item:
+                                    borderWidth : 0,
+                                }),
                             ])),
                         }),
                     ])),
@@ -579,13 +575,9 @@ export const usesListgroupVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
-                                variants([
-                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
-                                        imports([
-                                            // layouts:
-                                            usesButtonLayout(),
-                                        ]),
-                                    ]),
+                                imports([
+                                    // layouts:
+                                    usesButtonLayout(),
                                 ]),
                             ])),
                         }),
@@ -611,17 +603,15 @@ export const usesListgroupVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
+                                imports([
+                                    // borders:
+                                    usesBorderStroke(),
+                                ]),
+                                layout({
+                                    // borders:
+                                    backgroundClip : 'padding-box',
+                                }),
                                 variants([
-                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
-                                        imports([
-                                            // borders:
-                                            usesBorderStroke(),
-                                        ]),
-                                        layout({
-                                            // borders:
-                                            backgroundClip : 'padding-box',
-                                        }),
-                                    ]),
                                     isPassive([
                                         variants([
                                             rule(':not(.inline)&', [ // block
@@ -806,6 +796,10 @@ export const usesListgroupVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
+                                imports([
+                                    // borders:
+                                    usesBorderStroke(),
+                                ]),
                                 layout({
                                     // borders:
                                     borderRadius : borderRadiuses.pill, // big rounded corner
@@ -816,14 +810,6 @@ export const usesListgroupVariants = () => {
                                     // customize:
                                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'bullet')), // apply general cssProps starting with bullet***
                                 }),
-                                variants([
-                                    rule(':nth-child(n)', [ // cancel out `.block`/`.inline` effect
-                                        imports([
-                                            // borders:
-                                            usesBorderStroke(),
-                                        ]),
-                                    ]),
-                                ]),
                             ])),
                         }),
                     ])),
