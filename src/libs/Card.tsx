@@ -24,7 +24,6 @@ import {
     rule,
     isFirstChild,
     isLastChild,
-    isNotNthLastChild,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -189,7 +188,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             // remove double border by removing bottom-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
-            isNotNthLastChild(0, (replaceLast ? 2 : 0), composition([
+            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, composition([ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
@@ -200,7 +199,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             
             // remove top-border at the header, so that it wouldn't collide with the Card's top-border
             // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
-            rule([':first-child', ...(replaceLast ? [':last-child'] : [])], composition([
+            rule([':where(:first-child)', ...(replaceLast ? [':where(:last-child)'] : [])], composition([ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
@@ -236,7 +235,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             // remove double border by removing right-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
-            isNotNthLastChild(0, (replaceLast ? 2 : 0), composition([
+            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, composition([ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderInlineEndWidth   : 0, // remove right-border
@@ -247,7 +246,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             
             // remove left-border at the header, so that it wouldn't collide with the Card's left-border
             // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
-            rule([':first-child', ...(replaceLast ? [':last-child'] : [])], composition([
+            rule([':where(:first-child)', ...(replaceLast ? [':where(:last-child)'] : [])], composition([ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderInlineStartWidth : 0, // remove left-border
@@ -277,7 +276,7 @@ export const usesImageBorder = () => {
         variants([
             // because we avoid modifying paragraph's top-border, we delegate the top-border to the image
             // so, we need to restore bottom-border that was removed by `usesBorderAsSeparatorBlock()`
-            isNotNthLastChild(0, 0, composition([
+            rule(':where(:not(:nth-last-child(0)))', composition([
                 layout({
                     // borders:
                     borderBlockEndWidth    : undefined, // restore bottom-border
@@ -285,7 +284,7 @@ export const usesImageBorder = () => {
             ])),
             // then replace the algoritm above with this one:
             // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
-            isLastChild(composition([
+            rule(':where(:last-child)', composition([ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
