@@ -18,7 +18,6 @@ import {
     
     
     // rules:
-    rules,
     variants,
     rule,
 }                           from './cssfn'       // cssfn core
@@ -156,19 +155,15 @@ export const usesAccordionItemStates = () => {
 };
 export const usesAccordionItem = () => {
     return composition([
-        rules([
-            rule('&&', [ // makes AccordionItem more specific than ListGroupItem
-                imports([
-                    // layouts:
-                    usesAccordionItemLayout(),
-                    
-                    // variants:
-                    usesAccordionItemVariants(),
-                    
-                    // states:
-                    usesAccordionItemStates(),
-                ]),
-            ]),
+        imports([
+            // layouts:
+            usesAccordionItemLayout(),
+            
+            // variants:
+            usesAccordionItemVariants(),
+            
+            // states:
+            usesAccordionItemStates(),
         ]),
     ]);
 };
