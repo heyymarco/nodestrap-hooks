@@ -198,13 +198,40 @@ export const useListVariant = (props: ListVariant) => {
 const wrapperElm  = ['li', '*'];
 const listItemElm = ':first-child';
 
-export const usesListgroupInheritVariants = () => {
+
+
+export const usesListgroupItemInheritMildVariant = () => {
     return composition([
         variants([
             // double `.mild.mild` to combat with `:not(.mild)&:not(.mild)`
             rule('.mild.mild>*>&', [ // content
                 imports([
                     mildOf(true),
+                ]),
+            ]),
+        ]),
+    ]);
+};
+export const usesListgroupItemInheritParentVariants = () => {
+    return composition([
+        variants([
+            rule('.content>*>&', [ // content
+                imports([
+                    usesContentLayout(),
+                    usesContentVariants(),
+                ]),
+            ]),
+            
+            rule(':not(.inline)>*>&', [ // block
+                imports([
+                    // borders:
+                    usesBorderAsSeparatorBlock(),
+                ]),
+            ]),
+            rule('.inline>*>&', [ // inline
+                imports([
+                    // borders:
+                    usesBorderAsSeparatorInline(),
                 ]),
             ]),
         ]),
@@ -252,31 +279,11 @@ export const usesListgroupItemVariants = () => {
         imports([
             // variants:
             usesIndicatorVariants(),
-            usesListgroupInheritVariants(),
+            usesListgroupItemInheritMildVariant(),
+            usesListgroupItemInheritParentVariants(),
             
             // layouts:
             sizes(),
-        ]),
-        variants([
-            rule('.content>*>&', [ // content
-                imports([
-                    usesContentLayout(),
-                    usesContentVariants(),
-                ]),
-            ]),
-            
-            rule(':not(.inline)>*>&', [ // block
-                imports([
-                    // borders:
-                    usesBorderAsSeparatorBlock(),
-                ]),
-            ]),
-            rule('.inline>*>&', [ // inline
-                imports([
-                    // borders:
-                    usesBorderAsSeparatorInline(),
-                ]),
-            ]),
         ]),
     ]);
 };
@@ -329,7 +336,7 @@ export const usesListgroupActionItemVariants = () => {
         imports([
             // variants:
             usesActionControlVariants(),
-            usesListgroupInheritVariants(),
+            usesListgroupItemInheritMildVariant(),
         ]),
     ]);
 };
