@@ -179,9 +179,9 @@ function ButtongroupItem(props: ButtongroupItemProps) {
                         <child.type
                             // other props:
                             {...child.props}
+                            
+                            
                             // classes:
-                            
-                            
                             classes={[...(child.props.classes ?? []),
                                 sheet.main, // inject ListgroupItem class
                             ]}
