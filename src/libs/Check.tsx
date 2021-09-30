@@ -363,32 +363,6 @@ export const usesCheckLayout = () => {
             
             
             
-            // foregrounds:
-            foreg          : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
-            
-            
-            
-            // backgrounds:
-            backg          : 'initial !important', // no valid/invalid animation
-            
-            
-            
-            // borders:
-            border         : 0, // discard border
-            borderRadius   : 0, // discard borderRadius
-            
-            
-            
-            // spacings:
-            padding        : 0, // discard padding
-            
-            
-            
-            // animations:
-            boxShadow      : 'initial !important', // no focus animation
-            
-            
-            
             // children:
             // a dummy text content, for making parent's height as tall as line-height
             // the dummy is also used for calibrating the flex's vertical position
@@ -516,6 +490,35 @@ export const usesCheckLayout = () => {
                 }),
             ])),
         }),
+        variants([
+            rule(':where(:not(.btn)):where(:not(.togglerBtn))', [ // selector with zero specificity
+                layout({
+                    // foregrounds:
+                    foreg          : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
+                    
+                    
+                    
+                    // backgrounds:
+                    backg          : 'initial !important', // no valid/invalid animation
+                    
+                    
+                    
+                    // borders:
+                    border         : 0, // discard border
+                    borderRadius   : 0, // discard borderRadius
+                    
+                    
+                    
+                    // spacings:
+                    padding        : 0, // discard padding
+                    
+                    
+                    
+                    // animations:
+                    boxShadow      : 'initial !important', // no focus animation
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesCheckVariants = () => {
@@ -541,6 +544,10 @@ export const usesCheckVariants = () => {
         ]),
         variants([
             rule(['.btn', '.togglerBtn'], [
+                imports([
+                    // layouts:
+                    usesButtonLayout(),
+                ]),
                 layout({
                     // layouts:
                     flexWrap       : 'nowrap', // because the input is visually hidden => prevents the label from wrapping to the next row
@@ -548,47 +555,22 @@ export const usesCheckVariants = () => {
                     
                     
                     // children:
-                    ...children(inputElm, composition([
+                    ...children(['::before', inputElm], composition([
                         layout({
-                            // hides the checkbox while still preserving animations
-                            
-                            
-                            
-                            // appearances:
-                         // visibility : 'hidden', // invisible but still exists (not recommended, causing uneven transition)
-                            opacity    : 0, // invisible but still exists & smooth transition between visible & hidden
-                            
-                            
-                            
-                            // sizes:
-                            boxSizing  : 'border-box', // the final size is including borders & paddings
-                            inlineSize : 0, // kill the width
-                            blockSize  : 0, // kill the height
-                            
-                            
-                            
-                            // borders:
-                            border     : 0, // kill the border
-                            
-                            
-                            
-                            // spacings:
-                            padding    : 0, // kill the paddings
+                            display : 'none',
                         }),
-                        variants([
-                            isNotLastChild(composition([
-                                layout({
-                                    marginInlineEnd : 0, // kill the spacing between input & label
-                                }),
-                            ])),
-                        ]),
                     ])),
                     ...children(labelElm, composition([
-                        imports([
-                            // layouts:
-                            usesButtonLayout(),
-                        ]),
                         layout({
+                            // layouts:
+                            display        : 'inherit',
+                            flexDirection  : 'inherit',
+                            justifyContent : 'inherit',
+                            alignItems     : 'inherit',
+                            flexWrap       : 'inherit',
+                            
+                            
+                            
                             // sizes:
                             flex      : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
                             alignSelf : 'stretch',        // follows parent's height
@@ -1033,25 +1015,13 @@ export function Check(props: CheckProps) {
                 
                 
                 // events:
-                onAnimationEnd={(e) => {
-                    // triggers `Check`'s onAnimationEnd event
-                    e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
-                }}
-                
                 {...{
                     onChange,
                 }}
                 onClick={(e) => e.stopPropagation()} // prevents firing `change` event triggering parent's `onClick`
             />
             { (text || props.children) &&
-                <span
-                    // events:
-                    // listening input's onAnimationEnd is enough
-                    // onAnimationEnd={(e) => {
-                    //     // triggers `Check`'s onAnimationEnd event
-                    //     e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
-                    // }}
-                >
+                <span>
                     { text }
                     { props.children }
                 </span>
