@@ -38,6 +38,11 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -970,18 +975,8 @@ export function Check(props: CheckProps) {
             <input
                 // essentials:
                 ref={(elm) => {
-                    inputRef.current = elm;
-                    
-                    
-                    // forwards:
-                    if (elmRef) {
-                        if (typeof(elmRef) === 'function') {
-                            elmRef(elm);
-                        }
-                        else {
-                            (elmRef as React.MutableRefObject<HTMLInputElement|null>).current = elm;
-                        } // if
-                    } // if
+                    setElmRef(elmRef, elm);
+                    setElmRef(inputRef, elm);
                 }}
                 
                 
