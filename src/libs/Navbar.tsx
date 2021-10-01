@@ -48,6 +48,7 @@ import {
     
     // utilities:
     isTypeOf,
+    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -1119,19 +1120,8 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             // essentials:
             tag={props.tag ?? 'nav'}
             elmRef={(elm) => {
-                navbarRef.current = elm;
-                
-                
-                // forwards:
-                const elmRef = props.elmRef;
-                if (elmRef) {
-                    if (typeof(elmRef) === 'function') {
-                        elmRef(elm);
-                    }
-                    else {
-                        (elmRef as React.MutableRefObject<TElement|null>).current = elm;
-                    } // if
-                } // if
+                setElmRef(props.elmRef, elm);
+                setElmRef(navbarRef, elm);
             }}
             
             
