@@ -37,6 +37,7 @@ import {
     
     // utilities:
     isTypeOf,
+    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -555,18 +556,8 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     // essentials:
                     tag={itemsTagFn}
                     elmRef={(elm) => {
-                        listRef.current = elm;
-                        
-                        
-                        // forwards:
-                        if (elmRef) {
-                            if (typeof(elmRef) === 'function') {
-                                elmRef(elm);
-                            }
-                            else {
-                                (elmRef as React.MutableRefObject<TElement|null>).current = elm;
-                            } // if
-                        } // if
+                        setElmRef(elmRef, elm);
+                        setElmRef(listRef, elm);
                     }}
                     
                     
