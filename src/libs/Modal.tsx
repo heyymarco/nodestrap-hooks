@@ -35,6 +35,11 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -778,18 +783,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
                 
                 // essentials:
                 elmRef={(elm) => {
-                    cardRef.current = elm;
-                    
-                    
-                    // forwards:
-                    if (elmRef) {
-                        if (typeof(elmRef) === 'function') {
-                            elmRef(elm);
-                        }
-                        else {
-                            (elmRef as React.MutableRefObject<TElement|null>).current = elm;
-                        } // if
-                    } // if
+                    setElmRef(elmRef, elm);
+                    setElmRef(cardRef, elm);
                 }}
                 
                 
