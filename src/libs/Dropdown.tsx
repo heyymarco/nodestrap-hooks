@@ -195,8 +195,8 @@ export { ListgroupItem, ListgroupItem as DropdownItem, ListgroupItem as Item }
 
 export interface DropdownProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListgroupProps<TElement>,
-        CollapseProps<TElement>
+        CollapseProps<TElement>,
+        ListgroupProps<TElement>
 {
     // accessibilities:
     tabIndex?   : number
@@ -460,7 +460,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
 }
 export { Dropdown as default }
 
+export type { PopupPlacement, PopupModifier, PopupPosition }
+
 export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
-
-export type { PopupPlacement, PopupModifier, PopupPosition }
