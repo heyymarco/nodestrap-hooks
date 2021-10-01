@@ -203,8 +203,7 @@ const listItemElm = ':first-child';
 export const usesListgroupItemInheritMildVariant = () => {
     return composition([
         variants([
-            // double `.mild.mild` to combat with `:not(.mild)&:not(.mild)`
-            rule('.mild.mild>*>&', [ // content
+            rule('.mild>*>&', [ // content
                 imports([
                     mildOf(true),
                 ]),
