@@ -27,6 +27,11 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -242,18 +247,8 @@ export function Radio(props: RadioProps) {
             
             // essentials:
             elmRef={(elm) => {
-                inputRef.current = elm;
-                
-                
-                // forwards:
-                if (elmRef) {
-                    if (typeof(elmRef) === 'function') {
-                        elmRef(elm);
-                    }
-                    else {
-                        (elmRef as React.MutableRefObject<HTMLInputElement|null>).current = elm;
-                    } // if
-                } // if
+                setElmRef(elmRef, elm);
+                setElmRef(inputRef, elm);
             }}
             
             
