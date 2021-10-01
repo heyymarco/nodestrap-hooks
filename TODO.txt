@@ -1,4 +1,4 @@
-Listgroup => add numbered variant
+List => add numbered variant
 DropdownButton
 Offcanvas
 

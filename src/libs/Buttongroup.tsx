@@ -62,9 +62,9 @@ import {
     // react components:
     ListItem,
     
-    ListgroupProps,
-    Listgroup,
-}                           from './Listgroup'
+    ListProps,
+    List,
+}                           from './List'
 import {
     // react components:
     Button,
@@ -236,7 +236,7 @@ ButtongroupItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 export interface ButtongroupProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListgroupProps<TElement>
+        ListProps<TElement>
 {
     // accessibilities:
     label?       : string
@@ -257,7 +257,7 @@ export function Buttongroup<TElement extends HTMLElement = HTMLElement>(props: B
     
     // jsx:
     return (
-        <Listgroup
+        <List
             // other props:
             {...restProps}
             
@@ -282,10 +282,10 @@ export function Buttongroup<TElement extends HTMLElement = HTMLElement>(props: B
                     { child }
                 </ButtongroupItem>
             ))}
-        </Listgroup>
+        </List>
     );
 }
-Buttongroup.prototype = Listgroup.prototype; // mark as Listgroup compatible
+Buttongroup.prototype = List.prototype; // mark as List compatible
 export { Buttongroup as default }
 
 export type { ListStyle, ListVariant }

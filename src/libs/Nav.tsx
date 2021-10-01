@@ -18,9 +18,9 @@ import {
     ListItemProps,
     ListItem,
     
-    ListgroupProps,
-    Listgroup,
-}                           from './Listgroup'
+    ListProps,
+    List,
+}                           from './List'
 import Icon                 from './Icon'
 
 
@@ -120,7 +120,7 @@ export {
 
 export interface NavProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListgroupProps<TElement>
+        ListProps<TElement>
 {
     // accessibilities:
     label?       : string
@@ -136,7 +136,7 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
     
     // jsx:
     return (
-        <Listgroup
+        <List
             // other props:
             {...restProps}
             
@@ -157,10 +157,10 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             actionCtrl={props.actionCtrl ?? true}
         >
             { props.children }
-        </Listgroup>
+        </List>
     );
 }
-Nav.prototype = Listgroup.prototype; // mark as Listgroup compatible
+Nav.prototype = List.prototype; // mark as List compatible
 export { Nav as default }
 
 export type { ListStyle, ListVariant }

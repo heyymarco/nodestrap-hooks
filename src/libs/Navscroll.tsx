@@ -14,7 +14,7 @@ import {
     // react components:
     ListItemProps,
     ListItem,
-}                           from './Listgroup'
+}                           from './List'
 import {
     // hooks:
     ListStyle,

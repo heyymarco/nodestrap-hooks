@@ -405,7 +405,7 @@ export const useListActionItemSheet = createUseSheet(() => [
 
 
 
-export const usesListgroupLayout = () => {
+export const usesListLayout = () => {
     return composition([
         imports([
             // resets:
@@ -434,7 +434,7 @@ export const usesListgroupLayout = () => {
             ...children(wrapperElm, composition([
                 layout({
                     // layouts:
-                    display        : 'flex',    // use block flexbox, so it takes the entire Listgroup's width
+                    display        : 'flex',    // use block flexbox, so it takes the entire List's width
                     justifyContent : 'start',   // if listItems are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first listItem should be visible first
                     alignItems     : 'stretch', // listItems width are 100% of the wrapper (for variant `.block`) or height (for variant `.inline`)
                     flexWrap       : 'nowrap',  // no wrapping
@@ -453,7 +453,7 @@ export const usesListgroupLayout = () => {
         }),
     ]);
 };
-export const usesListgroupVariants = () => {
+export const usesListVariants = () => {
     // dependencies:
     
     // layouts:
@@ -532,7 +532,7 @@ export const usesListgroupVariants = () => {
             rule(['.flat', '.breadcrumb', '.flush', '.btn', '.bullet'], [
                 layout({
                     // borders:
-                    // kill borders surrounding Listgroup:
+                    // kill borders surrounding List:
                     borderWidth  : 0,
                     borderRadius : 0,
                     overflow     : 'unset',
@@ -671,7 +671,7 @@ export const usesListgroupVariants = () => {
                     noOrientationInline([ // block
                         layout({
                             // layouts:
-                            // tab directions are block (down) but listgroup direction are inline:
+                            // tab directions are block (down) but List direction are inline:
                             display                : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
                             
                             
@@ -697,7 +697,7 @@ export const usesListgroupVariants = () => {
                     isOrientationInline([ // inline
                         layout({
                             // layouts:
-                            // tab directions are inline (right) but listgroup direction are block:
+                            // tab directions are inline (right) but List direction are block:
                             display                : 'flex',        // use block flexbox, so it takes the entire parent's width
                             
                             
@@ -824,7 +824,7 @@ export const usesListgroupVariants = () => {
         ], /*minSpecificityWeight: */2),
     ]);
 };
-export const usesListgroupStates = () => {
+export const usesListStates = () => {
     return composition([
         imports([
             // states:
@@ -832,25 +832,25 @@ export const usesListgroupStates = () => {
         ]),
     ]);
 };
-export const usesListgroup = () => {
+export const usesList = () => {
     return composition([
         imports([
             // layouts:
-            usesListgroupLayout(),
+            usesListLayout(),
             
             // variants:
-            usesListgroupVariants(),
+            usesListVariants(),
             
             // states:
-            usesListgroupStates(),
+            usesListStates(),
         ]),
     ]);
 };
 
-export const useListgroupSheet = createUseSheet(() => [
+export const useListSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesListgroup(),
+            usesList(),
         ]),
     ]),
 ]);
@@ -910,7 +910,7 @@ export interface ListItemProps<TElement extends HTMLElement = HTMLElement>
     // change default value to `true`
     /**
      * `undefined` : same as `true`.  
-     * `true`      : inherits `active` from `Listgroup`.  
+     * `true`      : inherits `active` from `List`.  
      * `false`     : independent `active`.
      */
     inheritActive? : boolean
@@ -974,7 +974,7 @@ export { ListItem as Item }
 
 
 
-export interface ListgroupProps<TElement extends HTMLElement = HTMLElement>
+export interface ListProps<TElement extends HTMLElement = HTMLElement>
     extends
         IndicatorProps<TElement>,
         
@@ -987,9 +987,9 @@ export interface ListgroupProps<TElement extends HTMLElement = HTMLElement>
     // behaviors:
     actionCtrl? : boolean
 }
-export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: ListgroupProps<TElement>) {
+export function List<TElement extends HTMLElement = HTMLElement>(props: ListProps<TElement>) {
     // styles:
-    const sheet              = useListgroupSheet();
+    const sheet              = useListSheet();
     
     
     
@@ -1054,12 +1054,12 @@ export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: Lis
                             
                             
                             // behaviors:
-                            actionCtrl={child.props.actionCtrl ?? actionCtrl} // the default value of [actionCtrl] is belong to Listgroup's [actionCtrl]
+                            actionCtrl={child.props.actionCtrl ?? actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
                             
                             
                             // events:
                             onAnimationEnd={(e) => {
-                                // triggers `Listgroup`'s onAnimationEnd event
+                                // triggers `List`'s onAnimationEnd event
                                 e.currentTarget.parentElement?.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
                                 
                                 
@@ -1070,12 +1070,12 @@ export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: Lis
                         :
                         <ListItem
                             // behaviors:
-                            actionCtrl={actionCtrl} // the default value of [actionCtrl] is belong to Listgroup's [actionCtrl]
+                            actionCtrl={actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
                             
                             
                             // events:
                             onAnimationEnd={(e) => {
-                                // triggers `Listgroup`'s onAnimationEnd event
+                                // triggers `List`'s onAnimationEnd event
                                 e.currentTarget.parentElement?.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
                             }}
                         >
@@ -1087,6 +1087,6 @@ export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: Lis
         </Indicator>
     );
 }
-export { Listgroup as default }
+export { List as default }
 
 export type { OrientationName, OrientationVariant }

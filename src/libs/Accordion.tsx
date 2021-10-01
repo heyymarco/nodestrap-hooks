@@ -75,9 +75,9 @@ import {
     ListItemProps,
     ListItem,
     
-    ListgroupProps,
-    Listgroup,
-}                           from './Listgroup'
+    ListProps,
+    List,
+}                           from './List'
 import {
     // hooks:
     usePropEnabled,
@@ -322,10 +322,10 @@ export { AccordionItem as Item }
 
 
 
-// Accordion => Listgroup
+// Accordion => List
 
-export type { ListgroupProps, ListgroupProps as AccordionProps }
-export { Listgroup as default, Listgroup as Accordion }
+export type { ListProps, ListProps as AccordionProps }
+export { List as default, List as Accordion }
 
 export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }

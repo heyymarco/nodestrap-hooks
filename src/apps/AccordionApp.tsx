@@ -10,7 +10,7 @@ import {
 	ThemeName,
 	SizeName,
 } 					from '../libs/BasicComponent';
-import {ListItem} from '../libs/Listgroup';
+import {ListItem} from '../libs/List';
 import Accordion, {AccordionItem} from '../libs/Accordion';
 import type * as Accordions from '../libs/Accordion';
 

@@ -16,8 +16,8 @@ import Control   from '../libs/Control';
 import ActionControl   from '../libs/ActionControl';
 import Button   from '../libs/Button';
 import Content from '../libs/Content';
-import Listgroup, {ListItem} from '../libs/Listgroup';
-import type * as Listgroups from '../libs/Listgroup';
+import List, {ListItem} from '../libs/List';
+import type * as Lists from '../libs/List';
 
 
 
@@ -44,10 +44,10 @@ function App() {
 	const [childActive,      setChildActive   ] = useState(true);
 
 	const orientations = [undefined, 'block', 'inline'];
-	const [orientation,    setOrientation     ] = useState<Listgroups.OrientationName|undefined>(undefined);
+	const [orientation,    setOrientation     ] = useState<Lists.OrientationName|undefined>(undefined);
 
 	const listStyles = [undefined, 'content','flat','flush','btn','tab','breadcrumb','bullet'];
-	const [listStyle,    setListStyle     ] = useState<Listgroups.ListStyle|undefined>(undefined);
+	const [listStyle,    setListStyle     ] = useState<Lists.ListStyle|undefined>(undefined);
 
 	
 
@@ -90,7 +90,7 @@ function App() {
 				>
                     action control
                 </ActionControl>
-				<Listgroup
+				<List
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 
@@ -142,7 +142,7 @@ function App() {
 					<ListItem active={true}>
 						<Button>button</Button>
 					</ListItem>
-                </Listgroup>
+                </List>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
@@ -264,7 +264,7 @@ function App() {
 								<input type='radio'
 									value={ori}
 									checked={orientation===ori}
-									onChange={(e) => setOrientation((e.target.value || undefined) as (Listgroups.OrientationName|undefined))}
+									onChange={(e) => setOrientation((e.target.value || undefined) as (Lists.OrientationName|undefined))}
 								/>
 								{`${ori}`}
 							</label>
@@ -279,7 +279,7 @@ function App() {
 								<input type='radio'
 									value={st}
 									checked={listStyle===st}
-									onChange={(e) => setListStyle((e.target.value || undefined) as (Listgroups.ListStyle|undefined))}
+									onChange={(e) => setListStyle((e.target.value || undefined) as (Lists.ListStyle|undefined))}
 								/>
 								{`${st}`}
 							</label>

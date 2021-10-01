@@ -77,9 +77,9 @@ import {
     ListItemProps,
     ListItem,
     
-    ListgroupProps,
-    Listgroup,
-}                           from './Listgroup'
+    ListProps,
+    List,
+}                           from './List'
 import {
     // hooks:
     usePropEnabled,
@@ -196,7 +196,7 @@ export { ListItem, ListItem as DropdownItem, ListItem as Item }
 export interface DropdownProps<TElement extends HTMLElement = HTMLElement>
     extends
         CollapseProps<TElement>,
-        ListgroupProps<TElement>
+        ListProps<TElement>
 {
     // accessibilities:
     tabIndex?   : number
@@ -344,7 +344,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
                 activePassiveState.handleAnimationEnd(e);
             }}
         >
-            <Listgroup
+            <List
                 // other props:
                 {...restProps}
                 
@@ -454,7 +454,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
                     :
                     children
                 }
-            </Listgroup>
+            </List>
         </Collapse>
     );
 }
