@@ -26,7 +26,7 @@ import reportWebVitals from './reportWebVitals';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
 //             import CollapseApp                      from './apps/CollapseApp';
-                import DropdownApp                  from './apps/DropdownApp';
+                import DropdownListApp              from './apps/DropdownListApp';
 //             import BadgeApp                         from './apps/BadgeApp';
 //                 import BusyApp                      from './apps/BusyApp';
 //             import TooltipApp                       from './apps/TooltipApp';
@@ -54,7 +54,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <DropdownApp />
+    <DropdownListApp />
     ,
     document.getElementById('root')
 );
