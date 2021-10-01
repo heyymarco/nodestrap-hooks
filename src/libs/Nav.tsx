@@ -15,8 +15,8 @@ import {
     
     
     // react components:
-    ListgroupItemProps,
-    ListgroupItem,
+    ListItemProps,
+    ListItem,
     
     ListgroupProps,
     Listgroup,
@@ -29,13 +29,13 @@ import Icon                 from './Icon'
 
 export interface NavItemProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListgroupItemProps<TElement>
+        ListItemProps<TElement>
 {
 }
 export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
     // jsx:
     return (
-        <ListgroupItem
+        <ListItem
             // other props:
             {...props}
             
@@ -49,7 +49,7 @@ export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavIt
         />
     );
 }
-NavItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
+NavItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 export type { NavItemProps as ItemProps }
 export { NavItem as Item }

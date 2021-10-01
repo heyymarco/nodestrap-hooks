@@ -66,14 +66,14 @@ import {
     
     
     // styles:
-    usesListgroupItemLayout,
-    usesListgroupItemVariants,
+    usesListItemLayout,
+    usesListItemVariants,
     
     
     
     // react components:
-    ListgroupItemProps,
-    ListgroupItem,
+    ListItemProps,
+    ListItem,
     
     ListgroupProps,
     Listgroup,
@@ -89,7 +89,7 @@ import {
 
 /*
     AccordionItem is just a composite component made of
-    ListGroupItem
+    ListItem
     and
     *modified* Collapse
 */
@@ -99,7 +99,7 @@ export const usesAccordionItemLayout = () => {
         imports([
             // layouts:
             usesCollapseLayout(),
-            usesListgroupItemLayout(),
+            usesListItemLayout(),
         ]),
         layout({
             // customize:
@@ -124,7 +124,7 @@ export const usesAccordionItemVariants = () => {
         imports([
             // variants:
             usesCollapseVariants(':not(.inline)>*>&', '.inline>*>&'),
-            usesListgroupItemVariants(), // todo: doesn't work as expected
+            usesListItemVariants(),
             
             // layouts:
             sizes(),
@@ -191,7 +191,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface AccordionItemProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListgroupItemProps<TElement>,
+        ListItemProps<TElement>,
         TogglerActiveProps
 {
     // accessibilities:
@@ -238,7 +238,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
     
     // jsx:
     return (<>
-        <ListgroupItem
+        <ListItem
             // other props:
             {...restProps}
             
@@ -291,7 +291,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             }}
         >
             { label }
-        </ListgroupItem>
+        </ListItem>
         <Collapse<TElement>
             // variants:
             theme={props.theme}
@@ -315,7 +315,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
         </Collapse>
     </>);
 }
-AccordionItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
+AccordionItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 export type { AccordionItemProps as ItemProps }
 export { AccordionItem as Item }

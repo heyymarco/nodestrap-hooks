@@ -10,7 +10,7 @@ import {
 	ThemeName,
 	SizeName,
 } 					from '../libs/BasicComponent';
-import {ListgroupItem} from '../libs/Listgroup';
+import {ListItem} from '../libs/Listgroup';
 import Accordion, {AccordionItem} from '../libs/Accordion';
 import type * as Accordions from '../libs/Accordion';
 
@@ -73,7 +73,7 @@ function App() {
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 					</AccordionItem>
-					<ListgroupItem>hoho</ListgroupItem>
+					<ListItem>hoho</ListItem>
                 </Accordion>
                 <hr style={{flexBasis: '100%'}} />
 				<p>

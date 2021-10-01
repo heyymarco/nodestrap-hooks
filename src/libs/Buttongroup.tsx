@@ -55,12 +55,12 @@ import {
     
     
     // styles:
-    usesListgroupItemInheritParentVariants,
+    usesListItemInheritParentVariants,
     
     
     
     // react components:
-    ListgroupItem,
+    ListItem,
     
     ListgroupProps,
     Listgroup,
@@ -116,7 +116,7 @@ export const usesButtongroupItemVariants = () => {
     return composition([
         imports([
             // variants:
-            usesListgroupItemInheritParentVariants(),
+            usesListItemInheritParentVariants(),
             
             // layouts:
             sizes(),
@@ -183,7 +183,7 @@ function ButtongroupItem(props: ButtongroupItemProps) {
                             
                             // classes:
                             classes={[...(child.props.classes ?? []),
-                                sheet.main, // inject ListgroupItem class
+                                sheet.main, // inject ButtongroupItem class
                             ]}
                         />
                     );
@@ -200,7 +200,7 @@ function ButtongroupItem(props: ButtongroupItemProps) {
                             
                             // classes:
                             classes={[...(child.props.classes ?? []),
-                                sheet.main, // inject ListgroupItem class
+                                sheet.main, // inject ButtongroupItem class
                             ]}
                         />
                     );
@@ -217,7 +217,7 @@ function ButtongroupItem(props: ButtongroupItemProps) {
                             
                             // classes:
                             classes={[...(child.props.classes ?? []),
-                                sheet.main, // inject ListgroupItem class
+                                sheet.main, // inject ButtongroupItem class
                             ]}
                         />
                     );
@@ -230,7 +230,7 @@ function ButtongroupItem(props: ButtongroupItemProps) {
         </>
     );
 }
-ButtongroupItem.prototype = ListgroupItem.prototype; // mark as ListgroupItem compatible
+ButtongroupItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 
 

@@ -200,7 +200,7 @@ const listItemElm = ':first-child';
 
 
 
-export const usesListgroupItemInheritMildVariant = () => {
+export const usesListItemInheritMildVariant = () => {
     return composition([
         variants([
             rule('.mild>*>&', [ // content
@@ -211,7 +211,7 @@ export const usesListgroupItemInheritMildVariant = () => {
         ]),
     ]);
 };
-export const usesListgroupItemInheritParentVariants = () => {
+export const usesListItemInheritParentVariants = () => {
     return composition([
         variants([
             rule('.content>*>&', [ // content
@@ -239,7 +239,7 @@ export const usesListgroupItemInheritParentVariants = () => {
 
 
 
-export const usesListgroupItemLayout = () => {
+export const usesListItemLayout = () => {
     return composition([
         imports([
             // layouts:
@@ -261,7 +261,7 @@ export const usesListgroupItemLayout = () => {
         }),
     ]);
 };
-export const usesListgroupItemVariants = () => {
+export const usesListItemVariants = () => {
     // dependencies:
     
     // layouts:
@@ -278,15 +278,15 @@ export const usesListgroupItemVariants = () => {
         imports([
             // variants:
             usesIndicatorVariants(),
-            usesListgroupItemInheritMildVariant(),
-            usesListgroupItemInheritParentVariants(),
+            usesListItemInheritMildVariant(),
+            usesListItemInheritParentVariants(),
             
             // layouts:
             sizes(),
         ]),
     ]);
 };
-export const usesListgroupItemStates = () => {
+export const usesListItemStates = () => {
     return composition([
         imports([
             // states:
@@ -294,32 +294,32 @@ export const usesListgroupItemStates = () => {
         ]),
     ]);
 };
-export const usesListgroupItem = () => {
+export const usesListItem = () => {
     return composition([
         imports([
             // layouts:
-            usesListgroupItemLayout(),
+            usesListItemLayout(),
             
             // variants:
-            usesListgroupItemVariants(),
+            usesListItemVariants(),
             
             // states:
-            usesListgroupItemStates(),
+            usesListItemStates(),
         ]),
     ]);
 };
 
-export const useListgroupItemSheet = createUseSheet(() => [
+export const useListItemSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesListgroupItem(),
+            usesListItem(),
         ]),
     ]),
 ]);
 
 
 
-export const usesListgroupActionItemLayout = () => {
+export const usesListActionItemLayout = () => {
     return composition([
         imports([
             // layouts:
@@ -330,16 +330,16 @@ export const usesListgroupActionItemLayout = () => {
         ]),
     ]);
 };
-export const usesListgroupActionItemVariants = () => {
+export const usesListActionItemVariants = () => {
     return composition([
         imports([
             // variants:
             usesActionControlVariants(),
-            usesListgroupItemInheritMildVariant(),
+            usesListItemInheritMildVariant(),
         ]),
     ]);
 };
-export const usesListgroupActionItemStates = () => {
+export const usesListActionItemStates = () => {
     return composition([
         imports([
             // states:
@@ -380,25 +380,25 @@ export const usesListgroupActionItemStates = () => {
         ]),
     ]);
 };
-export const usesListgroupActionItem = () => {
+export const usesListActionItem = () => {
     return composition([
         imports([
             // layouts:
-            usesListgroupActionItemLayout(),
+            usesListActionItemLayout(),
             
             // variants:
-            usesListgroupActionItemVariants(),
+            usesListActionItemVariants(),
             
             // states:
-            usesListgroupActionItemStates(),
+            usesListActionItemStates(),
         ]),
     ]);
 };
 
-export const useListgroupActionItemSheet = createUseSheet(() => [
+export const useListActionItemSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesListgroupActionItem(),
+            usesListActionItem(),
         ]),
     ]),
 ]);
@@ -901,7 +901,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export interface ListgroupItemProps<TElement extends HTMLElement = HTMLElement>
+export interface ListItemProps<TElement extends HTMLElement = HTMLElement>
     extends
         ActionControlProps<TElement>,
         React.AnchorHTMLAttributes<TElement>
@@ -923,10 +923,10 @@ export interface ListgroupItemProps<TElement extends HTMLElement = HTMLElement>
     // children:
     children?      : React.ReactNode
 }
-export function ListgroupItem<TElement extends HTMLElement = HTMLElement>(props: ListgroupItemProps<TElement>) {
+export function ListItem<TElement extends HTMLElement = HTMLElement>(props: ListItemProps<TElement>) {
     // styles:
-    const sheet       = useListgroupItemSheet();
-    const sheetAction = useListgroupActionItemSheet();
+    const sheet       = useListItemSheet();
+    const sheetAction = useListActionItemSheet();
     
     
     
@@ -969,8 +969,8 @@ export function ListgroupItem<TElement extends HTMLElement = HTMLElement>(props:
         />
     );
 }
-export type { ListgroupItemProps as ItemProps }
-export { ListgroupItem as Item }
+export type { ListItemProps as ItemProps }
+export { ListItem as Item }
 
 
 
@@ -1046,7 +1046,7 @@ export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: Lis
                     tag={wrapTag}
                 >
                     {
-                        isTypeOf(child, ListgroupItem)
+                        isTypeOf(child, ListItem)
                         ?
                         <child.type
                             // other props:
@@ -1068,7 +1068,7 @@ export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: Lis
                             }}
                         />
                         :
-                        <ListgroupItem
+                        <ListItem
                             // behaviors:
                             actionCtrl={actionCtrl} // the default value of [actionCtrl] is belong to Listgroup's [actionCtrl]
                             
@@ -1080,7 +1080,7 @@ export function Listgroup<TElement extends HTMLElement = HTMLElement>(props: Lis
                             }}
                         >
                             { child }
-                        </ListgroupItem>
+                        </ListItem>
                     }
                 </Element>
             ))}

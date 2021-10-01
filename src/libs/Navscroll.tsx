@@ -12,8 +12,8 @@ import {
 }                           from './react-cssfn' // cssfn for react
 import {
     // react components:
-    ListgroupItemProps,
-    ListgroupItem,
+    ListItemProps,
+    ListItem,
 }                           from './Listgroup'
 import {
     // hooks:
@@ -372,9 +372,9 @@ const findLast  = <T,R>(array: T[], predicate: (value: T) => R|null): [R, number
     Navscroll is just a Nav with *manipulated active* on its items
 */
 
-// ListgroupItem => NavscrollItem
-export type { ListgroupItemProps, ListgroupItemProps as NavscrollItemProps, ListgroupItemProps as ItemProps }
-export { ListgroupItem, ListgroupItem as NavscrollItem, ListgroupItem as Item }
+// ListItem => NavscrollItem
+export type { ListItemProps, ListItemProps as NavscrollItemProps, ListItemProps as ItemProps }
+export { ListItem, ListItem as NavscrollItem, ListItem as Item }
 
 
 
@@ -738,15 +738,15 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
             // essentials:
             key={key}
         >
-            { mutateListgroupItems(nestNavProps.children, /*deepLevelsParent: */deepLevelsParent) }
+            { mutateListItems(nestNavProps.children, /*deepLevelsParent: */deepLevelsParent) }
         </Nav>
     );
-    const mutateListgroupItems = (children: React.ReactNode, deepLevelsParent: number[]) => (
+    const mutateListItems = (children: React.ReactNode, deepLevelsParent: number[]) => (
         children && (Array.isArray(children) ? children : [children]).map((child, index) => {
             const deepLevelsCurrent = [...deepLevelsParent, index];
             
             return (
-                isTypeOf(child, ListgroupItem)
+                isTypeOf(child, ListItem)
                 ?
                 <child.type
                     // other props:
@@ -785,7 +785,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
                     ))}
                 </child.type>
                 :
-                <ListgroupItem
+                <ListItem
                     // essentials:
                     key={index}
                     
@@ -802,7 +802,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
                     }}
                 >
                     { child }
-                </ListgroupItem>
+                </ListItem>
             );
         })
     );
@@ -816,7 +816,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
             {...restProps}
             {...defaultProps}
         >
-            { mutateListgroupItems(props.children, /*deepLevelsParent: */[]) }
+            { mutateListItems(props.children, /*deepLevelsParent: */[]) }
         </Nav>
     );
 }

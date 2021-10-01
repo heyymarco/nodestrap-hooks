@@ -16,7 +16,7 @@ import Control   from '../libs/Control';
 import ActionControl   from '../libs/ActionControl';
 import Button   from '../libs/Button';
 import Content from '../libs/Content';
-import Listgroup, {ListgroupItem} from '../libs/Listgroup';
+import Listgroup, {ListItem} from '../libs/Listgroup';
 import type * as Listgroups from '../libs/Listgroup';
 
 
@@ -101,22 +101,22 @@ function App() {
 					<>hello</>
 					<></>
 					<>hey</>
-					<ListgroupItem enabled={childEnabled}>
+					<ListItem enabled={childEnabled}>
 						i'm {childEnabled ? 'enabled' : 'disabled'}
 						<input type='checkbox'
 							checked={childEnabled}
 							onChange={(e) => setChildEnabled(e.target.checked)}
 						/>
-					</ListgroupItem>
+					</ListItem>
 					'hoho'
-					<ListgroupItem active={childActive}>
+					<ListItem active={childActive}>
 						i'm {childActive ? 'active' : 'passive'}
 						<input type='checkbox'
 							checked={childActive}
 							onChange={(e) => setChildActive(e.target.checked)}
 						/>
-					</ListgroupItem>
-					<ListgroupItem enabled={childEnabled} active={childActive}>
+					</ListItem>
+					<ListItem enabled={childEnabled} active={childActive}>
 						i'm {childEnabled ? 'enabled' : 'disabled'}
 						<input type='checkbox'
 							checked={childEnabled}
@@ -127,21 +127,21 @@ function App() {
 							checked={childActive}
 							onChange={(e) => setChildActive(e.target.checked)}
 						/>
-					</ListgroupItem>
-					<ListgroupItem theme='danger'>i'm angry</ListgroupItem>
-					<ListgroupItem theme='success'>i'm fine</ListgroupItem>
-					<ListgroupItem size='sm'>i'm small</ListgroupItem>
-					<ListgroupItem size='lg'>i'm big</ListgroupItem>
-					<ListgroupItem gradient={true}>i'm 3d</ListgroupItem>
-					<ListgroupItem outlined={true}>i'm transparent</ListgroupItem>
-					<ListgroupItem actionCtrl={true}>i'm controllable</ListgroupItem>
-					<ListgroupItem actionCtrl={true} active={true}>i'm controllable</ListgroupItem>
-					<ListgroupItem>
+					</ListItem>
+					<ListItem theme='danger'>i'm angry</ListItem>
+					<ListItem theme='success'>i'm fine</ListItem>
+					<ListItem size='sm'>i'm small</ListItem>
+					<ListItem size='lg'>i'm big</ListItem>
+					<ListItem gradient={true}>i'm 3d</ListItem>
+					<ListItem outlined={true}>i'm transparent</ListItem>
+					<ListItem actionCtrl={true}>i'm controllable</ListItem>
+					<ListItem actionCtrl={true} active={true}>i'm controllable</ListItem>
+					<ListItem>
 						<Button>button</Button>
-					</ListgroupItem>
-					<ListgroupItem active={true}>
+					</ListItem>
+					<ListItem active={true}>
 						<Button>button</Button>
-					</ListgroupItem>
+					</ListItem>
                 </Listgroup>
                 <hr style={{flexBasis: '100%'}} />
 				<p>

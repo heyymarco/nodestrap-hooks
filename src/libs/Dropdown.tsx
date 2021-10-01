@@ -74,8 +74,8 @@ import {
     
     
     // react components:
-    ListgroupItemProps,
-    ListgroupItem,
+    ListItemProps,
+    ListItem,
     
     ListgroupProps,
     Listgroup,
@@ -187,9 +187,9 @@ const isSelfOrDescendantOf = (element: HTMLElement, desired: HTMLElement): boole
 
 export type CloseType = number|'shortcut'|'blur'
 
-// ListgroupItem => DropdownItem
-export type { ListgroupItemProps, ListgroupItemProps as DropdownItemProps, ListgroupItemProps as ItemProps }
-export { ListgroupItem, ListgroupItem as DropdownItem, ListgroupItem as Item }
+// ListItem => DropdownItem
+export type { ListItemProps, ListItemProps as DropdownItemProps, ListItemProps as ItemProps }
+export { ListItem, ListItem as DropdownItem, ListItem as Item }
 
 
 
@@ -397,7 +397,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
                     ?
                     (
                         children && (Array.isArray(children) ? children : [children]).map((child, index) => (
-                            isTypeOf(child, ListgroupItem)
+                            isTypeOf(child, ListItem)
                             ?
                             (
                                 ((child.props.enabled ?? true) && (child.props.actionCtrl ?? actionCtrl))
@@ -431,7 +431,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
                             (
                                 actionCtrl
                                 ?
-                                <ListgroupItem
+                                <ListItem
                                     // essentials:
                                     key={index}
                                     
@@ -445,7 +445,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
                                     }}
                                 >
                                     { child }
-                                </ListgroupItem>
+                                </ListItem>
                                 :
                                 child
                             )
