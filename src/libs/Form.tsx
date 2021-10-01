@@ -24,6 +24,11 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -305,20 +310,11 @@ export function Form(props: FormProps) {
             
             // validations:
             elmRef={(elm) => {
+                setElmRef(props.elmRef, elm);
+                
+                
                 if (elm) {
                     formValidator.handleInit(elm);
-                } // if
-                
-                
-                // forwards:
-                const elmRef = props.elmRef;
-                if (elmRef) {
-                    if (typeof(elmRef) === 'function') {
-                        elmRef(elm);
-                    }
-                    else {
-                        (elmRef as React.MutableRefObject<HTMLFormElement|null>).current = elm;
-                    } // if
                 } // if
             }}
             onChange={(e) => { // watch change event bubbling from children
