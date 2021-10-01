@@ -27,6 +27,11 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -479,19 +484,8 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
             
             // essentials:
             elmRef={(elm) => {
-                masonryRef.current = elm;
-                
-                
-                // forwards:
-                const elmRef = props.elmRef;
-                if (elmRef) {
-                    if (typeof(elmRef) === 'function') {
-                        elmRef(elm);
-                    }
-                    else {
-                        (elmRef as React.MutableRefObject<TElement|null>).current = elm;
-                    } // if
-                } // if
+                setElmRef(props.elmRef, elm);
+                setElmRef(masonryRef, elm);
             }}
             
             
