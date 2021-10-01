@@ -486,10 +486,9 @@ export interface GradientVars {
 const [gradientRefs, gradientDecls] = createCssVar<GradientVars>();
 
 // grandpa ?? `.gradient` and parent not `.gradient` and current not `.gradient`:
-export const noGradient = (styles: StyleCollection) => rule(                     ':not(.gradient)&:not(.gradient)', styles);
+export const noGradient = (styles: StyleCollection) => rule(':where(:not(.gradient)) :where(:not(.gradient))&:not(.gradient)', styles);
 // grandpa is `.gradient` or  parent is  `.gradient` or  current is  `.gradient`:
-// double `.gradient.gradient` to combat with `:not(.gradient)&:not(.gradient)`
-export const isGradient = (styles: StyleCollection) => rule(['.gradient.gradient &',  '.gradient&',  '&.gradient'], styles);
+export const isGradient = (styles: StyleCollection) => rule([           '.gradient &',          '.gradient&',   '&.gradient'], styles);
 
 /**
  * Uses toggleable gradient.
@@ -555,10 +554,9 @@ export interface OutlinedVars {
 const [outlinedRefs, outlinedDecls] = createCssVar<OutlinedVars>();
 
 // grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
-export const noOutlined = (styles: StyleCollection) => rule(                     ':not(.outlined)&:not(.outlined)', styles);
+export const noOutlined = (styles: StyleCollection) => rule(':where(:not(.outlined)) :where(:not(.outlined))&:not(.outlined)', styles);
 // grandpa is `.outlined` or  parent is  `.outlined` or  current is  `.outlined`:
-// double `.outlined.outlined` to combat with `:not(.outlined)&:not(.outlined)`
-export const isOutlined = (styles: StyleCollection) => rule(['.outlined.outlined &',  '.outlined&',  '&.outlined'], styles);
+export const isOutlined = (styles: StyleCollection) => rule([           '.outlined &',          '.outlined&',   '&.outlined'], styles);
 
 /**
  * Uses toggleable outlining.
@@ -647,9 +645,9 @@ const [mildRefs, mildDecls] = createCssVar<MildVars>();
 
 // by design: grandpa's `.mild` does not affect current `.mild`
 // parent not `.mild` and current not `.mild`:
-export const noMild = (styles: StyleCollection) => rule(':not(.mild)&:not(.mild)', styles);
+export const noMild = (styles: StyleCollection) => rule(':where(:not(.mild))&:not(.mild)', styles);
 // parent is  `.mild` or  current is  `.mild`:
-export const isMild = (styles: StyleCollection) => rule([    '.mild&',  '&.mild'], styles);
+export const isMild = (styles: StyleCollection) => rule([           '.mild&',   '&.mild'], styles);
 
 /**
  * Uses toggleable mildification.
