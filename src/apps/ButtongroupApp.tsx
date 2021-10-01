@@ -206,6 +206,224 @@ function App() {
 					</Button>
                 </Buttongroup>
 				<hr style={{flexBasis: '100%'}} />
+				<Buttongroup
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+					orientation={orientation}
+					listStyle={listStyle}
+				>
+					<Button
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						btnStyle={btnStyle}
+					>
+						button
+					</Button>
+                    <Check
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active} enableValidation={false}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						checkStyle='togglerBtn'
+					>
+						check btn
+					</Check>
+                    <TogglerMenuButton
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+					/>
+
+					<Buttongroup
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+						orientation={orientation}
+						listStyle={listStyle}
+					>
+						<Radio
+							theme={theme} size={size} gradient={enableGrad}
+							outlined={outlined} mild={mild}
+
+							enabled={enabled} active={active} enableValidation={false}
+
+							arrive={arrive}
+							focus={focus}
+							
+							press={press}
+
+							checkStyle='togglerBtn'
+							name='option'
+						>
+							opt 1
+						</Radio>
+						<Radio
+							theme={theme} size={size} gradient={enableGrad}
+							outlined={outlined} mild={mild}
+
+							enabled={enabled} active={active} enableValidation={false}
+
+							arrive={arrive}
+							focus={focus}
+							
+							press={press}
+
+							checkStyle='togglerBtn'
+							name='option'
+						>
+							opt 2
+						</Radio>
+						<Radio
+							theme={theme} size={size} gradient={enableGrad}
+							outlined={outlined} mild={mild}
+
+							enabled={enabled} active={active} enableValidation={false}
+
+							arrive={arrive}
+							focus={focus}
+							
+							press={press}
+
+							checkStyle='togglerBtn'
+							name='option'
+						>
+							opt 3
+						</Radio>
+					</Buttongroup>
+                </Buttongroup>
+				<hr style={{flexBasis: '100%'}} />
+				<Buttongroup
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+					orientation={orientation}
+					listStyle={listStyle}
+				>
+					<Button
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						btnStyle={btnStyle}
+					>
+						button
+					</Button>
+                    <Check
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active} enableValidation={false}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+
+						checkStyle='togglerBtn'
+					>
+						check btn
+					</Check>
+                    <TogglerMenuButton
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+					/>
+
+					<Buttongroup
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+						orientation={orientation && ((orientation === 'block') ? 'inline' : 'block')}
+						listStyle={listStyle}
+					>
+						<Radio
+							theme={theme} size={size} gradient={enableGrad}
+							outlined={outlined} mild={mild}
+
+							enabled={enabled} active={active} enableValidation={false}
+
+							arrive={arrive}
+							focus={focus}
+							
+							press={press}
+
+							checkStyle='togglerBtn'
+							name='option'
+						>
+							opt 1
+						</Radio>
+						<Radio
+							theme={theme} size={size} gradient={enableGrad}
+							outlined={outlined} mild={mild}
+
+							enabled={enabled} active={active} enableValidation={false}
+
+							arrive={arrive}
+							focus={focus}
+							
+							press={press}
+
+							checkStyle='togglerBtn'
+							name='option'
+						>
+							opt 2
+						</Radio>
+						<Radio
+							theme={theme} size={size} gradient={enableGrad}
+							outlined={outlined} mild={mild}
+
+							enabled={enabled} active={active} enableValidation={false}
+
+							arrive={arrive}
+							focus={focus}
+							
+							press={press}
+
+							checkStyle='togglerBtn'
+							name='option'
+						>
+							opt 3
+						</Radio>
+					</Buttongroup>
+                </Buttongroup>
+				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
 					{

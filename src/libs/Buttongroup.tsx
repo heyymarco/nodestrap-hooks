@@ -208,6 +208,23 @@ function ButtongroupItem(props: ButtongroupItemProps) {
                 
                 
                 
+                if (isTypeOf(child, Buttongroup)) {
+                    return (
+                        <child.type
+                            // other props:
+                            {...child.props}
+                            
+                            
+                            // classes:
+                            classes={[...(child.props.classes ?? []),
+                                sheet.main, // inject ListgroupItem class
+                            ]}
+                        />
+                    );
+                } // if
+                
+                
+                
                 return child;
             })(props.children)}
         </>
