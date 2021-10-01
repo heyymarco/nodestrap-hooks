@@ -23,6 +23,12 @@ import {
     
     
     
+    // react components:
+    ElementProps,
+    Element,
+    
+    
+    
     // utilities:
     isTypeOf,
     setElmRef,
@@ -64,27 +70,6 @@ import {
     CollapseProps,
     Collapse,
 }                           from './Collapse'
-import {
-    // hooks:
-    ListStyle,
-    ListVariant,
-    
-    OrientationName,
-    OrientationVariant,
-    
-    
-    
-    // react components:
-    ListItemProps,
-    ListItem,
-    
-    ListProps,
-    List,
-}                           from './List'
-import {
-    // hooks:
-    usePropEnabled,
-}                           from './accessibilities'
 
 
 
@@ -186,27 +171,41 @@ const isSelfOrDescendantOf = (element: HTMLElement, desired: HTMLElement): boole
 
 // react components:
 
-export type CloseType = number|'shortcut'|'blur'
+export type DropdownCloseType = 'shortcut'|'blur'
+export interface DropdownAction<TDropdownCloseType = DropdownCloseType>
+{
+    // actions:
+    onClose?  : (closeType: TDropdownCloseType) => void
+}
 
-// ListItem => DropdownItem
-export type { ListItemProps, ListItemProps as DropdownItemProps, ListItemProps as ItemProps }
-export { ListItem, ListItem as DropdownItem, ListItem as Item }
+
+
+export interface DropdownElementProps<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>
+    extends
+    DropdownAction<TDropdownCloseType>,
+    ElementProps<TElement>
+{
+}
+export function DropdownElement<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>(props: DropdownElementProps<TElement, TDropdownCloseType>) {
+    return (
+        <Element
+            // other props:
+            {...props}
+        />
+    );
+}
 
 
 
-export interface DropdownProps<TElement extends HTMLElement = HTMLElement>
+export interface DropdownProps<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>
     extends
         CollapseProps<TElement>,
-        ListProps<TElement>
+        DropdownAction<TDropdownCloseType>
 {
     // accessibilities:
-    tabIndex?   : number
-    
-    
-    // actions:
-    onClose?    : (closeType: CloseType) => void
+    tabIndex? : number
 }
-export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: DropdownProps<TElement>) {
+export function Dropdown<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>(props: DropdownProps<TElement, TDropdownCloseType>) {
     // styles:
     const sheet              = useDropdownSheet();
     
@@ -230,10 +229,6 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
         tabIndex,       // from Dropdown
         
         
-        // behaviors:
-        actionCtrl = true,
-        
-        
         // popups:
         targetRef,
         popupPlacement,
@@ -251,17 +246,12 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
     
     
     
-    // fn props:
-    const propEnabled = usePropEnabled(props);
-    
-    
-    
     // dom effects:
-    const listRef = useRef<TElement|null>(null);
+    const childRef = useRef<TElement|null>(null);
     
     useEffect(() => {
         if (isVisible) {
-            listRef.current?.focus(); // when actived => focus the dropdown, so the user able to use [esc] key to close the dropdown
+            childRef.current?.focus(); // when actived => focus the dropdown, so the user able to use [esc] key to close the dropdown
         } // if isVisible
     }, [isVisible]);
     
@@ -283,7 +273,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
             const focusedTarget = e.target;
             if (!focusedTarget) return;
             // check if focusedTarget is inside dropdown or not:
-            if ((focusedTarget instanceof HTMLElement) && listRef.current && isSelfOrDescendantOf(focusedTarget, listRef.current)) return; // focus is still in dropdown => nothing to do
+            if ((focusedTarget instanceof HTMLElement) && childRef.current && isSelfOrDescendantOf(focusedTarget, childRef.current)) return; // focus is still in dropdown => nothing to do
             
             
             
@@ -293,7 +283,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
             
             
             // focus is outside of dropdown => dropdown lost focus => hide dropdown
-            onClose('blur');
+            onClose('blur' as unknown as TDropdownCloseType);
         };
         
         
@@ -315,6 +305,10 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
     // jsx:
     return (
         <Collapse<TElement>
+            // other props:
+            {...restProps}
+            
+            
             // accessibilities:
             {...{
                 active,
@@ -345,113 +339,50 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement>(props: Drop
                 activePassiveState.handleAnimationEnd(e);
             }}
         >
-            <List
-                // other props:
-                {...restProps}
-                
-                
-                // essentials:
-                elmRef={(elm) => {
-                    setElmRef(elmRef, elm);
-                    setElmRef(listRef, elm);
-                }}
-                
-                
-                // behaviors:
-                actionCtrl={actionCtrl}
-                
-                
-                // Control props:
-                {...{
-                    // accessibilities:
-                    tabIndex : tabIndex ?? -1,
-                }}
-                
-                
-                // events:
-                onKeyUp={(e) => {
-                    // backwards:
-                    props.onKeyUp?.(e);
+            {
+                isTypeOf<DropdownElementProps<TElement, TDropdownCloseType>>(children, DropdownElement)
+                ?
+                <children.type
+                    // other props:
+                    {...children.props}
                     
                     
+                    // essentials:
+                    elmRef={(elm) => {
+                        setElmRef(elmRef, elm);
+                        setElmRef(childRef, elm);
+                    }}
                     
-                    if (!e.defaultPrevented) {
-                        if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                            onClose?.('shortcut');
-                            e.preventDefault();
+                    
+                    // Control props:
+                    {...{
+                        // accessibilities:
+                        tabIndex : tabIndex ?? -1,
+                    }}
+                    
+                    
+                    // events:
+                    onKeyUp={(e) => {
+                        // backwards:
+                        props.onKeyUp?.(e);
+                        
+                        
+                        
+                        if (!e.defaultPrevented) {
+                            if ((e.key === 'Escape') || (e.code === 'Escape')) {
+                                onClose?.('shortcut' as unknown as TDropdownCloseType);
+                                e.preventDefault();
+                            } // if
                         } // if
-                    } // if
-                }}
-            >
-                {
-                    propEnabled
-                    ?
-                    (
-                        children && (Array.isArray(children) ? children : [children]).map((child, index) => (
-                            isTypeOf(child, ListItem)
-                            ?
-                            (
-                                ((child.props.enabled ?? true) && (child.props.actionCtrl ?? actionCtrl))
-                                ?
-                                <child.type
-                                    // other props:
-                                    {...child.props}
-                                    
-                                    
-                                    // essentials:
-                                    key={child.key ?? index}
-                                    
-                                    
-                                    // events:
-                                    onClick={(e) => {
-                                        // backwards:
-                                        child.props.onClick?.(e);
-                                        
-                                        
-                                        
-                                        if (!e.defaultPrevented) {
-                                            onClose?.(index);
-                                            e.preventDefault();
-                                        } // if
-                                    }}
-                                />
-                                :
-                                child
-                            )
-                            :
-                            (
-                                actionCtrl
-                                ?
-                                <ListItem
-                                    // essentials:
-                                    key={index}
-                                    
-                                    
-                                    // events:
-                                    onClick={(e) => {
-                                        if (!e.defaultPrevented) {
-                                            onClose?.(index);
-                                            e.preventDefault();
-                                        } // if
-                                    }}
-                                >
-                                    { child }
-                                </ListItem>
-                                :
-                                child
-                            )
-                        ))
-                    )
-                    :
-                    children
-                }
-            </List>
+                    }}
+                    onClose={(closeType) => onClose?.(closeType)}
+                />
+                :
+                children
+            }
         </Collapse>
     );
 }
 export { Dropdown as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }
-
-export type { ListStyle, ListVariant }
-export type { OrientationName, OrientationVariant }
