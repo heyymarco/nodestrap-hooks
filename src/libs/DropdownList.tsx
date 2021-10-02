@@ -18,7 +18,6 @@ import {
     
     // react components:
     DropdownCloseType,
-    DropdownAction,
     
     DropdownElementProps,
     DropdownElement,
@@ -52,31 +51,23 @@ import {
 
 // react components:
 
+// ListItem => DropdownListItem
+export type { ListItemProps, ListItemProps as DropdownListItemProps, ListItemProps as ItemProps }
+export { ListItem, ListItem as DropdownListItem, ListItem as Item }
+
+
+
 export type DropdownListCloseType = number|DropdownCloseType
-export interface DropdownListAction<TDropdownListCloseType = DropdownListCloseType>
+
+
+
+export interface DropdownListElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
     extends
-        DropdownAction<TDropdownListCloseType>
-{
-    // actions:
-    onClose?  : (closeType: TDropdownListCloseType) => void
-}
-
-
-
-// ListItem => DropdownItem
-export type { ListItemProps, ListItemProps as DropdownItemProps, ListItemProps as ItemProps }
-export { ListItem, ListItem as DropdownItem, ListItem as Item }
-
-
-
-interface DropdownListElementProps<TElement extends HTMLElement = HTMLElement, TDropdownListCloseType = DropdownListCloseType>
-    extends
-        DropdownElementProps<TElement, TDropdownListCloseType>,
-        DropdownListAction<TDropdownListCloseType>,
+        DropdownElementProps<TElement, TCloseType>,
         ListProps<TElement>
 {
 }
-function DropdownListElement<TElement extends HTMLElement = HTMLElement, TDropdownListCloseType = DropdownListCloseType>(props: DropdownListElementProps<TElement, TDropdownListCloseType>) {
+export function DropdownListElement<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListElementProps<TElement, TCloseType>) {
     // rest props:
     const {
         // behaviors:
@@ -134,7 +125,7 @@ function DropdownListElement<TElement extends HTMLElement = HTMLElement, TDropdo
                                     
                                     
                                     if (!e.defaultPrevented) {
-                                        onClose?.(index as unknown as TDropdownListCloseType);
+                                        onClose?.(index as unknown as TCloseType);
                                         e.preventDefault();
                                     } // if
                                 }}
@@ -154,7 +145,7 @@ function DropdownListElement<TElement extends HTMLElement = HTMLElement, TDropdo
                                 // events:
                                 onClick={(e) => {
                                     if (!e.defaultPrevented) {
-                                        onClose?.(index as unknown as TDropdownListCloseType);
+                                        onClose?.(index as unknown as TCloseType);
                                         e.preventDefault();
                                     } // if
                                 }}
@@ -176,22 +167,31 @@ DropdownListElement.prototype = DropdownElement.prototype; // mark as DropdownEl
 
 
 
-export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, TDropdownListCloseType = DropdownListCloseType>
+export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
     extends
-        DropdownProps<TElement, TDropdownListCloseType>,
+        DropdownProps<TElement, TCloseType>,
         ListProps<TElement>
 {
 }
-export function DropdownList<TElement extends HTMLElement = HTMLElement, TDropdownListCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TDropdownListCloseType>) {
+export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
+    // rest props:
+    const {
+        // accessibilities:
+        active,         // from accessibilities, removed
+        inheritActive,  // from accessibilities, removed
+    ...restProps} = props;
+    
+    
+    
     // jsx:
     return (
-        <Dropdown<TElement, TDropdownListCloseType>
+        <Dropdown<TElement, TCloseType>
             // other props:
             {...props}
         >
-            <DropdownListElement<TElement, TDropdownListCloseType>
+            <DropdownListElement<TElement, TCloseType>
                 // other props:
-                {...props}
+                {...restProps}
             />
         </Dropdown>
     );

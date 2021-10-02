@@ -13,7 +13,7 @@ import {
 } 					from '../libs/BasicComponent';
 import Button   from '../libs/Button';
 import {TextInput}   from '../libs/Input';
-import DropdownList, {DropdownItem, OrientationName} from '../libs/DropdownList';
+import DropdownList, {DropdownListItem, OrientationName} from '../libs/DropdownList';
 
 
 
@@ -68,24 +68,24 @@ function App() {
 					}}
 				>
 					<>hello</>
-					<DropdownItem enabled={childEnabled}>
+					<DropdownListItem enabled={childEnabled}>
 						i'm {childEnabled ? 'enabled' : 'disabled'}
 						<input type='checkbox'
 							checked={childEnabled}
 							onChange={(e) => setChildEnabled(e.target.checked)}
 						/>
-					</DropdownItem>
-					<DropdownItem theme='danger'>i'm angry</DropdownItem>
-					<DropdownItem actionCtrl={false} theme='success'>i'm fine</DropdownItem>
-					<DropdownItem size='sm'>i'm small</DropdownItem>
-					<DropdownItem size='lg'>i'm big</DropdownItem>
-					<DropdownItem gradient={true}>i'm 3d</DropdownItem>
-					<DropdownItem outlined={true}>i'm transparent</DropdownItem>
-					<DropdownItem>i'm controllable</DropdownItem>
-					<DropdownItem active={true}>i'm controllable</DropdownItem>
-					<DropdownItem actionCtrl={false}>
+					</DropdownListItem>
+					<DropdownListItem theme='danger'>i'm angry</DropdownListItem>
+					<DropdownListItem actionCtrl={false} theme='success'>i'm fine</DropdownListItem>
+					<DropdownListItem size='sm'>i'm small</DropdownListItem>
+					<DropdownListItem size='lg'>i'm big</DropdownListItem>
+					<DropdownListItem gradient={true}>i'm 3d</DropdownListItem>
+					<DropdownListItem outlined={true}>i'm transparent</DropdownListItem>
+					<DropdownListItem>i'm controllable</DropdownListItem>
+					<DropdownListItem active={true}>i'm controllable</DropdownListItem>
+					<DropdownListItem actionCtrl={false}>
 						<TextInput placeholder='type here' enableValidation={false} />
-					</DropdownItem>
+					</DropdownListItem>
                 </DropdownList>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
