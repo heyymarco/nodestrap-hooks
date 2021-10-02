@@ -58,10 +58,44 @@ function App() {
 
 					enabled={enabled} active={active} actionCtrl={actionCtrl}
 					orientation={orientation}
-					onClose={() => {
+					onActiveChange={(newActive) => {
 						// if (document.activeElement === targetButtonRef.current) return; // dropdown lost focus because the toggler button got focus => ignore
-						setActive(false);
+						setActive(newActive);
 					}}
+
+					text='show menu'
+				>
+					<>hello</>
+					<DropdownListItem enabled={childEnabled}>
+						i'm {childEnabled ? 'enabled' : 'disabled'}
+						<input type='checkbox'
+							checked={childEnabled}
+							onChange={(e) => setChildEnabled(e.target.checked)}
+						/>
+					</DropdownListItem>
+					<DropdownListItem theme='danger'>i'm angry</DropdownListItem>
+					<DropdownListItem actionCtrl={false} theme='success'>i'm fine</DropdownListItem>
+					<DropdownListItem size='sm'>i'm small</DropdownListItem>
+					<DropdownListItem size='lg'>i'm big</DropdownListItem>
+					<DropdownListItem gradient={true}>i'm 3d</DropdownListItem>
+					<DropdownListItem outlined={true}>i'm transparent</DropdownListItem>
+					<DropdownListItem>i'm controllable</DropdownListItem>
+					<DropdownListItem active={true}>i'm controllable</DropdownListItem>
+					<DropdownListItem actionCtrl={false}>
+						<TextInput placeholder='type here' enableValidation={false} />
+					</DropdownListItem>
+                </DropdownListButton>
+
+				<DropdownListButton
+					// popupPlacement='bottom'
+					
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} actionCtrl={actionCtrl}
+					orientation={orientation}
+
+					text='show menu'
 				>
 					<>hello</>
 					<DropdownListItem enabled={childEnabled}>

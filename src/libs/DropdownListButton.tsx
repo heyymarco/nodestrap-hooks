@@ -58,8 +58,15 @@ export type { DropdownListCloseType }
 export interface DropdownListButtonProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
     extends
         DropdownListProps<TElement, TCloseType>,
-        TogglerActiveProps
+        TogglerActiveProps<TCloseType>
 {
+    // accessibilities:
+    label?          : string
+    text?           : string
+    
+    
+    // children:
+    buttonChildren? : React.ReactNode
 }
 export function DropdownListButton<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListButtonProps<TElement, TCloseType>) {
     // states:
@@ -74,9 +81,13 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
         
+        label,
+        text,
+        
         
         // children:
         children,
+        buttonChildren,
     ...restProps} = props;
     
     
@@ -107,6 +118,18 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                 }}
                 
                 
+                // accessibilities:
+                {...{
+                    label,
+                    text,
+                }}
+                
+                
+                
+                // children:
+                children={buttonChildren}
+                
+                
                 // events:
                 onClick={(e) => {
                     if (!e.defaultPrevented) {
@@ -114,9 +137,7 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                         e.preventDefault();
                     } // if
                 }}
-            >
-                test
-            </Button>
+            />
             <DropdownList
                 // other props:
                 {...restProps}
@@ -128,6 +149,14 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                 
                 // accessibilities:
                 active={isActive}
+                onActiveChange={(newActive, closeType) => {
+                    if (onActiveChange) { // controllable
+                        onActiveChange(newActive, closeType as unknown as TCloseType);
+                    }
+                    else { // uncontrollable
+                        setActive(newActive);
+                    } // if
+                }}
             >
                 { children }
             </DropdownList>
