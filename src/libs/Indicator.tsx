@@ -419,18 +419,18 @@ export const useActivePassiveState = (props: IndicationProps & ElementProps, act
     };
 };
 
-export interface TogglerActiveProps
+export interface TogglerActiveProps<TActiveChangeArg = unknown>
     extends
         IndicationProps
 {
     // accessibilities:
-    defaultActive?  : boolean
-    onActiveChange? : (active: boolean) => void
+    defaultActive?     : boolean
+    onActiveChange?    : (newActive: boolean, arg?: TActiveChangeArg) => void
 }
 interface TogglerActiveState  {
     propAccess         : TAccessibility<boolean, boolean, null>
     
-    onActiveChange?    : (active: boolean) => void
+    onActiveChange?    : (newActive: boolean) => void
     changeEventTarget? : (React.RefObject<HTMLInputElement>|null)
     
     activeTg           : boolean
@@ -476,7 +476,7 @@ const togglerActiveReducer = (state: TogglerActiveState, newActive: React.SetSta
         return { ...state, activeTg: newActiveValue }; // set dynamic (uncontrollable)
     } // if
 };
-export const useTogglerActive = (props: TogglerActiveProps, changeEventTarget?: (React.RefObject<HTMLInputElement>|null)): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
+export const useTogglerActive = <TActiveChangeArg extends unknown = unknown>(props: TogglerActiveProps<TActiveChangeArg>, changeEventTarget?: (React.RefObject<HTMLInputElement>|null)): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
     // fn props:
     const propAccess = usePropAccessibility<boolean, boolean, null>(props, undefined, undefined, null);
     
