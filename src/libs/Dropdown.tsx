@@ -175,7 +175,7 @@ export type DropdownCloseType = 'shortcut'|'blur'
 export interface DropdownAction<TCloseType = DropdownCloseType>
 {
     // actions:
-    onClose? : (closeType: TCloseType) => void
+    onActiveChange? : (newActive: boolean, arg?: TCloseType) => void
 }
 
 
@@ -237,7 +237,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         
         
         // actions:
-        onClose,
+        onActiveChange,
         
         
         // children:
@@ -265,8 +265,8 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             handleFocus({ target: e.target } as FocusEvent);
         };
         const handleFocus = (e: FocusEvent) => {
-            if (!isVisible) return; // dropdown is not shown => nothing to do
-            if (!onClose)   return; // [onClose] is not set  => nothing to do
+            if (!isVisible)      return; // dropdown is not shown => nothing to do
+            if (!onActiveChange) return; // [onActiveChange] is not set  => nothing to do
             
             
             
@@ -283,7 +283,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             
             
             // focus is outside of dropdown => dropdown lost focus => hide dropdown
-            onClose('blur' as unknown as TCloseType);
+            onActiveChange(false, 'blur' as unknown as TCloseType);
         };
         
         
@@ -298,7 +298,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             document.removeEventListener('click', handleClick);
             document.removeEventListener('focus', handleFocus);
         };
-    }, [onClose, isVisible, targetRef]);
+    }, [onActiveChange, isVisible, targetRef]);
     
     
     
@@ -370,12 +370,12 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                         
                         if (!e.defaultPrevented) {
                             if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                                onClose?.('shortcut' as unknown as TCloseType);
+                                onActiveChange?.(false, 'shortcut' as unknown as TCloseType);
                                 e.preventDefault();
                             } // if
                         } // if
                     }}
-                    onClose={(closeType) => onClose?.(closeType)}
+                    onActiveChange={(newActive, closeType) => onActiveChange?.(newActive, closeType)}
                 />
                 :
                 children
