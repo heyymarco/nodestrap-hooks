@@ -75,7 +75,7 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
         
         
         // actions:
-        onClose,
+        onActiveChange,
         
         
         // children:
@@ -125,7 +125,7 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
                                     
                                     
                                     if (!e.defaultPrevented) {
-                                        onClose?.(index as unknown as TCloseType);
+                                        onActiveChange?.(false, index as unknown as TCloseType);
                                         e.preventDefault();
                                     } // if
                                 }}
@@ -145,7 +145,7 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
                                 // events:
                                 onClick={(e) => {
                                     if (!e.defaultPrevented) {
-                                        onClose?.(index as unknown as TCloseType);
+                                        onActiveChange?.(false, index as unknown as TCloseType);
                                         e.preventDefault();
                                     } // if
                                 }}

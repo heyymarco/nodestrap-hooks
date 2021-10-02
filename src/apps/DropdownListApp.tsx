@@ -62,9 +62,9 @@ function App() {
 
 					enabled={enabled} active={active} actionCtrl={actionCtrl}
 					orientation={orientation}
-					onClose={() => {
+					onActiveChange={(newActive) => {
 						// if (document.activeElement === targetButtonRef.current) return; // dropdown lost focus because the toggler button got focus => ignore
-						setActive(false);
+						setActive(newActive);
 					}}
 				>
 					<>hello</>
