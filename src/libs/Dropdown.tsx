@@ -231,7 +231,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         
         // popups:
         targetRef,
-        popupPlacement,
+        popupPlacement = (((props.orientation ?? 'block') === 'block') ? 'bottom' : 'right'),
         popupModifiers,
         popupPosition,
         
