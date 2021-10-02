@@ -172,21 +172,21 @@ const isSelfOrDescendantOf = (element: HTMLElement, desired: HTMLElement): boole
 // react components:
 
 export type DropdownCloseType = 'shortcut'|'blur'
-export interface DropdownAction<TDropdownCloseType = DropdownCloseType>
+export interface DropdownAction<TCloseType = DropdownCloseType>
 {
     // actions:
-    onClose?  : (closeType: TDropdownCloseType) => void
+    onClose? : (closeType: TCloseType) => void
 }
 
 
 
-export interface DropdownElementProps<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>
+export interface DropdownElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>
     extends
-    DropdownAction<TDropdownCloseType>,
-    ElementProps<TElement>
+        DropdownAction<TCloseType>,
+        ElementProps<TElement>
 {
 }
-export function DropdownElement<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>(props: DropdownElementProps<TElement, TDropdownCloseType>) {
+export function DropdownElement<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>(props: DropdownElementProps<TElement, TCloseType>) {
     return (
         <Element
             // other props:
@@ -197,15 +197,15 @@ export function DropdownElement<TElement extends HTMLElement = HTMLElement, TDro
 
 
 
-export interface DropdownProps<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>
+export interface DropdownProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>
     extends
         CollapseProps<TElement>,
-        DropdownAction<TDropdownCloseType>
+        DropdownAction<TCloseType>
 {
     // accessibilities:
     tabIndex? : number
 }
-export function Dropdown<TElement extends HTMLElement = HTMLElement, TDropdownCloseType = DropdownCloseType>(props: DropdownProps<TElement, TDropdownCloseType>) {
+export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>(props: DropdownProps<TElement, TCloseType>) {
     // styles:
     const sheet              = useDropdownSheet();
     
@@ -283,7 +283,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TDropdownCl
             
             
             // focus is outside of dropdown => dropdown lost focus => hide dropdown
-            onClose('blur' as unknown as TDropdownCloseType);
+            onClose('blur' as unknown as TCloseType);
         };
         
         
@@ -340,7 +340,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TDropdownCl
             }}
         >
             {
-                isTypeOf<DropdownElementProps<TElement, TDropdownCloseType>>(children, DropdownElement)
+                isTypeOf<DropdownElementProps<TElement, TCloseType>>(children, DropdownElement)
                 ?
                 <children.type
                     // other props:
@@ -370,7 +370,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TDropdownCl
                         
                         if (!e.defaultPrevented) {
                             if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                                onClose?.('shortcut' as unknown as TDropdownCloseType);
+                                onClose?.('shortcut' as unknown as TCloseType);
                                 e.preventDefault();
                             } // if
                         } // if
