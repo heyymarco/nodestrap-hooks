@@ -652,7 +652,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
             
             
             
-            cardRef.current?.focus(); // when actived => focus the dialog, so the user able to use [esc] key to close the dialog
+            cardRef.current?.focus({ preventScroll: true }); // when actived => focus the dialog, so the user able to use [esc] key to close the dialog
             
             
             
