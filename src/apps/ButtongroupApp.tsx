@@ -21,6 +21,8 @@ import {
 import { Check } from '../libs/Check';
 import { TogglerMenuButton } from '../libs/TogglerMenuButton';
 import { Radio } from '../libs/Radio';
+import { DropdownListButton, DropdownListItem } from '../libs/DropdownListButton';
+import { TextInput } from '../libs/Input';
 
 
 
@@ -146,6 +148,30 @@ function App() {
 						
 						press={press}
 					/>
+					<DropdownListButton
+						// popupPlacement='bottom'
+						
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled}
+						orientation={orientation}
+
+						buttonChildren='show menu'
+					>
+						<>hello</>
+						<DropdownListItem theme='danger'>i'm angry</DropdownListItem>
+						<DropdownListItem actionCtrl={false} theme='success'>i'm fine</DropdownListItem>
+						<DropdownListItem size='sm'>i'm small</DropdownListItem>
+						<DropdownListItem size='lg'>i'm big</DropdownListItem>
+						<DropdownListItem gradient={true}>i'm 3d</DropdownListItem>
+						<DropdownListItem outlined={true}>i'm transparent</DropdownListItem>
+						<DropdownListItem>i'm controllable</DropdownListItem>
+						<DropdownListItem active={true}>i'm controllable</DropdownListItem>
+						<DropdownListItem actionCtrl={false}>
+							<TextInput placeholder='type here' enableValidation={false} />
+						</DropdownListItem>
+					</DropdownListButton>
                     <Radio
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
@@ -256,6 +282,31 @@ function App() {
 						press={press}
 					/>
 
+					<DropdownListButton
+						// popupPlacement='bottom'
+						
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled}
+						orientation={orientation}
+
+						buttonChildren='show menu'
+					>
+						<>hello</>
+						<DropdownListItem theme='danger'>i'm angry</DropdownListItem>
+						<DropdownListItem actionCtrl={false} theme='success'>i'm fine</DropdownListItem>
+						<DropdownListItem size='sm'>i'm small</DropdownListItem>
+						<DropdownListItem size='lg'>i'm big</DropdownListItem>
+						<DropdownListItem gradient={true}>i'm 3d</DropdownListItem>
+						<DropdownListItem outlined={true}>i'm transparent</DropdownListItem>
+						<DropdownListItem>i'm controllable</DropdownListItem>
+						<DropdownListItem active={true}>i'm controllable</DropdownListItem>
+						<DropdownListItem actionCtrl={false}>
+							<TextInput placeholder='type here' enableValidation={false} />
+						</DropdownListItem>
+					</DropdownListButton>
+
 					<Buttongroup
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
@@ -364,6 +415,31 @@ function App() {
 						
 						press={press}
 					/>
+
+					<DropdownListButton
+						// popupPlacement='bottom'
+						
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled}
+						orientation={orientation}
+
+						buttonChildren='show menu'
+					>
+						<>hello</>
+						<DropdownListItem theme='danger'>i'm angry</DropdownListItem>
+						<DropdownListItem actionCtrl={false} theme='success'>i'm fine</DropdownListItem>
+						<DropdownListItem size='sm'>i'm small</DropdownListItem>
+						<DropdownListItem size='lg'>i'm big</DropdownListItem>
+						<DropdownListItem gradient={true}>i'm 3d</DropdownListItem>
+						<DropdownListItem outlined={true}>i'm transparent</DropdownListItem>
+						<DropdownListItem>i'm controllable</DropdownListItem>
+						<DropdownListItem active={true}>i'm controllable</DropdownListItem>
+						<DropdownListItem actionCtrl={false}>
+							<TextInput placeholder='type here' enableValidation={false} />
+						</DropdownListItem>
+					</DropdownListButton>
 
 					<Buttongroup
 						theme={theme} size={size} gradient={enableGrad}
