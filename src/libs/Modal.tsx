@@ -701,10 +701,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
             >
                 { footer }
                 <Button
-                    // accessibilities:
-                    text='Close'
-                    
-                    
                     // actions:
                     onClick={(e) => {
                         if (!e.defaultPrevented) {
@@ -712,7 +708,9 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
                             e.preventDefault();
                         } // if
                     }}
-                />
+                >
+                    Close
+                </Button>
             </p>
         );
         
