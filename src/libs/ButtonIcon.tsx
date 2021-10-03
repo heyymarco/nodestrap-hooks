@@ -270,6 +270,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
+export type IconPosition = 'start'|'end'
+
 export interface ButtonIconProps
     extends
         ButtonProps,
@@ -278,7 +280,8 @@ export interface ButtonIconProps
         SizeVariant
 {
     // appearances:
-    icon?: string
+    icon?         : string
+    iconPosition? : IconPosition
 }
 export function ButtonIcon(props: ButtonIconProps) {
     // styles:
@@ -290,6 +293,7 @@ export function ButtonIcon(props: ButtonIconProps) {
     const {
         // appearances:
         icon,
+        iconPosition = 'start',
         
         
         // accessibilities:
@@ -312,9 +316,10 @@ export function ButtonIcon(props: ButtonIconProps) {
             // classes:
             mainClass={props.mainClass ?? sheet.main}
         >
-            { icon && <Icon icon={icon} /> }
+            { icon && (iconPosition === 'start') && <Icon icon={icon} /> }
             { text }
             { children }
+            { icon && (iconPosition === 'end') && <Icon icon={icon} /> }
         </Button>
     );
 }
