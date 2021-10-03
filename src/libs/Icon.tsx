@@ -714,6 +714,9 @@ const config = {
             'busy.svg',
             'prev.svg',
             'next.svg',
+            'dropdown.svg',
+            'dropright.svg',
+            'dropleft.svg',
         ],
     },
 };
