@@ -271,17 +271,21 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 // react components:
 
 export type IconPosition = 'start'|'end'
-
-export interface ButtonIconProps
-    extends
-        ButtonProps,
-        
-        // layouts:
-        SizeVariant
+export interface IconProps
 {
     // appearances:
     icon?         : string
     iconPosition? : IconPosition
+}
+
+export interface ButtonIconProps
+    extends
+        ButtonProps,
+        IconProps,
+        
+        // layouts:
+        SizeVariant
+{
 }
 export function ButtonIcon(props: ButtonIconProps) {
     // styles:
@@ -292,8 +296,8 @@ export function ButtonIcon(props: ButtonIconProps) {
     // rest props:
     const {
         // appearances:
-        icon,
-        iconPosition = 'start',
+        icon,                   // from IconProps
+        iconPosition = 'start', // from IconProps
         
         
         // accessibilities:
