@@ -370,7 +370,6 @@ export interface ButtonProps
     
     // accessibilities:
     label?       : string
-    text?        : string
     
     
     // children:
@@ -400,7 +399,6 @@ export function Button(props: ButtonProps) {
         
         // accessibilities:
         label,
-        text,
         
         active,
     ...restProps} = props;
@@ -447,7 +445,6 @@ export function Button(props: ButtonProps) {
                 type    : typeFn,
             }}
         >
-            { text }
             { props.children }
         </ActionControl>
     );
