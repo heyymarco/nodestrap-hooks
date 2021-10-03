@@ -62,6 +62,10 @@ export interface DropdownListButtonProps<TCloseType = DropdownListCloseType>
         
         ButtonIconProps
 {
+    // layouts:
+    buttonOrientation? : OrientationName
+    
+    
     // accessibilities:
     label?          : string
     
@@ -90,12 +94,23 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
         
         
         // layouts:
-        orientation  = 'inline',
+        orientation       = 'block',
+        buttonOrientation = (orientation === 'inline') ? 'block' : 'inline',
         
         
         // appearances:
-        icon         = 'face', // from IconProps
-        iconPosition = 'end',  // from IconProps
+        icon         = (() => { // from IconProps
+            switch (orientation) {
+                // todo: detect LTR or RTL
+                case 'inline' :
+                    return 'dropright';
+                
+                case 'block'  :
+                default       :
+                    return 'dropdown';
+            } // switch
+        })(),
+        iconPosition = 'end',   // from IconProps
         
         
         // children:
@@ -139,7 +154,7 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
                 
                 
                 // layouts:
-                orientation={orientation}
+                orientation={buttonOrientation}
                 
                 
                 // appearances:
@@ -184,7 +199,7 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
                 
                 
                 // layouts:
-                orientation={(orientation === 'inline') ? 'block' : 'inline'}
+                orientation={orientation}
             >
                 { children }
             </DropdownList>
