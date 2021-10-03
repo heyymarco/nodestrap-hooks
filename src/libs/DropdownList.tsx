@@ -70,6 +70,10 @@ export interface DropdownListElementProps<TElement extends HTMLElement = HTMLEle
 export function DropdownListElement<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListElementProps<TElement, TCloseType>) {
     // rest props:
     const {
+        // accessibilities:
+        tabIndex = -1,
+        
+        
         // behaviors:
         actionCtrl = true,
         
@@ -93,6 +97,12 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
         <List
             // other props:
             {...restProps}
+            
+            
+            // accessibilities:
+            {...{
+                tabIndex,
+            }}
             
             
             // behaviors:
