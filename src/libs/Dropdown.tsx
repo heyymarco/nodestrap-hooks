@@ -320,7 +320,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     
     useEffect(() => {
         if (isVisible) {
-            childRef.current?.focus(); // when actived => focus the dropdown, so the user able to use [esc] key to close the dropdown
+            childRef.current?.focus({ preventScroll: true }); // when actived => focus the dropdown, so the user able to use [esc] key to close the dropdown
         } // if isVisible
     }, [isVisible]);
     
