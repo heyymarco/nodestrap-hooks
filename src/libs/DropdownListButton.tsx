@@ -41,7 +41,6 @@ import {
 }                           from './DropdownList'
 import {
     // react components:
-    IconProps,
     ButtonIconProps,
     ButtonIcon,
 }                           from './ButtonIcon'
@@ -56,12 +55,12 @@ export type { DropdownListCloseType }
 
 
 
-export interface DropdownListButtonProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
+export interface DropdownListButtonProps<TCloseType = DropdownListCloseType>
     extends
-        DropdownListProps<TElement, TCloseType>,
+        DropdownListProps<HTMLButtonElement, TCloseType>,
         TogglerActiveProps<TCloseType>,
-
-        IconProps
+        
+        ButtonIconProps
 {
     // accessibilities:
     label?          : string
@@ -70,7 +69,7 @@ export interface DropdownListButtonProps<TElement extends HTMLElement = HTMLElem
     // children:
     buttonChildren? : React.ReactNode
 }
-export function DropdownListButton<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListButtonProps<TElement, TCloseType>) {
+export function DropdownListButton<TCloseType = DropdownListCloseType>(props: DropdownListButtonProps<TCloseType>) {
     // states:
     const [isActive, setActive] = useTogglerActive(props);
     
@@ -78,6 +77,10 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
     
     // rest props:
     const {
+        // essentials:
+        elmRef,
+        
+        
         // accessibilities:
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
@@ -119,11 +122,12 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
         <>
             <ButtonIcon
                 // other props:
-                {...(restProps as ButtonIconProps)}
+                {...restProps}
                 
                 
                 // essentials:
                 elmRef={(elm) => {
+                    setElmRef(elmRef, elm);
                     setElmRef(buttonRef, elm);
                 }}
                 
@@ -158,7 +162,7 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                     } // if
                 }}
             />
-            <DropdownList
+            <DropdownList<HTMLElement, TCloseType>
                 // other props:
                 {...restProps}
                 
@@ -187,7 +191,7 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
         </>
     );
 }
-DropdownListButton.prototype = DropdownList.prototype; // mark as DropdownList compatible
+DropdownListButton.prototype = ButtonIcon.prototype; // mark as ButtonIcon compatible
 export { DropdownListButton as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }
