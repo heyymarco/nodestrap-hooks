@@ -827,7 +827,6 @@ export interface CheckProps
     
     // accessibilities:
     label?          : string
-    text?           : string
     
     
     // events:
@@ -867,7 +866,6 @@ export function Check(props: CheckProps) {
         
         // accessibilities:
         label,
-        text,
         
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
@@ -1015,12 +1013,9 @@ export function Check(props: CheckProps) {
                 }}
                 onClick={(e) => e.stopPropagation()} // prevents firing `change` event triggering parent's `onClick`
             />
-            { (text || props.children) &&
-                <span>
-                    { text }
-                    { props.children }
-                </span>
-            }
+            { props.children && <span>
+                { props.children }
+            </span> }
         </EditableActionControl>
     );
 }
