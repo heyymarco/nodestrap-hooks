@@ -40,6 +40,7 @@ import {
     
     // utilities:
     usesGeneralProps,
+    usesPrefixedProps,
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
@@ -70,10 +71,49 @@ import {
     CollapseProps,
     Collapse,
 }                           from './Collapse'
+import {
+    stripOutFocusableElement,
+}                           from './strip-outs'
 
 
 
 // styles:
+export const usesDropdownElementLayout = () => {
+    return composition([
+        imports([
+            // resets:
+            stripOutFocusableElement(), // clear browser's default styles
+        ]),
+        layout({
+            // layouts:
+            display : 'block',
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(usesPrefixedProps(cssProps, 'element')), // apply general cssProps starting with element***
+        }),
+    ]);
+};
+export const usesDropdownElement = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesDropdownElementLayout(),
+        ]),
+    ]);
+};
+
+export const useDropdownElementSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesDropdownElement(),
+        ]),
+    ]),
+]);
+
+
+
 export const usesDropdownLayout = () => {
     return composition([
         imports([
@@ -185,12 +225,41 @@ export interface DropdownElementProps<TElement extends HTMLElement = HTMLElement
         DropdownAction<TCloseType>,
         ElementProps<TElement>
 {
+    // accessibilities:
+    tabIndex? : number
 }
 export function DropdownElement<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>(props: DropdownElementProps<TElement, TCloseType>) {
+    // styles:
+    const sheet = useDropdownElementSheet();
+    
+    
+    
+    // rest props:
+    const {
+        // accessibilities:
+        tabIndex = -1,
+        
+        
+        // actions:
+        onActiveChange, // not implemented
+    ...restProps} = props;
+    
+    
+    
     return (
         <Element
             // other props:
-            {...props}
+            {...restProps}
+            
+            
+            // accessibilities:
+            {...{
+                tabIndex,
+            }}
+            
+            
+            // classes:
+            mainClass={props.mainClass ?? sheet.main}
         />
     );
 }
@@ -354,11 +423,8 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                     }}
                     
                     
-                    // Control props:
-                    {...{
-                        // accessibilities:
-                        tabIndex : tabIndex ?? -1,
-                    }}
+                    // accessibilities:
+                    tabIndex={tabIndex}
                     
                     
                     // events:
@@ -378,7 +444,36 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                     onActiveChange={(newActive, closeType) => onActiveChange?.(newActive, closeType)}
                 />
                 :
-                children
+                <DropdownElement<TElement, TCloseType>
+                    // essentials:
+                    elmRef={(elm) => {
+                        setElmRef(elmRef, elm);
+                        setElmRef(childRef, elm);
+                    }}
+                    
+                    
+                    // accessibilities:
+                    tabIndex={tabIndex}
+                    
+                    
+                    // events:
+                    onKeyUp={(e) => {
+                        // backwards:
+                        props.onKeyUp?.(e);
+                        
+                        
+                        
+                        if (!e.defaultPrevented) {
+                            if ((e.key === 'Escape') || (e.code === 'Escape')) {
+                                onActiveChange?.(false, 'shortcut' as unknown as TCloseType);
+                                e.preventDefault();
+                            } // if
+                        } // if
+                    }}
+                    onActiveChange={(newActive, closeType) => onActiveChange?.(newActive, closeType)}
+                >
+                    { children }
+                </DropdownElement>
             }
         </Collapse>
     );
