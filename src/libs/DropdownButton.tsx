@@ -48,10 +48,10 @@ export type { DropdownCloseType }
 
 export interface DropdownButtonProps<TCloseType = DropdownCloseType>
     extends
-        DropdownProps<HTMLButtonElement, TCloseType>,
+        ButtonIconProps,
         TogglerActiveProps<TCloseType>,
         
-        ButtonIconProps
+        DropdownProps<HTMLButtonElement, TCloseType>
 {
     // layouts:
     buttonOrientation? : OrientationName
