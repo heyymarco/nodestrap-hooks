@@ -83,11 +83,16 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
         
-        // appearances:
-        icon = 'face',        // from IconProps
-        iconPosition = 'end', // from IconProps
-        
         label,
+        
+        
+        // layouts:
+        orientation  = 'inline',
+        
+        
+        // appearances:
+        icon         = 'face', // from IconProps
+        iconPosition = 'end',  // from IconProps
         
         
         // children:
@@ -129,6 +134,10 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                 }}
                 
                 
+                // layouts:
+                orientation={orientation}
+                
+                
                 // appearances:
                 {...{
                     icon,
@@ -168,6 +177,10 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                         setActive(newActive);
                     } // if
                 }}
+                
+                
+                // layouts:
+                orientation={(orientation === 'inline') ? 'block' : 'inline'}
             >
                 { children }
             </DropdownList>
