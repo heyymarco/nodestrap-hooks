@@ -16,6 +16,7 @@ import {
     
     // react components:
     ButtonType,
+    IconPosition,
     ButtonIconProps,
     ButtonIcon,
 }                           from './ButtonIcon'
@@ -23,6 +24,8 @@ import {
 
 
 // react components:
+
+export type { IconPosition }
 
 export interface CloseButtonProps
     extends
