@@ -278,7 +278,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             
             
             // `targetRef` is dropdown friend, so focus on `targetRef` is considered not to lose focus on dropdown:
-            if (focusedTarget === targetRef?.current) return; 
+            if ((focusedTarget instanceof HTMLElement) && targetRef?.current && isSelfOrDescendantOf(focusedTarget, targetRef?.current)) return;
             
             
             
