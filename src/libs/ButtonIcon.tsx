@@ -300,10 +300,6 @@ export function ButtonIcon(props: ButtonIconProps) {
         iconPosition = 'start', // from IconProps
         
         
-        // accessibilities:
-        text,
-        
-        
         // children:
         children,
     ...restProps} = props;
@@ -321,7 +317,6 @@ export function ButtonIcon(props: ButtonIconProps) {
             mainClass={props.mainClass ?? sheet.main}
         >
             { icon && (iconPosition === 'start') && <Icon icon={icon} /> }
-            { text }
             { children }
             { icon && (iconPosition === 'end') && <Icon icon={icon} /> }
         </Button>
