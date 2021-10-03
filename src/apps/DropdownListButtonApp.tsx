@@ -63,7 +63,7 @@ function App() {
 						setActive(newActive);
 					}}
 
-					text='show menu'
+					buttonChildren='show menu'
 				>
 					<>hello</>
 					<DropdownListItem enabled={childEnabled}>
@@ -95,7 +95,7 @@ function App() {
 					enabled={enabled} actionCtrl={actionCtrl}
 					orientation={orientation}
 
-					text='show menu'
+					buttonChildren='show menu'
 				>
 					<>hello</>
 					<DropdownListItem enabled={childEnabled}>

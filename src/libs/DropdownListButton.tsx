@@ -41,9 +41,10 @@ import {
 }                           from './DropdownList'
 import {
     // react components:
-    ButtonProps,
-    Button,
-}                           from './Button'
+    IconProps,
+    ButtonIconProps,
+    ButtonIcon,
+}                           from './ButtonIcon'
 
 
 
@@ -58,11 +59,12 @@ export type { DropdownListCloseType }
 export interface DropdownListButtonProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
     extends
         DropdownListProps<TElement, TCloseType>,
-        TogglerActiveProps<TCloseType>
+        TogglerActiveProps<TCloseType>,
+
+        IconProps
 {
     // accessibilities:
     label?          : string
-    text?           : string
     
     
     // children:
@@ -81,8 +83,11 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
         
+        // appearances:
+        icon = 'face',        // from IconProps
+        iconPosition = 'end', // from IconProps
+        
         label,
-        text,
         
         
         // children:
@@ -107,9 +112,9 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
     // jsx:
     return (
         <>
-            <Button
+            <ButtonIcon
                 // other props:
-                {...(restProps as ButtonProps)}
+                {...(restProps as ButtonIconProps)}
                 
                 
                 // essentials:
@@ -121,7 +126,13 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                 // accessibilities:
                 {...{
                     label,
-                    text,
+                }}
+                
+                
+                // appearances:
+                {...{
+                    icon,
+                    iconPosition,
                 }}
                 
                 
