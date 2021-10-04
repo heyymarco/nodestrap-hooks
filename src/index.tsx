@@ -50,14 +50,14 @@ import reportWebVitals from './reportWebVitals';
 //     import MasonryApp                               from './apps/MasonryApp';
 //     import CarouselApp                              from './apps/CarouselApp';
 //     import NavbarApp                                from './apps/NavbarApp';
-    import ButtongroupApp                           from './apps/ButtongroupApp';
+    import GroupApp                                 from './apps/GroupApp';
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ButtongroupApp />
+    <GroupApp />
     ,
     document.getElementById('root')
 );

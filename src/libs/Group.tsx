@@ -27,6 +27,11 @@ import {
     
     
     
+    // react components:
+    ElementProps,
+    
+    
+    
     // utilities:
     isTypeOf,
 }                           from './react-cssfn' // cssfn for react
@@ -67,21 +72,25 @@ import {
 }                           from './List'
 import {
     // react components:
-    Button,
-}                           from './Button'
+    VisuallyHidden,
+}                           from './VisuallyHidden'
 import {
     // react components:
-    Check,
-}                           from './Check'
+    Popup,
+}                           from './Popup'
 import {
     // react components:
-    Radio,
-}                           from './Radio'
+    Collapse,
+}                           from './Collapse'
+import {
+    // react components:
+    Dropdown,
+}                           from './Dropdown'
 
 
 
 // styles:
-export const usesButtongroupItemLayout = () => {
+export const usesGroupItemLayout = () => {
     return composition([
         layout({
             // no layout modification needed.
@@ -100,7 +109,7 @@ export const usesButtongroupItemLayout = () => {
         }),
     ]);
 };
-export const usesButtongroupItemVariants = () => {
+export const usesGroupItemVariants = () => {
     // dependencies:
     
     // layouts:
@@ -123,26 +132,26 @@ export const usesButtongroupItemVariants = () => {
         ]),
     ]);
 };
-export const usesButtongroupItem = () => {
+export const usesGroupItem = () => {
     return composition([
         variants([
-            rule('&&', [ // makes `.ButtongroupItem` is more specific than `.FooButton.FooVariant`
+            rule('&&', [ // makes `.GroupItem` is more specific than `.FooButton.FooVariant`
                 imports([
                     // layouts:
-                    usesButtongroupItemLayout(),
+                    usesGroupItemLayout(),
                     
                     // variants:
-                    usesButtongroupItemVariants(),
+                    usesGroupItemVariants(),
                 ]),
             ]),
         ]),
     ]);
 };
 
-export const useButtongroupItemSheet = createUseSheet(() => [
+export const useGroupItemSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesButtongroupItem(),
+            usesGroupItem(),
         ]),
     ]),
 ]);
@@ -160,13 +169,13 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-interface ButtongroupItemProps
+interface GroupItemProps
 {
     children: React.ReactNode
 }
-function ButtongroupItem(props: ButtongroupItemProps) {
+function GroupItem(props: GroupItemProps) {
     // styles:
-    const sheet = useButtongroupItemSheet();
+    const sheet = useGroupItemSheet();
     
     
     
@@ -174,7 +183,20 @@ function ButtongroupItem(props: ButtongroupItemProps) {
     return (
         <>
             {((child): React.ReactNode => {
-                if (isTypeOf(child, Button)) {
+                // excludes hidden element:
+                if (isTypeOf(child, VisuallyHidden)) return child;
+                
+                
+                
+                // overlayed element:
+                if (isTypeOf(child, Popup))    return child;
+                if (isTypeOf(child, Collapse)) return child;
+                if (isTypeOf(child, Dropdown)) return child;
+                
+                
+                
+                // React element:
+                if (React.isValidElement<ElementProps>(child)) {
                     return (
                         <child.type
                             // other props:
@@ -183,7 +205,7 @@ function ButtongroupItem(props: ButtongroupItemProps) {
                             
                             // classes:
                             classes={[...(child.props.classes ?? []),
-                                sheet.main, // inject ButtongroupItem class
+                                sheet.main, // inject GroupItem class
                             ]}
                         />
                     );
@@ -191,57 +213,24 @@ function ButtongroupItem(props: ButtongroupItemProps) {
                 
                 
                 
-                if ((isTypeOf(child, Check) || isTypeOf(child, Radio)) && (child.props.checkStyle?.toLowerCase().endsWith('btn') || child.type.name.includes('Button'))) {
-                    return (
-                        <child.type
-                            // other props:
-                            {...child.props}
-                            
-                            
-                            // classes:
-                            classes={[...(child.props.classes ?? []),
-                                sheet.main, // inject ButtongroupItem class
-                            ]}
-                        />
-                    );
-                } // if
-                
-                
-                
-                if (isTypeOf(child, Buttongroup)) {
-                    return (
-                        <child.type
-                            // other props:
-                            {...child.props}
-                            
-                            
-                            // classes:
-                            classes={[...(child.props.classes ?? []),
-                                sheet.main, // inject ButtongroupItem class
-                            ]}
-                        />
-                    );
-                } // if
-                
-                
-                
+                // unknown element or text or null:
                 return child;
             })(props.children)}
         </>
     );
 }
-ButtongroupItem.prototype = ListItem.prototype; // mark as ListItem compatible
+GroupItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 
 
-export interface ButtongroupProps<TElement extends HTMLElement = HTMLElement>
+export interface GroupProps<TElement extends HTMLElement = HTMLElement>
     extends
         ListProps<TElement>
 {
     // accessibilities:
     label?       : string
 }
-export function Buttongroup<TElement extends HTMLElement = HTMLElement>(props: ButtongroupProps<TElement>) {
+export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupProps<TElement>) {
     // rest props:
     const {
         // accessibilities:
@@ -275,18 +264,18 @@ export function Buttongroup<TElement extends HTMLElement = HTMLElement>(props: B
             mild={props.mild ?? false}
         >
             {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
-                <ButtongroupItem
+                <GroupItem
                     // essentials:
                     key={index}
                 >
                     { child }
-                </ButtongroupItem>
+                </GroupItem>
             ))}
         </List>
     );
 }
-Buttongroup.prototype = List.prototype; // mark as List compatible
-export { Buttongroup as default }
+Group.prototype = List.prototype; // mark as List compatible
+export { Group as default }
 
 export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
