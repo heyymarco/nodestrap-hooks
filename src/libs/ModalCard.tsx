@@ -559,7 +559,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         overlayAnimPassive          : [['500ms', 'ease-out', 'both', keyframesOverlayPassive]],
         //#endregion animations
     };
-}, { prefix: 'mdl' });
+}, { prefix: 'mdlcrd' });
 
 
 
