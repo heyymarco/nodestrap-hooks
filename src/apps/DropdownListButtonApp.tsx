@@ -9,7 +9,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Button   from '../libs/Button';
 import {TextInput}   from '../libs/Input';
 import DropdownListButton, {DropdownListItem, OrientationName} from '../libs/DropdownListButton';

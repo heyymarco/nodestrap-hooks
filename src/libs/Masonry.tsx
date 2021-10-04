@@ -51,7 +51,7 @@ import {
     isOrientationInline,
     OrientationVariant,
     useOrientationVariant,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // styles:
     usesContentLayout,

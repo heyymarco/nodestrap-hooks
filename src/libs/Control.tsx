@@ -56,9 +56,9 @@ import {
     usesSizeVariant,
     ThemeName,
     usesThemeVariant,
-    usesThemeDefault as basicComponentUsesThemeDefault,
+    usesThemeDefault as basicUsesThemeDefault,
     usesAnim,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     isDisable,
@@ -106,7 +106,7 @@ export const markActive = () => composition([
 ]);
 
 // change default parameter from `null` to 'secondary':
-export const usesThemeDefault = (themeName: ThemeName|null = 'secondary') => basicComponentUsesThemeDefault(themeName);
+export const usesThemeDefault = (themeName: ThemeName|null = 'secondary') => basicUsesThemeDefault(themeName);
 
 // change default parameter from 'secondary' to 'primary':
 export const usesThemeActive  = (themeName: ThemeName|null = 'primary') => indicatorUsesThemeActive(themeName);

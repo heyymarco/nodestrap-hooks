@@ -9,8 +9,8 @@ import {
 import {
 	ThemeName,
 	SizeName,
-	BasicComponent,
-} from '../libs/BasicComponent';
+	Basic,
+} from '../libs/Basic';
 
 
 
@@ -30,12 +30,12 @@ function App() {
     return (
         <div className="App">
             <div>
-                <BasicComponent
+                <Basic
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 				>
                     basic component
-                </BasicComponent>
+                </Basic>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

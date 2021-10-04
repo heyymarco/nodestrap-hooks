@@ -8,7 +8,7 @@ import {
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Form from '../libs/Form';
 import Input from '../libs/Input';
 

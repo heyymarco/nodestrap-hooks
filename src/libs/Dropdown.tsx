@@ -47,7 +47,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     useActivePassiveState,

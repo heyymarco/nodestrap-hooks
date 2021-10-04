@@ -46,15 +46,15 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
+    usesBasicLayout,
+    usesBasicVariants,
     
     
     
     // react components:
-    BasicComponentProps,
-    BasicComponent,
-}                           from './BasicComponent'
+    BasicProps,
+    Basic,
+}                           from './Basic'
 import {
     breakpoints,
     isScreenWidthAtLeast,
@@ -102,7 +102,7 @@ export const usesResponsiveContainerGridLayout = () => composition([
 export const usesContainerLayout = () => composition([
     imports([
         // layouts:
-        usesBasicComponentLayout(),
+        usesBasicLayout(),
         usesResponsiveContainerLayout(),
     ]),
     layout({
@@ -118,7 +118,7 @@ export const usesContainerLayout = () => composition([
 export const usesContainerVariants = () => composition([
     imports([
         // variants:
-        usesBasicComponentVariants(),
+        usesBasicVariants(),
     ]),
 ]);
 export const usesContainer = () => composition([
@@ -145,8 +145,8 @@ export const useContainerSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region borders
-        borderWidth  : 0, // strip out BasicComponent's border
-        borderRadius : 0, // strip out BasicComponent's borderRadius
+        borderWidth  : 0, // strip out Basic's border
+        borderRadius : 0, // strip out Basic's borderRadius
         //#endregion borders
         
         
@@ -200,7 +200,7 @@ createSheet(() => [
 
 export interface ContainerProps<TElement extends HTMLElement = HTMLElement>
     extends
-        BasicComponentProps<TElement>
+        BasicProps<TElement>
 {
     // children:
     children? : React.ReactNode
@@ -213,7 +213,7 @@ export function Container<TElement extends HTMLElement = HTMLElement>(props: Con
     
     // jsx:
     return (
-        <BasicComponent<TElement>
+        <Basic<TElement>
             // other props:
             {...props}
             

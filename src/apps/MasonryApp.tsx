@@ -10,7 +10,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Masonry from '../libs/Masonry';
 import type * as Masonries from '../libs/Masonry';
 

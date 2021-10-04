@@ -52,7 +52,7 @@ import {
     outlinedOf,
     usesMildVariant,
     usesForeg,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     isActive,

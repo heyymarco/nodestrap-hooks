@@ -63,28 +63,28 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    SizeName        as BasicComponentSizeName,
-    isSize          as basicComponentIsSize,
-    usesSizeVariant as basicComponentUsesSizeVariant,
-    SizeVariant     as BasicComponentSizeVariant,
-    useSizeVariant  as basicComponentUseSizeVariant,
+    SizeName        as BasicSizeName,
+    isSize          as basicIsSize,
+    usesSizeVariant as basicUsesSizeVariant,
+    SizeVariant     as BasicSizeVariant,
+    useSizeVariant  as basicUseSizeVariant,
     
     ThemeName,
-    usesThemeVariant      as basicComponentUsesThemeVariant,
+    usesThemeVariant      as basicUsesThemeVariant,
     ThemeVariant,
     useThemeVariant,
     
-    usesMildVariant        as basicComponentUsesMildVariant,
+    usesMildVariant        as basicUsesMildVariant,
     MildVariant,
     useMildVariant,
     
-    usesForeg       as basicComponentUsesForeg,
+    usesForeg       as basicUsesForeg,
     
     
     
     // configs:
     cssProps as bcssProps,
-}                           from './BasicComponent'
+}                           from './Basic'
 import fontItems            from './Icon-font-material'
 
 
@@ -96,7 +96,7 @@ import fontItems            from './Icon-font-material'
 //#region sizes
 export type SizeName = 'sm'|'nm'|'md'|'lg'|'1em' | string
 
-export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicComponentIsSize(sizeName as BasicComponentSizeName, styles);
+export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSize(sizeName as BasicSizeName, styles);
 
 /**
  * Uses basic sizes.  
@@ -107,7 +107,7 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicComp
  */
 export const usesSizeVariant = (sizeOverwrite?: Cust.Ref, factory = sizeOf, options = sizeOptions()) => {
     // dependencies:
-    const [sizes, sizeRefs, sizeDecls, ...restSizes] = basicComponentUsesSizeVariant(factory, options as BasicComponentSizeName[]);
+    const [sizes, sizeRefs, sizeDecls, ...restSizes] = basicUsesSizeVariant(factory, options as BasicSizeName[]);
     
     
     
@@ -142,7 +142,7 @@ export const sizeOptions = (): SizeName[] => ['sm', 'nm', 'md', 'lg', '1em'];
 export interface SizeVariant {
     size?: SizeName
 }
-export const useSizeVariant = (props: SizeVariant) => basicComponentUseSizeVariant(props as BasicComponentSizeVariant);
+export const useSizeVariant = (props: SizeVariant) => basicUseSizeVariant(props as BasicSizeVariant);
 //#endregion sizes
 
 
@@ -158,7 +158,7 @@ export const useSizeVariant = (props: SizeVariant) => basicComponentUseSizeVaria
  */
 export const usesThemeVariant = (factory?: Factory<StyleCollection>, options?: ThemeName[]) => {
     // dependencies:
-    const [themes, themeRefs, themeDecls, ...restThemes] = basicComponentUsesThemeVariant(factory, options);
+    const [themes, themeRefs, themeDecls, ...restThemes] = basicUsesThemeVariant(factory, options);
     
     
     
@@ -196,7 +196,7 @@ export const usesThemeVariant = (factory?: Factory<StyleCollection>, options?: T
  */
 export const usesMildVariant = (factory?: Factory<StyleCollection>) => {
     // dependencies:
-    const [mild, mildRefs , mildDecls, ...restMild] = basicComponentUsesMildVariant(factory);
+    const [mild, mildRefs , mildDecls, ...restMild] = basicUsesMildVariant(factory);
     const [    , themeRefs                        ] = usesThemeVariant();
     
     
@@ -234,7 +234,7 @@ export const usesMildVariant = (factory?: Factory<StyleCollection>) => {
  */
 export const usesForeg = (foregOverwrite?: Cust.Ref) => {
     // dependencies:
-    const [foreg, foregRefs, foregDecls, ...restForeg] = basicComponentUsesForeg();
+    const [foreg, foregRefs, foregDecls, ...restForeg] = basicUsesForeg();
     const [     , themeRefs                          ] = usesThemeVariant();
     const [     , mildRefs                           ] = usesMildVariant();
     

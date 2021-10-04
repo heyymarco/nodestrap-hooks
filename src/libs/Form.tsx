@@ -47,15 +47,15 @@ import {
     
     
     // styles:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
+    usesBasicLayout,
+    usesBasicVariants,
     
     
     
     // react components:
-    BasicComponentProps,
-    BasicComponent,
-}                           from './BasicComponent'
+    BasicProps,
+    Basic,
+}                           from './Basic'
 import {
     // styles:
     usesContentLayout,
@@ -159,7 +159,7 @@ export const usesFormLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
+            usesBasicLayout(),
             usesContentLayout(),
         ]),
         layout({
@@ -184,7 +184,7 @@ export const usesFormVariants = () => {
     return composition([
         imports([
             // variants:
-            usesBasicComponentVariants(),
+            usesBasicVariants(),
             usesContentVariants(),
             
             // layouts:
@@ -257,7 +257,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface FormProps
     extends
-        BasicComponentProps<HTMLFormElement>,
+        BasicProps<HTMLFormElement>,
         React.FormHTMLAttributes<HTMLFormElement>,
         
         ValidationProps
@@ -288,7 +288,7 @@ export function Form(props: FormProps) {
     
     // jsx:
     return (
-        <BasicComponent<HTMLFormElement>
+        <Basic<HTMLFormElement>
             // other props:
             {...props}
             
@@ -340,7 +340,7 @@ export function Form(props: FormProps) {
             { props.children && <ValidationProvider {...propValidation}>
                 { props.children }
             </ValidationProvider> }
-        </BasicComponent>
+        </Basic>
     );
 }
 export { Form as default }

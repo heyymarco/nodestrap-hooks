@@ -36,15 +36,15 @@ import {
     
     
     // styles:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
+    usesBasicLayout,
+    usesBasicVariants,
     
     
     
     // react components:
-    BasicComponentProps,
-    BasicComponent,
-}                           from './BasicComponent'
+    BasicProps,
+    Basic,
+}                           from './Basic'
 import spacers              from './spacers'     // configurable spaces defs
 
 
@@ -54,7 +54,7 @@ export const usesContentLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
+            usesBasicLayout(),
         ]),
         layout({
             // customize:
@@ -78,7 +78,7 @@ export const usesContentVariants = () => {
     return composition([
         imports([
             // variants:
-            usesBasicComponentVariants(),
+            usesBasicVariants(),
             
             // layouts:
             sizes(),
@@ -111,12 +111,12 @@ export const useContentSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region spacings
-        paddingInline        : spacers.default, // override to BasicComponent
-        paddingBlock         : spacers.default, // override to BasicComponent
-        paddingInlineSm      : spacers.sm,      // override to BasicComponent
-        paddingBlockSm       : spacers.sm,      // override to BasicComponent
-        paddingInlineLg      : spacers.lg,      // override to BasicComponent
-        paddingBlockLg       : spacers.lg,      // override to BasicComponent
+        paddingInline        : spacers.default, // override to Basic
+        paddingBlock         : spacers.default, // override to Basic
+        paddingInlineSm      : spacers.sm,      // override to Basic
+        paddingBlockSm       : spacers.sm,      // override to Basic
+        paddingInlineLg      : spacers.lg,      // override to Basic
+        paddingBlockLg       : spacers.lg,      // override to Basic
         //#endregion spacings
     };
 }, { prefix: 'ct' });
@@ -127,7 +127,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface ContentProps<TElement extends HTMLElement = HTMLElement>
     extends
-        BasicComponentProps<TElement>
+        BasicProps<TElement>
 {
     // children:
     children? : React.ReactNode
@@ -140,7 +140,7 @@ export function Content<TElement extends HTMLElement = HTMLElement>(props: Conte
     
     // jsx:
     return (
-        <BasicComponent<TElement>
+        <Basic<TElement>
             // other props:
             {...props}
 

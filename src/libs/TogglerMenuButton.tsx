@@ -55,7 +55,7 @@ import {
     
     // configs:
     cssDecls as bcssDecls,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     isActived,

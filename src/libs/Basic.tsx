@@ -1036,7 +1036,7 @@ export const usesAnim = () => {
 
 
 // styles:
-export const usesBasicComponentLayout = () => {
+export const usesBasicLayout = () => {
     // dependencies:
     
     // colors:
@@ -1090,7 +1090,7 @@ export const usesBasicComponentLayout = () => {
         }),
     ]);
 };
-export const usesBasicComponentVariants = () => {
+export const usesBasicVariants = () => {
     // dependencies:
     
     // layouts:
@@ -1117,22 +1117,22 @@ export const usesBasicComponentVariants = () => {
         ]),
     ]);
 };
-export const usesBasicComponent = () => {
+export const usesBasic = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
+            usesBasicLayout(),
             
             // variants:
-            usesBasicComponentVariants(),
+            usesBasicVariants(),
         ]),
     ]);
 };
 
-export const useBasicComponentSheet = createUseSheet(() => [
+export const useBasicSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesBasicComponent(),
+            usesBasic(),
         ]),
     ]),
 ]);
@@ -1234,7 +1234,7 @@ propsManager.registerAnim(cssProps.anim);
 
 // react components:
 
-export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
+export interface BasicProps<TElement extends HTMLElement = HTMLElement>
     extends
         ElementProps<TElement>,
         
@@ -1250,9 +1250,9 @@ export interface BasicComponentProps<TElement extends HTMLElement = HTMLElement>
         MildVariant
 {
 }
-export function BasicComponent<TElement extends HTMLElement = HTMLElement>(props: BasicComponentProps<TElement>) {
+export function Basic<TElement extends HTMLElement = HTMLElement>(props: BasicProps<TElement>) {
     // styles:
-    const sheet           = useBasicComponentSheet();
+    const sheet           = useBasicSheet();
     
     
     
@@ -1287,4 +1287,4 @@ export function BasicComponent<TElement extends HTMLElement = HTMLElement>(props
         />
     );
 }
-export { BasicComponent as default }
+export { Basic as default }

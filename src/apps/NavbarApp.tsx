@@ -6,11 +6,11 @@ import {
 }                          from 'react';
 
 import Container from '../libs/Container';
-import BasicComponent   from '../libs/BasicComponent';
+import Basic   from '../libs/Basic';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 // import ButtonIcon   from '../libs/ButtonIcon';
@@ -70,12 +70,12 @@ function App() {
 				<NavbarMenu gradient={true}>i'm 3d</NavbarMenu>
 			</Navbar>
             <Container>
-                <BasicComponent
+                <Basic
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
 				>
                         test
-                </BasicComponent>
+                </Basic>
                 <Indicator
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}

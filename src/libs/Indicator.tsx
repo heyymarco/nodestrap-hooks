@@ -68,15 +68,15 @@ import {
     
     
     // styles:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
+    usesBasicLayout,
+    usesBasicVariants,
     
     
     
     // react components:
-    BasicComponentProps,
-    BasicComponent,
-}                           from './BasicComponent'
+    BasicProps,
+    Basic,
+}                           from './Basic'
 import {
     // hooks:
     TAccessibility,
@@ -520,7 +520,7 @@ export const usesIndicatorLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
+            usesBasicLayout(),
         ]),
         layout({
             // customize:
@@ -544,7 +544,7 @@ export const usesIndicatorVariants = () => {
     return composition([
         imports([
             // variants:
-            usesBasicComponentVariants(),
+            usesBasicVariants(),
             
             // layouts:
             sizes(),
@@ -689,7 +689,7 @@ export interface IndicationProps
 }
 export interface IndicatorProps<TElement extends HTMLElement = HTMLElement>
     extends
-        BasicComponentProps<TElement>,
+        BasicProps<TElement>,
 
         IndicationProps
 {
@@ -713,7 +713,7 @@ export function Indicator<TElement extends HTMLElement = HTMLElement>(props: Ind
     
     // jsx:
     return (
-        <BasicComponent<TElement>
+        <Basic<TElement>
             // other props:
             {...props}
             
@@ -758,7 +758,7 @@ export function Indicator<TElement extends HTMLElement = HTMLElement>(props: Ind
             { props.children && <AccessibilityProvider {...propAccess}>
                 { props.children }
             </AccessibilityProvider> }
-        </BasicComponent>
+        </Basic>
     );
 }
 export { Indicator as default }

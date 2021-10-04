@@ -10,7 +10,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Button from '../libs/Button';
 import Popup from '../libs/Popup';
 

@@ -45,15 +45,15 @@ import {
     
     
     // styles:
-    usesBasicComponentLayout,
-    usesBasicComponentVariants,
+    usesBasicLayout,
+    usesBasicVariants,
     
     
     
     // react components:
-    BasicComponentProps,
-    BasicComponent,
-}                           from './BasicComponent'
+    BasicProps,
+    Basic,
+}                           from './Basic'
 import {
     // styles:
     usesContentLayout,
@@ -87,7 +87,7 @@ export const usesLabelLayout = () => {
     return composition([
         imports([
             // layouts:
-            usesBasicComponentLayout(),
+            usesBasicLayout(),
             
             // colors:
             usesThemeDefault(),
@@ -135,7 +135,7 @@ export const usesLabelVariants = () => {
     return composition([
         imports([
             // variants:
-            usesBasicComponentVariants(),
+            usesBasicVariants(),
             
             // layouts:
             sizes(),
@@ -186,7 +186,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface LabelProps<TElement extends HTMLElement = HTMLElement>
     extends
-        BasicComponentProps<TElement>,
+        BasicProps<TElement>,
         
         // layouts:
         NudeVariant,
@@ -211,7 +211,7 @@ export function Label<TElement extends HTMLElement = HTMLElement>(props: LabelPr
     
     // jsx:
     return (
-        <BasicComponent<TElement>
+        <Basic<TElement>
             // other props:
             {...props}
             

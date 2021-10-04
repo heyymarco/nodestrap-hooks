@@ -54,7 +54,7 @@ import {
     isMild,
     mildOf,
     usesForeg,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     isActive,

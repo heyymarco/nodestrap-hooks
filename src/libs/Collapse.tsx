@@ -46,7 +46,7 @@ import {
     OrientationName,
     OrientationVariant,
     useOrientationVariant,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     isActived,

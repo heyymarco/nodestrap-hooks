@@ -9,8 +9,8 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-	BasicComponent,
-} from '../libs/BasicComponent';
+	Basic,
+} from '../libs/Basic';
 import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 import Icon from '../libs/Icon';
@@ -37,7 +37,7 @@ function App() {
     return (
         <div className="App">
             <Container>
-                <BasicComponent
+                <Basic
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 				>
@@ -46,7 +46,7 @@ function App() {
 					<Icon icon='face' theme={theme} size={size} mild={mild} />
 					<Icon icon='instagram' 				 size={size} mild={mild} />
 					<Icon icon='instagram' theme={theme} size={size} mild={mild} />
-                </BasicComponent>
+                </Basic>
                 <Indicator
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}

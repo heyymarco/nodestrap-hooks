@@ -9,7 +9,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import {ListItem} from '../libs/List';
 import Accordion, {AccordionItem} from '../libs/Accordion';
 import type * as Accordions from '../libs/Accordion';

@@ -12,7 +12,7 @@ import type {
     // hooks:
     OrientationName,
     OrientationVariant,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     TogglerActiveProps,

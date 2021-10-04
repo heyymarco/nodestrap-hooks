@@ -32,7 +32,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // general types:
     PopupPlacement,

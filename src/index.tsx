@@ -13,7 +13,7 @@ import reportWebVitals from './reportWebVitals';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
-// import BasicComponentApp                            from './apps/BasicComponentApp';
+// import BasicApp                                     from './apps/BasicApp';
 //     import LabelApp                                 from './apps/LabelApp';
 //     import ContentApp                               from './apps/ContentApp';
 //     import ContainerApp                             from './apps/ContainerApp';

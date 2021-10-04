@@ -9,7 +9,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Nav, {Item, NextItem, PrevItem} from '../libs/Nav';
 import type * as Navs from '../libs/Nav';
 

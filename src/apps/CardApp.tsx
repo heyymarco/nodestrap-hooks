@@ -9,8 +9,8 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
-import BasicComponent   from '../libs/BasicComponent';
+} 					from '../libs/Basic';
+import Basic   from '../libs/Basic';
 import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 import Card from '../libs/Card';
@@ -42,12 +42,12 @@ function App() {
     return (
         <div className="App">
             <Container>
-                <BasicComponent
+                <Basic
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 				>
                         test
-                </BasicComponent>
+                </Basic>
                 <Content
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}

@@ -6,11 +6,11 @@ import {
 }                          from 'react';
 
 import Container from '../libs/Container';
-import BasicComponent   from '../libs/BasicComponent';
+import Basic   from '../libs/Basic';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 // import Button from '../libs/Button';
 // import ButtonIcon from '../libs/ButtonIcon';
 import Carousel, { CarouselItem } from '../libs/Carousel';
@@ -32,12 +32,12 @@ function App() {
     return (
         <div className="App">
             <Container>
-                <BasicComponent
+                <Basic
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined}
 				>
                         test
-                </BasicComponent>
+                </Basic>
 				<Carousel theme={theme} size={size} gradient={enableGrad} outlined={outlined}
 				>
 					<CarouselItem><img src='https://picsum.photos/400/600' alt='' /></CarouselItem>

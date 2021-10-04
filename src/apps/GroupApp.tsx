@@ -7,9 +7,10 @@ import {
 
 import Container 		from '../libs/Container';
 import {
+	Basic,
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import {
 	Button,
 	ButtonStyle,
@@ -539,17 +540,23 @@ function App() {
 					>
 						check btn
 					</Check>
-                    <Check
+					<Basic
 						theme={theme} size={size} gradient={enableGrad}
-						outlined={outlined} mild={mild}
+						outlined={outlined} mild={!mild}
+						style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+					>
+						<Check
+							theme={theme} size={size} gradient={enableGrad}
+							outlined={outlined} mild={mild}
 
-						enabled={enabled} active={active} enableValidation={false}
+							enabled={enabled} active={active} enableValidation={false}
 
-						arrive={arrive}
-						focus={focus}
-						
-						press={press}
-					/>
+							arrive={arrive}
+							focus={focus}
+							
+							press={press}
+						/>
+					</Basic>
                     <TogglerMenuButton
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}

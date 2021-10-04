@@ -42,7 +42,7 @@ import {
     // hooks:
     usesSizeVariant,
     noNude,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // general types:
     PopupPlacement,

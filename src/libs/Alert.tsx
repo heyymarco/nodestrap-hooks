@@ -44,7 +44,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // styles:
     usesContentLayout,

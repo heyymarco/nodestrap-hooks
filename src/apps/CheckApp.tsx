@@ -9,7 +9,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Check, * as Checks   from '../libs/Check';
 import EditableControl from '../libs/EditableControl';
 import ActionControl from '../libs/ActionControl';

@@ -69,7 +69,7 @@ import {
     
     // configs:
     cssDecls as bcssDecls,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // styles:
     usesResponsiveContainerGridLayout,
@@ -219,7 +219,7 @@ export const usesCard = () => {
         rcssDecls, // Card
         ccssDecls, // Content
         icssDecls, // Indicator
-        bcssDecls, // BasicComponent
+        bcssDecls, // Basic
     );
     
     

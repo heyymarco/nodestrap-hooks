@@ -48,7 +48,7 @@ import {
     usesNudeVariant,
     NudeVariant,
     useNudeVariant,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     usesEnableDisableState,

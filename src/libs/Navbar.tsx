@@ -76,7 +76,7 @@ import {
     
     // configs:
     cssProps as bcssProps,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // styles:
     usesContainerLayout,
@@ -881,8 +881,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         //#region spacings
-        paddingInline             : ccssProps.paddingInline, // override to BasicComponent
-        paddingBlock              : bcssProps.paddingBlock,  // override to BasicComponent
+        paddingInline             : ccssProps.paddingInline, // override to Basic
+        paddingBlock              : bcssProps.paddingBlock,  // override to Basic
         
         gapInline                 : bcssProps.paddingInline,
         gapBlock                  : bcssProps.paddingBlock,

@@ -76,7 +76,7 @@ import {
     
     // configs:
     cssProps as bcssProps,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     isActive,

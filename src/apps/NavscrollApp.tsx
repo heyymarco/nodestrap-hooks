@@ -11,7 +11,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Navscroll, {NavscrollItem} from '../libs/Navscroll';
 import type * as Navscrolls from '../libs/Navscroll';
 

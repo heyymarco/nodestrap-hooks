@@ -8,7 +8,7 @@ import {
 import type {
 	ThemeName,
 	SizeName,
-} from '../libs/BasicComponent';
+} from '../libs/Basic';
 import Container from '../libs/Container';
 
 

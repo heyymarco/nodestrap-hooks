@@ -67,7 +67,7 @@ import {
     usesForeg,
     usesBackg,
     usesAnim,
-}                           from './BasicComponent'
+}                           from './Basic'
 import {
     // hooks:
     isActive,

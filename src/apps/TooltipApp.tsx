@@ -10,7 +10,7 @@ import Container from '../libs/Container';
 import {
 	ThemeName,
 	SizeName,
-} 					from '../libs/BasicComponent';
+} 					from '../libs/Basic';
 import Button from '../libs/Button';
 import { Tooltip, PopupPlacement, } from '../libs/Tooltip';
 import { Card } from '../libs/Card';
