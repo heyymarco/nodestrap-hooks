@@ -456,7 +456,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     // jsx:
     return (
-        <Indicator<HTMLElement>
+        <Indicator<TElement>
             // other props:
             {...restProps}
             
@@ -498,6 +498,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             onAnimationEnd={(e) => {
                 // states:
                 activePassiveState.handleAnimationEnd(e);
+                
+                
+                
+                // forwards:
+                props.onAnimationEnd?.(e);
             }}
         >
             {
