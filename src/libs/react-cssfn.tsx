@@ -332,7 +332,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
 
 
             // classes:
-            className={[
+            className={Array.from(new Set([
                 // main:
                 props.mainClass,
 
@@ -347,7 +347,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
 
                 // states:
                 ...(props.stateClasses ?? []),
-            ].filter((c) => !!c).join(' ') || undefined}
+            ].filter((c) => !!c))).join(' ') || undefined}
         >
             { props.children }
         </Tag>
