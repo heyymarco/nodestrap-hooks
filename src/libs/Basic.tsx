@@ -1062,6 +1062,11 @@ export const usesBasicLayout = () => {
             anim(),
         ]),
         layout({
+            // layouts:
+            display     : 'block',
+            
+            
+            
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
             
