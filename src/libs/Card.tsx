@@ -80,6 +80,7 @@ import {
 import Button               from './Button'
 import {
     stripOutFigure,
+    stripOutFocusableElement,
     stripOutImage,
 }                           from './strip-outs'
 import spacers              from './spacers'     // configurable spaces defs
@@ -442,6 +443,9 @@ export const usesCardBodyLayout = () => {
 export const usesCardLayout = () => {
     return composition([
         imports([
+            // resets:
+            stripOutFocusableElement(), // clear browser's default styles
+            
             // borders:
             usesBorderAsContainer(), // make a nicely rounded corners
         ]),
