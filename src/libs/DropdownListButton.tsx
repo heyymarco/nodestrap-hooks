@@ -65,7 +65,27 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
         
         
         // children:
-        children,
+        children,       // delete
+        
+        
+        // essentials:
+        tag,            // delete
+        style,          // delete
+        
+        
+        // identifiers:
+        id,             // delete
+        
+        
+        // accessibilities:
+        role,           // delete
+        
+        
+        // classes:
+        mainClass,      // delete
+        classes,        // delete
+        variantClasses, // delete
+        stateClasses,   // delete
     ...restProps} = props;
     
     
