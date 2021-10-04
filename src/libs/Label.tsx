@@ -94,7 +94,7 @@ export const usesLabelLayout = () => {
         ]),
         layout({
             // layouts:
-            display        : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
+            display        : 'inline-block', // use inline block, so it takes the width & height as we set
             
             
             
