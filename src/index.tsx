@@ -23,7 +23,7 @@ import reportWebVitals from './reportWebVitals';
 //             import NavApp                           from './apps/NavApp';
 //                 import NavscrollApp                 from './apps/NavscrollApp';
 //         import CardApp                              from './apps/CardApp';
-//             import ModalApp                         from './apps/ModalApp';
+            import ModalCardApp                     from './apps/ModalCardApp';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
 //             import CollapseApp                      from './apps/CollapseApp';
@@ -51,14 +51,14 @@ import reportWebVitals from './reportWebVitals';
 //     import MasonryApp                               from './apps/MasonryApp';
 //     import CarouselApp                              from './apps/CarouselApp';
 //     import NavbarApp                                from './apps/NavbarApp';
-    import GroupApp                                 from './apps/GroupApp';
+//     import GroupApp                                 from './apps/GroupApp';
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <GroupApp />
+    <ModalCardApp />
     ,
     document.getElementById('root')
 );

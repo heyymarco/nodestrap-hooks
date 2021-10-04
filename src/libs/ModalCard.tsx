@@ -114,7 +114,6 @@ import CloseButton          from './CloseButton'
 import {
     stripOutFocusableElement,
 }                           from './strip-outs'
-import typos                from './typos/index' // configurable typography (texting) defs
 
 
 
@@ -174,21 +173,21 @@ export const usesOverlayAnim = () => {
 
 // appearances:
 
-export type ModalStyle = 'scrollable' // might be added more styles in the future
-export interface ModalVariant {
-    modalStyle? : ModalStyle
+export type ModalCardStyle = 'scrollable' // might be added more styles in the future
+export interface ModalCardVariant {
+    modalCardStyle? : ModalCardStyle
 }
-export const useModalVariant = (props: ModalVariant) => {
+export const useModalCardVariant = (props: ModalCardVariant) => {
     return {
-        class: props.modalStyle ? props.modalStyle : null,
+        class: props.modalCardStyle ? props.modalCardStyle : null,
     };
 };
 
-export interface ModalAlign {
+export interface ModalCardAlign {
     horzAlign? : Prop.JustifyItems
     vertAlign? : Prop.AlignItems
 }
-export const useModalAlign = (props: ModalAlign) => {
+export const useModalCardAlign = (props: ModalCardAlign) => {
     return {
         style: {
             [cssDecls.horzAlign] : props.horzAlign,
@@ -263,7 +262,7 @@ export const usesCard = () => {
     });
 };
 
-export const usesModalLayout = () => {
+export const usesModalCardLayout = () => {
     // dependencies:
     
     // animations:
@@ -351,7 +350,7 @@ export const usesModalLayout = () => {
         }),
     ]);
 };
-export const usesModalVariants = () => {
+export const usesModalCardVariants = () => {
     // dependencies:
     
     // layouts:
@@ -376,7 +375,7 @@ export const usesModalVariants = () => {
             rule(':not(.scrollable)', [
                 layout({
                     // scrolls:
-                    // scroller at Modal's layer
+                    // scroller at ModalCard's layer
                     overflow : 'auto', // enable horz & vert scrolling
                     
                     
@@ -427,7 +426,7 @@ export const usesModalVariants = () => {
         ]),
     ]);
 };
-export const usesModalStates = () => {
+export const usesModalCardStates = () => {
     // dependencies:
     
     // animations:
@@ -445,17 +444,17 @@ export const usesModalStates = () => {
         ]),
     ]);
 };
-export const usesModal = () => {
+export const usesModalCard = () => {
     return composition([
         imports([
             // layouts:
-            usesModalLayout(),
+            usesModalCardLayout(),
             
             // variants:
-            usesModalVariants(),
+            usesModalCardVariants(),
             
             // states:
-            usesModalStates(),
+            usesModalCardStates(),
         ]),
     ]);
 };
@@ -495,10 +494,10 @@ export const usesActionBarLayout = () => {
     ]);
 };
 
-export const useModalSheet = createUseSheet(() => [
+export const useModalCardSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesModal(),
+            usesModalCard(),
         ]),
     ]),
     compositionOf('body', [
@@ -546,7 +545,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // backgrounds:
-        backg                       : typos.backg,
+        // backg                       : typos.backg,
         boxShadow                   : [[0, 0, '10px', 'black']],
         
         overlayBackg                : 'rgba(0,0,0, 0.5)',
@@ -568,13 +567,13 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export type CloseType = 'ui'|'overlay'|'shortcut'
 
-export interface ModalProps<TElement extends HTMLElement = HTMLElement>
+export interface ModalCardProps<TElement extends HTMLElement = HTMLElement>
     extends
         CardProps<TElement>,
         
         // appearances:
-        ModalVariant,
-        ModalAlign
+        ModalCardVariant,
+        ModalCardAlign
 {
     // accessibilities:
     tabIndex?   : number
@@ -583,15 +582,15 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement>
     // actions:
     onClose?    : (closeType: CloseType) => void
 }
-export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalProps<TElement>) {
+export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: ModalCardProps<TElement>) {
     // styles:
-    const sheet              = useModalSheet();
+    const sheet              = useModalCardSheet();
     
     
     
     // variants:
-    const modalVariant       = useModalVariant(props);
-    const modalAlign         = useModalAlign(props);
+    const modalCardVariant       = useModalCardVariant(props);
+    const modalCardAlign         = useModalCardAlign(props);
     
     
     
@@ -610,15 +609,15 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
         // accessibilities:
         active,         // from accessibilities
         inheritActive,  // from accessibilities
-        tabIndex,       // from Modal
+        tabIndex,       // from ModalCard
         
         
         // actions:
-        onClose,        // from Modal
+        onClose,        // from ModalCard
         
         
         // variants:
-        modalStyle,
+        modalCardStyle,
         
         
         // children:
@@ -634,7 +633,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
     useLayoutEffect(() => {
         if (cardRef.current && navigator.userAgent.toLowerCase().includes('firefox')) {
             if (isVisible) {
-                cardRef.current.style.overflow = (modalStyle === 'scrollable') ? '' : 'visible';
+                cardRef.current.style.overflow = (modalCardStyle === 'scrollable') ? '' : 'visible';
                 
                 // setTimeout(() => {
                 //     if (cardRef.current) cardRef.current.style.overflow = 'clip';
@@ -644,7 +643,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
                 cardRef.current.style.overflow = '';
             } // if
         } // if firefox
-    }, [isVisible, modalStyle]);
+    }, [isVisible, modalCardStyle]);
     
     useEffect(() => {
         if (isVisible) {
@@ -737,14 +736,14 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                modalVariant.class,
+                modalCardVariant.class,
             ]}
             
             
             // styles:
             style={{...(props.style ?? {}),
                 // variants:
-                ...modalAlign.style,
+                ...modalCardAlign.style,
             }}
             
             
@@ -759,7 +758,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
                 } // if
             }}
             
-            // watch [escape key] on the whole Modal, including Card & Card's children:
+            // watch [escape key] on the whole ModalCard, including Card & Card's children:
             onKeyUp={(e) => {
                 if (!e.defaultPrevented) {
                     if ((e.key === 'Escape') || (e.code === 'Escape')) {
@@ -802,6 +801,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement>(props: ModalPr
         </Popup>
     );
 }
-export { Modal as default }
+export { ModalCard as default }
 
 export type { OrientationName, OrientationVariant }

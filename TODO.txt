@@ -1,7 +1,14 @@
 List => add numbered variant
 Range
-Offcanvas
+Offcanvas*****
 
-fix modal close btn
+fix modalCard close btn
 fix focus-visible
 Dropdown => role => allActionCtrl = 'menu', else = 'dialog' && aria-modal=true
+Check => variant fill or nude=true
+Carousel => infinite loop
+Navbar => use List
+Media => for profile image, video, static images, gifs, svgs, etc
+Progress
+ModalCard => ModalCard<> => ModalCard<Card>
+ModalCard.onClose => ModalCard.onActiveChange

@@ -15,7 +15,7 @@ import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 import Button from '../libs/Button';
 import ButtonIcon from '../libs/ButtonIcon';
-import Modal, * as Modals from '../libs/Modal';
+import ModalCard, * as ModalCards from '../libs/ModalCard';
 import {
     Prop,
 } from '../libs/css-types'        // ts defs support for jss
@@ -35,8 +35,8 @@ function App() {
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
 	
-	const modalStyles = [undefined, 'scrollable'];
-	const [modalStyle,    setModalStyle     ] = useState<Modals.ModalStyle|undefined>(undefined);
+	const modalCardStyles = [undefined, 'scrollable'];
+	const [modalCardStyle,    setModalCardStyle     ] = useState<ModalCards.ModalCardStyle|undefined>(undefined);
 
 	const aligns = [undefined, 'start', 'center', 'end'];
 	const [horzAlign,  setHorzAlign   ] = useState<Prop.JustifyItems|undefined>(undefined);
@@ -70,9 +70,9 @@ function App() {
 				>
                         test
                 </Content>
-				<Button onClick={() => setActive(true)}>Show modal</Button>
+				<Button onClick={() => setActive(true)}>Show modalCard</Button>
 				<ButtonIcon btnStyle='link' theme='secondary' aria-label='Close' icon='close' />
-				<Modal theme={theme} size={size} gradient={enableGrad} outlined={outlined} enabled={enabled} active={active}
+				<ModalCard theme={theme} size={size} gradient={enableGrad} outlined={outlined} enabled={enabled} active={active}
 
 					header=
 					'Lorem ipsum dolor'
@@ -82,7 +82,7 @@ function App() {
 
 					onClose={() => setActive(false)}
 
-					modalStyle={modalStyle}
+					modalCardStyle={modalCardStyle}
 					horzAlign={horzAlign}
 					vertAlign={vertAlign}
 				>
@@ -144,14 +144,14 @@ function App() {
 						</label>
 					</p>
 					<p>
-						ModalStyle:
+						ModalCardStyle:
 						{
-							modalStyles.map(st =>
+							modalCardStyles.map(st =>
 								<label key={st ?? ''}>
 									<input type='radio'
 										value={st}
-										checked={modalStyle===st}
-										onChange={(e) => setModalStyle((e.target.value || undefined) as (Modals.ModalStyle|undefined))}
+										checked={modalCardStyle===st}
+										onChange={(e) => setModalCardStyle((e.target.value || undefined) as (ModalCards.ModalCardStyle|undefined))}
 									/>
 									{`${st}`}
 								</label>
@@ -245,7 +245,7 @@ function App() {
 							accusamus.
 						</p>
 					</>}
-				</Modal>
+				</ModalCard>
                 <hr style={{flexBasis: '100%'}} />
             </Container>
         </div>
