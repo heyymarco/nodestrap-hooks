@@ -25,8 +25,8 @@ import reportWebVitals from './reportWebVitals';
 //         import CardApp                              from './apps/CardApp';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
-            import ModalApp                         from './apps/ModalApp';
-//                 import ModalCardApp                 from './apps/ModalCardApp';
+//             import ModalApp                         from './apps/ModalApp';
+                import ModalCardApp                 from './apps/ModalCardApp';
 //             import CollapseApp                      from './apps/CollapseApp';
 //                 import DropdownApp                  from './apps/DropdownApp';
 //                     import DropdownListApp          from './apps/DropdownListApp';
@@ -59,7 +59,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ModalApp />
+    <ModalCardApp />
     ,
     document.getElementById('root')
 );

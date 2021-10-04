@@ -2,14 +2,12 @@
 import {
     default as React,
     useRef,
-    useEffect,
     useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
 import type {
     Prop,
-    PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
@@ -22,14 +20,12 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     
     
     
     // rules:
     variants,
-    states,
     rule,
 }                           from './cssfn'       // cssfn core
 import {
@@ -42,16 +38,12 @@ import {
     setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
-    createCssVar,
-}                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
-import {
     createCssConfig,
     
     
     
     // utilities:
     usesGeneralProps,
-    usesPrefixedProps,
     usesSuffixedProps,
     backupProps,
     restoreProps,
@@ -61,8 +53,6 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    OrientationName,
-    OrientationVariant,
     usesAnim,
     
     
@@ -76,8 +66,6 @@ import {
 }                           from './Container'
 import {
     // hooks:
-    isActivating,
-    isPassivating,
     useActivePassiveState,
     
     
@@ -90,6 +78,31 @@ import {
     cssDecls as ccssDecls,
 }                           from './Content'
 import {
+    // styles:
+    usesModalElement,
+    
+    usesModalLayout,
+    usesModalVariants,
+    usesModalStates,
+    
+    
+    
+    // react components:
+    ModalCloseType,
+    
+    ModalElementProps,
+    ModalElement,
+    
+    ModalProps,
+    Modal,
+}                           from './Modal'
+import {
+    // hooks:
+    OrientationName,
+    OrientationVariant,
+    
+    
+    
     // configs:
     cssDecls as rcssDecls,
     
@@ -99,97 +112,26 @@ import {
     CardProps,
     Card,
 }                           from './Card'
-import {
-    // styles:
-    usesPopupVariants,
-    usesPopupStates,
-    
-    
-    
-    // react components:
-    Popup,
-}                           from './Popup'
 import Button               from './Button'
 import CloseButton          from './CloseButton'
-import {
-    stripOutFocusableElement,
-}                           from './strip-outs'
 
 
 
 // hooks:
-
-// animations:
-
-//#region overlay animations
-interface OverlayAnimVars {
-    /**
-     * none animation.
-     */
-    animNone    : any
-    /**
-     * final animation for the overlay.
-     */
-    overlayAnim : any
-}
-const [overlayAnimRefs, overlayAnimDecls] = createCssVar<OverlayAnimVars>();
-
-export const usesOverlayAnim = () => {
-    // dependencies:
-    
-    // animations:
-    const [anim, animRefs] = usesAnim();
-    
-    
-    
-    return [
-        () => composition([
-            imports([
-                // animations:
-                anim(),
-            ]),
-            vars({
-                [overlayAnimDecls.overlayAnim] : animRefs.animNone,
-            }),
-            states([
-                isActivating([
-                    vars({
-                        [overlayAnimDecls.overlayAnim] : cssProps.overlayAnimActive,
-                    }),
-                ]),
-                isPassivating([
-                    vars({
-                        [overlayAnimDecls.overlayAnim] : cssProps.overlayAnimPassive,
-                    }),
-                ]),
-            ]),
-        ]),
-        overlayAnimRefs,
-        overlayAnimDecls,
-    ] as const;
-};
-//#endregion overlay animations
-
 
 // appearances:
 
 export type ModalCardStyle = 'scrollable' // might be added more styles in the future
 export interface ModalCardVariant {
     modalCardStyle? : ModalCardStyle
+    horzAlign?      : Prop.JustifyItems
+    vertAlign?      : Prop.AlignItems
 }
 export const useModalCardVariant = (props: ModalCardVariant) => {
     return {
-        class: props.modalCardStyle ? props.modalCardStyle : null,
-    };
-};
-
-export interface ModalCardAlign {
-    horzAlign? : Prop.JustifyItems
-    vertAlign? : Prop.AlignItems
-}
-export const useModalCardAlign = (props: ModalCardAlign) => {
-    return {
-        style: {
+        class : props.modalCardStyle ? props.modalCardStyle : null,
+        
+        style : {
             [cssDecls.horzAlign] : props.horzAlign,
             [cssDecls.vertAlign] : props.vertAlign,
         },
@@ -228,8 +170,7 @@ export const usesCard = () => {
         
         ...children(cardElm, composition([
             imports([
-                // resets:
-                stripOutFocusableElement(), // clear browser's default styles
+                usesModalElement(),
             ]),
             layout({
                 // children:
@@ -263,21 +204,11 @@ export const usesCard = () => {
 };
 
 export const usesModalCardLayout = () => {
-    // dependencies:
-    
-    // animations:
-    const [anim                 ] = usesAnim();
-    const [    , overlayAnimRefs] = usesOverlayAnim();
-    
-    
-    
     return composition([
         imports([
             // layouts:
+            usesModalLayout(),
             usesResponsiveContainerGridLayout(), // applies responsive container functionality using css grid
-            
-            // animations:
-            anim(),
         ]),
         layout({
             // layouts:
@@ -286,23 +217,6 @@ export const usesModalCardLayout = () => {
             // child default sizes:
             justifyItems : cssProps.horzAlign, // align (default center) horizontally
             alignItems   : cssProps.vertAlign, // align (default center) vertically
-            
-            
-            
-            // sizes:
-            // fills the entire screen:
-            boxSizing    : 'border-box', // the final size is including borders & paddings
-            position     : 'fixed',
-            inset        : 0,
-            width        : '100vw',
-            height       : '100vh',
-         // maxWidth     : 'fill-available', // hack to excluding scrollbar // not needed since all html pages are virtually full width
-         // maxHeight    : 'fill-available', // hack to excluding scrollbar // will be handle by javascript soon
-            
-            
-            
-            // animations:
-            anim         : overlayAnimRefs.overlayAnim,
             
             
             
@@ -346,7 +260,7 @@ export const usesModalCardLayout = () => {
             
             
             // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'overlay')), // apply general cssProps starting with overlay***
+            ...usesGeneralProps(cssProps), // apply general cssProps
         }),
     ]);
 };
@@ -366,7 +280,7 @@ export const usesModalCardVariants = () => {
     return composition([
         imports([
             // variants:
-            usesPopupVariants(),
+            usesModalVariants(),
             
             // layouts:
             sizes(),
@@ -427,20 +341,10 @@ export const usesModalCardVariants = () => {
     ]);
 };
 export const usesModalCardStates = () => {
-    // dependencies:
-    
-    // animations:
-    const [overlayAnim] = usesOverlayAnim();
-    
-    
-    
     return composition([
         imports([
             // states:
-            usesPopupStates(),
-            
-            // animations:
-            overlayAnim(),
+            usesModalStates(),
         ]),
     ]);
 };
@@ -459,14 +363,6 @@ export const usesModalCard = () => {
     ]);
 };
 
-export const usesDocumentBodyLayout = () => {
-    return composition([
-        layout({
-            // kill the scroll on the body:
-            overflow: 'hidden',
-        }),
-    ]);
-};
 export const usesActionBarLayout = () => {
     return composition([
         layout({
@@ -500,11 +396,6 @@ export const useModalCardSheet = createUseSheet(() => [
             usesModalCard(),
         ]),
     ]),
-    compositionOf('body', [
-        imports([
-            usesDocumentBodyLayout(),
-        ]),
-    ]),
     compositionOf('actionBar', [
         imports([
             usesActionBarLayout(),
@@ -516,48 +407,10 @@ export const useModalCardSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    //#region keyframes
-    const keyframesOverlayActive  : PropEx.Keyframes = {
-        from : {
-            filter : [[ // double array => makes the JSS treat as space separated values
-                'opacity(0)',
-            ]],
-        },
-        to   : {
-            filter : [[ // double array => makes the JSS treat as space separated values
-                'opacity(1)',
-            ]],
-        },
-    };
-    const keyframesOverlayPassive : PropEx.Keyframes = {
-        from : keyframesOverlayActive.to,
-        to   : keyframesOverlayActive.from,
-    };
-    //#endregion keyframes
-    
-    
-    
     return {
         // positions:
         horzAlign                   : 'center',
         vertAlign                   : 'center',
-        
-        
-        
-        // backgrounds:
-        // backg                       : typos.backg,
-        boxShadow                   : [[0, 0, '10px', 'black']],
-        
-        overlayBackg                : 'rgba(0,0,0, 0.5)',
-        
-        
-        
-        //#region animations
-        '@keyframes overlayActive'  : keyframesOverlayActive,
-        '@keyframes overlayPassive' : keyframesOverlayPassive,
-        overlayAnimActive           : [['300ms', 'ease-out', 'both', keyframesOverlayActive ]],
-        overlayAnimPassive          : [['500ms', 'ease-out', 'both', keyframesOverlayPassive]],
-        //#endregion animations
     };
 }, { prefix: 'mdlcrd' });
 
@@ -565,32 +418,66 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export type CloseType = 'ui'|'overlay'|'shortcut'
+export type ModalCardCloseType = 'ui'|ModalCloseType
 
-export interface ModalCardProps<TElement extends HTMLElement = HTMLElement>
+
+
+export interface ModalCardElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
     extends
+        ModalElementProps<TElement, TCloseType>,
+        CardProps<TElement>
+{
+}
+export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardElementProps<TElement, TCloseType>) {
+    // rest props:
+    const {
+        // accessibilities:
+        tabIndex = -1,
+        
+        
+        // actions:
+        onActiveChange,
+    ...restProps} = props;
+    
+    
+    
+    return (
+        <Card
+            // other props:
+            {...restProps}
+            
+            
+            // accessibilities:
+            {...{
+                tabIndex,
+            }}
+        />
+    );
+}
+ModalCardElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
+
+
+
+
+
+
+export interface ModalCardProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
+    extends
+        ModalProps<TElement, TCloseType>,
         CardProps<TElement>,
         
         // appearances:
-        ModalCardVariant,
-        ModalCardAlign
+        ModalCardVariant
 {
-    // accessibilities:
-    tabIndex?   : number
-    
-    
-    // actions:
-    onClose?    : (closeType: CloseType) => void
 }
-export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: ModalCardProps<TElement>) {
+export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardProps<TElement, TCloseType>) {
     // styles:
     const sheet              = useModalCardSheet();
     
     
     
     // variants:
-    const modalCardVariant       = useModalCardVariant(props);
-    const modalCardAlign         = useModalCardAlign(props);
+    const modalCardVariant   = useModalCardVariant(props);
     
     
     
@@ -607,16 +494,11 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: Mod
         
         
         // accessibilities:
-        active,         // from accessibilities
-        inheritActive,  // from accessibilities
-        tabIndex,       // from ModalCard
+        active,         // from accessibilities, removed
+        inheritActive,  // from accessibilities, removed
         
         
-        // actions:
-        onClose,        // from ModalCard
-        
-        
-        // variants:
+        // appearances:
         modalCardStyle,
         
         
@@ -645,23 +527,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: Mod
         } // if firefox
     }, [isVisible, modalCardStyle]);
     
-    useEffect(() => {
-        if (isVisible) {
-            document.body.classList.add(sheet.body);
-            
-            
-            
-            cardRef.current?.focus({ preventScroll: true }); // when actived => focus the dialog, so the user able to use [esc] key to close the dialog
-            
-            
-            
-            // cleanups:
-            return () => {
-                document.body.classList.remove(sheet.body);
-            };
-        } // if isVisible
-    }, [isVisible, sheet.body]);
-    
     
     
     // jsx fn props:
@@ -677,7 +542,7 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: Mod
                     // actions:
                     onClick={(e) => {
                         if (!e.defaultPrevented) {
-                            props.onClose?.('ui');
+                            props.onActiveChange?.(false, 'ui' as unknown as TCloseType);
                             e.preventDefault();
                         } // if
                     }}
@@ -703,7 +568,7 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: Mod
                     // actions:
                     onClick={(e) => {
                         if (!e.defaultPrevented) {
-                            props.onClose?.('ui');
+                            props.onActiveChange?.(false, 'ui' as unknown as TCloseType);
                             e.preventDefault();
                         } // if
                     }}
@@ -723,13 +588,15 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: Mod
     
     // jsx:
     return (
-        <Popup
-            // accessibilities:
-            role={active ? 'dialog' : undefined}
-            aria-modal={active ? true : undefined}
-            {...{
-                active,
-                inheritActive : false,
+        <Modal<TElement, TCloseType>
+            // other props:
+            {...props}
+            
+            
+            // essentials:
+            elmRef={(elm) => {
+                setElmRef(elmRef, elm);
+                setElmRef(cardRef, elm);
             }}
             
             
@@ -743,62 +610,31 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement>(props: Mod
             // styles:
             style={{...(props.style ?? {}),
                 // variants:
-                ...modalCardAlign.style,
+                ...modalCardVariant.style,
             }}
             
             
             // events:
-            // watch left click on the overlay only (not at the Card):
-            onClick={(e) => {
-                if (!e.defaultPrevented) {
-                    if (e.target === e.currentTarget) {
-                        props.onClose?.('overlay');
-                        e.preventDefault();
-                    } // if
-                } // if
-            }}
-            
-            // watch [escape key] on the whole ModalCard, including Card & Card's children:
-            onKeyUp={(e) => {
-                if (!e.defaultPrevented) {
-                    if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                        props.onClose?.('shortcut');
-                        e.preventDefault();
-                    } // if
-                } // if
-            }}
-            
             onAnimationEnd={(e) => {
                 // states:
                 activePassiveState.handleAnimationEnd(e);
+                
+                
+                
+                // forwards:
+                props.onAnimationEnd?.(e);
             }}
         >
-            <Card<TElement>
+            <ModalCardElement<TElement, TCloseType>
                 // other props:
                 {...restProps}
                 
                 
-                // essentials:
-                elmRef={(elm) => {
-                    setElmRef(elmRef, elm);
-                    setElmRef(cardRef, elm);
-                }}
-                
-                
-                // Control props:
-                {...{
-                    // accessibilities:
-                    tabIndex : tabIndex ?? -1,
-                }}
-                
-                
                 // children:
-                {...{
-                    header : headerFn,
-                    footer : footerFn,
-                }}
+                header={headerFn}
+                footer={footerFn}
             />
-        </Popup>
+        </Modal>
     );
 }
 export { ModalCard as default }

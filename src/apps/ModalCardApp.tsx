@@ -80,7 +80,9 @@ function App() {
 					footer=
 					'dolor sit amet'
 
-					onClose={() => setActive(false)}
+					onActiveChange={(newActive) => {
+						setActive(newActive);
+					}}
 
 					modalCardStyle={modalCardStyle}
 					horzAlign={horzAlign}
