@@ -373,7 +373,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     
     // jsx:
     return (
-        <Collapse<TElement>
+        <Collapse<HTMLElement>
             // other props:
             {...restProps}
             
