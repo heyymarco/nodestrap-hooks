@@ -108,6 +108,26 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
         children,
         buttonChildren,
     ...restProps} = props;
+    const {
+        // essentials:
+        tag,            // delete
+        style,          // delete
+        
+        
+        // identifiers:
+        id,             // delete
+        
+        
+        // accessibilities:
+        role,           // delete
+        
+        
+        // classes:
+        mainClass,      // delete
+        classes,        // delete
+        variantClasses, // delete
+        stateClasses,   // delete
+    ...restDropdownProps} = restProps;
     
     
     
@@ -170,7 +190,7 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
             />
             <Dropdown<HTMLElement, TCloseType>
                 // other props:
-                {...restProps}
+                {...restDropdownProps}
                 
                 
                 // popups:
