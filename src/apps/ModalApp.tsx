@@ -57,7 +57,7 @@ function App() {
 				>
                         test
                 </Content>
-				<Button onClick={() => setActive(true)}>Show modalCard</Button>
+				<Button onClick={() => setActive(true)}>Show modal</Button>
 				<ButtonIcon btnStyle='link' theme='secondary' aria-label='Close' icon='close' />
 				<Modal theme={theme} size={size} gradient={enableGrad} outlined={outlined} enabled={enabled} active={active}
 

@@ -71,12 +71,6 @@ import {
     
     
     
-    // styles:
-    usesIndicatorVariants,
-    usesIndicatorStates,
-    
-    
-    
     // react components:
     IndicatorProps,
     Indicator,
@@ -231,9 +225,6 @@ export const usesModalVariants = () => {
     
     return composition([
         imports([
-            // variants:
-            usesIndicatorVariants(),
-            
             // layouts:
             sizes(),
         ]),
@@ -249,9 +240,6 @@ export const usesModalStates = () => {
     
     return composition([
         imports([
-            // states:
-            usesIndicatorStates(),
-            
             // animations:
             modalAnim(),
         ]),
@@ -307,7 +295,7 @@ export const useModalSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     //#region keyframes
-    const keyframesActive  : PropEx.Keyframes = {
+    const keyframesActive    : PropEx.Keyframes = {
         from : {
             filter : [[ // double array => makes the JSS treat as space separated values
                 'opacity(0)',
@@ -319,7 +307,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             ]],
         },
     };
-    const keyframesPassive : PropEx.Keyframes = {
+    const keyframesPassive   : PropEx.Keyframes = {
         from : keyframesActive.to,
         to   : keyframesActive.from,
     };

@@ -12,3 +12,4 @@ Media => for profile image, video, static images, gifs, svgs, etc
 Progress
 ModalCard => ModalCard<> => ModalCard<Card>
 ModalCard.onClose => ModalCard.onActiveChange
+protect inherit anim state active/passive/enable/disable/etc
