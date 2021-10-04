@@ -23,6 +23,7 @@ import { TogglerMenuButton } from '../libs/TogglerMenuButton';
 import { Radio } from '../libs/Radio';
 import { DropdownListButton, DropdownListItem } from '../libs/DropdownListButton';
 import { EmailInput, TextInput } from '../libs/Input';
+import { Label } from '../libs/Label';
 
 
 
@@ -561,6 +562,12 @@ function App() {
 						press={press}
 					/>
 
+					<Label
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+					>
+						Your email
+					</Label>
 					<EmailInput
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
@@ -628,6 +635,94 @@ function App() {
 							opt 3
 						</Radio>
 					</Group>
+                </Group>
+				<hr style={{flexBasis: '100%'}} />
+				<Group
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+					orientation={orientation}
+					listStyle={listStyle}
+				>
+					<Label
+						theme='secondary' size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+					>
+						Your email
+					</Label>
+					<EmailInput
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+					/>
+                </Group>
+				<hr style={{flexBasis: '100%'}} />
+				<Group
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+					orientation={orientation}
+					listStyle={listStyle}
+				>
+					<Label
+						theme='secondary' size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+					>
+						https://example.com/users/
+					</Label>
+					<TextInput
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+					/>
+                </Group>
+				<hr style={{flexBasis: '100%'}} />
+				<Group
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+					orientation={orientation}
+					listStyle={listStyle}
+				>
+					<TextInput
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+
+						placeholder='username'
+					/>
+					<Label
+						theme='secondary' size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+					>
+						@
+					</Label>
+					<TextInput
+						theme={theme} size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						enabled={enabled} active={active}
+
+						arrive={arrive}
+						focus={focus}
+
+						placeholder='server'
+					/>
                 </Group>
 				<hr style={{flexBasis: '100%'}} />
 				<p>

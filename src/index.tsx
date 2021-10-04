@@ -14,6 +14,7 @@ import reportWebVitals from './reportWebVitals';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
 // import BasicComponentApp                            from './apps/BasicComponentApp';
+//     import LabelApp                                 from './apps/LabelApp';
 //     import ContentApp                               from './apps/ContentApp';
 //     import ContainerApp                             from './apps/ContainerApp';
 //     import IndicatorApp                             from './apps/IndicatorApp';

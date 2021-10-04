@@ -1,7 +1,7 @@
 List => add numbered variant
 Range
-Inputgroup
 Offcanvas
 
 fix modal close btn
 fix focus-visible
+Dropdown => role => allActionCtrl = 'menu', else = 'dialog' && aria-modal=true
