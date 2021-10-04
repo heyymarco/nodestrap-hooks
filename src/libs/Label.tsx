@@ -59,6 +59,10 @@ import {
     usesContentLayout,
     usesContentVariants,
 }                           from './Content'
+import {
+    // hooks:
+    usesThemeDefault,
+}                           from './Control'
 
 
 
@@ -84,6 +88,9 @@ export const usesLabelLayout = () => {
         imports([
             // layouts:
             usesBasicComponentLayout(),
+            
+            // colors:
+            usesThemeDefault(),
         ]),
         layout({
             // layouts:
