@@ -441,7 +441,14 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                             } // if
                         } // if
                     }}
-                    onActiveChange={(newActive, closeType) => onActiveChange?.(newActive, closeType)}
+                    onActiveChange={(newActive, closeType) => {
+                        onActiveChange?.(newActive, closeType);
+                        
+                        
+                        
+                        // forwards:
+                        children.props.onActiveChange?.(newActive, closeType);
+                    }}
                 />
                 :
                 <DropdownElement<TElement, TCloseType>
@@ -470,7 +477,9 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                             } // if
                         } // if
                     }}
-                    onActiveChange={(newActive, closeType) => onActiveChange?.(newActive, closeType)}
+                    onActiveChange={(newActive, closeType) => {
+                        onActiveChange?.(newActive, closeType);
+                    }}
                 >
                     { children }
                 </DropdownElement>
