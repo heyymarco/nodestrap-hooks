@@ -413,13 +413,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     // rest props:
     const {
         // essentials:
-        elmRef,                // moved to ModalElement
+        elmRef,        // moved to ModalElement
         
         
         // accessibilities:
-        active        = false, // from accessibilities
-        inheritActive = false, // from accessibilities
-        tabIndex,              // from Modal, moved to ModalElement
+        active,        // from accessibilities
+        inheritActive, // from accessibilities
+        tabIndex,      // from Modal, moved to ModalElement
         
         
         // actions:
