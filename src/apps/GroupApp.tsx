@@ -7,7 +7,6 @@ import {
 
 import Container 		from '../libs/Container';
 import {
-	Basic,
 	ThemeName,
 	SizeName,
 } 					from '../libs/Basic';
@@ -540,23 +539,18 @@ function App() {
 					>
 						check btn
 					</Check>
-					<Basic
+					<Check
 						theme={theme} size={size} gradient={enableGrad}
-						outlined={outlined} mild={!mild}
-						style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
-					>
-						<Check
-							theme={theme} size={size} gradient={enableGrad}
-							outlined={outlined} mild={mild}
+						outlined={outlined} mild={mild}
 
-							enabled={enabled} active={active} enableValidation={false}
+						enabled={enabled} active={active} enableValidation={false}
 
-							arrive={arrive}
-							focus={focus}
-							
-							press={press}
-						/>
-					</Basic>
+						arrive={arrive}
+						focus={focus}
+						
+						press={press}
+						checkStyle='fill'
+					/>
                     <TogglerMenuButton
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
@@ -604,7 +598,7 @@ function App() {
 							
 							press={press}
 
-							checkStyle='togglerBtn'
+							checkStyle='fill'
 							name='option'
 						>
 							opt 1
@@ -620,7 +614,7 @@ function App() {
 							
 							press={press}
 
-							checkStyle='togglerBtn'
+							checkStyle='fill'
 							name='option'
 						>
 							opt 2
@@ -636,7 +630,7 @@ function App() {
 							
 							press={press}
 
-							checkStyle='togglerBtn'
+							checkStyle='fill'
 							name='option'
 						>
 							opt 3

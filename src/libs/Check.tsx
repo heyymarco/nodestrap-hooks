@@ -297,7 +297,7 @@ export const usesCheckClearState = () => {
 
 // appearances:
 
-export type CheckStyle = 'btn'|'togglerBtn'|'switch' // might be added more styles in the future
+export type CheckStyle = 'btn'|'togglerBtn'|'switch'|'fill' // might be added more styles in the future
 export interface CheckVariant {
     checkStyle?: CheckStyle
 }
@@ -480,7 +480,7 @@ export const usesCheckLayout = () => {
             ])),
         }),
         variants([
-            rule(':where(:not(.btn)):where(:not(.togglerBtn))', [ // selector with zero specificity
+            rule(':where(:not(.btn)):where(:not(.togglerBtn)):where(:not(.fill))', [ // selector with zero specificity
                 layout({
                     // foregrounds:
                     foreg          : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
@@ -621,6 +621,23 @@ export const usesCheckVariants = () => {
                     
                     // overwrites propName = {switch}propName:
                     ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'switch')),
+                }),
+            ]),
+            
+            rule('.fill', [
+                layout({
+                    // children:
+                    ...children(inputElm, composition([
+                        layout({
+                            // borders:
+                            borderColor : 'currentColor',
+                        }),
+                    ])),
+                    
+                    
+                    
+                    // overwrites propName = {fill}propName:
+                    ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'fill')),
                 }),
             ]),
         ]),

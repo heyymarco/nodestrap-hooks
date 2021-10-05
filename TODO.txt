@@ -1,4 +1,3 @@
-Check => variant fill or nude=true
 List => add numbered variant
 Offcanvas*****
 fix modalCard close btn
