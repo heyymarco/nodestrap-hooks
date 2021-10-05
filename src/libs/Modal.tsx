@@ -413,13 +413,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     // rest props:
     const {
         // essentials:
-        elmRef,
+        elmRef,                // moved to ModalElement
         
         
         // accessibilities:
-        active,         // from accessibilities
-        inheritActive,  // from accessibilities
-        tabIndex,       // from Modal
+        active        = false, // from accessibilities
+        inheritActive = false, // from accessibilities
+        tabIndex,              // from Modal, moved to ModalElement
         
         
         // actions:
@@ -466,7 +466,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             aria-modal={active ? true : undefined}
             {...{
                 active,
-                inheritActive : false,
+                inheritActive,
             }}
             
             
@@ -515,6 +515,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                     
                     // essentials:
                     elmRef={(elm) => {
+                        setElmRef(children.props.elmRef, elm);
                         setElmRef(elmRef, elm);
                         setElmRef(childRef, elm);
                     }}
