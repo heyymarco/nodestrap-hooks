@@ -1,13 +1,13 @@
-List => add numbered variant
-Range
-Offcanvas*****
-
-fix modalCard close btn
-fix focus-visible
-Dropdown => role => allActionCtrl = 'menu', else = 'dialog' && aria-modal=true
 Check => variant fill or nude=true
+List => add numbered variant
+Offcanvas*****
+fix modalCard close btn
+
+Dropdown => role => allActionCtrl = 'menu', else = 'dialog' && aria-modal=true
 Carousel => infinite loop
 Navbar => use List
+
 Media => for profile image, video, static images, gifs, svgs, etc
 Progress
-protect inherit anim state active/passive/enable/disable/etc
+Range
+fix focus-visible

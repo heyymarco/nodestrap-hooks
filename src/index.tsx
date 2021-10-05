@@ -24,7 +24,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import NavscrollApp                 from './apps/NavscrollApp';
 //         import CardApp                              from './apps/CardApp';
 //         import PopupApp                             from './apps/PopupApp';
-            import AlertApp                         from './apps/AlertApp';
+//             import AlertApp                         from './apps/AlertApp';
 //             import ModalApp                         from './apps/ModalApp';
 //                 import ModalCardApp                 from './apps/ModalCardApp';
 //             import CollapseApp                      from './apps/CollapseApp';
@@ -44,7 +44,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';
 //                     import InputApp                 from './apps/InputApp';
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';
-//                     import CheckApp                 from './apps/CheckApp';
+                    import CheckApp                 from './apps/CheckApp';
 //                         import RadioApp             from './apps/RadioApp';
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';
 //                 import FormApp                      from './apps/FormApp';
@@ -59,7 +59,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <AlertApp />
+    <CheckApp />
     ,
     document.getElementById('root')
 );
