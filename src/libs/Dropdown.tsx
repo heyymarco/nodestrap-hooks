@@ -289,13 +289,13 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     // rest props:
     const {
         // essentials:
-        elmRef,
+        elmRef,        // moved to DropdownElement
         
         
         // accessibilities:
-        active,         // from accessibilities
-        inheritActive,  // from accessibilities
-        tabIndex,       // from Dropdown
+        active,        // from accessibilities
+        inheritActive, // from accessibilities
+        tabIndex,      // from Dropdown
         
         
         // popups:
@@ -373,7 +373,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     
     // jsx:
     return (
-        <Collapse<HTMLElement>
+        <Collapse<TElement>
             // other props:
             {...restProps}
             
@@ -403,9 +403,28 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             
             
             // events:
+            onKeyUp={(e) => {
+                if (!e.defaultPrevented) {
+                    if ((e.key === 'Escape') || (e.code === 'Escape')) {
+                        onActiveChange?.(false, 'shortcut' as unknown as TCloseType);
+                        e.preventDefault();
+                    } // if
+                } // if
+                
+                
+                
+                // forwards:
+                props.onKeyUp?.(e);
+            }}
+            
             onAnimationEnd={(e) => {
                 // states:
                 activePassiveState.handleAnimationEnd(e);
+                
+                
+                
+                // forwards:
+                props.onAnimationEnd?.(e);
             }}
         >
             {
@@ -418,6 +437,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                     
                     // essentials:
                     elmRef={(elm) => {
+                        setElmRef(children.props.elmRef, elm);
                         setElmRef(elmRef, elm);
                         setElmRef(childRef, elm);
                     }}
@@ -428,19 +448,6 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                     
                     
                     // events:
-                    onKeyUp={(e) => {
-                        // backwards:
-                        props.onKeyUp?.(e);
-                        
-                        
-                        
-                        if (!e.defaultPrevented) {
-                            if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                                onActiveChange?.(false, 'shortcut' as unknown as TCloseType);
-                                e.preventDefault();
-                            } // if
-                        } // if
-                    }}
                     onActiveChange={(newActive, closeType) => {
                         onActiveChange?.(newActive, closeType);
                         
@@ -464,19 +471,6 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                     
                     
                     // events:
-                    onKeyUp={(e) => {
-                        // backwards:
-                        props.onKeyUp?.(e);
-                        
-                        
-                        
-                        if (!e.defaultPrevented) {
-                            if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                                onActiveChange?.(false, 'shortcut' as unknown as TCloseType);
-                                e.preventDefault();
-                            } // if
-                        } // if
-                    }}
                     onActiveChange={(newActive, closeType) => {
                         onActiveChange?.(newActive, closeType);
                     }}
