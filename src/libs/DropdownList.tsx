@@ -5,14 +5,50 @@ import {
 
 // cssfn:
 import {
+    // compositions:
+    composition,
+    mainComposition,
+    imports,
+    
+    
+    
+    // layouts:
+    layout,
+    
+    
+    
+    // rules:
+    variants,
+    rule,
+}                           from './cssfn'       // cssfn core
+import {
+    // hooks:
+    createUseSheet,
+    
+    
+    
     // utilities:
     isTypeOf,
 }                           from './react-cssfn' // cssfn for react
+import {
+    createCssConfig,
+    
+    
+    
+    // utilities:
+    usesGeneralProps,
+    usesPrefixedProps,
+}                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // general types:
     PopupPlacement,
     PopupModifier,
     PopupPosition,
+    
+    
+    
+    // styles:
+    usesDropdownElementLayout,
     
     
     
@@ -49,6 +85,51 @@ import {
 
 
 
+// styles:
+export const usesDropdownListElementLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesDropdownElementLayout(),
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(usesPrefixedProps(cssProps, 'items')), // apply general cssProps starting with items***
+        }),
+    ]);
+};
+export const usesDropdownListElement = () => {
+    return composition([
+        variants([
+            rule('&&', [ // makes `.DropdownListElement` is more specific than `.List`
+                imports([
+                    // layouts:
+                    usesDropdownListElementLayout(),
+                ]),
+            ]),
+        ]),
+    ]);
+};
+
+export const useDropdownListElementSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesDropdownListElement(),
+        ]),
+    ]),
+]);
+
+
+
+// configs:
+export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    return {
+        /* no config props yet */
+    };
+}, { prefix: 'ddwnlst' });
+
+
+
 // react components:
 
 // ListItem => DropdownListItem
@@ -68,14 +149,21 @@ export interface DropdownListElementProps<TElement extends HTMLElement = HTMLEle
 {
 }
 export function DropdownListElement<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListElementProps<TElement, TCloseType>) {
+    // styles:
+    const sheet = useDropdownListElementSheet();
+    
+    
+    
     // rest props:
     const {
         // accessibilities:
-        tabIndex = -1,
+        active,         // from accessibilities, removed
+        inheritActive,  // from accessibilities, removed
+        tabIndex = -1,  // from ModalElement   , moved to List
         
         
         // behaviors:
-        actionCtrl = true,
+        actionCtrl = true, // set default to true
         
         
         // actions:
@@ -93,6 +181,16 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
     
     
     
+    // handlers:
+    const handleClose = onActiveChange && ((e: React.MouseEvent<HTMLElement, MouseEvent>, index: number) => {
+        if (!e.defaultPrevented) {
+            onActiveChange?.(false, index as unknown as TCloseType);
+            e.preventDefault();
+        } // if
+    });
+    
+    
+    
     return (
         <List
             // other props:
@@ -107,6 +205,12 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
             
             // behaviors:
             actionCtrl={actionCtrl}
+            
+            
+            // classes:
+            classes={[
+                sheet.main, // inject DropdownListElement class
+            ]}
         >
             {
                 propEnabled
@@ -134,10 +238,7 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
                                     
                                     
                                     
-                                    if (!e.defaultPrevented) {
-                                        onActiveChange?.(false, index as unknown as TCloseType);
-                                        e.preventDefault();
-                                    } // if
+                                    handleClose?.(e, index);
                                 }}
                             />
                             :
@@ -154,10 +255,7 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
                                 
                                 // events:
                                 onClick={(e) => {
-                                    if (!e.defaultPrevented) {
-                                        onActiveChange?.(false, index as unknown as TCloseType);
-                                        e.preventDefault();
-                                    } // if
+                                    handleClose?.(e, index);
                                 }}
                             >
                                 { child }
@@ -184,15 +282,6 @@ export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, T
 {
 }
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
-    // rest props:
-    const {
-        // accessibilities:
-        active,         // from accessibilities, removed
-        inheritActive,  // from accessibilities, removed
-    ...restProps} = props;
-    
-    
-    
     // jsx:
     return (
         <Dropdown<TElement, TCloseType>
@@ -201,7 +290,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
         >
             <DropdownListElement<TElement, TCloseType>
                 // other props:
-                {...restProps}
+                {...props}
             />
         </Dropdown>
     );
