@@ -244,7 +244,7 @@ export interface AlertProps<TElement extends HTMLElement = HTMLElement>
         PopupProps<TElement>
 {
     // actions:
-    onClose?  : () => void
+    onActiveChange? : (newActive: boolean) => void
     
     
     // children:
@@ -260,6 +260,10 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
     
     // rest props:
     const {
+        // actions:
+        onActiveChange,
+        
+        
         // children:
         icon,
         children: body,
@@ -348,6 +352,16 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
     })();
     
     const controlFn = (() => {
+        // handlers:
+        const handleClose = onActiveChange && ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            if (!e.defaultPrevented) {
+                onActiveChange(false);
+                e.preventDefault();
+            } // if
+        });
+        
+        
+        
         // default (unset):
         if (control === undefined) return (
             <CloseButton
@@ -362,7 +376,7 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
                 
                 
                 // actions:
-                onClick={() => props.onClose?.()}
+                onClick={handleClose}
             />
         );
         
@@ -382,7 +396,7 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
                 
                 
                 // actions:
-                onClick={props.onClick ?? (() => props.onClose?.())}
+                onClick={props.onClick ?? handleClose}
             />
         );
         

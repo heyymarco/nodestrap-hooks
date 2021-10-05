@@ -11,4 +11,3 @@ Navbar => use List
 Media => for profile image, video, static images, gifs, svgs, etc
 Progress
 protect inherit anim state active/passive/enable/disable/etc
-Alert.onClose() => Alert.onActiveChange()
