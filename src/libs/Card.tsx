@@ -430,7 +430,12 @@ export const usesCardBodyLayout = () => {
         layout({
             // sizes:
             // default card's body height is resizeable, ensuring footers are aligned to the bottom:
-            flex : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+            flex     : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+            
+            
+            
+            // scrolls:
+            overflow : 'auto', // enable horz & vert scrolling
             
             
             
