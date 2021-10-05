@@ -1,8 +1,6 @@
 // react (builds html using javascript):
 import {
     default as React,
-    useRef,
-    useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -31,11 +29,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // utilities:
-    setElmRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -44,42 +37,21 @@ import {
     
     // utilities:
     usesGeneralProps,
+    usesPrefixedProps,
     usesSuffixedProps,
-    backupProps,
-    restoreProps,
     overwriteProps,
-    overwriteParentProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
     usesSizeVariant,
-    usesAnim,
-    
-    
-    
-    // configs:
-    cssDecls as bcssDecls,
 }                           from './Basic'
 import {
     // styles:
     usesResponsiveContainerGridLayout,
 }                           from './Container'
 import {
-    // hooks:
-    useActivePassiveState,
-    
-    
-    
-    // configs:
-    cssDecls as icssDecls,
-}                           from './Indicator'
-import {
-    // configs:
-    cssDecls as ccssDecls,
-}                           from './Content'
-import {
     // styles:
-    usesModalElement,
+    usesModalElementLayout,
     
     usesModalLayout,
     usesModalVariants,
@@ -97,14 +69,13 @@ import {
     Modal,
 }                           from './Modal'
 import {
+    // react components:
+    Popup,
+}                           from './Popup'
+import {
     // hooks:
     OrientationName,
     OrientationVariant,
-    
-    
-    
-    // configs:
-    cssDecls as rcssDecls,
     
     
     
@@ -141,67 +112,101 @@ export const useModalCardVariant = (props: ModalCardVariant) => {
 
 
 // styles:
-const cardElm      = '*';
-const cardItemsElm = '*';
-const cardBodyElm  = '.body';
-
-export const usesCard = () => {
-    // dependencies:
-    
-    // animations:
-    const [, animRefs] = usesAnim();
-    
-    
-    
-    const newCardProps = overwriteParentProps(
-        usesGeneralProps(cssProps), // apply general cssProps
-        
-        // parents:
-        rcssDecls, // Card
-        ccssDecls, // Content
-        icssDecls, // Indicator
-        bcssDecls, // Basic
-    );
-    
-    
-    
-    return layout({
-        ...backupProps(newCardProps), // backup Card's cssProps before overwriting
-        
-        ...children(cardElm, composition([
-            imports([
-                usesModalElement(),
+export const usesModalCardElementLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesModalElementLayout(),
+        ]),
+        layout({
+            // layouts:
+            display       : 'flex',
+            flexDirection : 'column',
+            justifyContent : 'start',   // if Card is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the Card's header should be visible first
+            alignItems     : 'center',  // center Card horizontally
+            flexWrap       : 'nowrap',  // no wrapping
+            
+            
+            
+            // children:
+            ...children('*', composition([ // Card
+                layout({
+                    // customize:
+                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'card')), // apply general cssProps starting with card***
+                }),
+            ])),
+        }),
+    ]);
+};
+export const usesModalCardElementVariants = () => {
+    return composition([
+        variants([
+            rule(':not(.scrollable)>&', [
+                layout({
+                    // sizes:
+                    boxSizing  : 'content-box', // the final size is excluding borders & paddings
+                    inlineSize : 'max-content', // forcing the Card's width follows the Card's items width
+                    blockSize  : 'max-content', // forcing the Card's height follows the Card's items height
+                    
+                    // fix bug on firefox.
+                    // setting *(inline|block)Size:max-content* guarantes the scrolling effect never occured (the *scrolling prop* will be ignored).
+                    // but on firefox if the *scrolling prop* is not turned off => causing the element clipped off at the top.
+                 // overflow   : 'visible', // turn off the scrolling; side effect the rounded corners won't be clipped
+                 // overflow   : '-moz-hidden-unscrollable', // not working; use JS solution
+                }),
             ]),
-            layout({
-                // children:
-                ...children(cardItemsElm, composition([
-                    layout({
-                        // customize:
-                        ...restoreProps(newCardProps), // restore Card's cssProps
-                    }),
-                ])),
-            }),
-            variants([
-                rule(':nth-child(n)', [ // force overwrite
-                    layout({
-                        // layouts:
-                        gridArea : 'content',
-                        
-                        
-                        
-                        // animations:
-                        anim     : animRefs.anim,
-                        
-                        
-                        
-                        // customize:
-                        ...newCardProps, // overwrite Card's cssProps
-                    }),
+            rule('.scrollable>&', [
+                layout({
+                    // sizes:
+                    boxSizing     : 'border-box', // the final size is including borders & paddings
+                    inlineSize    : 'auto',       // follows the content's width, but
+                    maxInlineSize : '100%',       // up to the maximum available parent's width
+                    blockSize     : 'auto',       // follows the content's height, but
+                    maxBlockSize  : '100%',       // up to the maximum available parent's height
+                    overflow      : 'hidden',     // force the Card to scroll, otherwise clipped
+                    
+                    
+                    
+                    // children:
+                    ...children('*', composition([ // Card
+                        layout({
+                            boxSizing     : 'inherit',
+                            inlineSize    : 'inherit',
+                            maxInlineSize : 'inherit',
+                            blockSize     : 'inherit',
+                            maxBlockSize  : 'inherit',
+                        }),
+                    ])),
+                }),
+            ]),
+        ]),
+    ]);
+};
+export const usesModalCardElement = () => {
+    return composition([
+        variants([
+            rule('&&', [ // makes `.ModalCardElement` is more specific than `.Popup`
+                imports([
+                    // layouts:
+                    usesModalCardElementLayout(),
+                    
+                    // variants:
+                    usesModalCardElementVariants(),
                 ]),
             ]),
-        ])),
-    });
+        ]),
+    ]);
 };
+
+export const useModalCardElementSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesModalCardElement(),
+        ]),
+    ]),
+]);
+
+
 
 export const usesModalCardLayout = () => {
     return composition([
@@ -221,7 +226,12 @@ export const usesModalCardLayout = () => {
             
             
             // children:
-            ...usesCard(),
+            ...children('*', composition([
+                layout({
+                    // layouts:
+                    gridArea : 'content',
+                }),
+            ])),
             
             //#region psedudo elm for filling the end of horz & vert scroll
             ...children(['::before', '::after'], composition([
@@ -291,50 +301,6 @@ export const usesModalCardVariants = () => {
                     // scrolls:
                     // scroller at ModalCard's layer
                     overflow : 'auto', // enable horz & vert scrolling
-                    
-                    
-                    
-                    // children:
-                    ...children(cardElm, composition([
-                        layout({
-                            // sizes:
-                            boxSizing  : 'content-box', // the final size is excluding borders & paddings
-                            inlineSize : 'max-content', // forcing the Card's width follows the Card's items width
-                            blockSize  : 'max-content', // forcing the Card's height follows the Card's items height
-                            
-                            // fix bug on firefox.
-                            // setting *(inline|block)Size:max-content* guarantes the scrolling effect never occured (the *scrolling prop* will be ignored).
-                            // but on firefox if the *scrolling prop* is not turned off => causing the element clipped off at the top.
-                         // overflow   : 'visible', // turn off the scrolling; side effect the rounded corners won't be clipped
-                         // overflow   : '-moz-hidden-unscrollable', // not working; use JS solution
-                        }),
-                    ])),
-                }),
-            ]),
-            rule('.scrollable', [
-                layout({
-                    // children:
-                    ...children(cardElm, composition([
-                        layout({
-                            // sizes:
-                            boxSizing     : 'border-box', // the final size is including borders & paddings
-                            inlineSize    : 'auto',       // follows the content's width, but
-                            maxInlineSize : '100%',       // up to the maximum available parent's width
-                            blockSize     : 'auto',       // follows the content's height, but
-                            maxBlockSize  : '100%',       // up to the maximum available parent's height
-                            
-                            
-                            
-                            // children:
-                            ...children(cardBodyElm, composition([
-                                layout({
-                                    // scrolls:
-                                    // scroller at Card's body layer (for the `.scrollable` turned on)
-                                    overflow : 'auto', // enable horz & vert scrolling
-                                }),
-                            ])),
-                        }),
-                    ])),
                 }),
             ]),
         ]),
@@ -409,8 +375,8 @@ export const useModalCardSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         // positions:
-        horzAlign                   : 'center',
-        vertAlign                   : 'center',
+        horzAlign : 'center',
+        vertAlign : 'center',
     };
 }, { prefix: 'mdlcrd' });
 
@@ -429,29 +395,62 @@ export interface ModalCardElementProps<TElement extends HTMLElement = HTMLElemen
 {
 }
 export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardElementProps<TElement, TCloseType>) {
+    // styles:
+    const sheet = useModalCardElementSheet();
+    
+    
+    
     // rest props:
     const {
+        // essentials:
+        elmRef,         // moved to Card
+        
+        
         // accessibilities:
-        tabIndex = -1,
+        tabIndex = -1,  // from ModalElement   , moved to Card
+        active,         // from accessibilities, moved to Popup
+        inheritActive,  // from accessibilities, moved to Popup
         
         
         // actions:
-        onActiveChange,
+        onActiveChange, // from ModalAction, not implemented
     ...restProps} = props;
     
     
     
     return (
-        <Card
-            // other props:
-            {...restProps}
-            
-            
+        <Popup
             // accessibilities:
             {...{
-                tabIndex,
+                active,
+                inheritActive,
             }}
-        />
+            
+            
+            // appearances:
+            nude={true}
+            
+            
+            // classes:
+            classes={[
+                sheet.main, // inject ModalCardElement class
+            ]}
+        >
+            <Card
+                // other props:
+                {...restProps}
+                
+                
+                // essentials:
+                elmRef={elmRef}
+                
+                
+                // accessibilities:
+                {...{
+                    tabIndex,
+                }}
+            />
+        </Popup>
     );
 }
 ModalCardElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
@@ -481,23 +480,8 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
     
     
     
-    // states:
-    const activePassiveState = useActivePassiveState(props);
-    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
-    
-    
-    
     // rest props:
     const {
-        // essentials:
-        elmRef,
-        
-        
-        // accessibilities:
-        active,         // from accessibilities, removed
-        inheritActive,  // from accessibilities, removed
-        
-        
         // appearances:
         modalCardStyle,
         
@@ -506,26 +490,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
         header,
         footer,
     ...restProps} = props;
-    
-    
-    
-    // dom effects:
-    const cardRef = useRef<TElement|null>(null);
-    
-    useLayoutEffect(() => {
-        if (cardRef.current && navigator.userAgent.toLowerCase().includes('firefox')) {
-            if (isVisible) {
-                cardRef.current.style.overflow = (modalCardStyle === 'scrollable') ? '' : 'visible';
-                
-                // setTimeout(() => {
-                //     if (cardRef.current) cardRef.current.style.overflow = 'clip';
-                // }, 0);
-            }
-            else {
-                cardRef.current.style.overflow = '';
-            } // if
-        } // if firefox
-    }, [isVisible, modalCardStyle]);
     
     
     
@@ -593,13 +557,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
             {...props}
             
             
-            // essentials:
-            elmRef={(elm) => {
-                setElmRef(elmRef, elm);
-                setElmRef(cardRef, elm);
-            }}
-            
-            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
@@ -611,18 +568,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
             style={{...(props.style ?? {}),
                 // variants:
                 ...modalCardVariant.style,
-            }}
-            
-            
-            // events:
-            onAnimationEnd={(e) => {
-                // states:
-                activePassiveState.handleAnimationEnd(e);
-                
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         >
             <ModalCardElement<TElement, TCloseType>
