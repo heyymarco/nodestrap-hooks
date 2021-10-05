@@ -423,6 +423,16 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
     
     
     
+    // handlers:
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (!e.defaultPrevented) {
+            onActiveChange?.(false, 'ui' as unknown as TCloseType);
+            e.preventDefault();
+        } // if
+    };
+    
+    
+    
     // jsx fn props:
     const headerFn = (() => {
         // default (unset) or string:
@@ -434,12 +444,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
                 { header }
                 <CloseButton
                     // actions:
-                    onClick={(e) => {
-                        if (!e.defaultPrevented) {
-                            onActiveChange?.(false, 'ui' as unknown as TCloseType);
-                            e.preventDefault();
-                        } // if
-                    }}
+                    onClick={handleClick}
                 />
             </h5>
         );
@@ -460,12 +465,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
                 { footer }
                 <Button
                     // actions:
-                    onClick={(e) => {
-                        if (!e.defaultPrevented) {
-                            onActiveChange?.(false, 'ui' as unknown as TCloseType);
-                            e.preventDefault();
-                        } // if
-                    }}
+                    onClick={handleClick}
                 >
                     Close
                 </Button>
