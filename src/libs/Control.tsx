@@ -175,7 +175,6 @@ export const isFocusBlurring = (styles: StyleCollection) => rule([selectorIsFocu
 export const usesFocusBlurState = () => {
     // dependencies:
     const [, themeRefs] = usesThemeVariant();
-    const [, animRefs ] = usesAnim();
     
     
     
@@ -203,10 +202,6 @@ export const usesFocusBlurState = () => {
                     // boxShadowFocus color:
                     focusBlurRefs.boxShadowFocusCol,
                 ]],
-            }),
-            vars({
-                [focusBlurDecls.boxShadowFocusBlur] : animRefs.boxShadowNone,
-                [focusBlurDecls.animFocusBlur]      : animRefs.animNone,
             }),
             states([
                 isFocused([
@@ -372,17 +367,8 @@ export const isArriveLeaving = (styles: StyleCollection) => rule([selectorIsArri
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents arrive (hover) & leave state definitions.
  */
 export const usesArriveLeaveState = () => {
-    // dependencies:
-    const [, animRefs] = usesAnim();
-    
-    
-    
     return [
         () => composition([
-            vars({
-                [arriveLeaveDecls.filterArriveLeave] : animRefs.filterNone,
-                [arriveLeaveDecls.animArriveLeave]   : animRefs.animNone,
-            }),
             states([
                 isArrived([
                     vars({
