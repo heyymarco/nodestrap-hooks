@@ -476,24 +476,24 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             // events:
             // watch left click on the overlay only (not at the dialog):
-            onClick={(e) => {
+            onClick={onActiveChange && ((e) => {
                 if (!e.defaultPrevented) {
                     if (e.target === e.currentTarget) {
-                        props.onActiveChange?.(false, 'overlay' as unknown as TCloseType);
+                        onActiveChange(false, 'overlay' as unknown as TCloseType);
                         e.preventDefault();
                     } // if
                 } // if
-            }}
+            })}
             
             // watch [escape key] on the whole Modal, including dialog & dialog's children:
-            onKeyUp={(e) => {
+            onKeyUp={onActiveChange && ((e) => {
                 if (!e.defaultPrevented) {
                     if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                        props.onActiveChange?.(false, 'shortcut' as unknown as TCloseType);
+                        onActiveChange(false, 'shortcut' as unknown as TCloseType);
                         e.preventDefault();
                     } // if
                 } // if
-            }}
+            })}
             
             onAnimationEnd={(e) => {
                 // states:
