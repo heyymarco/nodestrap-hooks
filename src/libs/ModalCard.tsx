@@ -120,8 +120,8 @@ export const usesModalCardElementLayout = () => {
         ]),
         layout({
             // layouts:
-            display       : 'flex',
-            flexDirection : 'column',
+            display        : 'flex',
+            flexDirection  : 'column',
             justifyContent : 'start',   // if Card is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the Card's header should be visible first
             alignItems     : 'center',  // center Card horizontally
             flexWrap       : 'nowrap',  // no wrapping
