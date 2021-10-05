@@ -483,6 +483,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                         e.preventDefault();
                     } // if
                 } // if
+                
+                
+                
+                // forwards:
+                props.onClick?.(e);
             })}
             
             // watch [escape key] on the whole Modal, including dialog & dialog's children:
@@ -493,6 +498,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                         e.preventDefault();
                     } // if
                 } // if
+                
+                
+                
+                // forwards:
+                props.onKeyUp?.(e);
             })}
             
             onAnimationEnd={(e) => {
