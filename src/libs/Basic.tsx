@@ -973,7 +973,7 @@ const propsManager  = {
     unregisterAnim      : (item: Cust.Ref) => setsAnim.delete(item),
 } as const;
 
-const convertRefToDecl = (ref: Cust.Ref): Cust.Decl|null => (ref.match(/(?<=var\(\s*)--[\w-]+(?=\s*(?:,[^)]*)?\))/)?.[0] ?? null) as Cust.Decl|null;
+export const convertRefToDecl = (ref: Cust.Ref): Cust.Decl|null => (ref.match(/(?<=var\(\s*)--[\w-]+(?=\s*(?:,[^)]*)?\))/)?.[0] ?? null) as Cust.Decl|null;
 export const usesAnim = () => {
     return [
         () => composition([
