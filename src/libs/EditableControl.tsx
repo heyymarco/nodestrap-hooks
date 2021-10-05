@@ -179,16 +179,11 @@ export const usesValidInvalidState = () => {
     const [, mildRefs ] = usesMildVariant();
     const [, foregRefs] = usesForeg();
     const [, backgRefs] = usesBackg();
-    const [, animRefs ] = usesAnim();
     
     
     
     return [
         () => composition([
-            vars({
-                [validInvalidDecls.animValidUnvalid]     : animRefs.animNone,
-                [validInvalidDecls.animInvalidUninvalid] : animRefs.animNone,
-            }),
             states([
                 isValidating([
                     vars({
