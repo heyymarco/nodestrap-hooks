@@ -198,10 +198,42 @@ export const usesModalCardElement = () => {
     ]);
 };
 
+export const usesActionBarLayout = () => {
+    return composition([
+        layout({
+            // layouts:
+            display        : 'flex',          // use block flexbox, so it takes the entire parent's width
+            flexDirection  : 'row',           // items are stacked horizontally
+            justifyContent : 'space-between', // items are separated horizontally as far as possible
+            alignItems     : 'center',        // items are centered vertically
+            flexWrap       : 'nowrap',        // no wrapping
+            
+            
+            
+            // children:
+            ...children('*', composition([
+                variants([
+                    // only one child:
+                    rule(':first-child:last-child', composition([
+                        layout({
+                            marginInlineStart: 'auto',
+                        }),
+                    ])),
+                ]),
+            ])),
+        }),
+    ]);
+};
+
 export const useModalCardElementSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesModalCardElement(),
+        ]),
+    ]),
+    compositionOf('actionBar', [
+        imports([
+            usesActionBarLayout(),
         ]),
     ]),
 ]);
@@ -329,42 +361,10 @@ export const usesModalCard = () => {
     ]);
 };
 
-export const usesActionBarLayout = () => {
-    return composition([
-        layout({
-            // layouts:
-            display        : 'flex',          // use block flexbox, so it takes the entire parent's width
-            flexDirection  : 'row',           // items are stacked horizontally
-            justifyContent : 'space-between', // items are separated horizontally as far as possible
-            alignItems     : 'center',        // items are centered vertically
-            flexWrap       : 'nowrap',        // no wrapping
-            
-            
-            
-            // children:
-            ...children('*', composition([
-                variants([
-                    // only one child:
-                    rule(':first-child:last-child', composition([
-                        layout({
-                            marginInlineStart: 'auto',
-                        }),
-                    ])),
-                ]),
-            ])),
-        }),
-    ]);
-};
-
 export const useModalCardSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesModalCard(),
-        ]),
-    ]),
-    compositionOf('actionBar', [
-        imports([
-            usesActionBarLayout(),
         ]),
     ]),
 ]);
@@ -414,76 +414,6 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
         
         // actions:
         onActiveChange, // from ModalAction, not implemented
-    ...restProps} = props;
-    
-    
-    
-    return (
-        <Popup
-            // accessibilities:
-            {...{
-                active,
-                inheritActive,
-            }}
-            
-            
-            // appearances:
-            nude={true}
-            
-            
-            // classes:
-            classes={[
-                sheet.main, // inject ModalCardElement class
-            ]}
-        >
-            <Card
-                // other props:
-                {...restProps}
-                
-                
-                // essentials:
-                elmRef={elmRef}
-                
-                
-                // accessibilities:
-                {...{
-                    tabIndex,
-                }}
-            />
-        </Popup>
-    );
-}
-ModalCardElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
-
-
-
-
-
-
-export interface ModalCardProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
-    extends
-        ModalProps<TElement, TCloseType>,
-        CardProps<TElement>,
-        
-        // appearances:
-        ModalCardVariant
-{
-}
-export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardProps<TElement, TCloseType>) {
-    // styles:
-    const sheet              = useModalCardSheet();
-    
-    
-    
-    // variants:
-    const modalCardVariant   = useModalCardVariant(props);
-    
-    
-    
-    // rest props:
-    const {
-        // appearances:
-        modalCardStyle,
         
         
         // children:
@@ -550,6 +480,81 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
     
     
     
+    return (
+        <Popup
+            // accessibilities:
+            {...{
+                active,
+                inheritActive,
+            }}
+            
+            
+            // appearances:
+            nude={true}
+            
+            
+            // classes:
+            classes={[
+                sheet.main, // inject ModalCardElement class
+            ]}
+        >
+            <Card
+                // other props:
+                {...restProps}
+                
+                
+                // essentials:
+                elmRef={elmRef}
+                
+                
+                // accessibilities:
+                {...{
+                    tabIndex,
+                }}
+                
+                
+                // children:
+                header={headerFn}
+                footer={footerFn}
+            />
+        </Popup>
+    );
+}
+ModalCardElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
+
+
+
+
+
+
+export interface ModalCardProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
+    extends
+        ModalProps<TElement, TCloseType>,
+        CardProps<TElement>,
+        
+        // appearances:
+        ModalCardVariant
+{
+}
+export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardProps<TElement, TCloseType>) {
+    // styles:
+    const sheet              = useModalCardSheet();
+    
+    
+    
+    // variants:
+    const modalCardVariant   = useModalCardVariant(props);
+    
+    
+    
+    // rest props:
+    const {
+        // appearances:
+        modalCardStyle,
+    ...restProps} = props;
+    
+    
+    
     // jsx:
     return (
         <Modal<TElement, TCloseType>
@@ -573,11 +578,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
             <ModalCardElement<TElement, TCloseType>
                 // other props:
                 {...restProps}
-                
-                
-                // children:
-                header={headerFn}
-                footer={footerFn}
             />
         </Modal>
     );
