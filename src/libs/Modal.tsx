@@ -441,7 +441,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             
             
-            childRef.current?.focus({ preventScroll: true }); // when actived => focus the dialog, so the user able to use [esc] key to close the dialog
+            childRef.current?.focus({ preventScroll: true }); // when actived => focus the ModalElement, so the user able to use [esc] key to close the Modal
             
             
             
@@ -475,7 +475,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             
             // events:
-            // watch left click on the overlay only (not at the dialog):
+            // watch left click on the overlay only (not at the ModalElement):
             onClick={onActiveChange && ((e) => {
                 if (!e.defaultPrevented) {
                     if (e.target === e.currentTarget) {
@@ -490,7 +490,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                 props.onClick?.(e);
             })}
             
-            // watch [escape key] on the whole Modal, including dialog & dialog's children:
+            // watch [escape key] on the whole Modal, including ModalElement & ModalElement's children:
             onKeyUp={onActiveChange && ((e) => {
                 if (!e.defaultPrevented) {
                     if ((e.key === 'Escape') || (e.code === 'Escape')) {
