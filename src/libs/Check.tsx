@@ -64,6 +64,7 @@ import {
     usesSizeVariant,
     usesMildVariant,
     usesForeg,
+    convertRefToDecl,
     usesAnim,
 }                           from './Basic'
 import {
@@ -206,20 +207,17 @@ export const usesCheckAnim = () => {
                     )),
                 ],
             }),
+            vars(Object.fromEntries([
+                ...checkPropsManager.filters().map(convertRefToDecl).map((decl) => [ decl, animRefs.filterNone ]),
+                ...checkPropsManager.transfs().map(convertRefToDecl).map((decl) => [ decl, animRefs.transfNone ]),
+                ...checkPropsManager.anims().map(convertRefToDecl).map((decl) => [ decl, animRefs.animNone ]),
+            ])),
         ]),
         checkAnimRefs,
         checkAnimDecls,
         checkPropsManager,
     ] as const;
 };
-
-{
-    const [, animRefs] = usesAnim();
-    
-    checkPropsManager.registerFilter(animRefs.filterNone);
-    checkPropsManager.registerTransf(animRefs.transfNone);
-    checkPropsManager.registerAnim(animRefs.animNone);
-}
 //#endregion check animations
 
 
@@ -249,22 +247,8 @@ const [checkClearRefs, checkClearDecls] = createCssVar<CheckClearVars>();
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents check & clear state definitions.
  */
 export const usesCheckClearState = () => {
-    // dependencies:
-    const [, animRefs] = usesAnim();
-    
-    
-    
     return [
         () => composition([
-            vars({
-                [checkClearDecls.filterCheckClearIn]  : animRefs.filterNone,
-                [checkClearDecls.filterCheckClearOut] : animRefs.filterNone,
-                
-                [checkClearDecls.transfCheckClearIn]  : animRefs.transfNone,
-                [checkClearDecls.transfCheckClearOut] : animRefs.transfNone,
-                
-                [checkClearDecls.animCheckClear]      : animRefs.animNone,
-            }),
             states([
                 isActived([
                     vars({
