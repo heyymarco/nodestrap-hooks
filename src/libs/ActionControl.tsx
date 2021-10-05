@@ -133,17 +133,8 @@ export const isPressReleasing = (styles: StyleCollection) => rule([selectorIsPre
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents press & release state definitions.
  */
 export const usesPressReleaseState = () => {
-    // dependencies:
-    const [, animRefs] = usesAnim();
-    
-    
-    
     return [
         () => composition([
-            vars({
-                [pressReleaseDecls.filterPressRelease] : animRefs.filterNone,
-                [pressReleaseDecls.animPressRelease]   : animRefs.animNone,
-            }),
             states([
                 isPressed([
                     vars({
