@@ -407,13 +407,13 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
         
         
         // accessibilities:
-        tabIndex = -1,  // from ModalElement   , moved to Card
         active,         // from accessibilities, moved to Popup
         inheritActive,  // from accessibilities, moved to Popup
+        tabIndex = -1,  // from ModalElement   , moved to Card
         
         
         // actions:
-        onActiveChange, // from ModalAction, not implemented
+        onActiveChange,
         
         
         // children:
@@ -436,7 +436,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
                     // actions:
                     onClick={(e) => {
                         if (!e.defaultPrevented) {
-                            props.onActiveChange?.(false, 'ui' as unknown as TCloseType);
+                            onActiveChange?.(false, 'ui' as unknown as TCloseType);
                             e.preventDefault();
                         } // if
                     }}
@@ -462,7 +462,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
                     // actions:
                     onClick={(e) => {
                         if (!e.defaultPrevented) {
-                            props.onActiveChange?.(false, 'ui' as unknown as TCloseType);
+                            onActiveChange?.(false, 'ui' as unknown as TCloseType);
                             e.preventDefault();
                         } // if
                     }}
@@ -547,14 +547,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
     
     
     
-    // rest props:
-    const {
-        // appearances:
-        modalCardStyle,
-    ...restProps} = props;
-    
-    
-    
     // jsx:
     return (
         <Modal<TElement, TCloseType>
@@ -577,7 +569,7 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
         >
             <ModalCardElement<TElement, TCloseType>
                 // other props:
-                {...restProps}
+                {...props}
             />
         </Modal>
     );
