@@ -424,12 +424,12 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
     
     
     // handlers:
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleClose = onActiveChange && ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         if (!e.defaultPrevented) {
-            onActiveChange?.(false, 'ui' as unknown as TCloseType);
+            onActiveChange(false, 'ui' as unknown as TCloseType);
             e.preventDefault();
         } // if
-    };
+    });
     
     
     
@@ -444,7 +444,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
                 { header }
                 <CloseButton
                     // actions:
-                    onClick={handleClick}
+                    onClick={handleClose}
                 />
             </h5>
         );
@@ -465,7 +465,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
                 { footer }
                 <Button
                     // actions:
-                    onClick={handleClick}
+                    onClick={handleClose}
                 >
                     Close
                 </Button>
