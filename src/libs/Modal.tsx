@@ -462,8 +462,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             
             // accessibilities:
-            role={active ? 'dialog' : undefined}
-            aria-modal={active ? true : undefined}
+            role={props.role ?? (active ? 'dialog' : undefined)}
+            aria-modal={props['aria-modal'] ?? (active ? true : undefined)}
             {...{
                 active,
                 inheritActive,
