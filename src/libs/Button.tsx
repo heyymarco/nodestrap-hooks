@@ -49,6 +49,8 @@ import {
     useOrientationVariant,
     gradientOf,
     noOutlined,
+    isOutlined,
+    usesOutlinedVariant,
     outlinedOf,
     usesMildVariant,
     usesForeg,
@@ -191,8 +193,9 @@ export const usesButtonVariants = () => {
     ]));
     
     // colors:
-    const [, mildRefs            ] = usesMildVariant();
-    const [,         , foregDecls] = usesForeg();
+    const [, outlinedRefs            ] = usesOutlinedVariant();
+    const [, mildRefs                ] = usesMildVariant();
+    const [,             , foregDecls] = usesForeg();
     
     
     
@@ -258,9 +261,24 @@ export const usesButtonVariants = () => {
                 ]),
             ]),
             rule('.icon', [
-                vars({
-                    [foregDecls.foreg] : mildRefs.foregMildFn,
-                }),
+                variants([
+                    noOutlined([
+                        vars({
+                            /*
+                                `noBackground()` is causing `.outlined` actived
+                                => currentColor = theme color
+                                so we fix it:
+                                => currentColor = foreg color at `.mild` variant
+                            */
+                            [foregDecls.foreg] : mildRefs.foregMildFn,
+                        }),
+                    ]),
+                    isOutlined([
+                        vars({
+                            [foregDecls.foreg] : outlinedRefs.foregOutlinedFn,
+                        }),
+                    ]),
+                ]),
             ]),
             rule('.ghost', [
                 layout({
