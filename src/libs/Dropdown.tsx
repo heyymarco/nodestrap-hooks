@@ -269,10 +269,8 @@ export function DropdownElement<TElement extends HTMLElement = HTMLElement, TClo
 export interface DropdownProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>
     extends
         CollapseProps<TElement>,
-        DropdownAction<TCloseType>
+        DropdownElementProps<TElement, TCloseType>
 {
-    // accessibilities:
-    tabIndex? : number
 }
 export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>(props: DropdownProps<TElement, TCloseType>) {
     // styles:

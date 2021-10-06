@@ -393,10 +393,8 @@ export function ModalElement<TElement extends HTMLElement = HTMLElement, TCloseT
 export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>
     extends
         IndicatorProps<TElement>,
-        ModalAction<TCloseType>
+        ModalElementProps<TElement, TCloseType>
 {
-    // accessibilities:
-    tabIndex? : number
 }
 export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalProps<TElement, TCloseType>) {
     // styles:
