@@ -290,7 +290,7 @@ DropdownListElement.prototype = DropdownElement.prototype; // mark as DropdownEl
 export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
     extends
         DropdownProps<TElement, TCloseType>,
-        ListProps<TElement>
+        DropdownListElementProps<TElement, TCloseType>
 {
 }
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
