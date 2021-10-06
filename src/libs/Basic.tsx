@@ -148,10 +148,10 @@ export interface OrientationVars {
 }
 const [orientationRefs, orientationDecls] = createCssVar<OrientationVars>();
 
-export const noOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`:not(.${orientationName})`, styles);
+export const notOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`:not(.${orientationName})`, styles);
 export const isOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`.${orientationName}`, styles);
-export const noOrientationBlock  = (styles: StyleCollection) => noOrientation('block' , styles);
-export const noOrientationInline = (styles: StyleCollection) => noOrientation('inline', styles);
+export const notOrientationBlock  = (styles: StyleCollection) => notOrientation('block' , styles);
+export const notOrientationInline = (styles: StyleCollection) => notOrientation('inline', styles);
 export const isOrientationBlock  = (styles: StyleCollection) => isOrientation('block' , styles);
 export const isOrientationInline = (styles: StyleCollection) => isOrientation('inline', styles);
 
@@ -205,7 +205,7 @@ export const useOrientationVariant = (props: OrientationVariant) => {
 //#endregion orientation
 
 //#region nude
-export const noNude = (styles: StyleCollection) => rule(':not(.nude)', styles);
+export const notNude = (styles: StyleCollection) => rule(':not(.nude)', styles);
 export const isNude = (styles: StyleCollection) => rule('.nude', styles);
 export const usesNudeVariant = () => {
     return composition([
@@ -486,7 +486,7 @@ export interface GradientVars {
 const [gradientRefs, gradientDecls] = createCssVar<GradientVars>();
 
 // grandpa ?? `.gradient` and parent not `.gradient` and current not `.gradient`:
-export const noGradient = (styles: StyleCollection) => rule(':where(:not(.gradient)) :where(:not(.gradient))&:not(.gradient)', styles);
+export const notGradient = (styles: StyleCollection) => rule(':where(:not(.gradient)) :where(:not(.gradient))&:not(.gradient)', styles);
 // grandpa is `.gradient` or  parent is  `.gradient` or  current is  `.gradient`:
 export const isGradient = (styles: StyleCollection) => rule([           '.gradient &',          '.gradient&',   '&.gradient'], styles);
 
@@ -499,7 +499,7 @@ export const usesGradientVariant = (factory = gradientOf) => {
     return [
         () => composition([
             variants([
-                noGradient(factory(false)),
+                notGradient(factory(false)),
                 isGradient(factory(true)),
             ]),
         ]),
@@ -554,7 +554,7 @@ export interface OutlinedVars {
 const [outlinedRefs, outlinedDecls] = createCssVar<OutlinedVars>();
 
 // grandpa ?? `.outlined` and parent not `.outlined` and current not `.outlined`:
-export const noOutlined = (styles: StyleCollection) => rule(':where(:not(.outlined)) :where(:not(.outlined))&:not(.outlined)', styles);
+export const notOutlined = (styles: StyleCollection) => rule(':where(:not(.outlined)) :where(:not(.outlined))&:not(.outlined)', styles);
 // grandpa is `.outlined` or  parent is  `.outlined` or  current is  `.outlined`:
 export const isOutlined = (styles: StyleCollection) => rule([           '.outlined &',          '.outlined&',   '&.outlined'], styles);
 
@@ -588,7 +588,7 @@ export const usesOutlinedVariant = (factory = outlinedOf) => {
                 [outlinedDecls.backgOutlinedFn] : 'transparent', // set background to transparent, regardless of the theme colors
             }),
             variants([
-                noOutlined(factory(false)),
+                notOutlined(factory(false)),
                 isOutlined(factory(true)),
             ]),
         ]),
@@ -645,7 +645,7 @@ const [mildRefs, mildDecls] = createCssVar<MildVars>();
 
 // by design: grandpa's `.mild` does not affect current `.mild`
 // parent not `.mild` and current not `.mild`:
-export const noMild = (styles: StyleCollection) => rule(':where(:not(.mild))&:not(.mild)', styles);
+export const notMild = (styles: StyleCollection) => rule(':where(:not(.mild))&:not(.mild)', styles);
 // parent is  `.mild` or  current is  `.mild`:
 export const isMild = (styles: StyleCollection) => rule([           '.mild&',   '&.mild'], styles);
 
@@ -685,7 +685,7 @@ export const usesMildVariant = (factory = mildOf) => {
                 ),
             }),
             variants([
-                noMild(factory(false)),
+                notMild(factory(false)),
                 isMild(factory(true)),
             ]),
         ]),

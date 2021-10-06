@@ -44,7 +44,7 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    noOrientationInline,
+    notOrientationInline,
     isOrientationInline,
     OrientationVariant,
     useOrientationVariant,
@@ -526,7 +526,7 @@ export const usesCardVariants = () => {
             sizes(),
         ]),
         variants([
-            noOrientationInline([ // block
+            notOrientationInline([ // block
                 layout({
                     // layouts:
                     display        : 'flex',        // use block flexbox, so it takes the entire parent's width

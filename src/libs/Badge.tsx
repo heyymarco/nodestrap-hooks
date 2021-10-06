@@ -41,7 +41,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    noNude,
+    notNude,
 }                           from './Basic'
 import {
     // general types:
@@ -208,7 +208,7 @@ export const usesBadgeVariants = () => {
             ]),
             rule(['.square', '.circle'], [
                 variants([
-                    noNude([
+                    notNude([
                         layout({
                             // spacings:
                             padding : cssProps.paddingBlock, // set paddingInline = paddingBlock

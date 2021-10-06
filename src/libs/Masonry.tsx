@@ -47,7 +47,7 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    noOrientationInline,
+    notOrientationInline,
     isOrientationInline,
     OrientationVariant,
     useOrientationVariant,
@@ -102,7 +102,7 @@ export const usesMasonryVariants = () => {
             sizes(),
         ]),
         variants([
-            noOrientationInline([ // block
+            notOrientationInline([ // block
                 layout({
                     // layouts:
                     display             : 'grid', // use css block grid for layouting, the core of our Masonry layout

@@ -61,7 +61,7 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    noOrientationInline,
+    notOrientationInline,
     isOrientationInline,
     OrientationVariant,
     useOrientationVariant,
@@ -530,7 +530,7 @@ export const usesListVariants = () => {
                 ]),
             ]),
             
-            noOrientationInline([ // block
+            notOrientationInline([ // block
                 layout({
                     // layouts:
                     display           : 'flex',        // use block flexbox, so it takes the entire parent's width
@@ -713,7 +713,7 @@ export const usesListVariants = () => {
                     ])),
                 }),
                 variants([
-                    noOrientationInline([ // block
+                    notOrientationInline([ // block
                         layout({
                             // layouts:
                             // tab directions are block (down) but List direction are inline:

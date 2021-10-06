@@ -43,12 +43,12 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    noOrientationBlock,
+    notOrientationBlock,
     isOrientationBlock,
     OrientationVariant,
     useOrientationVariant,
     gradientOf,
-    noOutlined,
+    notOutlined,
     isOutlined,
     usesOutlinedVariant,
     outlinedOf,
@@ -109,7 +109,7 @@ export const useButtonVariant = (props: ButtonVariant) => {
 export const noBackground = () => {
     return composition([
         variants([
-            noOutlined([
+            notOutlined([
                 imports([
                     outlinedOf(true), // keeps outlined variant
                 ]),
@@ -208,7 +208,7 @@ export const usesButtonVariants = () => {
             sizes(),
         ]),
         variants([
-            noOrientationBlock([ // inline
+            notOrientationBlock([ // inline
                 layout({
                     // layouts:
                     flexDirection  : 'row',    // items are stacked horizontally
@@ -252,7 +252,7 @@ export const usesButtonVariants = () => {
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
                 }),
                 variants([
-                    noOutlined([ // fully link style without `.outlined`:
+                    notOutlined([ // fully link style without `.outlined`:
                         imports([
                             // backgrounds:
                             gradientOf(false), // gradient is not supported if not `.outlined`
@@ -262,7 +262,7 @@ export const usesButtonVariants = () => {
             ]),
             rule('.icon', [
                 variants([
-                    noOutlined([
+                    notOutlined([
                         vars({
                             /*
                                 `noBackground()` is causing `.outlined` actived
