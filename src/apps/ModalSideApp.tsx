@@ -16,9 +16,6 @@ import Content from '../libs/Content';
 import Button from '../libs/Button';
 import ButtonIcon from '../libs/ButtonIcon';
 import ModalSide, * as ModalSides from '../libs/ModalSide';
-import {
-    Prop,
-} from '../libs/css-types'        // ts defs support for jss
 
 
 
@@ -35,12 +32,8 @@ function App() {
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
 	
-	const modalSideStyles = [undefined, 'scrollable'];
+	const modalSideStyles = [undefined, 'inlineStart','inlineEnd','blockStart','blockEnd'];
 	const [modalSideStyle,    setModalSideStyle     ] = useState<ModalSides.ModalSideStyle|undefined>(undefined);
-
-	const aligns = [undefined, 'start', 'center', 'end'];
-	const [horzAlign,  setHorzAlign   ] = useState<Prop.JustifyItems|undefined>(undefined);
-	const [vertAlign,  setVertAlign   ] = useState<Prop.AlignItems|undefined>(undefined);
 
 	const [wideContent, setWideContent   ] = useState(false);
 	const [tallContent, setTallContent   ] = useState(false);
@@ -85,8 +78,6 @@ function App() {
 					}}
 
 					modalSideStyle={modalSideStyle}
-					horzAlign={horzAlign}
-					vertAlign={vertAlign}
 				>
 					<p>
 						Theme:
@@ -156,36 +147,6 @@ function App() {
 										onChange={(e) => setModalSideStyle((e.target.value || undefined) as (ModalSides.ModalSideStyle|undefined))}
 									/>
 									{`${st}`}
-								</label>
-							)
-						}
-					</p>
-					<p>
-						horzAlign:
-						{
-							aligns.map(al =>
-								<label key={al ?? ''}>
-									<input type='radio'
-										value={al}
-										checked={horzAlign===al}
-										onChange={(e) => setHorzAlign((e.target.value || undefined) as (Prop.JustifyItems|undefined))}
-									/>
-									{`${al}`}
-								</label>
-							)
-						}
-					</p>
-					<p>
-						vertAlign:
-						{
-							aligns.map(al =>
-								<label key={al ?? ''}>
-									<input type='radio'
-										value={al}
-										checked={vertAlign===al}
-										onChange={(e) => setVertAlign((e.target.value || undefined) as (Prop.AlignItems|undefined))}
-									/>
-									{`${al}`}
 								</label>
 							)
 						}

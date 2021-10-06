@@ -4,9 +4,6 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
-import type {
-    Prop,
-}                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
     composition,
@@ -47,10 +44,6 @@ import {
 }                           from './Basic'
 import {
     // styles:
-    usesResponsiveContainerGridLayout,
-}                           from './Container'
-import {
-    // styles:
     usesModalElementLayout,
     
     usesModalLayout,
@@ -60,18 +53,25 @@ import {
     
     
     // react components:
-    ModalCloseType,
-    
-    ModalElementProps,
-    ModalElement,
-    
     ModalProps,
     Modal,
 }                           from './Modal'
 import {
+    // styles:
+    usesActionBarLayout,
+    
+    
+    
     // react components:
-    Popup,
-}                           from './Popup'
+    ModalCardCloseType,
+    
+    ModalCardElementProps,
+    ModalCardElement,
+}                           from './ModalCard'
+import {
+    // react components:
+    Collapse,
+}                           from './Collapse'
 import {
     // hooks:
     OrientationName,
@@ -80,10 +80,8 @@ import {
     
     
     // react components:
-    CardProps,
     Card,
 }                           from './Card'
-import Button               from './Button'
 import CloseButton          from './CloseButton'
 
 
@@ -92,20 +90,13 @@ import CloseButton          from './CloseButton'
 
 // appearances:
 
-export type ModalSideStyle = 'scrollable' // might be added more styles in the future
+export type ModalSideStyle = 'inlineStart'|'inlineEnd'|'blockStart'|'blockEnd' // might be added more styles in the future
 export interface ModalSideVariant {
     modalSideStyle? : ModalSideStyle
-    horzAlign?      : Prop.JustifyItems
-    vertAlign?      : Prop.AlignItems
 }
 export const useModalSideVariant = (props: ModalSideVariant) => {
     return {
         class : props.modalSideStyle ? props.modalSideStyle : null,
-        
-        style : {
-            [cssDecls.horzAlign] : props.horzAlign,
-            [cssDecls.vertAlign] : props.vertAlign,
-        },
     };
 };
 
@@ -128,9 +119,28 @@ export const usesModalSideElementLayout = () => {
             
             
             
+            // sizes:
+            boxSizing     : 'border-box', // the final size is including borders & paddings
+            inlineSize    : 'auto',       // follows the content's width, but
+            maxInlineSize : '100%',       // up to the maximum available parent's width
+            blockSize     : 'auto',       // follows the content's height, but
+            maxBlockSize  : '100%',       // up to the maximum available parent's height
+            overflow      : 'hidden',     // force the Card to scroll, otherwise clipped
+            
+            
+            
             // children:
             ...children('*', composition([ // Card
                 layout({
+                    // sizes:
+                    boxSizing     : 'inherit',
+                    inlineSize    : 'inherit',
+                    maxInlineSize : 'inherit',
+                    blockSize     : 'inherit',
+                    maxBlockSize  : 'inherit',
+                    
+                    
+                    
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'card')), // apply general cssProps starting with card***
                 }),
@@ -138,90 +148,16 @@ export const usesModalSideElementLayout = () => {
         }),
     ]);
 };
-export const usesModalSideElementVariants = () => {
-    return composition([
-        variants([
-            rule(':not(.scrollable)>&', [
-                layout({
-                    // sizes:
-                    boxSizing  : 'content-box', // the final size is excluding borders & paddings
-                    inlineSize : 'max-content', // forcing the Card's width follows the Card's items width
-                    blockSize  : 'max-content', // forcing the Card's height follows the Card's items height
-                    
-                    // fix bug on firefox.
-                    // setting *(inline|block)Size:max-content* guarantes the scrolling effect never occured (the *scrolling prop* will be ignored).
-                    // but on firefox if the *scrolling prop* is not turned off => causing the element clipped off at the top.
-                 // overflow   : 'visible', // turn off the scrolling; side effect the rounded corners won't be clipped
-                 // overflow   : '-moz-hidden-unscrollable', // not working; use JS solution
-                }),
-            ]),
-            rule('.scrollable>&', [
-                layout({
-                    // sizes:
-                    boxSizing     : 'border-box', // the final size is including borders & paddings
-                    inlineSize    : 'auto',       // follows the content's width, but
-                    maxInlineSize : '100%',       // up to the maximum available parent's width
-                    blockSize     : 'auto',       // follows the content's height, but
-                    maxBlockSize  : '100%',       // up to the maximum available parent's height
-                    overflow      : 'hidden',     // force the Card to scroll, otherwise clipped
-                    
-                    
-                    
-                    // children:
-                    ...children('*', composition([ // Card
-                        layout({
-                            boxSizing     : 'inherit',
-                            inlineSize    : 'inherit',
-                            maxInlineSize : 'inherit',
-                            blockSize     : 'inherit',
-                            maxBlockSize  : 'inherit',
-                        }),
-                    ])),
-                }),
-            ]),
-        ]),
-    ]);
-};
 export const usesModalSideElement = () => {
     return composition([
         variants([
-            rule('&&', [ // makes `.ModalSideElement` is more specific than `.Popup`
+            rule('&&', [ // makes `.ModalSideElement` is more specific than `.Collapse`
                 imports([
                     // layouts:
                     usesModalSideElementLayout(),
-                    
-                    // variants:
-                    usesModalSideElementVariants(),
                 ]),
             ]),
         ]),
-    ]);
-};
-
-export const usesActionBarLayout = () => {
-    return composition([
-        layout({
-            // layouts:
-            display        : 'flex',          // use block flexbox, so it takes the entire parent's width
-            flexDirection  : 'row',           // items are stacked horizontally
-            justifyContent : 'space-between', // items are separated horizontally as far as possible
-            alignItems     : 'center',        // items are centered vertically
-            flexWrap       : 'nowrap',        // no wrapping
-            
-            
-            
-            // children:
-            ...children('*', composition([
-                variants([
-                    // only one child:
-                    rule(':first-child:last-child', composition([
-                        layout({
-                            marginInlineStart: 'auto',
-                        }),
-                    ])),
-                ]),
-            ])),
-        }),
     ]);
 };
 
@@ -245,59 +181,14 @@ export const usesModalSideLayout = () => {
         imports([
             // layouts:
             usesModalLayout(),
-            usesResponsiveContainerGridLayout(), // applies responsive container functionality using css grid
         ]),
         layout({
             // layouts:
-         // display      : 'grid',             // already defined in `usesResponsiveContainerGridLayout()`. We use a grid for the layout, so we can align the Card both horizontally & vertically
+            display      : 'grid',    // use a grid for the layout, so we can align the Card both horizontally & vertically
             
             // child default sizes:
-            justifyItems : cssProps.horzAlign, // align (default center) horizontally
-            alignItems   : cssProps.vertAlign, // align (default center) vertically
-            
-            
-            
-            // children:
-            ...children('*', composition([
-                layout({
-                    // layouts:
-                    gridArea : 'content',
-                }),
-            ])),
-            
-            //#region psedudo elm for filling the end of horz & vert scroll
-            ...children(['::before', '::after'], composition([
-                layout({
-                    // layouts:
-                    content     : '""',
-                    display     : 'block',
-                    
-                    
-                    
-                    // sizes:
-                    // fills the entire grid area:
-                    justifySelf : 'stretch',
-                    alignSelf   : 'stretch',
-                    
-                    
-                    
-                    // appearances:
-                    visibility  : 'hidden',
-                }),
-            ])),
-            ...children('::before', composition([
-                layout({
-                    // layouts:
-                    gridArea    : 'inlineEnd',
-                }),
-            ])),
-            ...children('::after', composition([
-                layout({
-                    // layouts:
-                    gridArea    : 'blockEnd',
-                }),
-            ])),
-            //#endregion psedudo elm for filling the end of horz & vert scroll
+            justifyItems : 'start',   // align left horizontally
+            alignItems   : 'stretch', // stretch    vertically
             
             
             
@@ -328,11 +219,40 @@ export const usesModalSideVariants = () => {
             sizes(),
         ]),
         variants([
-            rule(':not(.scrollable)', [
+            rule('.inlineStart', [
                 layout({
-                    // scrolls:
-                    // scroller at ModalSide's layer
-                    overflow : 'auto', // enable horz & vert scrolling
+                    // layouts:
+                    
+                    // child default sizes:
+                    justifyItems : 'start',   // align left horizontally
+                    alignItems   : 'stretch', // stretch    vertically
+                }),
+            ]),
+            rule('.inlineEnd', [
+                layout({
+                    // layouts:
+                    
+                    // child default sizes:
+                    justifyItems : 'end',     // align left horizontally
+                    alignItems   : 'stretch', // stretch    vertically
+                }),
+            ]),
+            rule('.blockStart', [
+                layout({
+                    // layouts:
+                    
+                    // child default sizes:
+                    justifyItems : 'stretch', // stretch   horizontally
+                    alignItems   : 'start',   // align top vertically
+                }),
+            ]),
+            rule('.blockEnd', [
+                layout({
+                    // layouts:
+                    
+                    // child default sizes:
+                    justifyItems : 'stretch', // stretch   horizontally
+                    alignItems   : 'end',     // align top vertically
                 }),
             ]),
         ]),
@@ -374,9 +294,7 @@ export const useModalSideSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        // positions:
-        horzAlign : 'center',
-        vertAlign : 'center',
+        /* no config props yet */
     };
 }, { prefix: 'mdlsde' });
 
@@ -384,14 +302,16 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export type ModalSideCloseType = 'ui'|ModalCloseType
+export type ModalSideCloseType = ModalCardCloseType
 
 
 
 export interface ModalSideElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>
     extends
-        ModalElementProps<TElement, TCloseType>,
-        CardProps<TElement>
+        ModalCardElementProps<TElement, TCloseType>,
+        
+        // appearances:
+        ModalSideVariant
 {
 }
 export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>(props: ModalSideElementProps<TElement, TCloseType>) {
@@ -407,8 +327,8 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
         
         
         // accessibilities:
-        active,         // from accessibilities, moved to Popup
-        inheritActive,  // from accessibilities, moved to Popup
+        active,         // from accessibilities, moved to Collapse
+        inheritActive,  // from accessibilities, moved to Collapse
         tabIndex = -1,  // from ModalElement   , moved to Card
         
         
@@ -418,7 +338,6 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
         
         // children:
         header,
-        footer,
     ...restProps} = props;
     
     
@@ -455,38 +374,20 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
         return header;
     })();
     
-    const footerFn = (() => {
-        // default (unset) or string:
-        if ((footer === undefined) || (typeof footer === 'string')) return (
-            <p
-                // classes:
-                className={sheet.actionBar}
-            >
-                { footer }
-                <Button
-                    // actions:
-                    onClick={handleClose}
-                >
-                    Close
-                </Button>
-            </p>
-        );
-        
-        
-        
-        // other component:
-        return footer;
-    })();
     
     
-    
+    // jsx:
     return (
-        <Popup
+        <Collapse
             // accessibilities:
             {...{
                 active,
                 inheritActive,
             }}
+            
+            
+            // layouts:
+            orientation={props.modalSideStyle?.startsWith('block') ? 'block' : 'inline'}
             
             
             // appearances:
@@ -495,7 +396,7 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
             
             // classes:
             classes={[
-                sheet.main, // inject ModalSideElement class
+                sheet.main, // inject ModalCardElement class
             ]}
         >
             <Card
@@ -515,22 +416,18 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
                 
                 // children:
                 header={headerFn}
-                footer={footerFn}
             />
-        </Popup>
+        </Collapse>
     );
 }
-ModalSideElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
+ModalSideElement.prototype = ModalCardElement.prototype; // mark as ModalCardElement compatible
 
 
 
 export interface ModalSideProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>
     extends
         ModalProps<TElement, TCloseType>,
-        CardProps<TElement>,
-        
-        // appearances:
-        ModalSideVariant
+        ModalSideElementProps<TElement, TCloseType>
 {
 }
 export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>(props: ModalSideProps<TElement, TCloseType>) {
@@ -556,13 +453,6 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
             variantClasses={[...(props.variantClasses ?? []),
                 modalSideVariant.class,
             ]}
-            
-            
-            // styles:
-            style={{...(props.style ?? {}),
-                // variants:
-                ...modalSideVariant.style,
-            }}
         >
             <ModalSideElement<TElement, TCloseType>
                 // other props:
