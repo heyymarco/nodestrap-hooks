@@ -391,7 +391,10 @@ export type ModalCardCloseType = 'ui'|ModalCloseType
 export interface ModalCardElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
     extends
         ModalElementProps<TElement, TCloseType>,
-        CardProps<TElement>
+        CardProps<TElement>,
+        
+        // appearances:
+        ModalCardVariant
 {
 }
 export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardElementProps<TElement, TCloseType>) {
@@ -528,10 +531,7 @@ ModalCardElement.prototype = ModalElement.prototype; // mark as ModalElement com
 export interface ModalCardProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
     extends
         ModalProps<TElement, TCloseType>,
-        ModalCardElementProps<TElement, TCloseType>,
-        
-        // appearances:
-        ModalCardVariant
+        ModalCardElementProps<TElement, TCloseType>
 {
 }
 export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardProps<TElement, TCloseType>) {
