@@ -12,7 +12,7 @@ import {
 } 					from '../libs/Basic';
 import Button   from '../libs/Button';
 import {TextInput}   from '../libs/Input';
-import DropdownListButton, {DropdownListItem, OrientationName} from '../libs/DropdownListButton';
+import DropdownListButton, {DropdownListItem, DropdownListSeparatorItem, OrientationName} from '../libs/DropdownListButton';
 
 
 
@@ -66,6 +66,8 @@ function App() {
 					buttonChildren='show menu'
 				>
 					<>hello</>
+					<DropdownListSeparatorItem />
+					<DropdownListItem>world</DropdownListItem>
 					<DropdownListItem enabled={childEnabled}>
 						i'm {childEnabled ? 'enabled' : 'disabled'}
 						<input type='checkbox'
@@ -98,6 +100,8 @@ function App() {
 					buttonChildren='show menu'
 				>
 					<>hello</>
+					<DropdownListSeparatorItem />
+					<DropdownListItem>world</DropdownListItem>
 					<DropdownListItem enabled={childEnabled}>
 						i'm {childEnabled ? 'enabled' : 'disabled'}
 						<input type='checkbox'

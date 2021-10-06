@@ -27,6 +27,8 @@ import {
     DropdownListItemProps,
     DropdownListItem,
     
+    DropdownListSeparatorItem,
+    
     DropdownListElementProps,
     DropdownListElement,
 }                           from './DropdownList'
@@ -42,6 +44,10 @@ import {
 
 export type { DropdownListItemProps, DropdownListItemProps as ItemProps }
 export { DropdownListItem, DropdownListItem as Item }
+
+
+
+export { DropdownListSeparatorItem, DropdownListSeparatorItem as SeparatorItem }
 
 
 
