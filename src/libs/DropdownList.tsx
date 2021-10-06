@@ -75,6 +75,8 @@ import {
     ListItemProps,
     ListItem,
     
+    ListSeparatorItem,
+    
     ListProps,
     List,
 }                           from './List'
@@ -135,6 +137,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 // ListItem => DropdownListItem
 export type { ListItemProps, ListItemProps as DropdownListItemProps, ListItemProps as ItemProps }
 export { ListItem, ListItem as DropdownListItem, ListItem as Item }
+
+
+
+// ListSeparatorItem => DropdownListSeparatorItem
+export { ListSeparatorItem, ListSeparatorItem as DropdownListSeparatorItem, ListSeparatorItem as SeparatorItem }
 
 
 
@@ -205,6 +212,11 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
             
             // behaviors:
             actionCtrl={actionCtrl}
+            
+            
+            // variants:
+            theme={props.theme ?? 'secondary'}
+            listStyle={props.listStyle ?? 'joined'}
             
             
             // classes:
