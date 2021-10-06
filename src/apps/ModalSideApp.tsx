@@ -70,8 +70,8 @@ function App() {
 					header=
 					'Lorem ipsum dolor'
 
-					footer=
-					'dolor sit amet'
+					// footer=
+					// 'dolor sit amet'
 
 					onActiveChange={(newActive) => {
 						setActive(newActive);

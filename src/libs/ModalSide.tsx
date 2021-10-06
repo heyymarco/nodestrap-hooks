@@ -96,7 +96,7 @@ export interface ModalSideVariant {
 }
 export const useModalSideVariant = (props: ModalSideVariant) => {
     return {
-        class : props.modalSideStyle ? props.modalSideStyle : null,
+        class : props.modalSideStyle ? props.modalSideStyle : 'inlineStart',
     };
 };
 
@@ -114,7 +114,7 @@ export const usesModalSideElementLayout = () => {
             display        : 'flex',
             flexDirection  : 'column',
             justifyContent : 'start',   // if Card is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the Card's header should be visible first
-            alignItems     : 'center',  // center Card horizontally
+            alignItems     : 'stretch', // stretch Card horizontally
             flexWrap       : 'nowrap',  // no wrapping
             
             
@@ -133,6 +133,8 @@ export const usesModalSideElementLayout = () => {
             ...children('*', composition([ // Card
                 layout({
                     // sizes:
+                    flex          : [[1, 1, '100%']], // growable, shrinkable, initial from parent's height
+                    
                     boxSizing     : 'inherit',
                     inlineSize    : 'inherit',
                     maxInlineSize : 'inherit',
@@ -148,6 +150,60 @@ export const usesModalSideElementLayout = () => {
         }),
     ]);
 };
+export const usesModalSideElementVariants = () => {
+    return composition([
+        variants([
+            rule('.inlineStart>&', [
+                layout({
+                    // children:
+                    ...children(['&', '*'], composition([ // Card
+                        layout({
+                            // border radiuses:
+                            borderStartStartRadius : 0, // remove border radius on left_top
+                            borderEndStartRadius   : 0, // remove border radius on left_bottom
+                        }),
+                    ])),
+                }),
+            ]),
+            rule('.inlineEnd>&', [
+                layout({
+                    // children:
+                    ...children(['&', '*'], composition([ // Card
+                        layout({
+                            // border radiuses:
+                            borderStartEndRadius : 0, // remove border radius on right_top
+                            borderEndEndRadius   : 0, // remove border radius on right_bottom
+                        }),
+                    ])),
+                }),
+            ]),
+            rule('.blockStart>&', [
+                layout({
+                    // children:
+                    ...children(['&', '*'], composition([ // Card
+                        layout({
+                            // border radiuses:
+                            borderStartStartRadius : 0, // remove border radius on top_left
+                            borderStartEndRadius   : 0, // remove border radius on top_right
+                        }),
+                    ])),
+                }),
+            ]),
+            rule('.blockEnd>&', [
+                layout({
+                    // children:
+                    ...children(['&', '*'], composition([ // Card
+                        layout({
+                            // border radiuses:
+                            borderEndStartRadius : 0, // remove border radius on bottom_left
+                            borderEndEndRadius   : 0, // remove border radius on bottom_right
+                        }),
+                    ])),
+                }),
+            ]),
+        ]),
+    ]);
+};
 export const usesModalSideElement = () => {
     return composition([
         variants([
@@ -155,6 +211,9 @@ export const usesModalSideElement = () => {
                 imports([
                     // layouts:
                     usesModalSideElementLayout(),
+                    
+                    // variants:
+                    usesModalSideElementVariants(),
                 ]),
             ]),
         ]),
@@ -187,8 +246,8 @@ export const usesModalSideLayout = () => {
             display      : 'grid',    // use a grid for the layout, so we can align the Card both horizontally & vertically
             
             // child default sizes:
-            justifyItems : 'start',   // align left horizontally
-            alignItems   : 'stretch', // stretch    vertically
+         // justifyItems : 'start',   // align left horizontally // already defined in variant `.(inline|block)(Start|End)`
+         // alignItems   : 'stretch', // stretch    vertically   // already defined in variant `.(inline|block)(Start|End)`
             
             
             
