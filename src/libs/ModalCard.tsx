@@ -524,9 +524,6 @@ ModalCardElement.prototype = ModalElement.prototype; // mark as ModalElement com
 
 
 
-
-
-
 export interface ModalCardProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
     extends
         ModalProps<TElement, TCloseType>,
