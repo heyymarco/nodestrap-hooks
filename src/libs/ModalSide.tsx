@@ -43,6 +43,12 @@ import {
     usesSizeVariant,
 }                           from './Basic'
 import {
+    // hooks:
+    ModalStyle,
+    ModalVariant,
+    
+    
+    
     // styles:
     usesModalElementLayout,
     
@@ -522,4 +528,5 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
 }
 export { ModalSide as default }
 
+export type { ModalStyle, ModalVariant }
 export type { OrientationName, OrientationVariant }

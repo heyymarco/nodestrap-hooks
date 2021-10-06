@@ -19,6 +19,7 @@ import ModalCard, * as ModalCards from '../libs/ModalCard';
 import {
     Prop,
 } from '../libs/css-types'        // ts defs support for jss
+import { ModalStyle } from '../libs/ModalCard';
 
 
 
@@ -44,6 +45,9 @@ function App() {
 
 	const [wideContent, setWideContent   ] = useState(false);
 	const [tallContent, setTallContent   ] = useState(false);
+
+	const modalStyles = [undefined, 'hidden', 'interactive'];
+	const [modalStyle,    setModalStyle     ] = useState<ModalStyle|undefined>(undefined);
 
 	
 
@@ -73,7 +77,8 @@ function App() {
 				<Button onClick={() => setActive(true)}>Show modalCard</Button>
 				<ButtonIcon btnStyle='link' theme='secondary' aria-label='Close' icon='close' />
 				<ModalCard theme={theme} size={size} gradient={enableGrad} outlined={outlined} enabled={enabled} active={active}
-
+					modalStyle={modalStyle}
+					
 					header=
 					'Lorem ipsum dolor'
 
@@ -186,6 +191,21 @@ function App() {
 										onChange={(e) => setVertAlign((e.target.value || undefined) as (Prop.AlignItems|undefined))}
 									/>
 									{`${al}`}
+								</label>
+							)
+						}
+					</p>
+					<p>
+						ModalStyle:
+						{
+							modalStyles.map(st =>
+								<label key={st ?? ''}>
+									<input type='radio'
+										value={st}
+										checked={modalStyle===st}
+										onChange={(e) => setModalStyle((e.target.value || undefined) as (ModalStyle|undefined))}
+									/>
+									{`${st}`}
 								</label>
 							)
 						}

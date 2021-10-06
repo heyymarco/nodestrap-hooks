@@ -21,11 +21,14 @@ import {
     // layouts:
     layout,
     vars,
+    children,
     
     
     
     // rules:
+    variants,
     states,
+    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -135,6 +138,19 @@ export const usesModalAnim = () => {
 //#endregion modal animations
 
 
+// appearances:
+
+export type ModalStyle = 'hidden'|'interactive' // might be added more styles in the future
+export interface ModalVariant {
+    modalStyle? : ModalStyle
+}
+export const useModalVariant = (props: ModalVariant) => {
+    return {
+        class : props.modalStyle ? props.modalStyle : null,
+    };
+};
+
+
 
 // styles:
 export const usesModalElementLayout = () => {
@@ -227,6 +243,29 @@ export const usesModalVariants = () => {
         imports([
             // layouts:
             sizes(),
+        ]),
+        variants([
+            rule('.hidden', [
+                layout({
+                    background    : 'none',
+                }),
+            ]),
+            rule(['.hidden', '.interactive'], [
+                layout({
+                    // accessibilities:
+                    pointerEvents : 'none',
+                    
+                    
+                    
+                    // children:
+                    ...children('*', composition([ // ModalElement
+                        layout({
+                            // accessibilities:
+                            pointerEvents : 'initial',
+                        }),
+                    ])),
+                }),
+            ]),
         ]),
     ]);
 };
@@ -347,7 +386,10 @@ export interface ModalAction<TCloseType = ModalCloseType>
 export interface ModalElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>
     extends
         ModalAction<TCloseType>,
-        ElementProps<TElement>
+        ElementProps<TElement>,
+        
+        // appearances:
+        ModalVariant
 {
     // accessibilities:
     tabIndex? : number
@@ -399,13 +441,19 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseTy
 }
 export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalProps<TElement, TCloseType>) {
     // styles:
-    const sheet              = useModalSheet();
+    const sheet               = useModalSheet();
+    
+    
+    
+    // variants:
+    const modalVariant        = useModalVariant(props);
     
     
     
     // states:
-    const activePassiveState = useActivePassiveState(props);
-    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
+    const activePassiveState  = useActivePassiveState(props);
+    const isVisible           = activePassiveState.active || (!!activePassiveState.class);
+    const isNoBackInteractive = isVisible && ((modalVariant.class !== 'hidden') && (modalVariant.class !== 'interactive'));
     
     
     
@@ -436,11 +484,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     useEffect(() => {
         if (isVisible) {
-            document.body.classList.add(sheet.body);
-            
-            
-            
             childRef.current?.focus({ preventScroll: true }); // when actived => focus the ModalElement, so the user able to use [esc] key to close the Modal
+        } // if isVisible
+    }, [isVisible]);
+    
+    useEffect(() => {
+        if (isNoBackInteractive) {
+            document.body.classList.add(sheet.body);
             
             
             
@@ -448,8 +498,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             return () => {
                 document.body.classList.remove(sheet.body);
             };
-        } // if isVisible
-    }, [isVisible, sheet.body]);
+        } // if isNoBackInteractive
+    }, [isNoBackInteractive, sheet.body]);
     
     
     
@@ -462,7 +512,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             // accessibilities:
             role={props.role ?? (active ? 'dialog' : undefined)}
-            aria-modal={props['aria-modal'] ?? (active ? true : undefined)}
+            aria-modal={props['aria-modal'] ?? ((active && isNoBackInteractive) ? true : undefined)}
             {...{
                 active,
                 inheritActive,
@@ -471,6 +521,9 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            variantClasses={[...(props.variantClasses ?? []),
+                modalVariant.class,
+            ]}
             
             
             // events:

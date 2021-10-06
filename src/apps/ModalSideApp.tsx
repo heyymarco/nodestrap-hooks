@@ -16,6 +16,7 @@ import Content from '../libs/Content';
 import Button from '../libs/Button';
 import ButtonIcon from '../libs/ButtonIcon';
 import ModalSide, * as ModalSides from '../libs/ModalSide';
+import { ModalStyle } from '../libs/ModalSide';
 
 
 
@@ -37,6 +38,9 @@ function App() {
 
 	const [wideContent, setWideContent   ] = useState(false);
 	const [tallContent, setTallContent   ] = useState(false);
+
+	const modalStyles = [undefined, 'hidden', 'interactive'];
+	const [modalStyle,    setModalStyle     ] = useState<ModalStyle|undefined>(undefined);
 
 	
 
@@ -77,6 +81,7 @@ function App() {
 						setActive(newActive);
 					}}
 
+					modalStyle={modalStyle}
 					modalSideStyle={modalSideStyle}
 				>
 					<p>
@@ -135,6 +140,21 @@ function App() {
 							/>
 							enabled
 						</label>
+					</p>
+					<p>
+						ModalStyle:
+						{
+							modalStyles.map(st =>
+								<label key={st ?? ''}>
+									<input type='radio'
+										value={st}
+										checked={modalStyle===st}
+										onChange={(e) => setModalStyle((e.target.value || undefined) as (ModalStyle|undefined))}
+									/>
+									{`${st}`}
+								</label>
+							)
+						}
 					</p>
 					<p>
 						ModalSideStyle:

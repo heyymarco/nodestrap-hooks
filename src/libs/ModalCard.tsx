@@ -50,6 +50,12 @@ import {
     usesResponsiveContainerGridLayout,
 }                           from './Container'
 import {
+    // hooks:
+    ModalStyle,
+    ModalVariant,
+    
+    
+    
     // styles:
     usesModalElementLayout,
     
@@ -572,4 +578,5 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
 }
 export { ModalCard as default }
 
+export type { ModalStyle, ModalVariant }
 export type { OrientationName, OrientationVariant }
