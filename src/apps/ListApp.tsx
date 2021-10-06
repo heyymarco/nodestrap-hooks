@@ -16,7 +16,7 @@ import Control   from '../libs/Control';
 import ActionControl   from '../libs/ActionControl';
 import Button   from '../libs/Button';
 import Content from '../libs/Content';
-import List, {ListItem} from '../libs/List';
+import List, {ListItem, ListSeparatorItem} from '../libs/List';
 import type * as Lists from '../libs/List';
 
 
@@ -46,7 +46,7 @@ function App() {
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Lists.OrientationName|undefined>(undefined);
 
-	const listStyles = [undefined, 'content','flat','flush','btn','tab','breadcrumb','bullet'];
+	const listStyles = [undefined, 'content','flat','flush','joined','btn','tab','breadcrumb','bullet','numbered'];
 	const [listStyle,    setListStyle     ] = useState<Lists.ListStyle|undefined>(undefined);
 
 	
@@ -99,8 +99,8 @@ function App() {
 					listStyle={listStyle}
 				>
 					<>hello</>
-					<></>
-					<>hey</>
+					<ListSeparatorItem />
+					<ListItem>world</ListItem>
 					<ListItem enabled={childEnabled}>
 						i'm {childEnabled ? 'enabled' : 'disabled'}
 						<input type='checkbox'
