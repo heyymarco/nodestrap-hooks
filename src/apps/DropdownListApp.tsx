@@ -32,6 +32,7 @@ function App() {
 
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
+	const [active2,      setActive2   ] = useState(false);
 
 	const actionCtrls = [false, undefined, true];
 	const [actionCtrl,      setActionCtrl   ] = useState<boolean|undefined>(undefined);
@@ -42,6 +43,7 @@ function App() {
 	const [orientation,    setOrientation     ] = useState<OrientationName|undefined>(undefined);
 
 	const targetButtonRef = useRef<HTMLButtonElement>(null);
+	const targetButton2Ref = useRef<HTMLButtonElement>(null);
 
 	
 
@@ -52,7 +54,7 @@ function App() {
 					if (e.buttons) return; // no other button(s) being pressed
 					
 					setActive(!active);
-				}}>Toggle DropdownList</Button>
+				}}>Toggle DropdownList dialog</Button>
 				<DropdownList
 					targetRef={targetButtonRef}
 					popupPlacement='bottom'
@@ -88,6 +90,44 @@ function App() {
 					<DropdownListItem actionCtrl={false}>
 						<TextInput placeholder='type here' enableValidation={false} />
 					</DropdownListItem>
+                </DropdownList>
+
+				<Button elmRef={targetButton2Ref} onClick={(e) => {
+					if (e.buttons) return; // no other button(s) being pressed
+					
+					setActive2(!active2);
+				}}>Toggle DropdownList menu</Button>
+				<DropdownList
+					targetRef={targetButton2Ref}
+					popupPlacement='bottom'
+					
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active2} actionCtrl={actionCtrl}
+					orientation={orientation}
+					onActiveChange={(newActive) => {
+						// if (document.activeElement === targetButtonRef.current) return; // dropdown lost focus because the toggler button got focus => ignore
+						setActive2(newActive);
+					}}
+				>
+					<>hello</>
+					<DropdownListSeparatorItem />
+					<DropdownListItem>world</DropdownListItem>
+					<DropdownListItem enabled={childEnabled}>
+						i'm {childEnabled ? 'enabled' : 'disabled'}
+						<input type='checkbox'
+							checked={childEnabled}
+							onChange={(e) => setChildEnabled(e.target.checked)}
+						/>
+					</DropdownListItem>
+					<DropdownListItem theme='danger'>i'm angry</DropdownListItem>
+					<DropdownListItem size='sm'>i'm small</DropdownListItem>
+					<DropdownListItem size='lg'>i'm big</DropdownListItem>
+					<DropdownListItem gradient={true}>i'm 3d</DropdownListItem>
+					<DropdownListItem outlined={true}>i'm transparent</DropdownListItem>
+					<DropdownListItem>i'm controllable</DropdownListItem>
+					<DropdownListItem active={true}>i'm controllable</DropdownListItem>
                 </DropdownList>
                 <hr style={{flexBasis: '100%'}} />
 				<p>

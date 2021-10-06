@@ -294,11 +294,34 @@ export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, T
 {
 }
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
+    // fn props:
+    const ariaRole = props.role ?? (() => {
+        const children   = props.children;
+        const actionCtrl = props.actionCtrl ?? true;
+        if (children && (Array.isArray(children) ? children : [children]).some((child) =>
+            isTypeOf(child, ListItem)
+            ?
+            !(child.props.actionCtrl ?? actionCtrl) // ListItem is not an actionCtrl => not a menu item => role='dialog'
+            :
+            !actionCtrl // default ListItem wrapper is not an actionCtrl => not a menu item => role='dialog'
+        )) return 'dialog';
+        
+        
+        
+        return 'menu';
+    })();
+    
+    
+    
     // jsx:
     return (
         <Dropdown<TElement, TCloseType>
             // other props:
             {...props}
+            
+            
+            // accessibilities:
+            role={ariaRole}
         >
             <DropdownListElement<TElement, TCloseType>
                 // other props:

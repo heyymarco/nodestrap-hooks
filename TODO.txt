@@ -1,6 +1,5 @@
 Offcanvas*****
 
-Dropdown => role => allActionCtrl = 'menu', else = 'dialog' && aria-modal=true
 Carousel => infinite loop
 Navbar => use List
 
