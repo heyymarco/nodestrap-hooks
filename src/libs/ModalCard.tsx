@@ -144,26 +144,24 @@ export const usesModalCardElementVariants = () => {
             rule(':not(.scrollable)>&', [
                 layout({
                     // sizes:
-                    boxSizing  : 'content-box', // the final size is excluding borders & paddings
-                    inlineSize : 'max-content', // forcing the Card's width follows the Card's items width
-                    blockSize  : 'max-content', // forcing the Card's height follows the Card's items height
+                    flex          : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height
                     
-                    // fix bug on firefox.
-                    // setting *(inline|block)Size:max-content* guarantes the scrolling effect never occured (the *scrolling prop* will be ignored).
-                    // but on firefox if the *scrolling prop* is not turned off => causing the element clipped off at the top.
-                 // overflow   : 'visible', // turn off the scrolling; side effect the rounded corners won't be clipped
-                 // overflow   : '-moz-hidden-unscrollable', // not working; use JS solution
+                    boxSizing     : 'content-box',    // the final size is excluding borders & paddings
+                    inlineSize    : 'max-content',    // forcing the Card's width follows the Card's items width
+                    blockSize     : 'max-content',    // forcing the Card's height follows the Card's items height
                 }),
             ]),
             rule('.scrollable>&', [
                 layout({
                     // sizes:
-                    boxSizing     : 'border-box', // the final size is including borders & paddings
-                    inlineSize    : 'auto',       // follows the content's width, but
-                    maxInlineSize : '100%',       // up to the maximum available parent's width
-                    blockSize     : 'auto',       // follows the content's height, but
-                    maxBlockSize  : '100%',       // up to the maximum available parent's height
-                    overflow      : 'hidden',     // force the Card to scroll, otherwise clipped
+                    flex          : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height
+                    
+                    boxSizing     : 'border-box',     // the final size is including borders & paddings
+                    inlineSize    : 'auto',           // follows the content's width, but
+                    maxInlineSize : '100%',           // up to the maximum available parent's width
+                    blockSize     : 'auto',           // follows the content's height, but
+                    maxBlockSize  : '100%',           // up to the maximum available parent's height
+                    overflow      : 'hidden',         // force the Card to scroll, otherwise clipped
                     
                     
                     
