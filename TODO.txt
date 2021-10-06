@@ -1,4 +1,3 @@
-List => add numbered variant
 Offcanvas*****
 fix modalCard close btn
 
