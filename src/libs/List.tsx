@@ -147,6 +147,10 @@ import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
+import {
+    // configs:
+    cssProps as hcssProps,
+}                           from './typos/horizontal-rule'
 
 
 
@@ -182,7 +186,7 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 // appearances:
 
-export type ListStyle = 'content'|'flat'|'flush'|'btn'|'tab'|'breadcrumb'|'bullet' // might be added more styles in the future
+export type ListStyle = 'content'|'flat'|'flush'|'joined'|'btn'|'tab'|'breadcrumb'|'bullet'|'numbered' // might be added more styles in the future
 export interface ListVariant {
     listStyle?: SingleOrArray<ListStyle>
 }
@@ -313,6 +317,47 @@ export const useListItemSheet = createUseSheet(() => [
     mainComposition([
         imports([
             usesListItem(),
+        ]),
+    ]),
+]);
+
+
+
+export const usesListSeparatorItemLayout = () => {
+    return composition([
+        layout({
+            // spacings:
+            padding : 0,
+            
+            
+            
+            // children:
+            ...children('hr', composition([
+                layout({
+                    // spacings:
+                    marginBlockStart : `calc(${hcssProps.marginBlockStart} / 2)`,
+                    marginBlockEnd   : `calc(${hcssProps.marginBlockEnd  } / 2)`,
+                }),
+            ])),
+        }),
+    ]);
+};
+export const usesListSeparatorItem = () => {
+    return composition([
+        variants([
+            rule('&&', [ // makes `.ListSeparatorItem` is more specific than `.ListSeparator`
+                imports([
+                    // layouts:
+                    usesListSeparatorItemLayout(),
+                ]),
+            ]),
+        ]),
+    ]);
+};
+export const useListSeparatorItemSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesListSeparatorItem(),
         ]),
     ]),
 ]);
@@ -529,7 +574,7 @@ export const usesListVariants = () => {
             ]),
         ]),
         variants([
-            rule(['.flat', '.breadcrumb', '.flush', '.btn', '.bullet'], [
+            rule(['.flat', '.flush', '.btn', '.breadcrumb', '.bullet'], [
                 layout({
                     // borders:
                     // kill borders surrounding List:
@@ -538,7 +583,7 @@ export const usesListVariants = () => {
                     overflow     : 'unset',
                 }),
             ]),
-            rule(['.flat', '.breadcrumb'], [
+            rule(['.flat', '.joined', '.breadcrumb'], [
                 layout({
                     // children:
                     ...children(wrapperElm, composition([
@@ -821,6 +866,37 @@ export const usesListVariants = () => {
                     ])),
                 }),
             ]),
+            rule('.numbered', [
+                layout({
+                    // counters:
+                    counterReset: 'ListNumber',
+                    
+                    
+                    
+                    // children:
+                    ...children(wrapperElm, composition([
+                        layout({
+                            // children:
+                            ...children(listItemElm, composition([
+                                variants([
+                                    rule(':not(.void)', [
+                                        layout({
+                                            // children:
+                                            ...children('::before', composition([
+                                                layout({
+                                                    // counters:
+                                                    counterIncrement : 'ListNumber',
+                                                    content          : [['counters(ListNumber, ".")', '". "']],
+                                                }),
+                                            ])),
+                                        }),
+                                    ])
+                                ]),
+                            ])),
+                        }),
+                    ])),
+                }),
+            ]),
         ], /*minSpecificityWeight: */2),
     ]);
 };
@@ -971,6 +1047,35 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
 }
 export type { ListItemProps as ItemProps }
 export { ListItem as Item }
+
+
+
+export function ListSeparatorItem<TElement extends HTMLElement = HTMLElement>(props: ListItemProps<TElement>) {
+    // styles:
+    const sheet          = useListItemSheet();
+    const sheetSeparator = useListSeparatorItemSheet();
+    
+    
+    
+    // jsx:
+    return (
+        <ListItem<TElement>
+            // other props:
+            {...props}
+            
+            
+            // behaviors:
+            actionCtrl={false}
+            
+            
+            // classes:
+            mainClass={props.mainClass ?? [sheet.main, sheetSeparator.main, 'void'].join(' ')}
+        >
+            <hr />
+        </ListItem>
+    );
+}
+ListSeparatorItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 
 
