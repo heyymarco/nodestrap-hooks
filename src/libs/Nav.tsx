@@ -18,6 +18,8 @@ import {
     ListItemProps,
     ListItem,
     
+    ListSeparatorItem,
+    
     ListProps,
     List,
 }                           from './List'
@@ -115,6 +117,11 @@ export {
     NavNextItem as NextItem,
     NavNextItem as NextPage,
 }
+
+
+
+// ListSeparatorItem => NavSeparatorItem
+export { ListSeparatorItem, ListSeparatorItem as NavSeparatorItem, ListSeparatorItem as SeparatorItem }
 
 
 
