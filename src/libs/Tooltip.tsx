@@ -366,7 +366,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             
             
             // accessibilities:
-            role='tooltip'
+            role={props.role ?? 'tooltip'}
             {...{
                 active        : activeFn,
                 inheritActive : false,
