@@ -75,6 +75,8 @@ import {
     ListItemProps,
     ListItem,
     
+    ListSeparatorItem,
+    
     ListProps,
     List,
 }                           from './List'
@@ -319,6 +321,11 @@ AccordionItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 export type { AccordionItemProps as ItemProps }
 export { AccordionItem as Item }
+
+
+
+// ListSeparatorItem => AccordionSeparatorItem
+export { ListSeparatorItem, ListSeparatorItem as AccordionSeparatorItem, ListSeparatorItem as SeparatorItem }
 
 
 
