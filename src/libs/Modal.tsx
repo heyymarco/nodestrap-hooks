@@ -1,9 +1,10 @@
 // react (builds html using javascript):
 import {
     default as React,
+    useState,
     useRef,
     useEffect,
-    useState,
+    useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -561,7 +562,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         } // if isVisible
     }, [isVisible]);
     
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (isNoBackInteractive) {
             document.body.classList.add(sheet.body);
             
@@ -602,15 +603,16 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             // events:
             // watch left click on the overlay only (not at the ModalElement):
             onClick={onActiveChange && ((e) => {
-                if (e.target === e.currentTarget) {
+                if (e.target === e.currentTarget) { // only handle click on the overlay, ignores click bubbling from the children
                     if (!e.defaultPrevented) {
                         if (props.modalStyle !== 'static') {
                             onActiveChange(false, 'overlay' as unknown as TCloseType);
-                            e.preventDefault();
                         }
                         else {
                             setExcitedDn(true);
+                            childRef.current?.focus({ preventScroll: true }); // re-focus to the ModalElement, so the user able to use [esc] key to close the Modal
                         } // if static
+                        e.preventDefault();
                     } // if
                 } // if
                 
