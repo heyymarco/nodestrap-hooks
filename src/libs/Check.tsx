@@ -46,7 +46,6 @@ import {
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
-    fallbacks,
 }                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
@@ -66,6 +65,11 @@ import {
     usesForeg,
     convertRefToDecl,
     usesAnim,
+    isRef,
+    filterRef,
+    fallbackNoneFilter,
+    fallbackNoneTransf,
+    fallbackNoneAnim,
 }                           from './Basic'
 import {
     // hooks:
@@ -142,9 +146,9 @@ export interface CheckAnimVars {
 }
 const [checkAnimRefs, checkAnimDecls] = createCssVar<CheckAnimVars>();
 
-const setsCheckFilter = new Set<Cust.Ref>();
-const setsCheckTransf = new Set<Cust.Ref>();
-const setsCheckAnim   = new Set<Cust.Ref>();
+const setsCheckFilter = new Set<Cust.Ref|Cust.General>(['brightness(100%)' as Cust.General]);
+const setsCheckTransf = new Set<Cust.Ref|Cust.General>(['translate(0)'     as Cust.General]);
+const setsCheckAnim   = new Set<Cust.Ref|Cust.General>(['0'                as Cust.General]);
 const checkPropsManager  = {
     filters             : () => Array.from(setsCheckFilter),
     registerFilter      : (item: Cust.Ref) => setsCheckFilter.add(item),
@@ -178,39 +182,27 @@ export const usesCheckAnim = () => {
                     // combining: filter1 * filter2 * filter3 ...
                     
                     // layers:
-                    ...checkPropsManager.filters().map((filter) => fallbacks(
-                        filter,
-                        
-                        animRefs.filterNone, // default => none filter
-                    )),
+                    ...checkPropsManager.filters().map(fallbackNoneFilter),
                 ]],
                 
                 [checkAnimDecls.checkTransf]        : [[ // double array => makes the JSS treat as space separated values
                     // combining: transf1 * transf2 * transf3 ...
                     
                     // layers:
-                    ...checkPropsManager.transfs().map((transf) => fallbacks(
-                        transf,
-                        
-                        animRefs.transfNone, // default => none transf
-                    )),
+                    ...checkPropsManager.transfs().map(fallbackNoneTransf),
                 ]],
                 
                 [checkAnimDecls.checkAnim]          : [ // single array => makes the JSS treat as comma separated values
                     // layering: anim1 | anim2 | anim3 ...
                     
                     // layers:
-                    ...checkPropsManager.anims().map((anim) => fallbacks(
-                        anim,
-                        
-                        animRefs.animNone, // default => none anim
-                    )),
+                    ...checkPropsManager.anims().map(fallbackNoneAnim),
                 ],
             }),
             vars(Object.fromEntries([
-                ...checkPropsManager.filters().map(convertRefToDecl).map((decl) => [ decl, animRefs.filterNone ]),
-                ...checkPropsManager.transfs().map(convertRefToDecl).map((decl) => [ decl, animRefs.transfNone ]),
-                ...checkPropsManager.anims().map(convertRefToDecl).map((decl) => [ decl, animRefs.animNone ]),
+                ...checkPropsManager.filters().filter(filterRef).map(convertRefToDecl).map((decl) => [ decl, animRefs.filterNone ]),
+                ...checkPropsManager.transfs().filter(filterRef).map(convertRefToDecl).map((decl) => [ decl, animRefs.transfNone ]),
+                ...checkPropsManager.anims().filter(filterRef).map(convertRefToDecl).map((decl) => [ decl, animRefs.animNone ]),
             ])),
         ]),
         checkAnimRefs,
@@ -687,13 +679,9 @@ export const useCheckSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
-    const [, checkAnimRefs, , checkPropsManager] = usesCheckAnim();
+    const [, , , checkPropsManager] = usesCheckAnim();
     const filters = checkPropsManager.filters();
     const transfs = checkPropsManager.transfs();
-    
-    const defaultFilter = (filter : Cust.Ref) => fallbacks(filter, checkAnimRefs.filterNone);
-    const defaultTransf = (transf : Cust.Ref) => fallbacks(transf, checkAnimRefs.transfNone);
-    const isRef         = (expr   : Cust.Expr): expr is Cust.Ref => (typeof(expr) === 'string') && expr.startsWith('var(--');
     
     const [, {filterCheckClearIn, filterCheckClearOut, transfCheckClearIn, transfCheckClearOut}] = usesCheckClearState();
     
@@ -703,27 +691,27 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const keyframesCheck         : PropEx.Keyframes = {
         from : {
             filter    : [[ // double array => makes the JSS treat as space separated values
-                ...filters.filter((f) => ![filterCheckClearIn, filterCheckClearOut].includes(f)),
+                ...filters.filter((f) => !isRef(f) || ![filterCheckClearIn, filterCheckClearOut].includes(f)),
                 
                 filterCheckClearOut,
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
             transform : [[ // double array => makes the JSS treat as space separated values
-                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
+                ...transfs.filter((t) => !isRef(t) || ![transfCheckClearIn, transfCheckClearOut].includes(t)),
                 
                 transfCheckClearOut,
-            ].map(defaultTransf)],
+            ].map(fallbackNoneTransf)],
         },
         to   : {
             filter    : [[ // double array => makes the JSS treat as space separated values
-                ...filters.filter((f) => ![filterCheckClearIn, filterCheckClearOut].includes(f)),
+                ...filters.filter((f) => !isRef(f) || ![filterCheckClearIn, filterCheckClearOut].includes(f)),
                 
                 filterCheckClearIn,
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
             transform : [[ // double array => makes the JSS treat as space separated values
-                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
+                ...transfs.filter((t) => !isRef(t) || ![transfCheckClearIn, transfCheckClearOut].includes(t)),
                 
                 transfCheckClearIn,
-            ].map(defaultTransf)],
+            ].map(fallbackNoneTransf)],
         },
     };
     const keyframesClear         : PropEx.Keyframes = {
@@ -738,11 +726,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         '75%': {
             transformOrigin: 'left', // todo: orientation aware transform => left will be top if the element rotated 90deg clockwise
             transform : [[ // double array => makes the JSS treat as space separated values
-                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
+                ...transfs.filter((t) => !isRef(t) || ![transfCheckClearIn, transfCheckClearOut].includes(t)),
                 
                 transfCheckClearIn,
                 'scaleX(1.2)', // add a bumpy effect
-            ].map((t) => isRef(t) ? defaultTransf(t) : t)],
+            ].map(fallbackNoneTransf)],
         },
         to   : keyframesCheck.to,
     };
@@ -751,11 +739,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         '75%': {
             transformOrigin: 'right', // todo: orientation aware transform => right will be bottom if the element rotated 90deg clockwise
             transform : [[ // double array => makes the JSS treat as space separated values
-                ...transfs.filter((t) => ![transfCheckClearIn, transfCheckClearOut].includes(t)),
+                ...transfs.filter((t) => !isRef(t) || ![transfCheckClearIn, transfCheckClearOut].includes(t)),
                 
                 transfCheckClearOut,
                 'scaleX(1.2)', // add a bumpy effect
-            ].map((t) => isRef(t) ? defaultTransf(t) : t)],
+            ].map(fallbackNoneTransf)],
         },
         to   : keyframesSwitchCheck.from,
     };
