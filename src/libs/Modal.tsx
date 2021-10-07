@@ -463,7 +463,7 @@ export function ModalElement<TElement extends HTMLElement = HTMLElement, TCloseT
     
     // jsx:
     return (
-        <Element
+        <Element<TElement>
             // other props:
             {...restProps}
             

@@ -248,7 +248,7 @@ export function DropdownElement<TElement extends HTMLElement = HTMLElement, TClo
     
     // jsx:
     return (
-        <Element
+        <Element<TElement>
             // other props:
             {...restProps}
             
