@@ -1041,10 +1041,11 @@ export const usesAnim = () => {
     ] as const;
 };
 
-export const fallbackNoneBoxShadow = (boxShadow : Cust.Ref) => boxShadow.startsWith('var(') ? fallbacks(boxShadow, animRefs.boxShadowNone) : boxShadow;
-export const fallbackNoneFilter    = (filter    : Cust.Ref) => filter.startsWith('var(')    ? fallbacks(filter   , animRefs.filterNone)    : filter;
-export const fallbackNoneTransf    = (transf    : Cust.Ref) => transf.startsWith('var(')    ? fallbacks(transf   , animRefs.transfNone)    : transf;
-export const fallbackNoneAnim      = (anim      : Cust.Ref) => anim.startsWith('var(')      ? fallbacks(anim     , animRefs.animNone)      : anim;
+export const isRef                 = (expr      : Cust.Expr): expr is Cust.Ref => (typeof(expr) === 'string') && expr.startsWith('var(--');
+export const fallbackNoneBoxShadow = (boxShadow : Cust.Ref) => isRef(boxShadow) ? fallbacks(boxShadow, animRefs.boxShadowNone) : boxShadow;
+export const fallbackNoneFilter    = (filter    : Cust.Ref) => isRef(filter)    ? fallbacks(filter   , animRefs.filterNone)    : filter;
+export const fallbackNoneTransf    = (transf    : Cust.Ref) => isRef(transf)    ? fallbacks(transf   , animRefs.transfNone)    : transf;
+export const fallbackNoneAnim      = (anim      : Cust.Ref) => isRef(anim)      ? fallbacks(anim     , animRefs.animNone)      : anim;
 //#endregion animations
 
 //#region excited
