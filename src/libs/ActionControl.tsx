@@ -7,7 +7,6 @@ import {
 
 // cssfn:
 import type {
-    Cust,
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
@@ -39,7 +38,6 @@ import {
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
-    fallbacks,
 }                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
@@ -55,6 +53,7 @@ import {
     // hooks:
     usesSizeVariant,
     usesAnim,
+    fallbackNoneFilter,
 }                           from './Basic'
 import {
     // hooks:
@@ -400,10 +399,8 @@ export const useActionControlSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
-    const [, animRefs, , propsManager] = usesAnim();
+    const [, , , propsManager] = usesAnim();
     const filters = propsManager.filters();
-    
-    const defaultFilter = (filter: Cust.Ref) => fallbacks(filter, animRefs.filterNone);
     
     const [, {filterPressRelease}] = usesPressReleaseState();
     
@@ -416,14 +413,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterPressRelease)),
 
              // filterPressRelease, // missing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
         to   : {
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterPressRelease)),
 
                 filterPressRelease, // existing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
     };
     const keyframesRelease : PropEx.Keyframes = {
