@@ -456,7 +456,8 @@ export function ModalElement<TElement extends HTMLElement = HTMLElement, TCloseT
         
         
         // actions:
-        onActiveChange, // not implemented
+        onActiveChange,  // not implemented
+        onExcitedChange, // not implemented
     ...restProps} = props;
     
     

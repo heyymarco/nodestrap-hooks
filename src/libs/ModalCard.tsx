@@ -450,6 +450,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
         
         // actions:
         onActiveChange,
+        onExcitedChange, // not implemented
         
         
         // children:
