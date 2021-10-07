@@ -953,10 +953,10 @@ export interface AnimVars {
 }
 const [animRefs, animDecls] = createCssVar<AnimVars>();
 
-const setsBoxShadow = new Set<Cust.Ref>();
-const setsFilter    = new Set<Cust.Ref>();
-const setsTransf    = new Set<Cust.Ref>();
-const setsAnim      = new Set<Cust.Ref>();
+const setsBoxShadow = new Set<Cust.Ref>(['0 0 transparent'  as Cust.Ref]);
+const setsFilter    = new Set<Cust.Ref>(['brightness(100%)' as Cust.Ref]);
+const setsTransf    = new Set<Cust.Ref>(['translate(0)'     as Cust.Ref]);
+const setsAnim      = new Set<Cust.Ref>(['0'                as Cust.Ref]);
 const propsManager  = {
     boxShadows          : () => Array.from(setsBoxShadow),
     registerBoxShadow   : (item: Cust.Ref) => setsBoxShadow.add(item),
@@ -1029,10 +1029,10 @@ export const usesAnim = () => {
                 ],
             }),
             vars(Object.fromEntries([
-                ...propsManager.boxShadows().map(convertRefToDecl).map((decl) => [ decl, animRefs.boxShadowNone ]),
-                ...propsManager.filters().map(convertRefToDecl).map((decl) => [ decl, animRefs.filterNone ]),
-                ...propsManager.transfs().map(convertRefToDecl).map((decl) => [ decl, animRefs.transfNone ]),
-                ...propsManager.anims().map(convertRefToDecl).map((decl) => [ decl, animRefs.animNone ]),
+                ...propsManager.boxShadows().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.boxShadowNone ]),
+                ...propsManager.filters().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.filterNone ]),
+                ...propsManager.transfs().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.transfNone ]),
+                ...propsManager.anims().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.animNone ]),
             ])),
         ]),
         animRefs,
@@ -1040,6 +1040,11 @@ export const usesAnim = () => {
         propsManager,
     ] as const;
 };
+
+export const fallbackNoneBoxShadow = (boxShadow : Cust.Ref) => boxShadow.startsWith('var(') ? fallbacks(boxShadow, animRefs.boxShadowNone) : boxShadow;
+export const fallbackNoneFilter    = (filter    : Cust.Ref) => filter.startsWith('var(')    ? fallbacks(filter   , animRefs.filterNone)    : filter;
+export const fallbackNoneTransf    = (transf    : Cust.Ref) => transf.startsWith('var(')    ? fallbacks(transf   , animRefs.transfNone)    : transf;
+export const fallbackNoneAnim      = (anim      : Cust.Ref) => anim.startsWith('var(')      ? fallbacks(anim     , animRefs.animNone)      : anim;
 //#endregion animations
 
 //#region excited
@@ -1251,12 +1256,9 @@ export const useBasicSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
-    const [, animRefs, , propsManager] = usesAnim();
+    const [, , , propsManager] = usesAnim();
     const filters = propsManager.filters();
     const transfs = propsManager.transfs();
-    
-    const defaultFilter = (filter: Cust.Ref) => fallbacks(filter, animRefs.filterNone);
-    const defaultTransf = (transf: Cust.Ref) => fallbacks(transf, animRefs.transfNone);
     
     const [, {filterExcited, transfExcited} ] = usesExcitedState();
     
@@ -1269,26 +1271,26 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterExcited)),
 
              // filterExcited, // missing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
             
             transf: [[ // double array => makes the JSS treat as space separated values
                 ...transfs.filter((t) => (t !== transfExcited)),
 
              // transfExcited, // missing the last => let's the browser interpolated it
-            ].map(defaultTransf)],
+            ].map(fallbackNoneTransf)],
         },
         to   : {
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterExcited)),
 
                 filterExcited, // existing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
             
             transf: [[ // double array => makes the JSS treat as space separated values
                 ...transfs.filter((t) => (t !== transfExcited)),
 
                 transfExcited, // existing the last => let's the browser interpolated it
-            ].map(defaultTransf)],
+            ].map(fallbackNoneTransf)],
         },
     };
     //#endregion keyframes
@@ -1379,7 +1381,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
-        filterExcited        : 'initial',
+        filterExcited        : [['invert(80%)']],
         transfExcited        : [['scale(1.02)']],
         
         '@keyframes excited' : keyframesExcited,
@@ -1387,10 +1389,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         //#endregion animations
     };
 }, { prefix: 'bsc' });
-propsManager.registerBoxShadow(cssProps.boxShadow);
-propsManager.registerFilter(cssProps.filter);
-propsManager.registerTransf(cssProps.transf);
-propsManager.registerAnim(cssProps.anim);
 
 
 
