@@ -39,7 +39,7 @@ function App() {
 	const [wideContent, setWideContent   ] = useState(false);
 	const [tallContent, setTallContent   ] = useState(false);
 
-	const modalStyles = [undefined, 'hidden', 'interactive'];
+	const modalStyles = [undefined, 'hidden', 'interactive', 'static'];
 	const [modalStyle,    setModalStyle     ] = useState<ModalStyle|undefined>(undefined);
 
 	

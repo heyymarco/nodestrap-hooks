@@ -46,7 +46,7 @@ function App() {
 	const [wideContent, setWideContent   ] = useState(false);
 	const [tallContent, setTallContent   ] = useState(false);
 
-	const modalStyles = [undefined, 'hidden', 'interactive'];
+	const modalStyles = [undefined, 'hidden', 'interactive', 'static'];
 	const [modalStyle,    setModalStyle     ] = useState<ModalStyle|undefined>(undefined);
 
 	
@@ -78,7 +78,7 @@ function App() {
 				<ButtonIcon btnStyle='link' theme='secondary' aria-label='Close' icon='close' />
 				<ModalCard theme={theme} size={size} gradient={enableGrad} outlined={outlined} enabled={enabled} active={active}
 					modalStyle={modalStyle}
-					
+
 					header=
 					'Lorem ipsum dolor'
 
