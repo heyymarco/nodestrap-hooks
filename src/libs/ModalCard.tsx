@@ -550,7 +550,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
                 props.onAnimationEnd?.(e);
             }}
         >
-            <Card
+            <Card<TElement>
                 // other props:
                 {...restProps}
                 
