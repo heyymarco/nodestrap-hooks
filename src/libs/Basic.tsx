@@ -1,6 +1,7 @@
 // react (builds html using javascript):
 import {
     default as React,
+    useState,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -32,6 +33,7 @@ import {
     
     // rules:
     variants,
+    states,
     rule,
     
     
@@ -1040,6 +1042,101 @@ export const usesAnim = () => {
 };
 //#endregion animations
 
+//#region excited
+export interface ExcitedVars {
+    filterExcited : any
+    transfExcited : any
+    animExcited   : any
+}
+const [excitedRefs, excitedDecls] = createCssVar<ExcitedVars>();
+
+{
+    const [, , , propsManager] = usesAnim();
+    propsManager.registerFilter(excitedRefs.filterExcited);
+    propsManager.registerAnim(excitedRefs.animExcited);
+}
+
+const selectorIsExcited  = '.excited'
+const selectorNotExcited = ':not(.excited)'
+
+export const isExcited  = (styles: StyleCollection) => rule(selectorIsExcited,  styles);
+export const notExcited = (styles: StyleCollection) => rule(selectorNotExcited, styles);
+
+/**
+ * Uses excited states.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents excited state definitions.
+ */
+export const usesExcitedState = () => {
+    return [
+        () => composition([
+            states([
+                isExcited([
+                    vars({
+                        [excitedDecls.filterExcited] : cssProps.filterExcited,
+                        [excitedDecls.transfExcited] : cssProps.transfExcited,
+                        [excitedDecls.animExcited]   : cssProps.animExcited,
+                    }),
+                ]),
+            ]),
+        ]),
+        excitedRefs,
+        excitedDecls,
+    ] as const;
+};
+
+export const useExcitedState = (props: TogglerExcitedProps) => {
+    // states:
+    const [excited,     setExcited] = useState<boolean>(props.excited ?? false); // true => excited, false => normal
+    const [animating, setAnimating] = useState<boolean|null>(null);              // null => no-animation, true => exciting-animation, false => not implemented
+    
+    
+    
+    /*
+     * state is excited/normal based on [controllable excited]
+     */
+    const excitedFn: boolean = props.excited /*controllable*/ ?? false;
+    
+    if (excited !== excitedFn) { // change detected => apply the change & start animating
+        setExcited(excitedFn);   // remember the last change
+        setAnimating(excitedFn); // start exciting-animation
+    }
+    
+    
+    
+    const handleIdle = () => {
+        // clean up finished animation
+
+        setAnimating(null); // stop exciting-animation
+        props.onExcitedChange?.(false); // request to stop
+    }
+    return {
+        excited : excited,
+        
+        class   : ((): string|null => {
+            // fully excited:
+            if (excited) return 'excited';
+            
+            // fully normal:
+            return null;
+        })(),
+        
+        handleAnimationEnd : (e: React.AnimationEvent<HTMLElement>) => {
+            if (e.target !== e.currentTarget) return; // no bubbling
+            if (/((?<![a-z])(excited)|(?<=[a-z])(Excited))(?![a-z])/.test(e.animationName)) {
+                handleIdle();
+            }
+        },
+    };
+};
+
+export interface TogglerExcitedProps
+{
+    // accessibilities:
+    excited?         : boolean
+    onExcitedChange? : (newExcited: boolean) => void
+}
+//#endregion excited
+
 
 
 // styles:
@@ -1153,6 +1250,51 @@ export const useBasicSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    // dependencies:
+    const [, animRefs, , propsManager] = usesAnim();
+    const filters = propsManager.filters();
+    const transfs = propsManager.transfs();
+    
+    const defaultFilter = (filter: Cust.Ref) => fallbacks(filter, animRefs.filterNone);
+    const defaultTransf = (transf: Cust.Ref) => fallbacks(transf, animRefs.transfNone);
+    
+    const [, {filterExcited, transfExcited} ] = usesExcitedState();
+    
+    
+    
+    //#region keyframes
+    const keyframesExcited  : PropEx.Keyframes = {
+        from : {
+            filter: [[ // double array => makes the JSS treat as space separated values
+                ...filters.filter((f) => (f !== filterExcited)),
+
+             // filterExcited, // missing the last => let's the browser interpolated it
+            ].map(defaultFilter)],
+            
+            transf: [[ // double array => makes the JSS treat as space separated values
+                ...transfs.filter((t) => (t !== transfExcited)),
+
+             // transfExcited, // missing the last => let's the browser interpolated it
+            ].map(defaultTransf)],
+        },
+        to   : {
+            filter: [[ // double array => makes the JSS treat as space separated values
+                ...filters.filter((f) => (f !== filterExcited)),
+
+                filterExcited, // existing the last => let's the browser interpolated it
+            ].map(defaultFilter)],
+            
+            transf: [[ // double array => makes the JSS treat as space separated values
+                ...transfs.filter((t) => (t !== transfExcited)),
+
+                transfExcited, // existing the last => let's the browser interpolated it
+            ].map(defaultTransf)],
+        },
+    };
+    //#endregion keyframes
+    
+    
+    
     const keyframesNone : PropEx.Keyframes = { };
 
     
@@ -1160,55 +1302,55 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     return {
         //#region foreg, backg, borders
-        foreg             : 'currentColor',
+        foreg                : 'currentColor',
         
-        backg             : 'transparent',
-        backgGrad         : [['linear-gradient(180deg, rgba(255,255,255, 0.2), rgba(0,0,0, 0.2))', 'border-box']],
+        backg                : 'transparent',
+        backgGrad            : [['linear-gradient(180deg, rgba(255,255,255, 0.2), rgba(0,0,0, 0.2))', 'border-box']],
         
-        border            : [[borders.style, borders.defaultWidth, borders.color]],
-        borderStyle       : borders.style,
-        borderWidth       : borders.defaultWidth,
-        borderColor       : borders.color,
+        border               : [[borders.style, borders.defaultWidth, borders.color]],
+        borderStyle          : borders.style,
+        borderWidth          : borders.defaultWidth,
+        borderColor          : borders.color,
         
-        borderRadius      : borderRadiuses.md,
-        borderRadiusSm    : borderRadiuses.sm,
-        borderRadiusLg    : borderRadiuses.lg,
+        borderRadius         : borderRadiuses.md,
+        borderRadiusSm       : borderRadiuses.sm,
+        borderRadiusLg       : borderRadiuses.lg,
         //#endregion foreg, backg, borders
 
         
         
         //#region spacings
-        paddingInline     : [['calc((', spacers.sm, '+', spacers.md, ')/2)']],
-        paddingBlock      : [['calc((', spacers.xs, '+', spacers.sm, ')/2)']],
-        paddingInlineSm   : spacers.sm,
-        paddingBlockSm    : spacers.xs,
-        paddingInlineLg   : spacers.md,
-        paddingBlockLg    : spacers.sm,
+        paddingInline        : [['calc((', spacers.sm, '+', spacers.md, ')/2)']],
+        paddingBlock         : [['calc((', spacers.xs, '+', spacers.sm, ')/2)']],
+        paddingInlineSm      : spacers.sm,
+        paddingBlockSm       : spacers.xs,
+        paddingInlineLg      : spacers.md,
+        paddingBlockLg       : spacers.sm,
         //#endregion spacings
 
         
         
         // appearances:
-        opacity           : 1,
+        opacity              : 1,
         
         
         
         //#region typos
-        fontSize          : typos.fontSizeNm,
-        fontSizeSm        : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
-        fontSizeLg        : typos.fontSizeMd,
-        fontFamily        : 'inherit',
-        fontWeight        : 'inherit',
-        fontStyle         : 'inherit',
-        textDecoration    : 'inherit',
-        lineHeight        : 'inherit',
+        fontSize             : typos.fontSizeNm,
+        fontSizeSm           : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
+        fontSizeLg           : typos.fontSizeMd,
+        fontFamily           : 'inherit',
+        fontWeight           : 'inherit',
+        fontStyle            : 'inherit',
+        textDecoration       : 'inherit',
+        lineHeight           : 'inherit',
         //#endregion typos
         
         
         
         //#region animations
-        transDuration     : transDuration,
-        transition        : [
+        transDuration        : transDuration,
+        transition           : [
             // foreg, backg, borders:
             ['color'      , transDuration, 'ease-out'],
             ['background' , transDuration, 'ease-out'],
@@ -1228,12 +1370,20 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             ['font-size'  , transDuration, 'ease-out'],
         ],
 
-        boxShadow         : [[0, 0, 'transparent']],
-        filter            : 'brightness(100%)',
-        transf            : 'translate(0)',
+        boxShadow            : [[0, 0, 'transparent']],
+        filter               : 'brightness(100%)',
+        transf               : 'translate(0)',
 
-        '@keyframes none' : keyframesNone,
-        anim              : [[keyframesNone]],
+        '@keyframes none'    : keyframesNone,
+        anim                 : [[keyframesNone]],
+        
+        
+        
+        filterExcited        : 'initial',
+        transfExcited        : [['scale(1.02)']],
+        
+        '@keyframes excited' : keyframesExcited,
+        animExcited          : [['150ms', 'ease', 'both', 'alternate-reverse', 5, keyframesExcited]],
         //#endregion animations
     };
 }, { prefix: 'bsc' });
