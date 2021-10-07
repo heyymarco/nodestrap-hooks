@@ -602,16 +602,16 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             // events:
             // watch left click on the overlay only (not at the ModalElement):
             onClick={onActiveChange && ((e) => {
-                if (!e.defaultPrevented) {
-                    if (props.modalStyle !== 'static') {
-                        if (e.target === e.currentTarget) {
+                if (e.target === e.currentTarget) {
+                    if (!e.defaultPrevented) {
+                        if (props.modalStyle !== 'static') {
                             onActiveChange(false, 'overlay' as unknown as TCloseType);
                             e.preventDefault();
-                        } // if
-                    }
-                    else {
-                        setExcitedDn(true);
-                    } // if static
+                        }
+                        else {
+                            setExcitedDn(true);
+                        } // if static
+                    } // if
                 } // if
                 
                 
