@@ -240,7 +240,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
     
     // jsx:
     return (<>
-        <ListItem
+        <ListItem<TElement>
             // other props:
             {...restProps}
             
