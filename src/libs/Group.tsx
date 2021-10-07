@@ -246,7 +246,7 @@ export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupPr
     
     // jsx:
     return (
-        <List
+        <List<TElement>
             // other props:
             {...restProps}
             
