@@ -3,6 +3,7 @@ import {
     default as React,
     useRef,
     useEffect,
+    useState,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -64,6 +65,9 @@ import {
     // hooks:
     usesSizeVariant,
     usesAnim,
+    usesExcitedState,
+    useExcitedState,
+    TogglerExcitedProps,
 }                           from './Basic'
 import {
     // hooks:
@@ -140,7 +144,7 @@ export const usesModalAnim = () => {
 
 // appearances:
 
-export type ModalStyle = 'hidden'|'interactive' // might be added more styles in the future
+export type ModalStyle = 'hidden'|'interactive'|'static' // might be added more styles in the future
 export interface ModalVariant {
     modalStyle? : ModalStyle
 }
@@ -154,14 +158,32 @@ export const useModalVariant = (props: ModalVariant) => {
 
 // styles:
 export const usesModalElementLayout = () => {
+    // dependencies:
+    
+    // animations:
+    const [anim  , animRefs]   = usesAnim();
+    
+    
+    
     return composition([
         imports([
             // resets:
             stripOutFocusableElement(), // clear browser's default styles
+            
+            // animations:
+            anim(),
         ]),
         layout({
             // layouts:
             display : 'inline-block',
+            
+            
+            
+            // animations:
+            boxShadow   : animRefs.boxShadow,
+            filter      : animRefs.filter,
+            transf      : animRefs.transf,
+            anim        : animRefs.anim,
             
             
             
@@ -170,11 +192,29 @@ export const usesModalElementLayout = () => {
         }),
     ]);
 };
+export const usesModalElementStates = () => {
+    // dependencies:
+    
+    // states:
+    const [excited]   = usesExcitedState();
+    
+    
+    
+    return composition([
+        imports([
+            // states:
+            excited(),
+        ]),
+    ]);
+};
 export const usesModalElement = () => {
     return composition([
         imports([
             // layouts:
             usesModalElementLayout(),
+            
+            // states:
+            usesModalElementStates(),
         ]),
     ]);
 };
@@ -388,6 +428,9 @@ export interface ModalElementProps<TElement extends HTMLElement = HTMLElement, T
         ModalAction<TCloseType>,
         ElementProps<TElement>,
         
+        // states:
+        TogglerExcitedProps,
+        
         // appearances:
         ModalVariant
 {
@@ -396,7 +439,12 @@ export interface ModalElementProps<TElement extends HTMLElement = HTMLElement, T
 }
 export function ModalElement<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalElementProps<TElement, TCloseType>) {
     // styles:
-    const sheet = useModalElementSheet();
+    const sheet        = useModalElementSheet();
+    
+    
+    
+    // states:
+    const excitedState = useExcitedState(props);
     
     
     
@@ -427,6 +475,21 @@ export function ModalElement<TElement extends HTMLElement = HTMLElement, TCloseT
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            stateClasses={[...(props.stateClasses ?? []),
+                excitedState.class,
+            ]}
+            
+            
+            // events:
+            onAnimationEnd={(e) => {
+                // states:
+                excitedState.handleAnimationEnd(e);
+                
+                
+                
+                // forwards:
+                props.onAnimationEnd?.(e);
+            }}
         />
     );
 }
@@ -441,19 +504,21 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseTy
 }
 export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalProps<TElement, TCloseType>) {
     // styles:
-    const sheet               = useModalSheet();
+    const sheet                     = useModalSheet();
     
     
     
     // variants:
-    const modalVariant        = useModalVariant(props);
+    const modalVariant              = useModalVariant(props);
     
     
     
     // states:
-    const activePassiveState  = useActivePassiveState(props);
-    const isVisible           = activePassiveState.active || (!!activePassiveState.class);
-    const isNoBackInteractive = isVisible && ((modalVariant.class !== 'hidden') && (modalVariant.class !== 'interactive'));
+    const activePassiveState        = useActivePassiveState(props);
+    const isVisible                 = activePassiveState.active || (!!activePassiveState.class);
+    const isNoBackInteractive       = isVisible && ((modalVariant.class !== 'hidden') && (modalVariant.class !== 'interactive'));
+
+    const [excitedDn, setExcitedDn] = useState(false);
     
     
     
@@ -468,6 +533,9 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         inheritActive, // from accessibilities
         tabIndex,      // from Modal, moved to ModalElement
         
+        excited,
+        onExcitedChange,
+        
         
         // actions:
         onActiveChange,
@@ -476,6 +544,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         // children:
         children,
     ...restProps} = props;
+    
+    
+    
+    // fn props:
+    const excitedFn = excited ?? excitedDn;
     
     
     
@@ -530,10 +603,15 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             // watch left click on the overlay only (not at the ModalElement):
             onClick={onActiveChange && ((e) => {
                 if (!e.defaultPrevented) {
-                    if (e.target === e.currentTarget) {
-                        onActiveChange(false, 'overlay' as unknown as TCloseType);
-                        e.preventDefault();
-                    } // if
+                    if (props.modalStyle !== 'static') {
+                        if (e.target === e.currentTarget) {
+                            onActiveChange(false, 'overlay' as unknown as TCloseType);
+                            e.preventDefault();
+                        } // if
+                    }
+                    else {
+                        setExcitedDn(true);
+                    } // if static
                 } // if
                 
                 
@@ -585,6 +663,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                     
                     // accessibilities:
                     tabIndex={tabIndex}
+                    excited={excitedFn}
+                    onExcitedChange={(newExcited) => {
+                        onExcitedChange?.(newExcited);
+                        setExcitedDn(newExcited);
+                    }}
                     
                     
                     // events:
@@ -608,6 +691,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                     
                     // accessibilities:
                     tabIndex={tabIndex}
+                    excited={excitedFn}
+                    onExcitedChange={(newExcited) => {
+                        onExcitedChange?.(newExcited);
+                        setExcitedDn(newExcited);
+                    }}
                     
                     
                     // events:
