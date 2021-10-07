@@ -953,10 +953,10 @@ export interface AnimVars {
 }
 const [animRefs, animDecls] = createCssVar<AnimVars>();
 
-const setsBoxShadow = new Set<Cust.Ref>(['0 0 transparent'  as Cust.Ref]);
-const setsFilter    = new Set<Cust.Ref>(['brightness(100%)' as Cust.Ref]);
-const setsTransf    = new Set<Cust.Ref>(['translate(0)'     as Cust.Ref]);
-const setsAnim      = new Set<Cust.Ref>(['0'                as Cust.Ref]);
+const setsBoxShadow = new Set<Cust.Ref|Cust.General>(['0 0 transparent'  as Cust.General]);
+const setsFilter    = new Set<Cust.Ref|Cust.General>(['brightness(100%)' as Cust.General]);
+const setsTransf    = new Set<Cust.Ref|Cust.General>(['translate(0)'     as Cust.General]);
+const setsAnim      = new Set<Cust.Ref|Cust.General>(['0'                as Cust.General]);
 const propsManager  = {
     boxShadows          : () => Array.from(setsBoxShadow),
     registerBoxShadow   : (item: Cust.Ref) => setsBoxShadow.add(item),
@@ -975,7 +975,7 @@ const propsManager  = {
     unregisterAnim      : (item: Cust.Ref) => setsAnim.delete(item),
 } as const;
 
-export const convertRefToDecl = (ref: Cust.Ref): Cust.Decl|null => (ref.match(/(?<=var\(\s*)--[\w-]+(?=\s*(?:,[^)]*)?\))/)?.[0] ?? null) as Cust.Decl|null;
+export const convertRefToDecl = (ref: Cust.Ref): Cust.Decl => (ref.match(/(?<=var\(\s*)--[\w-]+(?=\s*(?:,[^)]*)?\))/)?.[0] ?? null) as Cust.Decl;
 export const usesAnim = () => {
     return [
         () => composition([
@@ -985,11 +985,7 @@ export const usesAnim = () => {
                     // layering: boxShadow1 | boxShadow2 | boxShadow3 ...
                     
                     // layers:
-                    ...propsManager.boxShadows().map((boxShadow) => fallbacks(
-                        boxShadow,
-                        
-                        animRefs.boxShadowNone, // default => none boxShadow
-                    )),
+                    ...propsManager.boxShadows().map(fallbackNoneBoxShadow),
                 ],
                 
                 [animDecls.filterNone]    : 'brightness(100%)',
@@ -997,11 +993,7 @@ export const usesAnim = () => {
                     // combining: filter1 * filter2 * filter3 ...
                     
                     // layers:
-                    ...propsManager.filters().map((filter) => fallbacks(
-                        filter,
-                        
-                        animRefs.filterNone, // default => none filter
-                    )),
+                    ...propsManager.filters().map(fallbackNoneFilter),
                 ]],
                 
                 [animDecls.transfNone]    : 'translate(0)',
@@ -1009,11 +1001,7 @@ export const usesAnim = () => {
                     // combining: transf1 * transf2 * transf3 ...
                     
                     // layers:
-                    ...propsManager.transfs().map((transf) => fallbacks(
-                        transf,
-                        
-                        animRefs.transfNone, // default => none transf
-                    )),
+                    ...propsManager.transfs().map(fallbackNoneTransf),
                 ]],
                 
                 [animDecls.animNone]      : 'none',
@@ -1021,18 +1009,14 @@ export const usesAnim = () => {
                     // layering: anim1 | anim2 | anim3 ...
                     
                     // layers:
-                    ...propsManager.anims().map((anim) => fallbacks(
-                        anim,
-                        
-                        animRefs.animNone, // default => none anim
-                    )),
+                    ...propsManager.anims().map(fallbackNoneAnim),
                 ],
             }),
             vars(Object.fromEntries([
-                ...propsManager.boxShadows().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.boxShadowNone ]),
-                ...propsManager.filters().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.filterNone ]),
-                ...propsManager.transfs().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.transfNone ]),
-                ...propsManager.anims().map(convertRefToDecl).filter((decl) => decl).map((decl) => [ decl, animRefs.animNone ]),
+                ...propsManager.boxShadows().filter(filterRef).map(convertRefToDecl).map((decl) => [ decl, animRefs.boxShadowNone ]),
+                ...propsManager.filters().filter(filterRef).map(convertRefToDecl).map((decl) => [ decl, animRefs.filterNone ]),
+                ...propsManager.transfs().filter(filterRef).map(convertRefToDecl).map((decl) => [ decl, animRefs.transfNone ]),
+                ...propsManager.anims().filter(filterRef).map(convertRefToDecl).map((decl) => [ decl, animRefs.animNone ]),
             ])),
         ]),
         animRefs,
@@ -1041,11 +1025,13 @@ export const usesAnim = () => {
     ] as const;
 };
 
-export const isRef                 = (expr      : Cust.Expr): expr is Cust.Ref => (typeof(expr) === 'string') && expr.startsWith('var(--');
-export const fallbackNoneBoxShadow = (boxShadow : Cust.Ref) => isRef(boxShadow) ? fallbacks(boxShadow, animRefs.boxShadowNone) : boxShadow;
-export const fallbackNoneFilter    = (filter    : Cust.Ref) => isRef(filter)    ? fallbacks(filter   , animRefs.filterNone)    : filter;
-export const fallbackNoneTransf    = (transf    : Cust.Ref) => isRef(transf)    ? fallbacks(transf   , animRefs.transfNone)    : transf;
-export const fallbackNoneAnim      = (anim      : Cust.Ref) => isRef(anim)      ? fallbacks(anim     , animRefs.animNone)      : anim;
+export const isRef     = (expr: Cust.Expr): expr is Cust.Ref => (typeof(expr) === 'string') && expr.startsWith('var(--');
+export const filterRef = (expr: Cust.Ref|Cust.General): expr is Cust.Ref => isRef(expr);
+
+export const fallbackNoneBoxShadow = (boxShadow : Cust.Ref|Cust.General) => isRef(boxShadow) ? fallbacks(boxShadow, animRefs.boxShadowNone) : boxShadow;
+export const fallbackNoneFilter    = (filter    : Cust.Ref|Cust.General) => isRef(filter)    ? fallbacks(filter   , animRefs.filterNone)    : filter;
+export const fallbackNoneTransf    = (transf    : Cust.Ref|Cust.General) => isRef(transf)    ? fallbacks(transf   , animRefs.transfNone)    : transf;
+export const fallbackNoneAnim      = (anim      : Cust.Ref|Cust.General) => isRef(anim)      ? fallbacks(anim     , animRefs.animNone)      : anim;
 //#endregion animations
 
 //#region excited
