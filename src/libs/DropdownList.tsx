@@ -200,7 +200,7 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
     
     // jsx:
     return (
-        <List
+        <List<TElement>
             // other props:
             {...restProps}
             
