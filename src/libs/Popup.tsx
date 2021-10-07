@@ -236,7 +236,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             transform : 'scale(0)',
         },
         '70%' : {
-            transform : 'scale(1.1)',
+            transform : 'scale(1.02)',
         },
         to    : {
             opacity   : 1,
