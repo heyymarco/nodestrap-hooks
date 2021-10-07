@@ -44,6 +44,9 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    usesExcitedState,
+    useExcitedState,
+    TogglerExcitedProps,
 }                           from './Basic'
 import {
     // styles:
@@ -186,6 +189,21 @@ export const usesModalCardElementVariants = () => {
         ]),
     ]);
 };
+export const usesModalCardElementStates = () => {
+    // dependencies:
+    
+    // states:
+    const [excited]   = usesExcitedState();
+    
+    
+    
+    return composition([
+        imports([
+            // states:
+            excited(),
+        ]),
+    ]);
+};
 export const usesModalCardElement = () => {
     return composition([
         variants([
@@ -196,6 +214,9 @@ export const usesModalCardElement = () => {
                     
                     // variants:
                     usesModalCardElementVariants(),
+                    
+                    // states:
+                    usesModalCardElementStates(),
                 ]),
             ]),
         ]),
@@ -397,13 +418,21 @@ export interface ModalCardElementProps<TElement extends HTMLElement = HTMLElemen
         ModalElementProps<TElement, TCloseType>,
         CardProps<TElement>,
         
+        // states:
+        TogglerExcitedProps,
+        
         // appearances:
         ModalCardVariant
 {
 }
 export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: ModalCardElementProps<TElement, TCloseType>) {
     // styles:
-    const sheet = useModalCardElementSheet();
+    const sheet        = useModalCardElementSheet();
+    
+    
+    
+    // states:
+    const excitedState = useExcitedState(props);
     
     
     
@@ -489,7 +518,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
     
     // jsx:
     return (
-        <Popup
+        <Popup<TElement>
             // accessibilities:
             {...{
                 active,
@@ -505,6 +534,21 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
             classes={[
                 sheet.main, // inject ModalCardElement class
             ]}
+            stateClasses={[...(props.stateClasses ?? []),
+                excitedState.class,
+            ]}
+            
+            
+            // events:
+            onAnimationEnd={(e) => {
+                // states:
+                excitedState.handleAnimationEnd(e);
+                
+                
+                
+                // forwards:
+                props.onAnimationEnd?.(e);
+            }}
         >
             <Card
                 // other props:
