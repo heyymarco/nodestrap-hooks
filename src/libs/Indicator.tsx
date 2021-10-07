@@ -64,6 +64,7 @@ import {
     outlinedOf,
     mildOf,
     usesAnim,
+    fallbackNoneFilter,
     
     
     
@@ -585,10 +586,8 @@ export const useIndicatorSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
-    const [, animRefs, , propsManager] = usesAnim();
+    const [, , , propsManager] = usesAnim();
     const filters = propsManager.filters();
-    
-    const defaultFilter = (filter: Cust.Ref) => fallbacks(filter, animRefs.filterNone);
     
     const [, {filterEnableDisable}] = usesEnableDisableState();
     const [, {filterActivePassive}] = usesActivePassiveState();
@@ -602,14 +601,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterEnableDisable)),
 
              // filterEnableDisable, // missing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
         to   : {
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterEnableDisable)),
 
                 filterEnableDisable, // existing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
     };
     const keyframesEnable  : PropEx.Keyframes = {
@@ -625,14 +624,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterActivePassive)),
 
              // filterActivePassive, // missing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
         to   : {
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterActivePassive)),
 
                 filterActivePassive, // existing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
     };
     const keyframesPassive : PropEx.Keyframes = {
