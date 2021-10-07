@@ -43,7 +43,6 @@ import {
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
-    fallbacks,
 }                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
