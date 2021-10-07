@@ -832,7 +832,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          * animValid
          * animInvalidInline
          */
-        if ((/(None|Enable|Disable|Active|Passive|Press|Release|Check|Clear|Hover|Arrive|Leave|Focus|Blur|Valid|Unvalid|Invalid|Uninvalid|Full|Compact)(Block|Inline)?$/).test(propName)) continue; // exclude
+        if ((/(None|Excited|Enable|Disable|Active|Passive|Press|Release|Check|Clear|Hover|Arrive|Leave|Focus|Blur|Valid|Unvalid|Invalid|Uninvalid|Full|Compact)(Block|Inline)?$/).test(propName)) continue; // exclude
 
         // special props:
         /**
