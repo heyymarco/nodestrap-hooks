@@ -7,7 +7,6 @@ import {
 
 // cssfn:
 import type {
-    Cust,
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
