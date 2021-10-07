@@ -1078,28 +1078,34 @@ export const usesExcitedState = () => {
 
 export const useExcitedState = (props: TogglerExcitedProps) => {
     // states:
-    const [excited,     setExcited] = useState<boolean>(props.excited ?? false); // true => excited, false => normal
-    const [animating, setAnimating] = useState<boolean|null>(null);              // null => no-animation, true => exciting-animation, false => not implemented
+    const [excited,     setExcited    ] = useState<boolean>(props.excited ?? false); // true => excited, false => normal
+    const [needRestart, setNeedRestart] = useState<boolean>(false);
     
     
     
     /*
      * state is excited/normal based on [controllable excited]
      */
-    const excitedFn: boolean = props.excited /*controllable*/ ?? false;
+    const excitedFn: boolean = !needRestart && (props.excited /*controllable*/ ?? false);
     
     if (excited !== excitedFn) { // change detected => apply the change & start animating
         setExcited(excitedFn);   // remember the last change
-        setAnimating(excitedFn); // start exciting-animation
+        
+        if (needRestart) {
+            // wait until DOM rendered the removed `.excited` then reset the `setNeedRestart(false)` then re-render again
+            setTimeout(() => {
+                setNeedRestart(false);
+            }, 0);
+        } // if
     }
     
     
     
     const handleIdle = () => {
         // clean up finished animation
-
-        setAnimating(null); // stop exciting-animation
-        props.onExcitedChange?.(false); // request to stop
+        
+        props.onExcitedChange?.(false);      // request to stop. If not changed => the next render => `setExcited(true)`
+        if (excitedFn) setNeedRestart(true); // need animation restart on next render
     }
     return {
         excited : excited,
