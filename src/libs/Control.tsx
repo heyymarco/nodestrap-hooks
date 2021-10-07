@@ -6,7 +6,6 @@ import {
 
 // cssfn:
 import type {
-    Cust,
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
@@ -58,6 +57,8 @@ import {
     usesThemeVariant,
     usesThemeDefault as basicUsesThemeDefault,
     usesAnim,
+    fallbackNoneBoxShadow,
+    fallbackNoneFilter,
 }                           from './Basic'
 import {
     // hooks:
@@ -593,12 +594,9 @@ export const useControlSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
-    const [, animRefs, , propsManager] = usesAnim();
+    const [, , , propsManager] = usesAnim();
     const boxShadows = propsManager.boxShadows();
     const filters    = propsManager.filters();
-    
-    const defaultBoxShadow = (boxShadow : Cust.Ref) => fallbacks(boxShadow, animRefs.boxShadowNone);
-    const defaultFilter    = (filter    : Cust.Ref) => fallbacks(filter   , animRefs.filterNone);
     
     const [, {boxShadowFocusBlur}] = usesFocusBlurState();
     const [, {filterArriveLeave} ] = usesArriveLeaveState();
@@ -612,14 +610,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...boxShadows.filter((b) => (b !== boxShadowFocusBlur)),
 
              // boxShadowFocusBlur, // missing the last => let's the browser interpolated it
-            ].map(defaultBoxShadow)]] as unknown as JssValue,
+            ].map(fallbackNoneBoxShadow)]] as unknown as JssValue,
         },
         to   : {
             boxShadow: [[[ // triple array => makes the JSS treat as comma separated values
                 ...boxShadows.filter((b) => (b !== boxShadowFocusBlur)),
 
                 boxShadowFocusBlur, // existing the last => let's the browser interpolated it
-            ].map(defaultBoxShadow)]] as unknown as JssValue,
+            ].map(fallbackNoneBoxShadow)]] as unknown as JssValue,
         },
     };
     const keyframesBlur   : PropEx.Keyframes = {
@@ -635,14 +633,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
                 ...filters.filter((f) => (f !== filterArriveLeave)),
 
              // filterArriveLeave, // missing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
         to   : {
             filter: [[ // double array => makes the JSS treat as space separated values
                 ...filters.filter((f) => (f !== filterArriveLeave)),
 
                 filterArriveLeave, // existing the last => let's the browser interpolated it
-            ].map(defaultFilter)],
+            ].map(fallbackNoneFilter)],
         },
     };
     const keyframesLeave  : PropEx.Keyframes = {
