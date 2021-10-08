@@ -237,6 +237,7 @@ export const combinators = (combinator: string, selectors: SelectorCollection, s
         
         if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
         
+        if (combinator.includes('&')) return `${combinator}${selector}`;
         return `&${combinator}${selector}`;
     });
     if (!combiSelectors.length) return {}; // no selector => return empty
