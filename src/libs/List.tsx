@@ -199,7 +199,8 @@ export const useListVariant = (props: ListVariant) => {
 
 
 // styles:
-const wrapperElm  = ['li', '*'];
+// const wrapperElm  = ['li', '*']; // poor specificity
+const wrapperElm  = ':nth-child(n)'; // better specificity
 const listItemElm = ':first-child';
 
 
@@ -492,7 +493,7 @@ export const usesListLayout = () => {
                     
                     
                     // children:
-                    ...children('*', composition([
+                    ...children(':nth-child(n)', composition([
                         layout({
                             // border radiuses:
                             borderRadius : 'inherit', // copy wrapper's borderRadius
