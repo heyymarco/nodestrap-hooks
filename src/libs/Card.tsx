@@ -144,7 +144,11 @@ export const usesImageFill = () => {
 
 
 // borders:
-export const usesBorderAsContainer = () => {
+export const usesBorderAsContainer = (blockRule : string|null = '.block', inlineRule : string|null = '.inline') => {
+    const innerBorderRadius = `calc(${bcssProps.borderRadius} - ${bcssProps.borderWidth})`;
+    
+    
+    
     return composition([
         imports([
             // borders:
@@ -153,12 +157,62 @@ export const usesBorderAsContainer = () => {
         layout({
             // border radiuses:
             borderRadius : bcssProps.borderRadius,
-            overflow     : 'hidden', // clip the children at the rounded corners
+            overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
             
             
             
             // shadows:
             boxShadow    : bcssProps.boxShadow,
+            
+            
+            
+            // children:
+            ...children('*', composition([
+                variants([
+                    (!!blockRule || null) && rule(blockRule, [
+                        variants([
+                            isFirstChild([
+                                layout({
+                                    // add rounded corners on top:
+                                    borderStartStartRadius : innerBorderRadius,
+                                    borderStartEndRadius   : innerBorderRadius,
+                                }),
+                            ]),
+                            isLastChild([
+                                layout({
+                                    // add rounded corners on bottom:
+                                    borderEndStartRadius : innerBorderRadius,
+                                    borderEndEndRadius   : innerBorderRadius,
+                                }),
+                            ]),
+                        ]),
+                    ]),
+                    (!!inlineRule || null) && rule(inlineRule, [
+                        variants([
+                            isFirstChild([
+                                layout({
+                                    // add rounded corners on left:
+                                    borderStartStartRadius : innerBorderRadius,
+                                    borderEndStartRadius   : innerBorderRadius,
+                                }),
+                            ]),
+                            isLastChild([
+                                layout({
+                                    // add rounded corners on right:
+                                    borderStartEndRadius : innerBorderRadius,
+                                    borderEndEndRadius   : innerBorderRadius,
+                                }),
+                            ]),
+                        ]),
+                    ]),
+                    ((!!blockRule && !!inlineRule) || null) && rule('&', [
+                        layout({
+                            // add rounded corners:
+                            borderRadius : innerBorderRadius,
+                        }),
+                    ]),
+                ])
+            ])),
         }),
     ]);
 };
