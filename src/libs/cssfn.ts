@@ -64,7 +64,7 @@ export type Class                                                = RealClass|Pse
 export type ClassEntry<TClassName extends ClassName = ClassName> = readonly [TClassName, StyleCollection]
 export type ClassList <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
 
-export type OptionalString                                       = Optional<string>
+export type OptionalString                                       = OptionalOrFalse<string>
 
 export type UniversalSelector                                    = '*'
 export type RealElementSelector                                  = string
@@ -74,7 +74,7 @@ export type ClassSelector                                        = Class
 export type IdSelector                                           = `#${string}`
 export type SingleSelector                                       = UniversalSelector|ElementSelector|ClassSelector|IdSelector
 export type Selector                                             = SingleSelector|`${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`
-export type SelectorCollection                                   = SingleOrDeepArray<Optional<Selector>>
+export type SelectorCollection                                   = SingleOrDeepArray<OptionalOrFalse<Selector>>
 
 export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
 
@@ -271,6 +271,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                     const isOptionalString                = (value: any): value is OptionalString => {
                         if (value === null)      return true; // optional `null`
                         if (value === undefined) return true; // optional `undefined`
+                        if (value === false)     return true; // optional `false`
                         
                         
                         
