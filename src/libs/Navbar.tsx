@@ -107,7 +107,6 @@ import {
     markActive       as controlMarkActive,
     usesThemeDefault as controlUsesThemeDefault,
     usesThemeActive  as controlUsesThemeActive,
-    isBlurring,
     isFocus,
     isArrive,
 }                           from './Control'
@@ -557,17 +556,6 @@ export const usesMenuStates = () => {
             usesActivePassiveAsPressReleaseState(),
         ]),
         states([
-            isFocus([
-                layout({
-                    zIndex: 2, // prevents boxShadowFocus from clipping
-                }),
-            ]),
-            isBlurring([
-                layout({
-                    zIndex: 1, // prevents boxShadowFocus from clipping but below the active one
-                }),
-            ]),
-            
             isActive([
                 imports([
                     markActive(),
