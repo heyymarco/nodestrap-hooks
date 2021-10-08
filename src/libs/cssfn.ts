@@ -25,7 +25,6 @@ import jssPluginShort       from './jss-plugin-short'
 
 // cssfn:
 import type {
-    Optional,
     OptionalOrFalse,
     SingleOrArray,
     SingleOrDeepArray,
@@ -55,7 +54,7 @@ export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
 export type Style                                                = JssStyle & ExtendableStyle
-export type StyleCollection                                      = ProductOrFactoryOrDeepArray<Optional<Style>>
+export type StyleCollection                                      = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
 export type ClassName                                            = string
 export type RealClass                                            = `.${ClassName}`
@@ -143,22 +142,22 @@ export const composition     = (styles: StyleCollection[]): StyleCollection => s
  */
 export const mergeStyles     = (styles: StyleCollection): Style|null => {
     /*
-        StyleCollection = ProductOrFactoryOrDeepArray<Optional<Style>>
-        StyleCollection = ProductOrFactory<Optional<Style>> | ProductOrFactoryDeepArray<Optional<Style>>
-        typeof          = ---------- not an array --------- | -------------- is an array ---------------
+        StyleCollection = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
+        StyleCollection = ProductOrFactory<OptionalOrFalse<Style>> | ProductOrFactoryDeepArray<OptionalOrFalse<Style>>
+        typeof          = ------------- not an array ------------- | ----------------- is an array ------------------
     */
     
     
     
     if (!Array.isArray(styles)) {
-        // not an array => ProductOrFactory<Optional<Style>>
+        // not an array => ProductOrFactory<OptionalOrFalse<Style>>
         
-        const styleValue: Optional<Style> = (
+        const styleValue: OptionalOrFalse<Style> = (
             (typeof(styles) === 'function')
             ?
-            styles() // a function => Factory<Optional<Style>>
+            styles() // a function => Factory<OptionalOrFalse<Style>>
             :
-            styles   // a product  => Optional<Style>
+            styles   // a product  => OptionalOrFalse<Style>
         );
         if (!styleValue) return null; // `null` or `undefined` => return `null`
         
@@ -171,19 +170,19 @@ export const mergeStyles     = (styles: StyleCollection): Style|null => {
     
     const mergedStyles: Style = {}
     for (const subStyles of styles) {
-        const subStyleValue: Optional<Style> = (
+        const subStyleValue: OptionalOrFalse<Style> = (
             Array.isArray(subStyles)
             ?
-            mergeStyles(subStyles) // an array => ProductOrFactoryDeepArray<Optional<Style>> => recursively `mergeStyles()`
+            mergeStyles(subStyles) // an array => ProductOrFactoryDeepArray<OptionalOrFalse<Style>> => recursively `mergeStyles()`
             :
             (
-                // not an array => ProductOrFactory<Optional<Style>>
+                // not an array => ProductOrFactory<OptionalOrFalse<Style>>
                 
                 (typeof(subStyles) === 'function')
                 ?
-                subStyles() // a function => Factory<Optional<Style>>
+                subStyles() // a function => Factory<OptionalOrFalse<Style>>
                 :
-                subStyles   // a product  => Optional<Style>
+                subStyles   // a product  => OptionalOrFalse<Style>
             )
         );
         if (!subStyleValue) continue; // `null` or `undefined` => skip
@@ -296,8 +295,8 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         return true;
                     };
                     
-                    const isOptionalSelector              = (value: any): value is Optional<Selector>   => isOptionalString(value);
-                    const isOptionalSelectorDeepArr       = (value: any): value is Optional<Selector>[] => isOptionalStringDeepArr(value);
+                    const isOptionalSelector              = (value: any): value is OptionalOrFalse<Selector>   => isOptionalString(value);
+                    const isOptionalSelectorDeepArr       = (value: any): value is OptionalOrFalse<Selector>[] => isOptionalStringDeepArr(value);
                     
                     const isOptionalStyleOrFactory        = (value: any): value is ProductOrFactory<Style> => {
                         if (value === null)      return true; // optional `null`
@@ -349,15 +348,15 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         
                         /*
                             the first element must be `SelectorCollection`:
-                            * `Optional<Selector>`
-                            * DeepArrayOf< `Optional<Selector>` >
+                            * `OptionalOrFalse<Selector>`
+                            * DeepArrayOf< `OptionalOrFalse<Selector>` >
                             * empty array
                         */
                         // and
                         /*
                             the second element must be `StyleCollection`:
-                            * `Optional<Style>` | `Factory<Optional<Style>>`
-                            * DeepArrayOf< `Optional<Style> | Factory<Optional<Style>>` >
+                            * `OptionalOrFalse<Style>` | `Factory<OptionalOrFalse<Style>>`
+                            * DeepArrayOf< `OptionalOrFalse<Style> | Factory<OptionalOrFalse<Style>>` >
                             * empty array
                         */
                         return (
