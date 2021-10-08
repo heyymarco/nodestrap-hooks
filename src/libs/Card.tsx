@@ -157,7 +157,7 @@ export const usesBorderAsContainer = (blockRule : string|null = '.block', inline
         layout({
             // border radiuses:
             borderRadius : bcssProps.borderRadius,
-            overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
+         // overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
             
             
             
@@ -169,7 +169,14 @@ export const usesBorderAsContainer = (blockRule : string|null = '.block', inline
             // children:
             ...children('*', composition([
                 variants([
-                    (!!blockRule || null) && rule(blockRule, [
+                ])
+            ])),
+        }),
+        variants([
+            (!!blockRule || null) && rule(blockRule, [
+                layout({
+                    // children:
+                    ...children('*', composition([
                         variants([
                             isFirstChild([
                                 layout({
@@ -181,13 +188,18 @@ export const usesBorderAsContainer = (blockRule : string|null = '.block', inline
                             isLastChild([
                                 layout({
                                     // add rounded corners on bottom:
-                                    borderEndStartRadius : innerBorderRadius,
-                                    borderEndEndRadius   : innerBorderRadius,
+                                    borderEndStartRadius   : innerBorderRadius,
+                                    borderEndEndRadius     : innerBorderRadius,
                                 }),
                             ]),
                         ]),
-                    ]),
-                    (!!inlineRule || null) && rule(inlineRule, [
+                    ])),
+                }),
+            ]),
+            (!!inlineRule || null) && rule(inlineRule, [
+                layout({
+                    // children:
+                    ...children('*', composition([
                         variants([
                             isFirstChild([
                                 layout({
@@ -199,21 +211,26 @@ export const usesBorderAsContainer = (blockRule : string|null = '.block', inline
                             isLastChild([
                                 layout({
                                     // add rounded corners on right:
-                                    borderStartEndRadius : innerBorderRadius,
-                                    borderEndEndRadius   : innerBorderRadius,
+                                    borderStartEndRadius   : innerBorderRadius,
+                                    borderEndEndRadius     : innerBorderRadius,
                                 }),
                             ]),
                         ]),
-                    ]),
-                    ((!!blockRule && !!inlineRule) || null) && rule('&', [
+                    ])),
+                }),
+            ]),
+            ((!!blockRule && !!inlineRule) || null) && rule('&', [
+                layout({
+                    // children:
+                    ...children('*', composition([
                         layout({
                             // add rounded corners:
                             borderRadius : innerBorderRadius,
                         }),
-                    ]),
-                ])
-            ])),
-        }),
+                    ])),
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
@@ -506,7 +523,7 @@ export const usesCardLayout = () => {
             stripOutFocusableElement(), // clear browser's default styles
             
             // borders:
-            usesBorderAsContainer(), // make a nicely rounded corners
+            usesBorderAsContainer(/*blockRule: */':not(.inline)', /*inlineRule: */'.inline'), // make a nicely rounded corners
         ]),
         layout({
             // layouts:
