@@ -78,7 +78,7 @@ export type SelectorCollection                                   = SingleOrDeepA
 export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
 
 export type RuleEntry                                            = readonly [SelectorCollection, StyleCollection]
-export type RuleEntrySource                                      = ProductOrFactory<RuleEntry>
+export type RuleEntrySource                                      = ProductOrFactory<Optional<RuleEntry>>
 export type RuleList                                             = RuleEntrySource[]
 export type RuleCollection                                       = SingleOrArray<RuleEntrySource|RuleList>
 
@@ -266,7 +266,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
         
         return [
             ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
-                .map((ruleEntrySourceList: RuleEntrySource|RuleList): RuleEntry[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
+                .map((ruleEntrySourceList: RuleEntrySource|RuleList): Optional<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
                     const isOptionalString                = (value: any): value is OptionalString => {
                         if (value === null)      return true; // optional `null`
                         if (value === undefined) return true; // optional `undefined`
@@ -332,8 +332,13 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         return true;
                     };
                     
-                    const isRuleEntry                     = (value: any): value is RuleEntry => {
-                        if (value.length !== 2) return false; // not a tuple => not a `RuleEntry`
+                    const isOptionalRuleEntry             = (value: any): value is Optional<RuleEntry> => {
+                        if (value === null)      return true; // optional `null`
+                        if (value === undefined) return true; // optional `undefined`
+                        
+                        
+                        
+                        if (value.length !== 2)  return false; // not a tuple => not a `RuleEntry`
                         
                         
                         
@@ -370,10 +375,11 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                     
                     
                     if (typeof(ruleEntrySourceList) === 'function') return [ruleEntrySourceList()];
-                    if (isRuleEntry(ruleEntrySourceList)) return [ruleEntrySourceList];
+                    if (isOptionalRuleEntry(ruleEntrySourceList))   return [ruleEntrySourceList];
                     return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
                 })
-                .flat(/*depth: */1) // flatten: RuleEntry[][] => RuleEntry[]
+                .flat(/*depth: */1) // flatten: Optional<RuleEntry>[][] => Optional<RuleEntry>[]
+                .filter((optionalRuleEntry): optionalRuleEntry is RuleEntry => !!optionalRuleEntry)
                 .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
                     let nestedSelectors = flat(selectors).map((selector): NestedSelector => {
                         if (!selector) return '&';
@@ -469,18 +475,18 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  */
 export const rule = (selectors: SelectorCollection, styles: StyleCollection): RuleEntry => [selectors, styles];
 // shortcut rule items:
-export const atRoot          = (styles: StyleCollection) => rule(':root'              , styles);
-export const atGlobal        = (styles: StyleCollection) => rule('@global'            , styles);
-export const fontFace        = (styles: StyleCollection) => atGlobal(
+export const atRoot            = (styles: StyleCollection) => rule(':root'              , styles);
+export const atGlobal          = (styles: StyleCollection) => rule('@global'            , styles);
+export const fontFace          = (styles: StyleCollection) => atGlobal(
     rules([
         rule('@font-face', styles),
     ]),
 );
-export const isFirstChild    = (styles: StyleCollection) => rule(     ':first-child'  , styles);
-export const isNotFirstChild = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
-export const isLastChild     = (styles: StyleCollection) => rule(     ':last-child'   , styles);
-export const isNotLastChild  = (styles: StyleCollection) => rule(':not(:last-child)'  , styles);
-export const isNthChild      = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+export const isFirstChild      = (styles: StyleCollection) => rule(     ':first-child'  , styles);
+export const isNotFirstChild   = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
+export const isLastChild       = (styles: StyleCollection) => rule(     ':last-child'   , styles);
+export const isNotLastChild    = (styles: StyleCollection) => rule(':not(:last-child)'  , styles);
+export const isNthChild        = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
         if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
         
@@ -495,7 +501,7 @@ export const isNthChild      = (step: number, offset: number, styles: StyleColle
         return rule(`:nth-child(${step}n+${offset})`, styles);
     } // if
 };
-export const isNotNthChild   = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+export const isNotNthChild     = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
         // if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
         
@@ -510,7 +516,7 @@ export const isNotNthChild   = (step: number, offset: number, styles: StyleColle
         return rule(`:not(:nth-child(${step}n+${offset}))`, styles);
     } // if
 };
-export const isNthLastChild  = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+export const isNthLastChild    = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
         if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
         
