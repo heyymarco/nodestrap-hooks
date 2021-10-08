@@ -469,7 +469,7 @@ export const usesCheckLayout = () => {
                     
                     
                     // sizes:
-                    flex          : [[1, 1, 'auto']], // growable, shrinkable, initial from it's width
+                    flex          : [[1, 1, 0]], // growable, shrinkable, initial from 0 width (setting initial to `auto`, when wrapped to next line, causing the text is not centered)
                     
                     
                     
