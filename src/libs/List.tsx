@@ -192,7 +192,7 @@ export interface ListVariant {
 }
 export const useListVariant = (props: ListVariant) => {
     return {
-        class: props.listStyle ? ((Array.isArray(props.listStyle) ? props.listStyle : [props.listStyle]).join(' ') || null) : null,
+        class: props.listStyle ? ((Array.isArray(props.listStyle) ? props.listStyle : [props.listStyle]).filter((style) => !!style).join(' ') || null) : null,
     };
 };
 
