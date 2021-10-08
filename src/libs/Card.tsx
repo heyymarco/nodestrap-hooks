@@ -268,7 +268,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             
             // remove top-border at the header, so that it wouldn't collide with the Card's top-border
             // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
-            rule([':where(:first-child)', ((replaceLast || null) && ':where(:last-child)')], composition([ // :where(...) => avoid increasing specificity
+            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], composition([ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
@@ -326,7 +326,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             
             // remove left-border at the header, so that it wouldn't collide with the Card's left-border
             // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
-            rule([':where(:first-child)', ((replaceLast || null) && ':where(:last-child)')], composition([ // :where(...) => avoid increasing specificity
+            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], composition([ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderInlineStartWidth : 0, // remove left-border
