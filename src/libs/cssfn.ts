@@ -473,6 +473,7 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  */
 export const rule = (selectors: SelectorCollection, styles: StyleCollection): RuleEntry => [selectors, styles];
 // shortcut rule items:
+export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
 export const atRoot            = (styles: StyleCollection) => rule(':root'              , styles);
 export const atGlobal          = (styles: StyleCollection) => rule('@global'            , styles);
 export const fontFace          = (styles: StyleCollection) => atGlobal(
