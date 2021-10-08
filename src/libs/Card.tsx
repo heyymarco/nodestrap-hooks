@@ -14,6 +14,8 @@ import {
     
     // layouts:
     layout,
+    vars,
+    descendants,
     children,
     adjacentSiblings,
     
@@ -32,6 +34,9 @@ import {
     // hooks:
     createUseSheet,
 }                           from './react-cssfn' // cssfn for react
+import {
+    createCssVar,
+}                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
     
@@ -147,8 +152,40 @@ export const usesImageFill = () => {
 
 
 // borders:
+interface BorderVars {
+    borderStartStartRadius : any
+    borderStartEndRadius   : any
+    borderEndStartRadius   : any
+    borderEndEndRadius     : any
+}
+const [borderRadiusRefs, borderRadiusDecls] = createCssVar<BorderVars>();
+export const usesBorderRadius = () => {
+    return [
+        () => composition([
+            vars({
+                [borderRadiusDecls.borderStartStartRadius] : bcssProps.borderRadius,
+                [borderRadiusDecls.borderStartEndRadius]   : bcssProps.borderRadius,
+                [borderRadiusDecls.borderEndStartRadius]   : bcssProps.borderRadius,
+                [borderRadiusDecls.borderEndEndRadius]     : bcssProps.borderRadius,
+            }),
+            layout({
+                // border radiuses:
+                borderStartStartRadius : borderRadiusRefs.borderStartStartRadius,
+                borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,
+                borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,
+                borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,
+            }),
+        ]),
+        borderRadiusRefs,
+        borderRadiusDecls,
+    ] as const;
+};
+
 export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not(.inline)', orientationInlineRule : string|null = '.inline') => {
-    const innerBorderRadius = `calc(${bcssProps.borderRadius} - ${bcssProps.borderWidth})`;
+    // dependencies:
+    
+    // borders:
+    const [borderRadius, borderRadiusRefs] = usesBorderRadius();
     
     
     
@@ -156,10 +193,10 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
         imports([
             // borders:
             usesBorderStroke(),
+            borderRadius(),
         ]),
         layout({
-            // border radiuses:
-            borderRadius : bcssProps.borderRadius,
+            // borders:
          // overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
             
             
@@ -176,15 +213,15 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
                             isFirstChild([
                                 layout({
                                     // add rounded corners on top:
-                                    borderStartStartRadius : innerBorderRadius,
-                                    borderStartEndRadius   : innerBorderRadius,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${bcssProps.borderWidth})`,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${bcssProps.borderWidth})`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on bottom:
-                                    borderEndStartRadius   : innerBorderRadius,
-                                    borderEndEndRadius     : innerBorderRadius,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${bcssProps.borderWidth})`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${bcssProps.borderWidth})`,
                                 }),
                             ]),
                         ]),
@@ -199,15 +236,15 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
                             isFirstChild([
                                 layout({
                                     // add rounded corners on left:
-                                    borderStartStartRadius : innerBorderRadius,
-                                    borderEndStartRadius   : innerBorderRadius,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${bcssProps.borderWidth})`,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${bcssProps.borderWidth})`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on right:
-                                    borderStartEndRadius   : innerBorderRadius,
-                                    borderEndEndRadius     : innerBorderRadius,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${bcssProps.borderWidth})`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${bcssProps.borderWidth})`,
                                 }),
                             ]),
                         ]),
@@ -219,8 +256,13 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
                     // children:
                     ...children('*', composition([
                         layout({
-                            // add rounded corners:
-                            borderRadius : innerBorderRadius,
+                            // add rounded corners on top:
+                            borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${bcssProps.borderWidth})`,
+                            borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${bcssProps.borderWidth})`,
+                            
+                            // add rounded corners on bottom:
+                            borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${bcssProps.borderWidth})`,
+                            borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${bcssProps.borderWidth})`,
                         }),
                     ])),
                 }),
@@ -229,6 +271,13 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
     ]);
 };
 export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         imports([
             // borders:
@@ -271,16 +320,26 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
         variants([
             isNotFirstChild([
                 layout({
-                    // remove rounded corners on top:
-                    borderStartStartRadius : 0,
-                    borderStartEndRadius   : 0,
+                    // children:
+                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                        layout({
+                            // remove rounded corners on top:
+                            borderStartStartRadius : 0, [borderRadiusDecls.borderStartStartRadius] : 0,
+                            borderStartEndRadius   : 0, [borderRadiusDecls.borderStartEndRadius]   : 0,
+                        }),
+                    ])),
                 }),
             ]),
             isNotLastChild([
                 layout({
-                    // remove rounded corners on bottom:
-                    borderEndStartRadius   : 0,
-                    borderEndEndRadius     : 0,
+                    // children:
+                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                        layout({
+                            // remove rounded corners on bottom:
+                            borderEndStartRadius   : 0, [borderRadiusDecls.borderEndStartRadius]   : 0,
+                            borderEndEndRadius     : 0, [borderRadiusDecls.borderEndEndRadius]     : 0,
+                        }),
+                    ])),
                 }),
             ]),
         ]),
@@ -329,16 +388,26 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
         variants([
             isNotFirstChild([
                 layout({
-                    // remove rounded corners on left:
-                    borderStartStartRadius : 0,
-                    borderEndStartRadius   : 0,
+                    // children:
+                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                        layout({
+                            // remove rounded corners on left:
+                            borderStartStartRadius : 0, [borderRadiusDecls.borderStartStartRadius] : 0,
+                            borderEndStartRadius   : 0, [borderRadiusDecls.borderEndStartRadius]   : 0,
+                        }),
+                    ])),
                 }),
             ]),
             isNotLastChild([
                 layout({
-                    // remove rounded corners on right:
-                    borderStartEndRadius   : 0,
-                    borderEndEndRadius     : 0,
+                    // children:
+                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                        layout({
+                            // remove rounded corners on right:
+                            borderStartEndRadius   : 0, [borderRadiusDecls.borderStartEndRadius]   : 0,
+                            borderEndEndRadius     : 0, [borderRadiusDecls.borderEndEndRadius]     : 0,
+                        }),
+                    ])),
                 }),
             ]),
         ]),
