@@ -144,7 +144,7 @@ export const usesImageFill = () => {
 
 
 // borders:
-export const usesBorderAsContainer = (blockRule : string|null = '.block', inlineRule : string|null = '.inline') => {
+export const usesBorderAsContainer = (blockRule : string|null = ':not(.inline)', inlineRule : string|null = '.inline') => {
     const innerBorderRadius = `calc(${bcssProps.borderRadius} - ${bcssProps.borderWidth})`;
     
     
@@ -523,7 +523,7 @@ export const usesCardLayout = () => {
             stripOutFocusableElement(), // clear browser's default styles
             
             // borders:
-            usesBorderAsContainer(/*blockRule: */':not(.inline)', /*inlineRule: */'.inline'), // make a nicely rounded corners
+            usesBorderAsContainer(), // make a nicely rounded corners
         ]),
         layout({
             // layouts:
