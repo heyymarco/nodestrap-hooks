@@ -276,7 +276,12 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
                 
                 
                 
-                if (!e.defaultPrevented) e.preventDefault(); // prevents pressing space for scrolling page
+                if (!e.defaultPrevented) {
+                    if ((e.key === ' ') || (e.code === 'Space')) {
+                        // prevents pressing space for scrolling page
+                        e.preventDefault();
+                    } // if
+                } // if
             }}
             onKeyUp={(e) => {
                 // backwards:
