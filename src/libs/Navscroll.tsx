@@ -720,6 +720,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
     
     // jsx functions:
     const mutateNestedNavscroll = (nestNavProps: NavscrollProps, key: React.Key|null, deepLevelsParent: number[]) => (
+        // downgrade nested Navscroll to Nav:
         <Nav
             // other props:
             {...((): {} => {
@@ -811,7 +812,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
     
     // jsx:
     return (
-        <Nav
+        <Nav<TElement>
             // other props:
             {...restProps}
             {...defaultProps}
