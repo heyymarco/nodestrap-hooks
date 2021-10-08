@@ -474,6 +474,7 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 export const rule = (selectors: SelectorCollection, styles: StyleCollection): RuleEntry => [selectors, styles];
 // shortcut rule items:
 export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
+export const emptyRule         = ()                        => rule(null                 , null  );
 export const atRoot            = (styles: StyleCollection) => rule(':root'              , styles);
 export const atGlobal          = (styles: StyleCollection) => rule('@global'            , styles);
 export const fontFace          = (styles: StyleCollection) => atGlobal(
@@ -487,7 +488,7 @@ export const isLastChild       = (styles: StyleCollection) => rule(     ':last-c
 export const isNotLastChild    = (styles: StyleCollection) => rule(':not(:last-child)'  , styles);
 export const isNthChild        = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
-        if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
         if (offset === 1) return isFirstChild(styles);
         
@@ -502,7 +503,7 @@ export const isNthChild        = (step: number, offset: number, styles: StyleCol
 };
 export const isNotNthChild     = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
-        // if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        // if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
         if (offset === 1) return isNotFirstChild(styles);
         
@@ -517,7 +518,7 @@ export const isNotNthChild     = (step: number, offset: number, styles: StyleCol
 };
 export const isNthLastChild    = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
-        if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
         if (offset === 1) return isLastChild(styles);
         
@@ -532,7 +533,7 @@ export const isNthLastChild    = (step: number, offset: number, styles: StyleCol
 };
 export const isNotNthLastChild = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
     if (step === 0) { // no step
-        // if (offset === 0) return rule(':none', null); // element indices are starting from 1 => never match => return empty style
+        // if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
         if (offset === 1) return isNotLastChild(styles);
         
