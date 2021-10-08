@@ -1,4 +1,5 @@
 export type Optional<T>                    = T|null|undefined
+export type OptionalOrFalse<T>             = Optional<T|false>
 export type SingleOrArray<T>               = T|T[]
 
 export type DeepArray<T>                   = (T|DeepArray<T>)[] // ===       T[]  |  T[][]  |  T[][][]  |  ...
