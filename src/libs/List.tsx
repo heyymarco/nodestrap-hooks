@@ -488,6 +488,16 @@ export const usesListLayout = () => {
                     
                     // sizes:
                     flex           : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+                    
+                    
+                    
+                    // children:
+                    ...children('*', composition([
+                        layout({
+                            // border radiuses:
+                            borderRadius : 'inherit', // copy wrapper's borderRadius
+                        }),
+                    ])),
                 }),
             ])),
             
