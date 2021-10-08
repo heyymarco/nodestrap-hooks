@@ -7,6 +7,7 @@ import {
     
     // rules:
     rule,
+    noRule,
 }                           from './cssfn'      // cssfn core
 
 
@@ -144,7 +145,7 @@ export const isScreenWidthBetween = (lowerBreakpointName: string, upperBreakpoin
         return rule(`@media (max-width: ${maxWidth}px)`, styles);
     }
     else {
-        return rule(null, styles);
+        return noRule(styles);
     } // if
 };
 
@@ -169,6 +170,6 @@ export const isScreenWidth = (breakpointName: string, styles: StyleCollection) =
         return rule(`@media (max-width: ${maxWidth}px)`, styles);
     }
     else {
-        return rule(null, styles);
+        return noRule(styles);
     } // if
 };
