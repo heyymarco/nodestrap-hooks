@@ -233,7 +233,7 @@ export const combinators = (combinator: string, selectors: SelectorCollection, s
     const combiSelectors = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
-        if (selector === '&') return selector; // no children => the parent itself
+        // if (selector === '&') return selector; // no children => the parent itself
         if (selector.includes('&')) return selector; // custom combinator
         
         if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
