@@ -567,6 +567,17 @@ export const usesControlStates = () => {
                     markActive(),
                 ]),
             ]),
+            
+            isFocus([
+                layout({
+                    zIndex: 2, // prevents boxShadowFocus from clipping
+                }),
+            ]),
+            isBlurring([
+                layout({
+                    zIndex: 1, // prevents boxShadowFocus from clipping but below the active one
+                }),
+            ]),
         ]),
     ]);
 };
