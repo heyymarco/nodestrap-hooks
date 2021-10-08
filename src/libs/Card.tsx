@@ -23,7 +23,9 @@ import {
     variants,
     rule,
     isFirstChild,
+    isNotFirstChild,
     isLastChild,
+    isNotLastChild,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -273,6 +275,22 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
                 }),
             ])),
         ]),
+        variants([
+            isNotFirstChild([
+                layout({
+                    // remove rounded corners on top:
+                    borderStartStartRadius : 0,
+                    borderStartEndRadius   : 0,
+                }),
+            ]),
+            isNotLastChild([
+                layout({
+                    // remove rounded corners on bottom:
+                    borderEndStartRadius   : 0,
+                    borderEndEndRadius     : 0,
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesBorderAsSeparatorInline = (replaceLast = false) => {
@@ -314,6 +332,22 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
                     borderInlineStartWidth : 0, // remove left-border
                 }),
             ])),
+        ]),
+        variants([
+            isNotFirstChild([
+                layout({
+                    // remove rounded corners on left:
+                    borderStartStartRadius : 0,
+                    borderEndStartRadius   : 0,
+                }),
+            ]),
+            isNotLastChild([
+                layout({
+                    // remove rounded corners on right:
+                    borderStartEndRadius   : 0,
+                    borderEndEndRadius     : 0,
+                }),
+            ]),
         ]),
     ]);
 };
