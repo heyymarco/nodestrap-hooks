@@ -62,6 +62,9 @@ import {
     
     
     // react components:
+    ModalElementProps,
+    ModalElement,
+    
     ModalProps,
     Modal,
 }                           from './Modal'
@@ -73,9 +76,6 @@ import {
     
     // react components:
     ModalCardCloseType,
-    
-    ModalCardElementProps,
-    ModalCardElement,
 }                           from './ModalCard'
 import {
     // react components:
@@ -89,6 +89,7 @@ import {
     
     
     // react components:
+    CardProps,
     Card,
 }                           from './Card'
 import CloseButton          from './CloseButton'
@@ -394,7 +395,8 @@ export type ModalSideCloseType = ModalCardCloseType
 
 export interface ModalSideElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>
     extends
-        ModalCardElementProps<TElement, TCloseType>,
+        ModalElementProps<TElement, TCloseType>,
+        CardProps<TElement>,
         
         // states:
         TogglerExcitedProps,
@@ -491,7 +493,7 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
             
             // classes:
             classes={[
-                sheet.main, // inject ModalCardElement class
+                sheet.main, // inject ModalSideElement class
             ]}
             stateClasses={[...(props.stateClasses ?? []),
                 excitedState.class,
@@ -530,7 +532,7 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
         </Collapse>
     );
 }
-ModalSideElement.prototype = ModalCardElement.prototype; // mark as ModalCardElement compatible
+ModalSideElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
 
 
 
