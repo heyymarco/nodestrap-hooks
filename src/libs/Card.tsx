@@ -22,6 +22,7 @@ import {
     // rules:
     variants,
     rule,
+    noRule,
     isFirstChild,
     isNotFirstChild,
     isLastChild,
@@ -213,7 +214,7 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
                     ])),
                 }),
             ]),
-            (!!orientationBlockRule && !!orientationInlineRule) && rule('&', [
+            (!orientationBlockRule && !orientationInlineRule) && noRule([
                 layout({
                     // children:
                     ...children('*', composition([
