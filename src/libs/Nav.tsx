@@ -37,7 +37,7 @@ export interface NavItemProps<TElement extends HTMLElement = HTMLElement>
 export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
     // jsx:
     return (
-        <ListItem
+        <ListItem<TElement>
             // other props:
             {...props}
             
@@ -59,7 +59,7 @@ export { NavItem as Item }
 export function NavPrevItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
     // jsx:
     return (
-        <NavItem
+        <NavItem<TElement>
             // other props:
             {...props}
             
@@ -85,7 +85,7 @@ export function NavPrevItem<TElement extends HTMLElement = HTMLElement>(props: N
 export function NavNextItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
     // jsx:
     return (
-        <NavItem
+        <NavItem<TElement>
             // other props:
             {...props}
             
@@ -143,7 +143,7 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
     
     // jsx:
     return (
-        <List
+        <List<TElement>
             // other props:
             {...restProps}
             
