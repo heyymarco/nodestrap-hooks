@@ -82,6 +82,10 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
+    usesFocusBlurState,
+}                           from './Control'
+import {
+    // hooks:
     usesActivePassiveAsPressReleaseState,
 }                           from './ActionControl'
 import {
@@ -448,6 +452,14 @@ export const usesCheckLayout = () => {
                         }),
                     ])),
                 ]),
+                (() => {
+                    // dependencies:
+                    const [, , focusBlurDecls] = usesFocusBlurState();
+                    return vars({
+                        [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
+                        [focusBlurDecls.animFocusBlur]      : 'inherit',
+                    });
+                })(),
             ])),
             ...children(labelElm, composition([
                 layout({
@@ -538,6 +550,7 @@ export const usesCheckVariants = () => {
                     // children:
                     ...children(['::before', inputElm], composition([
                         layout({
+                            // layouts:
                             display : 'none',
                         }),
                     ])),

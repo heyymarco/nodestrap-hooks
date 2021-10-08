@@ -1,4 +1,5 @@
-fix Check focus
+fix clipped focus indicator on List
+fix blinky toggle active as pressed
 
 Carousel => infinite loop
 Navbar => use List
