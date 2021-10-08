@@ -15,7 +15,6 @@ import {
     // layouts:
     layout,
     vars,
-    descendants,
     children,
     adjacentSiblings,
     
@@ -321,7 +320,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             isNotFirstChild([
                 layout({
                     // children:
-                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on top:
                             borderStartStartRadius : 0, [borderRadiusDecls.borderStartStartRadius] : 0,
@@ -333,7 +332,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             isNotLastChild([
                 layout({
                     // children:
-                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on bottom:
                             borderEndStartRadius   : 0, [borderRadiusDecls.borderEndStartRadius]   : 0,
@@ -389,7 +388,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             isNotFirstChild([
                 layout({
                     // children:
-                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on left:
                             borderStartStartRadius : 0, [borderRadiusDecls.borderStartStartRadius] : 0,
@@ -401,7 +400,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             isNotLastChild([
                 layout({
                     // children:
-                    ...descendants(['&', ':where(&) *'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on right:
                             borderStartEndRadius   : 0, [borderRadiusDecls.borderStartEndRadius]   : 0,
