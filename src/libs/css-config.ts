@@ -26,6 +26,7 @@ import {
 
     // rules:
     rule,
+    noRule,
 }                           from './cssfn'      // cssfn core
 
 // utilities:
@@ -555,8 +556,8 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
         // create a new styleSheet & attach:
         genStyleSheet = createSheet([
             global([
-                rule(settings.rule, genProps    ),
-                rule(null         , genKeyframes),
+                rule(settings.rule, genProps),
+                noRule(genKeyframes),
             ]),
         ])
         .attach();
