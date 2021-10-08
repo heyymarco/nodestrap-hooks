@@ -26,6 +26,7 @@ import jssPluginShort       from './jss-plugin-short'
 // cssfn:
 import type {
     Optional,
+    OptionalOrFalse,
     SingleOrArray,
     SingleOrDeepArray,
     ProductOrFactoryOrDeepArray,
@@ -78,7 +79,7 @@ export type SelectorCollection                                   = SingleOrDeepA
 export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
 
 export type RuleEntry                                            = readonly [SelectorCollection, StyleCollection]
-export type RuleEntrySource                                      = ProductOrFactory<Optional<RuleEntry>>
+export type RuleEntrySource                                      = ProductOrFactory<OptionalOrFalse<RuleEntry>>
 export type RuleList                                             = RuleEntrySource[]
 export type RuleCollection                                       = SingleOrArray<RuleEntrySource|RuleList>
 
@@ -266,7 +267,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
         
         return [
             ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
-                .map((ruleEntrySourceList: RuleEntrySource|RuleList): Optional<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
+                .map((ruleEntrySourceList: RuleEntrySource|RuleList): OptionalOrFalse<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
                     const isOptionalString                = (value: any): value is OptionalString => {
                         if (value === null)      return true; // optional `null`
                         if (value === undefined) return true; // optional `undefined`
@@ -332,9 +333,10 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                         return true;
                     };
                     
-                    const isOptionalRuleEntry             = (value: any): value is Optional<RuleEntry> => {
+                    const isOptionalRuleEntry             = (value: any): value is OptionalOrFalse<RuleEntry> => {
                         if (value === null)      return true; // optional `null`
                         if (value === undefined) return true; // optional `undefined`
+                        if (value === false)     return true; // optional `false`
                         
                         
                         
@@ -378,7 +380,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                     if (isOptionalRuleEntry(ruleEntrySourceList))   return [ruleEntrySourceList];
                     return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
                 })
-                .flat(/*depth: */1) // flatten: Optional<RuleEntry>[][] => Optional<RuleEntry>[]
+                .flat(/*depth: */1) // flatten: OptionalOrFalse<RuleEntry>[][] => OptionalOrFalse<RuleEntry>[]
                 .filter((optionalRuleEntry): optionalRuleEntry is RuleEntry => !!optionalRuleEntry)
                 .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
                     let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
