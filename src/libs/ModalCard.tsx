@@ -519,7 +519,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
     
     // jsx:
     return (
-        <Popup<TElement>
+        <Popup
             // accessibilities:
             {...{
                 active,
