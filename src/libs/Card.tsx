@@ -144,7 +144,7 @@ export const usesImageFill = () => {
 
 
 // borders:
-export const usesBorderAsContainer = (blockRule : string|null = ':not(.inline)', inlineRule : string|null = '.inline') => {
+export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not(.inline)', orientationInlineRule : string|null = '.inline') => {
     const innerBorderRadius = `calc(${bcssProps.borderRadius} - ${bcssProps.borderWidth})`;
     
     
@@ -173,7 +173,7 @@ export const usesBorderAsContainer = (blockRule : string|null = ':not(.inline)',
             ])),
         }),
         variants([
-            (!!blockRule || null) && rule(blockRule, [
+            (!!orientationBlockRule || null) && rule(orientationBlockRule, [
                 layout({
                     // children:
                     ...children('*', composition([
@@ -196,7 +196,7 @@ export const usesBorderAsContainer = (blockRule : string|null = ':not(.inline)',
                     ])),
                 }),
             ]),
-            (!!inlineRule || null) && rule(inlineRule, [
+            (!!orientationInlineRule || null) && rule(orientationInlineRule, [
                 layout({
                     // children:
                     ...children('*', composition([
@@ -219,7 +219,7 @@ export const usesBorderAsContainer = (blockRule : string|null = ':not(.inline)',
                     ])),
                 }),
             ]),
-            ((!!blockRule && !!inlineRule) || null) && rule('&', [
+            ((!!orientationBlockRule && !!orientationInlineRule) || null) && rule('&', [
                 layout({
                     // children:
                     ...children('*', composition([
