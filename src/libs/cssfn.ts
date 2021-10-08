@@ -381,9 +381,7 @@ export const rules = (ruleCollection: RuleCollection, minSpecificityWeight: numb
                 .flat(/*depth: */1) // flatten: Optional<RuleEntry>[][] => Optional<RuleEntry>[]
                 .filter((optionalRuleEntry): optionalRuleEntry is RuleEntry => !!optionalRuleEntry)
                 .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
-                    let nestedSelectors = flat(selectors).map((selector): NestedSelector => {
-                        if (!selector) return '&';
-
+                    let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
                         if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
 
                         if (selector.includes('&')) return (selector as NestedSelector); // &.foo   .boo&   .foo&.boo
