@@ -320,6 +320,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             isNotFirstChild([
                 layout({
                     // children:
+                    // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on top:
@@ -332,6 +333,7 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
             isNotLastChild([
                 layout({
                     // children:
+                    // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on bottom:
@@ -388,6 +390,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             isNotFirstChild([
                 layout({
                     // children:
+                    // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on left:
@@ -400,6 +403,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
             isNotLastChild([
                 layout({
                     // children:
+                    // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
                             // remove rounded corners on right:
