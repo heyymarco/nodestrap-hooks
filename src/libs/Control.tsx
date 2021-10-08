@@ -289,8 +289,12 @@ export const useFocusBlurState  = <TElement extends HTMLElement = HTMLElement>(p
                 // negative [tabIndex] => can't be focused by user input => treats Control as *wrapper* element => use class .focus
                 if ((props.tabIndex ?? 0) < 0) return 'focus';
 
+                // use class .focus instead of pseudo :focus
+                // in case of child got focus, the parent is also marked as focus
+                return 'focus';
+                
                 // otherwise use pseudo :focus
-                return null;
+                // return null;
             } // if
 
             // blurring:
