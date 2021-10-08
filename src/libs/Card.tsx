@@ -165,14 +165,6 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
             
             // shadows:
             boxShadow    : bcssProps.boxShadow,
-            
-            
-            
-            // children:
-            ...children('*', composition([
-                variants([
-                ])
-            ])),
         }),
         variants([
             !!orientationBlockRule && rule(orientationBlockRule, [
