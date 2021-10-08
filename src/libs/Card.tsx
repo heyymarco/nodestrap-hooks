@@ -175,7 +175,7 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
             ])),
         }),
         variants([
-            (!!orientationBlockRule || null) && rule(orientationBlockRule, [
+            !!orientationBlockRule && rule(orientationBlockRule, [
                 layout({
                     // children:
                     ...children('*', composition([
@@ -198,7 +198,7 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
                     ])),
                 }),
             ]),
-            (!!orientationInlineRule || null) && rule(orientationInlineRule, [
+            !!orientationInlineRule && rule(orientationInlineRule, [
                 layout({
                     // children:
                     ...children('*', composition([
@@ -221,7 +221,7 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
                     ])),
                 }),
             ]),
-            ((!!orientationBlockRule && !!orientationInlineRule) || null) && rule('&', [
+            (!!orientationBlockRule && !!orientationInlineRule) && rule('&', [
                 layout({
                     // children:
                     ...children('*', composition([
