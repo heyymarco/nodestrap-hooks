@@ -743,18 +743,18 @@ export function Control<TElement extends HTMLElement = HTMLElement>(props: Contr
             
             
             // events:
-            onFocus=        {(e) => { focusBlurState.handleFocus();        props.onFocus?.(e);      }}
-            onBlur=         {(e) => { focusBlurState.handleBlur();         props.onBlur?.(e);       }}
-            onMouseEnter=   {(e) => { arriveLeaveState.handleMouseEnter(); props.onMouseEnter?.(e); }}
-            onMouseLeave=   {(e) => { arriveLeaveState.handleMouseLeave(); props.onMouseLeave?.(e); }}
+            onFocus=        {(e) => { props.onFocus?.(e);      focusBlurState.handleFocus();        }}
+            onBlur=         {(e) => { props.onBlur?.(e);       focusBlurState.handleBlur();         }}
+            onMouseEnter=   {(e) => { props.onMouseEnter?.(e); arriveLeaveState.handleMouseEnter(); }}
+            onMouseLeave=   {(e) => { props.onMouseLeave?.(e); arriveLeaveState.handleMouseLeave(); }}
             onAnimationEnd= {(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // states:
                 focusBlurState.handleAnimationEnd(e);
                 arriveLeaveState.handleAnimationEnd(e);
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         />
     );
