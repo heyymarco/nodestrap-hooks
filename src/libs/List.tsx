@@ -1198,12 +1198,12 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                             
                             // events:
                             onAnimationEnd={(e) => {
+                                child.props.onAnimationEnd?.(e);
+                                
+                                
+                                
                                 // triggers `List`'s onAnimationEnd event
                                 e.currentTarget.parentElement?.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
-                                
-                                
-                                // forwards:
-                                child.props.onAnimationEnd?.(e);
                             }}
                         />
                         :
