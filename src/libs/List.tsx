@@ -639,6 +639,10 @@ export const usesListVariants = () => {
                                     // layouts:
                                     usesButtonLayout(),
                                 ]),
+                                layout({
+                                    // customize:
+                                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'btn')), // apply general cssProps starting with btn***
+                                }),
                             ])),
                         }),
                     ])),
@@ -665,6 +669,12 @@ export const usesListVariants = () => {
                                     // borders:
                                     borderColor    : 'inherit', // change borderColor independent to child's theme color
                                     backgroundClip : 'padding-box',
+                                    
+                                    
+                                    
+                                    // customize:
+                                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'tab')), // apply general cssProps starting with tab***
+                                    borderRadius: null, // tab borderRadius has been handled
                                 }),
                                 variants([
                                     isPassive([
@@ -904,7 +914,11 @@ export const usesListVariants = () => {
                                                 layout({
                                                     // counters:
                                                     counterIncrement : 'ListNumber',
-                                                    content          : [['counters(ListNumber, ".")', '". "']],
+                                                    
+                                                    
+                                                    
+                                                    // customize:
+                                                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'numbered')), // apply general cssProps starting with numbered***
                                                 }),
                                             ])),
                                         }),
@@ -954,7 +968,6 @@ export const useListSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        //#region spacings
         btnSpacing        : spacers.sm,
         btnSpacingSm      : spacers.xs,
         btnSpacingLg      : spacers.md,
@@ -987,9 +1000,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         bulletPadding     : spacers.xs,
         bulletPaddingSm   : spacers.xxs,
         bulletPaddingLg   : spacers.sm,
-        //#endregion spacings
+        
+        
+        
+        numberedContent   : [['counters(ListNumber, ".")', '". "']],
     };
-}, { prefix: 'lg' });
+}, { prefix: 'lst' });
 
 
 
