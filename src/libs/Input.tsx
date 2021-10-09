@@ -59,8 +59,8 @@ import {
     usePropReadOnly,
 }                           from './accessibilities'
 import {
-    stripOutTextbox,
-}                           from './strip-outs'
+    stripoutTextbox,
+}                           from './stripouts'
 
 
 
@@ -90,7 +90,7 @@ export const usesInputLayout = () => {
             // children:
             ...children(inputElm, composition([
                 imports([
-                    stripOutTextbox(), // clear browser's default styles
+                    stripoutTextbox(), // clear browser's default styles
                 ]),
                 layout({
                     // layouts:

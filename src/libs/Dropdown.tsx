@@ -72,8 +72,8 @@ import {
     Collapse,
 }                           from './Collapse'
 import {
-    stripOutFocusableElement,
-}                           from './strip-outs'
+    stripoutFocusableElement,
+}                           from './stripouts'
 
 
 
@@ -82,7 +82,7 @@ export const usesDropdownElementLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutFocusableElement(), // clear browser's default styles
+            stripoutFocusableElement(), // clear browser's default styles
         ]),
         layout({
             // layouts:

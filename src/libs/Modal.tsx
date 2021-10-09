@@ -84,8 +84,8 @@ import {
     Indicator,
 }                           from './Indicator'
 import {
-    stripOutFocusableElement,
-}                           from './strip-outs'
+    stripoutFocusableElement,
+}                           from './stripouts'
 
 
 
@@ -169,7 +169,7 @@ export const usesModalElementLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutFocusableElement(), // clear browser's default styles
+            stripoutFocusableElement(), // clear browser's default styles
             
             // animations:
             anim(),

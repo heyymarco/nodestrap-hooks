@@ -85,8 +85,8 @@ import {
     usePropEnabled,
 }                           from './accessibilities'
 import {
-    stripOutControl,
-}                           from './strip-outs'
+    stripoutControl,
+}                           from './stripouts'
 import {
     colors,
 }                           from './colors'      // configurable colors & theming defs
@@ -491,7 +491,7 @@ export const usesControlLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutControl(), // clear browser's default styles
+            stripoutControl(), // clear browser's default styles
             
             // layouts:
             usesIndicatorLayout(),

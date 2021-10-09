@@ -140,9 +140,9 @@ import {
     usesIconImage,
 }                           from './Icon'
 import {
-    stripOutList,
-    stripOutFocusableElement,
-}                           from './strip-outs'
+    stripoutList,
+    stripoutFocusableElement,
+}                           from './stripouts'
 import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
@@ -444,8 +444,8 @@ export const usesListLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutFocusableElement(), // clear browser's default styles
-            stripOutList(),             // clear browser's default styles
+            stripoutFocusableElement(), // clear browser's default styles
+            stripoutList(),             // clear browser's default styles
             
             // borders:
             usesBorderAsContainer(), // make a nicely rounded corners

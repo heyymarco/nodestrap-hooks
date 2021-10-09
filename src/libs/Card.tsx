@@ -87,10 +87,10 @@ import {
 }                           from './Indicator'
 import Button               from './Button'
 import {
-    stripOutFigure,
-    stripOutFocusableElement,
-    stripOutImage,
-}                           from './strip-outs'
+    stripoutFigure,
+    stripoutFocusableElement,
+    stripoutImage,
+}                           from './stripouts'
 import spacers              from './spacers'     // configurable spaces defs
 
 
@@ -462,7 +462,7 @@ const imgElm    = ['figure', 'img'];
 export const usesCardImageLayout = () => {
     return composition([
         imports([
-            stripOutImage(), // clear browser's default styling on image
+            stripoutImage(), // clear browser's default styling on image
             
             // layouts:
             usesImageFill(),
@@ -519,13 +519,13 @@ export const usesCardItemLayout = () => {
             //#region first: reset top_level <figure> and inner <img>
             ...children('figure', composition([
                 imports([
-                    stripOutFigure(), // clear browser's default styling on figure
+                    stripoutFigure(), // clear browser's default styling on figure
                 ]),
                 layout({
                     // children:
                     ...children('img', composition([
                         imports([
-                            stripOutImage(), // clear browser's default styling on image
+                            stripoutImage(), // clear browser's default styling on image
                         ]),
                         layout({
                             // layouts:
@@ -612,7 +612,7 @@ export const usesCardLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutFocusableElement(), // clear browser's default styles
+            stripoutFocusableElement(), // clear browser's default styles
             
             // borders:
             usesBorderAsContainer(), // make a nicely rounded corners

@@ -27,9 +27,9 @@ const none  = 'none';
 /**
  * removes browser's default styling on hyperlink (`a`).
  */
-export const stripOutLink = () => composition([
+export const stripoutLink = () => composition([
     imports([
-        stripOutFocusableElement(),
+        stripoutFocusableElement(),
     ]),
     layout({
         color                 : unset, // reset blue color
@@ -49,9 +49,9 @@ export const stripOutLink = () => composition([
 /**
  * removes browser's default styling on control (`input`, `textarea`, `button`, etc).
  */
-export const stripOutControl = () => composition([
+export const stripoutControl = () => composition([
     imports([
-        stripOutFocusableElement(),
+        stripoutFocusableElement(),
     ]),
     layout({
         appearance            : none,
@@ -78,9 +78,9 @@ export const stripOutControl = () => composition([
  * removes browser's default styling on `input[type=**text**]`.  
  * `**text**` = `text`|`search`|`password`|`email`|`tel`|`url`|`number`|`time`|`week`|`date`|`datetime-local`|`month`
  */
-export const stripOutTextbox = () => composition([
+export const stripoutTextbox = () => composition([
     imports([
-        stripOutControl(),
+        stripoutControl(),
     ]),
     layout({
         '-moz-appearance'  : 'textfield',
@@ -107,7 +107,7 @@ export const stripOutTextbox = () => composition([
 /**
  * removes browser's default styling on list (`ul>li` & `ol>li`).
  */
-export const stripOutList = () => composition([
+export const stripoutList = () => composition([
     layout({
         listStyleType      : none,
         marginBlockStart   : unset,
@@ -130,7 +130,7 @@ export const stripOutList = () => composition([
 /**
  * removes browser's default styling on figure.
  */
-export const stripOutFigure = () => composition([
+export const stripoutFigure = () => composition([
     layout({
         display           : unset,
         marginBlockStart  : unset,
@@ -143,7 +143,7 @@ export const stripOutFigure = () => composition([
 /**
  * removes browser's default styling on focusable element.
  */
-export const stripOutFocusableElement = () => composition([
+export const stripoutFocusableElement = () => composition([
     variants([
         isFocus([
             layout({
@@ -163,7 +163,7 @@ export const stripOutFocusableElement = () => composition([
 /**
  * hides browser's default scrollbar.
  */
-export const stripOutScrollbar = () => composition([
+export const stripoutScrollbar = () => composition([
     layout({
         scrollbarWidth       : none,
         '-ms-overflow-style' : none,
@@ -181,7 +181,7 @@ export const stripOutScrollbar = () => composition([
 /**
  * removes browser's default styling on image.
  */
-export const stripOutImage = () => composition([
+export const stripoutImage = () => composition([
     layout({
         // layouts:
         display: 'block', // fills the entire parent's width

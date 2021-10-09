@@ -88,10 +88,10 @@ import {
     Navscroll,
 }                           from './Navscroll'
 import {
-    stripOutList,
-    stripOutScrollbar,
-    stripOutImage,
-}                           from './strip-outs'
+    stripoutList,
+    stripoutScrollbar,
+    stripoutImage,
+}                           from './stripouts'
 
 
 
@@ -107,8 +107,8 @@ export const usesCarouselItemsLayout = () => {
     return composition([
         imports([
             // resets:
-            stripOutList(),      // clear browser's default styles
-            stripOutScrollbar(), // hides browser's scrollbar
+            stripoutList(),      // clear browser's default styles
+            stripoutScrollbar(), // hides browser's scrollbar
         ]),
         layout({
             // layouts:
@@ -198,7 +198,7 @@ export const usesCarouselItemLayout = () => {
 export const usesCarouselMediaLayout = () => {
     return composition([
         imports([
-            stripOutImage(), // removes browser's default styling on image
+            stripoutImage(), // removes browser's default styling on image
         ]),
         layout({
             // customize:
