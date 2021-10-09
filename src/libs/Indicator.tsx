@@ -724,14 +724,13 @@ export function Indicator<TElement extends HTMLElement = HTMLElement>(props: Ind
             
             // events:
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // states:
                 enableDisableState.handleAnimationEnd(e);
                 activePassiveState.handleAnimationEnd(e);
-                
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         >
             { props.children && <AccessibilityProvider {...propAccess}>
