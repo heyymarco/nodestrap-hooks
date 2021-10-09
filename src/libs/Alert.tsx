@@ -353,7 +353,7 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
     
     const controlFn = (() => {
         // handlers:
-        const handleClose = onActiveChange && ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        const handleClose = onActiveChange && ((e: React.MouseEvent<HTMLElement, MouseEvent>) => {
             if (!e.defaultPrevented) {
                 onActiveChange(false);
                 e.preventDefault();
@@ -396,7 +396,13 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
                 
                 
                 // actions:
-                onClick={props.onClick ?? handleClose}
+                onClick={(e) => {
+                    control.props.onClick?.(e);
+                    
+                    
+                    
+                    handleClose?.(e);
+                }}
             />
         );
         
