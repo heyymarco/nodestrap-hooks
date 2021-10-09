@@ -1,5 +1,5 @@
 top priority:
-
+centralize dummy text content
 
 
 medium priority:
@@ -14,3 +14,4 @@ Progress
 Range
 fix focus-visible
 Check_togglerBtn & NavbarMenu fix blinky toggle active => press for a few seconds and then released, the blinky occured
+List:variant_tab => move up tab border radius from ListItem to Wrapper

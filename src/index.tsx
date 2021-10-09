@@ -52,15 +52,15 @@ import reportWebVitals from './reportWebVitals';
 //     import IconApp                                  from './apps/IconApp';
 //     import MasonryApp                               from './apps/MasonryApp';
 //     import CarouselApp                              from './apps/CarouselApp';
-//     import NavbarApp                                from './apps/NavbarApp';
-    import GroupApp                                 from './apps/GroupApp';
+    import NavbarApp                                from './apps/NavbarApp';
+//     import GroupApp                                 from './apps/GroupApp';
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <GroupApp />
+    <NavbarApp />
     ,
     document.getElementById('root')
 );
