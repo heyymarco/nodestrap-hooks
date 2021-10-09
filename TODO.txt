@@ -1,5 +1,4 @@
 top priority:
-centralize dummy text content
 
 
 medium priority:

@@ -108,6 +108,10 @@ import {
     // hooks:
     usePropEnabled,
 }                           from './accessibilities'
+import {
+    // styles:
+    fillTextLineheightLayout,
+}                           from './layouts'
 
 
 
@@ -345,25 +349,12 @@ export const usesCheckLayout = () => {
             
             
             // children:
-            // a dummy text content, for making parent's height as tall as line-height
-            // the dummy is also used for calibrating the flex's vertical position
             ...children('::before', composition([
-                layout({
-                    // layouts:
-                    content    : '"\xa0"',       // &nbsp;
-                    display    : 'inline-block', // use inline-block, so we can kill the width
-                    
-                    
-                    
-                    // appearances:
-                    overflow   : 'hidden', // crop the text width (&nbsp;)
-                    visibility : 'hidden', // hide the element, but still consumes the dimension
-                    
-                    
-                    
-                    // sizes:
-                    inlineSize : 0,        // kill the width, we just need the height
-                }),
+                imports([
+                    // a dummy text content, for making parent's height as tall as line-height
+                    // the dummy is also used for calibrating the flex's vertical position
+                    fillTextLineheightLayout(),
+                ]),
             ])),
             ...children(inputElm, composition([
                 imports([

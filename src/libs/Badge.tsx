@@ -66,6 +66,10 @@ import typos                from './typos/index' // configurable typography (tex
 import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
+import {
+    // styles:
+    fillTextLineheightLayout,
+}                           from './layouts'
 
 
 
@@ -132,25 +136,12 @@ export const usesBadgeLayout = () => {
                     // height  : '1em', // not working, (font-height !== 1em) if the font-size is fractional number
                     
                     // children:
-                    // a dummy text content, for making parent's height as tall as line-height
-                    // the dummy is also used for calibrating the flex's vertical position
                     ...children(['::before', '::after'], composition([
-                        layout({
-                            // layouts:
-                            content     : '"\xa0"',       // &nbsp;
-                            display     : 'inline-block', // use inline-block, so we can kill the width
-                            
-                            
-                            
-                            // appearances:
-                            overflow    : 'hidden', // crop the text width (&nbsp;)
-                            visibility  : 'hidden', // hide the element, but still consumes the dimension
-                            
-                            
-                            
-                            // sizes:
-                            inlineSize  : 0,        // kill the width, we just need the height
-                        }),
+                        imports([
+                            // a dummy text content, for making parent's height as tall as line-height
+                            // the dummy is also used for calibrating the flex's vertical position
+                            fillTextLineheightLayout(),
+                        ]),
                     ])),
                     ...children('::after', composition([
                         layout({
