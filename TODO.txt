@@ -1,10 +1,17 @@
-Check_togglerBtn & NavbarMenu fix blinky toggle active => press for a few seconds and then released, the blinky occured
+top priority:
 weird gap at DropdownMenuButton at Group at Firefox
 
-Carousel => infinite loop
-Navbar => use List
 
+
+medium priority:
+Navbar => use List
+Carousel => infinite loop
+
+
+
+low priority:
 Media => for profile image, video, static images, gifs, svgs, etc
 Progress
 Range
 fix focus-visible
+Check_togglerBtn & NavbarMenu fix blinky toggle active => press for a few seconds and then released, the blinky occured
