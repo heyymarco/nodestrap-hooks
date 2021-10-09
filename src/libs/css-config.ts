@@ -804,7 +804,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          * logoOpacity
          * subOpacity
          */
-        if ((/^(icon|img|arrow(Top|Right|Bottom|Left)?|items|item|sub|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|card|caption|header|footer|body|tab|breadcrumb|element)($|[A-Z])/).test(propName)) continue; // exclude
+        if ((/^(icon|img|arrow(Top|Right|Bottom|Left)?|items|item|sub|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|card|caption|header|footer|body|tab|breadcrumb|numbered|element)($|[A-Z])/).test(propName)) continue; // exclude
 
         // suffixes:
         /**
@@ -845,7 +845,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          * valid   => (icon)Valid   => valid
          * invalid => (icon)Invalid => invalid
          */
-        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
+        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|transDuration|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
 
         // props starting with `@`:
         /**
