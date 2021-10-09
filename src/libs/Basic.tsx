@@ -1358,7 +1358,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             ['block-size' , transDuration, 'ease-out'],
             
             // spacings:
-            ['padding'    , transDuration, 'ease-out'],
+            // ['padding'    , transDuration, 'ease-out'], // beautiful but uncomfortable
             
             // appearances:
             ['opacity'    , transDuration, 'ease-out'],
