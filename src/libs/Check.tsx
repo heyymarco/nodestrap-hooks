@@ -926,7 +926,6 @@ export function Check(props: CheckProps) {
             
             // events:
             onClick={(e) => {
-                // backwards:
                 props.onClick?.(e);
                 
                 
@@ -937,7 +936,6 @@ export function Check(props: CheckProps) {
                 } // if
             }}
             onKeyDown={(e) => {
-                // backwards:
                 props.onKeyDown?.(e);
                 
                 
@@ -950,7 +948,6 @@ export function Check(props: CheckProps) {
                 } // if
             }}
             onKeyUp={(e) => {
-                // backwards:
                 props.onKeyUp?.(e);
                 
                 
