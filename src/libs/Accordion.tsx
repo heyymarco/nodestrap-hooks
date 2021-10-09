@@ -260,7 +260,6 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             
             // events:
             onClick={(e) => {
-                // backwards:
                 props.onClick?.(e);
                 
                 
@@ -271,7 +270,6 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
                 } // if
             }}
             onKeyDown={(e) => {
-                // backwards:
                 props.onKeyDown?.(e);
                 
                 
@@ -284,7 +282,6 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
                 } // if
             }}
             onKeyUp={(e) => {
-                // backwards:
                 props.onKeyUp?.(e);
                 
                 
