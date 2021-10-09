@@ -85,6 +85,9 @@ function App() {
 							setActive(false);
 						} // if
 					}}
+					onChange={(e) => {
+						console.log('onChange A', e.target);
+					}}
 
 					focus={focus}
 
@@ -108,6 +111,9 @@ function App() {
 						if (act) {
 							setActive(true);
 						} // if
+					}}
+					onChange={(e) => {
+						console.log('onChange B', e.target);
 					}}
 
 					focus={focus}
@@ -135,6 +141,9 @@ function App() {
 							setActive(false);
 						} // if
 					}}
+					onChange={(e) => {
+						console.log('onChange a', e.target);
+					}}
 
 					focus={focus}
 
@@ -158,6 +167,9 @@ function App() {
 						if (act) {
 							setActive(true);
 						} // if
+					}}
+					onChange={(e) => {
+						console.log('onChange b', e.target);
 					}}
 
 					focus={focus}
