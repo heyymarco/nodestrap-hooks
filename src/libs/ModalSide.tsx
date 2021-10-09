@@ -168,7 +168,7 @@ export const usesModalSideElementVariants = () => {
                     // children:
                     ...children(['&', '*'], composition([ // Card
                         layout({
-                            // border radiuses:
+                            // borders:
                             borderStartStartRadius : 0, // remove border radius on left_top
                             borderEndStartRadius   : 0, // remove border radius on left_bottom
                         }),
@@ -180,7 +180,7 @@ export const usesModalSideElementVariants = () => {
                     // children:
                     ...children(['&', '*'], composition([ // Card
                         layout({
-                            // border radiuses:
+                            // borders:
                             borderStartEndRadius : 0, // remove border radius on right_top
                             borderEndEndRadius   : 0, // remove border radius on right_bottom
                         }),
@@ -192,7 +192,7 @@ export const usesModalSideElementVariants = () => {
                     // children:
                     ...children(['&', '*'], composition([ // Card
                         layout({
-                            // border radiuses:
+                            // borders:
                             borderStartStartRadius : 0, // remove border radius on top_left
                             borderStartEndRadius   : 0, // remove border radius on top_right
                         }),
@@ -204,7 +204,7 @@ export const usesModalSideElementVariants = () => {
                     // children:
                     ...children(['&', '*'], composition([ // Card
                         layout({
-                            // border radiuses:
+                            // borders:
                             borderEndStartRadius : 0, // remove border radius on bottom_left
                             borderEndEndRadius   : 0, // remove border radius on bottom_right
                         }),
