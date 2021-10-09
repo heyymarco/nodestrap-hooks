@@ -484,7 +484,7 @@ export const usesListLayout = () => {
                     // children:
                     ...children(':nth-child(n)', composition([
                         layout({
-                            // border radiuses:
+                            // borders:
                             borderRadius : 'inherit', // copy wrapper's borderRadius
                         }),
                     ])),
