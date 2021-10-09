@@ -135,7 +135,7 @@ export const usesModalSideElementLayout = () => {
             maxInlineSize : '100%',       // up to the maximum available parent's width
             blockSize     : 'auto',       // follows the content's height, but
             maxBlockSize  : '100%',       // up to the maximum available parent's height
-            overflow      : 'hidden',     // force the Card to scroll, otherwise clipped
+            overflow      : 'hidden',     // force the Card to scroll
             
             
             
