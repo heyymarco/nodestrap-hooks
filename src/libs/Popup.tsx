@@ -369,12 +369,12 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // events:
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // states:
                 activePassiveState.handleAnimationEnd(e);
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         />
     );
