@@ -836,14 +836,6 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
     
     
     
-    // handlers:
-    const handleAnimationEnd = (e: React.AnimationEvent<HTMLElement>) => {
-        // triggers `Card`'s onAnimationEnd event
-        e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }))
-    };
-    
-    
-    
     // jsx:
     return (
         <Indicator<TElement>
@@ -861,16 +853,10 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
                 orientationVariant.class,
             ]}
         >
-            { header && <header
-                // triggers `Card`'s onAnimationEnd event
-                onAnimationEnd={handleAnimationEnd}
-            >
+            { header && <header>
                 { header }
             </header> }
-            { children && <div className='body'
-                // triggers `Card`'s onAnimationEnd event
-                onAnimationEnd={handleAnimationEnd}
-            >
+            { children && <div className='body'>
                 {(Array.isArray(children) ? children : [children]).map((child, index) => (
                     (React.isValidElement(child) && (child.type === 'a'))
                     ?
@@ -891,10 +877,7 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
                     child
                 ))}
             </div> }
-            { footer && <footer
-                // triggers `Card`'s onAnimationEnd event
-                onAnimationEnd={handleAnimationEnd}
-            >
+            { footer && <footer>
                 { footer }
             </footer> }
         </Indicator>
