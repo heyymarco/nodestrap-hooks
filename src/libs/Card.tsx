@@ -56,6 +56,7 @@ import {
     OrientationVariant,
     useOrientationVariant,
     usesBorderStroke,
+    usesAnim,
     
     
     
@@ -601,6 +602,13 @@ export const usesCardBodyLayout = () => {
 };
 
 export const usesCardLayout = () => {
+    // dependencies:
+    
+    // animations:
+    const [anim, animRefs] = usesAnim();
+    
+    
+    
     return composition([
         imports([
             // resets:
@@ -608,6 +616,9 @@ export const usesCardLayout = () => {
             
             // borders:
             usesBorderAsContainer(), // make a nicely rounded corners
+            
+            // animations:
+            anim(),
         ]),
         layout({
             // layouts:
@@ -621,6 +632,14 @@ export const usesCardLayout = () => {
             
             // sizes:
             minInlineSize  : 0, // See https://github.com/twbs/bootstrap/pull/22740#issuecomment-305868106
+            
+            
+            
+            // animations:
+            boxShadow   : animRefs.boxShadow,
+            filter      : animRefs.filter,
+            transf      : animRefs.transf,
+            anim        : animRefs.anim,
             
             
             
