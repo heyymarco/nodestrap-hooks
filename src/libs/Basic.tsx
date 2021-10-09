@@ -953,9 +953,11 @@ export interface AnimVars {
 }
 const [animRefs, animDecls] = createCssVar<AnimVars>();
 
+const isFirefox = navigator?.userAgent?.toLowerCase()?.includes('firefox') ?? false; // workarounds for firefox bug
+
 const setsBoxShadow = new Set<Cust.Ref|Cust.General>(['0 0 transparent'  as Cust.General]);
 const setsFilter    = new Set<Cust.Ref|Cust.General>(['brightness(100%)' as Cust.General]);
-const setsTransf    = new Set<Cust.Ref|Cust.General>(['translate(0)'     as Cust.General]);
+const setsTransf    = new Set<Cust.Ref|Cust.General>([(isFirefox ? 'translate(0.1px, 0.1px)' : 'translate(0)')     as Cust.General]);
 const setsAnim      = new Set<Cust.Ref|Cust.General>(['0'                as Cust.General]);
 const propsManager  = {
     boxShadows          : () => Array.from(setsBoxShadow),
@@ -1365,12 +1367,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             ['font-size'  , transDuration, 'ease-out'],
         ],
 
-        boxShadow            : [[0, 0, 'transparent']],
-        filter               : 'brightness(100%)',
-        transf               : 'translate(0)',
+        // boxShadow            : [[0, 0, 'transparent']],
+        // filter               : 'brightness(100%)',
+        // transf               : 'translate(0)',
 
         '@keyframes none'    : keyframesNone,
-        anim                 : [[keyframesNone]],
+        // anim                 : [[keyframesNone]],
         
         
         
