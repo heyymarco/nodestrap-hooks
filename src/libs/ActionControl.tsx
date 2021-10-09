@@ -270,6 +270,7 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
 
 //#region activePassive as pressRelease
 /**
+ * @deprecated The method should not be used
  * Uses active & passive states as press & release states.
  * @returns A `StyleCollection` represents active & passive state definitions.
  */

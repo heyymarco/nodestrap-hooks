@@ -1,4 +1,4 @@
-fix blinky toggle active as pressed
+Check_togglerBtn & NavbarMenu fix blinky toggle active => press for a few seconds and then released, the blinky occured
 weird gap at DropdownMenuButton at Group at Firefox
 
 Carousel => infinite loop

@@ -85,10 +85,6 @@ import {
     usesFocusBlurState,
 }                           from './Control'
 import {
-    // hooks:
-    usesActivePassiveAsPressReleaseState,
-}                           from './ActionControl'
-import {
     // styles:
     usesEditableActionControlLayout,
     usesEditableActionControlVariants,
@@ -583,10 +579,6 @@ export const usesCheckVariants = () => {
                 }),
             ]),
             rule('.togglerBtn', [ // todo: fix blinky when mouseUp
-                imports([
-                    // states:
-                    usesActivePassiveAsPressReleaseState(),
-                ]),
                 layout({
                     ...children(labelElm, composition([
                         layout({
@@ -907,6 +899,8 @@ export function Check(props: CheckProps) {
     const ariaRole    = props.role            ?? 'checkbox';
     const ariaChecked = props['aria-checked'] ?? ((ariaRole === 'checkbox') ? isActive : undefined);
     
+    const pressFn     = props.press ?? ((isActive && (props.checkStyle === 'togglerBtn')) || undefined);
+    
     
     
     // jsx:
@@ -925,6 +919,7 @@ export function Check(props: CheckProps) {
             aria-checked={ariaChecked}
             aria-label={label}
             active={isActive}
+            press={pressFn}
             
             
             // variants:

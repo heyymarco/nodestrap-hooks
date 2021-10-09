@@ -113,7 +113,6 @@ import {
 import {
     // hooks:
     isPress,
-    usesActivePassiveAsPressReleaseState,
     
     
     
@@ -553,7 +552,6 @@ export const usesMenuStates = () => {
         imports([
             // states:
             usesActionControlStates(),
-            usesActivePassiveAsPressReleaseState(),
         ]),
         states([
             isActive([
@@ -929,6 +927,11 @@ export interface NavbarMenuProps<TElement extends HTMLElement = HTMLElement>
 {
 }
 export function NavbarMenu<TElement extends HTMLElement = HTMLElement>(props: NavbarMenuProps<TElement>) {
+    // fn props:
+    const pressFn = props.press ?? props.active;
+    
+    
+    
     // jsx:
     return (
         <ActionControl<TElement>
@@ -938,6 +941,10 @@ export function NavbarMenu<TElement extends HTMLElement = HTMLElement>(props: Na
             
             // essentials:
             tag={props.tag ?? 'a'}
+            
+            
+            // accessibilities:
+            press={pressFn}
             
             
             // variants:
