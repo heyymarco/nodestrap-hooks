@@ -266,7 +266,6 @@ export function Radio(props: RadioProps) {
             
             // events:
             onClick={(e) => {
-                // backwards:
                 props.onClick?.(e);
                 
                 
@@ -277,7 +276,6 @@ export function Radio(props: RadioProps) {
                 } // if
             }}
             onKeyUp={(e) => {
-                // backwards:
                 props.onKeyUp?.(e);
                 
                 
@@ -291,6 +289,10 @@ export function Radio(props: RadioProps) {
             }}
             
             onChange={(e) => {
+                props.onChange?.(e);
+                
+                
+                
                 if (!props.name)       return; // the radio must have a name
                 if (!e.target.checked) return; // the radio is checked not cleared
                 
