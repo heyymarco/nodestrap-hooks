@@ -126,6 +126,7 @@ import {
 }                           from './ActionControl'
 import {
     // hooks:
+    usesBorderRadius,
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
     usesBorderAsSeparatorInline,
@@ -512,6 +513,9 @@ export const usesListVariants = () => {
     const [foreg, foregRefs] = usesForeg();
     const [     , backgRefs] = usesBackg();
     
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
     
     
     return composition([
@@ -578,8 +582,14 @@ export const usesListVariants = () => {
                     // borders:
                     // kill borders surrounding List:
                     borderWidth  : 0,
-                    borderRadius : 0,
-                    overflow     : 'unset',
+                    
+                 // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // remove rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : 0,
+                    [borderRadiusDecls.borderStartEndRadius]   : 0,
+                    // remove rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : 0,
+                    [borderRadiusDecls.borderEndEndRadius]     : 0,
                 }),
             ]),
             rule(['.flat', '.joined', '.breadcrumb'], [
@@ -636,12 +646,6 @@ export const usesListVariants = () => {
             ]),
             rule('.tab', [
                 layout({
-                    // borders:
-                    // allow the items to overflow, so the `active item` can hide the `border(Bottom|Right)`:
-                    overflow: 'visible',
-                    
-                    
-                    
                     // children:
                     ...children(wrapperElm, composition([
                         layout({
@@ -659,6 +663,7 @@ export const usesListVariants = () => {
                                 ]),
                                 layout({
                                     // borders:
+                                    borderColor    : 'inherit', // change borderColor independent to child's theme color
                                     backgroundClip : 'padding-box',
                                 }),
                                 variants([
@@ -724,7 +729,14 @@ export const usesListVariants = () => {
                             // kill border [top, left, bottom] surrounding tab:
                             borderBlockWidth       : 0,
                             borderInlineStartWidth : 0,
-                            borderRadius           : 0,
+                            
+                         // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                            // remove rounded corners on top:
+                            [borderRadiusDecls.borderStartStartRadius] : 0,
+                            [borderRadiusDecls.borderStartEndRadius]   : 0,
+                            // remove rounded corners on bottom:
+                            [borderRadiusDecls.borderEndStartRadius]   : 0,
+                            [borderRadiusDecls.borderEndEndRadius]     : 0,
                             
                             
                             
@@ -750,7 +762,14 @@ export const usesListVariants = () => {
                             // kill border [left, top, right] surrounding tab:
                             borderInlineWidth      : 0,
                             borderBlockStartWidth  : 0,
-                            borderRadius           : 0,
+                            
+                         // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                            // remove rounded corners on top:
+                            [borderRadiusDecls.borderStartStartRadius] : 0,
+                            [borderRadiusDecls.borderStartEndRadius]   : 0,
+                            // remove rounded corners on bottom:
+                            [borderRadiusDecls.borderEndStartRadius]   : 0,
+                            [borderRadiusDecls.borderEndEndRadius]     : 0,
                             
                             
                             
