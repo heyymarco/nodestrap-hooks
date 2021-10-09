@@ -163,7 +163,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         /* no config props yet */
     };
-}, { prefix: 'btng' });
+}, { prefix: 'grp' });
 
 
 
