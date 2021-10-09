@@ -230,15 +230,15 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     //#region keyframes
     const keyframesActive        : PropEx.Keyframes = {
         from : {
-            overflow     : 'hidden',
+            overflowY    : 'hidden',
             maxBlockSize : 0,
         },
         '99%': {
-            overflow     : 'hidden',
+            overflowY    : 'hidden',
             maxBlockSize : '100vh',
         },
         to   : {
-            overflow     : 'unset',
+            overflowY    : 'unset',
             maxBlockSize : 'unset',
         },
     };
@@ -250,15 +250,15 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     const keyframesActiveInline  : PropEx.Keyframes = {
         from : {
-            overflow      : 'hidden',
+            overflowX     : 'hidden',
             maxInlineSize : 0,
         },
         '99%': {
-            overflow      : 'hidden',
+            overflowX     : 'hidden',
             maxInlineSize : '100vw',
         },
         to   : {
-            overflow      : 'unset',
+            overflowX     : 'unset',
             maxInlineSize : 'unset',
         },
     };
