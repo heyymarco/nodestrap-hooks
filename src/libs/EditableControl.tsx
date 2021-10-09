@@ -713,23 +713,23 @@ export function EditableControl<TElement extends EditableControlElement = Editab
                 } // if
             }}
             onChange={(e) => { // watch change event from current element or bubbling from children
+                props.onChange?.(e);
+                
+                
+                
                 // validations:
                 if (inputRef.current) inputValidator.handleChange(inputRef.current);
-
-
-                // forwards:
-                props.onChange?.(e);
             }}
         
 
             // events:
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // validations:
                 validInvalidState.handleAnimationEnd(e);
-
-
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         />
     );
