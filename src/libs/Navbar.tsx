@@ -829,15 +829,15 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     //#region keyframes
     const keyframesMenusActive  : PropEx.Keyframes = {
         from  : {
-            overflow     : 'hidden',
+            overflowY    : 'hidden',
             maxBlockSize : 0,
         },
         '99%' : {
-            overflow     : 'hidden',
+            overflowY    : 'hidden',
             maxBlockSize : '100vh',
         },
         to    : {
-            overflow     : 'unset',
+            overflowY    : 'unset',
             maxBlockSize : 'unset',
         },
     };
