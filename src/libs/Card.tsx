@@ -169,7 +169,7 @@ export const usesBorderRadius = () => {
                 [borderRadiusDecls.borderEndEndRadius]     : bcssProps.borderRadius,
             }),
             layout({
-                // border radiuses:
+                // borders:
                 borderStartStartRadius : borderRadiusRefs.borderStartStartRadius,
                 borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,
                 borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,
