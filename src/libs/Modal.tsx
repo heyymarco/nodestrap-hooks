@@ -484,13 +484,12 @@ export function ModalElement<TElement extends HTMLElement = HTMLElement, TCloseT
             
             // events:
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // states:
                 excitedState.handleAnimationEnd(e);
-                
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         />
     );
@@ -603,49 +602,39 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             // events:
             // watch left click on the overlay only (not at the ModalElement):
-            onClick={onActiveChange && ((e) => {
+            onClick={(e) => {
                 if (e.target === e.currentTarget) { // only handle click on the overlay, ignores click bubbling from the children
                     if (!e.defaultPrevented) {
                         if (props.modalStyle !== 'static') {
-                            onActiveChange(false, 'overlay' as unknown as TCloseType);
+                            if (onActiveChange) {
+                                onActiveChange(false, 'overlay' as unknown as TCloseType);
+                                e.preventDefault();
+                            } // if
                         }
                         else {
                             setExcitedDn(true);
                             childRef.current?.focus({ preventScroll: true }); // re-focus to the ModalElement, so the user able to use [esc] key to close the Modal
+                            e.preventDefault();
                         } // if static
-                        e.preventDefault();
                     } // if
                 } // if
-                
-                
-                
-                // forwards:
-                props.onClick?.(e);
-            })}
+            }}
             
             // watch [escape key] on the whole Modal, including ModalElement & ModalElement's children:
-            onKeyUp={onActiveChange && ((e) => {
+            onKeyUp={(e) => {
                 if (!e.defaultPrevented) {
                     if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                        onActiveChange(false, 'shortcut' as unknown as TCloseType);
-                        e.preventDefault();
+                        if (onActiveChange) {
+                            onActiveChange(false, 'shortcut' as unknown as TCloseType);
+                            e.preventDefault();
+                        } // if
                     } // if
                 } // if
-                
-                
-                
-                // forwards:
-                props.onKeyUp?.(e);
-            })}
+            }}
             
             onAnimationEnd={(e) => {
                 // states:
                 activePassiveState.handleAnimationEnd(e);
-                
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         >
             {
@@ -668,6 +657,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                     tabIndex={tabIndex}
                     excited={excitedFn}
                     onExcitedChange={(newExcited) => {
+                        children.props.onExcitedChange?.(newExcited);
+                        
+                        
+                        
                         onExcitedChange?.(newExcited);
                         setExcitedDn(newExcited);
                     }}
@@ -675,12 +668,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                     
                     // events:
                     onActiveChange={(newActive, closeType) => {
-                        onActiveChange?.(newActive, closeType);
-                        
-                        
-                        
-                        // forwards:
                         children.props.onActiveChange?.(newActive, closeType);
+                        
+                        
+                        
+                        onActiveChange?.(newActive, closeType);
                     }}
                 />
                 :

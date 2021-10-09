@@ -504,11 +504,6 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
             onAnimationEnd={(e) => {
                 // states:
                 excitedState.handleAnimationEnd(e);
-                
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         >
             <Card<TElement>
