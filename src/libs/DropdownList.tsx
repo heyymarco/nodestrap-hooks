@@ -246,7 +246,6 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
                                 
                                 // events:
                                 onClick={(e) => {
-                                    // backwards:
                                     child.props.onClick?.(e);
                                     
                                     

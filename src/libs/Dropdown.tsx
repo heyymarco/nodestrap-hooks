@@ -404,28 +404,20 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             
             // events:
             // watch [escape key] on the whole Dropdown, including DropdownElement & DropdownElement's children:
-            onKeyUp={onActiveChange && ((e) => {
+            onKeyUp={(e) => {
                 if (!e.defaultPrevented) {
                     if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                        onActiveChange(false, 'shortcut' as unknown as TCloseType);
-                        e.preventDefault();
+                        if (onActiveChange) {
+                            onActiveChange(false, 'shortcut' as unknown as TCloseType);
+                            e.preventDefault();
+                        } // if
                     } // if
                 } // if
-                
-                
-                
-                // forwards:
-                props.onKeyUp?.(e);
-            })}
+            }}
             
             onAnimationEnd={(e) => {
                 // states:
                 activePassiveState.handleAnimationEnd(e);
-                
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         >
             {
