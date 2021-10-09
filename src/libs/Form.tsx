@@ -318,23 +318,23 @@ export function Form(props: FormProps) {
                 } // if
             }}
             onChange={(e) => { // watch change event bubbling from children
+                props.onChange?.(e);
+                
+                
+                
                 // validations:
                 formValidator.handleChange(e.currentTarget);
-                
-                
-                // forwards:
-                props.onChange?.(e);
             }}
             
             
             // events:
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // validations:
                 validInvalidState.handleAnimationEnd(e);
-                
-                
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         >
             { props.children && <ValidationProvider {...propValidation}>
