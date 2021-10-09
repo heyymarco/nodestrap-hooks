@@ -182,6 +182,10 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 
                 // events:
                 onClick={(e) => {
+                    props.onClick?.(e);
+                    
+                    
+                    
                     if (!e.defaultPrevented) {
                         handleToggleActive();
                         e.preventDefault();
