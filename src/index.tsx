@@ -33,7 +33,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import DropdownListApp          from './apps/DropdownListApp';
 //                 import DropdownButtonApp            from './apps/DropdownButtonApp';
 //                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';
-            import BadgeApp                         from './apps/BadgeApp';
+//             import BadgeApp                         from './apps/BadgeApp';
 //                 import BusyApp                      from './apps/BusyApp';
 //             import TooltipApp                       from './apps/TooltipApp';
 //         import ControlApp                           from './apps/ControlApp';
@@ -53,14 +53,14 @@ import reportWebVitals from './reportWebVitals';
 //     import MasonryApp                               from './apps/MasonryApp';
 //     import CarouselApp                              from './apps/CarouselApp';
 //     import NavbarApp                                from './apps/NavbarApp';
-//     import GroupApp                                 from './apps/GroupApp';
+    import GroupApp                                 from './apps/GroupApp';
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <BadgeApp />
+    <GroupApp />
     ,
     document.getElementById('root')
 );
