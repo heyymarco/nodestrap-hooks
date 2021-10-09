@@ -194,15 +194,10 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
             usesBorderStroke(),
             borderRadius(),
         ]),
-        layout({
-            // borders:
-         // overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
-            
-            
-            
-            // shadows:
-            boxShadow    : bcssProps.boxShadow,
-        }),
+        // layout({
+        //     // borders:
+        //     overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
+        // }),
         variants([
             !!orientationBlockRule && rule(orientationBlockRule, [
                 layout({
