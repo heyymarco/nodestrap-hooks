@@ -442,12 +442,11 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                     
                     // events:
                     onActiveChange={(newActive, closeType) => {
-                        onActiveChange?.(newActive, closeType);
-                        
-                        
-                        
-                        // forwards:
                         children.props.onActiveChange?.(newActive, closeType);
+                        
+                        
+                        
+                        onActiveChange?.(newActive, closeType);
                     }}
                 />
                 :
