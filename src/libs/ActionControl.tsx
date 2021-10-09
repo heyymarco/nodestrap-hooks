@@ -481,15 +481,15 @@ export function ActionControl<TElement extends HTMLElement = HTMLElement>(props:
         
 
             // events:
-            onMouseDown={(e) => { pressReleaseState.handleMouseDown(e); props.onMouseDown?.(e); }}
-            onKeyDown=  {(e) => { pressReleaseState.handleKeyDown(e);   props.onKeyDown?.(e);   }}
+            onMouseDown={(e) => { props.onMouseDown?.(e); pressReleaseState.handleMouseDown(e); }}
+            onKeyDown=  {(e) => { props.onKeyDown?.(e);   pressReleaseState.handleKeyDown(e);   }}
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // states:
                 pressReleaseState.handleAnimationEnd(e);
-
-
-                // forwards:
-                props.onAnimationEnd?.(e);
             }}
         />
     );
