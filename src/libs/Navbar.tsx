@@ -1138,7 +1138,6 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             // events:
             // watch [escape key] on the whole navbar, including menus & toggler:
             onKeyUp={(e) => {
-                // backwards:
                 props.onKeyUp?.(e);
                 
                 
