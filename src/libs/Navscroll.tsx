@@ -764,7 +764,6 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
                     
                     // events:
                     onClick={(e) => {
-                        // backwards:
                         child.props.onClick?.(e);
                         
                         
