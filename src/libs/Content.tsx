@@ -89,7 +89,16 @@ import {
 
 // layouts:
 
-export const usesMediaFill = () => {
+export const usesMediaFill = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Ref) => {
+    // dependencies:
+    
+    // paddings:
+    const [, paddingRefs]       = usesPadding(paddingInline, paddingBlock);
+    const negativePaddingInline = `calc(0px - ${paddingRefs.paddingInline})`;
+    const negativePaddingBlock  = `calc(0px - ${paddingRefs.paddingBlock})`;
+    
+    
+    
     return composition([
         layout({
             // layouts:
@@ -102,15 +111,15 @@ export const usesMediaFill = () => {
             boxSizing      : 'border-box', // the final size is including borders & paddings
             inlineSize     : 'fill-available',
             fallbacks      : {
-                inlineSize : [['calc(100% + (', cssProps.paddingInline, ' * 2))']],
+                inlineSize : `calc(100% + (${paddingRefs.paddingInline} * 2))`,
             },
             
             
             
             // spacings:
-            marginInline   : [['calc(0px -', cssProps.paddingInline, ')']], // cancel out parent's padding with negative margin
+            marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
             
-            marginBlockEnd : cssProps.paddingBlock, // add a spacing to the next sibling
+            marginBlockEnd : paddingRefs.paddingBlock, // add a spacing to the next sibling
             
             
             
@@ -119,7 +128,7 @@ export const usesMediaFill = () => {
             ...adjacentSiblings(mediaElm, composition([
                 layout({
                     // spacings:
-                    marginBlockStart : `calc(0px - ${cssProps.paddingBlock})`, // cancel out prev sibling's spacing with negative margin
+                    marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
                 }),
             ])),
         }),
@@ -127,13 +136,13 @@ export const usesMediaFill = () => {
             isFirstChild(composition([
                 layout({
                     // spacings:
-                    marginBlockStart : `calc(0px - ${cssProps.paddingBlock})`, // cancel out parent's padding with negative margin
+                    marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
                 }),
             ])),
             isLastChild(composition([
                 layout({
                     // spacings:
-                    marginBlockEnd   : `calc(0px - ${cssProps.paddingBlock})`, // cancel out parent's padding with negative margin
+                    marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
                 }),
             ])),
         ]),
@@ -171,7 +180,8 @@ export const usesBorderRadius = (borderRadius : Cust.Ref = bcssProps.borderRadiu
     ] as const;
 };
 
-export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', orientationBlockRule : SelectorCollection = ':not(.inline)', orientationInlineRule : SelectorCollection = '.inline', borderWidth : Cust.Ref = bcssProps.borderWidth, borderRadiusRef : Cust.Ref = bcssProps.borderRadius) => {
+
+export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', orientationBlockRule : SelectorCollection = ':not(.inline)', orientationInlineRule : SelectorCollection = '.inline', borderWidth : Cust.Ref = bcssProps.borderWidth, borderRadiusRef? : Cust.Ref) => {
     // dependencies:
     
     // borders:
@@ -255,11 +265,11 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
         ]),
     ]);
 };
-export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
+export const usesBorderAsSeparatorBlock = (replaceLast = false, borderRadius? : Cust.Ref) => {
     // dependencies:
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
+    const [, , borderRadiusDecls] = usesBorderRadius(borderRadius);
     
     
     
@@ -334,7 +344,14 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false) => {
         ]),
     ]);
 };
-export const usesBorderAsSeparatorInline = (replaceLast = false) => {
+export const usesBorderAsSeparatorInline = (replaceLast = false, borderRadius? : Cust.Ref) => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius(borderRadius);
+    
+    
+    
     return composition([
         imports([
             // borders:
@@ -408,11 +425,11 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
 };
 
 
-export const usesMediaBorder = () => {
+export const usesMediaBorder = (borderRadius? : Cust.Ref) => {
     return composition([
         imports([
             // borders:
-            usesBorderAsSeparatorBlock(),
+            usesBorderAsSeparatorBlock(undefined, borderRadius),
         ]),
         layout({
             // children:
@@ -559,6 +576,13 @@ export const usesContentMedia = () => {
 
 
 export const usesContentLayout = () => {
+    // dependencies:
+    
+    // paddings:
+    const [paddings] = usesPadding();
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -566,6 +590,10 @@ export const usesContentLayout = () => {
             
             // borders:
             usesBorderAsContainer(/*itemsSelector: */mediaElm), // make a nicely rounded corners
+            // borderRadiuses(), // already included in `usesBorderAsContainer`
+            
+            // paddings:
+            paddings(),
         ]),
         layout({
             // customize:
