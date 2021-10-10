@@ -375,6 +375,7 @@ export type ButtonType = 'button'|'submit'|'reset'
 export interface ButtonProps
     extends
         ActionControlProps<HTMLButtonElement>,
+        React.AnchorHTMLAttributes<HTMLButtonElement>,
         
         // layouts:
         OrientationVariant,
