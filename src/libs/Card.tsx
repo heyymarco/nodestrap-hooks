@@ -76,7 +76,6 @@ import {
     IndicatorProps,
     Indicator,
 }                           from './Indicator'
-import Button               from './Button'
 import {
     stripoutFocusableElement,
 }                           from './stripouts'
@@ -92,7 +91,7 @@ export const usesCardItemLayout = () => {
     return composition([
         imports([
             // media:
-            usesContentMedia(),
+            usesContentMedia(cssProps.itemPaddingInline, cssProps.itemPaddingBlock),
             
             // layouts:
             usesIndicatorLayout(),
@@ -338,8 +337,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // items:
-        itemPaddingInline : ccssProps.paddingInline,
-        itemPaddingBlock  : ccssProps.paddingBlock,
+        itemPaddingInline   : ccssProps.paddingInline,
+        itemPaddingBlock    : ccssProps.paddingBlock,
+        itemPaddingInlineSm : ccssProps.paddingInlineSm,
+        itemPaddingBlockSm  : ccssProps.paddingBlockSm,
+        itemPaddingInlineLg : ccssProps.paddingInlineLg,
+        itemPaddingBlockLg  : ccssProps.paddingBlockLg,
         
         
         
@@ -410,25 +413,7 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
                 { header }
             </header> }
             { children && <div className='body'>
-                {(Array.isArray(children) ? children : [children]).map((child, index) => (
-                    (React.isValidElement(child) && (child.type === 'a'))
-                    ?
-                    <Button
-                        // other props:
-                        {...child.props}
-                        
-                        
-                        // essentials:
-                        key={child.key ?? index}
-                        tag='a'
-                        
-                        
-                        // variants:
-                        btnStyle='link'
-                    />
-                    :
-                    child
-                ))}
+                { children }
             </div> }
             { footer && <footer>
                 { footer }

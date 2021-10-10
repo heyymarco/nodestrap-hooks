@@ -1,8 +1,10 @@
 top priority:
-fix weird card scrollbar
+check Content::usesBorderRadius() & Content::usesPadding() parameters
 test ActionControl/Button => click on disabled state
 Navbar => use List
 [['calc(0px -', cssProps.paddingBlock, ')']] => `${}`
+Button => implements AnchorHTMLAttributes
+Input => implement InputHTMLAttributes
 
 
 
