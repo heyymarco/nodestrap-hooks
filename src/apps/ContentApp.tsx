@@ -74,6 +74,33 @@ function App() {
 					</div>
                 </Content>
                 <hr style={{flexBasis: '100%'}} />
+				<Content
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined}
+				>
+                    <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href='/'>Content link</a>
+					<a href='/'>Another link</a>
+                </Content>
+				<Content
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined}
+				>
+                    <img src='https://picsum.photos/300/200' alt='' />
+                </Content>
+				<Content
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined}
+				>
+                    <img src='https://picsum.photos/300/200' alt='' />
+					<img src='https://picsum.photos/300/200' alt='' />
+					<img src='https://picsum.photos/300/200' alt='' />
+					<h5>Title</h5>
+					<p>This is a wider card with supporting text below as a natural lead-in to additional content.<br>
+					</br>This content is a little bit longer.</p>
+					<p>Last updated 3 mins ago</p>
+                </Content>
+                <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
 					{
