@@ -15,6 +15,7 @@ import Indicator 	from '../libs/Indicator';
 import {
 	Content,
 } 					from '../libs/Content';
+import { Button } from '../libs/Button';
 
 
 
@@ -59,8 +60,8 @@ function App() {
 					outlined={outlined}
 				>
                     <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href='/'>Content link</a>
-					<a href='/'>Another link</a>
+					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
+					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
                 </Content>
 				<Content
 					theme={theme} size={size} gradient={enableGrad}

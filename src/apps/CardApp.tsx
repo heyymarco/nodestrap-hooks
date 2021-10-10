@@ -15,6 +15,7 @@ import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 import Card from '../libs/Card';
 import type * as Cards from '../libs/Card';
+import { Button } from '../libs/Button';
 
 
 
@@ -96,15 +97,15 @@ function App() {
 				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
 					<h5>Card title</h5>
 					<p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href='/'>Card link</a>
-					<a href='/'>Another link</a>
+					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
+					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
 				</Card>
 				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
 					<h5>Card title</h5>
 					<h6>Card subtitle</h6>
 					<p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href='/'>Card link</a>
-					<a href='/'>Another link</a>
+					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
+					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
 				</Card>
 				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
 					<img src='https://picsum.photos/300/200' alt='' />
