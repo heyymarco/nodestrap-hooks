@@ -545,10 +545,6 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             {...restProps}
             
             
-            // variants:
-            mild={props.mild ?? true}
-            
-            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
         >
