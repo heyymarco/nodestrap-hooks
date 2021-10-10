@@ -4,6 +4,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    Cust,
+}                           from './css-types'   // ts defs support for cssfn
 import {
     // general types:
     SelectorCollection,
@@ -146,14 +149,14 @@ interface BorderVars {
     borderEndEndRadius     : any
 }
 const [borderRadiusRefs, borderRadiusDecls] = createCssVar<BorderVars>();
-export const usesBorderRadius = () => {
+export const usesBorderRadius = (borderRadius : Cust.Ref = bcssProps.borderRadius) => {
     return [
         () => composition([
             vars({
-                [borderRadiusDecls.borderStartStartRadius] : bcssProps.borderRadius,
-                [borderRadiusDecls.borderStartEndRadius]   : bcssProps.borderRadius,
-                [borderRadiusDecls.borderEndStartRadius]   : bcssProps.borderRadius,
-                [borderRadiusDecls.borderEndEndRadius]     : bcssProps.borderRadius,
+                [borderRadiusDecls.borderStartStartRadius] : borderRadius,
+                [borderRadiusDecls.borderStartEndRadius]   : borderRadius,
+                [borderRadiusDecls.borderEndStartRadius]   : borderRadius,
+                [borderRadiusDecls.borderEndEndRadius]     : borderRadius,
             }),
             layout({
                 // borders:
@@ -168,11 +171,11 @@ export const usesBorderRadius = () => {
     ] as const;
 };
 
-export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', orientationBlockRule : SelectorCollection = ':not(.inline)', orientationInlineRule : SelectorCollection = '.inline') => {
+export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', orientationBlockRule : SelectorCollection = ':not(.inline)', orientationInlineRule : SelectorCollection = '.inline', borderWidth : Cust.Ref = bcssProps.borderWidth, borderRadiusRef : Cust.Ref = bcssProps.borderRadius) => {
     // dependencies:
     
     // borders:
-    const [borderRadius, borderRadiusRefs] = usesBorderRadius();
+    const [borderRadius, borderRadiusRefs] = usesBorderRadius(borderRadiusRef);
     
     
     
@@ -195,15 +198,15 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
                             isFirstChild([
                                 layout({
                                     // add rounded corners on top:
-                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${bcssProps.borderWidth})`,
-                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${bcssProps.borderWidth})`,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth})`,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth})`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on bottom:
-                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${bcssProps.borderWidth})`,
-                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${bcssProps.borderWidth})`,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth})`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth})`,
                                 }),
                             ]),
                         ]),
@@ -218,15 +221,15 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
                             isFirstChild([
                                 layout({
                                     // add rounded corners on left:
-                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${bcssProps.borderWidth})`,
-                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${bcssProps.borderWidth})`,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth})`,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth})`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on right:
-                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${bcssProps.borderWidth})`,
-                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${bcssProps.borderWidth})`,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth})`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth})`,
                                 }),
                             ]),
                         ]),
@@ -239,12 +242,12 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
                     ...children(itemsSelector, composition([
                         layout({
                             // add rounded corners on top:
-                            borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${bcssProps.borderWidth})`,
-                            borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${bcssProps.borderWidth})`,
+                            borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth})`,
+                            borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth})`,
                             
                             // add rounded corners on bottom:
-                            borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${bcssProps.borderWidth})`,
-                            borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${bcssProps.borderWidth})`,
+                            borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth})`,
+                            borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth})`,
                         }),
                     ])),
                 }),
@@ -443,6 +446,31 @@ export const usesMediaBorder = () => {
             ])),
         ]),
     ]);
+};
+
+
+// paddings:
+interface PaddingVars {
+    paddingInline : any
+    paddingBlock  : any
+}
+const [paddingRefs, paddingDecls] = createCssVar<PaddingVars>();
+export const usesPadding = (paddingInline : Cust.Ref = cssProps.paddingInline, paddingBlock : Cust.Ref = cssProps.paddingBlock) => {
+    return [
+        () => composition([
+            vars({
+                [paddingDecls.paddingInline] : paddingInline,
+                [paddingDecls.paddingBlock]  : paddingBlock,
+            }),
+            layout({
+                // borders:
+                paddingInline : paddingRefs.paddingInline,
+                paddingBlock  : paddingRefs.paddingBlock,
+            }),
+        ]),
+        paddingRefs,
+        paddingDecls,
+    ] as const;
 };
 
 
