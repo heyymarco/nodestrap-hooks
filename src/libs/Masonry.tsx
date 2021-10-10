@@ -489,10 +489,6 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
             }}
             
             
-            // variants:
-            mild={props.mild ?? true}
-            
-            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
