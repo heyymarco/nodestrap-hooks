@@ -495,16 +495,16 @@ export const usesPadding = (paddingInline : Cust.Ref = cssProps.paddingInline, p
 // styles:
 const mediaElm = ['figure', 'img', 'svg', 'video'];
 
-export const usesContentMediaLayout = () => {
+export const usesContentMediaLayout = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Ref, borderRadius? : Cust.Ref) => {
     return composition([
         imports([
             stripoutImage(), // clear browser's default styling on image
             
             // layouts:
-            usesMediaFill(),
+            usesMediaFill(paddingInline, paddingBlock),
             
             // borders:
-            usesMediaBorder(),
+            usesMediaBorder(borderRadius),
         ]),
         layout({
             // customize:
@@ -512,7 +512,7 @@ export const usesContentMediaLayout = () => {
         }),
     ]);
 };
-export const usesContentMedia = () => {
+export const usesContentMedia = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Ref, borderRadius? : Cust.Ref) => {
     return composition([
         layout({
             // children:
@@ -565,7 +565,7 @@ export const usesContentMedia = () => {
             // then: styling top_level <figure> & top_level <media>:
             ...children(mediaElm, composition([
                 imports([
-                    usesContentMediaLayout(),
+                    usesContentMediaLayout(paddingInline, paddingBlock, borderRadius),
                 ]),
             ])),
             //#endregion media
