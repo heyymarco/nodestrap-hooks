@@ -5,6 +5,11 @@ import {
 
 // cssfn:
 import {
+    // general types:
+    SelectorCollection,
+    
+    
+    
     // compositions:
     composition,
     mainComposition,
@@ -81,7 +86,7 @@ import {
 
 // layouts:
 
-export const usesImageFill = () => {
+export const usesMediaFill = () => {
     return composition([
         layout({
             // layouts:
@@ -163,7 +168,7 @@ export const usesBorderRadius = () => {
     ] as const;
 };
 
-export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not(.inline)', orientationInlineRule : string|null = '.inline') => {
+export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', orientationBlockRule : SelectorCollection = ':not(.inline)', orientationInlineRule : SelectorCollection = '.inline') => {
     // dependencies:
     
     // borders:
@@ -185,7 +190,7 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
             !!orientationBlockRule && rule(orientationBlockRule, [
                 layout({
                     // children:
-                    ...children('*', composition([
+                    ...children(itemsSelector, composition([
                         variants([
                             isFirstChild([
                                 layout({
@@ -208,7 +213,7 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
             !!orientationInlineRule && rule(orientationInlineRule, [
                 layout({
                     // children:
-                    ...children('*', composition([
+                    ...children(itemsSelector, composition([
                         variants([
                             isFirstChild([
                                 layout({
@@ -231,7 +236,7 @@ export const usesBorderAsContainer = (orientationBlockRule : string|null = ':not
             (!orientationBlockRule && !orientationInlineRule) && noRule([
                 layout({
                     // children:
-                    ...children('*', composition([
+                    ...children(itemsSelector, composition([
                         layout({
                             // add rounded corners on top:
                             borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${bcssProps.borderWidth})`,
@@ -400,7 +405,7 @@ export const usesBorderAsSeparatorInline = (replaceLast = false) => {
 };
 
 
-export const usesImageBorder = () => {
+export const usesMediaBorder = () => {
     return composition([
         imports([
             // borders:
@@ -409,7 +414,7 @@ export const usesImageBorder = () => {
         layout({
             // children:
             // make sibling <media> closer:
-            // remove double border by removing top-border at the adjacent images
+            // remove double border by removing top-border at the adjacent media(s)
             ...adjacentSiblings(mediaElm, composition([
                 layout({
                     // borders:
@@ -451,10 +456,10 @@ export const usesContentMediaLayout = () => {
             stripoutImage(), // clear browser's default styling on image
             
             // layouts:
-            usesImageFill(),
+            usesMediaFill(),
             
             // borders:
-            usesImageBorder(),
+            usesMediaBorder(),
         ]),
         layout({
             // customize:
@@ -489,7 +494,7 @@ export const usesContentMedia = () => {
             ])),
             //#endregion links
             
-            //#region images
+            //#region media
             // handle <figure> & <media> as content-media:
             
             //#region first: reset top_level <figure> and inner <media>
@@ -518,7 +523,7 @@ export const usesContentMedia = () => {
                     usesContentMediaLayout(),
                 ]),
             ])),
-            //#endregion images
+            //#endregion media
         }),
     ]);
 };
@@ -530,6 +535,9 @@ export const usesContentLayout = () => {
         imports([
             // layouts:
             usesBasicLayout(),
+            
+            // borders:
+            usesBorderAsContainer(/*itemsSelector: */mediaElm), // make a nicely rounded corners
         ]),
         layout({
             // customize:

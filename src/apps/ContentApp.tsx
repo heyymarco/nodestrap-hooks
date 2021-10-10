@@ -52,26 +52,6 @@ function App() {
 					outlined={outlined}
 				>
                     content
-
-					<div style={{display: 'inline-block', background: 'white', border: 'solid 1px black', padding: '10px', margin: '15px'}}>
-						<Content
-							theme={theme} size={size} gradient={enableGrad}
-							outlined={outlined}
-
-							style={{display: 'inline-block'}}
-						>
-							independent
-						</Content>
-
-						<Content
-							theme={theme} size={size} gradient={enableGrad}
-							outlined={outlined}
-
-							style={{display: 'inline-block'}}
-						>
-							inherit by prop
-						</Content>
-					</div>
                 </Content>
                 <hr style={{flexBasis: '100%'}} />
 				<Content
