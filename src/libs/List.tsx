@@ -96,7 +96,16 @@ import {
     Indicator,
 }                           from './Indicator'
 import {
+    // hooks:
+    usesBorderRadius,
+    usesBorderAsContainer,
+    usesBorderAsSeparatorBlock,
+    usesBorderAsSeparatorInline,
+    
+    
+    
     // styles:
+    usesContentMedia,
     usesContentLayout,
     usesContentVariants,
 }                           from './Content'
@@ -124,13 +133,6 @@ import {
     ActionControlProps,
     ActionControl,
 }                           from './ActionControl'
-import {
-    // hooks:
-    usesBorderRadius,
-    usesBorderAsContainer,
-    usesBorderAsSeparatorBlock,
-    usesBorderAsSeparatorInline,
-}                           from './Card'
 import {
     // styles:
     usesButtonLayout,
@@ -221,7 +223,13 @@ export const usesListItemInheritParentVariants = () => {
         variants([
             rule('.content>*>&', [ // content
                 imports([
+                    // media:
+                    usesContentMedia(),
+                    
+                    // layouts:
                     usesContentLayout(),
+                    
+                    // variants:
                     usesContentVariants(),
                 ]),
             ]),
