@@ -58,6 +58,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    usesBorderStroke,
     usesBorderRadius,
     
     
@@ -159,8 +160,6 @@ export const usesMediaFill = () => {
 
 // borders:
 export interface BorderContainerOptions {
-    borderWidth?           : Cust.Ref
-    
     itemsSelector?         : SelectorCollection
     
     orientationBlockRule?  : SelectorCollection
@@ -169,8 +168,6 @@ export interface BorderContainerOptions {
 export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     // options:
     const {
-        borderWidth           = defaultBorderWidth(),
-        
         itemsSelector         = '*',
         
         orientationBlockRule  = ':not(.inline)',
@@ -181,7 +178,8 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     
     // dependencies:
     
-    // borders:
+    // layouts:
+    const [, borderStrokeRefs] = usesBorderStroke();
     const [, borderRadiusRefs] = usesBorderRadius();
     
     
@@ -200,15 +198,15 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                             isFirstChild([
                                 layout({
                                     // add rounded corners on top:
-                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth} - 0.5px)`,
-                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth} - 0.5px)`,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on bottom:
-                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth} - 0.5px)`,
-                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth} - 0.5px)`,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
                                 }),
                             ]),
                         ]),
@@ -223,15 +221,15 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                             isFirstChild([
                                 layout({
                                     // add rounded corners on left:
-                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth} - 0.5px)`,
-                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth} - 0.5px)`,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on right:
-                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth} - 0.5px)`,
-                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth} - 0.5px)`,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
                                 }),
                             ]),
                         ]),
@@ -244,12 +242,12 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                     ...children(itemsSelector, composition([
                         layout({
                             // add rounded corners on top:
-                            borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth} - 0.5px)`,
-                            borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth} - 0.5px)`,
+                            borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
+                            borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
                             
                             // add rounded corners on bottom:
-                            borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth} - 0.5px)`,
-                            borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth} - 0.5px)`,
+                            borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
+                            borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderStrokeRefs.borderWidth} - 0.5px)`,
                         }),
                     ])),
                 }),
