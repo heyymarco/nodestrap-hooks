@@ -46,6 +46,8 @@ import {
     OrientationName,
     OrientationVariant,
     
+    usesBorderRadius,
+    
     
     
     // configs:
@@ -134,6 +136,13 @@ export const useSizeVariant = (props: SizeVariant) => basicUseSizeVariant(props 
 
 // styles:
 export const usesButtonIconLayout = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -142,6 +151,13 @@ export const usesButtonIconLayout = () => {
         layout({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+        vars({
+            // borders:
+            [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius,
+            [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius,
         }),
         vars({
             //#region Icon
