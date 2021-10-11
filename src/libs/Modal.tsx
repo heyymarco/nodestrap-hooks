@@ -94,7 +94,7 @@ import {
 // animations:
 
 //#region modal animations
-interface ModalAnimVars {
+export interface ModalAnimVars {
     /**
      * none animation.
      */
