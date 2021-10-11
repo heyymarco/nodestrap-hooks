@@ -44,6 +44,7 @@ import {
     usesSizeVariant,
     usesBackg,
     usesBorder,
+    usesBorderStroke,
     
     
     
@@ -90,8 +91,11 @@ export const usesTooltipLayout = () => {
     // dependencies:
     
     // colors:
-    const [, backgRefs]  = usesBackg();
-    const [, borderRefs] = usesBorder();
+    const [, backgRefs       ] = usesBackg();
+    const [, borderRefs      ] = usesBorder();
+    
+    // layouts:
+    const [, borderStrokeRefs] = usesBorderStroke();
     
     
     
@@ -119,8 +123,9 @@ export const usesTooltipLayout = () => {
                             
                             
                             // borders:
-                            border      : bcssProps.border,
-                            borderColor : borderRefs.borderCol,
+                            border      : bcssProps.border,             // all border properties
+                            borderColor : borderRefs.borderCol,         // overwrite color prop
+                            borderWidth : borderStrokeRefs.borderWidth, // overwrite width prop
                             
                             
                             
