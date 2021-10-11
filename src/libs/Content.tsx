@@ -52,15 +52,21 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesPadding,
+    usesBorder,
     usesBorderStroke,
     usesBorderRadius,
+    usesPadding,
     
     
     
     // styles:
     usesBasicLayout,
     usesBasicVariants,
+    
+    
+    
+    // configs:
+    cssProps as bcssProps,
     
     
     
@@ -141,7 +147,7 @@ export const usesMediaFill = () => {
 };
 
 
-// layouts:
+// borders:
 export interface BorderContainerOptions {
     itemsSelector?         : SelectorCollection
     
@@ -409,7 +415,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
 };
 
 
-export const usesMediaBorder = () => {
+export const usesMediaSeparator = () => {
     return composition([
         imports([
             // borders:
@@ -455,20 +461,44 @@ export const usesMediaBorder = () => {
 const mediaElm = ['figure', 'img', 'svg', 'video'];
 
 export const usesContentMediaLayout = () => {
+    // dependencies:
+    
+    // colors:
+    const [border      , borderRefs      ] = usesBorder();
+    
+    // layouts:
+    const [borderStroke, borderStrokeRefs] = usesBorderStroke();
+    
+    
+    
     return composition([
         imports([
             stripoutImage(), // clear browser's default styling on image
             
-            // layouts:
-            usesMediaFill(),
+            // colors:
+            border(),
             
-            // borders:
-            usesMediaBorder(),
+            // layouts:
+            borderStroke(),
+            usesMediaFill(),
         ]),
         layout({
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'media')), // apply general cssProps starting with img***
+            
+            
+            
+            // borders:
+            border                 : bcssProps.border,                         // all border properties
+            
+            borderColor            : borderRefs.borderCol,                    // overwrite color prop
+            
+            borderWidth            : borderStrokeRefs.borderWidth,   
         }),
+        imports([
+            // borders:
+            usesMediaSeparator(),
+        ]),
     ]);
 };
 export const usesContentMedia = () => {
