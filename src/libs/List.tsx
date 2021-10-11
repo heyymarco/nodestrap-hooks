@@ -455,10 +455,9 @@ export const usesListLayout = () => {
             stripoutFocusableElement(), // clear browser's default styles
             stripoutList(),             // clear browser's default styles
             
+            // colors:
             // borders:
-            usesBorderAsContainer({ // make a nicely rounded corners
-                borderWidth  : cssProps.borderWidth,
-            }),
+            usesBorderAsContainer(),    // make a nicely rounded corners
         ]),
         layout({
             // layouts:
@@ -957,11 +956,6 @@ export const useListSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        // borders:
-        borderWidth       : bcssProps.borderWidth,
-        
-        
-        
         btnSpacing        : spacers.sm,
         btnSpacingSm      : spacers.xs,
         btnSpacingLg      : spacers.md,

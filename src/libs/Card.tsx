@@ -177,9 +177,7 @@ export const usesCardLayout = () => {
             stripoutFocusableElement(), // clear browser's default styles
             
             // borders:
-            usesBorderAsContainer({ // make a nicely rounded corners
-                borderWidth  : cssProps.borderWidth,
-            }),
+            usesBorderAsContainer(),    // make a nicely rounded corners
             
             // animations:
             anim(),
@@ -337,11 +335,6 @@ export const useCardSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        // borders:
-        borderWidth         : bcssProps.borderWidth,
-        
-        
-        
         // sizes:
         boxSizing           : 'border-box', // the final size is including borders & paddings
         blockSize           : '100%',       // fills the entire parent's height if the parent has a specific height, otherwise no effect
