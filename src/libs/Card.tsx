@@ -61,11 +61,6 @@ import {
     usesContentMedia,
     usesContentLayout,
     usesContentVariants,
-    
-    
-    
-    // configs:
-    cssProps as ccssProps,
 }                           from './Content'
 import {
     // styles:
