@@ -843,10 +843,6 @@ export const usesBackg = () => {
 //#endregion backg
 
 //#region border
-/**
- * Uses border color.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents border color definitions.
- */
 export interface BorderVars {
     /**
      * functional border color.
@@ -859,6 +855,10 @@ export interface BorderVars {
 }
 const [borderRefs, borderDecls] = createCssVar<BorderVars>();
 
+/**
+ * Uses border color.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents border color definitions.
+ */
 export const usesBorder = () => {
     // dependencies:
     const [, themeRefs   ] = usesThemeVariant();
@@ -888,11 +888,8 @@ export const usesBorder = () => {
     ] as const;
 };
 
-/**
- * Uses border stroke.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents border stroke definitions.
- */
- export interface BorderStrokeVars {
+
+export interface BorderStrokeVars {
     /**
      * final border width.
      */
@@ -900,15 +897,47 @@ export const usesBorder = () => {
 }
 const [borderStrokeRefs, borderStrokeDecls] = createCssVar<BorderStrokeVars>();
 
+/**
+ * Uses border stroke.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents border stroke definitions.
+ */
 export const usesBorderStroke = () => {
     return [
         () => composition([
             vars({
-                [borderStrokeDecls.borderWidth] : cssProps.borderWidth,
+                [borderStrokeDecls.borderWidth] : cssProps.borderWidth, // default => uses config's border width
             }),
         ]),
         borderStrokeRefs,
         borderStrokeDecls,
+    ] as const;
+};
+
+
+export interface BorderRadiusVars {
+    borderStartStartRadius : any
+    borderStartEndRadius   : any
+    borderEndStartRadius   : any
+    borderEndEndRadius     : any
+}
+const [borderRadiusRefs, borderRadiusDecls] = createCssVar<BorderRadiusVars>();
+
+/**
+ * Uses border radius.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents border radius definitions.
+ */
+export const usesBorderRadius = () => {
+    return [
+        () => composition([
+            vars({
+                [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius, // default => uses config's border radius
+                [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius, // default => uses config's border radius
+                [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius, // default => uses config's border radius
+                [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius, // default => uses config's border radius
+            }),
+        ]),
+        borderRadiusRefs,
+        borderRadiusDecls,
     ] as const;
 };
 //#endregion border
@@ -1156,6 +1185,7 @@ export const usesBasicLayout = () => {
     
     // layouts:
     const [borderStroke, borderStrokeRefs] = usesBorderStroke();
+    const [borderRadius, borderRadiusRefs] = usesBorderRadius();
     
     
     
@@ -1173,6 +1203,7 @@ export const usesBasicLayout = () => {
             
             // layouts:
             borderStroke(),
+            borderRadius(),
         ]),
         layout({
             // layouts:
@@ -1196,9 +1227,16 @@ export const usesBasicLayout = () => {
             
             
             // borders:
-            border      : cssProps.border,              // all border properties
-            borderColor : borderRefs.borderCol,         // overwrite color prop
-            borderWidth : borderStrokeRefs.borderWidth, // overwrite width prop
+            border                 : cssProps.border,                         // all border properties
+            
+            borderColor            : borderRefs.borderCol,                    // overwrite color prop
+            
+            borderWidth            : borderStrokeRefs.borderWidth,            // overwrite width prop
+            
+            borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
+            borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
+            borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
+            borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
             
             
             
