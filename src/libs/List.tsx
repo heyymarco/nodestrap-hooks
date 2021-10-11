@@ -497,7 +497,8 @@ export const usesListLayout = () => {
             // borders:
             ...children(['&', wrapperElm], composition([
                 layout({
-                    border                 : bcssProps.border,                         // all border properties
+                    // borders:
+                    border                 : borderStrokeRefs.border,                 // all border properties
                     
                     borderColor            : borderRefs.borderCol,                    // overwrite color prop
                     
@@ -796,7 +797,7 @@ export const usesListVariants = () => {
                                 layout({
                                     // spacings:
                                     // shift the items to right a bit, so the `active item` can hide the `borderRight`:
-                                    marginInlineEnd : `calc(0px - ${bcssProps.borderWidth})`,
+                                    marginInlineEnd : `calc(0px - ${borderStrokeRefs.borderWidth})`,
                                 }),
                             ])),
                         }),
@@ -821,7 +822,7 @@ export const usesListVariants = () => {
                                 layout({
                                     // spacings:
                                     // shift the items to bottom a bit, so the `active item` can hide the `borderBottom`:
-                                    marginBlockEnd : `calc(0px - ${bcssProps.borderWidth})`,
+                                    marginBlockEnd : `calc(0px - ${borderStrokeRefs.borderWidth})`,
                                 }),
                             ])),
                         }),
