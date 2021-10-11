@@ -85,15 +85,23 @@ import {
 
 
 
+// defaults:
+const defaultBorderWidth   = () => bcssProps.borderWidth
+const defaultBorderRadius  = () => bcssProps.borderRadius
+const defaultPaddingInline = () => cssProps.paddingInline
+const defaultPaddingBlock  = () => cssProps.paddingBlock
+
+
+
 // hooks:
 
 // layouts:
 
-export const usesMediaFill = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Ref) => {
+export const usesMediaFill = (options: PaddingOptions = {}) => {
     // dependencies:
     
-    // paddings:
-    const [, paddingRefs]       = usesPadding(paddingInline, paddingBlock);
+    // spacings:
+    const [, paddingRefs]       = usesPadding(options);
     const negativePaddingInline = `calc(0px - ${paddingRefs.paddingInline})`;
     const negativePaddingBlock  = `calc(0px - ${paddingRefs.paddingBlock})`;
     
@@ -117,7 +125,7 @@ export const usesMediaFill = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Re
             
             
             // spacings:
-            marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
+            marginInline   : negativePaddingInline,    // cancel out parent's padding with negative margin
             
             marginBlockEnd : paddingRefs.paddingBlock, // add a spacing to the next sibling
             
@@ -151,14 +159,25 @@ export const usesMediaFill = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Re
 
 
 // borders:
-interface BorderVars {
+export interface BorderVars {
     borderStartStartRadius : any
     borderStartEndRadius   : any
     borderEndStartRadius   : any
     borderEndEndRadius     : any
 }
 const [borderRadiusRefs, borderRadiusDecls] = createCssVar<BorderVars>();
-export const usesBorderRadius = (borderRadius : Cust.Ref = bcssProps.borderRadius) => {
+
+export interface BorderRadiusOptions {
+    borderRadius? : Cust.Ref
+}
+export const usesBorderRadius = (options: BorderRadiusOptions = {}) => {
+    // options:
+    const {
+        borderRadius = defaultBorderRadius(),
+    } = options;
+    
+    
+    
     return [
         () => composition([
             vars({
@@ -181,11 +200,32 @@ export const usesBorderRadius = (borderRadius : Cust.Ref = bcssProps.borderRadiu
 };
 
 
-export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', orientationBlockRule : SelectorCollection = ':not(.inline)', orientationInlineRule : SelectorCollection = '.inline', borderWidth : Cust.Ref = bcssProps.borderWidth, borderRadiusRef? : Cust.Ref) => {
+export interface BorderContainerOptions extends BorderRadiusOptions {
+    borderWidth?           : Cust.Ref
+    
+    itemsSelector?         : SelectorCollection
+    
+    orientationBlockRule?  : SelectorCollection
+    orientationInlineRule? : SelectorCollection
+}
+export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
+    // options:
+    const {
+        borderWidth           = defaultBorderWidth(),
+        borderRadius          = defaultBorderRadius(),
+        
+        itemsSelector         = '*',
+        
+        orientationBlockRule  = ':not(.inline)',
+        orientationInlineRule = '.inline',
+    } = options;
+    
+    
+    
     // dependencies:
     
     // borders:
-    const [borderRadius, borderRadiusRefs] = usesBorderRadius(borderRadiusRef);
+    const [borderRadiuses, borderRadiusRefs] = usesBorderRadius({ borderRadius });
     
     
     
@@ -193,7 +233,7 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
         imports([
             // borders:
             usesBorderStroke(),
-            borderRadius(),
+            borderRadiuses(),
         ]),
         // layout({
         //     // borders:
@@ -208,15 +248,15 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
                             isFirstChild([
                                 layout({
                                     // add rounded corners on top:
-                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth})`,
-                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth})`,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth} - 0.5px)`,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth} - 0.5px)`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on bottom:
-                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth})`,
-                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth})`,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth} - 0.5px)`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth} - 0.5px)`,
                                 }),
                             ]),
                         ]),
@@ -231,15 +271,15 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
                             isFirstChild([
                                 layout({
                                     // add rounded corners on left:
-                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth})`,
-                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth})`,
+                                    borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth} - 0.5px)`,
+                                    borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth} - 0.5px)`,
                                 }),
                             ]),
                             isLastChild([
                                 layout({
                                     // add rounded corners on right:
-                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth})`,
-                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth})`,
+                                    borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth} - 0.5px)`,
+                                    borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth} - 0.5px)`,
                                 }),
                             ]),
                         ]),
@@ -252,12 +292,12 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
                     ...children(itemsSelector, composition([
                         layout({
                             // add rounded corners on top:
-                            borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth})`,
-                            borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth})`,
+                            borderStartStartRadius : `calc(${borderRadiusRefs.borderStartStartRadius} - ${borderWidth} - 0.5px)`,
+                            borderStartEndRadius   : `calc(${borderRadiusRefs.borderStartEndRadius} - ${borderWidth} - 0.5px)`,
                             
                             // add rounded corners on bottom:
-                            borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth})`,
-                            borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth})`,
+                            borderEndStartRadius   : `calc(${borderRadiusRefs.borderEndStartRadius} - ${borderWidth} - 0.5px)`,
+                            borderEndEndRadius     : `calc(${borderRadiusRefs.borderEndEndRadius} - ${borderWidth} - 0.5px)`,
                         }),
                     ])),
                 }),
@@ -265,11 +305,24 @@ export const usesBorderAsContainer = (itemsSelector: SelectorCollection = '*', o
         ]),
     ]);
 };
-export const usesBorderAsSeparatorBlock = (replaceLast = false, borderRadius? : Cust.Ref) => {
+
+export interface BorderSeparatorOptions extends BorderRadiusOptions {
+    replaceLast? : boolean
+}
+export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}) => {
+    // options:
+    const {
+        borderRadius = defaultBorderRadius(),
+        
+        replaceLast  = false,
+    } = options;
+    
+    
+    
     // dependencies:
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius(borderRadius);
+    const [, , borderRadiusDecls] = usesBorderRadius({ borderRadius });
     
     
     
@@ -344,11 +397,20 @@ export const usesBorderAsSeparatorBlock = (replaceLast = false, borderRadius? : 
         ]),
     ]);
 };
-export const usesBorderAsSeparatorInline = (replaceLast = false, borderRadius? : Cust.Ref) => {
+export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}) => {
+    // options:
+    const {
+        borderRadius = defaultBorderRadius(),
+        
+        replaceLast  = false,
+    } = options;
+    
+    
+    
     // dependencies:
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius(borderRadius);
+    const [, , borderRadiusDecls] = usesBorderRadius({ borderRadius });
     
     
     
@@ -425,11 +487,11 @@ export const usesBorderAsSeparatorInline = (replaceLast = false, borderRadius? :
 };
 
 
-export const usesMediaBorder = (borderRadius? : Cust.Ref) => {
+export const usesMediaBorder = (options: BorderRadiusOptions = {}) => {
     return composition([
         imports([
             // borders:
-            usesBorderAsSeparatorBlock(undefined, borderRadius),
+            usesBorderAsSeparatorBlock(options),
         ]),
         layout({
             // children:
@@ -467,12 +529,25 @@ export const usesMediaBorder = (borderRadius? : Cust.Ref) => {
 
 
 // paddings:
-interface PaddingVars {
+export interface PaddingVars {
     paddingInline : any
     paddingBlock  : any
 }
 const [paddingRefs, paddingDecls] = createCssVar<PaddingVars>();
-export const usesPadding = (paddingInline : Cust.Ref = cssProps.paddingInline, paddingBlock : Cust.Ref = cssProps.paddingBlock) => {
+
+export interface PaddingOptions {
+    paddingInline? : Cust.Ref
+    paddingBlock?  : Cust.Ref
+}
+export const usesPadding = (options: PaddingOptions = {}) => {
+    // options:
+    const {
+        paddingInline = defaultPaddingInline(),
+        paddingBlock  = defaultPaddingBlock(),
+    } = options;
+    
+    
+    
     return [
         () => composition([
             vars({
@@ -480,7 +555,7 @@ export const usesPadding = (paddingInline : Cust.Ref = cssProps.paddingInline, p
                 [paddingDecls.paddingBlock]  : paddingBlock,
             }),
             layout({
-                // borders:
+                // spacings:
                 paddingInline : paddingRefs.paddingInline,
                 paddingBlock  : paddingRefs.paddingBlock,
             }),
@@ -495,16 +570,18 @@ export const usesPadding = (paddingInline : Cust.Ref = cssProps.paddingInline, p
 // styles:
 const mediaElm = ['figure', 'img', 'svg', 'video'];
 
-export const usesContentMediaLayout = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Ref, borderRadius? : Cust.Ref) => {
+export interface ContentMediaOptions extends PaddingOptions, BorderRadiusOptions {
+}
+export const usesContentMediaLayout = (options: ContentMediaOptions = {}) => {
     return composition([
         imports([
             stripoutImage(), // clear browser's default styling on image
             
             // layouts:
-            usesMediaFill(paddingInline, paddingBlock),
+            usesMediaFill(options),
             
             // borders:
-            usesMediaBorder(borderRadius),
+            usesMediaBorder(options),
         ]),
         layout({
             // customize:
@@ -512,7 +589,7 @@ export const usesContentMediaLayout = (paddingInline? : Cust.Ref, paddingBlock? 
         }),
     ]);
 };
-export const usesContentMedia = (paddingInline? : Cust.Ref, paddingBlock? : Cust.Ref, borderRadius? : Cust.Ref) => {
+export const usesContentMedia = (options: ContentMediaOptions = {}) => {
     return composition([
         layout({
             // children:
@@ -565,7 +642,7 @@ export const usesContentMedia = (paddingInline? : Cust.Ref, paddingBlock? : Cust
             // then: styling top_level <figure> & top_level <media>:
             ...children(mediaElm, composition([
                 imports([
-                    usesContentMediaLayout(paddingInline, paddingBlock, borderRadius),
+                    usesContentMediaLayout(options),
                 ]),
             ])),
             //#endregion media
@@ -578,7 +655,7 @@ export const usesContentMedia = (paddingInline? : Cust.Ref, paddingBlock? : Cust
 export const usesContentLayout = () => {
     // dependencies:
     
-    // paddings:
+    // spacings:
     const [paddings] = usesPadding();
     
     
@@ -589,10 +666,10 @@ export const usesContentLayout = () => {
             usesBasicLayout(),
             
             // borders:
-            usesBorderAsContainer(/*itemsSelector: */mediaElm), // make a nicely rounded corners
+            usesBorderAsContainer({ itemsSelector: mediaElm }), // make a nicely rounded corners
             // borderRadiuses(), // already included in `usesBorderAsContainer`
             
-            // paddings:
+            // spacings:
             paddings(),
         ]),
         layout({
