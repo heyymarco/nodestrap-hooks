@@ -65,11 +65,6 @@ import {
     
     
     
-    // configs:
-    cssProps as bcssProps,
-    
-    
-    
     // react components:
     BasicProps,
     Basic,
@@ -489,11 +484,11 @@ export const usesContentMediaLayout = () => {
             
             
             // borders:
-            border                 : bcssProps.border,                         // all border properties
+            border      : borderStrokeRefs.border,      // all border properties
             
-            borderColor            : borderRefs.borderCol,                    // overwrite color prop
+            borderColor : borderRefs.borderCol,         // overwrite color prop
             
-            borderWidth            : borderStrokeRefs.borderWidth,   
+            borderWidth : borderStrokeRefs.borderWidth, // overwrite width prop
         }),
         imports([
             // borders:
