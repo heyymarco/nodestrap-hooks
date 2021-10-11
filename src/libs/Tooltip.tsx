@@ -45,11 +45,6 @@ import {
     usesBackg,
     usesBorder,
     usesBorderStroke,
-    
-    
-    
-    // configs:
-    cssProps as bcssProps,
 }                           from './Basic'
 import {
     // general types:
@@ -123,7 +118,7 @@ export const usesTooltipLayout = () => {
                             
                             
                             // borders:
-                            border      : bcssProps.border,             // all border properties
+                            border      : borderStrokeRefs.border,      // all border properties
                             
                             borderColor : borderRefs.borderCol,         // overwrite color prop
                             
