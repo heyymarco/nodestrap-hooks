@@ -58,7 +58,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesBorderStroke,
+    usesBorderRadius,
     
     
     
@@ -87,7 +87,6 @@ import {
 
 // defaults:
 const defaultBorderWidth   = () => bcssProps.borderWidth
-const defaultBorderRadius  = () => bcssProps.borderRadius
 const defaultPaddingInline = () => cssProps.paddingInline
 const defaultPaddingBlock  = () => cssProps.paddingBlock
 
@@ -97,11 +96,11 @@ const defaultPaddingBlock  = () => cssProps.paddingBlock
 
 // layouts:
 
-export const usesMediaFill = (options: PaddingOptions = {}) => {
+export const usesMediaFill = () => {
     // dependencies:
     
     // spacings:
-    const [, paddingRefs]       = usesPadding(options);
+    const [, paddingRefs]       = usesPadding();
     const negativePaddingInline = `calc(0px - ${paddingRefs.paddingInline})`;
     const negativePaddingBlock  = `calc(0px - ${paddingRefs.paddingBlock})`;
     
@@ -159,48 +158,7 @@ export const usesMediaFill = (options: PaddingOptions = {}) => {
 
 
 // borders:
-export interface BorderVars {
-    borderStartStartRadius : any
-    borderStartEndRadius   : any
-    borderEndStartRadius   : any
-    borderEndEndRadius     : any
-}
-const [borderRadiusRefs, borderRadiusDecls] = createCssVar<BorderVars>();
-
-export interface BorderRadiusOptions {
-    borderRadius? : Cust.Ref
-}
-export const usesBorderRadius = (options: BorderRadiusOptions = {}) => {
-    // options:
-    const {
-        borderRadius = defaultBorderRadius(),
-    } = options;
-    
-    
-    
-    return [
-        () => composition([
-            vars({
-                [borderRadiusDecls.borderStartStartRadius] : borderRadius,
-                [borderRadiusDecls.borderStartEndRadius]   : borderRadius,
-                [borderRadiusDecls.borderEndStartRadius]   : borderRadius,
-                [borderRadiusDecls.borderEndEndRadius]     : borderRadius,
-            }),
-            layout({
-                // borders:
-                borderStartStartRadius : borderRadiusRefs.borderStartStartRadius,
-                borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,
-                borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,
-                borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,
-            }),
-        ]),
-        borderRadiusRefs,
-        borderRadiusDecls,
-    ] as const;
-};
-
-
-export interface BorderContainerOptions extends BorderRadiusOptions {
+export interface BorderContainerOptions {
     borderWidth?           : Cust.Ref
     
     itemsSelector?         : SelectorCollection
@@ -212,7 +170,6 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     // options:
     const {
         borderWidth           = defaultBorderWidth(),
-        borderRadius          = defaultBorderRadius(),
         
         itemsSelector         = '*',
         
@@ -225,16 +182,11 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     // dependencies:
     
     // borders:
-    const [borderRadiuses, borderRadiusRefs] = usesBorderRadius({ borderRadius });
+    const [, borderRadiusRefs] = usesBorderRadius();
     
     
     
     return composition([
-        imports([
-            // borders:
-            usesBorderStroke(),
-            borderRadiuses(),
-        ]),
         // layout({
         //     // borders:
         //     overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
@@ -306,14 +258,12 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     ]);
 };
 
-export interface BorderSeparatorOptions extends BorderRadiusOptions {
+export interface BorderSeparatorOptions {
     replaceLast? : boolean
 }
 export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}) => {
     // options:
     const {
-        borderRadius = defaultBorderRadius(),
-        
         replaceLast  = false,
     } = options;
     
@@ -322,15 +272,11 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
     // dependencies:
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius({ borderRadius });
+    const [, , borderRadiusDecls] = usesBorderRadius();
     
     
     
     return composition([
-        imports([
-            // borders:
-            usesBorderStroke(),
-        ]),
         layout({
             // borders:
             borderInlineWidth : 0, // remove (left|right)-border
@@ -400,8 +346,6 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
 export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}) => {
     // options:
     const {
-        borderRadius = defaultBorderRadius(),
-        
         replaceLast  = false,
     } = options;
     
@@ -410,15 +354,11 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
     // dependencies:
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius({ borderRadius });
+    const [, , borderRadiusDecls] = usesBorderRadius();
     
     
     
     return composition([
-        imports([
-            // borders:
-            usesBorderStroke(),
-        ]),
         layout({
             // borders:
             borderBlockWidth  : 0, // remove (top|bottom)-border
@@ -487,11 +427,11 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
 };
 
 
-export const usesMediaBorder = (options: BorderRadiusOptions = {}) => {
+export const usesMediaBorder = () => {
     return composition([
         imports([
             // borders:
-            usesBorderAsSeparatorBlock(options),
+            usesBorderAsSeparatorBlock(),
         ]),
         layout({
             // children:
@@ -570,18 +510,16 @@ export const usesPadding = (options: PaddingOptions = {}) => {
 // styles:
 const mediaElm = ['figure', 'img', 'svg', 'video'];
 
-export interface ContentMediaOptions extends BorderRadiusOptions, PaddingOptions {
-}
-export const usesContentMediaLayout = (options: ContentMediaOptions = {}) => {
+export const usesContentMediaLayout = () => {
     return composition([
         imports([
             stripoutImage(), // clear browser's default styling on image
             
             // layouts:
-            usesMediaFill(options),
+            usesMediaFill(),
             
             // borders:
-            usesMediaBorder(options),
+            usesMediaBorder(),
         ]),
         layout({
             // customize:
@@ -589,7 +527,7 @@ export const usesContentMediaLayout = (options: ContentMediaOptions = {}) => {
         }),
     ]);
 };
-export const usesContentMedia = (options: ContentMediaOptions = {}) => {
+export const usesContentMedia = () => {
     return composition([
         layout({
             // children:
@@ -642,7 +580,7 @@ export const usesContentMedia = (options: ContentMediaOptions = {}) => {
             // then: styling top_level <figure> & top_level <media>:
             ...children(mediaElm, composition([
                 imports([
-                    usesContentMediaLayout(options),
+                    usesContentMediaLayout(),
                 ]),
             ])),
             //#endregion media

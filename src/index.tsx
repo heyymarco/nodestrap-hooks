@@ -20,11 +20,11 @@ import reportWebVitals from './reportWebVitals';
 //         import CarouselApp                          from './apps/CarouselApp';
 //     import ContainerApp                             from './apps/ContainerApp';
 //     import IndicatorApp                             from './apps/IndicatorApp';
-//         import ListApp                              from './apps/ListApp';
+        import ListApp                              from './apps/ListApp';
 //             import AccordionApp                     from './apps/AccordionApp';
 //             import NavApp                           from './apps/NavApp';
 //                 import NavscrollApp                 from './apps/NavscrollApp';
-        import CardApp                              from './apps/CardApp';
+//         import CardApp                              from './apps/CardApp';
 //         import PopupApp                             from './apps/PopupApp';
 //             import AlertApp                         from './apps/AlertApp';
 //             import ModalApp                         from './apps/ModalApp';
@@ -60,7 +60,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <CardApp />
+    <ListApp />
     ,
     document.getElementById('root')
 );

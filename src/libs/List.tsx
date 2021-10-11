@@ -71,6 +71,7 @@ import {
     usesForeg,
     usesBackg,
     usesBorderStroke,
+    usesBorderRadius,
     
     
     
@@ -97,7 +98,6 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    usesBorderRadius,
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
     usesBorderAsSeparatorInline,
@@ -230,22 +230,20 @@ export const usesListItemInheritParentVariants = () => {
                     usesContentVariants(),
                     
                     // media:
-                    usesContentMedia({
-                        borderRadius: cssProps.borderRadius,
-                    }),
+                    usesContentMedia(),
                 ]),
             ]),
             
             rule(':not(.inline)>*>&', [ // block
                 imports([
                     // borders:
-                    usesBorderAsSeparatorBlock({ borderRadius: cssProps.borderRadius }),
+                    usesBorderAsSeparatorBlock(),
                 ]),
             ]),
             rule('.inline>*>&', [ // inline
                 imports([
                     // borders:
-                    usesBorderAsSeparatorInline({ borderRadius: cssProps.borderRadius }),
+                    usesBorderAsSeparatorInline(),
                 ]),
             ]),
         ]),
@@ -460,7 +458,6 @@ export const usesListLayout = () => {
             // borders:
             usesBorderAsContainer({ // make a nicely rounded corners
                 borderWidth  : cssProps.borderWidth,
-                borderRadius : cssProps.borderRadius,
             }),
         ]),
         layout({
@@ -526,8 +523,9 @@ export const usesListVariants = () => {
     const [foreg, foregRefs] = usesForeg();
     const [     , backgRefs] = usesBackg();
     
-    // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius({ borderRadius: cssProps.borderRadius });
+    // layouts:
+    const [, borderStrokeRefs]    = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -558,7 +556,7 @@ export const usesListVariants = () => {
                     ...children(wrapperElm, composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorBlock({ borderRadius: cssProps.borderRadius }),
+                            usesBorderAsSeparatorBlock(),
                         ]),
                         layout({
                             // layouts:
@@ -579,7 +577,7 @@ export const usesListVariants = () => {
                     ...children(wrapperElm, composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorInline({ borderRadius: cssProps.borderRadius }),
+                            usesBorderAsSeparatorInline(),
                         ]),
                         layout({
                             // layouts:
@@ -590,7 +588,7 @@ export const usesListVariants = () => {
             ]),
         ]),
         variants([
-            rule(['.flat', '.flush', '.btn', '.breadcrumb', '.bullet'], [
+            rule(['.flat', '.flush', '.btn', '.tab', '.breadcrumb', '.bullet'], [
                 layout({
                     // borders:
                     // kill borders surrounding List:
@@ -674,13 +672,10 @@ export const usesListVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
-                                imports([
-                                    // borders:
-                                    usesBorderStroke(),
-                                ]),
                                 layout({
                                     // borders:
                                     borderColor    : 'inherit', // change borderColor independent to child's theme color
+                                    borderWidth    : borderStrokeRefs.borderWidth, 
                                     backgroundClip : 'padding-box',
                                     
                                     
@@ -753,14 +748,6 @@ export const usesListVariants = () => {
                             borderBlockWidth       : 0,
                             borderInlineStartWidth : 0,
                             
-                         // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            // remove rounded corners on top:
-                            [borderRadiusDecls.borderStartStartRadius] : 0,
-                            [borderRadiusDecls.borderStartEndRadius]   : 0,
-                            // remove rounded corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius]   : 0,
-                            [borderRadiusDecls.borderEndEndRadius]     : 0,
-                            
                             
                             
                             // children:
@@ -785,14 +772,6 @@ export const usesListVariants = () => {
                             // kill border [left, top, right] surrounding tab:
                             borderInlineWidth      : 0,
                             borderBlockStartWidth  : 0,
-                            
-                         // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            // remove rounded corners on top:
-                            [borderRadiusDecls.borderStartStartRadius] : 0,
-                            [borderRadiusDecls.borderStartEndRadius]   : 0,
-                            // remove rounded corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius]   : 0,
-                            [borderRadiusDecls.borderEndEndRadius]     : 0,
                             
                             
                             
@@ -888,12 +867,9 @@ export const usesListVariants = () => {
                             
                             // children:
                             ...children(listItemElm, composition([
-                                imports([
-                                    // borders:
-                                    usesBorderStroke(),
-                                ]),
                                 layout({
                                     // borders:
+                                    borderWidth  : borderStrokeRefs.borderWidth, 
                                     borderRadius : borderRadiuses.pill, // big rounded corner
                                     overflow     : 'hidden',            // clip the children at the rounded corners
                                     
@@ -983,10 +959,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         // borders:
         borderWidth       : bcssProps.borderWidth,
-        
-        borderRadius      : bcssProps.borderRadius,
-        borderRadiusSm    : bcssProps.borderRadiusSm,
-        borderRadiusLg    : bcssProps.borderRadiusLg,
         
         
         

@@ -100,12 +100,7 @@ export const usesCardItemLayout = () => {
             usesContentLayout(),
             
             // media:
-            usesContentMedia({
-                borderRadius  : cssProps.itemBorderRadius,
-                
-                paddingInline : cssProps.itemPaddingInline,
-                paddingBlock  : cssProps.itemPaddingBlock,
-            }),
+            usesContentMedia(),
         ]),
         layout({
             // layouts:
@@ -184,7 +179,6 @@ export const usesCardLayout = () => {
             // borders:
             usesBorderAsContainer({ // make a nicely rounded corners
                 borderWidth  : cssProps.borderWidth,
-                borderRadius : cssProps.borderRadius,
             }),
             
             // animations:
@@ -282,10 +276,7 @@ export const usesCardVariants = () => {
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorBlock({
-                                borderRadius : cssProps.borderRadius,
-                                replaceLast  : true,
-                            }),
+                            usesBorderAsSeparatorBlock({ replaceLast  : true }),
                         ]),
                     ])),
                 }),
@@ -302,10 +293,7 @@ export const usesCardVariants = () => {
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorInline({
-                                borderRadius : cssProps.borderRadius,
-                                replaceLast  : true,
-                            }),
+                            usesBorderAsSeparatorInline({ replaceLast  : true }),
                         ]),
                     ])),
                 }),
@@ -352,29 +340,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         // borders:
         borderWidth         : bcssProps.borderWidth,
         
-        borderRadius        : bcssProps.borderRadius,
-        borderRadiusSm      : bcssProps.borderRadiusSm,
-        borderRadiusLg      : bcssProps.borderRadiusLg,
-        
         
         
         // sizes:
         boxSizing           : 'border-box', // the final size is including borders & paddings
         blockSize           : '100%',       // fills the entire parent's height if the parent has a specific height, otherwise no effect
-        
-        
-        
-        // items:
-        itemPaddingInline   : ccssProps.paddingInline,
-        itemPaddingBlock    : ccssProps.paddingBlock,
-        itemPaddingInlineSm : ccssProps.paddingInlineSm,
-        itemPaddingBlockSm  : ccssProps.paddingBlockSm,
-        itemPaddingInlineLg : ccssProps.paddingInlineLg,
-        itemPaddingBlockLg  : ccssProps.paddingBlockLg,
-        
-        itemBorderRadius    : bcssProps.borderRadius,
-        itemBorderRadiusSm  : bcssProps.borderRadiusSm,
-        itemBorderRadiusLg  : bcssProps.borderRadiusLg,
         
         
         
