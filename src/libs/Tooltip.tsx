@@ -66,9 +66,9 @@ import {
     Popup,
 }                           from './Popup'
 import typos                from './typos/index' // configurable typography (texting) defs
-        
-        
-        
+
+
+
 // utilities:
 const isEnabled = (target: HTMLElement|null|undefined) => {
     if (!target) return false; // if no target => assumes target as disabled
