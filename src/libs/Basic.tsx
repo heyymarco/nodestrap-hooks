@@ -901,13 +901,6 @@ export const usesBorder = () => {
 const [borderStrokeRefs, borderStrokeDecls] = createCssVar<BorderStrokeVars>();
 
 export const usesBorderStroke = () => {
-    // dependencies:
-    
-    // colors:
-    const [, borderRefs] = usesBorder();
-    
-    
-    
     return [
         () => composition([
             vars({
