@@ -888,25 +888,35 @@ export const usesBorder = () => {
     ] as const;
 };
 
+/**
+ * Uses border stroke.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents border stroke definitions.
+ */
+ export interface BorderStrokeVars {
+    /**
+     * final border width.
+     */
+    borderWidth : any
+}
+const [borderStrokeRefs, borderStrokeDecls] = createCssVar<BorderStrokeVars>();
+
 export const usesBorderStroke = () => {
     // dependencies:
     
     // colors:
-    const [border, borderRefs] = usesBorder();
+    const [, borderRefs] = usesBorder();
     
     
     
-    return composition([
-        imports([
-            // colors:
-            border(),
+    return [
+        () => composition([
+            vars({
+                [borderStrokeDecls.borderWidth] : cssProps.borderWidth,
+            }),
         ]),
-        layout({
-            // borders:
-            border      : cssProps.border,
-            borderColor : borderRefs.borderCol,
-        }),
-    ]);
+        borderStrokeRefs,
+        borderStrokeDecls,
+    ] as const;
 };
 //#endregion border
 
@@ -1144,12 +1154,15 @@ export const usesBasicLayout = () => {
     // dependencies:
     
     // colors:
-    const [foreg , foregRefs]  = usesForeg();
-    const [backg , backgRefs]  = usesBackg();
-    const [border, borderRefs] = usesBorder();
+    const [foreg       , foregRefs       ] = usesForeg();
+    const [backg       , backgRefs       ] = usesBackg();
+    const [border      , borderRefs      ] = usesBorder();
     
     // animations:
-    const [anim  , animRefs]   = usesAnim();
+    const [anim        , animRefs        ] = usesAnim();
+    
+    // layouts:
+    const [borderStroke, borderStrokeRefs] = usesBorderStroke();
     
     
     
@@ -1164,6 +1177,9 @@ export const usesBasicLayout = () => {
             
             // animations:
             anim(),
+            
+            // layouts:
+            borderStroke(),
         ]),
         layout({
             // layouts:
@@ -1187,7 +1203,9 @@ export const usesBasicLayout = () => {
             
             
             // borders:
-            borderColor : borderRefs.borderCol,
+            border      : cssProps.border,              // all border properties
+            borderColor : borderRefs.borderCol,         // overwrite color prop
+            borderWidth : borderStrokeRefs.borderWidth, // overwrite width prop
             
             
             
