@@ -124,7 +124,9 @@ export const usesTooltipLayout = () => {
                             
                             // borders:
                             border      : bcssProps.border,             // all border properties
+                            
                             borderColor : borderRefs.borderCol,         // overwrite color prop
+                            
                             borderWidth : borderStrokeRefs.borderWidth, // overwrite width prop
                             
                             
