@@ -45,6 +45,11 @@ import {
     OrientationVariant,
     useOrientationVariant,
     usesAnim,
+    
+    
+    
+    // configs:
+    cssProps as bcssProps,
 }                           from './Basic'
 import {
     // hooks:
@@ -90,12 +95,17 @@ const bodyElm   = '.body';
 export const usesCardItemLayout = () => {
     return composition([
         imports([
-            // media:
-            usesContentMedia(cssProps.itemPaddingInline, cssProps.itemPaddingBlock),
-            
             // layouts:
             usesIndicatorLayout(),
             usesContentLayout(),
+            
+            // media:
+            usesContentMedia({
+                borderRadius  : cssProps.itemBorderRadius,
+                
+                paddingInline : cssProps.itemPaddingInline,
+                paddingBlock  : cssProps.itemPaddingBlock,
+            }),
         ]),
         layout({
             // layouts:
@@ -172,7 +182,10 @@ export const usesCardLayout = () => {
             stripoutFocusableElement(), // clear browser's default styles
             
             // borders:
-            usesBorderAsContainer(), // make a nicely rounded corners
+            usesBorderAsContainer({ // make a nicely rounded corners
+                borderWidth  : cssProps.borderWidth,
+                borderRadius : cssProps.borderRadius,
+            }),
             
             // animations:
             anim(),
@@ -269,7 +282,10 @@ export const usesCardVariants = () => {
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorBlock(true),
+                            usesBorderAsSeparatorBlock({
+                                borderRadius : cssProps.borderRadius,
+                                replaceLast  : true,
+                            }),
                         ]),
                     ])),
                 }),
@@ -286,7 +302,10 @@ export const usesCardVariants = () => {
                     ...children([headerElm, footerElm, bodyElm], composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorInline(true),
+                            usesBorderAsSeparatorInline({
+                                borderRadius : cssProps.borderRadius,
+                                replaceLast  : true,
+                            }),
                         ]),
                     ])),
                 }),
@@ -330,9 +349,18 @@ export const useCardSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
+        // borders:
+        borderWidth         : bcssProps.borderWidth,
+        
+        borderRadius        : bcssProps.borderRadius,
+        borderRadiusSm      : bcssProps.borderRadiusSm,
+        borderRadiusLg      : bcssProps.borderRadiusLg,
+        
+        
+        
         // sizes:
-        boxSizing         : 'border-box', // the final size is including borders & paddings
-        blockSize         : '100%',       // fills the entire parent's height if the parent has a specific height, otherwise no effect
+        boxSizing           : 'border-box', // the final size is including borders & paddings
+        blockSize           : '100%',       // fills the entire parent's height if the parent has a specific height, otherwise no effect
         
         
         
@@ -344,15 +372,19 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         itemPaddingInlineLg : ccssProps.paddingInlineLg,
         itemPaddingBlockLg  : ccssProps.paddingBlockLg,
         
+        itemBorderRadius    : bcssProps.borderRadius,
+        itemBorderRadiusSm  : bcssProps.borderRadiusSm,
+        itemBorderRadiusLg  : bcssProps.borderRadiusLg,
+        
         
         
         // captions:
-        captionFilter     : [['brightness(70%)', 'contrast(140%)']],
+        captionFilter       : [['brightness(70%)', 'contrast(140%)']],
         
         
         
         // typos:
-        wordWrap          : 'break-word',
+        wordWrap            : 'break-word',
     };
 }, { prefix: 'crd' });
 
