@@ -570,7 +570,7 @@ export const usesPadding = (options: PaddingOptions = {}) => {
 // styles:
 const mediaElm = ['figure', 'img', 'svg', 'video'];
 
-export interface ContentMediaOptions extends PaddingOptions, BorderRadiusOptions {
+export interface ContentMediaOptions extends BorderRadiusOptions, PaddingOptions {
 }
 export const usesContentMediaLayout = (options: ContentMediaOptions = {}) => {
     return composition([
@@ -704,14 +704,14 @@ export const usesContentVariants = () => {
 export const usesContent = () => {
     return composition([
         imports([
-            // media:
-            usesContentMedia(),
-            
             // layouts:
             usesContentLayout(),
             
             // variants:
             usesContentVariants(),
+            
+            // media:
+            usesContentMedia(),
         ]),
     ]);
 };
