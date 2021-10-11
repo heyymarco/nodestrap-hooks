@@ -704,14 +704,14 @@ export const usesContentVariants = () => {
 export const usesContent = () => {
     return composition([
         imports([
+            // media:
+            usesContentMedia(),
+            
             // layouts:
             usesContentLayout(),
             
             // variants:
             usesContentVariants(),
-            
-            // media:
-            usesContentMedia(),
         ]),
     ]);
 };
