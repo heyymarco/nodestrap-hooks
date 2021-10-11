@@ -943,6 +943,34 @@ export const usesBorderRadius = () => {
 //#endregion border
 
 
+// spacings:
+
+//#region paddings
+export interface PaddingVars {
+    paddingInline : any
+    paddingBlock  : any
+}
+const [paddingRefs, paddingDecls] = createCssVar<PaddingVars>();
+
+/**
+ * Uses paddings.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents paddings definitions.
+ */
+export const usesPadding = () => {
+    return [
+        () => composition([
+            vars({
+                [paddingDecls.paddingInline] : cssProps.paddingInline, // default => uses config's padding inline
+                [paddingDecls.paddingBlock]  : cssProps.paddingBlock,  // default => uses config's padding block
+            }),
+        ]),
+        paddingRefs,
+        paddingDecls,
+    ] as const;
+};
+//#endregion paddings
+
+
 // animations:
 
 //#region animations
@@ -1180,12 +1208,15 @@ export const usesBasicLayout = () => {
     const [backg       , backgRefs       ] = usesBackg();
     const [border      , borderRefs      ] = usesBorder();
     
-    // animations:
-    const [anim        , animRefs        ] = usesAnim();
-    
-    // layouts:
+    // borders:
     const [borderStroke, borderStrokeRefs] = usesBorderStroke();
     const [borderRadius, borderRadiusRefs] = usesBorderRadius();
+    
+    // spacings:
+    const [paddings    , paddingRefs     ] = usesPadding();
+    
+    // animations:
+    const [anim        , animRefs        ] = usesAnim();
     
     
     
@@ -1198,16 +1229,19 @@ export const usesBasicLayout = () => {
             backg(),
             border(),
             
-            // animations:
-            anim(),
-            
-            // layouts:
+            // borders:
             borderStroke(),
             borderRadius(),
+
+            // spacings:
+            paddings(),
+            
+            // animations:
+            anim(),
         ]),
         layout({
             // layouts:
-            display     : 'block',
+            display                : 'block',
             
             
             
@@ -1217,12 +1251,12 @@ export const usesBasicLayout = () => {
             
             
             // foregrounds:
-            foreg       : foregRefs.foreg,
+            foreg                  : foregRefs.foreg,
             
             
             
             // backgrounds:
-            backg       : backgRefs.backg,
+            backg                  : backgRefs.backg,
             
             
             
@@ -1240,11 +1274,17 @@ export const usesBasicLayout = () => {
             
             
             
+            // spacings:
+            paddingInline          : paddingRefs.paddingInline,
+            paddingBlock           : paddingRefs.paddingBlock,
+            
+            
+            
             // animations:
-            boxShadow   : animRefs.boxShadow,
-            filter      : animRefs.filter,
-            transf      : animRefs.transf,
-            anim        : animRefs.anim,
+            boxShadow              : animRefs.boxShadow,
+            filter                 : animRefs.filter,
+            transf                 : animRefs.transf,
+            anim                   : animRefs.anim,
         }),
     ]);
 };

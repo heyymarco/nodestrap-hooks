@@ -70,6 +70,7 @@ import {
     mildOf,
     usesForeg,
     usesBackg,
+    usesBorder,
     usesBorderStroke,
     usesBorderRadius,
     
@@ -449,6 +450,21 @@ export const useListActionItemSheet = createUseSheet(() => [
 
 
 export const usesListLayout = () => {
+    // dependencies:
+    
+    // colors:
+    const [border      , borderRefs      ] = usesBorder();
+    
+    // layouts:
+    const [borderStroke, borderStrokeRefs] = usesBorderStroke();
+    const [
+        borderRadius,
+        borderRadiusRefs,
+        borderRadiusDecls,
+    ] = usesBorderRadius();
+    
+    
+    
     return composition([
         imports([
             // resets:
@@ -456,7 +472,11 @@ export const usesListLayout = () => {
             stripoutList(),             // clear browser's default styles
             
             // colors:
-            // borders:
+            border(),
+            
+            // layouts:
+            borderStroke(),
+            borderRadius(),
             usesBorderAsContainer(),    // make a nicely rounded corners
         ]),
         layout({
@@ -471,6 +491,24 @@ export const usesListLayout = () => {
             
             // sizes:
             minInlineSize  : 0, // See https://github.com/twbs/bootstrap/pull/22740#issuecomment-305868106
+            
+            
+            
+            // borders:
+            ...children(['&', wrapperElm], composition([
+                layout({
+                    border                 : bcssProps.border,                         // all border properties
+                    
+                    borderColor            : borderRefs.borderCol,                    // overwrite color prop
+                    
+                    borderWidth            : borderStrokeRefs.borderWidth,            // overwrite width prop
+                    
+                    borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
+                    borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
+                    borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
+                    borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
+                }),
+            ])),
             
             
             
@@ -494,7 +532,11 @@ export const usesListLayout = () => {
                     ...children(':nth-child(n)', composition([
                         layout({
                             // borders:
-                            borderRadius : 'inherit', // copy wrapper's borderRadius
+                         // borderRadius : 'inherit', // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                            [borderRadiusDecls.borderStartStartRadius] : 'inherit', // copy wrapper's borderRadius
+                            [borderRadiusDecls.borderStartEndRadius]   : 'inherit', // copy wrapper's borderRadius
+                            [borderRadiusDecls.borderEndStartRadius]   : 'inherit', // copy wrapper's borderRadius
+                            [borderRadiusDecls.borderEndEndRadius]     : 'inherit', // copy wrapper's borderRadius
                         }),
                     ])),
                 }),

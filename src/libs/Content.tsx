@@ -4,9 +4,6 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
-import type {
-    Cust,
-}                           from './css-types'   // ts defs support for cssfn
 import {
     // general types:
     SelectorCollection,
@@ -42,9 +39,6 @@ import {
     createUseSheet,
 }                           from './react-cssfn' // cssfn for react
 import {
-    createCssVar,
-}                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
-import {
     createCssConfig,
     
     
@@ -58,6 +52,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    usesPadding,
     usesBorderStroke,
     usesBorderRadius,
     
@@ -66,11 +61,6 @@ import {
     // styles:
     usesBasicLayout,
     usesBasicVariants,
-    
-    
-    
-    // configs:
-    cssProps as bcssProps,
     
     
     
@@ -83,13 +73,6 @@ import {
     stripoutFigure,
     stripoutImage,
 }                           from './stripouts'
-
-
-
-// defaults:
-const defaultBorderWidth   = () => bcssProps.borderWidth
-const defaultPaddingInline = () => cssProps.paddingInline
-const defaultPaddingBlock  = () => cssProps.paddingBlock
 
 
 
@@ -158,7 +141,7 @@ export const usesMediaFill = () => {
 };
 
 
-// borders:
+// layouts:
 export interface BorderContainerOptions {
     itemsSelector?         : SelectorCollection
     
@@ -255,6 +238,7 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
         ]),
     ]);
 };
+
 
 export interface BorderSeparatorOptions {
     replaceLast? : boolean
@@ -466,44 +450,6 @@ export const usesMediaBorder = () => {
 };
 
 
-// paddings:
-export interface PaddingVars {
-    paddingInline : any
-    paddingBlock  : any
-}
-const [paddingRefs, paddingDecls] = createCssVar<PaddingVars>();
-
-export interface PaddingOptions {
-    paddingInline? : Cust.Ref
-    paddingBlock?  : Cust.Ref
-}
-export const usesPadding = (options: PaddingOptions = {}) => {
-    // options:
-    const {
-        paddingInline = defaultPaddingInline(),
-        paddingBlock  = defaultPaddingBlock(),
-    } = options;
-    
-    
-    
-    return [
-        () => composition([
-            vars({
-                [paddingDecls.paddingInline] : paddingInline,
-                [paddingDecls.paddingBlock]  : paddingBlock,
-            }),
-            layout({
-                // spacings:
-                paddingInline : paddingRefs.paddingInline,
-                paddingBlock  : paddingRefs.paddingBlock,
-            }),
-        ]),
-        paddingRefs,
-        paddingDecls,
-    ] as const;
-};
-
-
 
 // styles:
 const mediaElm = ['figure', 'img', 'svg', 'video'];
@@ -592,7 +538,7 @@ export const usesContentLayout = () => {
     // dependencies:
     
     // spacings:
-    const [paddings] = usesPadding();
+    const [, , paddingDecls] = usesPadding();
     
     
     
@@ -600,14 +546,13 @@ export const usesContentLayout = () => {
         imports([
             // layouts:
             usesBasicLayout(),
-            
-            // borders:
             usesBorderAsContainer({ itemsSelector: mediaElm }), // make a nicely rounded corners
-            // borderRadiuses(), // already included in `usesBorderAsContainer`
-            
-            // spacings:
-            paddings(),
         ]),
+        vars({
+            // spacings:
+            [paddingDecls.paddingInline] : cssProps.paddingInline, // default => uses config's padding inline
+            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,  // default => uses config's padding block
+        }),
         layout({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps

@@ -44,6 +44,9 @@ import {
     isOrientationInline,
     OrientationVariant,
     useOrientationVariant,
+    usesBorder,
+    usesBorderStroke,
+    usesBorderRadius,
     usesAnim,
     
     
@@ -166,8 +169,15 @@ export const usesCardBodyLayout = () => {
 export const usesCardLayout = () => {
     // dependencies:
     
+    // colors:
+    const [border      , borderRefs      ] = usesBorder();
+    
     // animations:
     const [anim, animRefs] = usesAnim();
+    
+    // layouts:
+    const [borderStroke, borderStrokeRefs] = usesBorderStroke();
+    const [borderRadius, borderRadiusRefs] = usesBorderRadius();
     
     
     
@@ -176,7 +186,12 @@ export const usesCardLayout = () => {
             // resets:
             stripoutFocusableElement(), // clear browser's default styles
             
-            // borders:
+            // colors:
+            border(),
+            
+            // layouts:
+            borderStroke(),
+            borderRadius(),
             usesBorderAsContainer(),    // make a nicely rounded corners
             
             // animations:
@@ -194,6 +209,20 @@ export const usesCardLayout = () => {
             
             // sizes:
             minInlineSize  : 0, // See https://github.com/twbs/bootstrap/pull/22740#issuecomment-305868106
+            
+            
+            
+            // borders:
+            border                 : bcssProps.border,                         // all border properties
+            
+            borderColor            : borderRefs.borderCol,                    // overwrite color prop
+            
+            borderWidth            : borderStrokeRefs.borderWidth,            // overwrite width prop
+            
+            borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
+            borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
+            borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
+            borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
             
             
             
