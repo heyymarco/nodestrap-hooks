@@ -223,27 +223,29 @@ export const usesListItemInheritParentVariants = () => {
         variants([
             rule('.content>*>&', [ // content
                 imports([
-                    // media:
-                    usesContentMedia(),
-                    
                     // layouts:
                     usesContentLayout(),
                     
                     // variants:
                     usesContentVariants(),
+                    
+                    // media:
+                    usesContentMedia({
+                        borderRadius: cssProps.borderRadius,
+                    }),
                 ]),
             ]),
             
             rule(':not(.inline)>*>&', [ // block
                 imports([
                     // borders:
-                    usesBorderAsSeparatorBlock(),
+                    usesBorderAsSeparatorBlock({ borderRadius: cssProps.borderRadius }),
                 ]),
             ]),
             rule('.inline>*>&', [ // inline
                 imports([
                     // borders:
-                    usesBorderAsSeparatorInline(),
+                    usesBorderAsSeparatorInline({ borderRadius: cssProps.borderRadius }),
                 ]),
             ]),
         ]),
@@ -456,7 +458,10 @@ export const usesListLayout = () => {
             stripoutList(),             // clear browser's default styles
             
             // borders:
-            usesBorderAsContainer(), // make a nicely rounded corners
+            usesBorderAsContainer({ // make a nicely rounded corners
+                borderWidth  : cssProps.borderWidth,
+                borderRadius : cssProps.borderRadius,
+            }),
         ]),
         layout({
             // layouts:
@@ -522,7 +527,7 @@ export const usesListVariants = () => {
     const [     , backgRefs] = usesBackg();
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
+    const [, , borderRadiusDecls] = usesBorderRadius({ borderRadius: cssProps.borderRadius });
     
     
     
@@ -553,7 +558,7 @@ export const usesListVariants = () => {
                     ...children(wrapperElm, composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorBlock(),
+                            usesBorderAsSeparatorBlock({ borderRadius: cssProps.borderRadius }),
                         ]),
                         layout({
                             // layouts:
@@ -574,7 +579,7 @@ export const usesListVariants = () => {
                     ...children(wrapperElm, composition([
                         imports([
                             // borders:
-                            usesBorderAsSeparatorInline(),
+                            usesBorderAsSeparatorInline({ borderRadius: cssProps.borderRadius }),
                         ]),
                         layout({
                             // layouts:
@@ -976,6 +981,15 @@ export const useListSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
+        // borders:
+        borderWidth       : bcssProps.borderWidth,
+        
+        borderRadius      : bcssProps.borderRadius,
+        borderRadiusSm    : bcssProps.borderRadiusSm,
+        borderRadiusLg    : bcssProps.borderRadiusLg,
+        
+        
+        
         btnSpacing        : spacers.sm,
         btnSpacingSm      : spacers.xs,
         btnSpacingLg      : spacers.md,
