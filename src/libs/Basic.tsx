@@ -891,6 +891,10 @@ export const usesBorder = () => {
 
 export interface BorderStrokeVars {
     /**
+     * final border mix (style, width, color, etc).
+     */
+    border      : any
+    /**
      * final border width.
      */
     borderWidth : any
@@ -905,6 +909,7 @@ export const usesBorderStroke = () => {
     return [
         () => composition([
             vars({
+                [borderStrokeDecls.border]      : cssProps.border,      // default => uses config's border
                 [borderStrokeDecls.borderWidth] : cssProps.borderWidth, // default => uses config's border width
             }),
         ]),
@@ -1261,7 +1266,7 @@ export const usesBasicLayout = () => {
             
             
             // borders:
-            border                 : cssProps.border,                         // all border properties
+            border                 : borderStrokeRefs.border,                 // all border properties
             
             borderColor            : borderRefs.borderCol,                    // overwrite color prop
             
