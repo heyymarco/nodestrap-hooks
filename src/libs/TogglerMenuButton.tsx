@@ -129,7 +129,7 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 // animations:
 
 //#region svg animations
-interface SvgAnimVars {
+export interface SvgAnimVars {
     svgTopTransfIn   : any
     svgMidTransfIn   : any
     svgBtmTransfIn   : any
