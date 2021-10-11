@@ -48,11 +48,6 @@ import {
     usesBorderStroke,
     usesBorderRadius,
     usesAnim,
-    
-    
-    
-    // configs:
-    cssProps as bcssProps,
 }                           from './Basic'
 import {
     // hooks:
@@ -213,7 +208,7 @@ export const usesCardLayout = () => {
             
             
             // borders:
-            border                 : bcssProps.border,                         // all border properties
+            border                 : borderStrokeRefs.border,                 // all border properties
             
             borderColor            : borderRefs.borderCol,                    // overwrite color prop
             
