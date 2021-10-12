@@ -210,6 +210,14 @@ export const useOrientationVariant = (props: OrientationVariant) => {
 export const notNude = (styles: StyleCollection) => rule(':not(.nude)', styles);
 export const isNude = (styles: StyleCollection) => rule('.nude', styles);
 export const usesNudeVariant = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+ // const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         variants([
             isNude([
@@ -220,8 +228,8 @@ export const usesNudeVariant = () => {
                     
                     
                     // borders:
-                    border       : 0,      // discard border
-                 // borderRadius : 0,      // do not discard borderRadius, causing boxShadow looks weird
+                    [borderStrokeDecls.borderWidth]  : 0, // discard border
+                 // [borderRadiusDecls.borderRadius] : 0, // do not discard borderRadius, causing boxShadow looks weird
                     
                     
                     
