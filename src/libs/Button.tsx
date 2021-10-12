@@ -54,6 +54,7 @@ import {
     outlinedOf,
     usesMildVariant,
     usesForeg,
+    usesBorderStroke,
 }                           from './Basic'
 import {
     // hooks:
@@ -107,6 +108,13 @@ export const useButtonVariant = (props: ButtonVariant) => {
 
 // styles:
 export const noBackground = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    
+    
+    
     return composition([
         variants([
             notOutlined([
@@ -115,7 +123,7 @@ export const noBackground = () => {
                 ]),
                 layout({
                     // borders:
-                    border : 'none', // noBorder if not explicitly `.outlined`
+                    [borderStrokeDecls.borderWidth]  : 0, // noBorder if not explicitly `.outlined`
                 }),
             ]),
         ]),
