@@ -63,6 +63,7 @@ import {
     usesSizeVariant,
     usesMildVariant,
     usesForeg,
+    usesBorder,
     convertRefToDecl,
     usesAnim,
     isRef,
@@ -512,6 +513,9 @@ export const usesCheckVariants = () => {
         }),
     ]));
     
+    // borders:
+    const [, , borderDecls] = usesBorder();
+    
     
     
     return composition([
@@ -618,7 +622,7 @@ export const usesCheckVariants = () => {
                     ...children(inputElm, composition([
                         layout({
                             // borders:
-                            borderColor : 'currentColor',
+                            [borderDecls.borderCol] : 'currentColor', // make a contrast border between indicator & filler
                         }),
                     ])),
                     
