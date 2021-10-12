@@ -91,9 +91,6 @@ export const usesCardItemLayout = () => {
             // layouts:
             usesIndicatorLayout(),
             usesContentLayout(),
-            
-            // media:
-            usesContentMedia(),
         ]),
         layout({
             // layouts:
@@ -165,7 +162,7 @@ export const usesCardLayout = () => {
     // animations:
     const [anim, animRefs] = usesAnim();
     
-    // layouts:
+    // borders:
     const [borderStroke, borderStrokeRefs] = usesBorderStroke();
     const [borderRadius, borderRadiusRefs] = usesBorderRadius();
     
@@ -179,7 +176,7 @@ export const usesCardLayout = () => {
             // colors:
             border(),
             
-            // layouts:
+            // borders:
             borderStroke(),
             borderRadius(),
             usesBorderAsContainer(),    // make a nicely rounded corners
@@ -227,26 +224,34 @@ export const usesCardLayout = () => {
             // children:
             ...children([headerElm, footerElm, bodyElm], composition([
                 imports([
+                    // media:
+                    usesContentMedia(),
+                    
+                    // layouts:
                     usesCardItemLayout(),
                 ]),
             ])),
             ...children([headerElm, footerElm], composition([
                 imports([
+                    // layouts:
                     usesCardCaptionLayout(),
                 ]),
             ])),
             ...children(headerElm, composition([
                 imports([
+                    // layouts:
                     usesCardHeaderLayout(),
                 ]),
             ])),
             ...children(footerElm, composition([
                 imports([
+                    // layouts:
                     usesCardFooterLayout(),
                 ]),
             ])),
             ...children(bodyElm, composition([
                 imports([
+                    // layouts:
                     usesCardBodyLayout(),
                 ]),
             ])),
