@@ -70,6 +70,8 @@ import {
     ThemeName,
     outlinedOf,
     mildOf,
+    usesBorderStroke,
+    usesBorderRadius,
     usesAnim,
     
     
@@ -514,6 +516,14 @@ export const usesMenusCompactLayout = () => {
 };
 
 export const usesMenuLayout = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -524,8 +534,11 @@ export const usesMenuLayout = () => {
         ]),
         layout({
             // borders:
-            border       : 0, // discard border
-            borderRadius : 0, // discard borderRadius
+            [borderStrokeDecls.borderWidth]            : 0, // discard border
+            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
             
             
             
