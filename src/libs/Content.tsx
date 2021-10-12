@@ -309,9 +309,11 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
                     // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
+                            // borders:
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                             // remove rounded corners on top:
-                            borderStartStartRadius : 0, [borderRadiusDecls.borderStartStartRadius] : 0,
-                            borderStartEndRadius   : 0, [borderRadiusDecls.borderStartEndRadius]   : 0,
+                            [borderRadiusDecls.borderStartStartRadius] : 0,
+                            [borderRadiusDecls.borderStartEndRadius]   : 0,
                         }),
                     ])),
                 }),
@@ -322,9 +324,11 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
                     // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
+                            // borders:
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                             // remove rounded corners on bottom:
-                            borderEndStartRadius   : 0, [borderRadiusDecls.borderEndStartRadius]   : 0,
-                            borderEndEndRadius     : 0, [borderRadiusDecls.borderEndEndRadius]     : 0,
+                            [borderRadiusDecls.borderEndStartRadius]   : 0,
+                            [borderRadiusDecls.borderEndEndRadius]     : 0,
                         }),
                     ])),
                 }),
@@ -391,9 +395,11 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
                     // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
+                            // borders:
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                             // remove rounded corners on left:
-                            borderStartStartRadius : 0, [borderRadiusDecls.borderStartStartRadius] : 0,
-                            borderEndStartRadius   : 0, [borderRadiusDecls.borderEndStartRadius]   : 0,
+                            [borderRadiusDecls.borderStartStartRadius] : 0,
+                            [borderRadiusDecls.borderEndStartRadius]   : 0,
                         }),
                     ])),
                 }),
@@ -404,9 +410,11 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
                     // modify (container|any) & container>separator (if any)
                     ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
                         layout({
+                            // borders:
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                             // remove rounded corners on right:
-                            borderStartEndRadius   : 0, [borderRadiusDecls.borderStartEndRadius]   : 0,
-                            borderEndEndRadius     : 0, [borderRadiusDecls.borderEndEndRadius]     : 0,
+                            [borderRadiusDecls.borderStartEndRadius]   : 0,
+                            [borderRadiusDecls.borderEndEndRadius]     : 0,
                         }),
                     ])),
                 }),
@@ -416,7 +424,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
 };
 
 
-export const usesMediaSeparator = () => {
+export const usesMediaBorderSeparator = () => {
     return composition([
         imports([
             // borders:
@@ -498,7 +506,7 @@ export const usesContentMediaLayout = () => {
         }),
         imports([
             // borders:
-            usesMediaSeparator(),
+            usesMediaBorderSeparator(),
         ]),
     ]);
 };
@@ -577,6 +585,8 @@ export const usesContentLayout = () => {
         imports([
             // layouts:
             usesBasicLayout(),
+            
+            // borders:
             usesBorderAsContainer({ itemsSelector: mediaElm }), // make a nicely rounded corners
         ]),
         vars({
