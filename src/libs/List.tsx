@@ -566,9 +566,9 @@ export const usesListVariants = () => {
     const [     , backgRefs] = usesBackg();
     
     // borders:
-    const [, , borderDecls]       = usesBorder();
-    const [, borderStrokeRefs]    = usesBorderStroke();
-    const [, , borderRadiusDecls] = usesBorderRadius();
+    const [, , borderDecls]                       = usesBorder();
+    const [, borderStrokeRefs, borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls]                 = usesBorderRadius();
     
     
     
@@ -635,7 +635,7 @@ export const usesListVariants = () => {
                 layout({
                     // borders:
                     // kill borders surrounding List:
-                    borderWidth  : 0,
+                    [borderStrokeDecls.borderWidth] : 0,
                     
                  // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on top:
@@ -653,7 +653,7 @@ export const usesListVariants = () => {
                         layout({
                             // borders:
                             // kill separator between items:
-                            borderWidth : 0,
+                            [borderStrokeDecls.borderWidth] : 0,
                             
                             
                             
@@ -662,7 +662,7 @@ export const usesListVariants = () => {
                                 layout({
                                     // borders:
                                     // kill border on each item:
-                                    borderWidth : 0,
+                                    [borderStrokeDecls.borderWidth] : 0,
                                 }),
                             ])),
                         }),
@@ -674,7 +674,7 @@ export const usesListVariants = () => {
                 layout({
                     // spacings:
                     // add space between buttons:
-                    gap : cssProps.bulletSpacing,
+                    gap : cssProps.btnSpacing,
                     
                     
                     
@@ -683,7 +683,7 @@ export const usesListVariants = () => {
                         layout({
                             // borders:
                             // kill separator between buttons:
-                            borderWidth : 0,
+                            [borderStrokeDecls.borderWidth] : 0,
                             
                             
                             
@@ -709,7 +709,7 @@ export const usesListVariants = () => {
                         layout({
                             // borders:
                             // kill separator between tabs:
-                            borderWidth : 0,
+                            [borderStrokeDecls.borderWidth] : 0,
                             
                             
                             
@@ -899,7 +899,7 @@ export const usesListVariants = () => {
                         layout({
                             // borders:
                             // kill separator between bullets:
-                            borderWidth : 0,
+                            [borderStrokeDecls.borderWidth] : 0,
                             
                             
                             
