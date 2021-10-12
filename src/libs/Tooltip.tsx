@@ -89,7 +89,7 @@ export const usesTooltipLayout = () => {
     const [, backgRefs       ] = usesBackg();
     const [, borderRefs      ] = usesBorder();
     
-    // layouts:
+    // borders:
     const [, borderStrokeRefs] = usesBorderStroke();
     
     
