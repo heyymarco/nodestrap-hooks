@@ -110,7 +110,6 @@ export const usesMediaFill = () => {
             
             // spacings:
             marginInline   : negativePaddingInline,    // cancel out parent's padding with negative margin
-            
             marginBlockEnd : paddingRefs.paddingBlock, // add a spacing to the next sibling
             
             
