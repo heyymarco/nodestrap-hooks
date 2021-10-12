@@ -154,6 +154,7 @@ export const usesButtonIconLayout = () => {
         }),
         vars({
             // borders:
+            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
             [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius,
             [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius,
             [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius,
