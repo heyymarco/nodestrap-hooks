@@ -64,6 +64,8 @@ import {
     usesMildVariant,
     usesForeg,
     usesBorder,
+    usesBorderStroke,
+    usesBorderRadius,
     convertRefToDecl,
     usesAnim,
     isRef,
@@ -318,6 +320,10 @@ export const usesCheckLayout = () => {
     const [         , mildRefs     ] = usesMildVariant();
     const [foreg    , foregRefs    ] = usesForeg();
     
+    // borders:
+    const [, , borderStrokeDecls   ] = usesBorderStroke();
+    const [, , borderRadiusDecls   ] = usesBorderRadius();
+    
     // animations:
     const [checkAnim, checkAnimRefs] = usesCheckAnim();
     
@@ -485,8 +491,11 @@ export const usesCheckLayout = () => {
                     
                     
                     // borders:
-                    border         : 0, // discard border
-                    borderRadius   : 0, // discard borderRadius
+                    [borderStrokeDecls.borderWidth]            : 0, // discard border
+                    [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+                    [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
                     
                     
                     
