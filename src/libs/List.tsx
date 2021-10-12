@@ -566,6 +566,7 @@ export const usesListVariants = () => {
     const [     , backgRefs] = usesBackg();
     
     // borders:
+    const [, , borderDecls]       = usesBorder();
     const [, borderStrokeRefs]    = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
     
@@ -716,9 +717,9 @@ export const usesListVariants = () => {
                             ...children(listItemElm, composition([
                                 layout({
                                     // borders:
-                                    borderColor    : 'inherit', // change borderColor independent to child's theme color
-                                    borderWidth    : borderStrokeRefs.borderWidth, 
-                                    backgroundClip : 'padding-box',
+                                    [borderDecls.borderCol] : 'inherit', // change borderColor independent to child's theme color
+                                    borderWidth             : borderStrokeRefs.borderWidth, 
+                                    backgroundClip          : 'padding-box',
                                     
                                     
                                     
