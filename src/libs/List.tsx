@@ -224,14 +224,14 @@ export const usesListItemInheritParentVariants = () => {
         variants([
             rule('.content>*>&', [ // content
                 imports([
+                    // media:
+                    usesContentMedia(),
+                    
                     // layouts:
                     usesContentLayout(),
                     
                     // variants:
                     usesContentVariants(),
-                    
-                    // media:
-                    usesContentMedia(),
                 ]),
             ]),
             
@@ -455,7 +455,7 @@ export const usesListLayout = () => {
     // colors:
     const [border      , borderRefs      ] = usesBorder();
     
-    // layouts:
+    // borders:
     const [borderStroke, borderStrokeRefs] = usesBorderStroke();
     const [
         borderRadius,
@@ -474,7 +474,7 @@ export const usesListLayout = () => {
             // colors:
             border(),
             
-            // layouts:
+            // borders:
             borderStroke(),
             borderRadius(),
             usesBorderAsContainer(),    // make a nicely rounded corners
@@ -565,7 +565,7 @@ export const usesListVariants = () => {
     const [foreg, foregRefs] = usesForeg();
     const [     , backgRefs] = usesBackg();
     
-    // layouts:
+    // borders:
     const [, borderStrokeRefs]    = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
     
