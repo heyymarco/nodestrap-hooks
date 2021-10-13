@@ -152,7 +152,7 @@ export const usesMediaFill = () => {
     const positivePaddingInline = paddingRefs.paddingInline;
     const positivePaddingBlock  = paddingRefs.paddingBlock;
     const negativePaddingInline = `calc(0px - ${positivePaddingInline})`;
-    const negativePaddingBlock  = `calc(0px - ${positivePaddingBlock})`;
+    const negativePaddingBlock  = `calc(0px - ${positivePaddingBlock })`;
     
     
     
