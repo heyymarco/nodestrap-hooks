@@ -72,7 +72,9 @@ import {
     usesBackg,
     usesBorder,
     usesBorderStroke,
+    expandBorderStroke,
     usesBorderRadius,
+    expandBorderRadius,
     usesPadding,
     
     
@@ -472,15 +474,11 @@ export const usesListLayout = () => {
     // dependencies:
     
     // colors:
-    const [border      , borderRefs      ] = usesBorder();
+    const [border                           ] = usesBorder();
     
     // borders:
-    const [borderStroke, borderStrokeRefs] = usesBorderStroke();
-    const [
-        borderRadius,
-        borderRadiusRefs,
-        borderRadiusDecls,
-    ] = usesBorderRadius();
+    const [borderStroke                     ] = usesBorderStroke();
+    const [borderRadius, , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -517,17 +515,8 @@ export const usesListLayout = () => {
             ...children(['&', wrapperElm], composition([
                 layout({
                     // borders:
-                    border                 : borderStrokeRefs.border,                 // all border properties
-                    
-                    borderColor            : borderRefs.borderCol,                    // overwrite color prop
-                    
-                    borderWidth            : borderStrokeRefs.borderWidth,            // overwrite width prop
-                    
-                    borderRadius           : undefined as unknown as null,            // delete short prop
-                    borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
-                    borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
-                    borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
-                    borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
+                    ...expandBorderStroke(), // expand borderStroke css vars
+                    ...expandBorderRadius(), // expand borderRadius css vars
                 }),
             ])),
             
