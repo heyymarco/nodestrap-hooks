@@ -47,6 +47,7 @@ import {
     OrientationVariant,
     
     usesBorderRadius,
+    usesPadding,
     
     
     
@@ -139,7 +140,10 @@ export const usesButtonIconLayout = () => {
     // dependencies:
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
+    const [, borderRadiusRefs, borderRadiusDecls] = usesBorderRadius();
+    
+    // spacings:
+    const [, paddingRefs     , paddingDecls     ] = usesPadding();
     
     
     
@@ -154,11 +158,25 @@ export const usesButtonIconLayout = () => {
         }),
         vars({
             // borders:
-            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+            // cssProps.borderRadius** => ref.borderRadius**
             [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius,
             [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius,
             [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius,
             [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius,
+            borderRadius           : undefined as unknown as null,            // delete short prop
+            borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
+            borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
+            borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
+            borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
+        }),
+        vars({
+            // spacings:
+            // cssProps.padding** => ref.padding**
+            [paddingDecls.paddingInline] : cssProps.paddingInline,
+            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
+            padding                      : undefined as unknown as null, // delete short prop
+            paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
+            paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
         }),
         vars({
             //#region Icon
@@ -236,10 +254,10 @@ export const useButtonIconSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region typos
-        fontSize          : typos.fontSize,
+        fontSize          : typos.fontSizeNm,
         fontSizeXs        : typos.fontSizeSm,
-        fontSizeSm        : typos.fontSizeSm,
-        fontSizeLg        : typos.fontSizeLg,
+        fontSizeSm        : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
+        fontSizeLg        : typos.fontSizeMd,
         fontSizeXl        : typos.fontSizeLg,
         //#endregion typos
         
