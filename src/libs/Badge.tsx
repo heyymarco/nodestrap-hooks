@@ -14,6 +14,7 @@ import {
     
     // layouts:
     layout,
+    vars,
     children,
     
     
@@ -43,6 +44,7 @@ import {
     usesSizeVariant,
     notNude,
     usesBorderRadius,
+    usesPadding,
 }                           from './Basic'
 import {
     // general types:
@@ -92,6 +94,13 @@ export const useBadgeVariant = (props: BadgeVariant) => {
 
 // styles:
 export const usesBadgeLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, paddingRefs, paddingDecls] = usesPadding();
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -123,6 +132,17 @@ export const usesBadgeLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            padding       : undefined as unknown as null,
+            paddingInline : undefined as unknown as null,
+            paddingBlock  : undefined as unknown as null,
+        }),
+        vars({
+            // spacings:
+            [paddingDecls.paddingInline] : cssProps.paddingInline,
+            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
+            padding                      : undefined as unknown as null, // delete short prop
+            paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
+            paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
         }),
         variants([
             isEmpty([
@@ -159,7 +179,7 @@ export const usesBadgeLayout = () => {
                     
                     
                     // spacings:
-                    padding : cssProps.paddingBlock, // set paddingInline = paddingBlock
+                    [paddingDecls.paddingInline] : paddingRefs.paddingBlock, // set paddingInline = paddingBlock
                 }),
             ]),
         ]),
@@ -177,7 +197,10 @@ export const usesBadgeVariants = () => {
     ]));
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
+    const [, , borderRadiusDecls]       = usesBorderRadius();
+    
+    // spacings:
+    const [, paddingRefs, paddingDecls] = usesPadding();
     
     
     
@@ -207,7 +230,7 @@ export const usesBadgeVariants = () => {
                     notNude([
                         layout({
                             // spacings:
-                            padding : cssProps.paddingBlock, // set paddingInline = paddingBlock
+                            [paddingDecls.paddingInline] : paddingRefs.paddingBlock, // set paddingInline = paddingBlock
                         }),
                     ]),
                 ]),
