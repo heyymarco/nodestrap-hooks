@@ -46,7 +46,9 @@ import {
     useOrientationVariant,
     usesBorder,
     usesBorderStroke,
+    expandBorderStroke,
     usesBorderRadius,
+    expandBorderRadius,
     usesAnim,
 }                           from './Basic'
 import {
@@ -157,14 +159,14 @@ export const usesCardLayout = () => {
     // dependencies:
     
     // colors:
-    const [border      , borderRefs      ] = usesBorder();
+    const [border        ] = usesBorder();
     
     // animations:
     const [anim, animRefs] = usesAnim();
     
     // borders:
-    const [borderStroke, borderStrokeRefs] = usesBorderStroke();
-    const [borderRadius, borderRadiusRefs] = usesBorderRadius();
+    const [borderStroke  ] = usesBorderStroke();
+    const [borderRadius  ] = usesBorderRadius();
     
     
     
@@ -200,17 +202,8 @@ export const usesCardLayout = () => {
             
             
             // borders:
-            border                 : borderStrokeRefs.border,                 // all border properties
-            
-            borderColor            : borderRefs.borderCol,                    // overwrite color prop
-            
-            borderWidth            : borderStrokeRefs.borderWidth,            // overwrite width prop
-            
-            borderRadius           : undefined as unknown as null,            // delete short prop
-            borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
-            borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
-            borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
-            borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
+            ...expandBorderStroke(), // expand borderStroke css vars
+            ...expandBorderRadius(), // expand borderRadius css vars
             
             
             
