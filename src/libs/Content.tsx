@@ -665,7 +665,7 @@ export const usesContentLayout = () => {
     // dependencies:
     
     // spacings:
-    const [, , paddingDecls] = usesPadding();
+    const [, paddingRefs, paddingDecls] = usesPadding();
     
     
     
@@ -683,9 +683,11 @@ export const usesContentLayout = () => {
         }),
         vars({
             // spacings:
-            padding                      : undefined as unknown as null,
             [paddingDecls.paddingInline] : cssProps.paddingInline,
             [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
+            padding                      : undefined as unknown as null, // delete short prop
+            paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
+            paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
         }),
     ]);
 };
