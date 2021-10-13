@@ -148,9 +148,9 @@ export const usesMediaFill = () => {
     // dependencies:
     
     // spacings:
-    const [, paddingRefs]       = usesPadding();
-    const negativePaddingInline = `calc(0px - ${paddingRefs.paddingInline})`;
-    const negativePaddingBlock  = `calc(0px - ${paddingRefs.paddingBlock})`;
+    const [, paddingRefs]                = usesPadding();
+    const negativeContainerPaddingInline = `calc(0px - ${paddingRefs.paddingInline})`;
+    const negativeContainerPaddingBlock  = `calc(0px - ${paddingRefs.paddingBlock})`;
     
     
     
@@ -172,8 +172,8 @@ export const usesMediaFill = () => {
             
             
             // spacings:
-            marginInline   : negativePaddingInline,    // cancel out parent's padding with negative margin
-            marginBlockEnd : paddingRefs.paddingBlock, // add a spacing to the next sibling
+            marginInline   : negativeContainerPaddingInline, // cancel out parent's padding with negative margin
+            marginBlockEnd : paddingRefs.paddingBlock,       // add a spacing to the next sibling
             
             
             
@@ -182,7 +182,7 @@ export const usesMediaFill = () => {
             ...adjacentSiblings(mediaElm, composition([
                 layout({
                     // spacings:
-                    marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
+                    marginBlockStart : negativeContainerPaddingBlock, // cancel out prev sibling's spacing with negative margin
                 }),
             ])),
         }),
@@ -190,13 +190,13 @@ export const usesMediaFill = () => {
             isFirstChild(composition([
                 layout({
                     // spacings:
-                    marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
+                    marginBlockStart : negativeContainerPaddingBlock, // cancel out parent's padding with negative margin
                 }),
             ])),
             isLastChild(composition([
                 layout({
                     // spacings:
-                    marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
+                    marginBlockEnd   : negativeContainerPaddingBlock, // cancel out parent's padding with negative margin
                 }),
             ])),
         ]),
