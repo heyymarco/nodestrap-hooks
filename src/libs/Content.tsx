@@ -147,7 +147,7 @@ export const usesContainer = () => {
 export const usesMediaFill = () => {
     // dependencies:
     
-    // layouts:
+    // spacings:
     const [, paddingRefs]       = usesPadding();
     const positivePaddingInline = paddingRefs.paddingInline;
     const positivePaddingBlock  = paddingRefs.paddingBlock;
