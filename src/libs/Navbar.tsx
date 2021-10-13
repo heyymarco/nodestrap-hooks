@@ -72,6 +72,7 @@ import {
     mildOf,
     usesBorderStroke,
     usesBorderRadius,
+    usesPadding,
     usesAnim,
     
     
@@ -376,10 +377,20 @@ const wrapperElm = '.wrapper';
 const logoElm    = '.logo';
 const togglerElm = '.toggler';
 const menusElm   = '.menus';
-const menuElm    = '.menus>*';
 
 export const usesWrapperLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [paddings, paddingRefs] = usesPadding();
+    
+    
+    
     return composition([
+        imports([
+            // spacings:
+            paddings(),
+        ]),
         layout({
             // layouts:
             display        : 'flex',   // use block flexbox, so it takes the entire parent's width
@@ -391,8 +402,9 @@ export const usesWrapperLayout = () => {
             
             
             // spacings:
-            paddingInline  : bcssProps.paddingInline,
-            paddingBlock   : bcssProps.paddingBlock,
+            padding        : undefined as unknown as null, // delete short prop
+            paddingInline  : paddingRefs.paddingInline,    // overwrite padding prop
+            paddingBlock   : paddingRefs.paddingBlock,     // overwrite padding prop
         }),
     ]);
 };
@@ -405,6 +417,13 @@ export const usesItemLayout = () => {
     ]);
 };
 export const usesSecondaryLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, , paddingDecls] = usesPadding();
+    
+    
+    
     return composition([
         layout({
             // layouts:
@@ -414,7 +433,8 @@ export const usesSecondaryLayout = () => {
             
             
             // spacings:
-            paddingInline  : 0,
+            [paddingDecls.paddingInline] : 0, // discard padding
+            [paddingDecls.paddingBlock]  : 0, // discard padding
         }),
     ]);
 };
@@ -528,6 +548,7 @@ export const usesMenuLayout = () => {
         imports([
             // layouts:
             usesActionControlLayout(),
+            usesWrapperLayout(),
             
             // colors:
             usesThemeDefault(),
@@ -625,7 +646,7 @@ export const usesNavbarLayout = () => {
             
             
             // children:
-            ...children([wrapperElm, menuElm], composition([ // wrapper elements
+            ...children(wrapperElm, composition([ // wrapper elements
                 imports([
                     usesWrapperLayout(),
                 ]),
