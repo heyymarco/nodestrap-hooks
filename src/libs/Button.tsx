@@ -56,6 +56,7 @@ import {
     usesForeg,
     usesBorderStroke,
     usesBorderRadius,
+    usesPadding,
 }                           from './Basic'
 import {
     // hooks:
@@ -207,7 +208,10 @@ export const usesButtonVariants = () => {
     const [,             , foregDecls] = usesForeg();
     
     // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
+    const [, , borderRadiusDecls]      = usesBorderRadius();
+    
+    // spacings:
+    const [, , paddingDecls]           = usesPadding();
     
     
     
@@ -256,7 +260,9 @@ export const usesButtonVariants = () => {
                     
                     
                     // spacings:
-                    padding        : spacers.xs,
+                 // padding        : spacers.xs, // do not modify padding directly, but use our custom vars so the children can calculate their negative margin (if any):
+                    [paddingDecls.paddingInline] : spacers.xs,
+                    [paddingDecls.paddingBlock]  : spacers.xs,
                     
                     
                     
