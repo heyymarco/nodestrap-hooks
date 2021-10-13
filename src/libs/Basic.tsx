@@ -929,6 +929,29 @@ export const usesBorderStroke = () => {
         borderStrokeDecls,
     ] as const;
 };
+export const expandBorderStroke = (cssProps?: { border: Cust.Ref, borderWidth: Cust.Ref }) => {
+    // dependencies:
+    
+    // colors:
+    const [, borderRefs                         ] = usesBorder();
+    
+    // borders:
+    const [, borderStrokeRefs, borderStrokeDecls] = usesBorderStroke();
+    
+    
+    
+    return vars({
+        // borders:
+        // cssProps.borderStroke** => ref.borderStroke**
+        ...(cssProps ? {
+            [borderStrokeDecls.border]      : cssProps.border,
+            [borderStrokeDecls.borderWidth] : cssProps.borderWidth,
+        } : null),
+        border                 : borderStrokeRefs.border,      // all border properties
+        borderColor            : borderRefs.borderCol,         // overwrite color prop
+        borderWidth            : borderStrokeRefs.borderWidth, // overwrite width prop
+    });
+};
 
 
 export interface BorderRadiusVars {
@@ -957,6 +980,30 @@ export const usesBorderRadius = () => {
         borderRadiusDecls,
     ] as const;
 };
+export const expandBorderRadius = (cssProps?: { borderRadius: Cust.Ref }) => {
+    // dependencies:
+    
+    // borders:
+    const [, borderRadiusRefs, borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
+    return vars({
+        // borders:
+        // cssProps.borderRadius** => ref.borderRadius**
+        ...(cssProps ? {
+            [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius,
+            [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius,
+        } : null),
+        borderRadius           : undefined as unknown as null,            // delete short prop
+        borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
+        borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
+        borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
+        borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
+    });
+};
 //#endregion border
 
 
@@ -984,6 +1031,26 @@ export const usesPadding = () => {
         paddingRefs,
         paddingDecls,
     ] as const;
+};
+export const expandPadding = (cssProps?: { paddingInline: Cust.Ref, paddingBlock: Cust.Ref }) => {
+    // dependencies:
+    
+    // borders:
+    const [, paddingRefs, paddingDecls] = usesPadding();
+    
+    
+    
+    return vars({
+        // spacings:
+        // cssProps.padding** => ref.padding**
+        ...(cssProps ? {
+            [paddingDecls.paddingInline] : cssProps.paddingInline,
+            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
+        } : null),
+        padding                      : undefined as unknown as null, // delete short prop
+        paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
+        paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
+    });
 };
 //#endregion paddings
 
@@ -1221,19 +1288,12 @@ export const usesBasicLayout = () => {
     // dependencies:
     
     // colors:
-    const [foreg       , foregRefs       ] = usesForeg();
-    const [backg       , backgRefs       ] = usesBackg();
-    const [border      , borderRefs      ] = usesBorder();
-    
-    // borders:
-    const [borderStroke, borderStrokeRefs] = usesBorderStroke();
-    const [borderRadius, borderRadiusRefs] = usesBorderRadius();
-    
-    // spacings:
-    const [paddings    , paddingRefs     ] = usesPadding();
+    const [foreg , foregRefs] = usesForeg();
+    const [backg , backgRefs] = usesBackg();
+    const [border           ] = usesBorder();
     
     // animations:
-    const [anim        , animRefs        ] = usesAnim();
+    const [anim  , animRefs ] = usesAnim();
     
     
     
@@ -1246,19 +1306,12 @@ export const usesBasicLayout = () => {
             backg(),
             border(),
             
-            // borders:
-            borderStroke(),
-            borderRadius(),
-
-            // spacings:
-            paddings(),
-            
             // animations:
             anim(),
         ]),
         layout({
             // layouts:
-            display                : 'block',
+            display   : 'block',
             
             
             
@@ -1268,42 +1321,31 @@ export const usesBasicLayout = () => {
             
             
             // foregrounds:
-            foreg                  : foregRefs.foreg,
+            foreg     : foregRefs.foreg,
             
             
             
             // backgrounds:
-            backg                  : backgRefs.backg,
+            backg     : backgRefs.backg,
             
             
             
             // borders:
-            border                 : borderStrokeRefs.border,                 // all border properties
-            
-            borderColor            : borderRefs.borderCol,                    // overwrite color prop
-            
-            borderWidth            : borderStrokeRefs.borderWidth,            // overwrite width prop
-            
-            borderRadius           : undefined as unknown as null,            // delete short prop
-            borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
-            borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
-            borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
-            borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
+            ...expandBorderStroke(cssProps), // expand borderStroke css vars
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
             
             
             
             // spacings:
-            padding                : undefined as unknown as null, // delete short prop
-            paddingInline          : paddingRefs.paddingInline,    // overwrite padding prop
-            paddingBlock           : paddingRefs.paddingBlock,     // overwrite padding prop
+            ...expandPadding(cssProps), // expand padding css vars
             
             
             
             // animations:
-            boxShadow              : animRefs.boxShadow,
-            filter                 : animRefs.filter,
-            transf                 : animRefs.transf,
-            anim                   : animRefs.anim,
+            boxShadow : animRefs.boxShadow,
+            filter    : animRefs.filter,
+            transf    : animRefs.transf,
+            anim      : animRefs.anim,
         }),
     ]);
 };
@@ -1413,7 +1455,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         backgGrad            : [['linear-gradient(180deg, rgba(255,255,255, 0.2), rgba(0,0,0, 0.2))', 'border-box']],
         
         border               : [[borders.style, borders.defaultWidth, borders.color]],
-        borderStyle          : borders.style,
         borderWidth          : borders.defaultWidth,
         borderColor          : borders.color,
         
