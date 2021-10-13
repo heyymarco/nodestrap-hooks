@@ -55,6 +55,7 @@ import {
     usesMildVariant,
     usesForeg,
     usesBorderStroke,
+    usesBorderRadius,
 }                           from './Basic'
 import {
     // hooks:
@@ -205,6 +206,9 @@ export const usesButtonVariants = () => {
     const [, mildRefs                ] = usesMildVariant();
     const [,             , foregDecls] = usesForeg();
     
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
     
     
     return composition([
@@ -241,7 +245,13 @@ export const usesButtonVariants = () => {
                 ]),
                 layout({
                     // borders:
-                    borderRadius   : borderRadiuses.sm,
+                 // borderRadius   : borderRadiuses.sm, // small rounded corner // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // small rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.sm,
+                    [borderRadiusDecls.borderStartEndRadius]   : borderRadiuses.sm,
+                    // small rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : borderRadiuses.sm,
+                    [borderRadiusDecls.borderEndEndRadius]     : borderRadiuses.sm,
                     
                     
                     
