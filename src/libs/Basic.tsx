@@ -216,6 +216,9 @@ export const usesNudeVariant = () => {
     const [, , borderStrokeDecls] = usesBorderStroke();
  // const [, , borderRadiusDecls] = usesBorderRadius();
     
+    // spacings:
+    const [, , paddingDecls     ] = usesPadding();
+    
     
     
     return composition([
@@ -234,7 +237,8 @@ export const usesNudeVariant = () => {
                     
                     
                     // spacings:
-                    padding      : 0,      // discard padding
+                    [paddingDecls.paddingInline] : 0, // discard padding
+                    [paddingDecls.paddingBlock]  : 0, // discard padding
                 }),
             ]),
         ]),
@@ -1289,8 +1293,9 @@ export const usesBasicLayout = () => {
             
             
             // spacings:
-            paddingInline          : paddingRefs.paddingInline,
-            paddingBlock           : paddingRefs.paddingBlock,
+            padding                : null,                      // delete short prop
+            paddingInline          : paddingRefs.paddingInline, // overwrite padding prop
+            paddingBlock           : paddingRefs.paddingBlock,  // overwrite padding prop
             
             
             
