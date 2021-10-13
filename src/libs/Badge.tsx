@@ -132,12 +132,10 @@ export const usesBadgeLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
-            padding       : undefined as unknown as null,
-            paddingInline : undefined as unknown as null,
-            paddingBlock  : undefined as unknown as null,
         }),
         vars({
             // spacings:
+            // cssProps.padding** => ref.padding**
             [paddingDecls.paddingInline] : cssProps.paddingInline,
             [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
             padding                      : undefined as unknown as null, // delete short prop
