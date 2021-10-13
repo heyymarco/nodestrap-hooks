@@ -148,7 +148,7 @@ export const usesMediaFill = () => {
     // dependencies:
     
     // layouts:
-    const [, paddingRefs] = usesPadding();
+    const [, paddingRefs]       = usesPadding();
     const positivePaddingInline = paddingRefs.paddingInline;
     const positivePaddingBlock  = paddingRefs.paddingBlock;
     const negativePaddingInline = `calc(0px - ${positivePaddingInline})`;
