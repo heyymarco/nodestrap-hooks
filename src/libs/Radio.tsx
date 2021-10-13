@@ -46,6 +46,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    usesBorderRadius,
 }                           from './Basic'
 import {
     // hooks:
@@ -80,6 +81,13 @@ import {
 
 // styles:
 export const usesRadioLayout = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -90,7 +98,13 @@ export const usesRadioLayout = () => {
             ...children(inputElm, composition([
                 layout({
                     // borders:
-                    borderRadius : '0.5em', // make circle corners
+                 // borderRadius : '0.5em', // make circle corners // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // circle corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : '0.5em',
+                    [borderRadiusDecls.borderStartEndRadius]   : '0.5em',
+                    // circle corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : '0.5em',
+                    [borderRadiusDecls.borderEndEndRadius]     : '0.5em',
                     
                     
                     
