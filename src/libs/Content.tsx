@@ -60,6 +60,7 @@ import {
     usesBorderStroke,
     usesBorderRadius,
     usesPadding,
+    expandPadding,
     
     
     
@@ -662,13 +663,6 @@ export const usesContentMedia = () => {
 
 
 export const usesContentLayout = () => {
-    // dependencies:
-    
-    // spacings:
-    const [, paddingRefs, paddingDecls] = usesPadding();
-    
-    
-    
     return composition([
         imports([
             // layouts:
@@ -680,15 +674,11 @@ export const usesContentLayout = () => {
         layout({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-        vars({
+            
+            
+            
             // spacings:
-            // cssProps.padding** => ref.padding**
-            [paddingDecls.paddingInline] : cssProps.paddingInline,
-            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
-            padding                      : undefined as unknown as null, // delete short prop
-            paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
-            paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
+            ...expandPadding(cssProps), // expand padding css vars
         }),
     ]);
 };
