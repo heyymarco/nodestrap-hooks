@@ -66,6 +66,7 @@ import {
     usesBorder,
     usesBorderStroke,
     usesBorderRadius,
+    usesPadding,
     convertRefToDecl,
     usesAnim,
     isRef,
@@ -324,6 +325,9 @@ export const usesCheckLayout = () => {
     const [, , borderStrokeDecls   ] = usesBorderStroke();
     const [, , borderRadiusDecls   ] = usesBorderRadius();
     
+    // spacings:
+    const [, , paddingDecls        ] = usesPadding();
+    
     // animations:
     const [checkAnim, checkAnimRefs] = usesCheckAnim();
     
@@ -384,7 +388,8 @@ export const usesCheckLayout = () => {
                     
                     
                     // spacings:
-                    padding       : 0, // discard padding
+                    [paddingDecls.paddingInline] : 0, // discard padding
+                    [paddingDecls.paddingBlock]  : 0, // discard padding
                     
                     
                     
@@ -500,7 +505,8 @@ export const usesCheckLayout = () => {
                     
                     
                     // spacings:
-                    padding        : 0, // discard padding
+                    [paddingDecls.paddingInline] : 0, // discard padding
+                    [paddingDecls.paddingBlock]  : 0, // discard padding
                     
                     
                     
