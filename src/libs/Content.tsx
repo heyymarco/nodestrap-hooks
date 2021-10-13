@@ -677,14 +677,15 @@ export const usesContentLayout = () => {
             // borders:
             usesBorderAsContainer({ itemsSelector: mediaElm }), // make a nicely rounded corners
         ]),
-        vars({
-            // spacings:
-            [paddingDecls.paddingInline] : cssProps.paddingInline, // default => uses config's padding inline
-            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,  // default => uses config's padding block
-        }),
         layout({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+        vars({
+            // spacings:
+            padding                      : undefined as unknown as null,
+            [paddingDecls.paddingInline] : cssProps.paddingInline,
+            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
         }),
     ]);
 };
