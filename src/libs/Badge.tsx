@@ -42,6 +42,7 @@ import {
     // hooks:
     usesSizeVariant,
     notNude,
+    usesBorderRadius,
 }                           from './Basic'
 import {
     // general types:
@@ -175,6 +176,9 @@ export const usesBadgeVariants = () => {
         }),
     ]));
     
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
     
     
     return composition([
@@ -186,15 +190,16 @@ export const usesBadgeVariants = () => {
             sizes(),
         ]),
         variants([
-            rule('.pill', [
+            rule(['.pill', '.circle'], [
                 layout({
                     // borders:
-                    borderRadius : borderRadiuses.pill, // big rounded corner
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'pill')), // apply general cssProps starting with pill***
+                 // borderRadius : borderRadiuses.pill, // big rounded corner // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // big rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.pill,
+                    [borderRadiusDecls.borderStartEndRadius]   : borderRadiuses.pill,
+                    // big rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : borderRadiuses.pill,
+                    [borderRadiusDecls.borderEndEndRadius]     : borderRadiuses.pill,
                 }),
             ]),
             rule(['.square', '.circle'], [
@@ -207,6 +212,12 @@ export const usesBadgeVariants = () => {
                     ]),
                 ]),
             ]),
+            rule('.pill', [
+                layout({
+                    // customize:
+                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'pill')), // apply general cssProps starting with pill***
+                }),
+            ]),
             rule('.square', [
                 layout({
                     // customize:
@@ -215,11 +226,6 @@ export const usesBadgeVariants = () => {
             ]),
             rule('.circle', [
                 layout({
-                    // borders:
-                    borderRadius : borderRadiuses.pill, // big rounded corner
-                    
-                    
-                    
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'circle')), // apply general cssProps starting with circle***
                 }),
