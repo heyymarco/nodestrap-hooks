@@ -147,10 +147,12 @@ export const usesContainer = () => {
 export const usesMediaFill = () => {
     // dependencies:
     
-    // spacings:
-    const [, paddingRefs]                = usesPadding();
-    const negativeContainerPaddingInline = `calc(0px - ${paddingRefs.paddingInline})`;
-    const negativeContainerPaddingBlock  = `calc(0px - ${paddingRefs.paddingBlock})`;
+    // layouts:
+    const [, paddingRefs] = usesPadding();
+    const positivePaddingInline = paddingRefs.paddingInline;
+    const positivePaddingBlock  = paddingRefs.paddingBlock;
+    const negativePaddingInline = `calc(0px - ${positivePaddingInline})`;
+    const negativePaddingBlock  = `calc(0px - ${positivePaddingBlock})`;
     
     
     
@@ -166,14 +168,14 @@ export const usesMediaFill = () => {
             boxSizing      : 'border-box', // the final size is including borders & paddings
             inlineSize     : 'fill-available',
             fallbacks      : {
-                inlineSize : `calc(100% + (${paddingRefs.paddingInline} * 2))`,
+                inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
             },
             
             
             
             // spacings:
-            marginInline   : negativeContainerPaddingInline, // cancel out parent's padding with negative margin
-            marginBlockEnd : paddingRefs.paddingBlock,       // add a spacing to the next sibling
+            marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
+            marginBlockEnd : positivePaddingBlock,  // add a spacing to the next sibling
             
             
             
@@ -182,7 +184,7 @@ export const usesMediaFill = () => {
             ...adjacentSiblings(mediaElm, composition([
                 layout({
                     // spacings:
-                    marginBlockStart : negativeContainerPaddingBlock, // cancel out prev sibling's spacing with negative margin
+                    marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
                 }),
             ])),
         }),
@@ -190,13 +192,13 @@ export const usesMediaFill = () => {
             isFirstChild(composition([
                 layout({
                     // spacings:
-                    marginBlockStart : negativeContainerPaddingBlock, // cancel out parent's padding with negative margin
+                    marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
                 }),
             ])),
             isLastChild(composition([
                 layout({
                     // spacings:
-                    marginBlockEnd   : negativeContainerPaddingBlock, // cancel out parent's padding with negative margin
+                    marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
                 }),
             ])),
         ]),
