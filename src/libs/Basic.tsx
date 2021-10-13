@@ -1292,6 +1292,11 @@ export const usesBasicLayout = () => {
     const [backg , backgRefs] = usesBackg();
     const [border           ] = usesBorder();
     
+    // borders:
+    const [borderStroke     ] = usesBorderStroke();
+    const [borderRadius     ] = usesBorderRadius();
+    const [padding          ] = usesPadding();
+    
     // animations:
     const [anim  , animRefs ] = usesAnim();
     
@@ -1305,6 +1310,13 @@ export const usesBasicLayout = () => {
             foreg(),
             backg(),
             border(),
+            
+            // borders:
+            borderStroke(),
+            borderRadius(),
+            
+            // spacings:
+            padding(),
             
             // animations:
             anim(),
