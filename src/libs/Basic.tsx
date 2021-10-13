@@ -947,9 +947,9 @@ export const expandBorderStroke = (cssProps?: { border: Cust.Ref, borderWidth: C
             [borderStrokeDecls.border]      : cssProps.border,
             [borderStrokeDecls.borderWidth] : cssProps.borderWidth,
         } : null),
-        border                 : borderStrokeRefs.border,      // all border properties
-        borderColor            : borderRefs.borderCol,         // overwrite color prop
-        borderWidth            : borderStrokeRefs.borderWidth, // overwrite width prop
+        border      : borderStrokeRefs.border,      // all border properties
+        borderColor : borderRefs.borderCol,         // overwrite color prop
+        borderWidth : borderStrokeRefs.borderWidth, // overwrite width prop
     });
 };
 
@@ -1035,7 +1035,7 @@ export const usesPadding = () => {
 export const expandPadding = (cssProps?: { paddingInline: Cust.Ref, paddingBlock: Cust.Ref }) => {
     // dependencies:
     
-    // borders:
+    // spacings:
     const [, paddingRefs, paddingDecls] = usesPadding();
     
     
@@ -1047,9 +1047,9 @@ export const expandPadding = (cssProps?: { paddingInline: Cust.Ref, paddingBlock
             [paddingDecls.paddingInline] : cssProps.paddingInline,
             [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
         } : null),
-        padding                      : undefined as unknown as null, // delete short prop
-        paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
-        paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
+        padding       : undefined as unknown as null, // delete short prop
+        paddingInline : paddingRefs.paddingInline,    // overwrite padding prop
+        paddingBlock  : paddingRefs.paddingBlock,     // overwrite padding prop
     });
 };
 //#endregion paddings
