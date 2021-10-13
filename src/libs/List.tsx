@@ -504,7 +504,7 @@ export const usesListLayout = () => {
                     
                     borderWidth            : borderStrokeRefs.borderWidth,            // overwrite width prop
                     
-                    borderRadius           : null,                                    // delete short prop
+                    borderRadius           : undefined as unknown as null,            // delete short prop
                     borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
                     borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
                     borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
