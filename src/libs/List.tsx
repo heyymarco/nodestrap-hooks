@@ -756,8 +756,11 @@ export const usesListVariants = () => {
                                                     // hide parent border right:
                                                     borderInlineEndColor   : backgRefs.backgCol,
                                                     // add rounded corners on left:
-                                                    borderStartStartRadius : cssProps.tabBorderRadius,
-                                                    borderEndStartRadius   : cssProps.tabBorderRadius,
+                                                 // borderStartStartRadius : cssProps.tabBorderRadius,
+                                                 // borderEndStartRadius   : cssProps.tabBorderRadius,
+                                                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                                                    [borderRadiusDecls.borderStartStartRadius] : cssProps.tabBorderRadius,
+                                                    [borderRadiusDecls.borderEndStartRadius]   : cssProps.tabBorderRadius,
                                                 }),
                                             ]),
                                             rule('.inline&', [ // inline
@@ -766,8 +769,11 @@ export const usesListVariants = () => {
                                                     // hide parent border bottom:
                                                     borderBlockEndColor    : backgRefs.backgCol,
                                                     // add rounded corners on top:
-                                                    borderStartStartRadius : cssProps.tabBorderRadius,
-                                                    borderStartEndRadius   : cssProps.tabBorderRadius,
+                                                 // borderStartStartRadius : cssProps.tabBorderRadius,
+                                                 // borderStartEndRadius   : cssProps.tabBorderRadius,
+                                                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                                                    [borderRadiusDecls.borderStartStartRadius] : cssProps.tabBorderRadius,
+                                                    [borderRadiusDecls.borderStartEndRadius]   : cssProps.tabBorderRadius,
                                                 }),
                                             ]),
                                         ]),
@@ -913,7 +919,15 @@ export const usesListVariants = () => {
                                 layout({
                                     // borders:
                                     borderWidth  : borderStrokeRefs.borderWidth, 
-                                    borderRadius : borderRadiuses.pill, // big rounded corner
+                                    
+                                 // borderRadius : borderRadiuses.pill, // big rounded corner // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                                    // big rounded corners on top:
+                                    [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.pill,
+                                    [borderRadiusDecls.borderStartEndRadius]   : borderRadiuses.pill,
+                                    // big rounded corners on bottom:
+                                    [borderRadiusDecls.borderEndStartRadius]   : borderRadiuses.pill,
+                                    [borderRadiusDecls.borderEndEndRadius]     : borderRadiuses.pill,
+                                    
                                     overflow     : 'hidden',            // clip the children at the rounded corners
                                     
                                     
