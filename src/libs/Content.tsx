@@ -683,6 +683,7 @@ export const usesContentLayout = () => {
         }),
         vars({
             // spacings:
+            // cssProps.padding** => ref.padding**
             [paddingDecls.paddingInline] : cssProps.paddingInline,
             [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
             padding                      : undefined as unknown as null, // delete short prop
