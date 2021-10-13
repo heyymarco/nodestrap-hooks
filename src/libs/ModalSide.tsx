@@ -41,6 +41,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    usesBorderRadius,
     usesExcitedState,
     useExcitedState,
     TogglerExcitedProps,
@@ -161,6 +162,13 @@ export const usesModalSideElementLayout = () => {
     ]);
 };
 export const usesModalSideElementVariants = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         variants([
             rule('.inlineStart>&', [
@@ -169,8 +177,11 @@ export const usesModalSideElementVariants = () => {
                     ...children(['&', '*'], composition([ // Card
                         layout({
                             // borders:
-                            borderStartStartRadius : 0, // remove border radius on left_top
-                            borderEndStartRadius   : 0, // remove border radius on left_bottom
+                         // borderStartStartRadius : 0, // remove border radius on left_top
+                         // borderEndStartRadius   : 0, // remove border radius on left_bottom
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                            [borderRadiusDecls.borderStartStartRadius] : 0, // remove border radius on left_top
+                            [borderRadiusDecls.borderEndStartRadius]   : 0, // remove border radius on left_bottom
                         }),
                     ])),
                 }),
@@ -181,8 +192,11 @@ export const usesModalSideElementVariants = () => {
                     ...children(['&', '*'], composition([ // Card
                         layout({
                             // borders:
-                            borderStartEndRadius : 0, // remove border radius on right_top
-                            borderEndEndRadius   : 0, // remove border radius on right_bottom
+                         // borderStartEndRadius : 0, // remove border radius on right_top
+                         // borderEndEndRadius   : 0, // remove border radius on right_bottom
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                            [borderRadiusDecls.borderStartEndRadius] : 0, // remove border radius on right_top
+                            [borderRadiusDecls.borderEndEndRadius]   : 0, // remove border radius on right_bottom
                         }),
                     ])),
                 }),
@@ -193,8 +207,11 @@ export const usesModalSideElementVariants = () => {
                     ...children(['&', '*'], composition([ // Card
                         layout({
                             // borders:
-                            borderStartStartRadius : 0, // remove border radius on top_left
-                            borderStartEndRadius   : 0, // remove border radius on top_right
+                         // borderStartStartRadius : 0, // remove border radius on top_left
+                         // borderStartEndRadius   : 0, // remove border radius on top_right
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                            [borderRadiusDecls.borderStartStartRadius] : 0, // remove border radius on top_left
+                            [borderRadiusDecls.borderStartEndRadius]   : 0, // remove border radius on top_right
                         }),
                     ])),
                 }),
@@ -205,8 +222,11 @@ export const usesModalSideElementVariants = () => {
                     ...children(['&', '*'], composition([ // Card
                         layout({
                             // borders:
-                            borderEndStartRadius : 0, // remove border radius on bottom_left
-                            borderEndEndRadius   : 0, // remove border radius on bottom_right
+                         // borderEndStartRadius : 0, // remove border radius on bottom_left
+                         // borderEndEndRadius   : 0, // remove border radius on bottom_right
+                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                            [borderRadiusDecls.borderEndStartRadius] : 0, // remove border radius on bottom_left
+                            [borderRadiusDecls.borderEndEndRadius]   : 0, // remove border radius on bottom_right
                         }),
                     ])),
                 }),
