@@ -35,11 +35,7 @@ import {
     // hooks:
     usesSizeVariant,
     usesGradientVariant,
-    
-    
-    
-    // configs:
-    cssProps as bcssProps,
+    usesPadding,
 }                           from './Basic'
 import {
     // styles:
@@ -67,6 +63,13 @@ import {
 // styles:
 export const inputElm = ':first-child';
 export const usesInputLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, paddingRefs] = usesPadding();
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -106,19 +109,19 @@ export const usesInputLayout = () => {
                     boxSizing      : 'border-box', // the final size is including borders & paddings
                     inlineSize     : 'fill-available',
                     fallbacks      : {
-                        inlineSize : [['calc(100% + (', cssProps.paddingInline, ' * 2))']],
+                        inlineSize : `calc(100% + (${paddingRefs.paddingInline} * 2))`,
                     },
                     
                     
                     
                     // spacings:
                     // cancel-out parent's padding with negative margin:
-                    marginInline   : [['calc(0px -', cssProps.paddingInline, ')']],
-                    marginBlock    : [['calc(0px -', cssProps.paddingBlock,  ')']],
+                    marginInline   : `calc(0px - ${paddingRefs.paddingInline})`,
+                    marginBlock    : `calc(0px - ${paddingRefs.paddingBlock })`,
                     
                     // copy parent's paddings:
-                    paddingInline  : cssProps.paddingInline,
-                    paddingBlock   : cssProps.paddingBlock,
+                    paddingInline  : paddingRefs.paddingInline,
+                    paddingBlock   : paddingRefs.paddingBlock,
                 }),
             ])),
             
@@ -199,13 +202,6 @@ export const useInputSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        //#region spacings
-        paddingInline : bcssProps.paddingInline,
-        paddingBlock  : bcssProps.paddingBlock,
-        //#endregion spacings
-        
-        
-        
         backgGrad     : [['linear-gradient(180deg, rgba(0,0,0, 0.2), rgba(255,255,255, 0.2))', 'border-box']],
     };
 }, { prefix: 'inp' });
