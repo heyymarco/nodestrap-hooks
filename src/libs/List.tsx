@@ -73,6 +73,7 @@ import {
     usesBorder,
     usesBorderStroke,
     usesBorderRadius,
+    usesPadding,
     
     
     
@@ -334,16 +335,34 @@ export const useListItemSheet = createUseSheet(() => [
 
 
 export const usesListSeparatorItemLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, , paddingDecls] = usesPadding();
+    
+    
+    
     return composition([
         layout({
             // spacings:
-            padding : 0,
+            [paddingDecls.paddingInline] : 0, // discard padding
+            [paddingDecls.paddingBlock]  : 0, // discard padding
             
             
             
             // children:
             ...children('hr', composition([
                 layout({
+                    // foregrounds:
+                    foreg            : 'inherit',
+                    
+                    
+                    
+                    // appearances:
+                    opacity          : 'unset',
+                    
+                    
+                    
                     // spacings:
                     marginBlockStart : `calc(${hcssProps.marginBlockStart} / 2)`,
                     marginBlockEnd   : `calc(${hcssProps.marginBlockEnd  } / 2)`,
