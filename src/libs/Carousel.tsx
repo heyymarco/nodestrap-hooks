@@ -53,6 +53,8 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    usesPadding,
+    expandPadding,
 }                           from './Basic'
 import {
     // styles:
@@ -104,6 +106,13 @@ const nextBtnElm = '.nextBtn';
 const navElm     = '.nav';
 
 export const usesCarouselItemsLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, paddingRefs] = usesPadding();
+    
+    
+    
     return composition([
         imports([
             // resets:
@@ -128,8 +137,8 @@ export const usesCarouselItemsLayout = () => {
             
             // spacings:
             // cancel-out parent's padding with negative margin:
-            marginInline   : [['calc(0px -', cssProps.paddingInline, ')']],
-            marginBlock    : [['calc(0px -', cssProps.paddingBlock,  ')']],
+            marginInline   : `calc(0px - ${paddingRefs.paddingInline})`,
+            marginBlock    : `calc(0px - ${paddingRefs.paddingBlock})`,
             
             
             
@@ -334,6 +343,11 @@ export const usesCarouselLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            
+            
+            
+            // spacings:
+            ...expandPadding(cssProps), // expand padding css vars
         }),
     ]);
 };
