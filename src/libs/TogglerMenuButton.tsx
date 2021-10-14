@@ -297,9 +297,7 @@ export const usesSvgLayout = () => {
         layout({
             // sizes:
             // fills the entire parent text's height:
-            blockSize  : [['calc(1em *',
-                `var(${bcssDecls.lineHeight},${typos.lineHeight})`,
-            ')']],
+            blockSize  : `calc(1em * var(${bcssDecls.lineHeight},${typos.lineHeight}))`,
             inlineSize : 'auto', // calculates the width by [height * aspect-ratio]
             
             
