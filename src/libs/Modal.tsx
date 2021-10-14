@@ -530,9 +530,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         
         // accessibilities:
-        active,        // from accessibilities
-        inheritActive, // from accessibilities
-        tabIndex,      // from Modal, moved to ModalElement
+        enabled,        // from accessibilities, not implemented
+        inheritEnabled, // from accessibilities, not implemented
+        active,         // from accessibilities
+        inheritActive,  // from accessibilities
+        tabIndex,       // from Modal, moved to ModalElement
         
         excited,
         onExcitedChange,
