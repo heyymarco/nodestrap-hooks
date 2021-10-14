@@ -159,9 +159,7 @@ export const usesButtonIconLayout = () => {
         vars({
             //#region Icon
             // fills the entire parent text's height:
-            [icssDecls.size]  : [['calc(1em *',
-                `var(${bcssDecls.lineHeight},${typos.lineHeight})`,
-            ')']],
+            [icssDecls.size]  : `calc(1em * var(${bcssDecls.lineHeight},${typos.lineHeight}))`,
             
             // set icon's color as parent's font color:
             [icssDecls.foreg] : 'currentColor',
@@ -170,8 +168,8 @@ export const usesButtonIconLayout = () => {
             [icssDecls.transition] : [
                 icssProps.transition,
                 
-                ['color'      , '0s'], // no color      transition, follow Button's transition
-                ['background' , '0s'], // no background transition, follow Button's transition
+                ['color'      , 0], // no color      transition, follow Button's transition
+                ['background' , 0], // no background transition, follow Button's transition
             ],
             //#endregion Icon
         }),
