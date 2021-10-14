@@ -15,6 +15,7 @@ import type {
 import {
     // general types:
     StyleCollection,
+    PropList,
     
     
     
@@ -929,7 +930,7 @@ export const usesBorderStroke = () => {
         borderStrokeDecls,
     ] as const;
 };
-export const expandBorderStroke = (cssProps?: { border: Cust.Ref, borderWidth: Cust.Ref }) => {
+export const expandBorderStroke = (cssProps?: { border: Cust.Ref, borderWidth: Cust.Ref }): PropList => {
     // dependencies:
     
     // colors:
@@ -950,7 +951,7 @@ export const expandBorderStroke = (cssProps?: { border: Cust.Ref, borderWidth: C
         border      : borderStrokeRefs.border,      // all border properties
         borderColor : borderRefs.borderCol,         // overwrite color prop
         borderWidth : borderStrokeRefs.borderWidth, // overwrite width prop
-    });
+    }) as PropList;
 };
 
 
@@ -980,7 +981,7 @@ export const usesBorderRadius = () => {
         borderRadiusDecls,
     ] as const;
 };
-export const expandBorderRadius = (cssProps?: { borderRadius: Cust.Ref }) => {
+export const expandBorderRadius = (cssProps?: { borderRadius: Cust.Ref }): PropList => {
     // dependencies:
     
     // borders:
@@ -1002,7 +1003,7 @@ export const expandBorderRadius = (cssProps?: { borderRadius: Cust.Ref }) => {
         borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
         borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
         borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
-    });
+    }) as PropList;
 };
 //#endregion border
 
@@ -1032,7 +1033,7 @@ export const usesPadding = () => {
         paddingDecls,
     ] as const;
 };
-export const expandPadding = (cssProps?: { paddingInline: Cust.Ref, paddingBlock: Cust.Ref }) => {
+export const expandPadding = (cssProps?: { paddingInline: Cust.Ref, paddingBlock: Cust.Ref }): PropList => {
     // dependencies:
     
     // spacings:
@@ -1050,7 +1051,7 @@ export const expandPadding = (cssProps?: { paddingInline: Cust.Ref, paddingBlock
         padding       : undefined as unknown as null, // delete short prop
         paddingInline : paddingRefs.paddingInline,    // overwrite padding prop
         paddingBlock  : paddingRefs.paddingBlock,     // overwrite padding prop
-    });
+    }) as PropList;
 };
 //#endregion paddings
 
