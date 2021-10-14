@@ -146,68 +146,6 @@ export const usesContainer = () => {
 //#endregion containers
 
 
-export const usesMediaFill = () => {
-    // dependencies:
-    
-    // spacings:
-    const [, paddingRefs]       = usesPadding();
-    const positivePaddingInline = paddingRefs.paddingInline;
-    const positivePaddingBlock  = paddingRefs.paddingBlock;
-    const negativePaddingInline = `calc(0px - ${positivePaddingInline})`;
-    const negativePaddingBlock  = `calc(0px - ${positivePaddingBlock })`;
-    
-    
-    
-    return composition([
-        layout({
-            // layouts:
-            display        : 'block', // fills the entire parent's width
-            
-            
-            
-            // sizes:
-            // span to maximum width including parent's paddings:
-            boxSizing      : 'border-box', // the final size is including borders & paddings
-            inlineSize     : 'fill-available',
-            fallbacks      : {
-                inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
-            },
-            
-            
-            
-            // spacings:
-            marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
-            marginBlockEnd : positivePaddingBlock,  // add a spacing to the next sibling
-            
-            
-            
-            // children:
-            // make sibling <media> closer (cancel out prev sibling's spacing):
-            ...adjacentSiblings(mediaElm, composition([
-                layout({
-                    // spacings:
-                    marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
-                }),
-            ])),
-        }),
-        variants([
-            isFirstChild(composition([
-                layout({
-                    // spacings:
-                    marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
-                }),
-            ])),
-            isLastChild(composition([
-                layout({
-                    // spacings:
-                    marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
-                }),
-            ])),
-        ]),
-    ]);
-};
-
-
 // borders:
 export interface BorderContainerOptions {
     itemsSelector?         : SelectorCollection
@@ -555,6 +493,70 @@ export const usesMediaBorderSeparator = () => {
 };
 
 
+// spacings:
+
+export const usesMediaFill = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, paddingRefs]       = usesPadding();
+    const positivePaddingInline = paddingRefs.paddingInline;
+    const positivePaddingBlock  = paddingRefs.paddingBlock;
+    const negativePaddingInline = `calc(0px - ${positivePaddingInline})`;
+    const negativePaddingBlock  = `calc(0px - ${positivePaddingBlock })`;
+    
+    
+    
+    return composition([
+        layout({
+            // layouts:
+            display        : 'block', // fills the entire parent's width
+            
+            
+            
+            // sizes:
+            // span to maximum width including parent's paddings:
+            boxSizing      : 'border-box', // the final size is including borders & paddings
+            inlineSize     : 'fill-available',
+            fallbacks      : {
+                inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
+            },
+            
+            
+            
+            // spacings:
+            marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
+            marginBlockEnd : positivePaddingBlock,  // add a spacing to the next sibling
+            
+            
+            
+            // children:
+            // make sibling <media> closer (cancel out prev sibling's spacing):
+            ...adjacentSiblings(mediaElm, composition([
+                layout({
+                    // spacings:
+                    marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
+                }),
+            ])),
+        }),
+        variants([
+            isFirstChild(composition([
+                layout({
+                    // spacings:
+                    marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
+                }),
+            ])),
+            isLastChild(composition([
+                layout({
+                    // spacings:
+                    marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
+                }),
+            ])),
+        ]),
+    ]);
+};
+
+
 
 // styles:
 const mediaElm = ['figure', 'img', 'svg', 'video'];
@@ -579,6 +581,8 @@ export const usesContentMediaLayout = () => {
             
             // borders:
             borderStroke(),
+            
+            // spacings:
             usesMediaFill(),
         ]),
         layout({
@@ -649,6 +653,7 @@ export const usesContentMedia = () => {
             // then: styling top_level <figure> & top_level <media>:
             ...children(mediaElm, composition([
                 imports([
+                    // layouts:
                     usesContentMediaLayout(),
                 ]),
             ])),
