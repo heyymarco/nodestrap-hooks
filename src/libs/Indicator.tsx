@@ -642,7 +642,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     return {
         //#region animations
-        filterDisable        : [['grayscale(50%)',  'opacity(50%)'  ]],
+        filterDisable        : [['grayscale(50%)',  'contrast(50%)'  ]],
         filterActive         : 'initial',
 
         '@keyframes enable'  : keyframesEnable,
