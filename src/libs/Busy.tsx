@@ -136,7 +136,7 @@ export const useBusySheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const basics = {
         //#region typos
-        fontSize      : '1em',
+        fontSize   : '1em',
         //#endregion typos
     };
     return {
@@ -145,14 +145,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         //#region typos
-        fontSizeSm      : [['calc(', basics.fontSize     , '/', 1.25, ')']],
-        fontSizeLg      : [['calc(', basics.fontSize     , '*', 1.25, ')']],
+        fontSizeSm : [['calc(', basics.fontSize, '/', 1.25, ')']],
+        fontSizeLg : [['calc(', basics.fontSize, '*', 1.25, ')']],
         //#endregion typos
         
         
         
         //#region indicators
-        icon : 'busy',
+        icon       : 'busy',
         //#endregion indicators
     };
 }, { prefix: 'busy' });
