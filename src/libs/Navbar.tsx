@@ -72,6 +72,7 @@ import {
     mildOf,
     usesBorderStroke,
     usesBorderRadius,
+    expandBorderRadius,
     usesPadding,
     expandPadding,
     usesAnim,
@@ -680,6 +681,11 @@ export const usesNavbarLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            
+            
+            
+            // borders:
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
             
             
             
