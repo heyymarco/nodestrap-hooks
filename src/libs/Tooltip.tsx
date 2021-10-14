@@ -43,6 +43,8 @@ import {
     // hooks:
     usesSizeVariant,
     usesBackg,
+    usesBorder,
+    usesBorderStroke,
     expandBorderStroke,
 }                           from './Basic'
 import {
@@ -85,7 +87,11 @@ export const usesTooltipLayout = () => {
     // dependencies:
     
     // colors:
-    const [, backgRefs] = usesBackg();
+    const [, backgRefs ] = usesBackg();
+    const [border      ] = usesBorder();
+    
+    // borders:
+    const [borderStroke] = usesBorderStroke();
     
     
     
@@ -100,6 +106,13 @@ export const usesTooltipLayout = () => {
                 layout({
                     // children:
                     ...children(arrowElm, composition([
+                        imports([
+                            // colors:
+                            border(),
+                            
+                            // borders:
+                            borderStroke(),
+                        ]),
                         layout({
                             // layouts:
                             display : 'block',
