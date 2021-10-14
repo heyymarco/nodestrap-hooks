@@ -46,6 +46,12 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
+    usesPadding,
+    expandPadding,
+    
+    
+    
+    // styles:
     usesBasicLayout,
     usesBasicVariants,
     
@@ -67,69 +73,87 @@ import {
  * Applies a responsive container layout.
  * @returns A `Style` represents a responsive container layout.
  */
-export const usesResponsiveContainerLayout = () => composition([
-    layout({
-        // spacings:
-        paddingInline : cssProps.paddingInline,
-        paddingBlock  : cssProps.paddingBlock,
-    }),
-]);
+export const usesResponsiveContainerLayout = () => {
+    return composition([
+        layout({
+            // spacings:
+            ...expandPadding(cssProps), // expand padding css vars
+        }),
+    ]);
+};
 /**
  * Applies a responsive container using grid layout.
  * @returns A `Style` represents a responsive container using grid layout.
  */
-export const usesResponsiveContainerGridLayout = () => composition([
-    layout({
-        // layouts:
-        display             : 'grid', // use css grid for layouting
-        gridTemplateRows    : [[cssProps.paddingBlock,  'auto', cssProps.paddingBlock ]], // the height of each row
-        gridTemplateColumns : [[cssProps.paddingInline, 'auto', cssProps.paddingInline]], // the width of each column
-        gridTemplateAreas   : [[
-            '"........... blockStart ........."',
-            '"inlineStart  content   inlineEnd"',
-            '"...........  blockEnd  ........."',
-        ]],
-        
-        
-        
-        // spacings:
-        // since we use grid as paddings, so the css paddings are no longer needed:
-        paddingInline : null,
-        paddingBlock  : null,
-    }),
-]);
+export const usesResponsiveContainerGridLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, paddingRefs] = usesPadding();
+    
+    
+    
+    return composition([
+        layout({
+            // layouts:
+            display             : 'grid', // use css grid for layouting
+            // define our logical paddings:
+            gridTemplateRows    : [[paddingRefs.paddingBlock,  'auto', paddingRefs.paddingBlock ]], // the height of each row
+            gridTemplateColumns : [[paddingRefs.paddingInline, 'auto', paddingRefs.paddingInline]], // the width of each column
+            gridTemplateAreas   : [[
+                '"........... blockStart ........."',
+                '"inlineStart  content   inlineEnd"',
+                '"...........  blockEnd  ........."',
+            ]],
+            
+            
+            
+            // spacings:
+            ...expandPadding(cssProps), // expand padding css vars
+            // since we use grid as paddings, so the css paddings are no longer needed:
+            paddingInline : undefined as unknown as null, // turn off physical padding, use logical padding we've set above
+            paddingBlock  : undefined as unknown as null, // turn off physical padding, use logical padding we've set above
+        }),
+    ]);
+};
 
-export const usesContainerLayout = () => composition([
-    imports([
-        // layouts:
-        usesBasicLayout(),
-        usesResponsiveContainerLayout(),
-    ]),
-    layout({
-        // layouts:
-        display: 'block',
-        
-        
-        
-        // customize:
-        ...usesGeneralProps(cssProps), // apply general cssProps
-    }),
-]);
-export const usesContainerVariants = () => composition([
-    imports([
-        // variants:
-        usesBasicVariants(),
-    ]),
-]);
-export const usesContainer = () => composition([
-    imports([
-        // layouts:
-        usesContainerLayout(),
-        
-        // variants:
-        usesContainerVariants(),
-    ]),
-]);
+export const usesContainerLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesBasicLayout(),
+            usesResponsiveContainerLayout(),
+        ]),
+        layout({
+            // layouts:
+            display: 'block',
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+    ]);
+};
+export const usesContainerVariants = () => {
+    return composition([
+        imports([
+            // variants:
+            usesBasicVariants(),
+        ]),
+    ]);
+};
+export const usesContainer = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesContainerLayout(),
+            
+            // variants:
+            usesContainerVariants(),
+        ]),
+    ]);
+};
 
 export const useContainerSheet = createUseSheet(() => [
     mainComposition([
