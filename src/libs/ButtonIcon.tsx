@@ -46,8 +46,8 @@ import {
     OrientationName,
     OrientationVariant,
     
-    usesBorderRadius,
-    usesPadding,
+    expandBorderRadius,
+    expandPadding,
     
     
     
@@ -137,16 +137,6 @@ export const useSizeVariant = (props: SizeVariant) => basicUseSizeVariant(props 
 
 // styles:
 export const usesButtonIconLayout = () => {
-    // dependencies:
-    
-    // borders:
-    const [, borderRadiusRefs, borderRadiusDecls] = usesBorderRadius();
-    
-    // spacings:
-    const [, paddingRefs     , paddingDecls     ] = usesPadding();
-    
-    
-    
     return composition([
         imports([
             // layouts:
@@ -155,28 +145,16 @@ export const usesButtonIconLayout = () => {
         layout({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-        vars({
+            
+            
+            
             // borders:
-            // cssProps.borderRadius** => ref.borderRadius**
-            [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius,
-            [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius,
-            [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius,
-            [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius,
-            borderRadius           : undefined as unknown as null,            // delete short prop
-            borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
-            borderStartEndRadius   : borderRadiusRefs.borderStartEndRadius,   // overwrite radius prop
-            borderEndStartRadius   : borderRadiusRefs.borderEndStartRadius,   // overwrite radius prop
-            borderEndEndRadius     : borderRadiusRefs.borderEndEndRadius,     // overwrite radius prop
-        }),
-        vars({
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
+            
+            
+            
             // spacings:
-            // cssProps.padding** => ref.padding**
-            [paddingDecls.paddingInline] : cssProps.paddingInline,
-            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
-            padding                      : undefined as unknown as null, // delete short prop
-            paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
-            paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
+            ...expandPadding(cssProps), // expand padding css vars
         }),
         vars({
             //#region Icon
