@@ -480,6 +480,10 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
             >
                 { header }
                 <CloseButton
+                    // variants:
+                    size={props.size}
+                    
+                    
                     // actions:
                     onClick={handleClose}
                 />
@@ -501,6 +505,10 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
             >
                 { footer }
                 <Button
+                    // variants:
+                    size={props.size}
+                    
+                    
                     // actions:
                     onClick={handleClose}
                 >
