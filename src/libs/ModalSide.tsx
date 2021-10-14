@@ -479,6 +479,10 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
             >
                 { header }
                 <CloseButton
+                    // variants:
+                    size={props.size}
+                    
+                    
                     // actions:
                     onClick={handleClose}
                 />
