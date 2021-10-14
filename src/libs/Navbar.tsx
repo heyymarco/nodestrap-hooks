@@ -73,6 +73,7 @@ import {
     usesBorderStroke,
     usesBorderRadius,
     usesPadding,
+    expandPadding,
     usesAnim,
     
     
@@ -382,7 +383,7 @@ export const usesWrapperLayout = () => {
     // dependencies:
     
     // spacings:
-    const [paddings, paddingRefs] = usesPadding();
+    const [paddings] = usesPadding();
     
     
     
@@ -402,9 +403,7 @@ export const usesWrapperLayout = () => {
             
             
             // spacings:
-            padding        : undefined as unknown as null, // delete short prop
-            paddingInline  : paddingRefs.paddingInline,    // overwrite padding prop
-            paddingBlock   : paddingRefs.paddingBlock,     // overwrite padding prop
+            ...expandPadding(), // expand padding css vars
         }),
     ]);
 };
@@ -681,6 +680,11 @@ export const usesNavbarLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            
+            
+            
+            // spacings:
+            ...expandPadding(cssProps), // expand padding css vars
         }),
     ]);
 };
