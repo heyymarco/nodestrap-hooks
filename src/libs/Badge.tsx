@@ -14,7 +14,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     
     
@@ -45,6 +44,7 @@ import {
     notNude,
     usesBorderRadius,
     usesPadding,
+    expandPadding,
 }                           from './Basic'
 import {
     // general types:
@@ -132,15 +132,11 @@ export const usesBadgeLayout = () => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-        vars({
-            // spacings:
-            // cssProps.padding** => ref.padding**
-            [paddingDecls.paddingInline] : cssProps.paddingInline,
-            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
-            padding                      : undefined as unknown as null, // delete short prop
-            paddingInline                : paddingRefs.paddingInline,    // overwrite padding prop
-            paddingBlock                 : paddingRefs.paddingBlock,     // overwrite padding prop
+            
+            
+            
+            // borders:
+            ...expandPadding(cssProps), // expand padding css vars
         }),
         variants([
             isEmpty([
