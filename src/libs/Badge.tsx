@@ -135,7 +135,7 @@ export const usesBadgeLayout = () => {
             
             
             
-            // borders:
+            // spacings:
             ...expandPadding(cssProps), // expand padding css vars
         }),
         variants([
