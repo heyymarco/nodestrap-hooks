@@ -1,19 +1,7 @@
 top priority:
-
-^\s*border((Start|End){0,2})Radius?(Start|End)?\s*:(?!\s*(any|borderRadiusRefs\.border\1Radius))
-
-[DONE] config padding(Inline|Block) => expandPadding
-[PROG] config border(Start|End){0,2}Radius => expandBorderRadius
-config borderWidth(Inline|Block) => expandBorderStroke
-ModalSide => enabled/disabled problem
-
-<hr > => change backg to border-top
-ListSeparatorItem => border = inherit container
-
-check Content::usesBorderRadius() & Content::usesPadding() parameters
+[['calc(0px -', cssProps.paddingBlock, ')']] => `${}`
 test ActionControl/Button => click on disabled state
 Navbar => use List
-[['calc(0px -', cssProps.paddingBlock, ')']] => `${}`
 Button => implements AnchorHTMLAttributes
 Input => implement InputHTMLAttributes
 
