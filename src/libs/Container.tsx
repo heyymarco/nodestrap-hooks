@@ -46,6 +46,7 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
+    expandBorderRadius,
     usesPadding,
     expandPadding,
     
@@ -76,6 +77,11 @@ import {
 export const usesResponsiveContainerLayout = () => {
     return composition([
         layout({
+            // borders:
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
+            
+            
+            
             // spacings:
             ...expandPadding(cssProps), // expand padding css vars
         }),
@@ -105,6 +111,11 @@ export const usesResponsiveContainerGridLayout = () => {
                 '"inlineStart  content   inlineEnd"',
                 '"...........  blockEnd  ........."',
             ]],
+            
+            
+            
+            // borders:
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
             
             
             
