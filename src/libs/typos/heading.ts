@@ -108,7 +108,7 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
         
                         // spacings:
                         // make subtitle closer to the main heading:
-                        marginBlockStart: [['calc(0px -', cssProps.marginBlockEnd, ')']], // cancel-out parent's marginBlockEnd with negative marginBlockStart
+                        marginBlockStart: `calc(0px - ${cssProps.marginBlockEnd})`, // cancel-out parent's marginBlockEnd with negative marginBlockStart
                     }),
                     variants([
                         isNotLastChild([
