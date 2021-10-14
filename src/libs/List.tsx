@@ -734,7 +734,7 @@ export const usesListVariants = () => {
                                     
                                     // customize:
                                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'tab')), // apply general cssProps starting with tab***
-                                    borderRadius: null, // tab borderRadius has been handled
+                                    borderRadius: undefined as unknown as null, // tab borderRadius has been handled
                                 }),
                                 variants([
                                     isPassive([
