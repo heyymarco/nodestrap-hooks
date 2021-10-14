@@ -96,6 +96,8 @@ function App() {
 					focus={focus}
 
 					press={press}
+
+					onClick={() => console.log('test onClick')}
 				>
                     action control
                 </ActionControl>
@@ -111,6 +113,8 @@ function App() {
 					focus={focus}
 					
 					press={press}
+
+					onClick={() => console.log('test onClick')}
 				>
                     action control
                 </ActionControl>

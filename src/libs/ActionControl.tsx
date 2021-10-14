@@ -458,29 +458,35 @@ export interface ActionControlProps<TElement extends HTMLElement = HTMLElement>
 export function ActionControl<TElement extends HTMLElement = HTMLElement>(props: ActionControlProps<TElement>) {
     // styles:
     const sheet             = useActionControlSheet();
-
+    
     
     
     // states:
     const pressReleaseState = usePressReleaseState(props);
-
-
-
+    
+    
+    
+    // fn props:
+    const propEnabled       = usePropEnabled(props);
+    
+    
+    
     // jsx:
     return (
         <Control<TElement>
             // other props:
             {...props}
-
-
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
                 pressReleaseState.class,
             ]}
-        
-
+            
+            
             // events:
+            onClick={(propEnabled || undefined) && props.onClick} // ignores onClick if disabled
             onMouseDown={(e) => { props.onMouseDown?.(e); pressReleaseState.handleMouseDown(e); }}
             onKeyDown=  {(e) => { props.onKeyDown?.(e);   pressReleaseState.handleKeyDown(e);   }}
             onAnimationEnd={(e) => {
