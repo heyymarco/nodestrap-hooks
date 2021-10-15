@@ -655,6 +655,10 @@ export interface EditableControlProps<TElement extends EditableControlElement = 
 
         ValidationProps
 {
+    // accessibilities:
+    autoFocus?       : boolean
+    
+    
     // identifiers:
     name?            : string
     form?            : string
