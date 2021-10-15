@@ -876,6 +876,7 @@ export function Check(props: CheckProps) {
         
         
         // accessibilities:
+        autoFocus,
         label,
         
         defaultActive,  // delete, already handled by `useTogglerActive`
@@ -996,6 +997,7 @@ export function Check(props: CheckProps) {
                 
                 
                 // accessibilities:
+                autoFocus={autoFocus}
                 aria-hidden={true} // the input just for check indicator & storing value
                 tabIndex={-1}      // non focusable
                 
