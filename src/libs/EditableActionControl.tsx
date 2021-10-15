@@ -47,6 +47,10 @@ import {
     // react components:
     ActionControlProps,
 }                           from './ActionControl'
+import {
+    // hooks:
+    usePropEnabled,
+}                           from './accessibilities'
 
 
 
@@ -124,6 +128,11 @@ export function EditableActionControl<TElement extends EditableControlElement = 
     
     
     
+    // fn props:
+    const propEnabled       = usePropEnabled(props);
+    
+    
+    
     // jsx:
     return (
         <EditableControl<TElement>
@@ -139,6 +148,7 @@ export function EditableActionControl<TElement extends EditableControlElement = 
             
             
             // events:
+            onClick={(propEnabled || undefined) && props.onClick} // ignores onClick if disabled
             onMouseDown={(e) => { props.onMouseDown?.(e); pressReleaseState.handleMouseDown(e); }}
             onKeyDown=  {(e) => { props.onKeyDown?.(e);   pressReleaseState.handleKeyDown(e);   }}
             onAnimationEnd={(e) => {

@@ -78,6 +78,9 @@ function App() {
 					isValid={isValid}
 
 					press={press}
+
+					onClick={() => console.log('test onClick')}
+					onChange={() => console.log('test onChange')}
 				>
                     editable action control
                 </EditableActionControl>
@@ -98,6 +101,9 @@ function App() {
 					required={true}
 
 					press={press}
+
+					onClick={() => console.log('test onClick')}
+					onChange={() => console.log('test onChange')}
 				/>
 				</form>
 				<br />
