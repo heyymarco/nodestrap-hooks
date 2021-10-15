@@ -212,7 +212,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export type InputTextLike                 = 'text'|'search'|'password'|'email'|'tel'|'url'|'number'|'time'|'week'|'date'|'datetime-local'|'month'
 export type InputType                     = InputTextLike | 'color'|'file'|'range'
-export type InputHTMLAttributes<TElement> = Omit<React.InputHTMLAttributes<TElement>, 'size'|keyof React.HTMLAttributes<TElement>>
+export type InputHTMLAttributes<TElement> = Omit<React.InputHTMLAttributes<TElement>, 'size'|'src'|'alt'|'width'|'height'|'crossOrigin'|'checked'|'multiple'|'accept'|'capture'|'formAction'|'formEncType'|'formMethod'|'formNoValidate'|'formTarget'|keyof React.HTMLAttributes<TElement>>
 
 export interface InputProps
     extends
@@ -228,6 +228,9 @@ export interface InputProps
     // formats:
     type?         : InputType
     placeholder?  : string
+    autoComplete? : string
+    list?         : string
+    step?         : number | string
 }
 export function Input(props: InputProps) {
     // styles:
@@ -242,11 +245,14 @@ export function Input(props: InputProps) {
         
         
         // accessibilities:
+        autoFocus,
         tabIndex,
+        enterKeyHint,
         
         
         // values:
         name,
+        form,
         defaultValue,
         value,
         onChange, // forwards to `input[type]`
@@ -264,6 +270,9 @@ export function Input(props: InputProps) {
         // formats:
         type,
         placeholder,
+        autoComplete,
+        list,
+        step,
     ...restProps}  = props;
     
     
@@ -287,6 +296,7 @@ export function Input(props: InputProps) {
             
             // accessibilities:
             tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
+            enabled={props.enabled ?? !(props.disabled ?? false)}
             
             
             // classes:
@@ -299,7 +309,9 @@ export function Input(props: InputProps) {
                 
                 // accessibilities:
                 {...{
+                    autoFocus,
                     tabIndex,
+                    enterKeyHint,
                 }}
                 
                 disabled={!propEnabled} // do not submit the value if disabled
@@ -309,6 +321,7 @@ export function Input(props: InputProps) {
                 // values:
                 {...{
                     name,
+                    form,
                     defaultValue,
                     value,
                 }}
@@ -329,6 +342,9 @@ export function Input(props: InputProps) {
                 {...{
                     type,
                     placeholder,
+                    autoComplete,
+                    list,
+                    step,
                 }}
                 
                 
