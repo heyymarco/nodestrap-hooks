@@ -315,7 +315,8 @@ export const useCompactState = <TElement extends HTMLElement = HTMLElement>(prop
     
     
     return {
-        class: compactFn ? 'compact' : null,
+        compact : compactFn,
+        class   : compactFn ? 'compact' : null,
     };
 };
 //#endregion compact
