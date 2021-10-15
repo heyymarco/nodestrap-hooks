@@ -889,6 +889,7 @@ export function Check(props: CheckProps) {
         
         // values:
         name,
+        form,
         defaultValue,
         value,
         
@@ -1006,6 +1007,7 @@ export function Check(props: CheckProps) {
                 // values:
                 {...{
                     name,
+                    form,
                     defaultValue,
                     value,
                 }}
