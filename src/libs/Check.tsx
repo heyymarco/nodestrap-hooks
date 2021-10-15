@@ -997,9 +997,11 @@ export function Check(props: CheckProps) {
                 
                 
                 // accessibilities:
-                autoFocus={autoFocus}
+                {...{
+                    autoFocus,
+                    tabIndex : -1, // non focusable
+                }}
                 aria-hidden={true} // the input just for check indicator & storing value
-                tabIndex={-1}      // non focusable
                 
                 disabled={!propEnabled} // do not submit the value if disabled
                 readOnly={true}    // for satisfying React of **controllable readOnly check**
