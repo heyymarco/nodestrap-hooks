@@ -210,13 +210,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export type InputTextLike = 'text'|'search'|'password'|'email'|'tel'|'url'|'number'|'time'|'week'|'date'|'datetime-local'|'month'
-export type InputType     = InputTextLike | 'color'|'file'|'range'
+export type InputTextLike                 = 'text'|'search'|'password'|'email'|'tel'|'url'|'number'|'time'|'week'|'date'|'datetime-local'|'month'
+export type InputType                     = InputTextLike | 'color'|'file'|'range'
+export type InputHTMLAttributes<TElement> = Omit<React.InputHTMLAttributes<TElement>, 'size'|keyof React.HTMLAttributes<TElement>>
 
 export interface InputProps
     extends
-        EditableTextControlProps<HTMLInputElement>
-        // React.InputHTMLAttributes<HTMLInputElement> // todo: implements input attr
+        EditableTextControlProps<HTMLInputElement>,
+        InputHTMLAttributes<HTMLInputElement>
 {
     // validations:
     min?     : string | number
