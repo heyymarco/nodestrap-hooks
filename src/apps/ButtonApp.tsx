@@ -139,8 +139,43 @@ function App() {
 
 					orientation={orientation}
 					btnStyle={btnStyle}
+
+					autoFocus={true}
+					form='#bleh'
+					formAction='http://www.google.com'
+					formEncType='text/plain'
+					formMethod='post'
+					formNoValidate={true}
+					formTarget='_blank'
+					name='select_one'
+					value='12345'
 				>
                     button
+                </Button>
+				<hr style={{flexBasis: '100%'}} />
+				<Button
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+					
+					press={press}
+
+					orientation={orientation}
+					btnStyle={btnStyle}
+
+					tag='a'
+					download={true}
+					href='https://assets.codepen.io/12005/windmill.jpg'
+					hrefLang='download this pict'
+					referrerPolicy='no-referrer'
+					ping='http://www.google.com http://www.bing.com'
+					media='print and (resolution:300dpi)'
+				>
+                    link button
                 </Button>
 				<hr style={{flexBasis: '100%'}} />
 				<p>

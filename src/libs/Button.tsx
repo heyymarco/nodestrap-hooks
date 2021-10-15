@@ -399,6 +399,7 @@ export type ButtonType = 'button'|'submit'|'reset'
 export interface ButtonProps
     extends
         ActionControlProps<HTMLButtonElement>,
+        React.ButtonHTMLAttributes<HTMLButtonElement>,
         React.AnchorHTMLAttributes<HTMLButtonElement>,
         
         // layouts:
@@ -466,7 +467,9 @@ export function Button(props: ButtonProps) {
             
             
             // accessibilities:
+            role={props.role ?? ((tagFn !== 'button') && (typeFn !== 'button')) ? 'button' : undefined}
             aria-label={label}
+            enabled={props.enabled ?? !(props.disabled ?? false)}
             press={props.press ?? active}
             
             

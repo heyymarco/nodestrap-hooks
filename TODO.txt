@@ -1,6 +1,5 @@
 top priority:
 Navbar => use List
-Button => implements AnchorHTMLAttributes
 Input => implement InputHTMLAttributes
 
 
