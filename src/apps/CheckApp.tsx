@@ -78,6 +78,8 @@ function App() {
 					enabled={enabled} active={active}
 
 					focus={focus}
+
+					onClick={() => console.log('test onClick')}
 				>
                     action control
                 </ActionControl>
@@ -88,6 +90,8 @@ function App() {
 					enabled={enabled} active={active}
 
 					focus={focus}
+
+					onClick={() => console.log('test onClick')}
 				>
                     action control mild
                 </ActionControl>
@@ -98,6 +102,9 @@ function App() {
 					enabled={enabled} active={active}
 
 					focus={focus}
+
+					onClick={() => console.log('test onClick')}
+					onChange={() => console.log('test onChange')}
 				>
                     editable action control
                 </EditableActionControl>
@@ -108,6 +115,9 @@ function App() {
 					enabled={enabled} active={active}
 
 					focus={focus}
+
+					onClick={() => console.log('test onClick')}
+					onChange={() => console.log('test onChange')}
 				>
                     editable action control mild
                 </EditableActionControl>
@@ -119,9 +129,11 @@ function App() {
 					
 					active={active}
 					onActiveChange={(act) => {
-						// console.log('onActiveChange', act);
+						console.log('test onActiveChange', act);
 						setActive(act);
 					}}
+					onClick={() => console.log('test onClick')}
+					onChange={() => console.log('test onChange')}
 
 					focus={focus}
 
