@@ -269,6 +269,10 @@ const htmlPropList = [
 
     // values:
     'defaultValue',
+
+    // more:
+    'referrerPolicy',
+    'ping',
 ];
 const isHtmlProp = (propName: string) => propName.startsWith('on') || propName.startsWith('aria-') || htmlPropList.includes(propName)
 
