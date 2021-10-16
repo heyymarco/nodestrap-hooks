@@ -589,7 +589,19 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     else {
                         // move the last item to the first
                         const item = itemsElm.lastElementChild;
-                        if (item) itemsElm.insertBefore(item, itemsElm.firstElementChild);
+                        if (item) {
+                            // save the current scrollPos before modifying:
+                            const scrollPos = itemsElm.scrollLeft;
+                            
+                            
+                            
+                            itemsElm.insertBefore(item, itemsElm.firstElementChild);
+                            
+                            
+                            
+                            // set the current scrollPos to the next item:
+                            itemsElm.scrollTo({ left: (scrollPos + itemsElm.clientWidth), behavior: ('instant' as any) });
+                        } // if
                         
                         // then
                         
@@ -625,7 +637,19 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     else {
                         // move the first item to the last
                         const item = itemsElm.firstElementChild;
-                        if (item) itemsElm.append(item);
+                        if (item) {
+                            // save the current scrollPos before modifying:
+                            const scrollPos = itemsElm.scrollLeft;
+                            
+                            
+                            
+                            itemsElm.append(item);
+                            
+                            
+                            
+                            // set the current scrollPos to the prev item:
+                            itemsElm.scrollTo({ left: (scrollPos - itemsElm.clientWidth), behavior: ('instant' as any) });
+                        } // if
                         
                         // then
                         
