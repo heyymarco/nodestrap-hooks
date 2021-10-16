@@ -97,6 +97,21 @@ import {
 
 
 
+// hooks:
+
+// appearances:
+
+export interface CarouselVariant {
+    infiniteLoop? : boolean
+}
+export const useCarouselVariant = (props: CarouselVariant) => {
+    return {
+        infiniteLoop: props.infiniteLoop ?? false,
+    };
+};
+
+
+
 // styles:
 const itemsElm   = '.items';    // `.items` is the slideList
 const itemElm    = ['li', '*']; // any children inside the slideList are slideItem
@@ -450,7 +465,10 @@ export { CarouselItem as Item }
 
 export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ContentProps<TElement>
+        ContentProps<TElement>,
+        
+        // appearances:
+        CarouselVariant
 {
     // essentials:
     itemsTag? : keyof JSX.IntrinsicElements
@@ -465,7 +483,12 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
 }
 export function Carousel<TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) {
     // styles:
-    const sheet      = useCarouselSheet();
+    const sheet           = useCarouselSheet();
+    
+    
+    
+    // variants:
+    const carouselVariant = useCarouselVariant(props);
     
     
     
@@ -549,6 +572,78 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             behavior : 'smooth',
         });
     };
+    const handlePrev = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        if (!e.defaultPrevented) {
+            const itemsElm = listRef.current;
+            if (itemsElm) {
+                if (
+                    (itemsElm.scrollLeft <= 0.5)
+                    &&
+                    (itemsElm.scrollTop  <= 0.5)
+                ) {
+                    // end of scroll
+                    if (!carouselVariant.infiniteLoop) {
+                        // scroll to last
+                        scrollTo(itemsElm.lastElementChild as (HTMLElement|null));
+                    }
+                    else {
+                        // move the last item to the first
+                        const item = itemsElm.lastElementChild;
+                        if (item) itemsElm.insertBefore(item, itemsElm.firstElementChild);
+                        
+                        // then
+                        
+                        // scroll to previous:
+                        scrollBy(itemsElm, false);
+                    } // if
+                }
+                else {
+                    // scroll to previous:
+                    scrollBy(itemsElm, false);
+                } // if
+                
+                
+                
+                e.preventDefault();
+            } // if itemsElm
+        } // if
+    };
+    const handleNext = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        if (!e.defaultPrevented) {
+            const itemsElm = listRef.current;
+            if (itemsElm) {
+                if (
+                    (((itemsElm.scrollWidth  - itemsElm.clientWidth ) - itemsElm.scrollLeft) <= 0.5)
+                    &&
+                    (((itemsElm.scrollHeight - itemsElm.clientHeight) - itemsElm.scrollTop ) <= 0.5)
+                ) {
+                    // end of scroll
+                    if (!carouselVariant.infiniteLoop) {
+                        // scroll to first
+                        scrollTo(itemsElm.firstElementChild as (HTMLElement|null));
+                    }
+                    else {
+                        // move the first item to the last
+                        const item = itemsElm.firstElementChild;
+                        if (item) itemsElm.append(item);
+                        
+                        // then
+                        
+                        // scroll to next:
+                        scrollBy(itemsElm, true);
+                    } // if
+                }
+                else {
+                    // scroll to next:
+                    scrollBy(itemsElm, true);
+                } // if
+                
+                
+                
+                e.preventDefault();
+            } // if itemsElm
+        } // if
+    };
     
     
     
@@ -604,7 +699,20 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 prevBtn.props.classes?.includes('prevBtn')
                 //#endregion has class prevBtn
                 ?
-                prevBtn
+                <prevBtn.type
+                    // other props:
+                    {...prevBtn.props}
+                    
+                    
+                    // events:
+                    onClick={(e) => {
+                        prevBtn.props.onClick?.(e);
+                        
+                        
+                        
+                        handlePrev(e);
+                    }}
+                />
                 :
                 <NavButton
                     // classes:
@@ -622,25 +730,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // events:
-                    onClick={(e) => {
-                        const itemsElm = listRef.current;
-                        if (!itemsElm) return;
-                        
-                        
-                        
-                        if (
-                            (itemsElm.scrollLeft <= 0.5)
-                            &&
-                            (itemsElm.scrollTop  <= 0.5)
-                        ) {
-                            // scroll to last
-                            scrollTo(itemsElm.lastElementChild as (HTMLElement|null));
-                        }
-                        else {
-                            // scroll to previous:
-                            scrollBy(itemsElm, false);
-                        } // if
-                    }}
+                    onClick={handlePrev}
                 >
                     { prevBtn }
                 </NavButton>
@@ -653,7 +743,20 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 nextBtn.props.classes?.includes('nextBtn')
                 //#endregion has class nextBtn
                 ?
-                nextBtn
+                <nextBtn.type
+                    // other props:
+                    {...nextBtn.props}
+                    
+                    
+                    // events:
+                    onClick={(e) => {
+                        nextBtn.props.onClick?.(e);
+                        
+                        
+                        
+                        handleNext(e);
+                    }}
+                />
                 :
                 <NavButton
                     // classes:
@@ -671,25 +774,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // events:
-                    onClick={(e) => {
-                        const itemsElm = listRef.current;
-                        if (!itemsElm) return;
-                        
-                        
-                        
-                        if (
-                            (((itemsElm.scrollWidth  - itemsElm.clientWidth ) - itemsElm.scrollLeft) <= 0.5)
-                            &&
-                            (((itemsElm.scrollHeight - itemsElm.clientHeight) - itemsElm.scrollTop ) <= 0.5)
-                        ) {
-                            // scroll to first
-                            scrollTo(itemsElm.firstElementChild as (HTMLElement|null));
-                        }
-                        else {
-                            // scroll to next:
-                            scrollBy(itemsElm, true);
-                        } // if
-                    }}
+                    onClick={handleNext}
                 >
                     { nextBtn }
                 </NavButton>

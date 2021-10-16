@@ -28,6 +28,9 @@ function App() {
 	const [outlined,   setOutlined  ] = useState(false);
 
 	
+	const [infiniteLoop,   setInfiniteLoop  ] = useState(false);
+
+	
 
     return (
         <div className="App">
@@ -39,6 +42,7 @@ function App() {
                         test
                 </Basic>
 				<Carousel theme={theme} size={size} gradient={enableGrad} outlined={outlined}
+					infiniteLoop={infiniteLoop}
 				>
 					<CarouselItem><img src='https://picsum.photos/400/600' alt='' /></CarouselItem>
 					<CarouselItem><img src='https://picsum.photos/600/400' alt='' /></CarouselItem>
@@ -92,6 +96,15 @@ function App() {
 							onChange={(e) => setOutlined(e.target.checked)}
 						/>
 						outlined
+					</label>
+				</p>
+				<p>
+					<label>
+						<input type='checkbox'
+							checked={infiniteLoop}
+							onChange={(e) => setInfiniteLoop(e.target.checked)}
+						/>
+						infinite loop
 					</label>
 				</p>
             </Container>

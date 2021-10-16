@@ -1,17 +1,17 @@
 top priority:
-Navbar => use List
+[progress] Carousel => infinite loop
 
 
 
 medium priority:
-Carousel => infinite loop
+Navbar => use List
 
 
 
 low priority:
 Media => for profile image, video, static images, gifs, svgs, etc
-Progress
 Range
+Progress
 fix focus-visible
 Check_togglerBtn & NavbarMenu fix blinky toggle active => press for a few seconds and then released, the blinky occured
 List:variant_tab => move up tab border radius from ListItem to Wrapper
