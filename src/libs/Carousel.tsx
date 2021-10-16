@@ -114,7 +114,8 @@ export const useCarouselVariant = (props: CarouselVariant) => {
 
 // styles:
 const itemsElm   = '.items';    // `.items` is the slideList
-const itemElm    = ['li', '*']; // any children inside the slideList are slideItem
+// const itemElm    = ['li', '*'];  // poor specificity // any children inside the slideList are slideItem
+const itemElm    = ':nth-child(n)'; // better specificity // any children inside the slideList are slideItem
 const mediaElm   = ['img', 'svg', 'video'];
 const prevBtnElm = '.prevBtn';
 const nextBtnElm = '.nextBtn';
@@ -516,7 +517,8 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     
     // dom effects:
-    const listRef    = useRef<HTMLElement|null>(null);
+    const listRef      = useRef<HTMLElement|null>(null);
+    const listDummyRef = useRef<HTMLElement|null>(null);
     
     
     
@@ -572,22 +574,30 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             behavior : 'smooth',
         });
     };
+    
+    const isBeginOfScroll = (itemsElm: HTMLElement) => (
+        (itemsElm.scrollLeft <= 0.5)
+        &&
+        (itemsElm.scrollTop  <= 0.5)
+    );
+    const isEndOfScroll = (itemsElm: HTMLElement) => (
+        (((itemsElm.scrollWidth  - itemsElm.clientWidth ) - itemsElm.scrollLeft) <= 0.5)
+        &&
+        (((itemsElm.scrollHeight - itemsElm.clientHeight) - itemsElm.scrollTop ) <= 0.5)
+    );
+    
     const handlePrev = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         if (!e.defaultPrevented) {
             const itemsElm = listRef.current;
             if (itemsElm) {
-                if (
-                    (itemsElm.scrollLeft <= 0.5)
-                    &&
-                    (itemsElm.scrollTop  <= 0.5)
-                ) {
+                if (isBeginOfScroll(itemsElm)) {
                     // end of scroll
                     if (!carouselVariant.infiniteLoop) {
-                        // scroll to last
+                        // scroll to last:
                         scrollTo(itemsElm.lastElementChild as (HTMLElement|null));
                     }
                     else {
-                        // move the last item to the first
+                        // move the last item to the first:
                         const item = itemsElm.lastElementChild;
                         if (item) {
                             // save the current scrollPos before modifying:
@@ -616,6 +626,20 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 
                 
                 
+                const dummyElm = listDummyRef.current;
+                if (dummyElm) {
+                    if (isBeginOfScroll(dummyElm)) {
+                        // scroll to last:
+                        scrollTo(dummyElm.lastElementChild as (HTMLElement|null));
+                    }
+                    else {
+                        // scroll to previous:
+                        scrollBy(dummyElm, false);
+                    } // if
+                } // if
+                
+                
+                
                 e.preventDefault();
             } // if itemsElm
         } // if
@@ -624,18 +648,14 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         if (!e.defaultPrevented) {
             const itemsElm = listRef.current;
             if (itemsElm) {
-                if (
-                    (((itemsElm.scrollWidth  - itemsElm.clientWidth ) - itemsElm.scrollLeft) <= 0.5)
-                    &&
-                    (((itemsElm.scrollHeight - itemsElm.clientHeight) - itemsElm.scrollTop ) <= 0.5)
-                ) {
+                if (isEndOfScroll(itemsElm)) {
                     // end of scroll
                     if (!carouselVariant.infiniteLoop) {
-                        // scroll to first
+                        // scroll to first:
                         scrollTo(itemsElm.firstElementChild as (HTMLElement|null));
                     }
                     else {
-                        // move the first item to the last
+                        // move the first item to the last:
                         const item = itemsElm.firstElementChild;
                         if (item) {
                             // save the current scrollPos before modifying:
@@ -664,6 +684,20 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 
                 
                 
+                const dummyElm = listDummyRef.current;
+                if (dummyElm) {
+                    if (isEndOfScroll(dummyElm)) {
+                        // scroll to first:
+                        scrollTo(dummyElm.firstElementChild as (HTMLElement|null));
+                    }
+                    else {
+                        // scroll to next:
+                        scrollBy(dummyElm, true);
+                    } // if
+                } // if
+                
+                
+                
                 e.preventDefault();
             } // if itemsElm
         } // if
@@ -681,7 +715,28 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             // classes:
             mainClass={props.mainClass ?? sheet.main}
         >
-            { children && <Element<TElement>
+            { children && <>
+                { carouselVariant.infiniteLoop && <Element<TElement>
+                    // essentials:
+                    tag={itemsTagFn}
+                    elmRef={(elm) => {
+                        setElmRef(listDummyRef, elm);
+                    }}
+                    
+                    
+                    // classes:
+                    mainClass='items dummy'
+                >
+                {(Array.isArray(children) ? children : [children]).map((child, index) => (
+                    <div
+                        // essentials:
+                        key={index}
+                    >
+                    </div>
+                ))}
+                </Element> }
+                
+                <Element<TElement>
                     // essentials:
                     tag={itemsTagFn}
                     elmRef={(elm) => {
@@ -714,7 +769,8 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         { child }
                     </CarouselItem>
                 ))}
-            </Element> }
+                </Element>
+            </> }
             
             {
                 //#region has class prevBtn
@@ -827,7 +883,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         
                         {...(isTypeOf(nav, Navscroll) ? ({
                             // scrolls:
-                            targetRef     : (nav.props as NavscrollProps).targetRef ?? listRef,
+                            targetRef     : (nav.props as NavscrollProps).targetRef ?? (carouselVariant.infiniteLoop ? listDummyRef : listRef),
                             interpolation : (nav.props as NavscrollProps).interpolation ?? true,
                         } as NavscrollProps) : {})}
                     />
@@ -854,7 +910,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // scrolls:
-                    targetRef={listRef}
+                    targetRef={(carouselVariant.infiniteLoop ? listDummyRef : listRef)}
                     interpolation={true}
                 >
                     {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
