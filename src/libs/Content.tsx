@@ -181,7 +181,7 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
         ]),
         layout({
             // borders:
-            overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
+         // overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
             
             
             
