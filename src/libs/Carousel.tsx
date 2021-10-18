@@ -521,6 +521,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     
     // fn props:
+    const itemsTotal = (children && (Array.isArray(children) ? children.length : 1)) || 0;
     const itemsTagFn = itemsTag ?? 'ul';
     const itemTagFn  = itemTag  ?? ['ul', 'ol'].includes(itemsTagFn) ? 'li' : 'div';
     
@@ -531,10 +532,9 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     const listDummyRef = useRef<HTMLElement|null>(null);
     const dummyDiff    = useRef<number>(0);
     const setDummyDiff = (diff: number) => {
-        const total = (children && (Array.isArray(children) ? children.length : 1)) || 0;
-        if (!total) return;
+        if (!itemsTotal) return;
         
-        dummyDiff.current = (((dummyDiff.current - diff) % total) + total) % total;
+        dummyDiff.current = (((dummyDiff.current - diff) % itemsTotal) + itemsTotal) % itemsTotal;
     };
     
     // sync dummyElm scrolling position to itemsElm scrolling position, once at startup:
@@ -585,6 +585,40 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 behavior : dummyBehavior,
             };
         };
+        const normalizeScrollItems = (itemsElm: HTMLElement) => {
+            if (!itemsTotal) return; // empty items => nothing to do
+            
+            const diff = dummyDiff.current;
+            if (!diff) return; // no difference => nothing to do
+            
+            
+            
+            // remember the current scrollPos before modifying:
+            const scrollPos = itemsElm.scrollLeft;
+            
+            
+            
+            // decide which side to be moved:
+            if (diff <= itemsTotal) { // modify the left side
+                Array.from(itemsElm.childNodes).slice(0, diff) // take nth elements from the left
+                .forEach((item) => itemsElm.append(item));     // insert the items at the end
+            }
+            else { // modify the right side
+                Array.from(itemsElm.childNodes).slice(-diff)   // take nth elements from the right
+                .reverse()                                     // inserting at the beginning causes the inserted items to be reversed, so we're re-reversing them to keep the order
+                .forEach((item) => itemsElm.insertBefore(item, itemsElm.firstElementChild)); // insert the items at the beginning
+            } // if
+            
+            
+            
+            // set the current scrollPos to the original:
+            itemsElm.scrollTo({ left: scrollPos, behavior: ('instant' as any) }); // no scrolling animation during sync
+            
+            
+            
+            // reset the diff of itemsElm & dummyElm:
+            dummyDiff.current = 0;
+        };
         
         const oriScrollBy = dummyElm.scrollBy;
         dummyElm.scrollBy = (function(this: HTMLElement, optionsOrX?: ScrollToOptions|number, y?: number) {
@@ -630,7 +664,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             dummyElm.scrollBy = oriScrollBy;
             dummyElm.scrollTo = oriScrollTo;
         };
-    }, [infiniteLoop, dummyDiff]);
+    }, [infiniteLoop, dummyDiff, itemsTotal]);
     
     
     
@@ -710,17 +744,17 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     // move the last item to the first:
                     const item = itemsElm.lastElementChild;
                     if (item) {
-                        // save the current scrollPos before modifying:
+                        // remember the current scrollPos before modifying:
                         const scrollPos = itemsElm.scrollLeft;
                         
                         
                         
-                        itemsElm.insertBefore(item, itemsElm.firstElementChild);
+                        itemsElm.insertBefore(item, itemsElm.firstElementChild); // insert the items at the beginning
                         
                         
                         
-                        // set the current scrollPos to the next item:
-                        itemsElm.scrollTo({ left: (scrollPos + itemsElm.clientWidth), behavior: ('instant' as any) });
+                        // set the current scrollPos to the next item, so the scrolling effect can occur:
+                        itemsElm.scrollTo({ left: (scrollPos + itemsElm.clientWidth), behavior: ('instant' as any) }); // no scrolling animation during sync
                     } // if
                     
                     
@@ -774,17 +808,17 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     // move the first item to the last:
                     const item = itemsElm.firstElementChild;
                     if (item) {
-                        // save the current scrollPos before modifying:
+                        // remember the current scrollPos before modifying:
                         const scrollPos = itemsElm.scrollLeft;
                         
                         
                         
-                        itemsElm.append(item);
+                        itemsElm.append(item); // insert the items at the end
                         
                         
                         
-                        // set the current scrollPos to the prev item:
-                        itemsElm.scrollTo({ left: (scrollPos - itemsElm.clientWidth), behavior: ('instant' as any) });
+                        // set the current scrollPos to the prev item, so the scrolling effect can occur:
+                        itemsElm.scrollTo({ left: (scrollPos - itemsElm.clientWidth), behavior: ('instant' as any) }); // no scrolling animation during sync
                     } // if
                     
                     
