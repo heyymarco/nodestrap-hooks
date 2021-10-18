@@ -566,7 +566,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             const dummyLeft     =  (typeof(optionsOrX) !== 'number') ? (optionsOrX?.left ?? 0) : optionsOrX;
             const dummyBehavior = ((typeof(optionsOrX) !== 'number') && optionsOrX?.behavior) || 'smooth';
             
-            const ratio         = itemsElm.scrollWidth / dummyElm.scrollWidth;
+            const ratio         = (itemsElm.scrollWidth - itemsElm.clientWidth) / (dummyElm.scrollWidth - dummyElm.clientWidth);
             const itemsCurrent  = dummyCurrent * ratio;
             const itemsLeft     = dummyLeft    * ratio;
             const itemsDiff     = (dummyDiff.current * itemsElm.clientWidth); // converts logical diff to physical diff
