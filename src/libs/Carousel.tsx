@@ -661,8 +661,10 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         
         
         
-        // set the current scrollPos to the original:
-        itemsElm.scrollTo({ left: scrollPos, behavior: ('instant' as any) }); // no scrolling animation during sync
+        // set the scrollPos to the correct image:
+        const style = getComputedStyle(itemsElm);
+        const step  = itemsElm.clientWidth - (Number.parseInt(style.paddingLeft) || 0) - (Number.parseInt(style.paddingRight ) || 0);
+        itemsElm.scrollTo({ left: scrollPos - (step * diff), behavior: ('instant' as any) }); // no scrolling animation during sync
         
         
         
