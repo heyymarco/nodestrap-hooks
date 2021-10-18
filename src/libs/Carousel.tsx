@@ -2,6 +2,7 @@
 import {
     default as React,
     useRef,
+    useEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -116,7 +117,7 @@ export const useCarouselVariant = (props: CarouselVariant) => {
 const itemsElm   = '.items';    // `.items` is the slideList
 // const itemElm    = ['li', '*'];  // poor specificity // any children inside the slideList are slideItem
 const itemElm    = ':nth-child(n)'; // better specificity // any children inside the slideList are slideItem
-const mediaElm   = ['img', 'svg', 'video'];
+const mediaElm   = ['figure', 'img', 'svg', 'video'];
 const prevBtnElm = '.prevBtn';
 const nextBtnElm = '.nextBtn';
 const navElm     = '.nav';
@@ -490,6 +491,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     // variants:
     const carouselVariant = useCarouselVariant(props);
+    const infiniteLoop    = carouselVariant.infiniteLoop;
     
     
     
@@ -519,6 +521,108 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     // dom effects:
     const listRef      = useRef<HTMLElement|null>(null);
     const listDummyRef = useRef<HTMLElement|null>(null);
+    const dummyDiff    = useRef<number>(0);
+    const setDummyDiff = (diff: number) => {
+        const total = (children && (Array.isArray(children) ? children.length : 1)) || 0;
+        if (!total) return;
+        
+        dummyDiff.current = (((dummyDiff.current - diff) % total) + total) % total;
+    };
+    
+    // sync dummyElm scrolling position to itemsElm scrolling position, once at startup:
+    useEffect(() => {
+        if (!infiniteLoop) return;
+        
+        const dummyElm = listDummyRef.current;
+        if (!dummyElm) return; // dummyElm must be exist to sync
+        
+        const itemsElm = listRef.current;
+        if (!itemsElm) return; // itemsElm must be exist for syncing
+        
+        
+        
+        dummyElm.scrollTo({ left: itemsElm.scrollLeft, top: itemsElm.scrollTop, behavior: ('instant' as any) }); // no scrolling animation during sync
+    }, [infiniteLoop]);
+    
+    // sync itemsElm scrolling position to dummyElm scrolling position, every `scrollBy()`/`scrollTo()` called:
+    useEffect(() => {
+        if (!infiniteLoop) return;
+        
+        const dummyElm = listDummyRef.current;
+        if (!dummyElm) return; // dummyElm must be exist for syncing
+        
+        
+        
+        const calculateScrollItems = (dummyElm: HTMLElement, itemsElm: HTMLElement, optionsOrX: ScrollToOptions|number|undefined, relative: boolean) => {
+            const dummyCurrent  = relative ? dummyElm.scrollLeft : 0;
+            const dummyLeft     =  (typeof(optionsOrX) !== 'number') ? (optionsOrX?.left ?? 0) : optionsOrX;
+            const dummyBehavior = ((typeof(optionsOrX) !== 'number') && optionsOrX?.behavior) || 'smooth';
+            
+            const ratio         = itemsElm.scrollWidth / dummyElm.scrollWidth;
+            const itemsCurrent  = dummyCurrent * ratio;
+            const itemsLeft     = dummyLeft    * ratio;
+            const itemsDiff     = (dummyDiff.current * itemsElm.clientWidth); // converts logical diff to physical diff
+            const itemsLeftLoop = itemsCurrent + itemsLeft + itemsDiff;       // current scroll + scroll by + diff
+            const itemsLeftAbs  = itemsLeftLoop % itemsElm.scrollWidth;       // wrap overflowed left
+            
+            return {
+                left     : Math.round(
+                    Math.min(Math.max(
+                        itemsLeftAbs
+                    , 0), (itemsElm.scrollWidth - itemsElm.clientWidth))
+                    -
+                    (relative ? itemsElm.scrollLeft : 0)
+                ),
+                
+                behavior : dummyBehavior,
+            };
+        };
+        
+        const oriScrollBy = dummyElm.scrollBy;
+        dummyElm.scrollBy = (function(this: HTMLElement, optionsOrX?: ScrollToOptions|number, y?: number) {
+            const itemsElm = listRef.current;
+            if (itemsElm) { // itemsElm must be exist to sync
+                itemsElm.scrollBy(calculateScrollItems(this, itemsElm, optionsOrX, true));
+            } // if
+            
+            
+            
+            // call the original:
+            if (typeof(optionsOrX) !== 'number') {
+                (oriScrollBy as any).call(this, optionsOrX);
+            }
+            else {
+                (oriScrollBy as any).call(this, optionsOrX, y);
+            } // if
+        } as any);
+        
+        const oriScrollTo = dummyElm.scrollTo;
+        dummyElm.scrollTo = (function(this: HTMLElement, optionsOrX?: ScrollToOptions|number, y?: number) {
+            const itemsElm = listRef.current;
+            if (itemsElm) { // itemsElm must be exist to sync
+                itemsElm.scrollTo(calculateScrollItems(this, itemsElm, optionsOrX, false));
+            } // if
+            
+            
+            
+            // call the original:
+            if (typeof(optionsOrX) !== 'number') {
+                (oriScrollTo as any).call(this, optionsOrX);
+            }
+            else {
+                (oriScrollTo as any).call(this, optionsOrX, y);
+            } // if
+        } as any);
+        
+        
+        
+        // cleanups:
+        return () => {
+            // restore the hacked to original:
+            dummyElm.scrollBy = oriScrollBy;
+            dummyElm.scrollTo = oriScrollTo;
+        };
+    }, [infiniteLoop, dummyDiff]);
     
     
     
@@ -545,7 +649,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             top      : deltaScrollTop,
             behavior : 'smooth',
         });
-    }
+    };
     const scrollTo   = (targetSlide: HTMLElement|null) => {
         if (!targetSlide) return;
         const parent = targetSlide.parentElement! as HTMLElement;
@@ -588,36 +692,55 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     const handlePrev = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         if (!e.defaultPrevented) {
+            const dummyElm = listDummyRef.current;
             const itemsElm = listRef.current;
-            if (itemsElm) {
-                if (isBeginOfScroll(itemsElm)) {
-                    // end of scroll
-                    if (!carouselVariant.infiniteLoop) {
-                        // scroll to last:
-                        scrollTo(itemsElm.lastElementChild as (HTMLElement|null));
-                    }
-                    else {
-                        // move the last item to the first:
-                        const item = itemsElm.lastElementChild;
-                        if (item) {
-                            // save the current scrollPos before modifying:
-                            const scrollPos = itemsElm.scrollLeft;
-                            
-                            
-                            
-                            itemsElm.insertBefore(item, itemsElm.firstElementChild);
-                            
-                            
-                            
-                            // set the current scrollPos to the next item:
-                            itemsElm.scrollTo({ left: (scrollPos + itemsElm.clientWidth), behavior: ('instant' as any) });
-                        } // if
+            
+            
+            
+            if (carouselVariant.infiniteLoop && dummyElm) {
+                if (itemsElm && isBeginOfScroll(itemsElm)) {
+                    // move the last item to the first:
+                    const item = itemsElm.lastElementChild;
+                    if (item) {
+                        // save the current scrollPos before modifying:
+                        const scrollPos = itemsElm.scrollLeft;
                         
-                        // then
                         
-                        // scroll to previous:
-                        scrollBy(itemsElm, false);
+                        
+                        itemsElm.insertBefore(item, itemsElm.firstElementChild);
+                        
+                        
+                        
+                        // set the current scrollPos to the next item:
+                        itemsElm.scrollTo({ left: (scrollPos + itemsElm.clientWidth), behavior: ('instant' as any) });
                     } // if
+                    
+                    
+                    
+                    // calculate the diff of itemsElm & dummyElm:
+                    setDummyDiff(-1);
+                } // if
+                
+                
+                
+                if (isBeginOfScroll(dummyElm)) {
+                    // scroll to last:
+                    scrollTo(dummyElm.lastElementChild as (HTMLElement|null));
+                }
+                else {
+                    // scroll to previous:
+                    scrollBy(dummyElm, false);
+                } // if
+                
+                
+                
+                // all necessary task has been performed, no further action needed:
+                e.preventDefault();
+            }
+            else if (itemsElm) {
+                if (isBeginOfScroll(itemsElm)) {
+                    // scroll to last:
+                    scrollTo(itemsElm.lastElementChild as (HTMLElement|null));
                 }
                 else {
                     // scroll to previous:
@@ -626,56 +749,62 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 
                 
                 
-                const dummyElm = listDummyRef.current;
-                if (dummyElm) {
-                    if (isBeginOfScroll(dummyElm)) {
-                        // scroll to last:
-                        scrollTo(dummyElm.lastElementChild as (HTMLElement|null));
-                    }
-                    else {
-                        // scroll to previous:
-                        scrollBy(dummyElm, false);
-                    } // if
-                } // if
-                
-                
-                
+                // all necessary task has been performed, no further action needed:
                 e.preventDefault();
-            } // if itemsElm
+            } // if
         } // if
     };
     const handleNext = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         if (!e.defaultPrevented) {
+            const dummyElm = listDummyRef.current;
             const itemsElm = listRef.current;
-            if (itemsElm) {
-                if (isEndOfScroll(itemsElm)) {
-                    // end of scroll
-                    if (!carouselVariant.infiniteLoop) {
-                        // scroll to first:
-                        scrollTo(itemsElm.firstElementChild as (HTMLElement|null));
-                    }
-                    else {
-                        // move the first item to the last:
-                        const item = itemsElm.firstElementChild;
-                        if (item) {
-                            // save the current scrollPos before modifying:
-                            const scrollPos = itemsElm.scrollLeft;
-                            
-                            
-                            
-                            itemsElm.append(item);
-                            
-                            
-                            
-                            // set the current scrollPos to the prev item:
-                            itemsElm.scrollTo({ left: (scrollPos - itemsElm.clientWidth), behavior: ('instant' as any) });
-                        } // if
+            
+            
+            
+            if (carouselVariant.infiniteLoop && dummyElm) {
+                if (itemsElm && isEndOfScroll(itemsElm)) {
+                    // move the first item to the last:
+                    const item = itemsElm.firstElementChild;
+                    if (item) {
+                        // save the current scrollPos before modifying:
+                        const scrollPos = itemsElm.scrollLeft;
                         
-                        // then
                         
-                        // scroll to next:
-                        scrollBy(itemsElm, true);
+                        
+                        itemsElm.append(item);
+                        
+                        
+                        
+                        // set the current scrollPos to the prev item:
+                        itemsElm.scrollTo({ left: (scrollPos - itemsElm.clientWidth), behavior: ('instant' as any) });
                     } // if
+                    
+                    
+                    
+                    // calculate the diff of itemsElm & dummyElm:
+                    setDummyDiff(1);
+                } // if
+                
+                
+                
+                if (isEndOfScroll(dummyElm)) {
+                    // scroll to first:
+                    scrollTo(dummyElm.firstElementChild as (HTMLElement|null));
+                }
+                else {
+                    // scroll to next:
+                    scrollBy(dummyElm, true);
+                } // if
+                
+                
+                
+                // all necessary task has been performed, no further action needed:
+                e.preventDefault();
+            }
+            else if (itemsElm) {
+                if (isEndOfScroll(itemsElm)) {
+                    // scroll to first:
+                    scrollTo(itemsElm.firstElementChild as (HTMLElement|null));
                 }
                 else {
                     // scroll to next:
@@ -684,22 +813,9 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 
                 
                 
-                const dummyElm = listDummyRef.current;
-                if (dummyElm) {
-                    if (isEndOfScroll(dummyElm)) {
-                        // scroll to first:
-                        scrollTo(dummyElm.firstElementChild as (HTMLElement|null));
-                    }
-                    else {
-                        // scroll to next:
-                        scrollBy(dummyElm, true);
-                    } // if
-                } // if
-                
-                
-                
+                // all necessary task has been performed, no further action needed:
                 e.preventDefault();
-            } // if itemsElm
+            } // if
         } // if
     };
     
