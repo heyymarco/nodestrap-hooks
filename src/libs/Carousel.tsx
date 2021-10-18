@@ -585,40 +585,6 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 behavior : dummyBehavior,
             };
         };
-        const normalizeScrollItems = (itemsElm: HTMLElement) => {
-            if (!itemsTotal) return; // empty items => nothing to do
-            
-            const diff = dummyDiff.current;
-            if (!diff) return; // no difference => nothing to do
-            
-            
-            
-            // remember the current scrollPos before modifying:
-            const scrollPos = itemsElm.scrollLeft;
-            
-            
-            
-            // decide which side to be moved:
-            if (diff <= itemsTotal) { // modify the left side
-                Array.from(itemsElm.childNodes).slice(0, diff) // take nth elements from the left
-                .forEach((item) => itemsElm.append(item));     // insert the items at the end
-            }
-            else { // modify the right side
-                Array.from(itemsElm.childNodes).slice(-diff)   // take nth elements from the right
-                .reverse()                                     // inserting at the beginning causes the inserted items to be reversed, so we're re-reversing them to keep the order
-                .forEach((item) => itemsElm.insertBefore(item, itemsElm.firstElementChild)); // insert the items at the beginning
-            } // if
-            
-            
-            
-            // set the current scrollPos to the original:
-            itemsElm.scrollTo({ left: scrollPos, behavior: ('instant' as any) }); // no scrolling animation during sync
-            
-            
-            
-            // reset the diff of itemsElm & dummyElm:
-            dummyDiff.current = 0;
-        };
         
         const oriScrollBy = dummyElm.scrollBy;
         dummyElm.scrollBy = (function(this: HTMLElement, optionsOrX?: ScrollToOptions|number, y?: number) {
@@ -669,7 +635,42 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     
     // functions:
-    const scrollBy   = (itemsElm: HTMLElement, nextSlide: boolean) => {
+    const normalizeScrollItems = (itemsElm: HTMLElement) => {
+        if (!itemsTotal) return; // empty items => nothing to do
+        
+        const diff = dummyDiff.current;
+        if (!diff) return; // no difference => nothing to do
+        
+        
+        
+        // remember the current scrollPos before modifying:
+        const scrollPos = itemsElm.scrollLeft;
+        
+        
+        
+        // decide which side to be moved:
+        if (diff <= itemsTotal) { // modify the left side
+            Array.from(itemsElm.childNodes).slice(0, diff) // take nth elements from the left
+            .forEach((item) => itemsElm.append(item));     // insert the items at the end
+        }
+        else { // modify the right side
+            Array.from(itemsElm.childNodes).slice(-diff)   // take nth elements from the right
+            .reverse()                                     // inserting at the beginning causes the inserted items to be reversed, so we're re-reversing them to keep the order
+            .forEach((item) => itemsElm.insertBefore(item, itemsElm.firstElementChild)); // insert the items at the beginning
+        } // if
+        
+        
+        
+        // set the current scrollPos to the original:
+        itemsElm.scrollTo({ left: scrollPos, behavior: ('instant' as any) }); // no scrolling animation during sync
+        
+        
+        
+        // reset the diff of itemsElm & dummyElm:
+        dummyDiff.current = 0;
+    };
+    
+    const scrollBy = (itemsElm: HTMLElement, nextSlide: boolean) => {
         const parent = itemsElm;
         
         
@@ -692,7 +693,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             behavior : 'smooth',
         });
     };
-    const scrollTo   = (targetSlide: HTMLElement|null) => {
+    const scrollTo = (targetSlide: HTMLElement|null) => {
         if (!targetSlide) return;
         const parent = targetSlide.parentElement! as HTMLElement;
         
@@ -726,7 +727,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         &&
         (itemsElm.scrollTop  <= 0.5)
     );
-    const isEndOfScroll = (itemsElm: HTMLElement) => (
+    const isEndOfScroll   = (itemsElm: HTMLElement) => (
         (((itemsElm.scrollWidth  - itemsElm.clientWidth ) - itemsElm.scrollLeft) <= 0.5)
         &&
         (((itemsElm.scrollHeight - itemsElm.clientHeight) - itemsElm.scrollTop ) <= 0.5)
@@ -924,6 +925,12 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     <div
                         // essentials:
                         key={index}
+                        
+                        
+                        // events:
+                        onScroll={(e) => {
+                            //
+                        }}
                     >
                     </div>
                 ))}
