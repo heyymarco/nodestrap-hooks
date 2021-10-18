@@ -337,7 +337,8 @@ export const usesCarouselLayout = () => {
             ...children(dummyElm, composition([
                 layout({
                     // appearances:
-                    visibility : 'hidden',
+                 // visibility : 'hidden', // causing onScroll doesn't work in Firefox
+                    opacity    : 0,
                     zIndex     : -1,
                 }),
             ])),
@@ -927,6 +928,10 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     elmRef={(elm) => {
                         setElmRef(listDummyRef, elm);
                     }}
+                    
+                    
+                    // accessibilities:
+                    aria-hidden={true} // just a dummy element, no meaningful content here
                     
                     
                     // classes:
