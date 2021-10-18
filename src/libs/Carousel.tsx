@@ -675,21 +675,27 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         
         
         
-        const [limDeltaScrollLeft, limDeltaScrollTop] = [
-            nextSlide ? ((parent.scrollWidth  - parent.clientWidth ) - parent.scrollLeft) : -parent.scrollLeft,
-            nextSlide ? ((parent.scrollHeight - parent.clientHeight) - parent.scrollTop)  : -parent.scrollTop,
+        // calculate the limit of the allowed scrolling distances:
+        const [minLeft, maxLeft, minTop, maxTop] = [
+            -parent.scrollLeft,
+            (parent.scrollWidth  - parent.clientWidth ) - parent.scrollLeft,
+            
+            -parent.scrollTop,
+            (parent.scrollHeight - parent.clientHeight) - parent.scrollTop,
         ];
         
-        const [deltaScrollLeft, deltaScrollTop] = [
-            nextSlide ? Math.min(parent.clientWidth,  limDeltaScrollLeft) : Math.max(-parent.clientWidth,  limDeltaScrollLeft),
-            nextSlide ? Math.min(parent.clientHeight, limDeltaScrollTop ) : Math.max(-parent.clientHeight, limDeltaScrollTop),
+        // calculate the scrolling distance:
+        const style = getComputedStyle(parent);
+        const [scrollLeft, scrollRight] = [
+            Math.min(Math.max((itemsElm.clientWidth  - (Number.parseInt(style.paddingLeft) || 0)  - (Number.parseInt(style.paddingRight ) || 0)) * (nextSlide ? 1 : -1), minLeft), maxLeft),
+            Math.min(Math.max((itemsElm.clientHeight - (Number.parseInt(style.paddingTop ) || 0)  - (Number.parseInt(style.paddingBottom) || 0)) * (nextSlide ? 1 : -1), minTop ), maxTop ),
         ];
         
         
         
         parent.scrollBy({
-            left     : deltaScrollLeft,
-            top      : deltaScrollTop,
+            left     : scrollLeft,
+            top      : scrollRight,
             behavior : 'smooth',
         });
     };
@@ -699,25 +705,28 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         
         
         
-        const [maxDeltaScrollLeft, maxDeltaScrollTop] = [
+        // calculate the limit of the allowed scrolling distances:
+        const [minLeft, maxLeft, minTop, maxTop] = [
+            -parent.scrollLeft,
             (parent.scrollWidth  - parent.clientWidth ) - parent.scrollLeft,
+            
+            -parent.scrollTop,
             (parent.scrollHeight - parent.clientHeight) - parent.scrollTop,
         ];
         
-        const [deltaScrollLeft, deltaScrollTop] = (() => {
-            const dimension = Dimension.from(targetSlide);
-            
-            return [
-                Math.min(dimension.offsetLeft, maxDeltaScrollLeft),
-                Math.min(dimension.offsetTop,  maxDeltaScrollTop ),
-            ];
-        })();
+        // calculate the scrolling distance:
+        const style = getComputedStyle(parent);
+        const dimension = Dimension.from(targetSlide);
+        const [scrollLeft, scrollRight] = [
+            Math.min(Math.max(dimension.offsetLeft - (Number.parseInt(style.paddingLeft) || 0), minLeft), maxLeft),
+            Math.min(Math.max(dimension.offsetTop  - (Number.parseInt(style.paddingTop ) || 0), minTop ), maxTop ),
+        ];
         
         
         
         parent.scrollBy({
-            left     : deltaScrollLeft,
-            top      : deltaScrollTop,
+            left     : scrollLeft,
+            top      : scrollRight,
             behavior : 'smooth',
         });
     };
