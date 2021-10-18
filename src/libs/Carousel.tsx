@@ -929,17 +929,34 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     // classes:
                     mainClass='items dummy'
+                    
+                    
+                    // events:
+                    onScroll={(e) => {
+                        const diff = dummyDiff.current;
+                        if (!diff) return; // no difference => nothing to do
+                        
+                        
+                        
+                        const dummyElm = e.target as HTMLElement;
+                        const itemsElm = listRef.current;
+                        if (!itemsElm) return; // itemsElm must be exist to normalize
+                        
+                        
+                        
+                        const style = getComputedStyle(dummyElm);
+                        const step  = dummyElm.clientWidth - (Number.parseInt(style.paddingLeft) || 0) - (Number.parseInt(style.paddingRight ) || 0);
+                        if (dummyElm.scrollLeft % step) return; // not an exact step => scrolling is still in progress => abort
+                        
+                        
+                        
+                        normalizeScrollItems(itemsElm);
+                    }}
                 >
                 {(Array.isArray(children) ? children : [children]).map((child, index) => (
                     <div
                         // essentials:
                         key={index}
-                        
-                        
-                        // events:
-                        onScroll={(e) => {
-                            //
-                        }}
                     >
                     </div>
                 ))}
