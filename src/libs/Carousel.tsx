@@ -115,6 +115,7 @@ export const useCarouselVariant = (props: CarouselVariant) => {
 
 // styles:
 const itemsElm   = '.items';    // `.items` is the slideList
+const dummyElm   = '.dummy';
 // const itemElm    = ['li', '*'];  // poor specificity // any children inside the slideList are slideItem
 const itemElm    = ':nth-child(n)'; // better specificity // any children inside the slideList are slideItem
 const mediaElm   = ['figure', 'img', 'svg', 'video'];
@@ -332,6 +333,13 @@ export const usesCarouselLayout = () => {
                 imports([
                     usesCarouselItemsLayout(),
                 ]),
+            ])),
+            ...children(dummyElm, composition([
+                layout({
+                    // appearances:
+                    visibility : 'hidden',
+                    zIndex     : -1,
+                }),
             ])),
             
             ...children([prevBtnElm, nextBtnElm], composition([
@@ -832,26 +840,6 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             mainClass={props.mainClass ?? sheet.main}
         >
             { children && <>
-                { carouselVariant.infiniteLoop && <Element<TElement>
-                    // essentials:
-                    tag={itemsTagFn}
-                    elmRef={(elm) => {
-                        setElmRef(listDummyRef, elm);
-                    }}
-                    
-                    
-                    // classes:
-                    mainClass='items dummy'
-                >
-                {(Array.isArray(children) ? children : [children]).map((child, index) => (
-                    <div
-                        // essentials:
-                        key={index}
-                    >
-                    </div>
-                ))}
-                </Element> }
-                
                 <Element<TElement>
                     // essentials:
                     tag={itemsTagFn}
@@ -886,6 +874,26 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     </CarouselItem>
                 ))}
                 </Element>
+                
+                { carouselVariant.infiniteLoop && <Element<TElement>
+                    // essentials:
+                    tag={itemsTagFn}
+                    elmRef={(elm) => {
+                        setElmRef(listDummyRef, elm);
+                    }}
+                    
+                    
+                    // classes:
+                    mainClass='items dummy'
+                >
+                {(Array.isArray(children) ? children : [children]).map((child, index) => (
+                    <div
+                        // essentials:
+                        key={index}
+                    >
+                    </div>
+                ))}
+                </Element> }
             </> }
             
             {
