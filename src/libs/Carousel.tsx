@@ -664,12 +664,13 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         
         
         // decide which side to be moved:
-        if (diff <= itemsTotal) { // modify the left side
+        const modifLeft = diff <= (itemsTotal / 2);
+        if (modifLeft) { // modify the left side
             Array.from(itemsElm.childNodes).slice(0, diff) // take nth elements from the left
             .forEach((item) => itemsElm.append(item));     // insert the items at the end
         }
         else { // modify the right side
-            Array.from(itemsElm.childNodes).slice(-diff)   // take nth elements from the right
+            Array.from(itemsElm.childNodes).slice(-(itemsTotal - diff))   // take nth elements from the right
             .reverse()                                     // inserting at the beginning causes the inserted items to be reversed, so we're re-reversing them to keep the order
             .forEach((item) => itemsElm.insertBefore(item, itemsElm.firstElementChild)); // insert the items at the beginning
         } // if
@@ -679,7 +680,11 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         // set the scrollPos to the correct image:
         const style = getComputedStyle(itemsElm);
         const step  = itemsElm.clientWidth - (Number.parseInt(style.paddingLeft) || 0) - (Number.parseInt(style.paddingRight ) || 0);
-        itemsElm.scrollTo({ left: scrollPos - (step * diff), behavior: ('instant' as any) }); // no scrolling animation during sync
+        const move  = modifLeft ? (itemsTotal - diff) : (-diff);
+        itemsElm.scrollTo({
+            left     : scrollPos + (step * move),
+            behavior : ('instant' as any) // no scrolling animation during sync
+        });
         
         
         
