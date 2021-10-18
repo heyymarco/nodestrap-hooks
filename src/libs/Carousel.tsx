@@ -550,7 +550,21 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         
         
         
-        dummyElm.scrollTo({ left: itemsElm.scrollLeft, top: itemsElm.scrollTop, behavior: ('instant' as any) }); // no scrolling animation during sync
+        const itemsCurrent = itemsElm.scrollLeft;
+        const ratio        = (dummyElm.scrollWidth - dummyElm.clientWidth) / (itemsElm.scrollWidth - itemsElm.clientWidth);
+        const dummyCurrent = itemsCurrent * ratio;
+        
+        
+        
+        dummyElm.scrollTo({
+            left     : Math.round(
+                Math.min(Math.max(
+                    dummyCurrent
+                , 0), (dummyElm.scrollWidth - dummyElm.clientWidth))
+            ),
+            
+            behavior : ('instant' as any) // no scrolling animation during sync
+        });
     }, [infiniteLoop]);
     
     // sync itemsElm scrolling position to dummyElm scrolling position, every `scrollBy()`/`scrollTo()` called:
