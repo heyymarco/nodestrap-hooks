@@ -482,15 +482,16 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
         CarouselVariant
 {
     // essentials:
-    itemsTag? : keyof JSX.IntrinsicElements
-    itemTag?  : keyof JSX.IntrinsicElements
+    scrollRef? : React.Ref<HTMLElement> // setter ref
+    itemsTag?  : keyof JSX.IntrinsicElements
+    itemTag?   : keyof JSX.IntrinsicElements
     
     
     // children:
-    children? : React.ReactNode
-    prevBtn?  : React.ReactChild | boolean | null
-    nextBtn?  : React.ReactChild | boolean | null
-    nav?      : React.ReactChild | boolean | null
+    children?  : React.ReactNode
+    prevBtn?   : React.ReactChild | boolean | null
+    nextBtn?   : React.ReactChild | boolean | null
+    nav?       : React.ReactChild | boolean | null
 }
 export function Carousel<TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) {
     // styles:
@@ -508,6 +509,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     const {
         // essentials:
         elmRef,
+        scrollRef,
         itemsTag,
         itemTag,
         
@@ -771,7 +773,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             
             
             
-            if (carouselVariant.infiniteLoop && dummyElm) {
+            if (infiniteLoop && dummyElm) {
                 if (itemsElm && isBeginOfScroll(itemsElm)) {
                     // move the last item to the first:
                     const item = itemsElm.lastElementChild;
@@ -835,7 +837,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             
             
             
-            if (carouselVariant.infiniteLoop && dummyElm) {
+            if (infiniteLoop && dummyElm) {
                 if (itemsElm && isEndOfScroll(itemsElm)) {
                     // move the first item to the last:
                     const item = itemsElm.firstElementChild;
@@ -911,6 +913,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     tag={itemsTagFn}
                     elmRef={(elm) => {
                         setElmRef(elmRef, elm);
+                        if (!infiniteLoop) setElmRef(scrollRef, elm);
                         setElmRef(listRef, elm);
                     }}
                     
@@ -941,10 +944,11 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 ))}
                 </Element>
                 
-                { carouselVariant.infiniteLoop && <Element<TElement>
+                { infiniteLoop && <Element<TElement>
                     // essentials:
                     tag={itemsTagFn}
                     elmRef={(elm) => {
+                        setElmRef(scrollRef, elm);
                         setElmRef(listDummyRef, elm);
                     }}
                     
@@ -1100,7 +1104,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         
                         {...(isTypeOf(nav, Navscroll) ? ({
                             // scrolls:
-                            targetRef     : (nav.props as NavscrollProps).targetRef ?? (carouselVariant.infiniteLoop ? listDummyRef : listRef),
+                            targetRef     : (nav.props as NavscrollProps).targetRef ?? (infiniteLoop ? listDummyRef : listRef),
                             interpolation : (nav.props as NavscrollProps).interpolation ?? true,
                         } as NavscrollProps) : {})}
                     />
@@ -1127,7 +1131,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // scrolls:
-                    targetRef={(carouselVariant.infiniteLoop ? listDummyRef : listRef)}
+                    targetRef={(infiniteLoop ? listDummyRef : listRef)}
                     interpolation={true}
                 >
                     {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
