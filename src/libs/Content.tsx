@@ -559,7 +559,7 @@ export const usesMediaFill = () => {
 
 
 // styles:
-const mediaElm = ['figure', 'img', 'svg', 'video'];
+const mediaElm = ['figure', 'img', 'svg', 'video', '.media'];
 
 export const usesContentMediaLayout = () => {
     // dependencies:
