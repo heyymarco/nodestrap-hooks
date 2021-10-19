@@ -289,10 +289,6 @@ export function Form(props: FormProps) {
             tag={props.tag ?? 'form'}
             
             
-            // variants:
-            mild={props.mild ?? true}
-            
-            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
