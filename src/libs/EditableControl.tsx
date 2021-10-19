@@ -41,7 +41,7 @@ import {
     
     
     // utilities:
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -702,16 +702,16 @@ export function EditableControl<TElement extends EditableControlElement = Editab
 
             // validations:
             elmRef={(elm) => {
-                setElmRef(props.elmRef, elm);
+                setRef(props.elmRef, elm);
                 
                 
                 if (elm) {
                     if (elm.validity) {
-                        setElmRef(inputRef, elm);
+                        setRef(inputRef, elm);
                     }
                     else {
                         const firstChild = elm.querySelector('input,select,textarea');
-                        if (firstChild) setElmRef(inputRef, firstChild as TElement);
+                        if (firstChild) setRef(inputRef, firstChild as TElement);
                     } // if
 
                     if (inputRef.current) inputValidator.handleInit(inputRef.current);

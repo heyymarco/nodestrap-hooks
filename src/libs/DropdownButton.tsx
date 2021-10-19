@@ -6,7 +6,7 @@ import {
 
 // cssfn:
 import {
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import type {
     // hooks:
@@ -153,8 +153,8 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 
                 // essentials:
                 elmRef={(elm) => {
-                    setElmRef(elmRef, elm);
-                    setElmRef(buttonRef, elm);
+                    setRef(elmRef, elm);
+                    setRef(buttonRef, elm);
                 }}
                 
                 

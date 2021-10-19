@@ -42,7 +42,7 @@ import {
     
     
     // utilities:
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -991,8 +991,8 @@ export function Check(props: CheckProps) {
             <input
                 // essentials:
                 ref={(elm) => {
-                    setElmRef(elmRef, elm);
-                    setElmRef(inputRef, elm);
+                    setRef(elmRef, elm);
+                    setRef(inputRef, elm);
                 }}
                 
                 

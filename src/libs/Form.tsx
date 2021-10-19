@@ -28,7 +28,7 @@ import {
     
     
     // utilities:
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -310,7 +310,7 @@ export function Form(props: FormProps) {
             
             // validations:
             elmRef={(elm) => {
-                setElmRef(props.elmRef, elm);
+                setRef(props.elmRef, elm);
                 
                 
                 if (elm) {

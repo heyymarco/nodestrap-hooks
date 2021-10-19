@@ -31,7 +31,7 @@ import {
     
     // utilities:
     isTypeOf,
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -430,9 +430,9 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                     
                     // essentials:
                     elmRef={(elm) => {
-                        setElmRef(children.props.elmRef, elm);
-                        setElmRef(elmRef, elm);
-                        setElmRef(childRef, elm);
+                        setRef(children.props.elmRef, elm);
+                        setRef(elmRef, elm);
+                        setRef(childRef, elm);
                     }}
                     
                     
@@ -453,8 +453,8 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
                 <DropdownElement<TElement, TCloseType>
                     // essentials:
                     elmRef={(elm) => {
-                        setElmRef(elmRef, elm);
-                        setElmRef(childRef, elm);
+                        setRef(elmRef, elm);
+                        setRef(childRef, elm);
                     }}
                     
                     

@@ -124,7 +124,7 @@ export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React
     );
 };
 
-export const setElmRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>|undefined, elm: TElement|null) => {
+export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>|undefined, elm: TElement|null) => {
     if (elmRef) {
         if (typeof(elmRef) === 'function') {
             elmRef(elm);

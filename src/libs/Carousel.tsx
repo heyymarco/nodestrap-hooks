@@ -38,7 +38,7 @@ import {
     
     // utilities:
     isTypeOf,
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -912,9 +912,9 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     // essentials:
                     tag={itemsTagFn}
                     elmRef={(elm) => {
-                        setElmRef(elmRef, elm);
-                        if (!infiniteLoop) setElmRef(scrollRef, elm);
-                        setElmRef(listRef, elm);
+                        setRef(elmRef, elm);
+                        if (!infiniteLoop) setRef(scrollRef, elm);
+                        setRef(listRef, elm);
                     }}
                     
                     
@@ -948,8 +948,8 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     // essentials:
                     tag={itemsTagFn}
                     elmRef={(elm) => {
-                        setElmRef(scrollRef, elm);
-                        setElmRef(listDummyRef, elm);
+                        setRef(scrollRef, elm);
+                        setRef(listDummyRef, elm);
                     }}
                     
                     

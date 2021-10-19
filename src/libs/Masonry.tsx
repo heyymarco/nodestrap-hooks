@@ -31,7 +31,7 @@ import {
     
     
     // utilities:
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -484,8 +484,8 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
             
             // essentials:
             elmRef={(elm) => {
-                setElmRef(props.elmRef, elm);
-                setElmRef(masonryRef, elm);
+                setRef(props.elmRef, elm);
+                setRef(masonryRef, elm);
             }}
             
             

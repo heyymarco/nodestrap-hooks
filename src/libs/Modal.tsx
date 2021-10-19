@@ -46,7 +46,7 @@ import {
     
     // utilities:
     isTypeOf,
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -649,9 +649,9 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                     
                     // essentials:
                     elmRef={(elm) => {
-                        setElmRef(children.props.elmRef, elm);
-                        setElmRef(elmRef, elm);
-                        setElmRef(childRef, elm);
+                        setRef(children.props.elmRef, elm);
+                        setRef(elmRef, elm);
+                        setRef(childRef, elm);
                     }}
                     
                     
@@ -681,8 +681,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                 <ModalElement<TElement, TCloseType>
                     // essentials:
                     elmRef={(elm) => {
-                        setElmRef(elmRef, elm);
-                        setElmRef(childRef, elm);
+                        setRef(elmRef, elm);
+                        setRef(childRef, elm);
                     }}
                     
                     

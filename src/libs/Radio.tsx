@@ -31,7 +31,7 @@ import {
     
     
     // utilities:
-    setElmRef,
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -261,8 +261,8 @@ export function Radio(props: RadioProps) {
             
             // essentials:
             elmRef={(elm) => {
-                setElmRef(elmRef, elm);
-                setElmRef(inputRef, elm);
+                setRef(elmRef, elm);
+                setRef(inputRef, elm);
             }}
             
             
