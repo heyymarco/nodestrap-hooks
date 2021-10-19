@@ -144,7 +144,10 @@ export const usesLabelVariants = () => {
         variants([
             rule('.content', [ // content
                 imports([
+                    // layouts:
                     usesContentLayout(),
+                    
+                    // variants:
                     usesContentVariants(),
                 ]),
             ]),
