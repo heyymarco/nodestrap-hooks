@@ -318,8 +318,8 @@ export const usesCheckLayout = () => {
     // dependencies:
     
     // colors:
-    const [         , mildRefs     ] = usesMildVariant();
-    const [foreg    , foregRefs    ] = usesForeg();
+    const [, mildRefs              ] = usesMildVariant();
+    const [, foregRefs             ] = usesForeg();
     
     // borders:
     const [, , borderStrokeDecls   ] = usesBorderStroke();
@@ -337,9 +337,6 @@ export const usesCheckLayout = () => {
         imports([
             // layouts:
             usesEditableActionControlLayout(),
-            
-            // colors:
-            foreg(),
             
             // animations:
             checkAnim(),
