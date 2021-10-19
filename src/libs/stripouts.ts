@@ -103,6 +103,15 @@ export const stripoutTextbox = () => composition([
     ]),
 ]);
 
+/**
+ * removes browser's default styling on `input[type=range]`.
+ */
+export const stripoutRange = () => composition([
+    imports([
+        stripoutControl(),
+    ]),
+]);
+
 
 /**
  * removes browser's default styling on list (`ul>li` & `ol>li`).
