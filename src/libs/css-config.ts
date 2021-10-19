@@ -804,7 +804,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          * logoOpacity
          * subOpacity
          */
-        if ((/^(icon|img|media|arrow(Top|Right|Bottom|Left)?|items|item|sub|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|card|caption|header|footer|body|tab|breadcrumb|numbered|element)($|[A-Z])/).test(propName)) continue; // exclude
+        if ((/^(icon|img|media|arrow(Top|Right|Bottom|Left)?|items|item|sub|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|card|caption|header|footer|body|tab|breadcrumb|numbered|element|thumb)($|[A-Z])/).test(propName)) continue; // exclude
 
         // suffixes:
         /**
