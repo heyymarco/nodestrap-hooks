@@ -2,13 +2,15 @@ import {
     // compositions:
     composition,
     imports,
-
-
+    
+    
+    
     // layouts:
     layout,
     children,
-
-
+    
+    
+    
     // rules:
     variants,
     rule,
@@ -70,6 +72,7 @@ export const stripoutControl = () => composition([
         font                  : unset,
         padding               : unset,
         border                : unset,
+        borderRadius          : unset,
         boxSizing             : unset,
     }),
 ]);
@@ -84,9 +87,10 @@ export const stripoutTextbox = () => composition([
     ]),
     layout({
         '-moz-appearance'  : 'textfield',
-
-
-
+        
+        
+        
+        // children:
         ...children(['::-webkit-calendar-picker-indicator', '::-webkit-inner-spin-button', '::-webkit-search-cancel-button'], [
             layout({
                 appearance : none,
@@ -103,6 +107,8 @@ export const stripoutTextbox = () => composition([
     ]),
 ]);
 
+export const rangeTrackElm = ['::-webkit-slider-runnable-track', '::-moz-range-track', '::-ms-track'];
+export const rangeThumbElm = ['::-webkit-slider-thumb'         , '::-moz-range-thumb', '::-ms-thumb'];
 /**
  * removes browser's default styling on `input[type=range]`.
  */
@@ -110,6 +116,23 @@ export const stripoutRange = () => composition([
     imports([
         stripoutControl(),
     ]),
+    layout({
+        // children:
+        ...Object.fromEntries(
+            [
+                ...rangeTrackElm,
+                ...rangeThumbElm,
+            ]
+            .map((thumbElm) => Object.entries(
+                children(thumbElm, composition([
+                    imports([
+                        stripoutControl(),
+                    ]),
+                ])),
+            ))
+            .flat()
+        ),
+    }),
 ]);
 
 
@@ -124,9 +147,10 @@ export const stripoutList = () => composition([
         marginInlineStart  : unset,
         marginInlineEnd    : unset,
         paddingInlineStart : unset,
-
-
-
+        
+        
+        
+        // children:
         ...children('li', [
             layout({
                 display    : unset,
@@ -176,9 +200,10 @@ export const stripoutScrollbar = () => composition([
     layout({
         scrollbarWidth       : none,
         '-ms-overflow-style' : none,
-
-
-
+        
+        
+        
+        // children:
         ...children('::-webkit-scrollbar', [
             layout({
                 display      : none,
@@ -194,9 +219,9 @@ export const stripoutImage = () => composition([
     layout({
         // layouts:
         display: 'block', // fills the entire parent's width
-    
-    
-    
+        
+        
+        
         // sizes:
         // fix the image's abnormal *display=block* sizing:
         // span to maximum width:
