@@ -420,7 +420,7 @@ export function Range(props: RangeProps) {
     const propReadOnly            = usePropReadOnly(props);
     const nude                    = props.nude ?? true;
     const theme                   = props.theme ?? 'primary';
-    const themeAlternate          = ((theme === 'primary') ? 'secondary' : 'primary');
+    const themeAlternate          = ((theme !== 'secondary') ? 'secondary' : 'primary');
     const mild                    = props.mild ?? false;
     const mildAlternate           = nude ? mild : !mild;
     
