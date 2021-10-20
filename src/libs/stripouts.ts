@@ -118,20 +118,11 @@ export const stripoutRange = () => composition([
     ]),
     layout({
         // children:
-        ...Object.fromEntries(
-            [
-                ...rangeTrackElm,
-                ...rangeThumbElm,
-            ]
-            .map((thumbElm) => Object.entries(
-                children(thumbElm, composition([
-                    imports([
-                        stripoutControl(),
-                    ]),
-                ])),
-            ))
-            .flat()
-        ),
+        ...children([rangeTrackElm, rangeThumbElm], composition([
+            imports([
+                stripoutControl(),
+            ]),
+        ]), { groupSelectors: false }), // any invalid selector does not cause the whole selectors to fail
     }),
 ]);
 
