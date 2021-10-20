@@ -114,6 +114,7 @@ import {
 import {
     // hooks:
     usePropEnabled,
+    usePropReadOnly,
 }                           from './accessibilities'
 import {
     // styles:
@@ -907,12 +908,13 @@ export function Check(props: CheckProps) {
     
     
     // fn props:
-    const propEnabled = usePropEnabled(props);
+    const propEnabled  = usePropEnabled(props);
+    const propReadOnly = usePropReadOnly(props);
     
-    const ariaRole    = props.role            ?? 'checkbox';
-    const ariaChecked = props['aria-checked'] ?? ((ariaRole === 'checkbox') ? isActive : undefined);
+    const ariaRole     = props.role            ?? 'checkbox';
+    const ariaChecked  = props['aria-checked'] ?? ((ariaRole === 'checkbox') ? isActive : undefined);
     
-    const pressFn     = props.press ?? ((isActive && (props.checkStyle === 'togglerBtn')) || undefined);
+    const pressFn      = props.press ?? ((isActive && (props.checkStyle === 'togglerBtn')) || undefined);
     
     
     
