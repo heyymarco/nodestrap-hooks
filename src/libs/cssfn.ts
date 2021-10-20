@@ -228,8 +228,23 @@ export const layout = (style: Style): Style => style;
  * @returns A `Style` represents the component's variable(s).
  */
 export const vars   = (items: { [name: string]: JssValue }): Style => items;
+
+
+
 //combinators:
-export const combinators = (combinator: string, selectors: SelectorCollection, styles: StyleCollection): PropList => {
+export interface CombinatorOptions {
+    groupSelectors? : boolean
+}
+const defaultCombinatorOptions : Required<CombinatorOptions> = {
+    groupSelectors  : true,
+};
+export const combinators      = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): PropList => {
+    const {
+        groupSelectors = defaultCombinatorOptions.groupSelectors,
+    } = options;
+    
+    
+    
     const combiSelectors = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
@@ -249,14 +264,22 @@ export const combinators = (combinator: string, selectors: SelectorCollection, s
     
     
     
-    return {
-        [combiSelectors.join(',')]: mergedStyles as JssValue,
-    };
+    if (groupSelectors) {
+        return {
+            [combiSelectors.join(',')]: (mergedStyles as JssValue),
+        };
+    }
+    else {
+        return Object.fromEntries(
+            combiSelectors
+            .map((combiSelector) => [combiSelector, (mergedStyles as JssValue)])
+        );
+    } // if
 };
-export const descendants      = (selectors: SelectorCollection, styles: StyleCollection) => combinators(' ', selectors, styles);
-export const children         = (selectors: SelectorCollection, styles: StyleCollection) => combinators('>', selectors, styles);
-export const siblings         = (selectors: SelectorCollection, styles: StyleCollection) => combinators('~', selectors, styles);
-export const adjacentSiblings = (selectors: SelectorCollection, styles: StyleCollection) => combinators('+', selectors, styles);
+export const descendants      = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
+export const children         = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
+export const siblings         = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('~', selectors, styles, options);
+export const adjacentSiblings = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('+', selectors, styles, options);
 
 
 
@@ -267,7 +290,6 @@ export interface RuleOptions {
 const defaultRuleOptions : Required<RuleOptions> = {
     minSpecificityWeight  : 0,
 };
-
 export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): StyleCollection => {
     const {
         minSpecificityWeight = defaultRuleOptions.minSpecificityWeight,
