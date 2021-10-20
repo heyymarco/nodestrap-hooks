@@ -1,6 +1,7 @@
 // react (builds html using javascript):
 import {
     default as React,
+    useReducer,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -16,16 +17,22 @@ import {
     layout,
     vars,
     children,
+    siblings,
     
     
     
     // rules:
+    rules,
     variants,
+    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
     createUseSheet,
 }                           from './react-cssfn' // cssfn for react
+import {
+    createCssVar,
+}                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
     
@@ -108,6 +115,11 @@ import {
     Input,
 }                           from './Input'
 import {
+    // hooks:
+    usePropEnabled,
+    usePropReadOnly,
+}                           from './accessibilities'
+import {
     borders,
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
@@ -121,6 +133,15 @@ import {
 // styles:
 const trackElm = '.track';
 const thumbElm = '.thumb';
+
+export interface RangeVars {
+    /**
+     * Range's thumb position.
+     */
+    rangeValuePos : any
+}
+const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>();
+
 export const usesRangeLayout = () => {
     // dependencies:
     
@@ -184,18 +205,19 @@ export const usesRangeLayout = () => {
                     ...children(thumbElm, composition([
                         layout({
                             // layouts:
-                            display         : 'inline-block', // use inline-block, so it takes the width & height as we set
+                            display          : 'inline-block', // use inline-block, so it takes the width & height as we set
                             
                             
                             
                             // sizes:
-                            boxSizing       : 'border-box', // the final size is including borders & paddings
+                            boxSizing        : 'border-box', // the final size is including borders & paddings
                             
                             
                             
                             // positions:
-                            position        : 'relative',
-                            insetBlockStart : `calc(0px - (${cssProps.thumbBlockSize} / 2))`,
+                            position         : 'relative',
+                            insetBlockStart  : `calc(0px - (${cssProps.thumbBlockSize} / 2))`,
+                            insetInlineStart : `calc((100% - ${cssProps.thumbInlineSize}) * ${rangeVarRefs.rangeValuePos})`,
                             
                             
                             
@@ -320,6 +342,26 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
+// utilities:
+const isSingleValue = (num: string|ReadonlyArray<string>): num is string => (typeof(num) === 'string') || Array.isArray(num) && (num.length === 1);
+const parseNumber = (num: number|string|ReadonlyArray<string>|null|undefined): number|null => {
+    if (typeof(num) === 'number') return num;
+    if (!num) return null;
+    
+    
+    
+    if (!isSingleValue(num)) return null;
+    if (!num) return null;
+    
+    
+    
+    num = Number.parseFloat(num);
+    if (num === NaN) return null;
+    return num;
+};
+
+
+
 // react components:
 
 export interface RangeProps
@@ -333,10 +375,7 @@ export interface RangeProps
     // validations:
     min?      : string | number
     max?      : string | number
-    
-    
-    // formats:
-    step?     : number | string
+    step?     : string | number
     
     
     // events:
@@ -344,29 +383,82 @@ export interface RangeProps
 }
 export function Range(props: RangeProps) {
     // styles:
-    const sheet          = useRangeSheet();
+    const sheet = useRangeSheet();
+    
+    
+    
+    // rest props:
+    const {
+        // essentials:
+        elmRef,
+        
+        
+        // accessibilities:
+        autoFocus,
+        tabIndex,
+        
+        
+        // values:
+        name,
+        form,
+        defaultValue,
+        value,
+        onChange, // forwards to `input[type]`
+        
+        
+        // validations:
+        required,
+        min,
+        max,
+        step,
+    ...restProps}  = props;
     
     
     
     // fn props:
-    const nude           = props.nude ?? true;
-    const theme          = props.theme ?? 'primary';
-    const themeAlternate = ((theme === 'primary') ? 'secondary' : 'primary');
-    const mild           = props.mild ?? false;
-    const mildAlternate  = nude ? mild : !mild;
+    const propEnabled             = usePropEnabled(props);
+    const propReadOnly            = usePropReadOnly(props);
+    const nude                    = props.nude ?? true;
+    const theme                   = props.theme ?? 'primary';
+    const themeAlternate          = ((theme === 'primary') ? 'secondary' : 'primary');
+    const mild                    = props.mild ?? false;
+    const mildAlternate           = nude ? mild : !mild;
     
     
     
     // variants:
-    const nudeVariant    = useNudeVariant({ nude });
+    const nudeVariant             = useNudeVariant({ nude });
+    
+    
+    
+    // fn props:
+    const minFn          : number = parseNumber(min)  ?? 0;
+    const maxFn          : number = parseNumber(max)  ?? 100;
+    const stepFn         : number = parseNumber(step) ?? 1;
+    const defaultValueFn : number = (maxFn < minFn) ? minFn : (minFn + ((maxFn - minFn) / 2));
+    
+    
+    
+    // states:
+    const [valueDn, setValueDn]   = useReducer((value: number, action: number): number => {
+        return action;
+    }, /*initialState: */parseNumber(defaultValue) ?? defaultValueFn);
+    
+    
+    
+    // fn props:
+    const valueFn        : number = Math.min(Math.max(
+        parseNumber(value) /*controllable*/ ?? valueDn /*uncontrollable*/
+    , minFn), maxFn);
+    const valuePos       : number = (valueFn - Math.abs(minFn)) / Math.abs(maxFn - minFn);
     
     
     
     // jsx:
     return (
-        <EditableControl
+        <EditableControl<HTMLInputElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             // accessibilities:
@@ -383,8 +475,60 @@ export function Range(props: RangeProps) {
             variantClasses={[...(props.variantClasses ?? []),
                 nudeVariant.class,
             ]}
+            
+            
+            // styles:
+            style={{...(props.style ?? {}),
+                // values:
+                [rangeVarDecls.rangeValuePos]: valuePos,
+            }}
         >
-            <EditableControl
+            <input
+                // essentials:
+                ref={elmRef}
+                
+                
+                // accessibilities:
+                {...{
+                    autoFocus,
+                    tabIndex,
+                }}
+                
+                disabled={!propEnabled} // do not submit the value if disabled
+                readOnly={propReadOnly} // locks the value if readOnly
+                
+                
+                // values:
+                {...{
+                    name,
+                    form,
+                    // defaultValue,
+                    value : valueFn,
+                }}
+                
+                
+                // validations:
+                {...{
+                    required,
+                    min  : minFn,
+                    max  : maxFn,
+                    step : stepFn,
+                }}
+                
+                
+                // formats:
+                {...{
+                    type : 'range',
+                }}
+                
+                
+                // events:
+                onChange={(e) => {
+                    onChange?.(e);
+                    setValueDn(parseNumber(e.target.value) ?? valueDn)
+                }}
+            />
+            <EditableControl<HTMLInputElement>
                 // accessibilities:
                 tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
                 
@@ -399,7 +543,7 @@ export function Range(props: RangeProps) {
                     'track',
                 ]}
             >
-                <EditableActionControl
+                <EditableActionControl<HTMLInputElement>
                     // variants:
                     theme={theme}
                     mild={mildAlternate}
