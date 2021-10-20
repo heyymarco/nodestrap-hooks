@@ -222,6 +222,7 @@ export interface InputProps
     // validations:
     min?     : string | number
     max?     : string | number
+    step?    : string | number
     pattern? : string
     
     
@@ -230,7 +231,6 @@ export interface InputProps
     placeholder?  : string
     autoComplete? : string
     list?         : string
-    step?         : number | string
 }
 export function Input(props: InputProps) {
     // styles:
@@ -264,6 +264,7 @@ export function Input(props: InputProps) {
         maxLength,
         min,
         max,
+        step,
         pattern,
         
         
@@ -272,7 +273,6 @@ export function Input(props: InputProps) {
         placeholder,
         autoComplete,
         list,
-        step,
     ...restProps}  = props;
     
     
@@ -334,6 +334,7 @@ export function Input(props: InputProps) {
                     maxLength,
                     min,
                     max,
+                    step,
                     pattern,
                 }}
                 
@@ -344,7 +345,6 @@ export function Input(props: InputProps) {
                     placeholder,
                     autoComplete,
                     list,
-                    step,
                 }}
                 
                 
