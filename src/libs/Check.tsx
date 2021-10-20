@@ -61,9 +61,12 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    isNude,
+    usesNudeVariant,
+    NudeVariant,
+    useNudeVariant,
     usesMildVariant,
     usesForeg,
-    usesBorder,
     usesBorderStroke,
     usesBorderRadius,
     usesPadding,
@@ -297,7 +300,7 @@ export const usesCheckClearState = () => {
 
 // appearances:
 
-export type CheckStyle = 'btn'|'togglerBtn'|'switch'|'fill' // might be added more styles in the future
+export type CheckStyle = 'btn'|'togglerBtn'|'switch' // might be added more styles in the future
 export interface CheckVariant {
     checkStyle?: CheckStyle
 }
@@ -318,12 +321,7 @@ export const usesCheckLayout = () => {
     // dependencies:
     
     // colors:
-    const [, mildRefs              ] = usesMildVariant();
     const [, foregRefs             ] = usesForeg();
-    
-    // borders:
-    const [, , borderStrokeDecls   ] = usesBorderStroke();
-    const [, , borderRadiusDecls   ] = usesBorderRadius();
     
     // spacings:
     const [, , paddingDecls        ] = usesPadding();
@@ -481,35 +479,7 @@ export const usesCheckLayout = () => {
         }),
         variants([
             rule(':where(:not(.btn)):where(:not(.togglerBtn)):where(:not(.fill))', [ // selector with zero specificity
-                layout({
-                    // foregrounds:
-                    foreg          : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
-                    
-                    
-                    
-                    // backgrounds:
-                    backg          : 'initial !important', // no valid/invalid animation
-                    
-                    
-                    
-                    // borders:
-                    [borderStrokeDecls.borderWidth]            : 0, // discard border
-                    [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
-                    [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
-                    [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
-                    [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
-                    
-                    
-                    
-                    // spacings:
-                    [paddingDecls.paddingInline] : 0, // discard padding
-                    [paddingDecls.paddingBlock]  : 0, // discard padding
-                    
-                    
-                    
-                    // animations:
-                    boxShadow      : 'initial !important', // no focus animation
-                }),
+
             ]),
         ]),
     ]);
@@ -525,9 +495,15 @@ export const usesCheckVariants = () => {
         }),
     ]));
     
+    // colors:
+    const [, mildRefs           ] = usesMildVariant();
+    
     // borders:
-    const [, , borderDecls]       = usesBorder();
+    const [, , borderStrokeDecls] = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    // spacings:
+    const [, , paddingDecls     ] = usesPadding();
     
     
     
@@ -538,6 +514,7 @@ export const usesCheckVariants = () => {
             
             // layouts:
             sizes(),
+            usesNudeVariant(),
         ]),
         variants([
             rule(['.btn', '.togglerBtn'], [
@@ -634,24 +611,40 @@ export const usesCheckVariants = () => {
                     ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'switch')),
                 }),
             ]),
-            
-            rule('.fill', [
+        ]),
+        variants([
+            isNude([
                 layout({
-                    // children:
-                    ...children(inputElm, composition([
-                        layout({
-                            // borders:
-                            [borderDecls.borderCol] : 'currentColor', // make a contrast border between indicator & filler
-                        }),
-                    ])),
+                    // foregrounds:
+                    foreg     : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
                     
                     
                     
-                    // overwrites propName = {fill}propName:
-                    ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'fill')),
+                    // backgrounds:
+                    backg     : 'none !important', // discard background, no valid/invalid animation
+                    
+                    
+                    
+                    // borders:
+                    [borderStrokeDecls.borderWidth]            : 0, // discard border
+                    [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+                    [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+                    
+                    
+                    
+                    // spacings:
+                    [paddingDecls.paddingInline] : 0, // discard padding
+                    [paddingDecls.paddingBlock]  : 0, // discard padding
+                    
+                    
+                    
+                    // animations:
+                    boxShadow : 'initial !important', // no focus animation
                 }),
             ]),
-        ]),
+        ], { minSpecificityWeight: 2 }),
     ]);
 };
 export const usesCheckStates = () => {
@@ -821,6 +814,9 @@ export interface CheckProps
         EditableActionControlProps<HTMLInputElement>,
         TogglerActiveProps,
         
+        // layouts:
+        NudeVariant,
+        
         // appearances:
         CheckVariant
 {
@@ -851,6 +847,7 @@ export function Check(props: CheckProps) {
     
     
     // variants:
+    const nudeVariant  = useNudeVariant({ nude: (props.nude ?? true) });
     const checkVariant = useCheckVariant(props);
     
     
@@ -945,6 +942,7 @@ export function Check(props: CheckProps) {
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
+                nudeVariant.class,
                 checkVariant.class,
             ]}
             

@@ -549,7 +549,7 @@ function App() {
 						focus={focus}
 						
 						press={press}
-						checkStyle='fill'
+						nude={false}
 					/>
                     <TogglerMenuButton
 						theme={theme} size={size} gradient={enableGrad}
@@ -598,7 +598,7 @@ function App() {
 							
 							press={press}
 
-							checkStyle='fill'
+							nude={false}
 							name='option'
 						>
 							opt 1
@@ -614,7 +614,7 @@ function App() {
 							
 							press={press}
 
-							checkStyle='fill'
+							nude={false}
 							name='option'
 						>
 							opt 2
@@ -630,7 +630,7 @@ function App() {
 							
 							press={press}
 
-							checkStyle='fill'
+							nude={false}
 							name='option'
 						>
 							opt 3

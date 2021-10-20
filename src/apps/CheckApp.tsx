@@ -26,6 +26,7 @@ function App() {
 
 	const [enableGrad, setEnableGrad] = useState(false);
 	const [outlined,   setOutlined  ] = useState(false);
+	const [nude,       setNude      ] = useState(true);
 
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
@@ -37,7 +38,7 @@ function App() {
 	const [enableVal, setEnableVal  ] = useState(false);
 	const [isValid,   setIsValid    ] = useState<boolean|null|undefined>(undefined);
 
-	const checkStyles = [undefined, 'btn', 'togglerBtn', 'switch', 'fill'];
+	const checkStyles = [undefined, 'btn', 'togglerBtn', 'switch'];
 	const [checkStyle,    setCheckStyle     ] = useState<Checks.CheckStyle|undefined>(undefined);
 
 
@@ -124,6 +125,7 @@ function App() {
 				<hr style={{flexBasis: '100%'}} />
 				<Check
 					theme={theme} size={size} gradient={enableGrad} outlined={outlined}
+					nude={nude}
 
 					enabled={enabled}
 					
@@ -191,6 +193,15 @@ function App() {
 							onChange={(e) => setOutlined(e.target.checked)}
 						/>
 						outlined
+					</label>
+				</p>
+				<p>
+					<label>
+						<input type='checkbox'
+							checked={nude}
+							onChange={(e) => setNude(e.target.checked)}
+						/>
+						nude
 					</label>
 				</p>
 				<p>
