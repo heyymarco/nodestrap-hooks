@@ -46,16 +46,43 @@ import {
     useNudeVariant,
     usesMildVariant,
     usesBorderRadius,
+    usesPadding,
     
     
     
     // styles:
     usesBasicLayout,
+    usesBasicVariants,
+    
+    
+    
+    // react components:
+    BasicProps,
+    Basic,
 }                           from './Basic'
 import {
     // hooks:
     usesFocusBlurState,
+    
+    
+    
+    // styles:
+    usesControlLayout,
+    usesControlVariants,
+    usesControlStates,
 }                           from './Control'
+import {
+    // styles:
+    usesEditableControlLayout,
+    usesEditableControlVariants,
+    usesEditableControlStates,
+    
+    
+    
+    // react components:
+    EditableControlProps,
+    EditableControl,
+}                           from './EditableControl'
 import {
     // hooks:
     usePressReleaseState,
@@ -69,14 +96,9 @@ import {
     
     
     // react components:
+    EditableActionControl,
     EditableActionControlProps,
 }                           from './EditableActionControl'
-// import {
-//     // styles:
-//     usesEditableTextControlLayout,
-//     usesEditableTextControlVariants,
-//     usesEditableTextControlStates,
-// }                           from './EditableTextControl'
 import {
     // styles:
     inputElm,
@@ -85,11 +107,6 @@ import {
     // react components:
     Input,
 }                           from './Input'
-import {
-    rangeTrackElm,
-    rangeThumbElm,
-    stripoutRange,
-}                           from './stripouts'
 import {
     borders,
     borderRadiuses,
@@ -102,11 +119,20 @@ import {
 
 
 // styles:
+const trackElm = '.track';
+const thumbElm = '.thumb';
 export const usesRangeLayout = () => {
+    // dependencies:
+    
+    // spacings:
+    const [, , paddingDecls] = usesPadding();
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesEditableActionControlLayout(),
+            usesEditableControlLayout(),
         ]),
         layout({
             // layouts:
@@ -123,11 +149,20 @@ export const usesRangeLayout = () => {
             
             
             
+            // // animations:
+            // boxShadow      : 'initial !important', // no focus animation
+            
+            
+            
             // children:
-            ...children(inputElm, composition([
+            ...children('::before', composition([
                 imports([
-                    stripoutRange(), // clear browser's default styles
+                    // a dummy text content, for making parent's height as tall as line-height
+                    // the dummy is also used for calibrating the flex's vertical position
+                    fillTextLineheightLayout(),
                 ]),
+            ])),
+            ...children(trackElm, composition([
                 layout({
                     // layouts:
                     display        : 'block', // fills the entire parent's width
@@ -135,80 +170,45 @@ export const usesRangeLayout = () => {
                     
                     
                     // sizes:
+                    boxSizing      : 'border-box', // the final size is including borders & paddings
                     flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
-                    alignSelf      : 'stretch',        // follows parent's height
+                    
+                    
+                    
+                    // animations:
+                    boxShadow      : 'initial !important', // no focus animation
                     
                     
                     
                     // children:
-                    ...children(rangeTrackElm, composition([
-                        imports([
-                            usesBasicLayout(),
-                        ]),
+                    ...children(thumbElm, composition([
                         layout({
                             // layouts:
-                            display        : 'block',
+                            display         : 'inline-block', // use inline-block, so it takes the width & height as we set
                             
                             
                             
                             // sizes:
-                            flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
+                            boxSizing       : 'border-box', // the final size is including borders & paddings
                             
                             
                             
-                            // customize:
-                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'track')), // apply general cssProps starting with track***
-                        }),
-                        // (() => {
-                        //     // dependencies:
-                        //     const [, , focusBlurDecls] = usesFocusBlurState();
-                        //     return vars({
-                        //         [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
-                        //         [focusBlurDecls.animFocusBlur]      : 'inherit',
-                        //     });
-                        // })(),
-                    ]), { groupSelectors: false }), // any invalid selector does not cause the whole selectors to fail
-                    
-                    ...children(rangeThumbElm, composition([
-                        imports([
-                            usesEditableActionControlLayout(),
-                        ]),
-                        layout({
-                            // layouts:
-                            display        : 'block', // thumb is only work for `block`
+                            // positions:
+                            position        : 'relative',
+                            insetBlockStart : `calc(0px - (${cssProps.thumbBlockSize} / 2))`,
                             
-                            
-                            
-                            // sizes:
-                            flex           : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's width
-                            boxSizing      : 'border-box', // the final size is including borders & paddings
-                            
-                            
-                            
-                            // spacings:
-                            marginBlockStart : `calc(0px - ((${cssProps.thumbBlockSize} - ${cssProps.trackBlockSize}) / 2))`,
                             
                             
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'thumb')), // apply general cssProps starting with thumb***
                         }),
-                        (() => {
-                            // dependencies:
-                            const [, , focusBlurDecls] = usesFocusBlurState();
-                            return vars({
-                                [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
-                                [focusBlurDecls.animFocusBlur]      : 'inherit',
-                            });
-                        })(),
-                    ]), { groupSelectors: false }), // any invalid selector does not cause the whole selectors to fail
+                    ])),
+                    
+                    
+                    
+                    // customize:
+                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'track')), // apply general cssProps starting with track***
                 }),
-            ])),
-            ...children('::after', composition([
-                imports([
-                    // a dummy text content, for making parent's height as tall as line-height
-                    // the dummy is also used for calibrating the flex's vertical position
-                    fillTextLineheightLayout(),
-                ]),
             ])),
             
             
@@ -240,7 +240,7 @@ export const usesRangeVariants = () => {
     return composition([
         imports([
             // variants:
-            usesEditableActionControlVariants(),
+            usesEditableControlVariants(),
             
             // layouts:
             sizes(),
@@ -250,7 +250,7 @@ export const usesRangeVariants = () => {
             isNude([
                 layout({
                     // foregrounds:
-                    foreg          : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
+                    foreg     : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
                     
                     
                     
@@ -263,7 +263,7 @@ export const usesRangeVariants = () => {
                     
                     
                     // animations:
-                    boxShadow      : 'initial !important', // no focus animation
+                    boxShadow : 'initial !important', // no focus animation
                 }),
             ]),
         ]),
@@ -273,7 +273,7 @@ export const usesRangeStates = () => {
     return composition([
         imports([
             // states:
-            usesEditableActionControlStates(),
+            usesEditableControlStates(),
         ]),
     ]);
 };
@@ -305,7 +305,7 @@ export const useRangeSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        trackBlockSize    : borders.bold,
+        trackBlockSize    : '0.4em',
         trackBorderRadius : borderRadiuses.pill,
         trackPadding      : 0,
         
@@ -344,33 +344,38 @@ export interface RangeProps
 }
 export function Range(props: RangeProps) {
     // styles:
-    const sheet             = useRangeSheet();
+    const sheet          = useRangeSheet();
+    
+    
+    
+    // fn props:
+    const nude           = props.nude ?? true;
+    const theme          = props.theme ?? 'primary';
+    const themeAlternate = ((theme === 'primary') ? 'secondary' : 'primary');
+    const mild           = props.mild ?? false;
+    const mildAlternate  = nude ? mild : !mild;
     
     
     
     // variants:
-    const nudeVariant       = useNudeVariant(props);
-    
-    
-    
-    // states:
-    const pressReleaseState = usePressReleaseState(props);
+    const nudeVariant    = useNudeVariant({ nude });
     
     
     
     // jsx:
     return (
-        <Input
+        <EditableControl
             // other props:
             {...props}
             
             
-            // formats:
-            type='range'
+            // accessibilities:
+            tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
             
             
             // variants:
-            mild={props.mild ?? false}
+            theme={theme}
+            mild={mild}
             
             
             // classes:
@@ -378,23 +383,36 @@ export function Range(props: RangeProps) {
             variantClasses={[...(props.variantClasses ?? []),
                 nudeVariant.class,
             ]}
-            stateClasses={[...(props.stateClasses ?? []),
-                pressReleaseState.class,
-            ]}
-            
-            
-            // events:
-            onMouseDown={(e) => { props.onMouseDown?.(e); pressReleaseState.handleMouseDown(e); }}
-            onKeyDown=  {(e) => { props.onKeyDown?.(e);   pressReleaseState.handleKeyDown(e);   }}
-            onAnimationEnd={(e) => {
-                props.onAnimationEnd?.(e);
+        >
+            <EditableControl
+                // accessibilities:
+                tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
                 
                 
+                // variants:
+                theme={themeAlternate}
+                mild={mild}
                 
-                // states:
-                pressReleaseState.handleAnimationEnd(e);
-            }}
-        />
+                
+                // classes:
+                classes={[...(props.classes ?? []),
+                    'track',
+                ]}
+            >
+                <EditableActionControl
+                    // variants:
+                    theme={theme}
+                    mild={mildAlternate}
+                    
+                    
+                    // classes:
+                    classes={[...(props.classes ?? []),
+                        'thumb',
+                    ]}
+                >
+                </EditableActionControl>
+            </EditableControl>
+        </EditableControl>
     );
 }
 export { Range as default }
