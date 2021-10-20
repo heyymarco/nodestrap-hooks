@@ -710,8 +710,8 @@ export function EditableControl<TElement extends EditableControlElement = Editab
                         setRef(inputRef, elm);
                     }
                     else {
-                        const firstChild = elm.querySelector('input,select,textarea');
-                        if (firstChild) setRef(inputRef, firstChild as TElement);
+                        const firstInput = elm.querySelector('input,select,textarea');
+                        if (firstInput) setRef(inputRef, firstInput as TElement);
                     } // if
 
                     if (inputRef.current) inputValidator.handleInit(inputRef.current);
