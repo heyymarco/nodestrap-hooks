@@ -227,7 +227,7 @@ export const usesNudeVariant = () => {
             isNude([
                 layout({
                     // backgrounds:
-                    backg        : 'none', // discard background
+                    backg : 'none !important', // discard background, no valid/invalid animation
                     
                     
                     
