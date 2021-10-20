@@ -223,7 +223,7 @@ createSheet(() => [
                         ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
                     }),
                 ])),
-            ], /*minSpecificityWeight: */2),
+            ], { minSpecificityWeight: 2 }),
         ]))),
     ]),
 ])

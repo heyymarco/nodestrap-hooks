@@ -984,7 +984,7 @@ export const usesListVariants = () => {
                     ])),
                 }),
             ]),
-        ], /*minSpecificityWeight: */2),
+        ], { minSpecificityWeight: 2 }),
     ]);
 };
 export const usesListStates = () => {
