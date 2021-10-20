@@ -24,6 +24,7 @@ function App() {
 	const [enableGrad, setEnableGrad] = useState(false);
 	const [outlined,   setOutlined  ] = useState(false);
 	const [mild,       setMild      ] = useState(false);
+	const [nude,       setNude      ] = useState(false);
 
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
@@ -45,7 +46,7 @@ function App() {
             <Container>
                 <Range
 					theme={theme} size={size} gradient={enableGrad}
-					outlined={outlined} mild={mild}
+					outlined={outlined} mild={mild} nude={nude}
 
 					enabled={enabled} active={active}
 
@@ -113,6 +114,15 @@ function App() {
 							onChange={(e) => setMild(e.target.checked)}
 						/>
 						mild
+					</label>
+				</p>
+				<p>
+					<label>
+						<input type='checkbox'
+							checked={nude}
+							onChange={(e) => setNude(e.target.checked)}
+						/>
+						nude
 					</label>
 				</p>
 				<p>

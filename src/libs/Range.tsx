@@ -14,7 +14,13 @@ import {
     
     // layouts:
     layout,
+    vars,
     children,
+    
+    
+    
+    // rules:
+    variants,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -34,7 +40,22 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    isNude,
+    usesNudeVariant,
+    NudeVariant,
+    useNudeVariant,
+    usesMildVariant,
+    usesBorderRadius,
+    
+    
+    
+    // styles:
+    usesBasicLayout,
 }                           from './Basic'
+import {
+    // hooks:
+    usesFocusBlurState,
+}                           from './Control'
 import {
     // hooks:
     usePressReleaseState,
@@ -50,6 +71,12 @@ import {
     // react components:
     EditableActionControlProps,
 }                           from './EditableActionControl'
+// import {
+//     // styles:
+//     usesEditableTextControlLayout,
+//     usesEditableTextControlVariants,
+//     usesEditableTextControlStates,
+// }                           from './EditableTextControl'
 import {
     // styles:
     inputElm,
@@ -67,6 +94,10 @@ import {
     borders,
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
+import {
+    // styles:
+    fillTextLineheightLayout,
+}                           from './layouts'
 
 
 
@@ -110,65 +141,74 @@ export const usesRangeLayout = () => {
                     
                     
                     // children:
-                    ...Object.fromEntries(
-                        rangeTrackElm
-                        .map((thumbElm) => Object.entries(
-                            children(thumbElm, composition([
-                                layout({
-                                    // layouts:
-                                    display        : 'block',
-                                    
-                                    
-                                    
-                                    // tests:
-                                    backg          : 'lightblue',
-                                    
-                                    
-                                    
-                                    // sizes:
-                                    flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
-                                    
-                                    
-                                    
-                                    // customize:
-                                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'track')), // apply general cssProps starting with track***
-                                }),
-                            ])),
-                        ))
-                        .flat()
-                    ),
-                    ...Object.fromEntries(
-                        rangeThumbElm
-                        .map((thumbElm) => Object.entries(
-                            children(thumbElm, composition([
-                                imports([
-                                    usesEditableActionControlLayout(),
-                                ]),
-                                layout({
-                                    // layouts:
-                                    display        : 'block', // thumb is only work for `block`
-                                    
-                                    
-                                    
-                                    // sizes:
-                                    flex           : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's width
-                                    boxSizing      : 'border-box', // the final size is including borders & paddings
-                                    
-                                    
-                                    
-                                    // spacings:
-                                    marginBlockStart : `calc(0px - ((${cssProps.thumbBlockSize} - ${cssProps.trackBlockSize}) / 2))`,
-                                    
-                                    
-                                    
-                                    // customize:
-                                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'thumb')), // apply general cssProps starting with thumb***
-                                }),
-                            ])),
-                        ))
-                        .flat()
-                    ),
+                    ...children(rangeTrackElm, composition([
+                        imports([
+                            usesBasicLayout(),
+                        ]),
+                        layout({
+                            // layouts:
+                            display        : 'block',
+                            
+                            
+                            
+                            // sizes:
+                            flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
+                            
+                            
+                            
+                            // customize:
+                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'track')), // apply general cssProps starting with track***
+                        }),
+                        // (() => {
+                        //     // dependencies:
+                        //     const [, , focusBlurDecls] = usesFocusBlurState();
+                        //     return vars({
+                        //         [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
+                        //         [focusBlurDecls.animFocusBlur]      : 'inherit',
+                        //     });
+                        // })(),
+                    ]), { groupSelectors: false }), // any invalid selector does not cause the whole selectors to fail
+                    
+                    ...children(rangeThumbElm, composition([
+                        imports([
+                            usesEditableActionControlLayout(),
+                        ]),
+                        layout({
+                            // layouts:
+                            display        : 'block', // thumb is only work for `block`
+                            
+                            
+                            
+                            // sizes:
+                            flex           : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's width
+                            boxSizing      : 'border-box', // the final size is including borders & paddings
+                            
+                            
+                            
+                            // spacings:
+                            marginBlockStart : `calc(0px - ((${cssProps.thumbBlockSize} - ${cssProps.trackBlockSize}) / 2))`,
+                            
+                            
+                            // customize:
+                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'thumb')), // apply general cssProps starting with thumb***
+                        }),
+                        (() => {
+                            // dependencies:
+                            const [, , focusBlurDecls] = usesFocusBlurState();
+                            return vars({
+                                [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
+                                [focusBlurDecls.animFocusBlur]      : 'inherit',
+                            });
+                        })(),
+                    ]), { groupSelectors: false }), // any invalid selector does not cause the whole selectors to fail
                 }),
+            ])),
+            ...children('::after', composition([
+                imports([
+                    // a dummy text content, for making parent's height as tall as line-height
+                    // the dummy is also used for calibrating the flex's vertical position
+                    fillTextLineheightLayout(),
+                ]),
             ])),
             
             
@@ -189,6 +229,12 @@ export const usesRangeVariants = () => {
         }),
     ]));
     
+    // colors:
+    const [, mildRefs           ] = usesMildVariant();
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
     
     
     return composition([
@@ -198,6 +244,28 @@ export const usesRangeVariants = () => {
             
             // layouts:
             sizes(),
+            usesNudeVariant(),
+        ]),
+        variants([
+            isNude([
+                layout({
+                    // foregrounds:
+                    foreg          : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
+                    
+                    
+                    
+                    // borders:
+                    [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+                    [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+                    
+                    
+                    
+                    // animations:
+                    boxShadow      : 'initial !important', // no focus animation
+                }),
+            ]),
         ]),
     ]);
 };
@@ -257,7 +325,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 export interface RangeProps
     extends
         EditableActionControlProps<HTMLInputElement>,
-        Pick<React.InputHTMLAttributes<HTMLInputElement>, 'disabled'>
+        Pick<React.InputHTMLAttributes<HTMLInputElement>, 'disabled'>,
+        
+        // layouts:
+        NudeVariant
 {
     // validations:
     min?      : string | number
@@ -273,7 +344,12 @@ export interface RangeProps
 }
 export function Range(props: RangeProps) {
     // styles:
-    const sheet = useRangeSheet();
+    const sheet             = useRangeSheet();
+    
+    
+    
+    // variants:
+    const nudeVariant       = useNudeVariant(props);
     
     
     
@@ -299,6 +375,9 @@ export function Range(props: RangeProps) {
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            variantClasses={[...(props.variantClasses ?? []),
+                nudeVariant.class,
+            ]}
             stateClasses={[...(props.stateClasses ?? []),
                 pressReleaseState.class,
             ]}
