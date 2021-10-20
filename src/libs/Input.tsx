@@ -349,8 +349,8 @@ export function Input(props: InputProps) {
                 
                 
                 // events:
-                {...{
-                    onChange,
+                onChange={(e) => {
+                    onChange?.(e);
                 }}
             />
         </EditableTextControl>

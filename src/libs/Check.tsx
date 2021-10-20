@@ -999,8 +999,8 @@ export function Check(props: CheckProps) {
                 aria-hidden={true} // the input just for check indicator & storing value
                 
                 disabled={!propEnabled} // do not submit the value if disabled
-                readOnly={true}    // for satisfying React of **controllable readOnly check**
-                checked={isActive} // **controllable check**
+                readOnly={propReadOnly} // locks the value if readOnly
+                checked={isActive}      // **controllable check**
                 
                 
                 // values:
@@ -1025,8 +1025,8 @@ export function Check(props: CheckProps) {
                 
                 
                 // events:
-                {...{
-                    onChange,
+                onChange={(e) => {
+                    onChange?.(e);
                 }}
                 onClick={(e) => e.stopPropagation()} // prevents firing `change` event triggering parent's `onClick`
             />
