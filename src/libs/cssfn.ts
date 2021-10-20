@@ -281,189 +281,189 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
             
             return [
                 ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
-                    .map((ruleEntrySourceList: RuleEntrySource|RuleList): OptionalOrFalse<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
-                        const isOptionalString                = (value: any): value is OptionalString => {
-                            if (value === null)      return true; // optional `null`
-                            if (value === undefined) return true; // optional `undefined`
-                            if (value === false)     return true; // optional `false`
-                            
-                            
-                            
-                            return ((typeof value) === 'string');
-                        };
-                        const isOptionalStringDeepArr         = (value: any): value is OptionalString[] => {
-                            if (!Array.isArray(value)) return false;
-                            
-                            
-                            
-                            const nonOptionalStringItems = value.filter((v) => !isOptionalString(v));
-                            if (nonOptionalStringItems.length === 0) return true;
-                            
-                            
-                            
-                            for (const nonOptionalStringItem of nonOptionalStringItems) {
-                                if (!isOptionalStringDeepArr(nonOptionalStringItem)) return false;
-                            } // for
-                            
-                            
-                            
-                            return true;
-                        };
-                        
-                        const isOptionalSelector              = (value: any): value is OptionalOrFalse<Selector>   => isOptionalString(value);
-                        const isOptionalSelectorDeepArr       = (value: any): value is OptionalOrFalse<Selector>[] => isOptionalStringDeepArr(value);
-                        
-                        const isOptionalStyleOrFactory        = (value: any): value is ProductOrFactory<Style> => {
-                            if (value === null)      return true; // optional `null`
-                            if (value === undefined) return true; // optional `undefined`
-                            
-                            
-                            
-                            return (
-                                value
-                                &&
-                                (
-                                    ((typeof(value) === 'object') && !Array.isArray(value)) // literal object => `Style`
-                                    ||
-                                    (typeof(value) === 'function') // function => `Factory<Style>`
-                                )
-                            );
-                        };
-                        const isOptionalStyleOrFactoryDeepArr = (value: any): value is Style[] => {
-                            if (!Array.isArray(value)) return false;
-                            
-                            
-                            
-                            const nonStyleOrFactoryItems = value.filter((v) => !isOptionalStyleOrFactory(v));
-                            if (nonStyleOrFactoryItems.length === 0) return true;
-                            
-                            
-                            
-                            for (const nonStyleOrFactoryItem of nonStyleOrFactoryItems) {
-                                if (!isOptionalStyleOrFactoryDeepArr(nonStyleOrFactoryItem)) return false;
-                            } // for
-                            
-                            
-                            
-                            return true;
-                        };
-                        
-                        const isOptionalRuleEntry             = (value: any): value is OptionalOrFalse<RuleEntry> => {
-                            if (value === null)      return true; // optional `null`
-                            if (value === undefined) return true; // optional `undefined`
-                            if (value === false)     return true; // optional `false`
-                            
-                            
-                            
-                            if (value.length !== 2)  return false; // not a tuple => not a `RuleEntry`
-                            
-                            
-                            
-                            const [first, second] = value;
-                            
-                            /*
-                                the first element must be `SelectorCollection`:
-                                * `OptionalOrFalse<Selector>`
-                                * DeepArrayOf< `OptionalOrFalse<Selector>` >
-                                * empty array
-                            */
-                            // and
-                            /*
-                                the second element must be `StyleCollection`:
-                                * `OptionalOrFalse<Style>` | `Factory<OptionalOrFalse<Style>>`
-                                * DeepArrayOf< `OptionalOrFalse<Style> | Factory<OptionalOrFalse<Style>>` >
-                                * empty array
-                            */
-                            return (
-                                (
-                                    isOptionalSelector(first)
-                                    ||
-                                    isOptionalSelectorDeepArr(first)
-                                )
-                                &&
-                                (
-                                    isOptionalStyleOrFactory(second)
-                                    ||
-                                    isOptionalStyleOrFactoryDeepArr(second)
-                                )
-                            );
-                        };
+                .map((ruleEntrySourceList: RuleEntrySource|RuleList): OptionalOrFalse<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
+                    const isOptionalString                = (value: any): value is OptionalString => {
+                        if (value === null)      return true; // optional `null`
+                        if (value === undefined) return true; // optional `undefined`
+                        if (value === false)     return true; // optional `false`
                         
                         
                         
-                        if (typeof(ruleEntrySourceList) === 'function') return [ruleEntrySourceList()];
-                        if (isOptionalRuleEntry(ruleEntrySourceList))   return [ruleEntrySourceList];
-                        return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
-                    })
-                    .flat(/*depth: */1) // flatten: OptionalOrFalse<RuleEntry>[][] => OptionalOrFalse<RuleEntry>[]
-                    .filter((optionalRuleEntry): optionalRuleEntry is RuleEntry => !!optionalRuleEntry)
-                    .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
-                        let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
-                            if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
+                        return ((typeof value) === 'string');
+                    };
+                    const isOptionalStringDeepArr         = (value: any): value is OptionalString[] => {
+                        if (!Array.isArray(value)) return false;
+                        
+                        
+                        
+                        const nonOptionalStringItems = value.filter((v) => !isOptionalString(v));
+                        if (nonOptionalStringItems.length === 0) return true;
+                        
+                        
+                        
+                        for (const nonOptionalStringItem of nonOptionalStringItems) {
+                            if (!isOptionalStringDeepArr(nonOptionalStringItem)) return false;
+                        } // for
+                        
+                        
+                        
+                        return true;
+                    };
+                    
+                    const isOptionalSelector              = (value: any): value is OptionalOrFalse<Selector>   => isOptionalString(value);
+                    const isOptionalSelectorDeepArr       = (value: any): value is OptionalOrFalse<Selector>[] => isOptionalStringDeepArr(value);
+                    
+                    const isOptionalStyleOrFactory        = (value: any): value is ProductOrFactory<Style> => {
+                        if (value === null)      return true; // optional `null`
+                        if (value === undefined) return true; // optional `undefined`
+                        
+                        
+                        
+                        return (
+                            value
+                            &&
+                            (
+                                ((typeof(value) === 'object') && !Array.isArray(value)) // literal object => `Style`
+                                ||
+                                (typeof(value) === 'function') // function => `Factory<Style>`
+                            )
+                        );
+                    };
+                    const isOptionalStyleOrFactoryDeepArr = (value: any): value is Style[] => {
+                        if (!Array.isArray(value)) return false;
+                        
+                        
+                        
+                        const nonStyleOrFactoryItems = value.filter((v) => !isOptionalStyleOrFactory(v));
+                        if (nonStyleOrFactoryItems.length === 0) return true;
+                        
+                        
+                        
+                        for (const nonStyleOrFactoryItem of nonStyleOrFactoryItems) {
+                            if (!isOptionalStyleOrFactoryDeepArr(nonStyleOrFactoryItem)) return false;
+                        } // for
+                        
+                        
+                        
+                        return true;
+                    };
+                    
+                    const isOptionalRuleEntry             = (value: any): value is OptionalOrFalse<RuleEntry> => {
+                        if (value === null)      return true; // optional `null`
+                        if (value === undefined) return true; // optional `undefined`
+                        if (value === false)     return true; // optional `false`
+                        
+                        
+                        
+                        if (value.length !== 2)  return false; // not a tuple => not a `RuleEntry`
+                        
+                        
+                        
+                        const [first, second] = value;
+                        
+                        /*
+                            the first element must be `SelectorCollection`:
+                            * `OptionalOrFalse<Selector>`
+                            * DeepArrayOf< `OptionalOrFalse<Selector>` >
+                            * empty array
+                        */
+                        // and
+                        /*
+                            the second element must be `StyleCollection`:
+                            * `OptionalOrFalse<Style>` | `Factory<OptionalOrFalse<Style>>`
+                            * DeepArrayOf< `OptionalOrFalse<Style> | Factory<OptionalOrFalse<Style>>` >
+                            * empty array
+                        */
+                        return (
+                            (
+                                isOptionalSelector(first)
+                                ||
+                                isOptionalSelectorDeepArr(first)
+                            )
+                            &&
+                            (
+                                isOptionalStyleOrFactory(second)
+                                ||
+                                isOptionalStyleOrFactoryDeepArr(second)
+                            )
+                        );
+                    };
+                    
+                    
+                    
+                    if (typeof(ruleEntrySourceList) === 'function') return [ruleEntrySourceList()];
+                    if (isOptionalRuleEntry(ruleEntrySourceList))   return [ruleEntrySourceList];
+                    return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
+                })
+                .flat(/*depth: */1) // flatten: OptionalOrFalse<RuleEntry>[][] => OptionalOrFalse<RuleEntry>[]
+                .filter((optionalRuleEntry): optionalRuleEntry is RuleEntry => !!optionalRuleEntry)
+                .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
+                    let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
+                        if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
+                        
+                        if (selector.includes('&')) return (selector as NestedSelector); // &.foo   .boo&   .foo&.boo
+                        
+                        // if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
+                        
+                        return `&${selector}`;
+                    });
+                    if (minSpecificityWeight >= 2) {
+                        nestedSelectors = nestedSelectors.map((nestedSelector: NestedSelector): NestedSelector => {
+                            if (nestedSelector === '&') return nestedSelector; // zero specificity => no change
                             
-                            if (selector.includes('&')) return (selector as NestedSelector); // &.foo   .boo&   .foo&.boo
+                            // one/more specificities found => increase the specificity weight until reaches `minSpecificityWeight`
                             
-                            // if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
                             
-                            return `&${selector}`;
+                            
+                            // calculate the specificity weight:
+                            // `.realClassName` or `:pseudoClassName` (without parameters):
+                            const classes               = nestedSelector.match(/(\.|:(?!(is|not)(?![\w-])))[\w-]+/gmi); // count the `.RealClass` and `:PseudoClass` but not `:is` or `:not`
+                            const specificityWeight     = classes?.length ?? 0;
+                            const missSpecificityWeight = minSpecificityWeight - specificityWeight;
+                            
+                            
+                            
+                            // the specificity weight was meet the minimum specificity required => no change:
+                            if (missSpecificityWeight <= 0) return nestedSelector;
+                            
+                            // the specificity weight is less than the minimum specificity required => increase the specificity:
+                            return `${nestedSelector}${(new Array(missSpecificityWeight)).fill(((): Selector => {
+                                const lastClass = classes?.[classes.length - 1];
+                                if (lastClass) {
+                                    // the last word (without parameters):
+                                    if (nestedSelector.length === (nestedSelector.lastIndexOf(lastClass) + lastClass.length)) return (lastClass as Selector); // `.RealClass` or `:PseudoClass` without parameters
+                                } // if
+                                
+                                
+                                
+                                // use a **hacky class name** to increase the specificity:
+                                return ':not(._)';
+                            })()).join('')}` as NestedSelector;
                         });
-                        if (minSpecificityWeight >= 2) {
-                            nestedSelectors = nestedSelectors.map((nestedSelector: NestedSelector): NestedSelector => {
-                                if (nestedSelector === '&') return nestedSelector; // zero specificity => no change
-                                
-                                // one/more specificities found => increase the specificity weight until reaches `minSpecificityWeight`
-                                
-                                
-                                
-                                // calculate the specificity weight:
-                                // `.realClassName` or `:pseudoClassName` (without parameters):
-                                const classes               = nestedSelector.match(/(\.|:(?!(is|not)(?![\w-])))[\w-]+/gmi); // count the `.RealClass` and `:PseudoClass` but not `:is` or `:not`
-                                const specificityWeight     = classes?.length ?? 0;
-                                const missSpecificityWeight = minSpecificityWeight - specificityWeight;
-                                
-                                
-                                
-                                // the specificity weight was meet the minimum specificity required => no change:
-                                if (missSpecificityWeight <= 0) return nestedSelector;
-                                
-                                // the specificity weight is less than the minimum specificity required => increase the specificity:
-                                return `${nestedSelector}${(new Array(missSpecificityWeight)).fill(((): Selector => {
-                                    const lastClass = classes?.[classes.length - 1];
-                                    if (lastClass) {
-                                        // the last word (without parameters):
-                                        if (nestedSelector.length === (nestedSelector.lastIndexOf(lastClass) + lastClass.length)) return (lastClass as Selector); // `.RealClass` or `:PseudoClass` without parameters
-                                    } // if
-                                    
-                                    
-                                    
-                                    // use a **hacky class name** to increase the specificity:
-                                    return ':not(._)';
-                                })()).join('')}` as NestedSelector;
-                            });
-                        } // if
-                        
-                        
-                        
-                        if (nestedSelectors.includes('&')) { // contains one/more selectors with zero specificity
-                            nestedSelectors = nestedSelectors.filter((nestedSelector) => (nestedSelector !== '&')); // filter out selectors with zero specificity
-                            noSelectors.push(styles); // add styles with zero specificity
-                        } // if
-                        
-                        
-                        
-                        return [nestedSelectors, styles];
-                    })
-                    .filter(([nestedSelectors]) => (nestedSelectors.length > 0)) // filter out empty `nestedSelectors`
-                    .map(([nestedSelectors, styles]) => [
-                        nestedSelectors,
-                        mergeStyles(styles) // merge the `styles` to single `Style`, for making JSS understand
-                    ] as const)
-                    .filter(([, mergedStyles]) => !!mergedStyles) // filter out empty `mergedStyles`
-                    .map(([nestedSelectors, mergedStyles]): Style => {
-                        return {
-                            [nestedSelectors.join(',')] : mergedStyles as JssValue,
-                        };
-                    }),
+                    } // if
+                    
+                    
+                    
+                    if (nestedSelectors.includes('&')) { // contains one/more selectors with zero specificity
+                        nestedSelectors = nestedSelectors.filter((nestedSelector) => (nestedSelector !== '&')); // filter out selectors with zero specificity
+                        noSelectors.push(styles); // add styles with zero specificity
+                    } // if
+                    
+                    
+                    
+                    return [nestedSelectors, styles];
+                })
+                .filter(([nestedSelectors]) => (nestedSelectors.length > 0)) // filter out empty `nestedSelectors`
+                .map(([nestedSelectors, styles]) => [
+                    nestedSelectors,
+                    mergeStyles(styles) // merge the `styles` to single `Style`, for making JSS understand
+                ] as const)
+                .filter((tuple): tuple is (readonly [typeof tuple[0], Style]) => !!tuple[1]) // filter out empty `mergedStyles`
+                .map(([nestedSelectors, mergedStyles]): Style => {
+                    return {
+                        [nestedSelectors.join(',')] : mergedStyles as JssValue,
+                    };
+                }),
                 
                 ...noSelectors,
             ];
