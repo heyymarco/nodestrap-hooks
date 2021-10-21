@@ -416,32 +416,67 @@ export function Range(props: RangeProps) {
     
     
     // fn props:
-    const propEnabled             = usePropEnabled(props);
-    const propReadOnly            = usePropReadOnly(props);
-    const nude                    = props.nude ?? true;
-    const theme                   = props.theme ?? 'primary';
-    const themeAlternate          = ((theme !== 'secondary') ? 'secondary' : 'primary');
-    const mild                    = props.mild ?? false;
-    const mildAlternate           = nude ? mild : !mild;
+    const propEnabled    = usePropEnabled(props);
+    const propReadOnly   = usePropReadOnly(props);
+    const nude           = props.nude ?? true;
+    const theme          = props.theme ?? 'primary';
+    const themeAlternate = ((theme !== 'secondary') ? 'secondary' : 'primary');
+    const mild           = props.mild ?? false;
+    const mildAlternate  = nude ? mild : !mild;
     
     
     
     // variants:
-    const nudeVariant             = useNudeVariant({ nude });
+    const nudeVariant    = useNudeVariant({ nude });
     
     
     
     // fn props:
-    const minFn          : number = parseNumber(min)  ?? 0;
-    const maxFn          : number = parseNumber(max)  ?? 100;
-    const stepFn         : number = parseNumber(step) ?? 1;
-    const defaultValueFn : number = (maxFn < minFn) ? minFn : (minFn + ((maxFn - minFn) / 2));
+    const minFn          : number  = parseNumber(min)  ?? 0;
+    const maxFn          : number  = parseNumber(max)  ?? 100;
+    const stepFn         : number  = (step === 'any') ? 0 : (parseNumber(step) ?? 1);
+    const negativeFn     : boolean = (maxFn < minFn);
+    const defaultValueFn : number  = negativeFn ? minFn : (minFn + ((maxFn - minFn) / 2));
     
     
     
     // states:
-    const [valueDn, setValueDn]   = useReducer((value: number, action: number): number => {
-        return action;
+    interface ValueReducerAction {
+        type    : 'setValue'|'setValuePos'
+        payload : number
+    }
+    const [valueDn, setValueDn]    = useReducer((value: number, action: ValueReducerAction): number => {
+        switch (action.type) {
+            case 'setValue': {
+                // take the requested raw value:
+                let value = action.payload;
+                
+                // make sure the requested value is between the min value & max value:
+                value     = Math.min(Math.max(
+                    value
+                , (negativeFn ? maxFn : minFn)), (negativeFn ? minFn : maxFn));
+                
+                // if step was specified => stepping the value starting from min value:
+                if (stepFn > 0) {
+                    let steps    = Math.round((value - minFn) / stepFn); // get the_nearest_stepped_value
+                    
+                    // make sure the_nearest_stepped_value is not exceeded the max value:
+                    let maxSteps = (maxFn - minFn) / stepFn;
+                    maxSteps     = negativeFn ? Math.ceil(maxSteps) : Math.floor(maxSteps); // remove the decimal fraction
+                    
+                    // re-align the steps:
+                    steps        = negativeFn ? Math.max(steps, maxSteps) : Math.min(steps, maxSteps);
+                    
+                    // calculate the new value:
+                    value        = minFn + (steps * stepFn);
+                } // if
+                
+                return value;
+            } // setValue
+            
+            default:
+                return value; // no change
+        } // switch
     }, /*initialState: */parseNumber(defaultValue) ?? defaultValueFn);
     
     
@@ -525,7 +560,7 @@ export function Range(props: RangeProps) {
                 // events:
                 onChange={(e) => {
                     onChange?.(e);
-                    setValueDn(parseNumber(e.target.value) ?? valueDn)
+                    setValueDn({ type: 'setValue', payload: parseNumber(e.target.value) ?? valueDn });
                 }}
             />
             <EditableControl<HTMLInputElement>
