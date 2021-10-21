@@ -230,11 +230,13 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
         class : ((): string|null => {
             // pressing:
             if (animating === true) {
-                // pressing by controllable prop => use class .press
-                if (props.press !== undefined) return 'press';
-
-                // otherwise use pseudo :active
-                return null;
+                // // pressing by controllable prop => use class .press
+                // if (props.press !== undefined) return 'press';
+                
+                return 'press'; // support for pressing by [space key] that not triggering :active
+                
+                // // otherwise use pseudo :active
+                // return null;
             } // if
 
             // releasing:
