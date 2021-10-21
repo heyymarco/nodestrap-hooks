@@ -71,7 +71,7 @@ function App() {
 					enableValidation={enableVal}
 					isValid={isValid}
 
-					min={20} max={90} step={15} defaultValue={25}
+					min={20} max={90} step={15} defaultValue={40}
 				/>
 				
                 <Range
@@ -86,7 +86,7 @@ function App() {
 					enableValidation={enableVal}
 					isValid={isValid}
 
-					min={-20} max={-90} step={15} defaultValue={-25}
+					min={-20} max={-90} step={15} defaultValue={-40}
 				/>
                 <hr style={{flexBasis: '100%'}} />
 				<p>

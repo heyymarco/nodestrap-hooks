@@ -390,38 +390,39 @@ export function Range(props: RangeProps) {
     
     
     
+    // utilities:
+    const trimValue = (value: number): number => {
+        // make sure the requested value is between the min value & max value:
+        value     = Math.min(Math.max(
+            value
+        , (negativeFn ? maxFn : minFn)), (negativeFn ? minFn : maxFn));
+        
+        // if step was specified => stepping the value starting from min value:
+        if (stepFn > 0) {
+            let steps    = Math.round((value - minFn) / stepFn); // get the_nearest_stepped_value
+            
+            // make sure the_nearest_stepped_value is not exceeded the max value:
+            let maxSteps = (maxFn - minFn) / stepFn;
+            maxSteps     = negativeFn ? Math.ceil(maxSteps) : Math.floor(maxSteps); // remove the decimal fraction
+            
+            // re-align the steps:
+            steps        = negativeFn ? Math.max(steps, maxSteps) : Math.min(steps, maxSteps);
+            
+            // calculate the new value:
+            value        = minFn + (steps * stepFn);
+        } // if
+        
+        return value;
+    };
+    
+    
+    
     // states:
     interface ValueReducerAction {
         type    : 'setValue'|'setValuePos'
         payload : number
     }
     const [valueDn, setValueDn]    = useReducer((value: number, action: ValueReducerAction): number => {
-        const trimValue = (value: number): number => {
-            // make sure the requested value is between the min value & max value:
-            value     = Math.min(Math.max(
-                value
-            , (negativeFn ? maxFn : minFn)), (negativeFn ? minFn : maxFn));
-            
-            // if step was specified => stepping the value starting from min value:
-            if (stepFn > 0) {
-                let steps    = Math.round((value - minFn) / stepFn); // get the_nearest_stepped_value
-                
-                // make sure the_nearest_stepped_value is not exceeded the max value:
-                let maxSteps = (maxFn - minFn) / stepFn;
-                maxSteps     = negativeFn ? Math.ceil(maxSteps) : Math.floor(maxSteps); // remove the decimal fraction
-                
-                // re-align the steps:
-                steps        = negativeFn ? Math.max(steps, maxSteps) : Math.min(steps, maxSteps);
-                
-                // calculate the new value:
-                value        = minFn + (steps * stepFn);
-            } // if
-            
-            return value;
-        };
-        
-        
-        
         switch (action.type) {
             case 'setValue':
                 return trimValue(action.payload);
@@ -445,11 +446,7 @@ export function Range(props: RangeProps) {
     
     
     // fn props:
-    // make sure the requested value is between the min value & max value:
-    const valueFn        : number = Math.min(Math.max(
-        parseNumber(value) /*controllable*/ ?? valueDn /*uncontrollable*/
-    , (negativeFn ? maxFn : minFn)), (negativeFn ? minFn : maxFn));
-    
+    const valueFn        : number = trimValue(parseNumber(value) /*controllable*/ ?? valueDn /*uncontrollable*/);
     const valuePos       : number = (valueFn - minFn) / (maxFn - minFn);
     
     
@@ -553,8 +550,8 @@ export function Range(props: RangeProps) {
                 // validations:
                 {...{
                     required,
-                    min  : negativeFn ? maxFn : minFn,
-                    max  : negativeFn ? minFn : maxFn,
+                    min  : negativeFn ? trimValue(maxFn) : minFn,
+                    max  : negativeFn ? minFn            : maxFn,
                     step : stepFn,
                 }}
                 
