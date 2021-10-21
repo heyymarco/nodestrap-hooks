@@ -2,6 +2,7 @@
 import {
     default as React,
     useReducer,
+    useRef,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -15,20 +16,21 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
-    siblings,
     
     
     
     // rules:
-    rules,
     variants,
-    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -53,31 +55,7 @@ import {
     useNudeVariant,
     usesMildVariant,
     usesBorderRadius,
-    usesPadding,
-    
-    
-    
-    // styles:
-    usesBasicLayout,
-    usesBasicVariants,
-    
-    
-    
-    // react components:
-    BasicProps,
-    Basic,
 }                           from './Basic'
-import {
-    // hooks:
-    usesFocusBlurState,
-    
-    
-    
-    // styles:
-    usesControlLayout,
-    usesControlVariants,
-    usesControlStates,
-}                           from './Control'
 import {
     // styles:
     usesEditableControlLayout,
@@ -87,40 +65,19 @@ import {
     
     
     // react components:
-    EditableControlProps,
     EditableControl,
 }                           from './EditableControl'
 import {
-    // hooks:
-    usePressReleaseState,
-}                           from './ActionControl'
-import {
-    // styles:
-    usesEditableActionControlLayout,
-    usesEditableActionControlVariants,
-    usesEditableActionControlStates,
-    
-    
-    
     // react components:
     EditableActionControl,
     EditableActionControlProps,
 }                           from './EditableActionControl'
-import {
-    // styles:
-    inputElm,
-    
-    
-    // react components:
-    Input,
-}                           from './Input'
 import {
     // hooks:
     usePropEnabled,
     usePropReadOnly,
 }                           from './accessibilities'
 import {
-    borders,
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import {
@@ -143,13 +100,6 @@ export interface RangeVars {
 const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>();
 
 export const usesRangeLayout = () => {
-    // dependencies:
-    
-    // spacings:
-    const [, , paddingDecls] = usesPadding();
-    
-    
-    
     return composition([
         imports([
             // layouts:
@@ -343,7 +293,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 // utilities:
-const isSingleValue = (num: string|ReadonlyArray<string>): num is string => (typeof(num) === 'string') || Array.isArray(num) && (num.length === 1);
+const isSingleValue = (num: string|ReadonlyArray<string>): num is string => (typeof(num) === 'string') || (Array.isArray(num) && (num.length === 1));
 const parseNumber = (num: number|string|ReadonlyArray<string>|null|undefined): number|null => {
     if (typeof(num) === 'number') return num;
     if (!num) return null;
@@ -356,7 +306,7 @@ const parseNumber = (num: number|string|ReadonlyArray<string>|null|undefined): n
     
     
     num = Number.parseFloat(num);
-    if (num === NaN) return null;
+    if (isNaN(num)) return null;
     return num;
 };
 
@@ -446,33 +396,38 @@ export function Range(props: RangeProps) {
         payload : number
     }
     const [valueDn, setValueDn]    = useReducer((value: number, action: ValueReducerAction): number => {
+        const trimValue = (value: number): number => {
+            // make sure the requested value is between the min value & max value:
+            value     = Math.min(Math.max(
+                value
+            , (negativeFn ? maxFn : minFn)), (negativeFn ? minFn : maxFn));
+            
+            // if step was specified => stepping the value starting from min value:
+            if (stepFn > 0) {
+                let steps    = Math.round((value - minFn) / stepFn); // get the_nearest_stepped_value
+                
+                // make sure the_nearest_stepped_value is not exceeded the max value:
+                let maxSteps = (maxFn - minFn) / stepFn;
+                maxSteps     = negativeFn ? Math.ceil(maxSteps) : Math.floor(maxSteps); // remove the decimal fraction
+                
+                // re-align the steps:
+                steps        = negativeFn ? Math.max(steps, maxSteps) : Math.min(steps, maxSteps);
+                
+                // calculate the new value:
+                value        = minFn + (steps * stepFn);
+            } // if
+            
+            return value;
+        };
+        
+        
+        
         switch (action.type) {
-            case 'setValue': {
-                // take the requested raw value:
-                let value = action.payload;
-                
-                // make sure the requested value is between the min value & max value:
-                value     = Math.min(Math.max(
-                    value
-                , (negativeFn ? maxFn : minFn)), (negativeFn ? minFn : maxFn));
-                
-                // if step was specified => stepping the value starting from min value:
-                if (stepFn > 0) {
-                    let steps    = Math.round((value - minFn) / stepFn); // get the_nearest_stepped_value
-                    
-                    // make sure the_nearest_stepped_value is not exceeded the max value:
-                    let maxSteps = (maxFn - minFn) / stepFn;
-                    maxSteps     = negativeFn ? Math.ceil(maxSteps) : Math.floor(maxSteps); // remove the decimal fraction
-                    
-                    // re-align the steps:
-                    steps        = negativeFn ? Math.max(steps, maxSteps) : Math.min(steps, maxSteps);
-                    
-                    // calculate the new value:
-                    value        = minFn + (steps * stepFn);
-                } // if
-                
-                return value;
-            } // setValue
+            case 'setValue':
+                return trimValue(action.payload);
+            
+            case 'setValuePos':
+                return trimValue(minFn + ((maxFn - minFn) * action.payload));
             
             default:
                 return value; // no change
@@ -482,10 +437,45 @@ export function Range(props: RangeProps) {
     
     
     // fn props:
+    // make sure the requested value is between the min value & max value:
     const valueFn        : number = Math.min(Math.max(
         parseNumber(value) /*controllable*/ ?? valueDn /*uncontrollable*/
-    , minFn), maxFn);
-    const valuePos       : number = (valueFn - Math.abs(minFn)) / Math.abs(maxFn - minFn);
+    , (negativeFn ? maxFn : minFn)), (negativeFn ? minFn : maxFn));
+    
+    const valuePos       : number = (valueFn - minFn) / (maxFn - minFn);
+    
+    
+    
+    // dom effects:
+    const trackRef = useRef<HTMLInputElement|null>(null);
+    const thumbRef = useRef<HTMLInputElement|null>(null);
+    
+    
+    
+    // handlers:
+    const handleMouseMove = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+        if (!propEnabled)    return; // control is disabled => no response required
+        if (propReadOnly)    return; // control is readOnly => no response required
+        if (e.buttons !== 1) return; // only handle left_click only
+        
+        
+        
+        const elm          = trackRef.current ?? e.currentTarget;
+        const rect         = elm.getBoundingClientRect();
+        
+        const style        = getComputedStyle(elm);
+        const borderLeft   = (Number.parseInt(style.borderLeftWidth) || 0);
+        const paddingLeft  = (Number.parseInt(style.paddingLeft)     || 0);
+        const paddingRight = (Number.parseInt(style.paddingRight)    || 0);
+        const thumbWidth   = thumbRef.current?.offsetWidth ?? 0;
+        const trackWidth   = (elm.clientWidth - paddingLeft - paddingRight - thumbWidth);
+        
+        const cursorPos    = e.clientX - rect.left - borderLeft - paddingLeft - (thumbWidth / 2);
+        if ((cursorPos < 0) || (cursorPos > trackWidth)) return;
+        const valuePos     = cursorPos / trackWidth;
+        
+        setValueDn({ type: 'setValuePos', payload: valuePos });
+    };
     
     
     
@@ -517,6 +507,16 @@ export function Range(props: RangeProps) {
                 // values:
                 [rangeVarDecls.rangeValuePos]: valuePos,
             }}
+            
+            
+            // events:
+            onMouseMove={(e) => {
+                props.onMouseMove?.(e);
+                
+                
+                
+                handleMouseMove(e);
+            }}
         >
             <input
                 // essentials:
@@ -545,8 +545,8 @@ export function Range(props: RangeProps) {
                 // validations:
                 {...{
                     required,
-                    min  : minFn,
-                    max  : maxFn,
+                    min  : negativeFn ? maxFn : minFn,
+                    max  : negativeFn ? minFn : maxFn,
                     step : stepFn,
                 }}
                 
@@ -560,10 +560,16 @@ export function Range(props: RangeProps) {
                 // events:
                 onChange={(e) => {
                     onChange?.(e);
-                    setValueDn({ type: 'setValue', payload: parseNumber(e.target.value) ?? valueDn });
+                    setValueDn({ type: 'setValue', payload: parseNumber(e.currentTarget.value) ?? valueDn });
                 }}
             />
             <EditableControl<HTMLInputElement>
+                // essentials:
+                elmRef={(elm) => {
+                    setRef(trackRef, elm);
+                }}
+                
+                
                 // accessibilities:
                 tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
                 
@@ -579,6 +585,12 @@ export function Range(props: RangeProps) {
                 ]}
             >
                 <EditableActionControl<HTMLInputElement>
+                    // essentials:
+                    elmRef={(elm) => {
+                        setRef(thumbRef, elm);
+                    }}
+                    
+                    
                     // variants:
                     theme={theme}
                     mild={mildAlternate}

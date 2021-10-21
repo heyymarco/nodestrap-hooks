@@ -58,6 +58,36 @@ function App() {
 
 					defaultValue={20}
 				/>
+
+				<Range
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild} nude={nude}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+
+					enableValidation={enableVal}
+					isValid={isValid}
+
+					min={20} max={90} step={15} defaultValue={25}
+				/>
+				
+                <Range
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild} nude={nude}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+
+					enableValidation={enableVal}
+					isValid={isValid}
+
+					min={-20} max={-90} step={15} defaultValue={-25}
+				/>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
