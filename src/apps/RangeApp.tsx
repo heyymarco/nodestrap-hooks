@@ -39,11 +39,16 @@ function App() {
 	const [enableVal, setEnableVal  ] = useState(true);
 	const [isValid,   setIsValid    ] = useState<boolean|null|undefined>(undefined);
 
+	const [slider1, setSlider1] = useState<number>(20);
+	const [slider2, setSlider2] = useState<number>(40);
+	const [slider3, setSlider3] = useState<number>(-40);
+
 
 
     return (
         <div className="App">
             <Container>
+				<p>Uncontrollable:</p>
                 <Range
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild} nude={nude}
@@ -56,8 +61,11 @@ function App() {
 					enableValidation={enableVal}
 					isValid={isValid}
 
-					defaultValue={20}
+					defaultValue={slider1}
+					onChange={(e) => setSlider1(e.currentTarget.valueAsNumber)}
 				/>
+				<span>{ slider1 }</span>
+				<br /><br />
 
 				<Range
 					theme={theme} size={size} gradient={enableGrad}
@@ -71,8 +79,11 @@ function App() {
 					enableValidation={enableVal}
 					isValid={isValid}
 
-					min={20} max={90} step={15} defaultValue={40}
+					min={20} max={90} step={15} defaultValue={slider2}
+					onChange={(e) => setSlider2(e.currentTarget.valueAsNumber)}
 				/>
+				<span>{ slider2 }</span>
+				<br /><br />
 				
                 <Range
 					theme={theme} size={size} gradient={enableGrad}
@@ -86,8 +97,12 @@ function App() {
 					enableValidation={enableVal}
 					isValid={isValid}
 
-					min={-20} max={-90} step={15} defaultValue={-40}
+					min={-20} max={-90} step={15} defaultValue={slider3}
+					onChange={(e) => setSlider3(e.currentTarget.valueAsNumber)}
 				/>
+				<span>{ slider3 }</span>
+				<br /><br />
+
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

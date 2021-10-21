@@ -85,6 +85,10 @@ import {
     fillTextLineheightLayout,
 }                           from './layouts'
 
+// others libs:
+// @ts-ignore
+import triggerChange        from 'react-trigger-change'
+
 
 
 // styles:
@@ -390,6 +394,13 @@ export function Range(props: RangeProps) {
     
     
     
+    // dom effects:
+    const inputRef = useRef<HTMLInputElement|null>(null);
+    const trackRef = useRef<HTMLInputElement|null>(null);
+    const thumbRef = useRef<HTMLInputElement|null>(null);
+    
+    
+    
     // utilities:
     const trimValue = (value: number): number => {
         // make sure the requested value is between the min value & max value:
@@ -414,19 +425,35 @@ export function Range(props: RangeProps) {
         
         return value;
     };
+    const triggerInputChange = (value: number) => {
+        const inputElm = inputRef.current;
+        if (!inputElm) return;
+        
+        
+        
+        inputElm.valueAsNumber = value;
+        setTimeout(() => {
+            triggerChange(inputElm);
+        }, 0);
+    };
     
     
     
     // states:
     interface ValueReducerAction {
-        type    : 'setValue'|'setValuePos'
-        payload : number
+        type           : 'setValue'|'setValuePos'
+        payload        : number
+        triggerChange? : boolean
     }
     const [valueDn, setValueDn]    = useReducer((value: number, action: ValueReducerAction): number => {
         switch (action.type) {
-            case 'setValue':
-                return trimValue(action.payload);
-            
+            case 'setValue': {
+                const newValue = trimValue(action.payload);
+                
+                if ((newValue !== value) && (action.triggerChange === true)) triggerInputChange(newValue);
+                
+                return newValue;
+            }
             case 'setValuePos': {
                 let valuePos = action.payload;
                 
@@ -435,7 +462,11 @@ export function Range(props: RangeProps) {
                     valuePos
                 , 0), 1);
                 
-                return trimValue(minFn + ((maxFn - minFn) * valuePos));
+                const newValue = trimValue(minFn + ((maxFn - minFn) * valuePos));
+                
+                if ((newValue !== value) && (action.triggerChange === true)) triggerInputChange(newValue);
+                
+                return newValue;
             }
             
             default:
@@ -448,12 +479,6 @@ export function Range(props: RangeProps) {
     // fn props:
     const valueFn        : number = trimValue(parseNumber(value) /*controllable*/ ?? valueDn /*uncontrollable*/);
     const valuePos       : number = (valueFn - minFn) / (maxFn - minFn);
-    
-    
-    
-    // dom effects:
-    const trackRef = useRef<HTMLInputElement|null>(null);
-    const thumbRef = useRef<HTMLInputElement|null>(null);
     
     
     
@@ -479,7 +504,7 @@ export function Range(props: RangeProps) {
         // if ((cursorPos < 0) || (cursorPos > trackWidth)) return; // setValuePos will take care of this
         const valuePos     = cursorPos / trackWidth;
         
-        setValueDn({ type: 'setValuePos', payload: valuePos });
+        setValueDn({ type: 'setValuePos', payload: valuePos, triggerChange: true });
     };
     
     
@@ -525,7 +550,10 @@ export function Range(props: RangeProps) {
         >
             <input
                 // essentials:
-                ref={elmRef}
+                ref={(elm) => {
+                    setRef(elmRef, elm);
+                    setRef(inputRef, elm);
+                }}
                 
                 
                 // accessibilities:
@@ -565,7 +593,10 @@ export function Range(props: RangeProps) {
                 // events:
                 onChange={(e) => {
                     onChange?.(e);
-                    setValueDn({ type: 'setValue', payload: parseNumber(e.currentTarget.value) ?? valueDn });
+                    
+                    
+                    
+                    // setValueDn({ type: 'setValue', payload: parseNumber(e.currentTarget.value) ?? valueDn });
                 }}
             />
             <EditableControl<HTMLInputElement>
