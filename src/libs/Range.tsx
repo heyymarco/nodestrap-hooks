@@ -426,8 +426,16 @@ export function Range(props: RangeProps) {
             case 'setValue':
                 return trimValue(action.payload);
             
-            case 'setValuePos':
-                return trimValue(minFn + ((maxFn - minFn) * action.payload));
+            case 'setValuePos': {
+                let valuePos = action.payload;
+                
+                // make sure the valuePos is between 0 & 1:
+                valuePos     = Math.min(Math.max(
+                    valuePos
+                , 0), 1);
+                
+                return trimValue(minFn + ((maxFn - minFn) * valuePos));
+            }
             
             default:
                 return value; // no change
@@ -471,7 +479,7 @@ export function Range(props: RangeProps) {
         const trackWidth   = (elm.clientWidth - paddingLeft - paddingRight - thumbWidth);
         
         const cursorPos    = e.clientX - rect.left - borderLeft - paddingLeft - (thumbWidth / 2);
-        if ((cursorPos < 0) || (cursorPos > trackWidth)) return;
+        // if ((cursorPos < 0) || (cursorPos > trackWidth)) return; // setValuePos will take care of this
         const valuePos     = cursorPos / trackWidth;
         
         setValueDn({ type: 'setValuePos', payload: valuePos });
