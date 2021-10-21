@@ -105,17 +105,19 @@ const [pressReleaseRefs, pressReleaseDecls] = createCssVar<PressReleaseVars>();
 
 // .pressed will be added after pressing-animation done:
 const selectorIsPressed   =  '.pressed'
-// .press = programatically press, :active = user press:
+/* we don't use :active because we cannot decide which mouse_button or keyboard_key to activate :active */
+// .press = programatically press, /* :active = user press */:
 const selectorIsPressing  = ['.press',
-                             ':active:not(.disabled):not(.disable):not(:disabled):not(.pressed):not(.release):not(.released)']
+                             /* ':active:not(.disabled):not(.disable):not(:disabled):not(.pressed):not(.release):not(.released)' */]
 // .release will be added after loosing press and will be removed after releasing-animation done:
 const selectorIsReleasing =  '.release'
 // if all above are not set => released
-// optionally use .released to kill pseudo :active:
-const selectorIsReleased  = [':not(.pressed):not(.press):not(:active):not(.release)',
+// /* optionally use .released to kill pseudo :active */:
+const selectorIsReleased  = [/* ':not(.pressed):not(.press):not(:active):not(.release)',
                              ':not(.pressed):not(.press).disabled:not(.release)'    ,
                              ':not(.pressed):not(.press).disable:not(.release)'     ,
-                             ':not(.pressed):not(.press):disabled:not(.release)'    ,
+                             ':not(.pressed):not(.press):disabled:not(.release)'    , */
+                             ':not(.pressed):not(.press):not(.release)',
                              '.released']
 
 export const isPressed        = (styles: StyleCollection) => rule(selectorIsPressed  , styles);
@@ -246,12 +248,13 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
             if (pressed) return 'pressed';
 
             // fully released:
-            if ((props.press !== undefined) || propReadOnly) {
+            /* if ((props.press !== undefined) || propReadOnly) {
                 return 'released'; // releasing by controllable prop => use class .released to kill pseudo :active
             }
             else {
                 return null; // discard all classes above
-            } // if
+            } // if */
+            return null; // discard all classes above
         })(),
         
         handleMouseDown    : ((e) => {
