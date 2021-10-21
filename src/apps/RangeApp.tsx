@@ -39,9 +39,9 @@ function App() {
 	const [enableVal, setEnableVal  ] = useState(true);
 	const [isValid,   setIsValid    ] = useState<boolean|null|undefined>(undefined);
 
-	const [slider1, setSlider1] = useState<number>(20);
+	// const [slider1, setSlider1] = useState<number>(20);
 	const [slider2, setSlider2] = useState<number>(40);
-	const [slider3, setSlider3] = useState<number>(-40);
+	// const [slider3, setSlider3] = useState<number>(-40);
 
 
 
@@ -49,7 +49,7 @@ function App() {
         <div className="App">
             <Container>
 				<p>Uncontrollable:</p>
-                <Range
+                {/* <Range
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild} nude={nude}
 
@@ -65,7 +65,7 @@ function App() {
 					onChange={(e) => setSlider1(e.currentTarget.valueAsNumber)}
 				/>
 				<span>{ slider1 }</span>
-				<br /><br />
+				<br /><br /> */}
 
 				<Range
 					theme={theme} size={size} gradient={enableGrad}
@@ -85,7 +85,7 @@ function App() {
 				<span>{ slider2 }</span>
 				<br /><br />
 				
-                <Range
+                {/* <Range
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild} nude={nude}
 
@@ -101,7 +101,7 @@ function App() {
 					onChange={(e) => setSlider3(e.currentTarget.valueAsNumber)}
 				/>
 				<span>{ slider3 }</span>
-				<br /><br />
+				<br /><br /> */}
 
                 <hr style={{flexBasis: '100%'}} />
 				<p>

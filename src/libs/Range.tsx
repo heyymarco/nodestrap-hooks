@@ -390,7 +390,7 @@ export function Range(props: RangeProps) {
     const maxFn          : number  = parseNumber(max)  ?? 100;
     const stepFn         : number  = (step === 'any') ? 0 : (parseNumber(step) ?? 1);
     const negativeFn     : boolean = (maxFn < minFn);
-    const defaultValueFn : number  = negativeFn ? minFn : (minFn + ((maxFn - minFn) / 2));
+    const defaultValueFn : number  = (minFn + ((maxFn - minFn) / 2));
     
     
     
