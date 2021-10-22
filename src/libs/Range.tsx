@@ -104,9 +104,9 @@ export const thumbElm = '.thumb';
 
 export interface RangeVars {
     /**
-     * Range's thumb position.
+     * Range's thumb ratio.
      */
-    rangeValuePos : any
+    rangeValueRatio : any
 }
 const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>();
 
@@ -162,7 +162,7 @@ export const usesRangeLayout = () => {
                     
                     
                     // sizes:
-                    boxSizing      : 'border-box', // the final size is including borders & paddings
+                    boxSizing      : 'border-box',     // the final size is including borders & paddings
                     flex           : [[1, 1, '100%']], // growable, shrinkable, initial 100% parent's width
                     
                     
@@ -173,20 +173,27 @@ export const usesRangeLayout = () => {
                     
                     
                     // children:
-                    ...children(thumbElm, composition([
+                    ...children(['::before', '::after'], composition([
                         layout({
                             // layouts:
-                            display          : 'inline-block', // use inline-block, so it takes the width & height as we set
+                            content   : '""',
+                            display   : 'inline-block', // use inline-block, so it takes the width & height as we set
                             
                             
                             
                             // sizes:
-                            boxSizing        : 'border-box', // the final size is including borders & paddings
+                            alignSelf : 'stretch',      // follows parent's height
+                        }),
+                    ])),
+                    ...children(thumbElm, composition([
+                        layout({
+                            // layouts:
+                            display   : 'inline-block', // use inline-block, so it takes the width & height as we set
                             
                             
                             
-                            // positions:
-                            position         : 'relative',
+                            // sizes:
+                            boxSizing : 'border-box', // the final size is including borders & paddings
                             
                             
                             
@@ -255,10 +262,16 @@ export const usesRangeVariants = () => {
                             
                             
                             // children:
-                            ...children(thumbElm, composition([
+                            ...children('::before', composition([
                                 layout({
-                                    // positions:
-                                    insetInlineStart : `calc((100% - ${cssProps.thumbInlineSize}) * ${rangeVarRefs.rangeValuePos})`,
+                                    // sizes:
+                                    flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+                                }),
+                            ])),
+                            ...children('::after', composition([
+                                layout({
+                                    // sizes:
+                                    flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
                                 }),
                             ])),
                         }),
@@ -279,6 +292,12 @@ export const usesRangeVariants = () => {
                     
                     
                     // children:
+                    ...children('::before', composition([
+                        layout({
+                            // rotate a dummy text 90 degree:
+                            writingMode : 'vertical-lr',
+                        }),
+                    ])),
                     ...children(trackElm, composition([
                         layout({
                             // layouts:
@@ -287,11 +306,16 @@ export const usesRangeVariants = () => {
                             
                             
                             // children:
-                            ...children(thumbElm, composition([
+                            ...children('::before', composition([
                                 layout({
-                                    // positions:
-                                    // TODO fix this:
-                                    insetBlockEnd : `calc((100% - ${cssProps.thumbBlockSize}) * ${rangeVarRefs.rangeValuePos})`,
+                                    // sizes:
+                                    flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
+                                }),
+                            ])),
+                            ...children('::after', composition([
+                                layout({
+                                    // sizes:
+                                    flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
                                 }),
                             ])),
                         }),
@@ -535,7 +559,7 @@ export function Range(props: RangeProps) {
     
     // states:
     interface ValueReducerAction {
-        type           : 'setValue'|'setValuePos'
+        type           : 'setValue'|'setValueRatio'
         payload        : number
         triggerChange? : boolean
     }
@@ -550,15 +574,15 @@ export function Range(props: RangeProps) {
                 
                 return newValue;
             }
-            case 'setValuePos': {
-                let valuePos = action.payload;
+            case 'setValueRatio': {
+                let valueRatio = action.payload;
                 
-                // make sure the valuePos is between 0 & 1:
-                valuePos     = Math.min(Math.max(
-                    valuePos
+                // make sure the valueRatio is between 0 & 1:
+                valueRatio     = Math.min(Math.max(
+                    valueRatio
                 , 0), 1);
                 
-                const newValue = trimValue(minFn + ((maxFn - minFn) * valuePos));
+                const newValue = trimValue(minFn + ((maxFn - minFn) * valueRatio));
                 
                 if ((newValue !== value) && (action.triggerChange === true)) {
                     triggerInputChange(newValue);
@@ -576,7 +600,7 @@ export function Range(props: RangeProps) {
     
     // fn props:
     const valueFn        : number = trimValue(parseNumber(value) /*controllable*/ ?? valueDn /*uncontrollable*/);
-    const valuePos       : number = (valueFn - minFn) / (maxFn - minFn);
+    const valueRatio     : number = (valueFn - minFn) / (maxFn - minFn);
     
     
     
@@ -599,10 +623,10 @@ export function Range(props: RangeProps) {
         const trackWidth   = (elm.clientWidth - paddingLeft - paddingRight - thumbWidth);
         
         const cursorPos    = e.clientX - rect.left - borderLeft - paddingLeft - (thumbWidth / 2);
-        // if ((cursorPos < 0) || (cursorPos > trackWidth)) return; // setValuePos will take care of this
-        const valuePos     = cursorPos / trackWidth;
+        // if ((cursorPos < 0) || (cursorPos > trackWidth)) return; // setValueRatio will take care of this
+        const valueRatio   = cursorPos / trackWidth;
         
-        setValueDn({ type: 'setValuePos', payload: valuePos, triggerChange: true });
+        setValueDn({ type: 'setValueRatio', payload: valueRatio, triggerChange: true });
     };
     
     
@@ -634,7 +658,7 @@ export function Range(props: RangeProps) {
             // styles:
             style={{...(props.style ?? {}),
                 // values:
-                [rangeVarDecls.rangeValuePos]: valuePos,
+                [rangeVarDecls.rangeValueRatio]: valueRatio,
             }}
             
             
