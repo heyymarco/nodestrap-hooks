@@ -3,6 +3,7 @@ import {
     default as React,
     useReducer,
     useRef,
+    useCallback,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -402,7 +403,7 @@ export function Range(props: RangeProps) {
     
     
     // utilities:
-    const trimValue = (value: number): number => {
+    const trimValue = useCallback((value: number): number => {
         // make sure the requested value is between the min value & max value:
         value     = Math.min(Math.max(
             value
@@ -424,7 +425,7 @@ export function Range(props: RangeProps) {
         } // if
         
         return value;
-    };
+    }, [minFn, maxFn, stepFn, negativeFn]);
     const triggerInputChange = (value: number) => {
         const inputElm = inputRef.current;
         if (!inputElm) return;
@@ -445,12 +446,14 @@ export function Range(props: RangeProps) {
         payload        : number
         triggerChange? : boolean
     }
-    const [valueDn, setValueDn]    = useReducer((value: number, action: ValueReducerAction): number => {
+    const [valueDn, setValueDn]    = useReducer(useCallback((value: number, action: ValueReducerAction): number => {
         switch (action.type) {
             case 'setValue': {
                 const newValue = trimValue(action.payload);
                 
-                if ((newValue !== value) && (action.triggerChange === true)) triggerInputChange(newValue);
+                if ((newValue !== value) && (action.triggerChange === true)) {
+                    triggerInputChange(newValue);
+                } // if
                 
                 return newValue;
             }
@@ -464,7 +467,9 @@ export function Range(props: RangeProps) {
                 
                 const newValue = trimValue(minFn + ((maxFn - minFn) * valuePos));
                 
-                if ((newValue !== value) && (action.triggerChange === true)) triggerInputChange(newValue);
+                if ((newValue !== value) && (action.triggerChange === true)) {
+                    triggerInputChange(newValue);
+                } // if
                 
                 return newValue;
             }
@@ -472,7 +477,7 @@ export function Range(props: RangeProps) {
             default:
                 return value; // no change
         } // switch
-    }, /*initialState: */parseNumber(defaultValue) ?? defaultValueFn);
+    }, [minFn, maxFn, trimValue]), /*initialState: */parseNumber(defaultValue) ?? defaultValueFn);
     
     
     
