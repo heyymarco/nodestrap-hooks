@@ -10,7 +10,7 @@ import {
 	ThemeName,
 	SizeName,
 } 					from '../libs/Basic';
-import Range from '../libs/Range';
+import {Range, OrientationName} from '../libs/Range';
 
 
 
@@ -38,6 +38,9 @@ function App() {
 	const isValids = [undefined, false, null, true];
 	const [enableVal, setEnableVal  ] = useState(true);
 	const [isValid,   setIsValid    ] = useState<boolean|null|undefined>(undefined);
+
+	const orientations = [undefined, 'block', 'inline'];
+	const [orientation,    setOrientation     ] = useState<OrientationName|undefined>(undefined);
 
 	// const [slider1, setSlider1] = useState<number>(20);
 	const [slider2, setSlider2] = useState<number>(40);
@@ -78,6 +81,8 @@ function App() {
 
 					enableValidation={enableVal}
 					isValid={isValid}
+
+					orientation={orientation}
 
 					min={20} max={90} step={15} defaultValue={slider2}
 					onChange={(e) => setSlider2(e.currentTarget.valueAsNumber)}
@@ -263,6 +268,21 @@ function App() {
 									})())}
 								/>
 								{`${(val===undefined) ? 'auto' : val}`}
+							</label>
+						)
+					}
+				</p>
+				<p>
+					OrientationStyle:
+					{
+						orientations.map(ori =>
+							<label key={ori ?? ''}>
+								<input type='radio'
+									value={ori}
+									checked={orientation===ori}
+									onChange={(e) => setOrientation((e.target.value || undefined) as (OrientationName|undefined))}
+								/>
+								{`${ori}`}
 							</label>
 						)
 					}

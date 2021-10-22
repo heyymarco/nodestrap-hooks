@@ -50,6 +50,11 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    OrientationName,
+    notOrientationBlock,
+    isOrientationBlock,
+    OrientationVariant,
+    useOrientationVariant,
     isNude,
     usesNudeVariant,
     NudeVariant,
@@ -93,8 +98,9 @@ import triggerChange        from 'react-trigger-change'
 
 
 // styles:
-const trackElm = '.track';
-const thumbElm = '.thumb';
+export const inputElm = ':first-child';
+export const trackElm = '.track';
+export const thumbElm = '.thumb';
 
 export interface RangeVars {
     /**
@@ -112,8 +118,8 @@ export const usesRangeLayout = () => {
         ]),
         layout({
             // layouts:
-            display        : 'flex',   // use block flexbox, so it takes the entire parent's width
-            flexDirection  : 'row',    // flow to the document's writing flow
+         // display        : 'flex',   // customizable orientation // already defined in variant `.block`/`.inline`
+         // flexDirection  : 'row',    // customizable orientation // already defined in variant `.block`/`.inline`
             justifyContent : 'start',  // if range is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the range's first part should be visible first
             alignItems     : 'center', // default center items vertically
             flexWrap       : 'nowrap', // prevents the range to wrap to the next row
@@ -138,10 +144,20 @@ export const usesRangeLayout = () => {
                     fillTextLineheightLayout(),
                 ]),
             ])),
+            ...children(inputElm, composition([
+                layout({
+                    // layouts:
+                    display: 'none', // hide the input
+                }),
+            ])),
             ...children(trackElm, composition([
                 layout({
                     // layouts:
-                    display        : 'block', // fills the entire parent's width
+                    display        : 'flex',    // use block flexbox, so it takes the entire Range's width
+                 // flexDirection  : 'row',     // customizable orientation // already defined in variant `.block`/`.inline`
+                    justifyContent : 'start',   // if thumb is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the thumb's first part should be visible first
+                    alignItems     : 'center',  // center thumb vertically
+                    flexWrap       : 'nowrap',  // no wrapping
                     
                     
                     
@@ -171,8 +187,6 @@ export const usesRangeLayout = () => {
                             
                             // positions:
                             position         : 'relative',
-                            insetBlockStart  : `calc(0px - (${cssProps.thumbBlockSize} / 2))`,
-                            insetInlineStart : `calc((100% - ${cssProps.thumbInlineSize}) * ${rangeVarRefs.rangeValuePos})`,
                             
                             
                             
@@ -224,6 +238,71 @@ export const usesRangeVariants = () => {
             usesNudeVariant(),
         ]),
         variants([
+            notOrientationBlock([ // inline
+                layout({
+                    // layouts:
+                    display        : 'flex',        // use block flexbox, so it takes the entire parent's width
+                    flexDirection  : 'row',         // items are stacked horizontally
+                    
+                    
+                    
+                    // children:
+                    ...children(trackElm, composition([
+                        layout({
+                            // layouts:
+                            flexDirection : 'row',    // items are stacked horizontally
+                            
+                            
+                            
+                            // children:
+                            ...children(thumbElm, composition([
+                                layout({
+                                    // positions:
+                                    insetInlineStart : `calc((100% - ${cssProps.thumbInlineSize}) * ${rangeVarRefs.rangeValuePos})`,
+                                }),
+                            ])),
+                        }),
+                    ])),
+                    
+                    
+                    
+                    // overwrites propName = propName{Inline}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
+                }),
+            ]),
+            isOrientationBlock([ // block
+                layout({
+                    // layouts:
+                    display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+                    flexDirection  : 'column',      // items are stacked vertically
+                    
+                    
+                    
+                    // children:
+                    ...children(trackElm, composition([
+                        layout({
+                            // layouts:
+                            flexDirection : 'column', // items are stacked vertically
+                            
+                            
+                            
+                            // children:
+                            ...children(thumbElm, composition([
+                                layout({
+                                    // positions:
+                                    // TODO fix this:
+                                    insetBlockEnd : `calc((100% - ${cssProps.thumbBlockSize}) * ${rangeVarRefs.rangeValuePos})`,
+                                }),
+                            ])),
+                        }),
+                    ])),
+                    
+                    
+                    
+                    // overwrites propName = propName{Block}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+                }),
+            ]),
             isNude([
                 layout({
                     // foregrounds:
@@ -282,16 +361,28 @@ export const useRangeSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        trackBlockSize    : '0.4em',
-        trackBorderRadius : borderRadiuses.pill,
-        trackPadding      : 0,
+        minInlineSize        : '8rem',
+        minBlockSize         : 'auto',
+        
+        minInlineSizeBlock   : 'auto',
+        minBlockSizeBlock    : '8rem',
         
         
         
-        thumbInlineSize   : '1em',
-        thumbBlockSize    : '1em',
-        thumbBorderRadius : borderRadiuses.pill,
-        thumbPadding      : 0,
+        trackInlineSize      : 'auto',
+        trackBlockSize       : '0.4em',
+        trackBorderRadius    : borderRadiuses.pill,
+        trackPadding         : 0,
+        
+        trackInlineSizeBlock : '0.4em',
+        trackBlockSizeBlock  : 'auto',
+        
+        
+        
+        thumbInlineSize      : '1em',
+        thumbBlockSize       : '1em',
+        thumbBorderRadius    : borderRadiuses.pill,
+        thumbPadding         : 0,
     };
 }, { prefix: 'rnge' });
 
@@ -325,6 +416,7 @@ export interface RangeProps
         Pick<React.InputHTMLAttributes<HTMLInputElement>, 'disabled'>,
         
         // layouts:
+        OrientationVariant,
         NudeVariant
 {
     // validations:
@@ -382,7 +474,8 @@ export function Range(props: RangeProps) {
     
     
     // variants:
-    const nudeVariant    = useNudeVariant({ nude });
+    const orientationVariant = useOrientationVariant(props);
+    const nudeVariant        = useNudeVariant({ nude });
     
     
     
@@ -533,6 +626,7 @@ export function Range(props: RangeProps) {
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
+                orientationVariant.class,
                 nudeVariant.class,
             ]}
             
@@ -648,3 +742,5 @@ export function Range(props: RangeProps) {
     );
 }
 export { Range as default }
+
+export type { OrientationName, OrientationVariant }
