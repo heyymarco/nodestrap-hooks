@@ -261,6 +261,19 @@ export const usesRangeLayout = () => {
                             alignSelf : 'stretch',      // follows parent's height
                         }),
                     ])),
+                    ...children(trackLowerElm, composition([
+                        layout({
+                            // sizes:
+                            flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+                        }),
+                    ])),
+                    ...children(trackUpperElm, composition([
+                        layout({
+                            // sizes:
+                            flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
+                        }),
+                    ])),
+                    
                     ...children(['&', thumbElm], composition([
                         layout({
                             cursor: 'inherit',
@@ -334,9 +347,6 @@ export const usesRangeVariants = () => {
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
     
-    // range vars:
-    const [, rangeVarRefs       ] = usesRangeVars();
-    
     
     
     return composition([
@@ -367,22 +377,6 @@ export const usesRangeVariants = () => {
                         layout({
                             // layouts:
                             flexDirection : 'row',    // items are stacked horizontally
-                            
-                            
-                            
-                            // children:
-                            ...children(trackLowerElm, composition([
-                                layout({
-                                    // sizes:
-                                    flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
-                                }),
-                            ])),
-                            ...children(trackUpperElm, composition([
-                                layout({
-                                    // sizes:
-                                    flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
-                                }),
-                            ])),
                         }),
                     ])),
                     
@@ -410,22 +404,6 @@ export const usesRangeVariants = () => {
                         layout({
                             // layouts:
                             flexDirection : 'column', // items are stacked vertically
-                            
-                            
-                            
-                            // children:
-                            ...children(trackLowerElm, composition([
-                                layout({
-                                    // sizes:
-                                    flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
-                                }),
-                            ])),
-                            ...children(trackUpperElm, composition([
-                                layout({
-                                    // sizes:
-                                    flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
-                                }),
-                            ])),
                         }),
                     ])),
                     
@@ -856,6 +834,50 @@ export function Range(props: RangeProps) {
     
     
     
+    // jsx fn props:
+    const trackLower = (
+        <Element
+            // essentials:
+            tag={trackLowerTag}
+            elmRef={(elm) => {
+                setRef(trackLowerRef , elm);
+            }}
+            
+            
+            // classes:
+            classes={[
+                'trackLower',
+            ]}
+            
+            
+            // styles:
+            style={trackLowerStyle}
+        >
+        </Element>
+    );
+    const trackUpper = (
+        <Element
+            // essentials:
+            tag={trackUpperTag}
+            elmRef={(elm) => {
+                setRef(trackUpperRef , elm);
+            }}
+            
+            
+            // classes:
+            classes={[
+                'trackUpper',
+            ]}
+            
+            
+            // styles:
+            style={trackUpperStyle}
+        >
+        </Element>
+    );
+    
+    
+    
     // jsx:
     return (
         <EditableControl<HTMLInputElement>
@@ -1011,24 +1033,7 @@ export function Range(props: RangeProps) {
                 // styles:
                 style={trackStyle}
             >
-                <Element
-                    // essentials:
-                    tag={trackLowerTag}
-                    elmRef={(elm) => {
-                        setRef(trackLowerRef , elm);
-                    }}
-                    
-                    
-                    // classes:
-                    classes={[
-                        'trackLower',
-                    ]}
-                    
-                    
-                    // styles:
-                    style={trackLowerStyle}
-                >
-                </Element>
+                { orientationVertical ? trackUpper : trackLower }
                 <EditableActionControl<HTMLInputElement>
                     // essentials:
                     tag={thumbTag}
@@ -1067,24 +1072,7 @@ export function Range(props: RangeProps) {
                     onAnimationEnd={pressReleaseState.handleAnimationEnd}
                 >
                 </EditableActionControl>
-                <Element
-                    // essentials:
-                    tag={trackUpperTag}
-                    elmRef={(elm) => {
-                        setRef(trackUpperRef , elm);
-                    }}
-                    
-                    
-                    // classes:
-                    classes={[
-                        'trackUpper',
-                    ]}
-                    
-                    
-                    // styles:
-                    style={trackUpperStyle}
-                >
-                </Element>
+                { orientationVertical ? trackLower : trackUpper }
             </EditableControl>
         </EditableControl>
     );
