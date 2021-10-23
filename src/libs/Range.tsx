@@ -17,6 +17,7 @@ import {
     
     // layouts:
     layout,
+    vars,
     children,
     
     
@@ -62,6 +63,10 @@ import {
     usesMildVariant,
     usesBorderRadius,
 }                           from './Basic'
+import {
+    // hooks:
+    usesFocusBlurState,
+}                           from './Control'
 import {
     // styles:
     usesEditableControlLayout,
@@ -357,11 +362,32 @@ export const usesRangeVariants = () => {
     ]);
 };
 export const usesRangeStates = () => {
+    // dependencies:
+    
+    // states:
+    const [, , focusBlurDecls] = usesFocusBlurState();
+    
+    
+    
     return composition([
         imports([
             // states:
             usesEditableControlStates(),
         ]),
+        layout({
+            // children:
+            ...children(trackElm, composition([
+                layout({
+                    // children:
+                    ...children(['&', thumbElm], composition([
+                        vars({
+                            [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
+                            [focusBlurDecls.animFocusBlur]      : 'inherit',
+                        })
+                    ])),
+                }),
+            ])),
+        }),
     ]);
 };
 export const usesRange = () => {
