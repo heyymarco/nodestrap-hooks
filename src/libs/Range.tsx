@@ -32,6 +32,11 @@ import {
     
     // utilities:
     setRef,
+    
+    
+    
+    // react components:
+    Element,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -882,8 +887,9 @@ export function Range(props: RangeProps) {
             />
             <EditableControl<HTMLInputElement>
                 // essentials:
+                tag={trackTag}
                 elmRef={(elm) => {
-                    setRef(trackRef , elm)
+                    setRef(trackRef , elm);
                     setRef(trackRef2, elm);
                 }}
                 
@@ -902,11 +908,52 @@ export function Range(props: RangeProps) {
                 classes={[
                     'track',
                 ]}
+                
+                
+                // styles:
+                style={trackStyle}
             >
+                <Element
+                    // essentials:
+                    tag={trackLowerTag}
+                    elmRef={(elm) => {
+                        setRef(trackLowerRef , elm);
+                    }}
+                    
+                    
+                    // classes:
+                    classes={[
+                        'trackLower',
+                    ]}
+                    
+                    
+                    // styles:
+                    style={trackLowerStyle}
+                >
+                </Element>
+                <Element
+                    // essentials:
+                    tag={trackUpperTag}
+                    elmRef={(elm) => {
+                        setRef(trackUpperRef , elm);
+                    }}
+                    
+                    
+                    // classes:
+                    classes={[
+                        'trackUpper',
+                    ]}
+                    
+                    
+                    // styles:
+                    style={trackUpperStyle}
+                >
+                </Element>
                 <EditableActionControl<HTMLInputElement>
                     // essentials:
+                    tag={thumbTag}
                     elmRef={(elm) => {
-                        setRef(thumbRef , elm)
+                        setRef(thumbRef , elm);
                         setRef(thumbRef2, elm);
                     }}
                     
@@ -930,6 +977,10 @@ export function Range(props: RangeProps) {
                     classes={[
                         'thumb',
                     ]}
+                    
+                    
+                    // styles:
+                    style={thumbStyle}
                     
                     
                     // events:
