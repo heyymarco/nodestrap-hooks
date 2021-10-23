@@ -149,7 +149,7 @@ export const usesButtonIconLayout = () => {
             
             
             // borders:
-            ...expandBorderRadius(cssProps), // expand borderRadius css vars
+            ...expandBorderRadius(cssProps.borderRadius), // expand borderRadius css vars
             
             
             
