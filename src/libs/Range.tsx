@@ -113,9 +113,11 @@ import triggerChange        from 'react-trigger-change'
 
 
 // styles:
-export const inputElm = ':first-child';
-export const trackElm = '.track';
-export const thumbElm = '.thumb';
+export const inputElm      = ':first-child';
+export const trackElm      = '.track';
+export const trackLowerElm = '.trackLower';
+export const trackUpperElm = '.trackUpper';
+export const thumbElm      = '.thumb';
 
 export interface RangeVars {
     /**
@@ -181,10 +183,9 @@ export const usesRangeLayout = () => {
                     
                     
                     // children:
-                    ...children(['::before', '::after'], composition([
+                    ...children([trackLowerElm, trackUpperElm], composition([
                         layout({
                             // layouts:
-                            content   : '""',
                             display   : 'inline-block', // use inline-block, so it takes the width & height as we set
                             
                             
@@ -280,13 +281,13 @@ export const usesRangeVariants = () => {
                             
                             
                             // children:
-                            ...children('::before', composition([
+                            ...children(trackLowerElm, composition([
                                 layout({
                                     // sizes:
                                     flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
                                 }),
                             ])),
-                            ...children('::after', composition([
+                            ...children(trackUpperElm, composition([
                                 layout({
                                     // sizes:
                                     flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
@@ -323,13 +324,13 @@ export const usesRangeVariants = () => {
                             
                             
                             // children:
-                            ...children('::before', composition([
+                            ...children(trackLowerElm, composition([
                                 layout({
                                     // sizes:
                                     flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
                                 }),
                             ])),
-                            ...children('::after', composition([
+                            ...children(trackUpperElm, composition([
                                 layout({
                                     // sizes:
                                     flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
@@ -931,24 +932,6 @@ export function Range(props: RangeProps) {
                     style={trackLowerStyle}
                 >
                 </Element>
-                <Element
-                    // essentials:
-                    tag={trackUpperTag}
-                    elmRef={(elm) => {
-                        setRef(trackUpperRef , elm);
-                    }}
-                    
-                    
-                    // classes:
-                    classes={[
-                        'trackUpper',
-                    ]}
-                    
-                    
-                    // styles:
-                    style={trackUpperStyle}
-                >
-                </Element>
                 <EditableActionControl<HTMLInputElement>
                     // essentials:
                     tag={thumbTag}
@@ -987,6 +970,24 @@ export function Range(props: RangeProps) {
                     onAnimationEnd={pressReleaseState.handleAnimationEnd}
                 >
                 </EditableActionControl>
+                <Element
+                    // essentials:
+                    tag={trackUpperTag}
+                    elmRef={(elm) => {
+                        setRef(trackUpperRef , elm);
+                    }}
+                    
+                    
+                    // classes:
+                    classes={[
+                        'trackUpper',
+                    ]}
+                    
+                    
+                    // styles:
+                    style={trackUpperStyle}
+                >
+                </Element>
             </EditableControl>
         </EditableControl>
     );
