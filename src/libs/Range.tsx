@@ -68,7 +68,13 @@ import {
     usesMildVariant,
     usesBackg,
     usesBorderRadius,
+    expandBorderRadius,
+    expandPadding,
 }                           from './Basic'
+import {
+    // hooks:
+    usesBorderAsContainer,
+}                           from './Content'
 import {
     // hooks:
     useFocusBlurState,
@@ -158,6 +164,9 @@ export const usesRangeVars = () => {
 export const usesRangeLayout = () => {
     // dependencies:
     
+    // borders:
+    const [, , borderRadiusDecls   ] = usesBorderRadius();
+    
     // range vars:
     const [rangeVars , rangeVarRefs] = usesRangeVars();
     
@@ -199,6 +208,12 @@ export const usesRangeLayout = () => {
                 }),
             ])),
             ...children(trackElm, composition([
+                imports([
+                    usesBorderAsContainer({ // make a nicely rounded corners
+                        orientationBlockRule  : '.block&',
+                        orientationInlineRule : ':not(.block)&',
+                    }),
+                ]),
                 layout({
                     // layouts:
                     display        : 'flex',    // use block flexbox, so it takes the entire Range's width
@@ -233,6 +248,15 @@ export const usesRangeLayout = () => {
                             
                             
                             
+                            // borders:
+                            ...expandBorderRadius(), // expand borderRadius css vars
+                            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+                            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+                            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+                            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+                            
+                            
+                            
                             // sizes:
                             alignSelf : 'stretch',      // follows parent's height
                         }),
@@ -256,6 +280,16 @@ export const usesRangeLayout = () => {
                             
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'thumb')), // apply general cssProps starting with thumb***
+                            
+                            
+                            
+                            // borders:
+                            ...expandBorderRadius({ borderRadius: cssProps.thumbBorderRadius }), // expand borderRadius css vars
+                            
+                            
+                            
+                            // spacings:
+                            ...expandPadding({ paddingInline: cssProps.thumbPaddingInline, paddingBlock: cssProps.thumbPaddingBlock }), // expand padding css vars
                         }),
                     ])),
                     
@@ -263,6 +297,16 @@ export const usesRangeLayout = () => {
                     
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'track')), // apply general cssProps starting with track***
+                    
+                    
+                    
+                    // borders:
+                    ...expandBorderRadius({ borderRadius: cssProps.trackBorderRadius }), // expand borderRadius css vars
+                    
+                    
+                    
+                    // spacings:
+                    ...expandPadding({ paddingInline: cssProps.trackPaddingInline, paddingBlock: cssProps.trackPaddingBlock }), // expand padding css vars
                 }),
             ])),
             
@@ -467,7 +511,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         trackInlineSize      : 'auto',
         trackBlockSize       : '0.4em',
         trackBorderRadius    : borderRadiuses.pill,
-        trackPadding         : 0,
+        trackPaddingInline   : 0,
+        trackPaddingBlock    : 0,
         
         trackInlineSizeBlock : '0.4em',
         trackBlockSizeBlock  : 'auto',
@@ -477,7 +522,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         thumbInlineSize      : '1em',
         thumbBlockSize       : '1em',
         thumbBorderRadius    : borderRadiuses.pill,
-        thumbPadding         : 0,
+        thumbPaddingInline   : 0,
+        thumbPaddingBlock    : 0,
     };
 }, { prefix: 'rnge' });
 
