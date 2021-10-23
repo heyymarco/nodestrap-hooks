@@ -57,7 +57,6 @@ import {
 }                           from './Basic'
 import {
     // hooks:
-    isDisable,
     isActived,
     isActivating,
     isPassivating,
@@ -371,13 +370,6 @@ export const usesActionControlStates = () => {
             pressRelease(),
         ]),
         states([
-            isDisable([
-                layout({
-                    // accessibilities:
-                    cursor     : cssProps.cursorDisable,
-                    userSelect : 'none',
-                }),
-            ]),
             isPress([
                 imports([
                     markActive(),

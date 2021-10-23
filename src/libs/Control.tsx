@@ -62,6 +62,7 @@ import {
 }                           from './Basic'
 import {
     // hooks:
+    isDisable,
     isActive,
     markActive      as indicatorMarkActive,
     usesThemeActive as indicatorUsesThemeActive,
@@ -544,6 +545,13 @@ export const usesControlStates = () => {
             arriveLeave(),
         ]),
         states([
+            isDisable([
+                layout({
+                    // accessibilities:
+                    cursor : cssProps.cursorDisable,
+                }),
+            ]),
+            
             isActive([
                 imports([
                     markActive(),
@@ -659,6 +667,11 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     
     return {
+        // accessibilities:
+        cursorDisable       : 'not-allowed',
+        
+        
+        
         //#region animations
         boxShadowFocus      : [[0, 0, 0, '0.25rem' ]], // supports for Control children's theming
         filterArrive        : [['brightness(85%)', 'drop-shadow(0 0 0.01px rgba(0,0,0,0.4))']],
