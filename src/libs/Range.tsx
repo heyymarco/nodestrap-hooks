@@ -618,15 +618,15 @@ export function Range(props: RangeProps) {
         
         const style        = getComputedStyle(elm);
         const borderStart  = (Number.parseInt(orientationVertical ? style.borderTopWidth : style.borderLeftWidth) || 0);
-        const paddingStart = (Number.parseInt(orientationVertical ? style.paddingTop     : style.paddingLeft)     || 0);
-        const paddingEnd   = (Number.parseInt(orientationVertical ? style.paddingBottom  : style.paddingRight)    || 0);
+        const paddingStart = (Number.parseInt(orientationVertical ? style.paddingTop     : style.paddingLeft    ) || 0);
+        const paddingEnd   = (Number.parseInt(orientationVertical ? style.paddingBottom  : style.paddingRight   ) || 0);
         const thumbSize    = (orientationVertical ? thumbRef.current?.offsetHeight : thumbRef.current?.offsetWidth) ?? 0;
         const trackSize    = ((orientationVertical ? elm.clientHeight : elm.clientWidth) - paddingStart - paddingEnd - thumbSize);
         
-        const cursorPos    = (orientationVertical ? e.clientY : e.clientX) - (orientationVertical ? rect.top : rect.left) - borderStart - paddingStart - (thumbSize / 2);
-        // if ((cursorPos < 0) || (cursorPos > trackSize)) return; // setValueRatio will take care of this
+        const cursorStart  = (orientationVertical ? e.clientY : e.clientX) - (orientationVertical ? rect.top : rect.left) - borderStart - paddingStart - (thumbSize / 2);
+        // if ((cursorStart < 0) || (cursorStart > trackSize)) return; // setValueRatio will take care of this
         
-        let valueRatio     = cursorPos / trackSize;
+        let valueRatio     = cursorStart / trackSize;
         if (orientationVertical || (style.direction === 'rtl')) valueRatio = (1 - valueRatio);
         
         setValueDn({ type: 'setValueRatio', payload: valueRatio, triggerChange: true });
