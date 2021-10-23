@@ -88,7 +88,7 @@ import {
 import fontItems            from './Icon-font-material'
 import {
     // styles:
-    fillTextLineheightLayout,
+    fillTextLineHeightLayout,
 }                           from './layouts'
 
 
@@ -366,7 +366,7 @@ export const usesIconLayout      = () => {
                 imports([
                     // a dummy text content, for making parent's height as tall as line-height
                     // the dummy is also used for calibrating the flex's vertical position
-                    fillTextLineheightLayout(),
+                    fillTextLineHeightLayout(),
                 ]),
             ])),
             

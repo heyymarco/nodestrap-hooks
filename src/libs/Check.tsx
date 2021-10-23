@@ -118,7 +118,7 @@ import {
 }                           from './accessibilities'
 import {
     // styles:
-    fillTextLineheightLayout,
+    fillTextLineHeightLayout,
 }                           from './layouts'
 
 
@@ -360,7 +360,7 @@ export const usesCheckLayout = () => {
                 imports([
                     // a dummy text content, for making parent's height as tall as line-height
                     // the dummy is also used for calibrating the flex's vertical position
-                    fillTextLineheightLayout(),
+                    fillTextLineHeightLayout(),
                 ]),
             ])),
             ...children(inputElm, composition([

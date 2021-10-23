@@ -14,7 +14,7 @@ import {
  * A dummy text content, for making parent's height as tall as line-height.  
  * The dummy is also used for calibrating the flex's vertical position.
  */
-export const fillTextLineheightLayout = () => composition([
+export const fillTextLineHeightLayout = () => composition([
     layout({
         // layouts:
         content    : '"\xa0"',       // &nbsp;

@@ -71,7 +71,7 @@ import {
 }                           from './borders'     // configurable borders & border radiuses defs
 import {
     // styles:
-    fillTextLineheightLayout,
+    fillTextLineHeightLayout,
 }                           from './layouts'
 
 
@@ -155,7 +155,7 @@ export const usesBadgeLayout = () => {
                         imports([
                             // a dummy text content, for making parent's height as tall as line-height
                             // the dummy is also used for calibrating the flex's vertical position
-                            fillTextLineheightLayout(),
+                            fillTextLineHeightLayout(),
                         ]),
                     ])),
                     ...children('::after', composition([
