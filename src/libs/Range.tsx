@@ -17,6 +17,7 @@ import {
     
     // layouts:
     layout,
+    vars,
     children,
     
     
@@ -65,6 +66,7 @@ import {
     NudeVariant,
     useNudeVariant,
     usesMildVariant,
+    usesBackg,
     usesBorderRadius,
 }                           from './Basic'
 import {
@@ -124,14 +126,50 @@ export interface RangeVars {
      * Range's thumb ratio.
      */
     rangeValueRatio : any
+    
+    /**
+     * final background layers of the Range.
+     */
+    rangeBackg      : any
 }
 const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>();
 
+/**
+ * Uses Range variables.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents Range variables definitions.
+ */
+export const usesRangeVars = () => {
+    // dependencies:
+    const [, backgRefs] = usesBackg();
+    
+    
+    
+    return [
+        () => composition([
+            vars({
+                [rangeVarDecls.rangeBackg] : backgRefs.backg,
+            }),
+        ]),
+        rangeVarRefs,
+        rangeVarDecls,
+    ] as const;
+};
+
 export const usesRangeLayout = () => {
+    // dependencies:
+    
+    // range vars:
+    const [rangeVars , rangeVarRefs] = usesRangeVars();
+    
+    
+    
     return composition([
         imports([
             // layouts:
             usesEditableControlLayout(),
+            
+            // range vars:
+            rangeVars(),
         ]),
         layout({
             // layouts:
@@ -187,6 +225,11 @@ export const usesRangeLayout = () => {
                         layout({
                             // layouts:
                             display   : 'inline-block', // use inline-block, so it takes the width & height as we set
+                            
+                            
+                            
+                            // backgrounds:
+                            backg : rangeVarRefs.rangeBackg,
                             
                             
                             
@@ -246,6 +289,9 @@ export const usesRangeVariants = () => {
     
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    // range vars:
+    const [, rangeVarRefs       ] = usesRangeVars();
     
     
     
@@ -756,6 +802,11 @@ export function Range(props: RangeProps) {
             } // if
         } // if
     };
+    
+    
+    
+    // range vars:
+    const [, , rangeVarDecls] = usesRangeVars();
     
     
     
