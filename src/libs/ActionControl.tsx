@@ -57,6 +57,7 @@ import {
 }                           from './Basic'
 import {
     // hooks:
+    isDisable,
     isActived,
     isActivating,
     isPassivating,
@@ -370,6 +371,13 @@ export const usesActionControlStates = () => {
             pressRelease(),
         ]),
         states([
+            isDisable([
+                layout({
+                    // accessibilities:
+                    cursor     : cssProps.cursorDisable,
+                    userSelect : 'none',
+                }),
+            ]),
             isPress([
                 imports([
                     markActive(),
@@ -439,6 +447,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     
     
     return {
+        // accessibilities:
+        cursor               : 'pointer',
+        cursorDisable        : 'not-allowed',
+        
+        
+        
         //#region animations
         filterPress          : [['brightness(65%)', 'contrast(150%)']],
         
