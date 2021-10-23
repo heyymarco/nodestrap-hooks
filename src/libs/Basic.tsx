@@ -981,7 +981,7 @@ export const usesBorderRadius = () => {
         borderRadiusDecls,
     ] as const;
 };
-export const expandBorderRadius = (borderRadius?: Cust.Ref): PropList => {
+export const expandBorderRadius = (cssProps?: { borderRadius: Cust.Ref }): PropList => {
     // dependencies:
     
     // borders:
@@ -991,12 +991,12 @@ export const expandBorderRadius = (borderRadius?: Cust.Ref): PropList => {
     
     return vars({
         // borders:
-        // borderRadius** => ref.borderRadius**
-        ...(borderRadius ? {
-            [borderRadiusDecls.borderStartStartRadius] : borderRadius,
-            [borderRadiusDecls.borderStartEndRadius]   : borderRadius,
-            [borderRadiusDecls.borderEndStartRadius]   : borderRadius,
-            [borderRadiusDecls.borderEndEndRadius]     : borderRadius,
+        // cssProps.borderRadius** => ref.borderRadius**
+        ...(cssProps ? {
+            [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius,
+            [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius,
         } : null),
         borderRadius           : undefined as unknown as null,            // delete short prop
         borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
@@ -1345,7 +1345,7 @@ export const usesBasicLayout = () => {
             
             // borders:
             ...expandBorderStroke(cssProps), // expand borderStroke css vars
-            ...expandBorderRadius(cssProps.borderRadius), // expand borderRadius css vars
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
             
             
             

@@ -565,7 +565,7 @@ export const usesNavbarLayout = () => {
             
             
             // borders:
-            ...expandBorderRadius(cssProps.borderRadius), // expand borderRadius css vars
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
             
             
             

@@ -78,7 +78,7 @@ export const usesResponsiveContainerLayout = () => {
     return composition([
         layout({
             // borders:
-            ...expandBorderRadius(cssProps.borderRadius), // expand borderRadius css vars
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
             
             
             
@@ -115,7 +115,7 @@ export const usesResponsiveContainerGridLayout = () => {
             
             
             // borders:
-            ...expandBorderRadius(cssProps.borderRadius), // expand borderRadius css vars
+            ...expandBorderRadius(cssProps), // expand borderRadius css vars
             
             
             
