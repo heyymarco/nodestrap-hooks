@@ -72,6 +72,7 @@ import {
 import {
     // styles:
     fillTextLineHeightLayout,
+    fillTextLineWidthLayout,
 }                           from './layouts'
 
 
@@ -151,23 +152,15 @@ export const usesBadgeLayout = () => {
                     // height  : '1em', // not working, (font-height !== 1em) if the font-size is fractional number
                     
                     // children:
-                    ...children(['::before', '::after'], composition([
+                    ...children('::before', composition([
                         imports([
-                            // a dummy text content, for making parent's height as tall as line-height
-                            // the dummy is also used for calibrating the flex's vertical position
                             fillTextLineHeightLayout(),
                         ]),
                     ])),
                     ...children('::after', composition([
-                        layout({
-                            // layouts:
-                            writingMode : 'vertical-lr', // rotate the element 90°
-                            
-                            
-                            
-                            // appearances:
-                            overflow    : 'unset', // fix Firefox bug
-                        }),
+                        imports([
+                            fillTextLineWidthLayout(),
+                        ]),
                     ])),
                     
                     

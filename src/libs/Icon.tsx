@@ -364,8 +364,6 @@ export const usesIconLayout      = () => {
             // children:
             ...children('::before', composition([
                 imports([
-                    // a dummy text content, for making parent's height as tall as line-height
-                    // the dummy is also used for calibrating the flex's vertical position
                     fillTextLineHeightLayout(),
                 ]),
             ])),
