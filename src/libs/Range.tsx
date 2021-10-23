@@ -17,7 +17,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     
     
@@ -65,7 +64,8 @@ import {
 }                           from './Basic'
 import {
     // hooks:
-    usesFocusBlurState,
+    useFocusBlurState,
+    useArriveLeaveState,
 }                           from './Control'
 import {
     // styles:
@@ -362,32 +362,11 @@ export const usesRangeVariants = () => {
     ]);
 };
 export const usesRangeStates = () => {
-    // dependencies:
-    
-    // states:
-    const [, , focusBlurDecls] = usesFocusBlurState();
-    
-    
-    
     return composition([
         imports([
             // states:
             usesEditableControlStates(),
         ]),
-        layout({
-            // children:
-            ...children(trackElm, composition([
-                layout({
-                    // children:
-                    ...children(['&', thumbElm], composition([
-                        vars({
-                            [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
-                            [focusBlurDecls.animFocusBlur]      : 'inherit',
-                        })
-                    ])),
-                }),
-            ])),
-        }),
     ]);
 };
 export const usesRange = () => {
@@ -544,6 +523,8 @@ export function Range(props: RangeProps) {
     
     
     // states:
+    const focusBlurState      = useFocusBlurState(props);
+    const arriveLeaveState    = useArriveLeaveState(props, focusBlurState);
     const pressReleaseState   = usePressReleaseState(props);
     
     
@@ -759,6 +740,10 @@ export function Range(props: RangeProps) {
                 orientationVariant.class,
                 nudeVariant.class,
             ]}
+            stateClasses={[...(props.stateClasses ?? []),
+                focusBlurState.class,
+                arriveLeaveState.class,
+            ]}
             
             
             // styles:
@@ -769,26 +754,41 @@ export function Range(props: RangeProps) {
             
             
             // events:
-            onMouseDown={(e) => {
+            onFocus=        {(e) => { props.onFocus?.(e);      focusBlurState.handleFocus();        }}
+            onBlur=         {(e) => { props.onBlur?.(e);       focusBlurState.handleBlur();         }}
+            onMouseEnter=   {(e) => { props.onMouseEnter?.(e); arriveLeaveState.handleMouseEnter(); }}
+            onMouseLeave=   {(e) => { props.onMouseLeave?.(e); arriveLeaveState.handleMouseLeave(); }}
+            
+            onMouseDown=    {(e) => {
                 props.onMouseDown?.(e);
                 
                 
                 
                 handleMouseSlider(e);
             }}
-            onMouseMove={(e) => {
+            onMouseMove=    {(e) => {
                 props.onMouseMove?.(e);
                 
                 
                 
                 handleMouseSlider(e);
             }}
-            onKeyDown={(e) => {
+            onKeyDown=      {(e) => {
                 props.onKeyDown?.(e);
                 
                 
                 
                 handleKeyboardSlider(e);
+            }}
+            
+            onAnimationEnd= {(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
+                // states:
+                focusBlurState.handleAnimationEnd(e);
+                arriveLeaveState.handleAnimationEnd(e);
             }}
         >
             <input
@@ -872,6 +872,7 @@ export function Range(props: RangeProps) {
                     
                     // accessibilities:
                     tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
+                    
                     
                     
                     // variants:
