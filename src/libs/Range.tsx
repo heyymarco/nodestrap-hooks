@@ -462,6 +462,25 @@ export interface RangeProps
         OrientationVariant,
         NudeVariant
 {
+    // essentials:
+    trackTag?        : keyof JSX.IntrinsicElements
+    trackStyle?      : React.CSSProperties
+    trackRef?        : React.Ref<HTMLElement> // setter ref
+    
+    trackLowerTag?   : keyof JSX.IntrinsicElements
+    trackLowerStyle? : React.CSSProperties
+    trackLowerRef?   : React.Ref<HTMLElement> // setter ref
+    
+    trackUpperTag?   : keyof JSX.IntrinsicElements
+    trackUpperStyle? : React.CSSProperties
+    trackUpperRef?   : React.Ref<HTMLElement> // setter ref
+    
+    thumbTag?        : keyof JSX.IntrinsicElements
+    thumbStyle?      : React.CSSProperties
+    thumbRef?        : React.Ref<HTMLElement> // setter ref
+    
+    
+    
     // validations:
     min?      : string | number
     max?      : string | number
@@ -481,6 +500,22 @@ export function Range(props: RangeProps) {
     const {
         // essentials:
         elmRef,
+        
+        trackTag,
+        trackStyle,
+        trackRef,
+        
+        trackLowerTag,
+        trackLowerStyle,
+        trackLowerRef,
+        
+        trackUpperTag,
+        trackUpperStyle,
+        trackUpperRef,
+        
+        thumbTag,
+        thumbStyle,
+        thumbRef,
         
         
         // accessibilities:
@@ -539,9 +574,9 @@ export function Range(props: RangeProps) {
     
     
     // dom effects:
-    const inputRef = useRef<HTMLInputElement|null>(null);
-    const trackRef = useRef<HTMLInputElement|null>(null);
-    const thumbRef = useRef<HTMLInputElement|null>(null);
+    const inputRef  = useRef<HTMLInputElement|null>(null);
+    const trackRef2 = useRef<HTMLInputElement|null>(null);
+    const thumbRef2 = useRef<HTMLInputElement|null>(null);
     
     
     
@@ -658,14 +693,14 @@ export function Range(props: RangeProps) {
             
             
             
-            const track        = trackRef.current ?? e.currentTarget;
+            const track        = trackRef2.current ?? e.currentTarget;
             const rect         = track.getBoundingClientRect();
             
             const style        = getComputedStyle(track);
             const borderStart  = (Number.parseInt(orientationVertical ? style.borderTopWidth : style.borderLeftWidth) || 0);
             const paddingStart = (Number.parseInt(orientationVertical ? style.paddingTop     : style.paddingLeft    ) || 0);
             const paddingEnd   = (Number.parseInt(orientationVertical ? style.paddingBottom  : style.paddingRight   ) || 0);
-            const thumbSize    = (orientationVertical ? thumbRef.current?.offsetHeight : thumbRef.current?.offsetWidth) ?? 0;
+            const thumbSize    = (orientationVertical ? thumbRef2.current?.offsetHeight : thumbRef2.current?.offsetWidth) ?? 0;
             const trackSize    = ((orientationVertical ? track.clientHeight : track.clientWidth) - paddingStart - paddingEnd - thumbSize);
             
             const cursorStart  = (orientationVertical ? e.clientY : e.clientX) - (orientationVertical ? rect.top : rect.left) - borderStart - paddingStart - (thumbSize / 2);
@@ -848,7 +883,8 @@ export function Range(props: RangeProps) {
             <EditableControl<HTMLInputElement>
                 // essentials:
                 elmRef={(elm) => {
-                    setRef(trackRef, elm);
+                    setRef(trackRef , elm)
+                    setRef(trackRef2, elm);
                 }}
                 
                 
@@ -863,14 +899,15 @@ export function Range(props: RangeProps) {
                 
                 
                 // classes:
-                classes={[...(props.classes ?? []),
+                classes={[
                     'track',
                 ]}
             >
                 <EditableActionControl<HTMLInputElement>
                     // essentials:
                     elmRef={(elm) => {
-                        setRef(thumbRef, elm);
+                        setRef(thumbRef , elm)
+                        setRef(thumbRef2, elm);
                     }}
                     
                     
@@ -887,10 +924,10 @@ export function Range(props: RangeProps) {
                     
                     
                     // classes:
-                    stateClasses={[...(props.stateClasses ?? []),
+                    stateClasses={[
                         pressReleaseState.class,
                     ]}
-                    classes={[...(props.classes ?? []),
+                    classes={[
                         'thumb',
                     ]}
                     
