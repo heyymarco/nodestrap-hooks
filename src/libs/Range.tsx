@@ -476,7 +476,6 @@ export function Range(props: RangeProps) {
         
         // accessibilities:
         autoFocus,
-        tabIndex,
         
         
         // values:
@@ -663,6 +662,7 @@ export function Range(props: RangeProps) {
             
             
             
+            e.currentTarget.focus();
             e.preventDefault();
         } // if
     };
@@ -706,7 +706,7 @@ export function Range(props: RangeProps) {
             
             
             // accessibilities:
-            tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
+            // none
             
             
             // variants:
@@ -763,7 +763,7 @@ export function Range(props: RangeProps) {
                 // accessibilities:
                 {...{
                     autoFocus,
-                    tabIndex,
+                    tabIndex : -1, // non focusable
                 }}
                 
                 disabled={!propEnabled} // do not submit the value if disabled
@@ -829,6 +829,10 @@ export function Range(props: RangeProps) {
                     elmRef={(elm) => {
                         setRef(thumbRef, elm);
                     }}
+                    
+                    
+                    // accessibilities:
+                    tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
                     
                     
                     // variants:
