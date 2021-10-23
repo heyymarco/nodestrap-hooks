@@ -851,6 +851,7 @@ export function Range(props: RangeProps) {
                 
                 // accessibilities:
                 tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
+                arrive={arriveLeaveState.arrive}
                 
                 
                 // variants:
@@ -872,6 +873,8 @@ export function Range(props: RangeProps) {
                     
                     // accessibilities:
                     tabIndex={-1} // negative [tabIndex] => act as *wrapper* element, if input is `:focus` (pseudo) => the wrapper is also `.focus` (synthetic)
+                    focus={focusBlurState.focus}
+                    arrive={arriveLeaveState.arrive}
                     
                     
                     
