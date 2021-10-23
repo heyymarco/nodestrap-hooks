@@ -441,7 +441,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         // accessibilities:
         cursor               : 'pointer',
-        cursorDisable        : 'not-allowed',
         
         
         
