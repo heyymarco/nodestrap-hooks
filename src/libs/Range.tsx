@@ -89,6 +89,7 @@ import {
 import {
     // styles:
     fillTextLineHeightLayout,
+    fillTextLineWidthLayout,
 }                           from './layouts'
 
 // others libs:
@@ -137,11 +138,6 @@ export const usesRangeLayout = () => {
             
             
             // children:
-            ...children('::before', composition([
-                imports([
-                    fillTextLineHeightLayout(),
-                ]),
-            ])),
             ...children(inputElm, composition([
                 layout({
                     // layouts:
@@ -181,6 +177,11 @@ export const usesRangeLayout = () => {
                             
                             // sizes:
                             alignSelf : 'stretch',      // follows parent's height
+                        }),
+                    ])),
+                    ...children(['&', thumbElm], composition([
+                        layout({
+                            cursor: 'inherit',
                         }),
                     ])),
                     ...children(thumbElm, composition([
@@ -252,6 +253,11 @@ export const usesRangeVariants = () => {
                     
                     
                     // children:
+                    ...children('::before', composition([
+                        imports([
+                            fillTextLineHeightLayout(),
+                        ]),
+                    ])),
                     ...children(trackElm, composition([
                         layout({
                             // layouts:
@@ -291,10 +297,9 @@ export const usesRangeVariants = () => {
                     
                     // children:
                     ...children('::before', composition([
-                        layout({
-                            // rotate a dummy text 90 degree:
-                            writingMode : 'vertical-lr',
-                        }),
+                        imports([
+                            fillTextLineWidthLayout(),
+                        ]),
                     ])),
                     ...children(trackElm, composition([
                         layout({
@@ -383,6 +388,13 @@ export const useRangeSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
+        // accessibilities:
+        cursor               : 'col-resize',
+        cursorBlock          : 'row-resize',
+        
+        
+        
+        // sizes:
         minInlineSize        : '8rem',
         minBlockSize         : 'auto',
         
@@ -604,30 +616,36 @@ export function Range(props: RangeProps) {
     
     
     // handlers:
-    const handleMouseMove = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-        if (!propEnabled)    return; // control is disabled => no response required
-        if (propReadOnly)    return; // control is readOnly => no response required
-        if (e.buttons !== 1) return; // only handle left_click only
-        
-        
-        
-        const elm          = trackRef.current ?? e.currentTarget;
-        const rect         = elm.getBoundingClientRect();
-        
-        const style        = getComputedStyle(elm);
-        const borderStart  = (Number.parseInt(orientationVertical ? style.borderTopWidth : style.borderLeftWidth) || 0);
-        const paddingStart = (Number.parseInt(orientationVertical ? style.paddingTop     : style.paddingLeft    ) || 0);
-        const paddingEnd   = (Number.parseInt(orientationVertical ? style.paddingBottom  : style.paddingRight   ) || 0);
-        const thumbSize    = (orientationVertical ? thumbRef.current?.offsetHeight : thumbRef.current?.offsetWidth) ?? 0;
-        const trackSize    = ((orientationVertical ? elm.clientHeight : elm.clientWidth) - paddingStart - paddingEnd - thumbSize);
-        
-        const cursorStart  = (orientationVertical ? e.clientY : e.clientX) - (orientationVertical ? rect.top : rect.left) - borderStart - paddingStart - (thumbSize / 2);
-        // if ((cursorStart < 0) || (cursorStart > trackSize)) return; // setValueRatio will take care of this
-        
-        let valueRatio     = cursorStart / trackSize;
-        if (orientationVertical || (style.direction === 'rtl')) valueRatio = (1 - valueRatio);
-        
-        setValueDn({ type: 'setValueRatio', payload: valueRatio, triggerChange: true });
+    const handleMouseSlider = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+        if (!e.defaultPrevented) {
+            if (!propEnabled)    return; // control is disabled => no response required
+            if (propReadOnly)    return; // control is readOnly => no response required
+            if (e.buttons !== 1) return; // only handle left_click only
+            
+            
+            
+            const elm          = trackRef.current ?? e.currentTarget;
+            const rect         = elm.getBoundingClientRect();
+            
+            const style        = getComputedStyle(elm);
+            const borderStart  = (Number.parseInt(orientationVertical ? style.borderTopWidth : style.borderLeftWidth) || 0);
+            const paddingStart = (Number.parseInt(orientationVertical ? style.paddingTop     : style.paddingLeft    ) || 0);
+            const paddingEnd   = (Number.parseInt(orientationVertical ? style.paddingBottom  : style.paddingRight   ) || 0);
+            const thumbSize    = (orientationVertical ? thumbRef.current?.offsetHeight : thumbRef.current?.offsetWidth) ?? 0;
+            const trackSize    = ((orientationVertical ? elm.clientHeight : elm.clientWidth) - paddingStart - paddingEnd - thumbSize);
+            
+            const cursorStart  = (orientationVertical ? e.clientY : e.clientX) - (orientationVertical ? rect.top : rect.left) - borderStart - paddingStart - (thumbSize / 2);
+            // if ((cursorStart < 0) || (cursorStart > trackSize)) return; // setValueRatio will take care of this
+            
+            let valueRatio     = cursorStart / trackSize;
+            if (orientationVertical || (style.direction === 'rtl')) valueRatio = (1 - valueRatio);
+            
+            setValueDn({ type: 'setValueRatio', payload: valueRatio, triggerChange: true });
+            
+            
+            
+            e.preventDefault();
+        } // if
     };
     
     
@@ -664,12 +682,19 @@ export function Range(props: RangeProps) {
             
             
             // events:
+            onMouseDown={(e) => {
+                props.onMouseDown?.(e);
+                
+                
+                
+                handleMouseSlider(e);
+            }}
             onMouseMove={(e) => {
                 props.onMouseMove?.(e);
                 
                 
                 
-                handleMouseMove(e);
+                handleMouseSlider(e);
             }}
         >
             <input
