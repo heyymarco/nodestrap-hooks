@@ -468,11 +468,6 @@ export const usesCheckLayout = () => {
                 }),
             ])),
         }),
-        variants([
-            rule(':where(:not(.btn)):where(:not(.togglerBtn)):where(:not(.fill))', [ // selector with zero specificity
-
-            ]),
-        ]),
     ]);
 };
 export const usesCheckVariants = () => {
