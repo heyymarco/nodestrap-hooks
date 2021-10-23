@@ -634,7 +634,7 @@ export function Range(props: RangeProps) {
     
     
     // handlers:
-    const handleMouseSlider = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+    const handleMouseSlider    = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
         if (!e.defaultPrevented) {
             if (!propEnabled)    return; // control is disabled => no response required
             if (propReadOnly)    return; // control is readOnly => no response required
