@@ -445,14 +445,6 @@ export const usesCheckLayout = () => {
                         }),
                     ])),
                 ]),
-                (() => {
-                    // dependencies:
-                    const [, , focusBlurDecls] = usesFocusBlurState();
-                    return vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
-                        [focusBlurDecls.animFocusBlur]      : 'inherit',
-                    });
-                })(),
             ])),
             ...children(labelElm, composition([
                 layout({
@@ -650,7 +642,8 @@ export const usesCheckStates = () => {
     // dependencies:
     
     // states:
-    const [checkClear] = usesCheckClearState();
+    const [, , focusBlurDecls] = usesFocusBlurState();
+    const [checkClear        ] = usesCheckClearState();
     
     
     
@@ -660,6 +653,15 @@ export const usesCheckStates = () => {
             usesEditableActionControlStates(),
             checkClear(),
         ]),
+        layout({
+            // children:
+            ...children(inputElm, composition([
+                vars({
+                    [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
+                    [focusBlurDecls.animFocusBlur]      : 'inherit',
+                })
+            ])),
+        }),
     ]);
 };
 export const usesCheck = () => {
