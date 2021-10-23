@@ -726,7 +726,10 @@ export function Range(props: RangeProps) {
             
             
             // accessibilities:
-            // none
+            role={props.role ?? 'slider'}
+            aria-valuenow={props['aria-valuenow'] ?? valueFn}
+            aria-valuemin={props['aria-valuemin'] ?? (negativeFn ? maxFn : minFn)}
+            aria-valuemax={props['aria-valuemax'] ?? (negativeFn ? minFn : maxFn)}
             
             
             // variants:
