@@ -517,7 +517,7 @@ export function Range(props: RangeProps) {
     // fn props:
     const minFn          : number  = parseNumber(min)  ?? 0;
     const maxFn          : number  = parseNumber(max)  ?? 100;
-    const stepFn         : number  = (step === 'any') ? 0 : (parseNumber(step) ?? 1);
+    const stepFn         : number  = (step === 'any') ? 0 : Math.abs(parseNumber(step) ?? 1);
     const negativeFn     : boolean = (maxFn < minFn);
     const defaultValueFn : number  = (minFn + ((maxFn - minFn) / 2));
     
@@ -570,7 +570,7 @@ export function Range(props: RangeProps) {
     
     // states:
     interface ValueReducerAction {
-        type           : 'setValue'|'setValueRatio'
+        type           : 'setValue'|'setValueRatio'|'decrease'|'increase'
         payload        : number
         triggerChange? : boolean
     }
@@ -602,10 +602,29 @@ export function Range(props: RangeProps) {
                 return newValue;
             }
             
+            case 'decrease' : {
+                const newValue = trimValue(value - ((stepFn || 1) * (negativeFn ? -1 : 1) * (action.payload)));
+                
+                if ((newValue !== value) && (action.triggerChange === true)) {
+                    triggerInputChange(newValue);
+                } // if
+                
+                return newValue;
+            }
+            case 'increase' : {
+                const newValue = trimValue(value + ((stepFn || 1) * (negativeFn ? -1 : 1) * (action.payload)));
+                
+                if ((newValue !== value) && (action.triggerChange === true)) {
+                    triggerInputChange(newValue);
+                } // if
+                
+                return newValue;
+            }
+            
             default:
                 return value; // no change
         } // switch
-    }, [minFn, maxFn, trimValue]), /*initialState: */parseNumber(defaultValue) ?? defaultValueFn);
+    }, [minFn, maxFn, stepFn, negativeFn, trimValue]), /*initialState: */parseNumber(defaultValue) ?? defaultValueFn);
     
     
     
@@ -624,15 +643,15 @@ export function Range(props: RangeProps) {
             
             
             
-            const elm          = trackRef.current ?? e.currentTarget;
-            const rect         = elm.getBoundingClientRect();
+            const track        = trackRef.current ?? e.currentTarget;
+            const rect         = track.getBoundingClientRect();
             
-            const style        = getComputedStyle(elm);
+            const style        = getComputedStyle(track);
             const borderStart  = (Number.parseInt(orientationVertical ? style.borderTopWidth : style.borderLeftWidth) || 0);
             const paddingStart = (Number.parseInt(orientationVertical ? style.paddingTop     : style.paddingLeft    ) || 0);
             const paddingEnd   = (Number.parseInt(orientationVertical ? style.paddingBottom  : style.paddingRight   ) || 0);
             const thumbSize    = (orientationVertical ? thumbRef.current?.offsetHeight : thumbRef.current?.offsetWidth) ?? 0;
-            const trackSize    = ((orientationVertical ? elm.clientHeight : elm.clientWidth) - paddingStart - paddingEnd - thumbSize);
+            const trackSize    = ((orientationVertical ? track.clientHeight : track.clientWidth) - paddingStart - paddingEnd - thumbSize);
             
             const cursorStart  = (orientationVertical ? e.clientY : e.clientX) - (orientationVertical ? rect.top : rect.left) - borderStart - paddingStart - (thumbSize / 2);
             // if ((cursorStart < 0) || (cursorStart > trackSize)) return; // setValueRatio will take care of this
@@ -645,6 +664,35 @@ export function Range(props: RangeProps) {
             
             
             e.preventDefault();
+        } // if
+    };
+    const handleKeyboardSlider = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (!e.defaultPrevented) {
+            if (((): boolean => {
+                const isKeyOf = (keys: string[]): boolean => {
+                    return (keys.includes(e.key.toLowerCase()) || keys.includes(e.code.toLowerCase()));
+                };
+                const isRtl = (getComputedStyle(e.currentTarget).direction === 'rtl');
+                
+                
+                
+                     if (!orientationVertical && !isRtl && isKeyOf(['arrowleft' , 'pagedown'])) setValueDn({ type: 'decrease', payload: 1    , triggerChange: true });
+                else if (!orientationVertical && !isRtl && isKeyOf(['arrowright', 'pageup'  ])) setValueDn({ type: 'increase', payload: 1    , triggerChange: true });
+                
+                else if (!orientationVertical &&  isRtl && isKeyOf(['arrowright', 'pagedown'])) setValueDn({ type: 'decrease', payload: 1    , triggerChange: true });
+                else if (!orientationVertical &&  isRtl && isKeyOf(['arrowleft' , 'pageup'  ])) setValueDn({ type: 'increase', payload: 1    , triggerChange: true });
+                
+                else if ( orientationVertical &&           isKeyOf(['arrowdown' , 'pagedown'])) setValueDn({ type: 'decrease', payload: 1    , triggerChange: true });
+                else if ( orientationVertical &&           isKeyOf(['arrowup'   , 'pageup'  ])) setValueDn({ type: 'increase', payload: 1    , triggerChange: true });
+                
+                else if (                                  isKeyOf(['home'                  ])) setValueDn({ type: 'setValue', payload: minFn, triggerChange: true });
+                else if (                                  isKeyOf(['end'                   ])) setValueDn({ type: 'setValue', payload: maxFn, triggerChange: true });
+                else return false; // not handled
+                
+                
+                
+                return true; // handled
+            })()) e.preventDefault();
         } // if
     };
     
@@ -695,6 +743,13 @@ export function Range(props: RangeProps) {
                 
                 
                 handleMouseSlider(e);
+            }}
+            onKeyDown={(e) => {
+                props.onKeyDown?.(e);
+                
+                
+                
+                handleKeyboardSlider(e);
             }}
         >
             <input
