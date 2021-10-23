@@ -74,6 +74,10 @@ import {
     EditableControl,
 }                           from './EditableControl'
 import {
+    // hooks:
+    usePressReleaseState,
+}                           from './ActionControl'
+import {
     // react components:
     EditableActionControl,
     EditableActionControlProps,
@@ -513,6 +517,11 @@ export function Range(props: RangeProps) {
     
     
     
+    // states:
+    const pressReleaseState   = usePressReleaseState(props);
+    
+    
+    
     // fn props:
     const minFn          : number  = parseNumber(min)  ?? 0;
     const maxFn          : number  = parseNumber(max)  ?? 100;
@@ -662,6 +671,7 @@ export function Range(props: RangeProps) {
             
             
             
+            pressReleaseState.handlePress();
             e.currentTarget.focus();
             e.preventDefault();
         } // if
@@ -692,7 +702,10 @@ export function Range(props: RangeProps) {
                 
                 
                 return true; // handled
-            })()) e.preventDefault();
+            })()) {
+                pressReleaseState.handlePress();
+                e.preventDefault();
+            } // if
         } // if
     };
     
@@ -841,9 +854,16 @@ export function Range(props: RangeProps) {
                     
                     
                     // classes:
+                    stateClasses={[...(props.stateClasses ?? []),
+                        pressReleaseState.class,
+                    ]}
                     classes={[...(props.classes ?? []),
                         'thumb',
                     ]}
+                    
+                    
+                    // events:
+                    onAnimationEnd={pressReleaseState.handleAnimationEnd}
                 >
                 </EditableActionControl>
             </EditableControl>
