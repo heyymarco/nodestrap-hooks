@@ -808,6 +808,11 @@ export function Range(props: RangeProps) {
     };
     const handleKeyboardSlider = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (!e.defaultPrevented) {
+            if (!propEnabled)    return; // control is disabled => no response required
+            if (propReadOnly)    return; // control is readOnly => no response required
+            
+            
+            
             if (((): boolean => {
                 const isKeyOf = (keys: string[]): boolean => {
                     return (keys.includes(e.key.toLowerCase()) || keys.includes(e.code.toLowerCase()));
