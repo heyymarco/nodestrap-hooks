@@ -265,12 +265,22 @@ export const usesRangeLayout = () => {
                         layout({
                             // sizes:
                             flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+                            
+                            
+                            
+                            // customize:
+                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackLower')), // apply general cssProps starting with trackLower***
                         }),
                     ])),
                     ...children(trackUpperElm, composition([
                         layout({
                             // sizes:
                             flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
+                            
+                            
+                            
+                            // customize:
+                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackUpper')), // apply general cssProps starting with trackUpper***
                         }),
                     ])),
                     
@@ -494,6 +504,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         trackInlineSizeBlock : '0.4em',
         trackBlockSizeBlock  : 'auto',
+        
+        trackUpperBackg      : 'none',
         
         
         
