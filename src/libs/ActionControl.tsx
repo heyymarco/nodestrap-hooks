@@ -257,6 +257,7 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
             return null; // discard all classes above
         })(),
         
+        handlePress,
         handleMouseDown    : ((e) => {
             if (!mouses || mouses.includes(e.button)) handlePress();
         }) as React.MouseEventHandler<HTMLElement>,
