@@ -1183,13 +1183,14 @@ export interface ListProps<TElement extends HTMLElement = HTMLElement>
 }
 export function List<TElement extends HTMLElement = HTMLElement>(props: ListProps<TElement>) {
     // styles:
-    const sheet              = useListSheet();
+    const sheet                 = useListSheet();
     
     
     
     // variants:
-    const orientationVariant = useOrientationVariant(props);
-    const listVariant        = useListVariant(props);
+    const orientationVariant    = useOrientationVariant(props);
+    const orientationHorizontal = (orientationVariant.class === 'inline');
+    const listVariant           = useListVariant(props);
     
     
     
@@ -1226,6 +1227,11 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             tag={parentTag}
             
             
+            // accessibilities:
+            role={props.role ?? ((wrapTag === 'li') ? undefined : 'list')}
+            aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
@@ -1238,6 +1244,10 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                     // essentials:
                     key={index}
                     tag={wrapTag}
+                    
+                    
+                    // accessibilities:
+                    role={(wrapTag === 'li') ? undefined : 'listitem'}
                 >
                     {
                         isTypeOf(child, ListItem)
