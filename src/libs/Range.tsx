@@ -123,8 +123,8 @@ import triggerChange        from 'react-trigger-change'
 // styles:
 export const inputElm      = ':first-child';
 export const trackElm      = '.track';
-export const trackLowerElm = '.trackLower';
-export const trackUpperElm = '.trackUpper';
+export const trackLowerElm = '.tracklower';
+export const trackUpperElm = '.trackupper';
 export const thumbElm      = '.thumb';
 
 export interface RangeVars {
@@ -505,7 +505,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         trackInlineSizeBlock : '0.4em',
         trackBlockSizeBlock  : 'auto',
         
-        trackUpperBackg      : 'none',
+        trackupperBackg      : 'none',
         
         
         
@@ -632,7 +632,8 @@ export function Range(props: RangeProps) {
     const propReadOnly   = usePropReadOnly(props);
     const nude           = props.nude ?? true;
     const theme          = props.theme ?? 'primary';
-    const themeAlternate = ((theme !== 'secondary') ? 'secondary' : 'primary');
+ // const themeAlternate = ((theme !== 'secondary') ? 'secondary' : 'primary');
+    const themeAlternate = 'secondary';
     const mild           = props.mild ?? false;
     const mildAlternate  = nude ? mild : !mild;
     
