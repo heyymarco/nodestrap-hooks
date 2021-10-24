@@ -74,6 +74,9 @@ import {
     ThemeVariant,
     useThemeVariant,
     
+    usesOutlinedVariant,
+    
+    isMild,
     usesMildVariant        as basicUsesMildVariant,
     MildVariant,
     useMildVariant,
@@ -275,6 +278,56 @@ export const usesForeg = (foregOverwrite?: Cust.Ref) => {
     ] as const;
 };
 //#endregion foreg
+
+//#region icon color
+export interface IconColorVars {
+    /**
+     * final icon color.
+     */
+    iconCol       : any
+    /**
+     * toggles on icon color - at mild variant.
+     */
+    iconColMildTg : any
+}
+const [iconColorRefs, iconColorDecls] = createCssVar<IconColorVars>();
+
+/**
+ * Uses icon color.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents icon color definitions.
+ */
+export const usesIconColor = () => {
+    // dependencies:
+    const [, outlinedRefs] = usesOutlinedVariant();
+    const [, foregRefs   ] = usesForeg();
+    
+    
+    
+    return [
+        () => composition([
+            vars({
+                [iconColorDecls.iconCol]       : fallbacks(
+                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
+                    iconColorRefs.iconColMildTg,  // toggle mild     (if `usesMildVariant()` applied)
+                    
+                    foregRefs.foregFn,            // default => uses our `foregFn`
+                ),
+                
+                [iconColorDecls.iconColMildTg] : 'initial',
+            }),
+            variants([
+                isMild([
+                    vars({
+                        [iconColorDecls.iconColMildTg] : outlinedRefs.foregOutlinedFn,
+                    }),
+                ]),
+            ]),
+        ]),
+        iconColorRefs,
+        iconColorDecls,
+    ] as const;
+};
+//#endregion icon color
 
 
 
