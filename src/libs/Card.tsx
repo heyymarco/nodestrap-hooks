@@ -386,12 +386,13 @@ export interface CardProps<TElement extends HTMLElement = HTMLElement>
 }
 export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProps<TElement>) {
     // styles:
-    const sheet              = useCardSheet();
+    const sheet                 = useCardSheet();
     
     
     
     // variants:
-    const orientationVariant = useOrientationVariant(props);
+    const orientationVariant    = useOrientationVariant(props);
+    const orientationHorizontal = (orientationVariant.class === 'inline');
     
     
     
@@ -413,6 +414,7 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
             
             
             // essentials:
+            aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             tag={props.tag ?? 'article'}
             
             
