@@ -846,6 +846,16 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          * invalid => (icon)Invalid => invalid
          */
         if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|transDuration|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
+        
+        // props starting with inline|block:
+        /**
+         * Eg:
+         * inlineSizeInline
+         *  blockSizeInline
+         * inlineSizeBlock
+         *  blockSizeBlock
+         */
+        if ((/^((inline|block)(Size)(Inline|Block))$/).test(propName)) continue; // exclude
 
         // props starting with `@`:
         /**
