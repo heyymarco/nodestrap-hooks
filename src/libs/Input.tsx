@@ -351,6 +351,11 @@ export function Input(props: InputProps) {
                 // events:
                 onChange={(e) => {
                     onChange?.(e);
+                    
+                    
+                    
+                    // then do nothing here, just for satisfying React for controllable readonly input
+                    // passing `onChange={undefined}` causing React unhappy
                 }}
             />
         </EditableTextControl>
