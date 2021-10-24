@@ -364,6 +364,20 @@ const findLast  = <T,R>(array: T[], predicate: (value: T) => R|null): [R, number
     return null; // not found
 };
 
+const activeIndicesReducer = (indices: number[], newIndices: number[]): number[] => {
+    if (((): boolean => {
+        if (newIndices.length !== indices.length) return false; // difference detected
+        
+        for (let i = 0; i < newIndices.length; i++) {
+            if (newIndices[i] !== indices[i]) return false; // difference detected
+        } // for
+        
+        return true; // no differences detected
+    })()) return indices; // already the same, use the old as by-reference
+    
+    return newIndices; // update with the new one
+};
+
 
 
 // react components:
@@ -389,19 +403,7 @@ export interface NavscrollProps<TElement extends HTMLElement = HTMLElement>
 }
 export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: NavscrollProps<TElement>) {
     // states:
-    const [activeIndices, setActiveIndices] = useReducer((indices: number[], newIndices: number[]): number[] => {
-        if (((): boolean => {
-            if (newIndices.length !== indices.length) return false; // difference detected
-            
-            for (let i = 0; i < newIndices.length; i++) {
-                if (newIndices[i] !== indices[i]) return false; // difference detected
-            } // for
-            
-            return true; // no differences detected
-        })()) return indices; // already the same, use the old as by-reference
-        
-        return newIndices; // update with the new one
-    }, []);
+    const [activeIndices, setActiveIndices] = useReducer(activeIndicesReducer, []);
     
     
     
