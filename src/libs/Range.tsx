@@ -8,6 +8,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    Optional,
+}                           from './types'       // cssfn's types
 import {
     // compositions:
     composition,
@@ -577,6 +580,29 @@ export interface RangeProps
     
     
     
+    // classes:
+    trackMainClass?           : Optional<string>
+    trackClasses?             : Optional<string>[]
+    trackVariantClasses?      : Optional<string>[]
+    trackStateClasses?        : Optional<string>[]
+    
+    trackLowerMainClass?      : Optional<string>
+    trackLowerClasses?        : Optional<string>[]
+    trackLowerVariantClasses? : Optional<string>[]
+    trackLowerStateClasses?   : Optional<string>[]
+    
+    trackUpperMainClass?      : Optional<string>
+    trackUpperClasses?        : Optional<string>[]
+    trackUpperVariantClasses? : Optional<string>[]
+    trackUpperStateClasses?   : Optional<string>[]
+    
+    thumbMainClass?           : Optional<string>
+    thumbClasses?             : Optional<string>[]
+    thumbVariantClasses?      : Optional<string>[]
+    thumbStateClasses?        : Optional<string>[]
+    
+    
+    
     // validations:
     min?      : string | number
     max?      : string | number
@@ -612,6 +638,28 @@ export function Range(props: RangeProps) {
         thumbTag,
         thumbStyle,
         thumbRef,
+        
+        
+        // classes:
+        trackMainClass,
+        trackClasses,
+        trackVariantClasses,
+        trackStateClasses,
+        
+        trackLowerMainClass,
+        trackLowerClasses,
+        trackLowerVariantClasses,
+        trackLowerStateClasses,
+        
+        trackUpperMainClass,
+        trackUpperClasses,
+        trackUpperVariantClasses,
+        trackUpperStateClasses,
+        
+        thumbMainClass,
+        thumbClasses,
+        thumbVariantClasses,
+        thumbStateClasses,
         
         
         // accessibilities:
@@ -891,9 +939,12 @@ export function Range(props: RangeProps) {
             
             
             // classes:
-            classes={[
+            mainClass={trackLowerMainClass}
+            classes={[...(trackLowerClasses ?? []),
                 'tracklower',
             ]}
+            variantClasses={trackLowerVariantClasses}
+            stateClasses={trackLowerStateClasses}
             
             
             // styles:
@@ -911,9 +962,12 @@ export function Range(props: RangeProps) {
             
             
             // classes:
-            classes={[
+            mainClass={trackUpperMainClass}
+            classes={[...(trackUpperClasses ?? []),
                 'trackupper',
             ]}
+            variantClasses={trackUpperVariantClasses}
+            stateClasses={trackUpperStateClasses}
             
             
             // styles:
@@ -1073,9 +1127,12 @@ export function Range(props: RangeProps) {
                 
                 
                 // classes:
-                classes={[
+                mainClass={trackMainClass}
+                classes={[...(trackClasses ?? []),
                     'track',
                 ]}
+                variantClasses={trackVariantClasses}
+                stateClasses={trackStateClasses}
                 
                 
                 // styles:
@@ -1104,11 +1161,13 @@ export function Range(props: RangeProps) {
                     
                     
                     // classes:
-                    stateClasses={[
-                        pressReleaseState.class,
-                    ]}
-                    classes={[
+                    mainClass={thumbMainClass}
+                    classes={[...(thumbClasses ?? []),
                         'thumb',
+                    ]}
+                    variantClasses={thumbVariantClasses}
+                    stateClasses={[...(thumbStateClasses ?? []),
+                        pressReleaseState.class,
                     ]}
                     
                     
