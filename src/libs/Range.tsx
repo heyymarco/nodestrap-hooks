@@ -756,8 +756,8 @@ export function Range(props: RangeProps) {
         
         
         
-        inputElm.valueAsNumber = value;
         setTimeout(() => {
+            inputElm.valueAsNumber = value;
             triggerChange(inputElm);
         }, 0);
     };

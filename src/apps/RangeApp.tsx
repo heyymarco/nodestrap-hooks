@@ -46,6 +46,9 @@ function App() {
 	const [slider2, setSlider2] = useState<number>(40);
 	const [slider3, setSlider3] = useState<number>(-40);
 
+	
+	const [slider4, setSlider4] = useState<number>(0);
+
 
 
     return (
@@ -116,6 +119,36 @@ function App() {
 					}}
 				/>
 				<span>{ slider3 }</span>
+				<br /><br />
+
+				<hr />
+
+				<p>Controllable:</p>
+
+				<Range
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild} nude={nude}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+
+					enableValidation={false}
+					isValid={isValid}
+
+					orientation={orientation}
+
+					min={0} max={360} step={1} value={slider4}
+					onChange={(e) => {
+						setSlider4(e.currentTarget.valueAsNumber);
+					}}
+
+					trackLowerStyle={{ background: 'unset', filter: 'unset' }}
+					trackUpperStyle={{ background: 'unset', filter: 'unset' }}
+					trackStyle={{ background: `hsla(${slider4}deg, 100%, 50%, 1)` }}
+				/>
+				<span>{ slider4 }</span>
 				<br /><br />
 
                 <hr style={{flexBasis: '100%'}} />
