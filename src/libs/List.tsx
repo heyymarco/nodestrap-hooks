@@ -870,7 +870,7 @@ export const usesListVariants = () => {
                             isNotFirstChild([
                                 imports([
                                     // colors:
-                                    iconColor(),
+                                    iconColor(), // do not import `iconColor()` on pseudo `::before`
                                 ]),
                                 layout({
                                     // children:
