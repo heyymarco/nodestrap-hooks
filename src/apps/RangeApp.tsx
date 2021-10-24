@@ -11,6 +11,7 @@ import {
 	SizeName,
 } 					from '../libs/Basic';
 import {Range, OrientationName} from '../libs/Range';
+import { usesThemeVariant } from '../libs/Basic'
 
 
 
@@ -48,6 +49,7 @@ function App() {
 
 	
 	const [slider4, setSlider4] = useState<number>(0);
+	const [,, themeDecls] = usesThemeVariant();
 
 
 
@@ -146,7 +148,31 @@ function App() {
 
 					trackLowerStyle={{ background: 'unset', filter: 'unset' }}
 					trackUpperStyle={{ background: 'unset', filter: 'unset' }}
-					trackStyle={{ background: `hsla(${slider4}deg, 100%, 50%, 1)` }}
+					trackStyle={{ background: `hsl(${slider4}deg, 100%, 50%)` }}
+				/>
+				<span>{ slider4 }</span>
+				<br /><br />
+
+				<Range
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild} nude={nude}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+
+					enableValidation={false}
+					isValid={isValid}
+
+					orientation={orientation}
+
+					min={0} max={360} step={1} value={slider4}
+					onChange={(e) => {
+						setSlider4(e.currentTarget.valueAsNumber);
+					}}
+
+					style={{ [themeDecls.backgTheme]: `hsl(${slider4}deg, 100%, 50%)` }}
 				/>
 				<span>{ slider4 }</span>
 				<br /><br />
