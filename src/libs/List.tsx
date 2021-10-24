@@ -68,7 +68,6 @@ import {
     ThemeName,
     outlinedOf,
     mildOf,
-    usesForeg,
     usesBackg,
     usesBorder,
     usesBorderStroke,
@@ -145,6 +144,10 @@ import {
     // styles:
     usesIconImage,
 }                           from './Icon'
+import {
+    // hooks:
+    usesIconColor,
+}                           from './EditableTextControl'
 import {
     stripoutList,
     stripoutFocusableElement,
@@ -571,8 +574,8 @@ export const usesListVariants = () => {
     ]));
     
     // colors:
-    const [foreg, foregRefs] = usesForeg();
-    const [     , backgRefs] = usesBackg();
+    const [iconColor, iconColorRefs] = usesIconColor();
+    const [         , backgRefs    ] = usesBackg();
     
     // borders:
     const [, , borderDecls]                       = usesBorder();
@@ -867,7 +870,7 @@ export const usesListVariants = () => {
                             isNotFirstChild([
                                 imports([
                                     // colors:
-                                    foreg(),
+                                    iconColor(),
                                 ]),
                                 layout({
                                     // children:
@@ -875,7 +878,7 @@ export const usesListVariants = () => {
                                         imports([
                                             usesIconImage(
                                                 /*iconImage: */cssProps.breadcrumbSeparatorImg,
-                                                /*iconColor: */foregRefs.foreg,
+                                                /*iconColor: */iconColorRefs.iconCol,
                                             ),
                                         ]),
                                         layout({
