@@ -1,12 +1,10 @@
 top priority:
-List:breadcrumb => fix next icon color
-Check_togglerBtn & NavbarMenu fix blinky toggle active => press for a few seconds and then released, the blinky occured
+optimize useReducer
+reduce ,composition([]) usage
 
 
 
 medium priority:
-optimize useReducer
-reduce ,composition([]) usage
 css-config => filter valid props
 
 

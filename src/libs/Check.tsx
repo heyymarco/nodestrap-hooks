@@ -923,7 +923,8 @@ export function Check(props: CheckProps) {
     const ariaRole     = props.role            ?? 'checkbox';
     const ariaChecked  = props['aria-checked'] ?? ((ariaRole === 'checkbox') ? isActive : undefined);
     
-    const pressFn      = props.press ?? ((isActive && (props.checkStyle === 'togglerBtn')) || undefined);
+    const isToggler    = (props.checkStyle === 'togglerBtn');
+    const pressFn      = props.press ?? ((isActive && isToggler) || undefined);
     
     
     
@@ -964,9 +965,25 @@ export function Check(props: CheckProps) {
                 
                 
                 
-                if (!e.defaultPrevented) {
-                    handleToggleActive();
-                    e.preventDefault();
+                // toggling active/passive is on `onMouseUp` phrase, so the `usePressReleaseState()` doesn't have a chance for calling `handleRelease()` first
+                if (!isToggler) {
+                    if (!e.defaultPrevented) {
+                        handleToggleActive();
+                        e.preventDefault();
+                    } // if
+                } // if
+            }}
+            onMouseUp={(e) => {
+                props.onMouseUp?.(e);
+                
+                
+                
+                // toggling active/passive is on `onMouseUp` phrase, so the `usePressReleaseState()` doesn't have a chance for calling `handleRelease()` first
+                if (isToggler) {
+                    if (!e.defaultPrevented) {
+                        handleToggleActive();
+                        e.preventDefault();
+                    } // if
                 } // if
             }}
             onKeyDown={(e) => {

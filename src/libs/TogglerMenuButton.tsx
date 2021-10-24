@@ -638,6 +638,7 @@ export function TogglerMenuButton(props: TogglerMenuButtonProps) {
             
             
             // variants:
+            nude={props.nude ?? false}
             checkStyle={props.checkStyle ?? 'btn'}
             
             
