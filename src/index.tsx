@@ -44,7 +44,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import ButtonIconApp            from './apps/ButtonIconApp';
 //                         import CloseButtonApp       from './apps/CloseButtonApp';
 //             import EditableControlApp               from './apps/EditableControlApp';
-                import RangeApp                     from './apps/RangeApp';
+//                 import RangeApp                     from './apps/RangeApp';
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';
 //                     import InputApp                 from './apps/InputApp';
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';
@@ -55,14 +55,14 @@ import reportWebVitals from './reportWebVitals';
 //     import IconApp                                  from './apps/IconApp';
 //     import NavbarApp                                from './apps/NavbarApp';
 //     import NavbarListApp                            from './apps/NavbarListApp';
-//     import GroupApp                                 from './apps/GroupApp';
+    import GroupApp                                 from './apps/GroupApp';
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <RangeApp />
+    <GroupApp />
     ,
     document.getElementById('root')
 );

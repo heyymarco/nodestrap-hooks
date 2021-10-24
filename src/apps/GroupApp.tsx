@@ -95,6 +95,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 					>
 					check btn
@@ -134,6 +135,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 					>
 						check btn
@@ -184,6 +186,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 						name='option'
 					>
@@ -200,6 +203,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 						name='option'
 					>
@@ -216,6 +220,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 						name='option'
 					>
@@ -267,6 +272,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 					>
 						check btn
@@ -327,6 +333,7 @@ function App() {
 							
 							press={press}
 
+							nude={false}
 							checkStyle='togglerBtn'
 							name='option'
 						>
@@ -343,6 +350,7 @@ function App() {
 							
 							press={press}
 
+							nude={false}
 							checkStyle='togglerBtn'
 							name='option'
 						>
@@ -359,6 +367,7 @@ function App() {
 							
 							press={press}
 
+							nude={false}
 							checkStyle='togglerBtn'
 							name='option'
 						>
@@ -401,6 +410,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 					>
 						check btn
@@ -461,6 +471,7 @@ function App() {
 							
 							press={press}
 
+							nude={false}
 							checkStyle='togglerBtn'
 							name='option'
 						>
@@ -477,6 +488,7 @@ function App() {
 							
 							press={press}
 
+							nude={false}
 							checkStyle='togglerBtn'
 							name='option'
 						>
@@ -493,6 +505,7 @@ function App() {
 							
 							press={press}
 
+							nude={false}
 							checkStyle='togglerBtn'
 							name='option'
 						>
@@ -535,6 +548,7 @@ function App() {
 						
 						press={press}
 
+						nude={false}
 						checkStyle='togglerBtn'
 					>
 						check btn
