@@ -176,7 +176,7 @@ export const usesEditableTextControlLayout = () => {
             usesEditableControlLayout(),
             
             // colors:
-            iconColor(),
+            iconColor(), // do not import `iconColor()` on pseudo `::after`
         ]),
         layout({
             ...children(iconElm, composition([
