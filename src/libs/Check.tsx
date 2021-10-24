@@ -61,12 +61,14 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    notNude,
     isNude,
     usesNudeVariant,
     NudeVariant,
     useNudeVariant,
     usesMildVariant,
     usesForeg,
+    usesBorder,
     usesBorderStroke,
     usesBorderRadius,
     usesPadding,
@@ -485,6 +487,7 @@ export const usesCheckVariants = () => {
     const [, mildRefs           ] = usesMildVariant();
     
     // borders:
+    const [, , borderDecls      ] = usesBorder();
     const [, , borderStrokeDecls] = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
     
@@ -599,6 +602,17 @@ export const usesCheckVariants = () => {
             ]),
         ]),
         variants([
+            notNude([
+                layout({
+                    // children:
+                    ...children(inputElm, composition([
+                        layout({
+                            // borders:
+                            [borderDecls.borderCol] : 'currentColor', // make a contrast border between indicator & filler
+                        }),
+                    ])),
+                }),
+            ]),
             isNude([
                 layout({
                     // foregrounds:
