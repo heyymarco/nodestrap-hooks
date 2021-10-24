@@ -4,6 +4,7 @@ import {
     useReducer,
     useRef,
     useCallback,
+    useEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -634,7 +635,7 @@ export function Range(props: RangeProps) {
     const nude           = props.nude ?? true;
     const theme          = props.theme ?? 'primary';
  // const themeAlternate = ((theme !== 'secondary') ? 'secondary' : 'primary');
-    const themeAlternate = 'secondary';
+ // const themeAlternate = 'secondary';
     const mild           = props.mild ?? false;
     const mildAlternate  = nude ? mild : !mild;
     
@@ -655,11 +656,12 @@ export function Range(props: RangeProps) {
     
     
     // fn props:
-    const minFn          : number  = parseNumber(min)  ?? 0;
-    const maxFn          : number  = parseNumber(max)  ?? 100;
-    const stepFn         : number  = (step === 'any') ? 0 : Math.abs(parseNumber(step) ?? 1);
-    const negativeFn     : boolean = (maxFn < minFn);
-    const defaultValueFn : number  = (minFn + ((maxFn - minFn) / 2));
+    const valueCtrl      : number|null = parseNumber(value);
+    const minFn          : number      = parseNumber(min)  ?? 0;
+    const maxFn          : number      = parseNumber(max)  ?? 100;
+    const stepFn         : number      = (step === 'any') ? 0 : Math.abs(parseNumber(step) ?? 1);
+    const negativeFn     : boolean     = (maxFn < minFn);
+    const defaultValueFn : number      = (minFn + ((maxFn - minFn) / 2));
     
     
     
@@ -710,9 +712,9 @@ export function Range(props: RangeProps) {
     
     // states:
     interface ValueReducerAction {
-        type           : 'setValue'|'setValueRatio'|'decrease'|'increase'
-        payload        : number
-        triggerChange? : boolean
+        type          : 'setValue'|'setValueRatio'|'decrease'|'increase'
+        payload       : number
+        triggerChange : boolean
     }
     const [valueDn, setValueDn]    = useReducer(useCallback((value: number, action: ValueReducerAction): number => {
         switch (action.type) {
@@ -764,13 +766,32 @@ export function Range(props: RangeProps) {
             default:
                 return value; // no change
         } // switch
-    }, [minFn, maxFn, stepFn, negativeFn, trimValue]), /*initialState: */parseNumber(defaultValue) ?? defaultValueFn);
+    }, [minFn, maxFn, stepFn, negativeFn, trimValue]), /*initialState: */valueCtrl ?? parseNumber(defaultValue) ?? trimValue(defaultValueFn));
     
     
     
     // fn props:
-    const valueFn        : number = trimValue(parseNumber(value) /*controllable*/ ?? valueDn /*uncontrollable*/);
+    const valueRaw       : number = valueCtrl /*controllable*/ ?? valueDn /*uncontrollable*/;
+    const valueFn        : number = trimValue(valueRaw);
     const valueRatio     : number = (valueFn - minFn) / (maxFn - minFn);
+    
+    
+    
+    // dom effects:
+    const hasLoaded      = useRef<boolean>(false);
+    useEffect(() => {
+        if (hasLoaded.current) return;
+        
+        
+        
+        if (valueRaw !== valueFn) {
+            setValueDn({ type: 'setValue', payload: valueFn, triggerChange: true });
+        } // if
+        
+        
+        
+        hasLoaded.current = true;
+    }, [valueRaw, valueFn]);
     
     
     
@@ -1022,7 +1043,8 @@ export function Range(props: RangeProps) {
                     
                     
                     
-                    // setValueDn({ type: 'setValue', payload: parseNumber(e.currentTarget.value) ?? valueDn });
+                    // then do nothing here, just for satisfying React for controllable readonly input
+                    // passing `onChange={undefined}` causing React unhappy
                 }}
             />
             <EditableControl<HTMLInputElement>
@@ -1040,7 +1062,7 @@ export function Range(props: RangeProps) {
                 
                 
                 // variants:
-                theme={themeAlternate}
+                theme={theme}
                 mild={mild}
                 
                 
