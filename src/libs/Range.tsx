@@ -505,7 +505,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         trackInlineSizeBlock : '0.4em',
         trackBlockSizeBlock  : 'auto',
         
-        trackupperBackg      : 'none',
+        trackupperFilter     : [['contrast(1.5)', 'invert(0.5)', 'saturate(0)'   ]],
+        tracklowerFilter     : [['contrast(1.5)',                'saturate(0.75)']],
         
         
         
