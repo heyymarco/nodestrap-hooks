@@ -141,13 +141,13 @@ import {
     usesButtonLayout,
 }                           from './Button'
 import {
+    // hooks:
+    usesIconColor,
+    
+    
     // styles:
     usesIconImage,
 }                           from './Icon'
-import {
-    // hooks:
-    usesIconColor,
-}                           from './EditableTextControl'
 import {
     stripoutList,
     stripoutFocusableElement,
