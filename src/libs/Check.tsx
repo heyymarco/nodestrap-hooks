@@ -1038,6 +1038,11 @@ export function Check(props: CheckProps) {
                 // events:
                 onChange={(e) => {
                     onChange?.(e);
+                    
+                    
+                    
+                    // then do nothing here, just for satisfying React for controllable readonly input
+                    // passing `onChange={undefined}` causing React unhappy
                 }}
                 onClick={(e) => e.stopPropagation()} // prevents firing `change` event triggering parent's `onClick`
             />
