@@ -269,7 +269,7 @@ export const usesRangeLayout = () => {
                             
                             
                             // customize:
-                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackLower')), // apply general cssProps starting with trackLower***
+                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'tracklower')), // apply general cssProps starting with tracklower***
                         }),
                     ])),
                     ...children(trackUpperElm, composition([
@@ -280,7 +280,7 @@ export const usesRangeLayout = () => {
                             
                             
                             // customize:
-                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackUpper')), // apply general cssProps starting with trackUpper***
+                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackupper')), // apply general cssProps starting with trackupper***
                         }),
                     ])),
                     
@@ -864,7 +864,7 @@ export function Range(props: RangeProps) {
             
             // classes:
             classes={[
-                'trackLower',
+                'tracklower',
             ]}
             
             
@@ -884,7 +884,7 @@ export function Range(props: RangeProps) {
             
             // classes:
             classes={[
-                'trackUpper',
+                'trackupper',
             ]}
             
             
@@ -905,6 +905,7 @@ export function Range(props: RangeProps) {
             
             // accessibilities:
             role={props.role ?? 'slider'}
+            aria-orientation={props['aria-orientation'] ?? (orientationVertical ? 'vertical' : 'horizontal')}
             aria-valuenow={props['aria-valuenow'] ?? valueFn}
             aria-valuemin={props['aria-valuemin'] ?? (negativeFn ? maxFn : minFn)}
             aria-valuemax={props['aria-valuemax'] ?? (negativeFn ? minFn : maxFn)}
