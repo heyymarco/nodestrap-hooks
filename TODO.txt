@@ -1,19 +1,20 @@
 top priority:
-add aria-orientation
-reduce ,composition([]) usage
-
-
-
-medium priority:
 List:breadcrumb => fix next icon color
 Check_togglerBtn & NavbarMenu fix blinky toggle active => press for a few seconds and then released, the blinky occured
 
 
 
+medium priority:
+optimize useReducer
+reduce ,composition([]) usage
+css-config => filter valid props
+
+
+
 low priority:
+Range => dial variant
 Media => for profile image, video, static images, gifs, svgs, etc
 Progress
 List:variant_tab => move up tab border radius from ListItem to Wrapper
-optimize useReducer
-Navbar => use List
 fix focus-visible
+Navbar => use List
