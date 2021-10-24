@@ -121,12 +121,9 @@ import triggerChange        from 'react-trigger-change'
 
 
 
-// styles:
-export const inputElm      = ':first-child';
-export const trackElm      = '.track';
-export const trackLowerElm = '.tracklower';
-export const trackUpperElm = '.trackupper';
-export const thumbElm      = '.thumb';
+// hooks:
+
+// range vars:
 
 export interface RangeVars {
     /**
@@ -161,6 +158,15 @@ export const usesRangeVars = () => {
         rangeVarDecls,
     ] as const;
 };
+
+
+
+// styles:
+export const inputElm      = ':first-child';
+export const trackElm      = '.track';
+export const trackLowerElm = '.tracklower';
+export const trackUpperElm = '.trackupper';
+export const thumbElm      = '.thumb';
 
 export const usesRangeLayout = () => {
     // dependencies:
