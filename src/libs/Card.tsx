@@ -414,8 +414,11 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
             
             
             // essentials:
-            aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             tag={props.tag ?? 'article'}
+            
+            
+            // accessibilities:
+            aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
             // classes:
