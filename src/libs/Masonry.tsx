@@ -251,17 +251,18 @@ export interface MasonryProps<TElement extends HTMLElement = HTMLElement>
 }
 export function Masonry<TElement extends HTMLElement = HTMLElement>(props: MasonryProps<TElement>) {
     // styles:
-    const sheet              = useMasonrySheet();
+    const sheet                 = useMasonrySheet();
     
     
     
     // variants:
-    const orientationVariant = useOrientationVariant(props);
+    const orientationVariant    = useOrientationVariant(props);
+    const orientationHorizontal = (orientationVariant.class === 'inline');
     
     
     
     // dom effects:
-    const masonryRef         = useRef<TElement|null>(null);
+    const masonryRef            = useRef<TElement|null>(null);
     useLayoutEffect(() => {
         const masonry = masonryRef.current;
         if (!masonry) return; // masonry was unloaded => nothing to do
@@ -487,6 +488,10 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
                 setRef(props.elmRef, elm);
                 setRef(masonryRef, elm);
             }}
+            
+            
+            // accessibilities:
+            aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
             // classes:
