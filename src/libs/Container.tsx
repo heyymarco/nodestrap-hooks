@@ -215,7 +215,7 @@ createSheet(() => [
     global([
         // the container size is determined by screen width:
         Object.keys(breakpoints)
-        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, composition([
+        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, [
             rules([
                 atRoot(composition([
                     layout({
@@ -224,7 +224,7 @@ createSheet(() => [
                     }),
                 ])),
             ], { minSpecificityWeight: 2 }),
-        ]))),
+        ])),
     ]),
 ])
 .attach();
