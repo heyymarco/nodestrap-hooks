@@ -95,7 +95,7 @@ export const usesRadioLayout = () => {
         ]),
         layout({
             // children:
-            ...children(inputElm, composition([
+            ...children(inputElm, [
                 layout({
                     // borders:
                  // borderRadius : '0.5em', // make circle corners // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -111,7 +111,7 @@ export const usesRadioLayout = () => {
                     // customize:
                     ...usesGeneralProps(cssProps), // apply general cssProps
                 }),
-            ])),
+            ]),
         }),
         vars({
             [ccssDecls.img] : cssProps.img,
