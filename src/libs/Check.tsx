@@ -358,12 +358,12 @@ export const usesCheckLayout = () => {
             
             
             // children:
-            ...children('::before', composition([
+            ...children('::before', [
                 imports([
                     fillTextLineHeightLayout(),
                 ]),
-            ])),
-            ...children(inputElm, composition([
+            ]),
+            ...children(inputElm, [
                 imports([
                     // layouts:
                     usesEditableActionControlLayout(),
@@ -405,7 +405,7 @@ export const usesCheckLayout = () => {
                     
                     
                     // children:
-                    ...children(checkElm, composition([
+                    ...children(checkElm, [
                         imports([
                             // check indicator:
                             usesIconImage(
@@ -432,7 +432,7 @@ export const usesCheckLayout = () => {
                             transf    : checkAnimRefs.checkTransf,
                             anim      : checkAnimRefs.checkAnim,
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -447,8 +447,8 @@ export const usesCheckLayout = () => {
                         }),
                     ])),
                 ]),
-            ])),
-            ...children(labelElm, composition([
+            ]),
+            ...children(labelElm, [
                 layout({
                     // layouts:
                     display       : 'inline', // use inline, so it takes the width & height automatically
@@ -468,7 +468,7 @@ export const usesCheckLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'label')), // apply general cssProps starting with label***
                 }),
-            ])),
+            ]),
         }),
     ]);
 };
@@ -518,13 +518,13 @@ export const usesCheckVariants = () => {
                     
                     
                     // children:
-                    ...children(['::before', inputElm], composition([
+                    ...children(['::before', inputElm], [
                         layout({
                             // layouts:
                             display : 'none',
                         }),
-                    ])),
-                    ...children(labelElm, composition([
+                    ]),
+                    ...children(labelElm, [
                         layout({
                             // layouts:
                             display        : 'inherit',
@@ -544,7 +544,7 @@ export const usesCheckVariants = () => {
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'btn')), // apply general cssProps starting with btn***
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -554,12 +554,12 @@ export const usesCheckVariants = () => {
             ]),
             rule('.togglerBtn', [ // todo: fix blinky when mouseUp
                 layout({
-                    ...children(labelElm, composition([
+                    ...children(labelElm, [
                         layout({
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'togglerBtn')), // apply general cssProps starting with togglerBtn***
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -571,7 +571,7 @@ export const usesCheckVariants = () => {
             rule('.switch', [
                 layout({
                     // children:
-                    ...children(inputElm, composition([
+                    ...children(inputElm, [
                         layout({
                             // sizes:
                             inlineSize   : '2em',   // make the width twice the height
@@ -592,7 +592,7 @@ export const usesCheckVariants = () => {
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'switch')), // apply general cssProps starting with switch***
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -605,12 +605,12 @@ export const usesCheckVariants = () => {
             notNude([
                 layout({
                     // children:
-                    ...children(inputElm, composition([
+                    ...children(inputElm, [
                         layout({
                             // borders:
                             [borderDecls.borderCol] : 'currentColor', // make a contrast border between indicator & filler
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             isNude([
@@ -664,12 +664,12 @@ export const usesCheckStates = () => {
         ]),
         layout({
             // children:
-            ...children(inputElm, composition([
+            ...children(inputElm, [
                 vars({
                     [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
                     [focusBlurDecls.animFocusBlur]      : 'inherit',
-                })
-            ])),
+                }),
+            ]),
         }),
     ]);
 };
