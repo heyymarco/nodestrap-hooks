@@ -102,10 +102,10 @@ export const usesTooltipLayout = () => {
         ]),
         layout({
             // children:
-            ...children(arrowWrapperElm, composition([
+            ...children(arrowWrapperElm, [
                 layout({
                     // children:
-                    ...children(arrowElm, composition([
+                    ...children(arrowElm, [
                         imports([
                             // colors:
                             border(),
@@ -133,9 +133,9 @@ export const usesTooltipLayout = () => {
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'arrow')), // apply general cssProps starting with arrow***
                         }),
-                    ])),
+                    ]),
                 }),
-            ])),
+            ]),
             
             
             
@@ -147,21 +147,21 @@ export const usesTooltipLayout = () => {
                 rule(`[data-popper-placement^="${tooltipPos}"]>&`, [
                     layout({
                         // children:
-                        ...children(arrowWrapperElm, composition([
+                        ...children(arrowWrapperElm, [
                             layout({
                                 [tooltipPos] : 'calc(100% - 1px)',
                                 
                                 
                                 
                                 // children:
-                                ...children(arrowElm, composition([
+                                ...children(arrowElm, [
                                     layout({
                                         // customize:
                                         ...usesGeneralProps(usesPrefixedProps(usesPrefixedProps(cssProps, 'arrow'), tooltipPos)), // apply general cssProps starting with arrow*** and then starting with ***${tooltipPos}
                                     }),
-                                ])),
+                                ]),
                             }),
-                        ])),
+                        ]),
                     }),
                 ]),
             ),
