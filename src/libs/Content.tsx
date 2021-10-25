@@ -189,7 +189,8 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
             // children:
             ...children(itemsSelector, [
                 variants([
-                    rule(':nth-child(n)', [ // increase the specificity
+                    // modify only at the 4 corners:
+                    rule([':first-child', ':last-child'], [ // 1 level of specificity
                         vars({
                             // the items inside the container => should NOT be a container too => should BE a valid separator
                             // all container props here must be DELETED, otherwise we cannot consume the container props
