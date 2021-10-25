@@ -123,7 +123,7 @@ export const usesMasonryVariants = () => {
                     
                     
                     // children:
-                    ...children('*', composition([
+                    ...children('*', [
                         layout({
                             gridColumnEnd : [['unset'], '!important'], // clear from residual effect from inlineStyle (if was)
                         }),
@@ -140,7 +140,7 @@ export const usesMasonryVariants = () => {
                                 }),
                             ]),
                         ]),
-                    ])),
+                    ]),
                 }),
             ]),
             isOrientationInline([ // inline
@@ -164,7 +164,7 @@ export const usesMasonryVariants = () => {
                     
                     
                     // children:
-                    ...children('*', composition([
+                    ...children('*', [
                         layout({
                             gridRowEnd : [['unset'], '!important'], // clear from residual effect from blockStyle (if was)
                         }),
@@ -181,7 +181,7 @@ export const usesMasonryVariants = () => {
                                 }),
                             ]),
                         ]),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
