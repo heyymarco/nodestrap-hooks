@@ -217,12 +217,12 @@ createSheet(() => [
         Object.keys(breakpoints)
         .map((breakpointName) => isScreenWidthAtLeast(breakpointName, [
             rules([
-                atRoot(composition([
+                atRoot([
                     layout({
                         // overwrites propName = propName{BreakpointName}:
                         ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
                     }),
-                ])),
+                ]),
             ], { minSpecificityWeight: 2 }),
         ])),
     ]),
