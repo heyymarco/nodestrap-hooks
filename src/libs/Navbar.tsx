@@ -492,13 +492,13 @@ export const usesMenusLayout = () => {
             
             
             // children:
-            ...children('*', composition([ // menu section
+            ...children('*', [ // menu section
                 imports([
                     usesMenuLayout(),
                     usesMenuVariants(),
                     usesMenuStates(),
                 ]),
-            ])),
+            ]),
             
             
             
@@ -647,36 +647,36 @@ export const usesNavbarLayout = () => {
             
             
             // children:
-            ...children(wrapperElm, composition([ // wrapper elements
+            ...children(wrapperElm, [ // wrapper elements
                 imports([
                     usesWrapperLayout(),
                 ]),
-            ])),
-            ...children([logoElm, togglerElm, menusElm], composition([ // all sections
+            ]),
+            ...children([logoElm, togglerElm, menusElm], [ // all sections
                 imports([
                     usesItemLayout(),
                 ]),
-            ])),
-            ...children([logoElm, togglerElm], composition([ // secondary sections
+            ]),
+            ...children([logoElm, togglerElm], [ // secondary sections
                 imports([
                     usesSecondaryLayout(),
                 ]),
-            ])),
-            ...children(logoElm, composition([ // logo section
+            ]),
+            ...children(logoElm, [ // logo section
                 imports([
                     usesLogoLayout(),
                 ]),
-            ])),
-            ...children(togglerElm, composition([ // toggler section
+            ]),
+            ...children(togglerElm, [ // toggler section
                 imports([
                     usesTogglerLayout(),
                 ]),
-            ])),
-            ...children(menusElm, composition([ // menus section
+            ]),
+            ...children(menusElm, [ // menus section
                 imports([
                     usesMenusLayout(),
                 ]),
-            ])),
+            ]),
             
             
             
@@ -735,19 +735,19 @@ export const usesNavbarStates = () => {
             rule(':not(.compact)', [ // full
                 layout({
                     // children:
-                    ...children([logoElm, togglerElm, menusElm], composition([ // all sections
+                    ...children([logoElm, togglerElm, menusElm], [ // all sections
                         layout({
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'item'), 'full')), // apply general cssProps starting with item*** and ending with ***Full
                         }),
-                    ])),
-                    ...children(logoElm, composition([ // logo section
+                    ]),
+                    ...children(logoElm, [ // logo section
                         layout({
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'logo'), 'full')), // apply general cssProps starting with logo*** and ending with ***Full
                         }),
-                    ])),
-                    ...children(togglerElm, composition([ // toggler section
+                    ]),
+                    ...children(togglerElm, [ // toggler section
                         layout({
                             // appearances:
                             display: 'none', // hides toggler on full mode
@@ -757,23 +757,23 @@ export const usesNavbarStates = () => {
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'toggler'), 'full')), // apply general cssProps starting with toggler*** and ending with ***Full
                         }),
-                    ])),
-                    ...children(menusElm, composition([ // menus section
+                    ]),
+                    ...children(menusElm, [ // menus section
                         layout({
                             // children:
-                            ...children('*', composition([ // menu section
+                            ...children('*', [ // menu section
                                 layout({
                                     // customize:
                                     ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'full')), // apply general cssProps starting with menu*** and ending with ***Full
                                 }),
-                            ])),
+                            ]),
                             
                             
                             
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menus'), 'full')), // apply general cssProps starting with menus*** and ending with ***Full
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -784,43 +784,43 @@ export const usesNavbarStates = () => {
             rule('.compact', [ // compact
                 layout({
                     // children:
-                    ...children([logoElm, togglerElm, menusElm], composition([ // all sections
+                    ...children([logoElm, togglerElm, menusElm], [ // all sections
                         layout({
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'item'), 'compact')), // apply general cssProps starting with item*** and ending with ***Compact
                         }),
-                    ])),
-                    ...children(logoElm, composition([ // logo section
+                    ]),
+                    ...children(logoElm, [ // logo section
                         layout({
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'logo'), 'compact')), // apply general cssProps starting with logo*** and ending with ***Compact
                         }),
-                    ])),
-                    ...children(togglerElm, composition([ // toggler section
+                    ]),
+                    ...children(togglerElm, [ // toggler section
                         layout({
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'toggler'), 'compact')), // apply general cssProps starting with toggler*** and ending with ***Compact
                         }),
-                    ])),
-                    ...children(menusElm, composition([ // menus section
+                    ]),
+                    ...children(menusElm, [ // menus section
                         imports([
                             usesMenusCompactLayout(),
                         ]),
                         layout({
                             // children:
-                            ...children('*', composition([ // menu section
+                            ...children('*', [ // menu section
                                 layout({
                                     // customize:
                                     ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'compact')), // apply general cssProps starting with menu*** and ending with ***Compact
                                 }),
-                            ])),
+                            ]),
                             
                             
                             
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menus'), 'compact')), // apply general cssProps starting with menus*** and ending with ***Compact
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -831,12 +831,12 @@ export const usesNavbarStates = () => {
                     isPassived([
                         layout({
                             // children:
-                            ...children(menusElm, composition([ // menus section
+                            ...children(menusElm, [ // menus section
                                 layout({
                                     // layouts:
                                     display: 'none', // hide the menus when on compact mode
                                 }),
-                            ])),
+                            ]),
                         }),
                     ]),
                 ]),
