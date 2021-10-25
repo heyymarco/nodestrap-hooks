@@ -169,11 +169,11 @@ export const usesCarouselItemsLayout = () => {
             
             
             // children:
-            ...children(itemElm, composition([
+            ...children(itemElm, [
                 imports([
                     usesCarouselItemLayout(),
                 ]),
-            ])),
+            ]),
             
             
             
@@ -209,11 +209,11 @@ export const usesCarouselItemLayout = () => {
             
             
             // children:
-            ...children(mediaElm, composition([
+            ...children(mediaElm, [
                 imports([
                     usesCarouselMediaLayout(),
                 ]),
-            ])),
+            ]),
             
             
             
@@ -329,41 +329,41 @@ export const usesCarouselLayout = () => {
             
             
             // children:
-            ...children(itemsElm, composition([
+            ...children(itemsElm, [
                 imports([
                     usesCarouselItemsLayout(),
                 ]),
-            ])),
-            ...children(dummyElm, composition([
+            ]),
+            ...children(dummyElm, [
                 layout({
                     // appearances:
                  // visibility : 'hidden', // causing onScroll doesn't work in Firefox
                     opacity    : 0,
                     zIndex     : -1,
                 }),
-            ])),
+            ]),
             
-            ...children([prevBtnElm, nextBtnElm], composition([
+            ...children([prevBtnElm, nextBtnElm], [
                 imports([
                     usesNavBtnLayout(),
                 ]),
-            ])),
-            ...children(prevBtnElm, composition([
+            ]),
+            ...children(prevBtnElm, [
                 imports([
                     usesPrevBtnLayout(),
                 ]),
-            ])),
-            ...children(nextBtnElm, composition([
+            ]),
+            ...children(nextBtnElm, [
                 imports([
                     usesNextBtnLayout(),
                 ]),
-            ])),
+            ]),
             
-            ...children(navElm, composition([
+            ...children(navElm, [
                 imports([
                     usesNavLayout(),
                 ]),
-            ])),
+            ]),
             
             
             
