@@ -437,14 +437,14 @@ export const usesIconFontLayout  = (img?: Cust.Ref) => {
     return composition([
         rules([
             // load a custom font:
-            fontFace(composition([
+            fontFace([
                 imports([
                     config.font.style, // define the font's properties
                 ]),
                 layout({
                     src: config.font.files.map((file) => `url("${concatUrl(config.font.path, file)}") ${formatOf(file)}`).join(','),
                 }),
-            ])),
+            ]),
         ]),
         layout({
             ...children('::after', [
