@@ -415,11 +415,11 @@ export const usesIconLayout      = () => {
             
             
             // children:
-            ...children('::before', composition([
+            ...children('::before', [
                 imports([
                     fillTextLineHeightLayout(),
                 ]),
-            ])),
+            ]),
             
             
             
@@ -447,7 +447,7 @@ export const usesIconFontLayout  = (img?: Cust.Ref) => {
             ])),
         ]),
         layout({
-            ...children('::after', composition([
+            ...children('::after', [
                 imports([
                     // use the loaded custom font:
                     config.font.style, // apply the defined font's properties
@@ -497,7 +497,7 @@ export const usesIconFontLayout  = (img?: Cust.Ref) => {
                     fontFeatureSettings       : 'liga',               // support for IE
                     //#endregion turn on available browser features
                 }),
-            ])),
+            ]),
         }),
     ]);
 };
@@ -511,7 +511,7 @@ export const usesIconImageLayout = (img?: Cust.Ref) => {
             
             // sizes:
             // a dummy element, for making the image's width
-            ...children('img', composition([
+            ...children('img', [
                 layout({
                     // layouts:
                     display    : 'inline-block', // use inline-block, so it takes the width & height as we set
@@ -537,7 +537,7 @@ export const usesIconImageLayout = (img?: Cust.Ref) => {
                     // accessibilities:
                     userSelect : 'none', // disable selecting icon's img
                 }),
-            ])),
+            ]),
             
             
             
@@ -611,18 +611,18 @@ export const usesIcon = () => {
             usesIconVariants(),
         ]),
         variants([
-            rule('.font', composition([
+            rule('.font', [
                 imports([
                     // layouts:
                     usesIconFontLayout(),
                 ]),
-            ])),
-            rule('.img', composition([
+            ]),
+            rule('.img', [
                 imports([
                     // layouts:
                     usesIconImageLayout(),
                 ]),
-            ])),
+            ]),
         ]),
     ]);
 };
