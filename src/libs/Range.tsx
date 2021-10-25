@@ -211,13 +211,13 @@ export const usesRangeLayout = () => {
             
             
             // children:
-            ...children(inputElm, composition([
+            ...children(inputElm, [
                 layout({
                     // layouts:
                     display: 'none', // hide the input
                 }),
-            ])),
-            ...children(trackElm, composition([
+            ]),
+            ...children(trackElm, [
                 imports([
                     usesBorderAsContainer({ // make a nicely rounded corners
                         orientationBlockRule  : '.block&',
@@ -246,7 +246,7 @@ export const usesRangeLayout = () => {
                     
                     
                     // children:
-                    ...children([trackLowerElm, trackUpperElm], composition([
+                    ...children([trackLowerElm, trackUpperElm], [
                         layout({
                             // layouts:
                             display   : 'inline-block', // use inline-block, so it takes the width & height as we set
@@ -270,8 +270,8 @@ export const usesRangeLayout = () => {
                             // sizes:
                             alignSelf : 'stretch',      // follows parent's height
                         }),
-                    ])),
-                    ...children(trackLowerElm, composition([
+                    ]),
+                    ...children(trackLowerElm, [
                         layout({
                             // sizes:
                             flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
@@ -281,8 +281,8 @@ export const usesRangeLayout = () => {
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'tracklower')), // apply general cssProps starting with tracklower***
                         }),
-                    ])),
-                    ...children(trackUpperElm, composition([
+                    ]),
+                    ...children(trackUpperElm, [
                         layout({
                             // sizes:
                             flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
@@ -292,14 +292,14 @@ export const usesRangeLayout = () => {
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackupper')), // apply general cssProps starting with trackupper***
                         }),
-                    ])),
+                    ]),
                     
-                    ...children(['&', thumbElm], composition([
+                    ...children(['&', thumbElm], [
                         layout({
                             cursor: 'inherit',
                         }),
-                    ])),
-                    ...children(thumbElm, composition([
+                    ]),
+                    ...children(thumbElm, [
                         layout({
                             // layouts:
                             display   : 'inline-block', // use inline-block, so it takes the width & height as we set
@@ -324,7 +324,7 @@ export const usesRangeLayout = () => {
                             // spacings:
                             ...expandPadding({ paddingInline: cssProps.thumbPaddingInline, paddingBlock: cssProps.thumbPaddingBlock }), // expand padding css vars
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -341,7 +341,7 @@ export const usesRangeLayout = () => {
                     // spacings:
                     ...expandPadding({ paddingInline: cssProps.trackPaddingInline, paddingBlock: cssProps.trackPaddingBlock }), // expand padding css vars
                 }),
-            ])),
+            ]),
             
             
             
@@ -388,17 +388,17 @@ export const usesRangeVariants = () => {
                     
                     
                     // children:
-                    ...children('::before', composition([
+                    ...children('::before', [
                         imports([
                             fillTextLineHeightLayout(),
                         ]),
-                    ])),
-                    ...children(trackElm, composition([
+                    ]),
+                    ...children(trackElm, [
                         layout({
                             // layouts:
                             flexDirection : 'row',    // items are stacked horizontally
                         }),
-                    ])),
+                    ]),
                     
                     
                     
@@ -415,17 +415,17 @@ export const usesRangeVariants = () => {
                     
                     
                     // children:
-                    ...children('::before', composition([
+                    ...children('::before', [
                         imports([
                             fillTextLineWidthLayout(),
                         ]),
-                    ])),
-                    ...children(trackElm, composition([
+                    ]),
+                    ...children(trackElm, [
                         layout({
                             // layouts:
                             flexDirection : 'column', // items are stacked vertically
                         }),
-                    ])),
+                    ]),
                     
                     
                     
