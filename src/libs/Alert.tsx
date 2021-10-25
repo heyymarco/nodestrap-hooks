@@ -115,7 +115,7 @@ export const usesAlertLayout = () => {
             
             
             // children:
-            ...children(iconElm, composition([
+            ...children(iconElm, [
                 layout({
                     // layouts:
                     gridArea    : '1 / -3', // the first row / the third column starting from the last
@@ -131,8 +131,8 @@ export const usesAlertLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'icon')), // apply general cssProps starting with icon***
                 }),
-            ])),
-            ...children(bodyElm, composition([
+            ]),
+            ...children(bodyElm, [
                 layout({
                     // layouts:
                     gridArea : 'body',
@@ -142,8 +142,8 @@ export const usesAlertLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'body')), // apply general cssProps starting with body***
                 }),
-            ])),
-            ...children(controlElm, composition([
+            ]),
+            ...children(controlElm, [
                 layout({
                     // layouts:
                     gridArea    : '1 / 2',  // the first row / the second column
@@ -159,7 +159,7 @@ export const usesAlertLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'control')), // apply general cssProps starting with control***
                 }),
-            ])),
+            ]),
             
             
             
