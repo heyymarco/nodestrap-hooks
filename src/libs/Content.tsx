@@ -60,6 +60,7 @@ import {
     usesBorderStroke,
     expandBorderStroke,
     usesBorderRadius,
+    expandBorderRadius,
     usesPadding,
     expandPadding,
     
@@ -565,10 +566,11 @@ export const usesContentMediaLayout = () => {
     // dependencies:
     
     // colors:
-    const [border      ] = usesBorder();
+    const [border               ] = usesBorder();
     
     // borders:
-    const [borderStroke] = usesBorderStroke();
+    const [borderStroke         ] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -593,6 +595,11 @@ export const usesContentMediaLayout = () => {
             
             // borders:
             ...expandBorderStroke(), // expand borderStroke css vars
+            ...expandBorderRadius(), // expand borderRadius css vars
+            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
         }),
         imports([
             // borders:
