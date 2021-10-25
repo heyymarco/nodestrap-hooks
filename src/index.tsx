@@ -15,7 +15,7 @@ import reportWebVitals from './reportWebVitals';
 
 // import BasicApp                                     from './apps/BasicApp';
 //     import LabelApp                                 from './apps/LabelApp';
-//     import ContentApp                               from './apps/ContentApp';
+    import ContentApp                               from './apps/ContentApp';
 //         import MasonryApp                           from './apps/MasonryApp';
 //         import CarouselApp                          from './apps/CarouselApp';
 //     import ContainerApp                             from './apps/ContainerApp';
@@ -54,15 +54,14 @@ import reportWebVitals from './reportWebVitals';
 //                 import FormApp                      from './apps/FormApp';
 //     import IconApp                                  from './apps/IconApp';
 //     import NavbarApp                                from './apps/NavbarApp';
-//     import NavbarListApp                            from './apps/NavbarListApp';
-    import GroupApp                                 from './apps/GroupApp';
+//     import GroupApp                                 from './apps/GroupApp';
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <GroupApp />
+    <ContentApp />
     ,
     document.getElementById('root')
 );

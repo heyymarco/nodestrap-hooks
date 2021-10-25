@@ -1,6 +1,12 @@
 top priority:
-optimize useReducer
-reduce ,composition([]) usage
+fix unclipped inner border radius on Content
+fix unclipped inner border radius on List
+
+
+
+
+remove unused translate() on firefox
+fix overflow detection Navbar padding-end
 
 
 
