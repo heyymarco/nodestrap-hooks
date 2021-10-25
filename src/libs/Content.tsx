@@ -157,7 +157,7 @@ export interface BorderContainerOptions {
 export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     // options:
     const {
-        itemsSelector         = '*',
+        itemsSelector         = 'nth-child(n)', // better than '*' (non_zero specificity)
         
         orientationBlockRule  = ':not(.inline)',
         orientationInlineRule = '.inline',
