@@ -138,12 +138,12 @@ export const usesModalCardElementLayout = () => {
             
             
             // children:
-            ...children('*', composition([ // Card
+            ...children('*', [ // Card
                 layout({
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'card')), // apply general cssProps starting with card***
                 }),
-            ])),
+            ]),
         }),
     ]);
 };
@@ -175,7 +175,7 @@ export const usesModalCardElementVariants = () => {
                     
                     
                     // children:
-                    ...children('*', composition([ // Card
+                    ...children('*', [ // Card
                         layout({
                             boxSizing     : 'inherit',
                             inlineSize    : 'inherit',
@@ -183,7 +183,7 @@ export const usesModalCardElementVariants = () => {
                             blockSize     : 'inherit',
                             maxBlockSize  : 'inherit',
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
@@ -236,16 +236,16 @@ export const usesActionBarLayout = () => {
             
             
             // children:
-            ...children('*', composition([
+            ...children('*', [
                 variants([
                     // only one child:
-                    rule(':first-child:last-child', composition([
+                    rule(':first-child:last-child', [
                         layout({
                             marginInlineStart: 'auto',
                         }),
-                    ])),
+                    ]),
                 ]),
-            ])),
+            ]),
         }),
     ]);
 };
@@ -283,15 +283,15 @@ export const usesModalCardLayout = () => {
             
             
             // children:
-            ...children('*', composition([
+            ...children('*', [
                 layout({
                     // layouts:
                     gridArea : 'content',
                 }),
-            ])),
+            ]),
             
             //#region psedudo elm for filling the end of horz & vert scroll
-            ...children(['::before', '::after'], composition([
+            ...children(['::before', '::after'], [
                 layout({
                     // layouts:
                     content     : '""',
@@ -309,19 +309,19 @@ export const usesModalCardLayout = () => {
                     // appearances:
                     visibility  : 'hidden',
                 }),
-            ])),
-            ...children('::before', composition([
+            ]),
+            ...children('::before', [
                 layout({
                     // layouts:
                     gridArea    : 'inlineEnd',
                 }),
-            ])),
-            ...children('::after', composition([
+            ]),
+            ...children('::after', [
                 layout({
                     // layouts:
                     gridArea    : 'blockEnd',
                 }),
-            ])),
+            ]),
             //#endregion psedudo elm for filling the end of horz & vert scroll
             
             
