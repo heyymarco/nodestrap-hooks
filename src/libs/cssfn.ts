@@ -53,7 +53,7 @@ export type { JssStyle, JssValue, Classes, Styles, StyleSheet }
 export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
-export type Style                                                = JssStyle & ExtendableStyle
+export type Style                                                = ExtendableStyle
 export type StyleCollection                                      = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
 export type ClassName                                            = string
