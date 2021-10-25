@@ -179,7 +179,7 @@ export const usesEditableTextControlLayout = () => {
             iconColor(), // do not import `iconColor()` on pseudo `::after`
         ]),
         layout({
-            ...children(iconElm, composition([
+            ...children(iconElm, [
                 imports([
                     usesIconImage(
                         /*iconImage: */validInvalidRefs.iconImgValidInvalid,
@@ -210,7 +210,7 @@ export const usesEditableTextControlLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'icon')), // apply general cssProps starting with icon***
                 }),
-            ])),
+            ]),
             
             
             
@@ -274,11 +274,11 @@ export const usesEditableTextControlStates = () => {
             ]),
             isNoValidation([
                 layout({
-                    ...children(iconElm, composition([
+                    ...children(iconElm, [
                         layout({
                             display: 'none',
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
