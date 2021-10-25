@@ -299,12 +299,12 @@ export const usesModalVariants = () => {
                     
                     
                     // children:
-                    ...children('*', composition([ // ModalElement
+                    ...children('*', [ // ModalElement
                         layout({
                             // accessibilities:
                             pointerEvents : 'initial',
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
