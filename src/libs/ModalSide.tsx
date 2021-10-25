@@ -141,7 +141,7 @@ export const usesModalSideElementLayout = () => {
             
             
             // children:
-            ...children('*', composition([ // Card
+            ...children('*', [ // Card
                 layout({
                     // sizes:
                     flex          : [[1, 1, '100%']], // growable, shrinkable, initial from parent's height
@@ -157,7 +157,7 @@ export const usesModalSideElementLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'card')), // apply general cssProps starting with card***
                 }),
-            ])),
+            ]),
         }),
     ]);
 };
@@ -174,7 +174,7 @@ export const usesModalSideElementVariants = () => {
             rule('.inlineStart>&', [
                 layout({
                     // children:
-                    ...children(['&', '*'], composition([ // Card
+                    ...children(['&', '*'], [ // Card
                         layout({
                             // borders:
                          // borderStartStartRadius : 0, // remove border radius on left_top
@@ -183,13 +183,13 @@ export const usesModalSideElementVariants = () => {
                             [borderRadiusDecls.borderStartStartRadius] : 0, // remove border radius on left_top
                             [borderRadiusDecls.borderEndStartRadius]   : 0, // remove border radius on left_bottom
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             rule('.inlineEnd>&', [
                 layout({
                     // children:
-                    ...children(['&', '*'], composition([ // Card
+                    ...children(['&', '*'], [ // Card
                         layout({
                             // borders:
                          // borderStartEndRadius : 0, // remove border radius on right_top
@@ -198,13 +198,13 @@ export const usesModalSideElementVariants = () => {
                             [borderRadiusDecls.borderStartEndRadius] : 0, // remove border radius on right_top
                             [borderRadiusDecls.borderEndEndRadius]   : 0, // remove border radius on right_bottom
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             rule('.blockStart>&', [
                 layout({
                     // children:
-                    ...children(['&', '*'], composition([ // Card
+                    ...children(['&', '*'], [ // Card
                         layout({
                             // borders:
                          // borderStartStartRadius : 0, // remove border radius on top_left
@@ -213,13 +213,13 @@ export const usesModalSideElementVariants = () => {
                             [borderRadiusDecls.borderStartStartRadius] : 0, // remove border radius on top_left
                             [borderRadiusDecls.borderStartEndRadius]   : 0, // remove border radius on top_right
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             rule('.blockEnd>&', [
                 layout({
                     // children:
-                    ...children(['&', '*'], composition([ // Card
+                    ...children(['&', '*'], [ // Card
                         layout({
                             // borders:
                          // borderEndStartRadius : 0, // remove border radius on bottom_left
@@ -228,7 +228,7 @@ export const usesModalSideElementVariants = () => {
                             [borderRadiusDecls.borderEndStartRadius] : 0, // remove border radius on bottom_left
                             [borderRadiusDecls.borderEndEndRadius]   : 0, // remove border radius on bottom_right
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
