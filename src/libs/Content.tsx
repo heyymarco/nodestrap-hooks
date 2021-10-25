@@ -186,7 +186,7 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
             
             
             // children:
-            ...children(itemsSelector, composition([
+            ...children(itemsSelector, [
                 variants([
                     rule(':nth-child(n)', [ // increase the specificity
                         vars({
@@ -199,13 +199,13 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                         }),
                     ]),
                 ]),
-            ])),
+            ]),
         }),
         variants([
             !!orientationBlockRule && rule(orientationBlockRule, [
                 layout({
                     // children:
-                    ...children(itemsSelector, composition([
+                    ...children(itemsSelector, [
                         variants([
                             isFirstChild([
                                 layout({
@@ -224,13 +224,13 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                                 }),
                             ]),
                         ]),
-                    ])),
+                    ]),
                 }),
             ]),
             !!orientationInlineRule && rule(orientationInlineRule, [
                 layout({
                     // children:
-                    ...children(itemsSelector, composition([
+                    ...children(itemsSelector, [
                         variants([
                             isFirstChild([
                                 layout({
@@ -249,13 +249,13 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                                 }),
                             ]),
                         ]),
-                    ])),
+                    ]),
                 }),
             ]),
             (!orientationBlockRule && !orientationInlineRule) && noRule([
                 layout({
                     // children:
-                    ...children(itemsSelector, composition([
+                    ...children(itemsSelector, [
                         layout({
                             // borders:
                             
@@ -267,7 +267,7 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                             [borderRadiusDecls.borderEndStartRadius]   : `calc(${containerRefs.containerBorderEndStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
                             [borderRadiusDecls.borderEndEndRadius]     : `calc(${containerRefs.containerBorderEndEndRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
@@ -312,30 +312,30 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             // remove double border by removing bottom-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
-            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, composition([ // :where(...) => avoid increasing specificity
+            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, [ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
                 }),
-            ])),
+            ]),
             
             
             
             // remove top-border at the header, so that it wouldn't collide with the Card's top-border
             // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
-            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], composition([ // :where(...) => avoid increasing specificity
+            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
                 }),
-            ])),
+            ]),
         ]),
         variants([
             isNotFirstChild([
                 layout({
                     // children:
                     // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
                         layout({
                             // borders:
                             // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -343,14 +343,14 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
                             [borderRadiusDecls.borderStartStartRadius] : 0,
                             [borderRadiusDecls.borderStartEndRadius]   : 0,
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             isNotLastChild([
                 layout({
                     // children:
                     // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
                         layout({
                             // borders:
                             // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -358,7 +358,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
                             [borderRadiusDecls.borderEndStartRadius]   : 0,
                             [borderRadiusDecls.borderEndEndRadius]     : 0,
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
@@ -398,30 +398,30 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             // remove double border by removing right-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
-            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, composition([ // :where(...) => avoid increasing specificity
+            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, [ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderInlineEndWidth   : 0, // remove right-border
                 }),
-            ])),
+            ]),
             
             
             
             // remove left-border at the header, so that it wouldn't collide with the Card's left-border
             // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
-            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], composition([ // :where(...) => avoid increasing specificity
+            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderInlineStartWidth : 0, // remove left-border
                 }),
-            ])),
+            ]),
         ]),
         variants([
             isNotFirstChild([
                 layout({
                     // children:
                     // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
                         layout({
                             // borders:
                             // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -429,14 +429,14 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
                             [borderRadiusDecls.borderStartStartRadius] : 0,
                             [borderRadiusDecls.borderEndStartRadius]   : 0,
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             isNotLastChild([
                 layout({
                     // children:
                     // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], composition([ // `:where(&) *` => zero specificity 
+                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
                         layout({
                             // borders:
                             // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -444,7 +444,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
                             [borderRadiusDecls.borderStartEndRadius]   : 0,
                             [borderRadiusDecls.borderEndEndRadius]     : 0,
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
@@ -462,32 +462,32 @@ export const usesMediaBorderSeparator = () => {
             // children:
             // make sibling <media> closer:
             // remove double border by removing top-border at the adjacent media(s)
-            ...adjacentSiblings(mediaElm, composition([
+            ...adjacentSiblings(mediaElm, [
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
                 }),
-            ])),
+            ]),
         }),
         variants([
             // supports for Card too
             
             // because we avoid modifying paragraph's top-border, we delegate the top-border to the <media>
             // so, we need to restore bottom-border that was removed by `usesBorderAsSeparatorBlock()`
-            rule(':where(:not(:nth-last-child(0)))', composition([
+            rule(':where(:not(:nth-last-child(0)))', [
                 layout({
                     // borders:
                     borderBlockEndWidth    : undefined, // restore bottom-border
                 }),
-            ])),
+            ]),
             // then replace the algoritm above with this one:
             // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
-            rule(':where(:last-child)', composition([ // :where(...) => avoid increasing specificity
+            rule(':where(:last-child)', [ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
                 }),
-            ])),
+            ]),
         ]),
     ]);
 };
@@ -532,12 +532,12 @@ export const usesMediaFill = () => {
             
             // children:
             // make sibling <media> closer (cancel out prev sibling's spacing):
-            ...adjacentSiblings(mediaElm, composition([
+            ...adjacentSiblings(mediaElm, [
                 layout({
                     // spacings:
                     marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
                 }),
-            ])),
+            ]),
         }),
         variants([
             isFirstChild(composition([
@@ -607,37 +607,37 @@ export const usesContentMedia = () => {
             //#region links
             // handle <a> as content-link:
             
-            ...children('a', composition([
+            ...children('a', [
                 layout({
                     // children:
                     // following by another <a>:
-                    ...adjacentSiblings('a', composition([
+                    ...adjacentSiblings('a', [
                         layout({
                             // spacings:
                             // add a space between links:
                             marginInlineStart: cssProps.linkSpacing,
                         }),
-                    ])),
+                    ]),
                     
                     
                     
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
                 }),
-            ])),
+            ]),
             //#endregion links
             
             //#region media
             // handle <figure> & <media> as content-media:
             
             //#region first: reset top_level <figure> and inner <media>
-            ...children('figure', composition([
+            ...children('figure', [
                 imports([
                     stripoutFigure(), // clear browser's default styling on figure
                 ]),
                 layout({
                     // children:
-                    ...children(mediaElm.filter((m) => (m !== 'figure')), composition([
+                    ...children(mediaElm.filter((m) => (m !== 'figure')), [
                         imports([
                             stripoutImage(), // clear browser's default styling on image
                         ]),
@@ -645,18 +645,18 @@ export const usesContentMedia = () => {
                             // layouts:
                             display: 'block', // fills the entire parent's width
                         }),
-                    ])),
+                    ]),
                 }),
-            ])),
+            ]),
             //#endregion first: reset top_level <figure> and inner <media>
             
             // then: styling top_level <figure> & top_level <media>:
-            ...children(mediaElm, composition([
+            ...children(mediaElm, [
                 imports([
                     // layouts:
                     usesContentMediaLayout(),
                 ]),
-            ])),
+            ]),
             //#endregion media
         }),
     ]);
