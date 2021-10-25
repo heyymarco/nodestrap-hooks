@@ -540,18 +540,18 @@ export const usesMediaFill = () => {
             ]),
         }),
         variants([
-            isFirstChild(composition([
+            isFirstChild([
                 layout({
                     // spacings:
                     marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
                 }),
-            ])),
-            isLastChild(composition([
+            ]),
+            isLastChild([
                 layout({
                     // spacings:
                     marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
                 }),
-            ])),
+            ]),
         ]),
     ]);
 };
