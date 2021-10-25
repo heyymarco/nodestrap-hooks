@@ -152,16 +152,16 @@ export const usesBadgeLayout = () => {
                     // height  : '1em', // not working, (font-height !== 1em) if the font-size is fractional number
                     
                     // children:
-                    ...children('::before', composition([
+                    ...children('::before', [
                         imports([
                             fillTextLineHeightLayout(),
                         ]),
-                    ])),
-                    ...children('::after', composition([
+                    ]),
+                    ...children('::after', [
                         imports([
                             fillTextLineWidthLayout(),
                         ]),
-                    ])),
+                    ]),
                     
                     
                     
