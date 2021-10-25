@@ -304,7 +304,7 @@ export const usesSvgLayout = () => {
             
             // children:
             overflow: 'visible', // allows graphics to overflow the canvas
-            ...children('*', composition([
+            ...children('*', [
                 layout({
                     // appearances:
                     stroke        : 'currentColor', // set menu color as parent's font color
@@ -317,29 +317,29 @@ export const usesSvgLayout = () => {
                     transformOrigin : '50% 50%',
                 }),
                 variants([
-                    isNthChild(0, 1, composition([
+                    isNthChild(0, 1, [
                         layout({
                             // animations:
                             transf : svgAnimRefs.svgTopTransf,
                             anim   : svgAnimRefs.svgTopAnim,
                         }),
-                    ])),
-                    isNthChild(0, 2, composition([
+                    ]),
+                    isNthChild(0, 2, [
                         layout({
                             // animations:
                             transf : svgAnimRefs.svgMidTransf,
                             anim   : svgAnimRefs.svgMidAnim,
                         }),
-                    ])),
-                    isNthChild(0, 3, composition([
+                    ]),
+                    isNthChild(0, 3, [
                         layout({
                             // animations:
                             transf : svgAnimRefs.svgBtmTransf,
                             anim   : svgAnimRefs.svgBtmAnim,
                         }),
-                    ])),
+                    ]),
                 ]),
-            ])),
+            ]),
         }),
     ]);
 };
@@ -354,21 +354,21 @@ export const usesTogglerMenuButtonLayout = () => {
         ]),
         layout({
             // children:
-            ...children(labelElm, composition([
+            ...children(labelElm, [
                 layout({
                     // children:
-                    ...children(svgElm, composition([
+                    ...children(svgElm, [
                         imports([
                             usesSvgLayout(),
                         ]),
-                    ])),
+                    ]),
                     
                     
                     
                     // customize:
                     ...usesGeneralProps(cssProps), // apply general cssProps
                 }),
-            ])),
+            ]),
         }),
         vars({
             [icssDecls.animActive ] : cssProps.animActive,
