@@ -440,12 +440,12 @@ export const usesCheckLayout = () => {
                     ...usesGeneralProps(cssProps), // apply general cssProps
                 }),
                 variants([
-                    isNotLastChild(composition([
+                    isNotLastChild([
                         layout({
                             // spacing between input & label:
                             marginInlineEnd : cssProps.spacing,
                         }),
-                    ])),
+                    ]),
                 ]),
             ]),
             ...children(labelElm, [
