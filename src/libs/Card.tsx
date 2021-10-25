@@ -216,7 +216,7 @@ export const usesCardLayout = () => {
             
             
             // children:
-            ...children([headerElm, footerElm, bodyElm], composition([
+            ...children([headerElm, footerElm, bodyElm], [
                 imports([
                     // media:
                     usesContentMedia(),
@@ -224,31 +224,31 @@ export const usesCardLayout = () => {
                     // layouts:
                     usesCardItemLayout(),
                 ]),
-            ])),
-            ...children([headerElm, footerElm], composition([
+            ]),
+            ...children([headerElm, footerElm], [
                 imports([
                     // layouts:
                     usesCardCaptionLayout(),
                 ]),
-            ])),
-            ...children(headerElm, composition([
+            ]),
+            ...children(headerElm, [
                 imports([
                     // layouts:
                     usesCardHeaderLayout(),
                 ]),
-            ])),
-            ...children(footerElm, composition([
+            ]),
+            ...children(footerElm, [
                 imports([
                     // layouts:
                     usesCardFooterLayout(),
                 ]),
-            ])),
-            ...children(bodyElm, composition([
+            ]),
+            ...children(bodyElm, [
                 imports([
                     // layouts:
                     usesCardBodyLayout(),
                 ]),
-            ])),
+            ]),
             
             
             
@@ -289,12 +289,12 @@ export const usesCardVariants = () => {
                     
                     
                     // children:
-                    ...children([headerElm, footerElm, bodyElm], composition([
+                    ...children([headerElm, footerElm, bodyElm], [
                         imports([
                             // borders:
                             usesBorderAsSeparatorBlock({ replaceLast  : true }),
                         ]),
-                    ])),
+                    ]),
                 }),
             ]),
             isOrientationInline([ // inline
@@ -306,12 +306,12 @@ export const usesCardVariants = () => {
                     
                     
                     // children:
-                    ...children([headerElm, footerElm, bodyElm], composition([
+                    ...children([headerElm, footerElm, bodyElm], [
                         imports([
                             // borders:
                             usesBorderAsSeparatorInline({ replaceLast  : true }),
                         ]),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
