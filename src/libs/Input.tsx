@@ -91,7 +91,7 @@ export const usesInputLayout = () => {
             
             
             // children:
-            ...children(inputElm, composition([
+            ...children(inputElm, [
                 imports([
                     stripoutTextbox(), // clear browser's default styles
                 ]),
@@ -123,7 +123,7 @@ export const usesInputLayout = () => {
                     paddingInline  : paddingRefs.paddingInline,
                     paddingBlock   : paddingRefs.paddingBlock,
                 }),
-            ])),
+            ]),
             
             
             
