@@ -356,7 +356,7 @@ export const usesListSeparatorItemLayout = () => {
             
             
             // children:
-            ...children('hr', composition([
+            ...children('hr', [
                 layout({
                     // foregrounds:
                     foreg            : 'inherit',
@@ -372,7 +372,7 @@ export const usesListSeparatorItemLayout = () => {
                     marginBlockStart : `calc(${hcssProps.marginBlockStart} / 2)`,
                     marginBlockEnd   : `calc(${hcssProps.marginBlockEnd  } / 2)`,
                 }),
-            ])),
+            ]),
         }),
     ]);
 };
@@ -515,18 +515,18 @@ export const usesListLayout = () => {
             
             
             // borders:
-            ...children(['&', wrapperElm], composition([
+            ...children(['&', wrapperElm], [
                 layout({
                     // borders:
                     ...expandBorderStroke(), // expand borderStroke css vars
                     ...expandBorderRadius(), // expand borderRadius css vars
                 }),
-            ])),
+            ]),
             
             
             
             // children:
-            ...children(wrapperElm, composition([
+            ...children(wrapperElm, [
                 layout({
                     // layouts:
                     display        : 'flex',    // use block flexbox, so it takes the entire List's width
@@ -542,7 +542,7 @@ export const usesListLayout = () => {
                     
                     
                     // children:
-                    ...children(':nth-child(n)', composition([
+                    ...children(':nth-child(n)', [
                         layout({
                             // borders:
                          // borderRadius : 'inherit', // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -551,9 +551,9 @@ export const usesListLayout = () => {
                             [borderRadiusDecls.borderEndStartRadius]   : 'inherit', // copy wrapper's borderRadius
                             [borderRadiusDecls.borderEndEndRadius]     : 'inherit', // copy wrapper's borderRadius
                         }),
-                    ])),
+                    ]),
                 }),
-            ])),
+            ]),
             
             
             
@@ -608,7 +608,7 @@ export const usesListVariants = () => {
                     
                     
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         imports([
                             // borders:
                             usesBorderAsSeparatorBlock(),
@@ -617,7 +617,7 @@ export const usesListVariants = () => {
                             // layouts:
                             flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             isOrientationInline([ // inline
@@ -629,7 +629,7 @@ export const usesListVariants = () => {
                     
                     
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         imports([
                             // borders:
                             usesBorderAsSeparatorInline(),
@@ -638,7 +638,7 @@ export const usesListVariants = () => {
                             // layouts:
                             flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ]),
@@ -661,7 +661,7 @@ export const usesListVariants = () => {
             rule(['.flat', '.joined', '.breadcrumb'], [
                 layout({
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         layout({
                             // borders:
                             // kill separator between items:
@@ -670,15 +670,15 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(listItemElm, composition([
+                            ...children(listItemElm, [
                                 layout({
                                     // borders:
                                     // kill border on each item:
                                     [borderStrokeDecls.borderWidth] : 0,
                                 }),
-                            ])),
+                            ]),
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             
@@ -691,7 +691,7 @@ export const usesListVariants = () => {
                     
                     
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         layout({
                             // borders:
                             // kill separator between buttons:
@@ -700,7 +700,7 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(listItemElm, composition([
+                            ...children(listItemElm, [
                                 imports([
                                     // layouts:
                                     usesButtonLayout(),
@@ -709,15 +709,15 @@ export const usesListVariants = () => {
                                     // customize:
                                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'btn')), // apply general cssProps starting with btn***
                                 }),
-                            ])),
+                            ]),
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             rule('.tab', [
                 layout({
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         layout({
                             // borders:
                             // kill separator between tabs:
@@ -726,7 +726,7 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(listItemElm, composition([
+                            ...children(listItemElm, [
                                 layout({
                                     // borders:
                                     [borderDecls.borderCol] : 'inherit', // change borderColor independent to child's theme color
@@ -791,9 +791,9 @@ export const usesListVariants = () => {
                                         ]),
                                     ]),
                                 ]),
-                            ])),
+                            ]),
                         }),
-                    ])),
+                    ]),
                 }),
                 variants([
                     notOrientationInline([ // block
@@ -812,13 +812,13 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(wrapperElm, composition([
+                            ...children(wrapperElm, [
                                 layout({
                                     // spacings:
                                     // shift the items to right a bit, so the `active item` can hide the `borderRight`:
                                     marginInlineEnd : `calc(0px - ${borderStrokeRefs.borderWidth})`,
                                 }),
-                            ])),
+                            ]),
                         }),
                     ]),
                     isOrientationInline([ // inline
@@ -837,13 +837,13 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(wrapperElm, composition([
+                            ...children(wrapperElm, [
                                 layout({
                                     // spacings:
                                     // shift the items to bottom a bit, so the `active item` can hide the `borderBottom`:
                                     marginBlockEnd : `calc(0px - ${borderStrokeRefs.borderWidth})`,
                                 }),
-                            ])),
+                            ]),
                         }),
                     ]),
                 ]),
@@ -851,10 +851,10 @@ export const usesListVariants = () => {
             rule('.breadcrumb', [
                 layout({
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         layout({
                             // children:
-                            ...children(listItemElm, composition([
+                            ...children(listItemElm, [
                                 layout({
                                     // typos:
                                     lineHeight    : 1,
@@ -864,7 +864,7 @@ export const usesListVariants = () => {
                                     // customize:
                                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'breadcrumb')), // apply general cssProps starting with breadcrumb***
                                 }),
-                            ])),
+                            ]),
                         }),
                         variants([
                             isNotFirstChild([
@@ -874,7 +874,7 @@ export const usesListVariants = () => {
                                 ]),
                                 layout({
                                     // children:
-                                    ...children('::before', composition([
+                                    ...children('::before', [
                                         imports([
                                             usesIconImage(
                                                 /*iconImage: */cssProps.breadcrumbSeparatorImg,
@@ -891,11 +891,11 @@ export const usesListVariants = () => {
                                             // customize:
                                             ...usesGeneralProps(usesPrefixedProps(cssProps, 'breadcrumbSeparator')), // apply general cssProps starting with breadcrumbSeparator***
                                         }),
-                                    ])),
+                                    ]),
                                 }),
                             ]),
                         ]),
-                    ])),
+                    ]),
                 }),
             ]),
             rule('.bullet', [
@@ -913,7 +913,7 @@ export const usesListVariants = () => {
                     
                     
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         layout({
                             // borders:
                             // kill separator between bullets:
@@ -927,7 +927,7 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(listItemElm, composition([
+                            ...children(listItemElm, [
                                 layout({
                                     // borders:
                                     borderWidth  : borderStrokeRefs.borderWidth, 
@@ -947,9 +947,9 @@ export const usesListVariants = () => {
                                     // customize:
                                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'bullet')), // apply general cssProps starting with bullet***
                                 }),
-                            ])),
+                            ]),
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
             rule('.numbered', [
@@ -960,15 +960,15 @@ export const usesListVariants = () => {
                     
                     
                     // children:
-                    ...children(wrapperElm, composition([
+                    ...children(wrapperElm, [
                         layout({
                             // children:
-                            ...children(listItemElm, composition([
+                            ...children(listItemElm, [
                                 variants([
                                     rule(':not(.void)', [
                                         layout({
                                             // children:
-                                            ...children('::before', composition([
+                                            ...children('::before', [
                                                 layout({
                                                     // counters:
                                                     counterIncrement : 'ListNumber',
@@ -978,13 +978,13 @@ export const usesListVariants = () => {
                                                     // customize:
                                                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'numbered')), // apply general cssProps starting with numbered***
                                                 }),
-                                            ])),
+                                            ]),
                                         }),
                                     ])
                                 ]),
-                            ])),
+                            ]),
                         }),
-                    ])),
+                    ]),
                 }),
             ]),
         ], { minSpecificityWeight: 2 }),
