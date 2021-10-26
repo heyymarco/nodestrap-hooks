@@ -189,9 +189,9 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                         variants([
                             isFirstChild([
                                 vars({
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
@@ -204,9 +204,9 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                             ]),
                             isLastChild([
                                 vars({
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
@@ -228,9 +228,9 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                         variants([
                             isFirstChild([
                                 vars({
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
@@ -243,9 +243,9 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                             ]),
                             isLastChild([
                                 vars({
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
@@ -265,11 +265,11 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                     // children:
                     ...children(itemsSelector, [
                         vars({
+                            [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                             [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
                             [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
                             [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
                             [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
-                            [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                         }),
                         layout({
                             // borders:
