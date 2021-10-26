@@ -201,6 +201,8 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                                     // add rounded corners on top:
                                     [borderRadiusDecls.borderStartStartRadius      ] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                     [borderRadiusDecls.borderStartEndRadius        ] : `calc(${containerRefs.containerBorderStartEndRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    
+                                    /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
                             isLastChild([
@@ -214,6 +216,8 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                                     // add rounded corners on bottom:
                                     [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                     [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    
+                                    /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
                         ]),
@@ -236,6 +240,8 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                                     // add rounded corners on left:
                                     [borderRadiusDecls.borderStartStartRadius      ] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                     [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    
+                                    /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
                             isLastChild([
@@ -249,6 +255,8 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                                     // add rounded corners on right:
                                     [borderRadiusDecls.borderStartEndRadius        ] : `calc(${containerRefs.containerBorderStartEndRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                     [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    
+                                    /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
                         ]),
@@ -276,6 +284,8 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                             // add rounded corners on bottom:
                             [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
                             [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                            
+                            /* recursive calculation of borderRadius is not supported yet */
                         }),
                     ]),
                 }),
