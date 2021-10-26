@@ -174,7 +174,7 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     const [, , borderRadiusDecls]    = usesBorderRadius();
     
     
-    return composition([]); // TODO remove
+    
     return composition([
         imports([
             // layouts:
@@ -186,22 +186,22 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
             
             
             
-            // children:
-            ...children(itemsSelector, [
-                variants([
-                    // modify only at the 4 corners:
-                    rule([':first-child', ':last-child'], [ // 1 level of specificity
-                        vars({
-                            // the items inside the container => should NOT be a container too => should BE a valid separator
-                            // all container props here must be DELETED, otherwise we cannot consume the container props
-                            ...Object.fromEntries(
-                                Object.keys(mergeStyles(container()) ?? {})
-                                .map((propName) => [propName, 'unset'] as const)
-                            ),
-                        }),
-                    ]),
-                ]),
-            ]),
+            // // children:
+            // ...children(itemsSelector, [
+            //     variants([
+            //         // modify only at the 4 corners:
+            //         rule([':first-child', ':last-child'], [ // 1 level of specificity
+            //             vars({
+            //                 // the items inside the container => should NOT be a container too => should BE a valid separator
+            //                 // all container props here must be DELETED, otherwise we cannot consume the container props
+            //                 ...Object.fromEntries(
+            //                     Object.keys(mergeStyles(container()) ?? {})
+            //                     .map((propName) => [propName, 'unset'] as const)
+            //                 ),
+            //             }),
+            //         ]),
+            //     ]),
+            // ]),
         }),
         variants([
             !!orientationBlockRule && rule(orientationBlockRule, [
@@ -210,19 +210,29 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                     ...children(itemsSelector, [
                         variants([
                             isFirstChild([
+                                vars({
+                                    [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                }),
                                 layout({
                                     // borders:
                                     // add rounded corners on top:
-                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
-                                    [borderRadiusDecls.borderStartEndRadius]   : `calc(${containerRefs.containerBorderStartEndRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderStartStartRadius      ] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderStartEndRadius        ] : `calc(${containerRefs.containerBorderStartEndRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                 }),
                             ]),
                             isLastChild([
+                                vars({
+                                    [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                }),
                                 layout({
                                     // borders:
                                     // add rounded corners on bottom:
-                                    [borderRadiusDecls.borderEndStartRadius]   : `calc(${containerRefs.containerBorderEndStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
-                                    [borderRadiusDecls.borderEndEndRadius]     : `calc(${containerRefs.containerBorderEndEndRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                 }),
                             ]),
                         ]),
@@ -235,19 +245,29 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
                     ...children(itemsSelector, [
                         variants([
                             isFirstChild([
+                                vars({
+                                    [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                }),
                                 layout({
                                     // borders:
                                     // add rounded corners on left:
-                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
-                                    [borderRadiusDecls.borderEndStartRadius]   : `calc(${containerRefs.containerBorderEndStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderStartStartRadius      ] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                 }),
                             ]),
                             isLastChild([
+                                vars({
+                                    [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
+                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                }),
                                 layout({
                                     // borders:
                                     // add rounded corners on right:
-                                    [borderRadiusDecls.borderStartEndRadius]   : `calc(${containerRefs.containerBorderStartEndRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
-                                    [borderRadiusDecls.borderEndEndRadius]     : `calc(${containerRefs.containerBorderEndEndRadius} - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderStartEndRadius        ] : `calc(${containerRefs.containerBorderStartEndRadius  } - ${containerRefs.containerBorderWidth} - 0.5px)`,
+                                    [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - 0.5px)`,
                                 }),
                             ]),
                         ]),
