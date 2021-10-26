@@ -335,36 +335,26 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             ]),
         ]),
         
-        // removes unecessary border radius (at unremoved border stroke):
+        // removes unecessary border radius:
+        // although the border stroke was/not removed, it *affects* the children's border radius
+        // do not remove border radius at the parent's corners (:first-child & :last-child)
         variants([
-            isNotFirstChild([
+            rule(':where(:not(:first-child))', [ // :where(...) => avoid increasing specificity
                 layout({
-                    // children:
-                    // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
-                        layout({
-                            // borders:
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            // remove rounded corners on top:
-                            [borderRadiusDecls.borderStartStartRadius] : 0,
-                            [borderRadiusDecls.borderStartEndRadius]   : 0,
-                        }),
-                    ]),
+                    // borders:
+                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // remove rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : 0,
+                    [borderRadiusDecls.borderStartEndRadius]   : 0,
                 }),
             ]),
-            isNotLastChild([
+            rule(':where(:not(:last-child))', [ // :where(...) => avoid increasing specificity
                 layout({
-                    // children:
-                    // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
-                        layout({
-                            // borders:
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            // remove rounded corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius]   : 0,
-                            [borderRadiusDecls.borderEndEndRadius]     : 0,
-                        }),
-                    ]),
+                    // borders:
+                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // remove rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : 0,
+                    [borderRadiusDecls.borderEndEndRadius]     : 0,
                 }),
             ]),
         ]),
@@ -425,36 +415,26 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             ]),
         ]),
         
-        // removes unecessary border radius (at unremoved border stroke):
+        // removes unecessary border radius:
+        // although the border stroke was/not removed, it *affects* the children's border radius
+        // do not remove border radius at the parent's corners (:first-child & :last-child)
         variants([
-            isNotFirstChild([
+            rule(':where(:not(:first-child))', [ // :where(...) => avoid increasing specificity
                 layout({
-                    // children:
-                    // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
-                        layout({
-                            // borders:
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            // remove rounded corners on left:
-                            [borderRadiusDecls.borderStartStartRadius] : 0,
-                            [borderRadiusDecls.borderEndStartRadius]   : 0,
-                        }),
-                    ]),
+                    // borders:
+                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // remove rounded corners on left:
+                    [borderRadiusDecls.borderStartStartRadius] : 0,
+                    [borderRadiusDecls.borderEndStartRadius]   : 0,
                 }),
             ]),
-            isNotLastChild([
+            rule(':where(:not(:last-child))', [ // :where(...) => avoid increasing specificity
                 layout({
-                    // children:
-                    // modify (container|any) & container>separator (if any)
-                    ...children(['&', ':where(&)>:nth-child(n)'], [ // `:where(&) *` => zero specificity 
-                        layout({
-                            // borders:
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            // remove rounded corners on right:
-                            [borderRadiusDecls.borderStartEndRadius]   : 0,
-                            [borderRadiusDecls.borderEndEndRadius]     : 0,
-                        }),
-                    ]),
+                    // borders:
+                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // remove rounded corners on right:
+                    [borderRadiusDecls.borderStartEndRadius]   : 0,
+                    [borderRadiusDecls.borderEndEndRadius]     : 0,
                 }),
             ]),
         ]),
