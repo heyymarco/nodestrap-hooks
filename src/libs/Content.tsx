@@ -12,7 +12,6 @@ import {
     
     // compositions:
     composition,
-    mergeStyles,
     mainComposition,
     imports,
     
@@ -31,9 +30,7 @@ import {
     rule,
     noRule,
     isFirstChild,
-    isNotFirstChild,
     isLastChild,
-    isNotLastChild,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
