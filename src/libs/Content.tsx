@@ -180,29 +180,10 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
             // layouts:
             container(),
         ]),
-        layout({
-            // borders:
-         // overflow     : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
-            
-            
-            
-            // // children:
-            // ...children(itemsSelector, [
-            //     variants([
-            //         // modify only at the 4 corners:
-            //         rule([':first-child', ':last-child'], [ // 1 level of specificity
-            //             vars({
-            //                 // the items inside the container => should NOT be a container too => should BE a valid separator
-            //                 // all container props here must be DELETED, otherwise we cannot consume the container props
-            //                 ...Object.fromEntries(
-            //                     Object.keys(mergeStyles(container()) ?? {})
-            //                     .map((propName) => [propName, 'unset'] as const)
-            //                 ),
-            //             }),
-            //         ]),
-            //     ]),
-            // ]),
-        }),
+        // layout({
+        //     // borders:
+        //     overflow : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
+        // }),
         variants([
             !!orientationBlockRule && rule(orientationBlockRule, [
                 layout({
