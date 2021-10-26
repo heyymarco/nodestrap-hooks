@@ -98,7 +98,10 @@ function App() {
 					orientation={orientation}
 					listStyle={listStyle}
 				>
-					<img src='https://picsum.photos/300/200' alt='' />
+					<ListItem>
+						<img src='https://picsum.photos/300/200' alt='' />
+						<img src='https://picsum.photos/300/200' alt='' />
+					</ListItem>
 					<>hello</>
 					<ListSeparatorItem />
 					<ListItem>world</ListItem>
