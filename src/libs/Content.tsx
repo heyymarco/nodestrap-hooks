@@ -306,7 +306,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             boxShadow         : undefined, // remove shadow
         }),
         
-        // take care border stroke:
+        // removes unecessary border stroke:
         variants([
             // supports for Card too
             
@@ -335,7 +335,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             ]),
         ]),
         
-        // take care border radius:
+        // removes unecessary border radius:
         variants([
             isNotFirstChild([
                 layout({
@@ -396,7 +396,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             boxShadow         : undefined, // remove shadow
         }),
         
-        // take care border stroke:
+        // removes unecessary border stroke:
         variants([
             // supports for Card too
             
@@ -425,7 +425,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             ]),
         ]),
         
-        // take care border radius:
+        // removes unecessary border radius:
         variants([
             isNotFirstChild([
                 layout({
