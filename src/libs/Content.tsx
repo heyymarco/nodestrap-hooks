@@ -335,7 +335,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             ]),
         ]),
         
-        // removes unecessary border radius:
+        // removes unecessary border radius (at unremoved border stroke):
         variants([
             isNotFirstChild([
                 layout({
@@ -425,7 +425,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             ]),
         ]),
         
-        // removes unecessary border radius:
+        // removes unecessary border radius (at unremoved border stroke):
         variants([
             isNotFirstChild([
                 layout({
