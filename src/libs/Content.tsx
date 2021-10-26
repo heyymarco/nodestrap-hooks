@@ -174,7 +174,7 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     const [, , borderRadiusDecls]    = usesBorderRadius();
     
     
-    
+    return composition([]); // TODO remove
     return composition([
         imports([
             // layouts:
@@ -316,7 +316,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             // remove double border by removing bottom-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
-            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, [ // :where(...) => avoid increasing specificity
+            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
@@ -406,7 +406,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             // remove double border by removing right-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
-            rule(`:where(:not(:nth-last-child(${(replaceLast ? 2 : 0)})))`, [ // :where(...) => avoid increasing specificity
+            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => avoid increasing specificity
                 layout({
                     // borders:
                     borderInlineEndWidth   : 0, // remove right-border
