@@ -37,7 +37,7 @@ function App() {
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Accordions.OrientationName|undefined>(undefined);
 
-	const listStyles = [undefined, 'bullet'];
+	const listStyles = [undefined, 'content','flat','flush','joined','btn','tab','breadcrumb','bullet','numbered'];
 	const [listStyle,    setListStyle     ] = useState<Accordions.ListStyle|undefined>(undefined);
 
 	
@@ -55,6 +55,8 @@ function App() {
 					listStyle={listStyle}
 				>
 					<AccordionItem label='test'>
+						<img src='https://picsum.photos/300/200' alt='' />
+						<img src='https://picsum.photos/300/200' alt='' />
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur odit voluptatum esse debitis praesentium non labore error ex eius mollitia, aliquid quos asperiores ullam. Cupiditate pariatur vitae minus nisi provident?</p>
 					</AccordionItem>
