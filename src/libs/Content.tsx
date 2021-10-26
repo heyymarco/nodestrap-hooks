@@ -165,10 +165,10 @@ export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     // dependencies:
     
     // layouts:
-    const [container, containerRefs] = usesContainer();
+    const [container, containerRefs, containerDecls   ] = usesContainer();
     
     // borders:
-    const [, , borderRadiusDecls]    = usesBorderRadius();
+    const [         ,              , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -305,12 +305,20 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
     
     // dependencies:
     
+    // layouts:
+    const [, , containerDecls   ] = usesContainer();
+    
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
     
     
     
     return composition([
+        vars({
+            // borders:
+            // if the current separator also acts as a container => the border width is effectively gone (just for separator only)
+            [containerDecls.containerBorderWidth] : 0,
+        }),
         layout({
             // borders:
             borderInlineWidth : 0, // remove (left|right)-border
@@ -385,12 +393,20 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
     
     // dependencies:
     
+    // layouts:
+    const [, , containerDecls   ] = usesContainer();
+    
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
     
     
     
     return composition([
+        vars({
+            // borders:
+            // if the current separator also acts as a container => the border width is effectively gone (just for separator only)
+            [containerDecls.containerBorderWidth] : 0,
+        }),
         layout({
             // borders:
             borderBlockWidth  : 0, // remove (top|bottom)-border
