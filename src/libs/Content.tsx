@@ -316,7 +316,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             // remove double border by removing bottom-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
-            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => avoid increasing specificity
+            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
@@ -327,7 +327,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             
             // remove top-border at the header, so that it wouldn't collide with the Card's top-border
             // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
-            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => avoid increasing specificity
+            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
@@ -339,7 +339,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
         // although the border stroke was/not removed, it *affects* the children's border radius
         // do not remove border radius at the parent's corners (:first-child & :last-child)
         variants([
-            rule(':where(:not(:first-child))', [ // :where(...) => avoid increasing specificity
+            rule(':where(:not(:first-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -348,7 +348,7 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
                     [borderRadiusDecls.borderStartEndRadius]   : 0,
                 }),
             ]),
-            rule(':where(:not(:last-child))', [ // :where(...) => avoid increasing specificity
+            rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -396,7 +396,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             // remove double border by removing right-border starting from the third-last-item to the first-item
             // and
             // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
-            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => avoid increasing specificity
+            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     borderInlineEndWidth   : 0, // remove right-border
@@ -407,7 +407,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             
             // remove left-border at the header, so that it wouldn't collide with the Card's left-border
             // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
-            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => avoid increasing specificity
+            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     borderInlineStartWidth : 0, // remove left-border
@@ -419,7 +419,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
         // although the border stroke was/not removed, it *affects* the children's border radius
         // do not remove border radius at the parent's corners (:first-child & :last-child)
         variants([
-            rule(':where(:not(:first-child))', [ // :where(...) => avoid increasing specificity
+            rule(':where(:not(:first-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -428,7 +428,7 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
                     [borderRadiusDecls.borderEndStartRadius]   : 0,
                 }),
             ]),
-            rule(':where(:not(:last-child))', [ // :where(...) => avoid increasing specificity
+            rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
@@ -464,7 +464,7 @@ export const usesMediaBorderSeparator = () => {
             
             // because we avoid modifying paragraph's top-border, we delegate the top-border to the <media>
             // so, we need to restore bottom-border that was removed by `usesBorderAsSeparatorBlock()`
-            rule(':where(:not(:nth-last-child(0)))', [
+            rule('&', [
                 layout({
                     // borders:
                     borderBlockEndWidth    : undefined, // restore bottom-border
@@ -472,7 +472,7 @@ export const usesMediaBorderSeparator = () => {
             ]),
             // then replace the algoritm above with this one:
             // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
-            rule(':where(:last-child)', [ // :where(...) => avoid increasing specificity
+            rule(':where(:last-child)', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
                     borderBlockEndWidth    : 0, // remove bottom-border
