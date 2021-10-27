@@ -479,11 +479,11 @@ export const usesListLayout = () => {
     // dependencies:
     
     // colors:
-    const [border                           ] = usesBorder();
+    const [border      ] = usesBorder();
     
     // borders:
-    const [borderStroke                     ] = usesBorderStroke();
-    const [borderRadius, , borderRadiusDecls] = usesBorderRadius();
+    const [borderStroke] = usesBorderStroke();
+    const [borderRadius] = usesBorderRadius();
     
     
     
