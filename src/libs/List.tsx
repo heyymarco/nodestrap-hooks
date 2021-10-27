@@ -1239,6 +1239,10 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
         tag,
         
         
+        // accessibilities:
+        role,
+        
+        
         // behaviors:
         actionCtrl,
         
@@ -1250,8 +1254,15 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const parentTag = tag ?? 'ul';
-    const wrapTag   = ['ul', 'ol'].includes(parentTag) ? 'li' : 'div';
+    const tagFn          = tag ?? 'ul';
+    const isSemanticList = ['ul', 'ol'].includes(tagFn);
+    const wrapTagFn      = isSemanticList ? 'li' : 'div';
+    
+    const roleAbs        = role ?? 'list';
+    const isList         = (roleAbs === 'list');
+    
+    const roleFn         = isList ? (isSemanticList ? '' : roleAbs   ) : roleAbs;
+    const subRoleFn      = isList ? (isSemanticList ? '' : 'listitem') : '';
     
     
     
@@ -1263,11 +1274,11 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             
             
             // essentials:
-            tag={parentTag}
+            tag={tagFn}
             
             
             // accessibilities:
-            role={props.role ?? ((wrapTag === 'li') ? undefined : 'list')}
+            role={roleFn || undefined}
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
@@ -1282,11 +1293,11 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                 <Element
                     // essentials:
                     key={index}
-                    tag={wrapTag}
+                    tag={wrapTagFn}
                     
                     
                     // accessibilities:
-                    role={(wrapTag === 'li') ? undefined : 'listitem'}
+                    role={subRoleFn || undefined}
                 >
                     {
                         isTypeOf(child, ListItem)
