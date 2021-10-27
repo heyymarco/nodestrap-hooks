@@ -49,6 +49,7 @@ import {
     // utilities:
     isTypeOf,
     setRef,
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -1050,7 +1051,8 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     
     // fn props:
-    const mildFn = props.mild ?? false;
+    const [tag, role] = defineSemantic(props, { preferredTag: 'nav', preferredRole: 'navigation' });
+    const mildFn      = props.mild ?? false;
     
     
     
@@ -1158,7 +1160,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             
             
             // essentials:
-            tag={props.tag ?? 'nav'}
+            tag={tag}
             elmRef={(elm) => {
                 setRef(props.elmRef, elm);
                 setRef(navbarRef, elm);
@@ -1166,6 +1168,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             
             
             // accessibilities:
+            role={role}
             active={isActive}
             
             
