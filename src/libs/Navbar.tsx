@@ -968,7 +968,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 export interface NavbarMenuProps<TElement extends HTMLElement = HTMLElement>
     extends
         ActionControlProps<TElement>,
-        React.AnchorHTMLAttributes<TElement>
+        Omit<React.AnchorHTMLAttributes<TElement>, 'role'>
 {
 }
 export function NavbarMenu<TElement extends HTMLElement = HTMLElement>(props: NavbarMenuProps<TElement>) {
