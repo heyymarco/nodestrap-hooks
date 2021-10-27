@@ -292,7 +292,7 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
 
 
     // accessibilities:
-    role?           : React.AriaRole|''|false
+    role?           : React.AriaRole
 
 
     // classes:
