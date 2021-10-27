@@ -47,6 +47,7 @@ import {
     
     // utilities:
     isTypeOf,
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -1235,14 +1236,6 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     // rest props:
     const {
-        // essentials:
-        tag,
-        
-        
-        // accessibilities:
-        role,
-        
-        
         // behaviors:
         actionCtrl,
         
@@ -1254,15 +1247,9 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const roleAbs        = role ?? 'list';
-    const isList         = (roleAbs === 'list');
-    
-    const tagFn          = tag ?? (isList ? 'ul' : undefined);
-    const isSemanticList = !!tagFn && ['ul', 'ol'].includes(tagFn);
-    const wrapTagFn      = isSemanticList ? 'li' : undefined;
-    
-    const roleFn         = isList ? (isSemanticList ? '' : roleAbs   ) : roleAbs;
-    const subRoleFn      = isList ? (isSemanticList ? '' : 'listitem') : '';
+    const [tag, role, isList, isSemantic] = defineSemantic(props, { preferredTag: ['ul', 'ol'], preferredRole: 'list' });    
+    const wrapTag = isSemantic ? 'li' : undefined;
+    const subRole = isList ? (isSemantic ? '' : 'listitem') : '';
     
     
     
@@ -1274,11 +1261,11 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             
             
             // essentials:
-            tag={tagFn}
+            tag={tag}
             
             
             // accessibilities:
-            role={roleFn}
+            role={role}
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
@@ -1293,11 +1280,11 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                 <Element
                     // essentials:
                     key={index}
-                    tag={wrapTagFn}
+                    tag={wrapTag}
                     
                     
                     // accessibilities:
-                    role={subRoleFn}
+                    role={subRole}
                 >
                     {
                         isTypeOf(child, ListItem)
