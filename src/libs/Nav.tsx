@@ -135,9 +135,26 @@ export interface NavProps<TElement extends HTMLElement = HTMLElement>
 export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<TElement>) {
     // rest props:
     const {
+        // essentials:
+        tag,
+        
+        
         // accessibilities:
+        role,
         label,
     ...restProps} = props;
+    
+    
+    
+    // fn props:
+    const tagFn         = tag ?? 'nav';
+    const isSemanticNav = (tagFn === 'nav');
+    
+    const roleAbs       = role ?? 'navigation';
+    const isNav         = (roleAbs === 'navigation');
+    
+    const roleFn        = isNav ? (isSemanticNav ? '' : roleAbs) : roleAbs;
+    const labelFn       = label ?? (isNav ? 'Page navigation' : '');
     
     
     
@@ -149,11 +166,12 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             
             
             // essentials:
-            tag={props.tag ?? 'nav'}
+            tag={tagFn}
             
             
             // accessibilities:
-            aria-label={label ?? 'Page navigation'}
+            role={roleFn}
+            aria-label={labelFn || undefined}
             
             
             // layouts:
