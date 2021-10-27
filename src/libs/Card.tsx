@@ -24,6 +24,11 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -406,6 +411,11 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
     
     
     
+    // fn props:
+    const [tag, role] = defineSemantic(props, { preferredTag: 'article', preferredRole: 'article' });  
+    
+    
+    
     // jsx:
     return (
         <Indicator<TElement>
@@ -414,10 +424,11 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
             
             
             // essentials:
-            tag={props.tag ?? 'article'}
+            tag={tag}
             
             
             // accessibilities:
+            role={role}
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
