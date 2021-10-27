@@ -5,6 +5,10 @@ import {
 
 // cssfn:
 import {
+    // utilities:
+    defineSemantic,
+}                           from './react-cssfn' // cssfn for react
+import {
     // hooks:
     ListStyle,
     ListVariant,
@@ -135,27 +139,15 @@ export interface NavProps<TElement extends HTMLElement = HTMLElement>
 export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<TElement>) {
     // rest props:
     const {
-        // essentials:
-        tag,
-        
-        
         // accessibilities:
-        role,
         label,
     ...restProps} = props;
     
     
     
     // fn props:
-    const roleAbs       = role ?? 'navigation';
-    const isNav         = (roleAbs === 'navigation');
-    
-    const tagFn         = tag ?? (isNav ? 'nav' : undefined);
-    const isSemanticNav = (tagFn === 'nav');
-    
-    const roleFn        = isNav ? (isSemanticNav ? '' : roleAbs) : roleAbs;
-    
-    const labelFn       = label ?? (isNav ? 'Page navigation' : '');
+    const [tag, role, isNav] = defineSemantic(props, { preferredTag: 'nav', preferredRole: 'navigation' });
+    const labelFn            = label ?? (isNav ? 'Page navigation' : '');
     
     
     
@@ -167,11 +159,11 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             
             
             // essentials:
-            tag={tagFn}
+            tag={tag}
             
             
             // accessibilities:
-            role={roleFn}
+            role={role}
             aria-label={labelFn}
             
             
