@@ -333,6 +333,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
 
             // accessibilities:
             role={props.role || undefined}
+            aria-label={props.aria-label || undefined}
 
 
             // classes:
