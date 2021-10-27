@@ -143,13 +143,13 @@ export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>
 
 export interface DefineSemanticOptions {
     preferredRole : SingleOrArray<React.AriaRole>
-    preferredTag  : SingleOrArray<Tag>
+    preferredTag  : SingleOrArray<Optional<Tag>>
 }
 export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: DefineSemanticOptions) => {
     const roleAbs       : React.AriaRole = props.role ?? (Array.isArray(options.preferredRole) ? options.preferredRole[0] : options.preferredRole);
     const isDesiredType : boolean        = (Array.isArray(options.preferredRole) ? options.preferredRole.includes(roleAbs) : (options.preferredRole === roleAbs));
     
-    const tagFn         : Tag|undefined  = props.tag ?? (isDesiredType ? (Array.isArray(options.preferredTag) ? options.preferredTag[0] : options.preferredTag) : undefined);
+    const tagFn         : Tag|undefined  = props.tag ?? (isDesiredType ? (Array.isArray(options.preferredTag) ? (options.preferredTag.filter((tag): tag is Tag => !!tag)?.[0] ?? undefined) : (options.preferredTag ?? undefined)) : undefined);
     const isSemanticTag : boolean        = !!tagFn && (Array.isArray(options.preferredTag) ? options.preferredTag.includes(tagFn) : (options.preferredTag === tagFn));
     
     const roleFn        : React.AriaRole = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs;
