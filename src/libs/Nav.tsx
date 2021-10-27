@@ -147,13 +147,14 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
     
     
     // fn props:
-    const tagFn         = tag ?? 'nav';
-    const isSemanticNav = (tagFn === 'nav');
-    
     const roleAbs       = role ?? 'navigation';
     const isNav         = (roleAbs === 'navigation');
     
+    const tagFn         = tag ?? (isNav ? 'nav' : undefined);
+    const isSemanticNav = (tagFn === 'nav');
+    
     const roleFn        = isNav ? (isSemanticNav ? '' : roleAbs) : roleAbs;
+    
     const labelFn       = label ?? (isNav ? 'Page navigation' : '');
     
     
@@ -171,7 +172,7 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             
             // accessibilities:
             role={roleFn}
-            aria-label={labelFn || undefined}
+            aria-label={labelFn}
             
             
             // layouts:
