@@ -29,6 +29,7 @@ import {
     
     // utilities:
     isTypeOf,
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -273,7 +274,8 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
     
     
     // fn props:
-    const mildFn  = props.mild ?? false;
+    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole: 'alert' });  
+    const mildFn      = props.mild ?? false;
     
     
     
@@ -426,6 +428,14 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
         <Popup<TElement>
             // other props:
             {...restProps}
+            
+            
+            // essentials:
+            tag={tag}
+            
+            
+            // accessibilities:
+            role={role}
             
             
             // variants:
