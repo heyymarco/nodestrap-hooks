@@ -1254,12 +1254,12 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const tagFn          = tag ?? 'ul';
-    const isSemanticList = ['ul', 'ol'].includes(tagFn);
-    const wrapTagFn      = isSemanticList ? 'li' : 'div';
-    
     const roleAbs        = role ?? 'list';
     const isList         = (roleAbs === 'list');
+    
+    const tagFn          = tag ?? (isList ? 'ul' : undefined);
+    const isSemanticList = !!tagFn && ['ul', 'ol'].includes(tagFn);
+    const wrapTagFn      = isSemanticList ? 'li' : undefined;
     
     const roleFn         = isList ? (isSemanticList ? '' : roleAbs   ) : roleAbs;
     const subRoleFn      = isList ? (isSemanticList ? '' : 'listitem') : '';
@@ -1278,7 +1278,7 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             
             
             // accessibilities:
-            role={roleFn || undefined}
+            role={roleFn}
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
@@ -1297,7 +1297,7 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                     
                     
                     // accessibilities:
-                    role={subRoleFn || undefined}
+                    role={subRoleFn}
                 >
                     {
                         isTypeOf(child, ListItem)
