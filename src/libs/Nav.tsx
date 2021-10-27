@@ -146,8 +146,7 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
     
     
     // fn props:
-    const [tag, role, isNav] = defineSemantic(props, { preferredTag: 'nav', preferredRole: 'navigation' });
-    const labelFn            = label ?? (isNav ? 'Page navigation' : '');
+    const [tag, role] = defineSemantic(props, { preferredTag: 'nav', preferredRole: 'navigation' });
     
     
     
@@ -164,7 +163,6 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             
             // accessibilities:
             role={role}
-            aria-label={labelFn}
             
             
             // layouts:
