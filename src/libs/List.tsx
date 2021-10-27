@@ -25,7 +25,9 @@ import {
     variants,
     states,
     rule,
+    isFirstChild,
     isNotFirstChild,
+    isLastChild,
     
     
     
@@ -538,20 +540,6 @@ export const usesListLayout = () => {
                     
                     // sizes:
                     flex           : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
-                    
-                    
-                    
-                    // children:
-                    ...children(':nth-child(n)', [
-                        layout({
-                            // borders:
-                         // borderRadius : 'inherit', // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            [borderRadiusDecls.borderStartStartRadius] : 'inherit', // copy wrapper's borderRadius
-                            [borderRadiusDecls.borderStartEndRadius]   : 'inherit', // copy wrapper's borderRadius
-                            [borderRadiusDecls.borderEndStartRadius]   : 'inherit', // copy wrapper's borderRadius
-                            [borderRadiusDecls.borderEndEndRadius]     : 'inherit', // copy wrapper's borderRadius
-                        }),
-                    ]),
                 }),
             ]),
             
@@ -616,6 +604,30 @@ export const usesListVariants = () => {
                         layout({
                             // layouts:
                             flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
+                            
+                            
+                            
+                            // children:
+                            ...children(':nth-child(n)', [
+                                variants([
+                                    isFirstChild([
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on top:
+                                            [borderRadiusDecls.borderStartStartRadius] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderStartEndRadius  ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                    isLastChild([
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on bottom:
+                                            [borderRadiusDecls.borderEndStartRadius  ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndEndRadius    ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                ]),
+                            ]),
                         }),
                     ]),
                 }),
@@ -637,6 +649,30 @@ export const usesListVariants = () => {
                         layout({
                             // layouts:
                             flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
+                            
+                            
+                            
+                            // children:
+                            ...children(':nth-child(n)', [
+                                variants([
+                                    isFirstChild([
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on left:
+                                            [borderRadiusDecls.borderStartStartRadius] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndStartRadius  ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                    isLastChild([
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on right:
+                                            [borderRadiusDecls.borderStartEndRadius  ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndEndRadius    ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                ]),
+                            ]),
                         }),
                     ]),
                 }),
