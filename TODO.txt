@@ -1,12 +1,8 @@
 top priority:
-fix unclipped inner border radius on Content
-fix unclipped inner border radius on List
-
-
-
-
-remove unused translate() on firefox
 fix overflow detection Navbar padding-end
+fix aria on List
+remove unused translate() on firefox
+Progress
 
 
 
@@ -18,7 +14,6 @@ css-config => filter valid props
 low priority:
 Range => dial variant
 Media => for profile image, video, static images, gifs, svgs, etc
-Progress
-List:variant_tab => move up tab border radius from ListItem to Wrapper
 fix focus-visible
+List:variant_tab => move up tab border radius from ListItem to Wrapper
 Navbar => use List
