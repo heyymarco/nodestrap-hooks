@@ -17,6 +17,7 @@ import {
 // cssfn:
 import type {
     Optional,
+    SingleOrArray,
     Factory,
     ProductOrFactory,
 }                           from './types'      // cssfn's types
@@ -33,6 +34,11 @@ import {
     // cssfn hooks:
     usesCssfn,
 }                           from './cssfn'      // cssfn core
+
+
+
+// general types:
+export type Tag = keyof JSX.IntrinsicElements
 
 
 
@@ -133,6 +139,29 @@ export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>
             (elmRef as React.MutableRefObject<TElement|null>).current = elm;
         } // if
     } // if
+};
+
+export interface DefineSemanticOptions {
+    preferredRole : SingleOrArray<React.AriaRole>
+    preferredTag  : SingleOrArray<Tag>
+}
+export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: DefineSemanticOptions) => {
+    const roleAbs       : React.AriaRole = props.role ?? (Array.isArray(options.preferredRole) ? options.preferredRole[0] : options.preferredRole);
+    const isDesiredType : boolean        = (Array.isArray(options.preferredRole) ? options.preferredRole.includes(roleAbs) : (options.preferredRole === roleAbs));
+    
+    const tagFn         : Tag|undefined  = props.tag ?? (isDesiredType ? (Array.isArray(options.preferredTag) ? options.preferredTag[0] : options.preferredTag) : undefined);
+    const isSemanticTag : boolean        = !!tagFn && (Array.isArray(options.preferredTag) ? options.preferredTag.includes(tagFn) : (options.preferredTag === tagFn));
+    
+    const roleFn        : React.AriaRole = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs;
+    
+    
+    
+    return [
+        tagFn,
+        roleFn,
+        isDesiredType,
+        isSemanticTag,
+    ] as const;
 };
 
 
@@ -282,7 +311,7 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
         React.AriaAttributes
 {
     // essentials:
-    tag?            : keyof JSX.IntrinsicElements
+    tag?            : Tag
     style?          : React.CSSProperties
     elmRef?         : React.Ref<TElement> // setter ref
 
