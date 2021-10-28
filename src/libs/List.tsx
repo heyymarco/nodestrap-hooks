@@ -1151,7 +1151,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
-    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (((props.preferredRole ?? (props.href ? 'link' : 'button')) === 'button') ? 'button' : null) });
+    // const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (((props.preferredRole ?? (props.href ? 'link' : 'button')) === 'button') ? 'button' : null) });
     
     
     
@@ -1165,7 +1165,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : 'button')}
+            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : null    )}
             preferredRole={props.preferredRole ?? (props.href ? 'link' : 'button')}
             
             
@@ -1181,11 +1181,11 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             mainClass={props.mainClass ?? [sheet.main, sheetAction.main].join(' ')}
             
             
-            // Button props:
-            {...{
-                // actions:
-                type : props.type ?? (isSemanticBtn ? 'button' : undefined),
-            }}
+            // // Button props:
+            // {...{
+            //     // actions:
+            //     type : props.type ?? (isSemanticBtn ? 'button' : undefined),
+            // }}
         />
         :
         <Indicator<TElement>
