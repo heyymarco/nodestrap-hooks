@@ -1151,6 +1151,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
+    /* not using <button> for "button" because the children may contain any_html_elements */
     // const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (((props.preferredRole ?? (props.href ? 'link' : 'button')) === 'button') ? 'button' : null) });
     
     
@@ -1165,7 +1166,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : null    )}
+            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : null    )} /* not using <button> for "button" because the children may contain any_html_elements */
             preferredRole={props.preferredRole ?? (props.href ? 'link' : 'button')}
             
             
@@ -1181,6 +1182,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             mainClass={props.mainClass ?? [sheet.main, sheetAction.main].join(' ')}
             
             
+            /* not using <button> for "button" because the children may contain any_html_elements */
             // // Button props:
             // {...{
             //     // actions:
