@@ -308,22 +308,23 @@ const isHtmlProp = (propName: string) => propName.startsWith('on') || propName.s
 export interface ElementProps<TElement extends HTMLElement = HTMLElement>
     extends
         React.DOMAttributes<TElement>,
-        React.AriaAttributes
+        React.AriaAttributes,
+        SemanticProps
 {
     // essentials:
     tag?            : Tag
     style?          : React.CSSProperties
     elmRef?         : React.Ref<TElement> // setter ref
-
-
+    
+    
     // identifiers:
     id?             : string
-
-
+    
+    
     // accessibilities:
     role?           : React.AriaRole
-
-
+    
+    
     // classes:
     mainClass?      : Optional<string>
     classes?        : Optional<string>[]
@@ -349,7 +350,8 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
 
 
     // fn props:
-    const Tag = (props.tag ?? 'div');
+    const [tag, role] = defineSemantic(props, { preferredTag: props.preferredTag, preferredRole: props.preferredRole });
+    const Tag         = (tag ?? 'div');
 
     
     
@@ -361,7 +363,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
 
 
             // accessibilities:
-            role={props.role || undefined}
+            role={role || undefined}
             aria-label={props['aria-label'] || undefined}
 
 
