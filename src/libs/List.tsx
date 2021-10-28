@@ -1151,6 +1151,10 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
+    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: 'button' });
+    
+    
+    
     // jsx:
     return (
         props.actionCtrl
@@ -1180,7 +1184,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             // Button props:
             {...{
                 // actions:
-                type : props.type ?? (props.href ? undefined : 'button'),
+                type : props.type ?? (isSemanticBtn ? 'button' : undefined),
             }}
         />
         :
