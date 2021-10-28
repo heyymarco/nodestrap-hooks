@@ -415,6 +415,10 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             // events:
             // watch [escape key] on the whole Dropdown, including DropdownElement & DropdownElement's children:
             onKeyUp={(e) => {
+                props.onKeyUp?.(e);
+                
+                
+                
                 if (!e.defaultPrevented) {
                     if ((e.key === 'Escape') || (e.code === 'Escape')) {
                         if (onActiveChange) {
@@ -426,6 +430,10 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             }}
             
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // states:
                 activePassiveState.handleAnimationEnd(e);
             }}
