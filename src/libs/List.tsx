@@ -1236,6 +1236,11 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     // rest props:
     const {
+        // semantics:
+        preferredTag  = ['ul', 'ol'],
+        preferredRole = 'list',
+        
+        
         // behaviors:
         actionCtrl,
         
@@ -1247,7 +1252,7 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const [tag, role, isList, isSemantic] = defineSemantic(props, { preferredTag: ['ul', 'ol'], preferredRole: 'list' });
+    const [, , isList, isSemantic] = defineSemantic(props, { preferredTag, preferredRole });
     const wrapTag = isSemantic ? 'li' : undefined;
     const subRole = isList ? (isSemantic ? '' : 'listitem') : '';
     
@@ -1260,12 +1265,14 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             {...restProps}
             
             
-            // essentials:
-            tag={tag}
+            // semantics:
+            {...{
+                preferredTag,
+                preferredRole,
+            }}
             
             
             // accessibilities:
-            role={role}
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
