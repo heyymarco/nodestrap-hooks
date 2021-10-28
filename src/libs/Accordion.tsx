@@ -245,8 +245,9 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             {...restProps}
             
             
-            // essentials:
-            tag={props.tag ?? 'h1'}
+            // semantics:
+            preferredTag={props.preferredTag   ?? ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']}
+            preferredRole={props.preferredRole ?? 'heading'}
             
             
             // accessibilities:
