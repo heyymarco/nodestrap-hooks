@@ -388,7 +388,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             
             
             // accessibilities:
-            role={props.role ?? (activePassiveState.active ? role : undefined)}
+            role={props.role ?? (isVisible ? role : undefined)}
             {...{
                 active        : activePassiveState.active,
                 inheritActive : false,
