@@ -5,10 +5,6 @@ import {
 
 // cssfn:
 import {
-    // utilities:
-    defineSemantic,
-}                           from './react-cssfn' // cssfn for react
-import {
     // hooks:
     ListStyle,
     ListVariant,
@@ -145,11 +141,6 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
     
     
     
-    // fn props:
-    const [tag, role] = defineSemantic(props, { preferredTag: 'nav', preferredRole: 'navigation' });
-    
-    
-    
     // jsx:
     return (
         <List<TElement>
@@ -157,12 +148,9 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             {...restProps}
             
             
-            // essentials:
-            tag={tag}
-            
-            
-            // accessibilities:
-            role={role}
+            // semantics:
+            preferredTag={props.preferredTag   ?? 'nav'}
+            preferredRole={props.preferredRole ?? 'navigation'}
             
             
             // layouts:
