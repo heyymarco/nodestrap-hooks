@@ -147,6 +147,11 @@ import {
 import {
     // styles:
     usesButtonLayout,
+    
+    
+    
+    // react components:
+    ButtonType,
 }                           from './Button'
 import {
     // hooks:
@@ -1114,8 +1119,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 export interface ListItemProps<TElement extends HTMLElement = HTMLElement>
     extends
         ActionControlProps<TElement>,
+        React.ButtonHTMLAttributes<TElement>,
         React.AnchorHTMLAttributes<TElement>
 {
+    // actions:
+    type?          : ButtonType
+    
+    
+    
     // accessibilities:
     // change default value to `true`
     /**
