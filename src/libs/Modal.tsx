@@ -614,6 +614,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             // events:
             // watch left click on the overlay only (not at the ModalElement):
             onClick={(e) => {
+                props.onClick?.(e);
+                
+                
+                
                 if (e.target === e.currentTarget) { // only handle click on the overlay, ignores click bubbling from the children
                     if (!e.defaultPrevented) {
                         if (props.modalStyle !== 'static') {
@@ -633,6 +637,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             // watch [escape key] on the whole Modal, including ModalElement & ModalElement's children:
             onKeyUp={(e) => {
+                props.onKeyUp?.(e);
+                
+                
+                
                 if (!e.defaultPrevented) {
                     if ((e.key === 'Escape') || (e.code === 'Escape')) {
                         if (onActiveChange) {
@@ -644,6 +652,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             }}
             
             onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
                 // states:
                 activePassiveState.handleAnimationEnd(e);
             }}
