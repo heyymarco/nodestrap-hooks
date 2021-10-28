@@ -1149,6 +1149,11 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             {...props}
             
             
+            // semantics:
+            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : 'button')}
+            preferredRole={props.preferredRole ?? (props.href ? 'link' : 'button')}
+            
+            
             // accessibilities:
             inheritActive={props.inheritActive ?? true} // change default value to `true`
             
