@@ -35,6 +35,11 @@ import {
     escapeSvg,
 }                           from './cssfn'       // cssfn core
 import {
+    // general types:
+    Tag,
+    
+    
+    
     // hooks:
     createUseSheet,
     
@@ -1237,8 +1242,8 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     // rest props:
     const {
         // semantics:
-        preferredTag  = ['ul', 'ol'],
-        preferredRole = 'list',
+        preferredTag,
+        preferredRole,
         
         
         // behaviors:
@@ -1252,9 +1257,12 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const [, , isList, isSemantic] = defineSemantic(props, { preferredTag, preferredRole });
-    const wrapTag = isSemantic ? 'li' : undefined;
-    const subRole = isList ? (isSemantic ? '' : 'listitem') : '';
+    const listTag                  = ['ul', 'ol'] as Array<Tag>;
+    const listRole                 = 'list';
+    
+    const [, , isList, isSemantic] = defineSemantic(props, { preferredTag: listTag, preferredRole: listRole });
+    const wrapTag                  = isSemantic ? 'li' : undefined;
+    const wrapRole                 = isList ? (isSemantic ? '' : 'listitem') : '';
     
     
     
@@ -1267,8 +1275,8 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             
             // semantics:
             {...{
-                preferredTag,
-                preferredRole,
+                preferredTag  : preferredTag  ?? listTag,
+                preferredRole : preferredRole ?? listRole,
             }}
             
             
@@ -1291,7 +1299,7 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                     
                     
                     // accessibilities:
-                    role={subRole}
+                    role={wrapRole}
                 >
                     {
                         isTypeOf(child, ListItem)
