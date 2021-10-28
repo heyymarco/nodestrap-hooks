@@ -1287,7 +1287,7 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     const listTag                      = ['ul', 'ol'] as Array<Tag>;
     const listRole                     = 'list';
     
-    const [, , isList, isSemanticList] = defineSemantic(props, { preferredTag: listTag, preferredRole: listRole });
+    const [, , isList, isSemanticList] = defineSemantic(props, { preferredTag: listTag, preferredRole: (((props.preferredRole ?? listRole) === listRole) ? listRole : null) });
     const wrapTag                      = isSemanticList ? 'li' : undefined;
     const wrapRole                     = isList ? (isSemanticList ? '' : 'listitem') : '';
     
