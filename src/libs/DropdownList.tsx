@@ -29,6 +29,7 @@ import {
     
     // utilities:
     isTypeOf,
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -39,6 +40,10 @@ import {
     usesGeneralProps,
     usesPrefixedProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+import {
+    // hooks:
+    useActivePassiveState,
+}                           from './Indicator'
 import {
     // general types:
     PopupPlacement,
@@ -294,8 +299,14 @@ export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, T
 {
 }
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
+    // states:
+    const activePassiveState = useActivePassiveState({ active: props.active, inheritActive: false });
+    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
+    
+    
+    
     // fn props:
-    const ariaRole = props.role ?? (() => {
+    const preferredRole = props.role ?? (() => {
         const children   = props.children;
         const actionCtrl = props.actionCtrl ?? true;
         if (children && (Array.isArray(children) ? children : [children]).some((child) =>
@@ -310,6 +321,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
         
         return 'menu';
     })();
+    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole });
     
     
     
@@ -320,8 +332,27 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
             {...props}
             
             
+            // essentials:
+            tag={tag}
+            
+            
             // accessibilities:
-            role={ariaRole}
+            role={props.role ?? (isVisible ? role : undefined)}
+            {...{
+                active        : activePassiveState.active,
+                inheritActive : false,
+            }}
+            
+            
+            // events:
+            onAnimationEnd={(e) => {
+                props.onAnimationEnd?.(e);
+                
+                
+                
+                // states:
+                activePassiveState.handleAnimationEnd(e);
+            }}
         >
             <DropdownListElement<TElement, TCloseType>
                 // other props:
