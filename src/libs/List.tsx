@@ -1175,6 +1175,13 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             // classes:
             mainClass={props.mainClass ?? [sheet.main, sheetAction.main].join(' ')}
+            
+            
+            // Button props:
+            {...{
+                // actions:
+                type : props.type ?? (props.href ? undefined : 'button'),
+            }}
         />
         :
         <Indicator<TElement>
