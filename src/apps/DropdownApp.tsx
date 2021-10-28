@@ -51,7 +51,7 @@ function App() {
 					if (e.buttons) return; // no other button(s) being pressed
 					
 					setActive(!active);
-				}}>Toggle DropdownList</Button>
+				}}>Toggle Dropdown</Button>
 				<Dropdown
 					targetRef={targetButton1Ref}
 					popupPlacement='bottom'
@@ -74,7 +74,7 @@ function App() {
 					if (e.buttons) return; // no other button(s) being pressed
 					
 					setActive2(!active2);
-				}}>Toggle DropdownList</Button>
+				}}>Toggle Dropdown</Button>
 				<Dropdown
 					targetRef={targetButton2Ref}
 					popupPlacement='bottom'

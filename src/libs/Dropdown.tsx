@@ -32,6 +32,7 @@ import {
     // utilities:
     isTypeOf,
     setRef,
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -279,12 +280,6 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     
     
     
-    // states:
-    const activePassiveState = useActivePassiveState(props);
-    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
-    
-    
-    
     // rest props:
     const {
         // essentials:
@@ -311,6 +306,17 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         // children:
         children,
     ...restProps} = props;
+    
+    
+    
+    // states:
+    const activePassiveState = useActivePassiveState({ active, inheritActive: false, tag: props.tag });
+    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
+    
+    
+    
+    // fn props:
+    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole: 'dialog' });
     
     
     
@@ -377,10 +383,14 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             {...restProps}
             
             
+            // essentials:
+            tag={tag}
+            
+            
             // accessibilities:
-            role={props.role ?? (active ? 'dialog' : undefined)}
+            role={props.role ?? (activePassiveState.active ? role : undefined)}
             {...{
-                active,
+                active        : activePassiveState.active,
                 inheritActive : false,
             }}
             
