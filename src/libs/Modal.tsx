@@ -516,10 +516,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // states:
-    const activePassiveState        = useActivePassiveState(props);
-    const isVisible                 = activePassiveState.active || (!!activePassiveState.class);
-    const isNoBackInteractive       = isVisible && ((modalVariant.class !== 'hidden') && (modalVariant.class !== 'interactive'));
-
     const [excitedDn, setExcitedDn] = useState(false);
     
     
@@ -548,6 +544,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         // children:
         children,
     ...restProps} = props;
+    
+    
+    
+    // states:
+    const activePassiveState        = useActivePassiveState({ active, inheritActive: false });
+    const isVisible                 = activePassiveState.active || (!!activePassiveState.class);
+    const isNoBackInteractive       = isVisible && ((modalVariant.class !== 'hidden') && (modalVariant.class !== 'interactive'));
     
     
     
@@ -593,11 +596,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             
             // accessibilities:
-            role={props.role ?? (active ? role : undefined)}
-            aria-modal={props['aria-modal'] ?? ((active && isNoBackInteractive) ? true : undefined)}
+            role={props.role ?? (isVisible ? role : undefined)}
+            aria-modal={props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)}
             {...{
-                active,
-                inheritActive,
+                active        : activePassiveState.active,
+                inheritActive : false,
             }}
             
             
