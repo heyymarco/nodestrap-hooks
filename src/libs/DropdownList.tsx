@@ -137,6 +137,29 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
+// utilities:
+export const calculatePreferredRole = <TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) => {
+    if (props.role) return props.role;
+    
+    
+    
+    const children   = props.children;
+    const actionCtrl = props.actionCtrl ?? true;
+    if (children && (Array.isArray(children) ? children : [children]).some((child) =>
+        isTypeOf(child, ListItem)
+        ?
+        !(child.props.actionCtrl ?? actionCtrl) // ListItem is not an actionCtrl => not a menu item => role='dialog'
+        :
+        !actionCtrl // default ListItem wrapper is not an actionCtrl => not a menu item => role='dialog'
+    )) return 'dialog';
+    
+    
+    
+    return 'menu';
+};
+
+
+
 // react components:
 
 // ListItem => DropdownListItem
@@ -306,22 +329,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
     
     
     // fn props:
-    const preferredRole = props.role ?? (() => {
-        const children   = props.children;
-        const actionCtrl = props.actionCtrl ?? true;
-        if (children && (Array.isArray(children) ? children : [children]).some((child) =>
-            isTypeOf(child, ListItem)
-            ?
-            !(child.props.actionCtrl ?? actionCtrl) // ListItem is not an actionCtrl => not a menu item => role='dialog'
-            :
-            !actionCtrl // default ListItem wrapper is not an actionCtrl => not a menu item => role='dialog'
-        )) return 'dialog';
-        
-        
-        
-        return 'menu';
-    })();
-    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole });
+    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole: calculatePreferredRole(props) });
     
     
     
