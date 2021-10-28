@@ -1151,7 +1151,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
-    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: 'button' });
+    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (props.href ? null : 'button') });
     
     
     
@@ -1284,12 +1284,12 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const listTag                  = ['ul', 'ol'] as Array<Tag>;
-    const listRole                 = 'list';
+    const listTag                      = ['ul', 'ol'] as Array<Tag>;
+    const listRole                     = 'list';
     
-    const [, , isList, isSemantic] = defineSemantic(props, { preferredTag: listTag, preferredRole: listRole });
-    const wrapTag                  = isSemantic ? 'li' : undefined;
-    const wrapRole                 = isList ? (isSemantic ? '' : 'listitem') : '';
+    const [, , isList, isSemanticList] = defineSemantic(props, { preferredTag: listTag, preferredRole: listRole });
+    const wrapTag                      = isSemanticList ? 'li' : undefined;
+    const wrapRole                     = isList ? (isSemanticList ? '' : 'listitem') : '';
     
     
     
