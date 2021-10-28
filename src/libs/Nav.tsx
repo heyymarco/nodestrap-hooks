@@ -42,10 +42,6 @@ export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavIt
             {...props}
             
             
-            // essentials:
-            tag={props.tag ?? (props.href ? 'a' : undefined)}
-            
-            
             // accessibilities:
             aria-current={props['aria-current'] ?? (props.active ? 'page' : undefined)}
         />
