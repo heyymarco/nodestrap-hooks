@@ -142,8 +142,9 @@ export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>
 };
 
 export interface SemanticProps {
-    preferredRole? : SingleOrArray<React.AriaRole>
+    // semantics:
     preferredTag?  : SingleOrArray<Optional<Tag>>
+    preferredRole? : SingleOrArray<React.AriaRole>
 }
 export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: SemanticProps) => {
     const roleAbs       : React.AriaRole|undefined = props.role ?? (Array.isArray(options.preferredRole) ? options.preferredRole?.[0]              :  options.preferredRole             );
