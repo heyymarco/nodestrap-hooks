@@ -1151,7 +1151,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
-    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (props.href ? null : 'button') });
+    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (((props.preferredRole ?? (props.href ? 'link' : 'button')) === 'button') ? 'button' : null) });
     
     
     
