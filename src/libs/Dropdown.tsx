@@ -310,7 +310,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     
     
     // states:
-    const activePassiveState = useActivePassiveState({ active, inheritActive: false, tag: props.tag });
+    const activePassiveState = useActivePassiveState({ active, inheritActive: false });
     const isVisible          = activePassiveState.active || (!!activePassiveState.class);
     
     
