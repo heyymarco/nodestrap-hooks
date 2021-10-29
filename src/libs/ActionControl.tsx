@@ -490,8 +490,8 @@ export function ActionControl<TElement extends HTMLElement = HTMLElement>(props:
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? [null, 'button', 'a']}
-            preferredRole={props.preferredRole ?? 'button'        }
+            preferredTag={props.preferredTag   ?? [null, 'button', 'a'   ]}
+            preferredRole={props.preferredRole ?? [      'button', 'link']}
             
             
             // classes:

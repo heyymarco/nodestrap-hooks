@@ -99,7 +99,7 @@ function App() {
 
 					onClick={() => console.log('test onClick')}
 				>
-                    action control
+                    action control generic
                 </ActionControl>
                 <ActionControl
 					tag='button'
@@ -116,7 +116,7 @@ function App() {
 
 					onClick={() => console.log('test onClick')}
 				>
-                    action control
+                    action control native
                 </ActionControl>
                 <ActionControl
 					tag='a'
@@ -133,7 +133,42 @@ function App() {
 
 					onClick={() => console.log('test onClick')}
 				>
-                    action control
+                    action control link
+                </ActionControl>
+                <ActionControl
+					role='link'
+					
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+					
+					press={press}
+
+					onClick={() => console.log('test onClick')}
+				>
+                    action control raw link
+                </ActionControl>
+                <ActionControl
+					tag='h2'
+					role='link'
+					
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+					
+					press={press}
+
+					onClick={() => console.log('test onClick')}
+				>
+                    action control raw link
                 </ActionControl>
 				
                 <ActionControl
@@ -151,7 +186,7 @@ function App() {
 
 					onClick={() => console.log('test onClick')}
 				>
-                    action control
+                    action control raw
                 </ActionControl>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
