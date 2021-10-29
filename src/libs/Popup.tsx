@@ -344,7 +344,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             ],
         }));
         
-        if (isVisible) popperRef.current.update();
+        popperRef.current.update();
     }, [isVisible]);
     useLayoutEffect(updatePopperOptionsCb, [updatePopperOptionsCb]); // primary chance   (in case of `targetRef` is not the parent element)
     useEffect(updatePopperOptionsCb, [updatePopperOptionsCb]);       // secondary chance (in case of `targetRef` is the parent element)
