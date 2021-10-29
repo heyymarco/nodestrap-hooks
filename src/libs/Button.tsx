@@ -27,6 +27,11 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -433,10 +438,6 @@ export function Button(props: ButtonProps) {
     
     // rest props:
     const {
-        // essentials:
-        tag,
-        
-        
         // actions:
         type,
         
@@ -450,8 +451,7 @@ export function Button(props: ButtonProps) {
     
     
     // fn props:
-    const tagFn  = tag  ?? 'button';
-    const typeFn = type ?? (['button', 'input'].includes(tagFn) ? 'button' : undefined);
+    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (((props.preferredRole ?? (props.href ? 'link' : 'button')) === 'button') ? 'button' : null) });
     
     
     
@@ -462,12 +462,12 @@ export function Button(props: ButtonProps) {
             {...restProps}
             
             
-            // essentials:
-            tag={tagFn}
+            // semantics:
+            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : 'button')}
+            preferredRole={props.preferredRole ?? (props.href ? 'link' : 'button')}
             
             
             // accessibilities:
-            role={props.role ?? ((tagFn !== 'button') && (typeFn !== 'button')) ? 'button' : undefined}
             aria-label={label}
             enabled={props.enabled ?? !(props.disabled ?? false)}
             press={props.press ?? active}
@@ -488,7 +488,7 @@ export function Button(props: ButtonProps) {
             // Button props:
             {...{
                 // actions:
-                type    : typeFn,
+                type : props.type ?? (isSemanticBtn ? 'button' : undefined),
             }}
         >
             { props.children }

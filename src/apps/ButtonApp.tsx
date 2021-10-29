@@ -167,7 +167,6 @@ function App() {
 					orientation={orientation}
 					btnStyle={btnStyle}
 
-					tag='a'
 					download={true}
 					href='https://assets.codepen.io/12005/windmill.jpg'
 					hrefLang='download this pict'
