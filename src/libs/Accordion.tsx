@@ -251,7 +251,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             
             
             // accessibilities:
-            aria-expanded={isActive}
+            aria-expanded={props['aria-expanded'] ?? isActive}
             active={isActive}
             
             
