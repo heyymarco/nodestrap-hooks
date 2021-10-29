@@ -628,7 +628,7 @@ export function TogglerMenuButton(props: TogglerMenuButtonProps) {
             
             // accessibilities:
             role={ariaRole}
-            aria-pressed={ariaPressed}
+            aria-pressed={props['aria-pressed'] ?? ariaPressed}
             aria-expanded={props['aria-expanded'] ?? propActive}
             label={props.label ?? 'Toggle navigation'}
             
