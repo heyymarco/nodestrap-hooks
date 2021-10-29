@@ -636,7 +636,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
         
         
         const target = props.targetRef?.current;
-        if (!target) return;
+        if (!target) return; // target was not set => nothing to do
         
         
         
