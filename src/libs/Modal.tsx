@@ -47,7 +47,6 @@ import {
     // utilities:
     isTypeOf,
     setRef,
-    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -555,7 +554,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // fn props:
-    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole: 'dialog' });
     const excitedFn   = excited ?? excitedDn;
     
     
@@ -591,12 +589,12 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             {...restProps}
             
             
-            // essentials:
-            tag={tag}
+            // semantics:
+            preferredTag={props.preferredTag   ?? null    }
+            preferredRole={props.preferredRole ?? 'dialog'}
             
             
             // accessibilities:
-            role={props.role ?? (isVisible ? role : undefined)}
             aria-modal={props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)}
             {...{
                 active        : activePassiveState.active,
