@@ -32,7 +32,6 @@ import {
     // utilities:
     isTypeOf,
     setRef,
-    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -315,11 +314,6 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     
     
     
-    // fn props:
-    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole: 'dialog' });
-    
-    
-    
     // dom effects:
     const childRef = useRef<TElement|null>(null);
     
@@ -383,12 +377,12 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             {...restProps}
             
             
-            // essentials:
-            tag={tag}
+            // semantics:
+            preferredTag={props.preferredTag   ?? null    }
+            preferredRole={props.preferredRole ?? 'dialog'}
             
             
             // accessibilities:
-            role={props.role ?? (isVisible ? role : undefined)}
             {...{
                 active        : activePassiveState.active,
                 inheritActive : false,
