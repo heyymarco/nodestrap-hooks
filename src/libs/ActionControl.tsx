@@ -489,6 +489,11 @@ export function ActionControl<TElement extends HTMLElement = HTMLElement>(props:
             {...props}
             
             
+            // semantics:
+            preferredTag={props.preferredTag   ?? [null, 'button', 'a']}
+            preferredRole={props.preferredRole ?? 'button'        }
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),

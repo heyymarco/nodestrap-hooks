@@ -118,6 +118,41 @@ function App() {
 				>
                     action control
                 </ActionControl>
+                <ActionControl
+					tag='a'
+					
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+					
+					press={press}
+
+					onClick={() => console.log('test onClick')}
+				>
+                    action control
+                </ActionControl>
+				
+                <ActionControl
+					tag='span'
+					
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+					
+					press={press}
+
+					onClick={() => console.log('test onClick')}
+				>
+                    action control
+                </ActionControl>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
