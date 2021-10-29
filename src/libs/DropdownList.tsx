@@ -29,7 +29,6 @@ import {
     
     // utilities:
     isTypeOf,
-    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -40,10 +39,6 @@ import {
     usesGeneralProps,
     usesPrefixedProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
-import {
-    // hooks:
-    useActivePassiveState,
-}                           from './Indicator'
 import {
     // general types:
     PopupPlacement,
@@ -139,7 +134,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // utilities:
 export const calculatePreferredRole = <TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) => {
-    if (props.role) return props.role;
+    if (props.role) return null;
     
     
     
@@ -322,17 +317,6 @@ export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, T
 {
 }
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
-    // states:
-    const activePassiveState = useActivePassiveState({ active: props.active, inheritActive: false });
-    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
-    
-    
-    
-    // fn props:
-    const [tag, role] = defineSemantic(props, { preferredTag: null, preferredRole: calculatePreferredRole(props) });
-    
-    
-    
     // jsx:
     return (
         <Dropdown<TElement, TCloseType>
@@ -340,27 +324,9 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
             {...props}
             
             
-            // essentials:
-            tag={tag}
-            
-            
-            // accessibilities:
-            role={props.role ?? (isVisible ? role : undefined)}
-            {...{
-                active        : activePassiveState.active,
-                inheritActive : false,
-            }}
-            
-            
-            // events:
-            onAnimationEnd={(e) => {
-                props.onAnimationEnd?.(e);
-                
-                
-                
-                // states:
-                activePassiveState.handleAnimationEnd(e);
-            }}
+            // semantics:
+            preferredTag={props.preferredTag   ?? null                         }
+            preferredRole={props.preferredRole ?? calculatePreferredRole(props)}
         >
             <DropdownListElement<TElement, TCloseType>
                 // other props:
