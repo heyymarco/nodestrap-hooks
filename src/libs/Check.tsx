@@ -43,7 +43,7 @@ import {
     
     // utilities:
     setRef,
-    defineSemantic,
+    useTestSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -918,15 +918,17 @@ export function Check(props: CheckProps) {
     
     
     // fn props:
-    const propEnabled      = usePropEnabled(props);
-    const propReadOnly     = usePropReadOnly(props);
+    const propEnabled       = usePropEnabled(props);
+    const propReadOnly      = usePropReadOnly(props);
     
-    const checkboxRole     = ['checkbox', 'radio'];
-    const [, , isCheckbox] = defineSemantic(props, { preferredTag: null, preferredRole: ((checkboxRole.some((r) => ([props.preferredRole ?? checkboxRole].flat()?.[0] ?? '') === r)) ? checkboxRole : null) });
-    const ariaChecked      = props['aria-checked'] ?? (isCheckbox ? isActive : undefined);
+    const tag               = 'span';
+    const preferredTag      = props.preferredTag  ?? null;
+    const preferredRole     = props.preferredRole ?? 'checkbox';
+    const [, , isCheckable] = useTestSemantic({ tag, role: props.role, preferredTag, preferredRole }, { preferredTag: null, preferredRole: ['checkbox', 'radio'] });
+    const ariaChecked       = props['aria-checked'] ?? (isCheckable ? isActive : undefined);
     
-    const isToggler        = (props.checkStyle === 'togglerBtn');
-    const pressFn          = props.press ?? ((isActive && isToggler) || undefined);
+    const isToggler         = (props.checkStyle === 'togglerBtn');
+    const pressFn           = props.press ?? ((isActive && isToggler) || undefined);
     
     
     
@@ -938,9 +940,9 @@ export function Check(props: CheckProps) {
             
             
             // semantics:
-            tag={props.tag ?? 'span'}
-            preferredTag={props.preferredTag   ?? null      }
-            preferredRole={props.preferredRole ?? checkboxRole}
+            tag={tag}
+            preferredTag={preferredTag}
+            preferredRole={preferredRole}
             
             aria-checked={ariaChecked}
             aria-label={label}
