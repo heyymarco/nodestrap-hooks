@@ -41,6 +41,9 @@ import {
 export type Tag  = keyof JSX.IntrinsicElements
 export type Role = React.AriaRole
 
+export type PreferredTag  = SingleOrArray<Optional<Tag>>
+export type PreferredRole = SingleOrArray<Optional<Role>>
+
 
 
 // hooks:
@@ -144,8 +147,8 @@ export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>
 
 export interface SemanticProps {
     // semantics:
-    preferredTag?  : SingleOrArray<Optional<Tag>>
-    preferredRole? : SingleOrArray<Optional<Role>>
+    preferredTag?  : PreferredTag
+    preferredRole? : PreferredRole
 }
 export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: SemanticProps = props) => {
     const roleAbs       : Role|undefined = props.role ??                  (Array.isArray(options.preferredRole) ? (options.preferredRole?.[0] ?? undefined) : (options.preferredRole ?? undefined));
