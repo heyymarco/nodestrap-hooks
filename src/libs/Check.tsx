@@ -43,6 +43,7 @@ import {
     
     // utilities:
     setRef,
+    defineSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -920,8 +921,9 @@ export function Check(props: CheckProps) {
     const propEnabled  = usePropEnabled(props);
     const propReadOnly = usePropReadOnly(props);
     
-    const ariaRole     = props.role            ?? 'checkbox';
-    const ariaChecked  = props['aria-checked'] ?? ((ariaRole === 'checkbox') ? isActive : undefined);
+    const checkboxRole = 'checkbox';
+    const [, , isCheckbox] = defineSemantic(props, { preferredTag: null, preferredRole: (((props.preferredRole ?? checkboxRole) === checkboxRole) ? checkboxRole : null) });
+    const ariaChecked  = props['aria-checked'] ?? (isCheckbox ? isActive : undefined);
     
     const isToggler    = (props.checkStyle === 'togglerBtn');
     const pressFn      = props.press ?? ((isActive && isToggler) || undefined);
@@ -935,14 +937,16 @@ export function Check(props: CheckProps) {
             {...restProps}
             
             
-            // essentials:
+            // semantics:
             tag={props.tag ?? 'span'}
+            preferredTag={props.preferredTag   ?? null      }
+            preferredRole={props.preferredRole ?? checkboxRole}
+            
+            aria-checked={ariaChecked}
+            aria-label={label}
             
             
             // accessibilities:
-            role={ariaRole}
-            aria-checked={ariaChecked}
-            aria-label={label}
             active={isActive}
             press={pressFn}
             
@@ -1019,12 +1023,15 @@ export function Check(props: CheckProps) {
                 }}
                 
                 
+                // semantics:
+                aria-hidden={true} // the input just for check indicator & storing value, no meaningful content here
+                
+                
                 // accessibilities:
                 {...{
                     autoFocus,
                     tabIndex : -1, // non focusable
                 }}
-                aria-hidden={true} // the input just for check indicator & storing value
                 
                 disabled={!propEnabled} // do not submit the value if disabled
                 readOnly={propReadOnly} // locks the value if readOnly
