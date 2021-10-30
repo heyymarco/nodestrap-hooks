@@ -62,6 +62,8 @@ function App() {
 	const listStyles = [undefined, 'content','flat','flush','btn','tab','breadcrumb','bullet'];
 	const [listStyle,    setListStyle     ] = useState<ListStyle|undefined>(undefined);
 
+	
+	const [expandMenu,      setExpandMenu   ] = useState(false);
 
 
     return (
@@ -144,7 +146,10 @@ function App() {
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
 
-						enabled={enabled} active={active}
+						enabled={enabled}
+
+						active={expandMenu}
+						onActiveChange={(act) => setExpandMenu(act)}
 
 						arrive={arrive}
 						focus={focus}
@@ -281,7 +286,10 @@ function App() {
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
 
-						enabled={enabled} active={active}
+						enabled={enabled}
+						
+						active={expandMenu}
+						onActiveChange={(act) => setExpandMenu(act)}
 
 						arrive={arrive}
 						focus={focus}
@@ -419,7 +427,10 @@ function App() {
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
 
-						enabled={enabled} active={active}
+						enabled={enabled}
+						
+						active={expandMenu}
+						onActiveChange={(act) => setExpandMenu(act)}
 
 						arrive={arrive}
 						focus={focus}
@@ -569,7 +580,10 @@ function App() {
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
 
-						enabled={enabled} active={active}
+						enabled={enabled}
+						
+						active={expandMenu}
+						onActiveChange={(act) => setExpandMenu(act)}
 
 						arrive={arrive}
 						focus={focus}

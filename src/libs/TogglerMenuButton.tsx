@@ -612,7 +612,7 @@ export function TogglerMenuButton(props: TogglerMenuButtonProps) {
     
     
     // fn props:
-    const propActive  = usePropActive(props);
+    const propActive  = usePropActive(props); // controllable active only; uncontrollable (toggle active) always return `false`
     
     
     
@@ -623,8 +623,11 @@ export function TogglerMenuButton(props: TogglerMenuButtonProps) {
             {...props}
             
             
-            // accessibilities:
+            // semantics:
             aria-expanded={props['aria-expanded'] ?? propActive}
+            
+            
+            // accessibilities:
             label={props.label ?? 'Toggle navigation'}
             
             
