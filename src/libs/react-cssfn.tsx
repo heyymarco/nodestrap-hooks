@@ -38,7 +38,8 @@ import {
 
 
 // general types:
-export type Tag = keyof JSX.IntrinsicElements
+export type Tag  = keyof JSX.IntrinsicElements
+export type Role = React.AriaRole
 
 
 
@@ -144,16 +145,16 @@ export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>
 export interface SemanticProps {
     // semantics:
     preferredTag?  : SingleOrArray<Optional<Tag>>
-    preferredRole? : SingleOrArray<Optional<React.AriaRole>>
+    preferredRole? : SingleOrArray<Optional<Role>>
 }
 export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: SemanticProps = props) => {
-    const roleAbs       : React.AriaRole|undefined = props.role ??                  (Array.isArray(options.preferredRole) ? (options.preferredRole?.[0] ?? undefined) : (options.preferredRole ?? undefined));
-    const isDesiredType : boolean                  = !!roleAbs  &&                  (Array.isArray(options.preferredRole) ?  options.preferredRole.includes(roleAbs)  : (options.preferredRole === roleAbs ));
+    const roleAbs       : Role|undefined = props.role ??                  (Array.isArray(options.preferredRole) ? (options.preferredRole?.[0] ?? undefined) : (options.preferredRole ?? undefined));
+    const isDesiredType : boolean        = !!roleAbs  &&                  (Array.isArray(options.preferredRole) ?  options.preferredRole.includes(roleAbs)  : (options.preferredRole === roleAbs ));
     
-    const tagFn         : Tag|undefined            = props.tag  ?? (isDesiredType ? (Array.isArray(options.preferredTag)  ? (options.preferredTag?.[0] ?? undefined)  : (options.preferredTag  ?? undefined)) : undefined);
-    const isSemanticTag : boolean                  = !!tagFn    &&                  (Array.isArray(options.preferredTag)  ?  options.preferredTag.includes(tagFn)     : (options.preferredTag  === tagFn   ));
+    const tagFn         : Tag|undefined  = props.tag  ?? (isDesiredType ? (Array.isArray(options.preferredTag)  ? (options.preferredTag?.[0] ?? undefined)  : (options.preferredTag  ?? undefined)) : undefined);
+    const isSemanticTag : boolean        = !!tagFn    &&                  (Array.isArray(options.preferredTag)  ?  options.preferredTag.includes(tagFn)     : (options.preferredTag  === tagFn   ));
     
-    const roleFn        : React.AriaRole|undefined = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs; /* `''` => do not render role attribute, `undefined` => lets the BaseComponent decide the appropriate role */
+    const roleFn        : Role|undefined = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs; /* `''` => do not render role attribute, `undefined` => lets the BaseComponent decide the appropriate role */
     
     
     
@@ -323,7 +324,7 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
     
     
     // accessibilities:
-    role?           : React.AriaRole
+    role?           : Role
     
     
     // classes:
