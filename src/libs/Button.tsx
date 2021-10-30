@@ -31,7 +31,7 @@ import {
     
     
     // utilities:
-    defineSemantic,
+    useTestSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -451,7 +451,9 @@ export function Button(props: ButtonProps) {
     
     
     // fn props:
-    const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (((props.preferredRole ?? (props.href ? 'link' : 'button')) === 'button') ? 'button' : null) });
+    const preferredTag  = props.preferredTag  ?? (props.href ? 'a'    : 'button');
+    const preferredRole = props.preferredRole ?? (props.href ? 'link' : 'button');
+    const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, preferredTag, preferredRole }, { preferredTag: 'button', preferredRole: 'button' });
     
     
     
@@ -463,8 +465,8 @@ export function Button(props: ButtonProps) {
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : 'button')}
-            preferredRole={props.preferredRole ?? (props.href ? 'link' : 'button')}
+            preferredTag={preferredTag}
+            preferredRole={preferredRole}
             
             
             // accessibilities:
