@@ -371,8 +371,12 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             {...restProps}
             
             
+            // semantics:
+            preferredTag={props.preferredTag   ?? null     }
+            preferredRole={props.preferredRole ?? 'tooltip'}
+            
+            
             // accessibilities:
-            role={props.role ?? 'tooltip'}
             {...{
                 active        : activeFn,
                 inheritActive : false,
