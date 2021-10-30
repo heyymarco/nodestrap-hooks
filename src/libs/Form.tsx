@@ -285,8 +285,9 @@ export function Form(props: FormProps) {
             {...props}
             
             
-            // essentials:
-            tag={props.tag ?? 'form'}
+            // semantics:
+            preferredTag={props.preferredTag   ?? 'form'}
+            preferredRole={props.preferredRole ?? 'form'}
             
             
             // classes:
