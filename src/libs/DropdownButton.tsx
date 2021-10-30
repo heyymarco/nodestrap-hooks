@@ -114,6 +114,11 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
         style,          // delete
         
         
+        // semantics:
+        preferredTag,   // delete
+        preferredRole,  // delete
+        
+        
         // identifiers:
         id,             // delete
         
@@ -159,6 +164,7 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 
                 
                 // accessibilities:
+                aria-expanded={props['aria-expanded'] ?? isActive}
                 {...{
                     label,
                 }}
