@@ -30,6 +30,11 @@ import {
     variants,
 }                           from './cssfn'       // cssfn core
 import {
+    // general types:
+    Tag,
+    
+    
+    
     // hooks:
     createUseSheet,
     
@@ -562,22 +567,24 @@ export interface RangeProps
         NudeVariant
 {
     // essentials:
-    trackTag?        : keyof JSX.IntrinsicElements
     trackStyle?      : React.CSSProperties
     trackRef?        : React.Ref<HTMLElement> // setter ref
     
-    trackLowerTag?   : keyof JSX.IntrinsicElements
     trackLowerStyle? : React.CSSProperties
     trackLowerRef?   : React.Ref<HTMLElement> // setter ref
     
-    trackUpperTag?   : keyof JSX.IntrinsicElements
     trackUpperStyle? : React.CSSProperties
     trackUpperRef?   : React.Ref<HTMLElement> // setter ref
     
-    thumbTag?        : keyof JSX.IntrinsicElements
     thumbStyle?      : React.CSSProperties
     thumbRef?        : React.Ref<HTMLElement> // setter ref
     
+    
+    // semantics:
+    trackTag?        : Tag
+    trackLowerTag?   : Tag
+    trackUpperTag?   : Tag
+    thumbTag?        : Tag
     
     
     // classes:
@@ -602,7 +609,6 @@ export interface RangeProps
     thumbStateClasses?        : Optional<string>[]
     
     
-    
     // validations:
     min?      : string | number
     max?      : string | number
@@ -623,21 +629,24 @@ export function Range(props: RangeProps) {
         // essentials:
         elmRef,
         
-        trackTag,
         trackStyle,
         trackRef,
         
-        trackLowerTag,
         trackLowerStyle,
         trackLowerRef,
         
-        trackUpperTag,
         trackUpperStyle,
         trackUpperRef,
         
-        thumbTag,
         thumbStyle,
         thumbRef,
+        
+        
+        // semantics:
+        trackTag,
+        trackLowerTag,
+        trackUpperTag,
+        thumbTag,
         
         
         // classes:
@@ -932,10 +941,13 @@ export function Range(props: RangeProps) {
     const trackLower = (
         <Element
             // essentials:
-            tag={trackLowerTag}
             elmRef={(elm) => {
                 setRef(trackLowerRef , elm);
             }}
+            
+            
+            // semantics:
+            tag={trackLowerTag}
             
             
             // classes:
@@ -955,10 +967,13 @@ export function Range(props: RangeProps) {
     const trackUpper = (
         <Element
             // essentials:
-            tag={trackUpperTag}
             elmRef={(elm) => {
                 setRef(trackUpperRef , elm);
             }}
+            
+            
+            // semantics:
+            tag={trackUpperTag}
             
             
             // classes:
@@ -1109,11 +1124,14 @@ export function Range(props: RangeProps) {
             />
             <EditableControl<HTMLInputElement>
                 // essentials:
-                tag={trackTag}
                 elmRef={(elm) => {
                     setRef(trackRef , elm);
                     setRef(trackRef2, elm);
                 }}
+                
+                
+                // semantics:
+                tag={trackTag}
                 
                 
                 // accessibilities:
@@ -1141,11 +1159,14 @@ export function Range(props: RangeProps) {
                 { orientationVertical ? trackUpper : trackLower }
                 <EditableActionControl<HTMLInputElement>
                     // essentials:
-                    tag={thumbTag}
                     elmRef={(elm) => {
                         setRef(thumbRef , elm);
                         setRef(thumbRef2, elm);
                     }}
+                    
+                    
+                    // semantics:
+                    tag={thumbTag}
                     
                     
                     // accessibilities:
