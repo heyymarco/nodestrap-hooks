@@ -125,13 +125,12 @@ import {
     usesActionControlLayout,
     usesActionControlVariants,
     usesActionControlStates,
-    
-    
-    
-    // react components:
-    ActionControlProps,
-    ActionControl,
 }                           from './ActionControl'
+import {
+    // react components:
+    ButtonProps,
+    Button,
+}                           from './Button'
 import {
     // react components:
     CheckProps,
@@ -965,13 +964,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export interface NavbarMenuProps<TElement extends HTMLElement = HTMLElement>
+export interface NavbarMenuProps
     extends
-        ActionControlProps<TElement>,
-        React.AnchorHTMLAttributes<TElement>
+        ButtonProps
 {
 }
-export function NavbarMenu<TElement extends HTMLElement = HTMLElement>(props: NavbarMenuProps<TElement>) {
+export function NavbarMenu(props: NavbarMenuProps) {
     // fn props:
     const pressFn = props.press ?? props.active;
     
@@ -979,13 +977,9 @@ export function NavbarMenu<TElement extends HTMLElement = HTMLElement>(props: Na
     
     // jsx:
     return (
-        <ActionControl<TElement>
+        <Button
             // other props:
             {...props}
-            
-            
-            // essentials:
-            tag={props.tag ?? 'a'}
             
             
             // accessibilities:
