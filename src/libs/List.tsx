@@ -52,7 +52,7 @@ import {
     
     // utilities:
     isTypeOf,
-    defineSemantic,
+    useTestSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -1152,7 +1152,10 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     /* not using <button> for "button" because the children may contain any_html_elements */
-    // const [, , , isSemanticBtn] = defineSemantic(props, { preferredTag: 'button', preferredRole: (((props.preferredRole ?? (props.href ? 'link' : 'button')) === 'button') ? 'button' : null) });
+    // fn props:
+    // const preferredTag  = props.preferredTag  ?? (props.href ? 'a'    : 'button');
+    // const preferredRole = props.preferredRole ?? (props.href ? 'link' : 'button');
+    // const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, preferredTag, preferredRole }, { preferredTag: 'button', preferredRole: 'button' });
     
     
     
@@ -1270,11 +1273,6 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     // rest props:
     const {
-        // semantics:
-        preferredTag,
-        preferredRole,
-        
-        
         // behaviors:
         actionCtrl,
         
@@ -1286,12 +1284,14 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const listTag                      = ['ul', 'ol'] as Array<Tag>;
-    const listRole                     = 'list';
+    const listTag       = ['ul', 'ol'] as Array<Tag>;
+    const listRole      = 'list';
+    const preferredTag  = props.preferredTag  ?? listTag;
+    const preferredRole = props.preferredRole ?? listRole;
+    const [, , isList, isSemanticList] = useTestSemantic({ tag: props.tag, role: props.role, preferredTag, preferredRole }, { preferredTag: listTag, preferredRole: listRole });
     
-    const [, , isList, isSemanticList] = defineSemantic(props, { preferredTag: listTag, preferredRole: (((props.preferredRole ?? listRole) === listRole) ? listRole : null) });
-    const wrapTag                      = isSemanticList ? 'li' : undefined;
-    const wrapRole                     = isList ? (isSemanticList ? '' : 'listitem') : '';
+    const wrapTag       = isSemanticList ? 'li' : undefined;
+    const wrapRole      = isList ? (isSemanticList ? '' : 'listitem') : '';
     
     
     
@@ -1303,10 +1303,8 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             
             
             // semantics:
-            {...{
-                preferredTag  : preferredTag  ?? listTag,
-                preferredRole : preferredRole ?? listRole,
-            }}
+            preferredTag={preferredTag}
+            preferredRole={preferredRole}
             
             
             // accessibilities:
