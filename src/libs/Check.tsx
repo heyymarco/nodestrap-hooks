@@ -918,15 +918,15 @@ export function Check(props: CheckProps) {
     
     
     // fn props:
-    const propEnabled  = usePropEnabled(props);
-    const propReadOnly = usePropReadOnly(props);
+    const propEnabled      = usePropEnabled(props);
+    const propReadOnly     = usePropReadOnly(props);
     
-    const checkboxRole = 'checkbox';
+    const checkboxRole     = 'checkbox';
     const [, , isCheckbox] = defineSemantic(props, { preferredTag: null, preferredRole: (((props.preferredRole ?? checkboxRole) === checkboxRole) ? checkboxRole : null) });
-    const ariaChecked  = props['aria-checked'] ?? (isCheckbox ? isActive : undefined);
+    const ariaChecked      = props['aria-checked'] ?? (isCheckbox ? isActive : undefined);
     
-    const isToggler    = (props.checkStyle === 'togglerBtn');
-    const pressFn      = props.press ?? ((isActive && isToggler) || undefined);
+    const isToggler        = (props.checkStyle === 'togglerBtn');
+    const pressFn          = props.press ?? ((isActive && isToggler) || undefined);
     
     
     
