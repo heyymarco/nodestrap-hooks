@@ -259,6 +259,10 @@ export function Radio(props: RadioProps) {
             {...restProps}
             
             
+            // semantics:
+            preferredRole={props.preferredRole ?? 'radio'}
+            
+            
             // essentials:
             elmRef={(elm) => {
                 setRef(elmRef, elm);
