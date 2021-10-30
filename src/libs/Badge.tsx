@@ -365,8 +365,10 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
             {...restProps}
             
             
-            // essentials:
+            // semantics:
             tag={props.tag ?? 'span'}
+            preferredTag={props.preferredTag   ?? null    }
+            preferredRole={props.preferredRole ?? 'status'}
             
             
             // accessibilities:
