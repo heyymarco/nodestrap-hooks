@@ -970,7 +970,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     }}
                     
                     
-                    // accessibilities:
+                    // semantics:
                     aria-hidden={true} // just a dummy element, no meaningful content here
                     
                     
