@@ -354,16 +354,12 @@ export function EditableTextControl<TElement extends EditableTextControlElement 
         <EditableControl<TElement>
             // other props:
             {...props}
-
-
-            // essentials:
-            tag={props.tag ?? 'input'}
-
-
+            
+            
             // variants:
             mild={props.mild ?? true}
-
-
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
         />

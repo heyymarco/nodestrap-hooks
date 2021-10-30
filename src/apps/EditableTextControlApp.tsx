@@ -46,6 +46,18 @@ function App() {
     return (
         <div className="App">
             <Container>
+				<EditableTextControl
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					enabled={enabled} active={active}
+
+					arrive={arrive}
+					focus={focus}
+
+					enableValidation={enableVal}
+					isValid={isValid}
+				/>
                 <EditableTextControl
 					tag='textarea'
 					defaultValue='editable text control'
