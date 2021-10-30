@@ -6,6 +6,15 @@ import {
 
 // cssfn:
 import {
+    // general types:
+    Tag,
+    Role,
+    PreferredTag,
+    PreferredRole,
+    
+    
+    
+    // utilities:
     setRef,
 }                           from './react-cssfn' // cssfn for react
 import type {
@@ -63,6 +72,14 @@ export interface DropdownButtonProps<TCloseType = DropdownCloseType>
     
     // children:
     buttonChildren? : React.ReactNode
+    
+    
+    
+    // semantics:
+    dropdownTag?           : Tag
+    dropdownRole?          : Role
+    dropdownPreferredTag?  : PreferredTag
+    dropdownPreferredRole? : PreferredRole
 }
 export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownButtonProps<TCloseType>) {
     // states:
@@ -74,6 +91,13 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
     const {
         // essentials:
         elmRef,
+        
+        
+        // semantics:
+        dropdownTag,
+        dropdownRole,
+        dropdownPreferredTag,
+        dropdownPreferredRole,
         
         
         // accessibilities:
@@ -110,21 +134,18 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
     ...restProps} = props;
     const {
         // essentials:
-        tag,            // delete
         style,          // delete
         
         
         // semantics:
-        preferredTag,   // delete
-        preferredRole,  // delete
+        tag,            // delete, replace with: dropdownTag
+        role,           // delete, replace with: dropdownRole
+        preferredTag,   // delete, replace with: dropdownPreferredTag
+        preferredRole,  // delete, replace with: dropdownPreferredRole
         
         
         // identifiers:
         id,             // delete
-        
-        
-        // accessibilities:
-        role,           // delete
         
         
         // classes:
@@ -201,6 +222,13 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
             <Dropdown<HTMLElement, TCloseType>
                 // other props:
                 {...restDropdownProps}
+                
+                
+                // semantics:
+                tag={dropdownTag}
+                role={dropdownRole}
+                preferredTag={dropdownPreferredTag}
+                preferredRole={dropdownPreferredRole}
                 
                 
                 // popups:
