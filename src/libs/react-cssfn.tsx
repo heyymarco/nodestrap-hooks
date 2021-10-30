@@ -314,17 +314,17 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
         SemanticProps
 {
     // essentials:
-    tag?            : Tag
     style?          : React.CSSProperties
     elmRef?         : React.Ref<TElement> // setter ref
     
     
+    // semantics:
+    tag?            : Tag
+    role?           : Role
+    
+    
     // identifiers:
     id?             : string
-    
-    
-    // accessibilities:
-    role?           : Role
     
     
     // classes:
