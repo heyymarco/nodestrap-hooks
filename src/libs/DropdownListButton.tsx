@@ -6,6 +6,13 @@ import {
 // cssfn:
 import {
     // general types:
+    Tag,
+    Role,
+    PreferredTag,
+    PreferredRole,
+}                           from './react-cssfn' // cssfn for react
+import {
+    // general types:
     PopupPlacement,
     PopupModifier,
     PopupPosition,
@@ -18,6 +25,11 @@ import {
     
     OrientationName,
     OrientationVariant,
+    
+    
+    
+    // utilities:
+    calculatePreferredRole,
     
     
     
@@ -61,6 +73,11 @@ export interface DropdownListButtonProps<TCloseType = DropdownListCloseType>
         
         DropdownListElementProps<HTMLButtonElement, TCloseType>
 {
+    // semantics:
+    listTag?           : Tag
+    listRole?          : Role
+    listPreferredTag?  : PreferredTag
+    listPreferredRole? : PreferredRole
 }
 export function DropdownListButton<TCloseType = DropdownListCloseType>(props: DropdownListButtonProps<TCloseType>) {
     // rest props:
@@ -75,16 +92,23 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
         
         
         // essentials:
-        tag,            // delete
         style,          // delete
+        
+        
+        // semantics:
+        listTag,
+        listRole,
+        listPreferredTag,
+        listPreferredRole,
+        
+        tag,            // delete, replace with: listTag
+        role,           // delete, replace with: listRole
+        preferredTag,   // delete, replace with: listPreferredTag
+        preferredRole,  // delete, replace with: listPreferredRole
         
         
         // identifiers:
         id,             // delete
-        
-        
-        // accessibilities:
-        role,           // delete
         
         
         // classes:
@@ -101,10 +125,22 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
         <DropdownButton<TCloseType>
             // other props:
             {...props}
+            
+            
+            // semantics:
+            dropdownPreferredTag={props.dropdownPreferredTag   ?? null                         }
+            dropdownPreferredRole={props.dropdownPreferredRole ?? calculatePreferredRole(props)}
         >
             <DropdownListElement<HTMLElement, TCloseType>
                 // other props:
                 {...restProps}
+                
+                
+                // semantics:
+                tag={listTag}
+                role={listRole}
+                preferredTag={listPreferredTag}
+                preferredRole={listPreferredRole}
             >
                 { children }
             </DropdownListElement>

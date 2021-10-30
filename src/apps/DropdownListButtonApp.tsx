@@ -110,16 +110,12 @@ function App() {
 						/>
 					</DropdownListItem>
 					<DropdownListItem theme='danger'>i'm angry</DropdownListItem>
-					<DropdownListItem actionCtrl={false} theme='success'>i'm fine</DropdownListItem>
 					<DropdownListItem size='sm'>i'm small</DropdownListItem>
 					<DropdownListItem size='lg'>i'm big</DropdownListItem>
 					<DropdownListItem gradient={true}>i'm 3d</DropdownListItem>
 					<DropdownListItem outlined={true}>i'm transparent</DropdownListItem>
 					<DropdownListItem>i'm controllable</DropdownListItem>
 					<DropdownListItem active={true}>i'm controllable</DropdownListItem>
-					<DropdownListItem actionCtrl={false}>
-						<TextInput placeholder='type here' enableValidation={false} />
-					</DropdownListItem>
                 </DropdownListButton>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
