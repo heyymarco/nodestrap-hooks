@@ -38,9 +38,10 @@ import {
 
 
 // general types:
-export type Tag  = keyof JSX.IntrinsicElements
-export type Role = React.AriaRole
 
+// semantics:
+export type Tag           = keyof JSX.IntrinsicElements
+export type Role          = React.AriaRole
 export type PreferredTag  = SingleOrArray<Optional<Tag>>
 export type PreferredRole = SingleOrArray<Optional<Role>>
 
