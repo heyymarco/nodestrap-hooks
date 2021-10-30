@@ -1000,8 +1000,12 @@ export function Range(props: RangeProps) {
             {...restProps}
             
             
+            // semantics:
+            preferredTag={props.preferredTag   ?? null     }
+            preferredRole={props.preferredRole ?? 'slider'}
+            
+            
             // accessibilities:
-            role={props.role ?? 'slider'}
             aria-orientation={props['aria-orientation'] ?? (orientationVertical ? 'vertical' : 'horizontal')}
             aria-valuenow={props['aria-valuenow'] ?? valueFn}
             aria-valuemin={props['aria-valuemin'] ?? (negativeFn ? maxFn : minFn)}
