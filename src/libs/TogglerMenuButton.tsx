@@ -614,9 +614,6 @@ export function TogglerMenuButton(props: TogglerMenuButtonProps) {
     // fn props:
     const propActive  = usePropActive(props);
     
-    const ariaRole    = props.role            ?? 'button';
-    const ariaPressed = props['aria-pressed'] ?? ((ariaRole === 'button') ? propActive : undefined);
-    
     
     
     // jsx:
@@ -627,8 +624,6 @@ export function TogglerMenuButton(props: TogglerMenuButtonProps) {
             
             
             // accessibilities:
-            role={ariaRole}
-            aria-pressed={props['aria-pressed'] ?? ariaPressed}
             aria-expanded={props['aria-expanded'] ?? propActive}
             label={props.label ?? 'Toggle navigation'}
             
