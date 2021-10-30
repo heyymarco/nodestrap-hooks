@@ -25,6 +25,11 @@ import {
     rule,
 }                           from './cssfn'       // cssfn core
 import {
+    // general types:
+    Tag,
+    
+    
+    
     // hooks:
     createUseSheet,
     
@@ -483,8 +488,11 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
 {
     // essentials:
     scrollRef? : React.Ref<HTMLElement> // setter ref
-    itemsTag?  : keyof JSX.IntrinsicElements
-    itemTag?   : keyof JSX.IntrinsicElements
+    
+    
+    // semantics:
+    itemsTag?  : Tag
+    itemTag?   : Tag
     
     
     // children:
@@ -510,6 +518,9 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         // essentials:
         elmRef,
         scrollRef,
+        
+        
+        // semantics:
         itemsTag,
         itemTag,
         
@@ -910,12 +921,15 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             { children && <>
                 <Element<TElement>
                     // essentials:
-                    tag={itemsTagFn}
                     elmRef={(elm) => {
                         setRef(elmRef, elm);
                         if (!infiniteLoop) setRef(scrollRef, elm);
                         setRef(listRef, elm);
                     }}
+                    
+                    
+                    // semantics:
+                    tag={itemsTagFn}
                     
                     
                     // classes:
@@ -931,6 +945,9 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         
                         // essentials:
                         key={child.key ?? index}
+                        
+                        
+                        // semantics:
                         tag={child.props.tag ?? itemTagFn}
                     />
                     :
