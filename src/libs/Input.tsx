@@ -290,7 +290,7 @@ export function Input(props: InputProps) {
             {...restProps}
             
             
-            // essentials:
+            // semantics:
             tag={props.tag ?? 'span'}
             
             
