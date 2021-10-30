@@ -233,11 +233,6 @@ export interface GroupProps<TElement extends HTMLElement = HTMLElement>
 export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupProps<TElement>) {
     // rest props:
     const {
-        // accessibilities:
-        role,
-        label,
-        
-        
         // children:
         children,
     ...restProps} = props;
@@ -251,9 +246,9 @@ export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupPr
             {...restProps}
             
             
-            // accessibilities:
-            role={role ?? 'group'}
-            aria-label={label ?? 'Buttons'}
+            // semantics:
+            preferredTag={props.preferredTag   ?? [null] }
+            preferredRole={props.preferredRole ?? 'group'}
             
             
             // layouts:
