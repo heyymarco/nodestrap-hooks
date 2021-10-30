@@ -391,7 +391,13 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             mainClass={props.mainClass ?? sheet.main}
         >
             { props.children }
-            <div data-popper-arrow></div>
+            <div
+                // semantics:
+                aria-hidden={true} // the arrow is just for decoration purpose, no meaningful content here
+                
+                
+                data-popper-arrow
+            ></div>
         </Popup>
     );
 }
