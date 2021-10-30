@@ -169,6 +169,37 @@ export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props
         isSemanticTag,
     ] as const;
 };
+export const useTestSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: SemanticProps) => {
+    const preferredTag = ((): PreferredTag => {
+        if (!props.preferredTag) return options.preferredTag;
+
+        
+        
+        if (props.preferredTag === options.preferredTag) return options.preferredTag;
+        
+        const preferredTag1 = Array.isArray(props.preferredTag)   ? props.preferredTag   : [props.preferredTag];
+        const preferredTag2 = Array.isArray(options.preferredTag) ? options.preferredTag : [options.preferredTag];
+        const intersect     = preferredTag1.filter((p) => preferredTag2.includes(p));
+        return (intersect.length) ? intersect : null;
+    })();
+    
+    const preferredRole = ((): PreferredRole => {
+        if (!props.preferredRole) return options.preferredRole;
+
+        
+        
+        if (props.preferredRole === options.preferredRole) return options.preferredRole;
+        
+        const preferredRole1 = Array.isArray(props.preferredRole)   ? props.preferredRole   : [props.preferredRole];
+        const preferredRole2 = Array.isArray(options.preferredRole) ? options.preferredRole : [options.preferredRole];
+        const intersect      =  preferredRole1.filter((p) => preferredRole2.includes(p));
+        return (intersect.length) ? intersect : null;
+    })();
+    
+    
+    
+    return defineSemantic(props, { preferredTag, preferredRole });
+}
 
 
 
