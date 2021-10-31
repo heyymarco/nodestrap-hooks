@@ -128,7 +128,7 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
             
             
             // semantics:
-            dropdownPreferredTag={props.dropdownPreferredTag   ?? null                         }
+            dropdownPreferredTag={props.dropdownPreferredTag   ?? [null]                       }
             dropdownPreferredRole={props.dropdownPreferredRole ?? calculatePreferredRole(props)}
         >
             <DropdownListElement<HTMLElement, TCloseType>
