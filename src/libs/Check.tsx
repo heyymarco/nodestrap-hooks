@@ -38,12 +38,12 @@ import {
 import {
     // hooks:
     createUseSheet,
+    useTestSemantic,
     
     
     
     // utilities:
     setRef,
-    useTestSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
