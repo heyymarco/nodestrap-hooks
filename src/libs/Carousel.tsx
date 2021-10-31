@@ -1191,6 +1191,9 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         <NavscrollItem
                             // essentials:
                             key={index}
+                            
+                            
+                            // semantics:
                             tag='button'
                             
                             
