@@ -276,7 +276,7 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
         NudeVariant
 {
     // popups:
-    targetRef?      : React.RefObject<HTMLElement> // getter ref
+    targetRef?      : React.RefObject<HTMLElement>|HTMLElement|null // getter ref
     popupPlacement? : PopupPlacement
     popupModifiers? : Partial<PopupModifier<string, any>>[]
     popupPosition?  : PopupPosition
@@ -306,7 +306,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         
         
         
-        const target = props.targetRef?.current;
+        const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
         const popup  = popupRef.current;
         if (!target) return; // target was not specified => nothing to do
         if (!popup)  return; // popup was unloaded       => nothing to do
