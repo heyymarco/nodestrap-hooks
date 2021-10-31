@@ -106,7 +106,7 @@ export function VisuallyHidden<TElement extends HTMLElement = HTMLElement>(props
             {...props}
             
             
-            // essentials:
+            // semantics:
             tag={props.tag ?? 'span'}
             
             
