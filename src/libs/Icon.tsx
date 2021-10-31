@@ -806,17 +806,17 @@ export function Icon<TElement extends HTMLElement = HTMLElement>(props: IconProp
         <Element<TElement>
             // other props:
             {...props}
-
-
-            // essentials:
+            
+            
+            // semantics:
             tag={props.tag ?? 'span'}
-
-
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 sizeVariant.class,
-
+                
                 themeVariant.class,
                 mildVariant.class,
             ]}
@@ -824,8 +824,8 @@ export function Icon<TElement extends HTMLElement = HTMLElement>(props: IconProp
                 // appearances:
                 icon.class,
             ]}
-
-
+            
+            
             // styles:
             style={{...(props.style ?? {}),
                 // appearances:
