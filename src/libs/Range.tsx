@@ -32,6 +32,9 @@ import {
 import {
     // general types:
     Tag,
+    Role,
+    SemanticTag,
+    SemanticRole,
     
     
     
@@ -586,6 +589,11 @@ export interface RangeProps
     trackUpperTag?   : Tag
     thumbTag?        : Tag
     
+    trackRole?       : Role
+    trackLowerRole?  : Role
+    trackUpperRole?  : Role
+    thumbRole?       : Role
+    
     
     // classes:
     trackMainClass?           : Optional<string>
@@ -647,6 +655,11 @@ export function Range(props: RangeProps) {
         trackLowerTag,
         trackUpperTag,
         thumbTag,
+        
+        trackRole,
+        trackLowerRole,
+        trackUpperRole,
+        thumbRole,
         
         
         // classes:
@@ -948,6 +961,7 @@ export function Range(props: RangeProps) {
             
             // semantics:
             tag={trackLowerTag}
+            role={trackLowerRole}
             
             
             // classes:
@@ -974,6 +988,7 @@ export function Range(props: RangeProps) {
             
             // semantics:
             tag={trackUpperTag}
+            role={trackUpperRole}
             
             
             // classes:
@@ -1136,6 +1151,7 @@ export function Range(props: RangeProps) {
                 
                 // semantics:
                 tag={trackTag}
+                role={trackRole}
                 
                 
                 // accessibilities:
@@ -1171,6 +1187,7 @@ export function Range(props: RangeProps) {
                     
                     // semantics:
                     tag={thumbTag}
+                    role={thumbRole}
                     
                     
                     // accessibilities:
