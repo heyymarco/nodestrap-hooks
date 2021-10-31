@@ -949,7 +949,7 @@ export function Check(props: CheckProps) {
             
             aria-checked={ariaChecked}
             aria-pressed={ariaPressed}
-            aria-label={label}
+            aria-label={props['aria-label'] ?? label}
             
             
             // accessibilities:
