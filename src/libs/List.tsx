@@ -42,6 +42,7 @@ import {
     
     // hooks:
     createUseSheet,
+    useTestSemantic,
     
     
     
@@ -52,7 +53,6 @@ import {
     
     // utilities:
     isTypeOf,
-    useTestSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
