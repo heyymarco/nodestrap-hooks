@@ -1306,8 +1306,6 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             semanticTag ={semanticTag }
             semanticRole={semanticRole}
             
-            
-            // accessibilities:
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
