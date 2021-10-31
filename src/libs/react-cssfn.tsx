@@ -48,6 +48,7 @@ export type PreferredRole = SingleOrArray<Optional<Role>>
 
 
 // hooks:
+
 const styleSheetManager = new SheetsManager(); // caches & manages styleSheets usage, attached to dom when in use and detached from dom when not in use
 export const createUseJssSheet = <TClassName extends ClassName = ClassName>(styles: ProductOrFactory<Styles<TClassName>>): Factory<Classes<TClassName>> => {
     const styleSheetId  = {}; // a simple object for the styleSheet's identifier (by reference)
@@ -107,45 +108,6 @@ export const createUseSheet    = <TClassName extends ClassName = ClassName>(clas
 
 
 
-// utilities:
-
-export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React.JSXElementConstructor<TProps>): element is React.ReactElement<TProps, React.JSXElementConstructor<TProps>> => {
-    return (
-        React.isValidElement<TProps>(element)
-        &&
-        (
-            (element.type === funcComponent)
-            ||
-            (
-                (typeof element.type === 'function')
-                &&
-                (
-                    (
-                        element.type.prototype
-                        &&
-                        funcComponent.prototype
-                        &&
-                        (element.type.prototype === funcComponent.prototype)
-                    )
-                    ||
-                    (element.type.prototype instanceof funcComponent)
-                )
-            )
-        )
-    );
-};
-
-export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>|undefined, elm: TElement|null) => {
-    if (elmRef) {
-        if (typeof(elmRef) === 'function') {
-            elmRef(elm);
-        }
-        else {
-            (elmRef as React.MutableRefObject<TElement|null>).current = elm;
-        } // if
-    } // if
-};
-
 export interface SemanticOptions
 {
     // semantics:
@@ -161,7 +123,7 @@ export interface SemanticProps
     tag?           : Tag
     role?          : Role
 }
-export const defineSemantic = (props: SemanticProps, options: SemanticOptions = props) => {
+export const useSemantic     = (props: SemanticProps, options: SemanticOptions = props) => {
     const roleAbs       : Role|undefined = props.role ??                  (Array.isArray(options.preferredRole) ? (options.preferredRole?.[0] ?? undefined) : (options.preferredRole ?? undefined));
     const isDesiredType : boolean        = !!roleAbs  &&                  (Array.isArray(options.preferredRole) ?  options.preferredRole.includes(roleAbs)  : (options.preferredRole === roleAbs ));
     
@@ -208,8 +170,49 @@ export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) 
     
     
     
-    return defineSemantic(props, { preferredTag, preferredRole });
+    return useSemantic(props, { preferredTag, preferredRole });
 }
+
+
+
+// utilities:
+
+export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React.JSXElementConstructor<TProps>): element is React.ReactElement<TProps, React.JSXElementConstructor<TProps>> => {
+    return (
+        React.isValidElement<TProps>(element)
+        &&
+        (
+            (element.type === funcComponent)
+            ||
+            (
+                (typeof element.type === 'function')
+                &&
+                (
+                    (
+                        element.type.prototype
+                        &&
+                        funcComponent.prototype
+                        &&
+                        (element.type.prototype === funcComponent.prototype)
+                    )
+                    ||
+                    (element.type.prototype instanceof funcComponent)
+                )
+            )
+        )
+    );
+};
+
+export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>|undefined, elm: TElement|null) => {
+    if (elmRef) {
+        if (typeof(elmRef) === 'function') {
+            elmRef(elm);
+        }
+        else {
+            (elmRef as React.MutableRefObject<TElement|null>).current = elm;
+        } // if
+    } // if
+};
 
 
 
@@ -378,7 +381,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
         const htmlProps : {} = {
             ref : props.elmRef,
         };
-
+        
         for (const name in props) {
             if (isHtmlProp(name)) {
                 (htmlProps as any)[name] = (props as any)[name];
@@ -387,13 +390,13 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
         
         return htmlProps;
     }, [props]);
-
-
-
+    
+    
+    
     // fn props:
-    const [tag, role] = defineSemantic(props);
+    const [tag, role] = useSemantic(props);
     const Tag         = (tag ?? 'div');
-
+    
     
     
     // jsx:
