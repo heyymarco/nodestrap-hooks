@@ -27,10 +27,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // utilities:
     useTestSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
