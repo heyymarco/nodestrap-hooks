@@ -27,11 +27,15 @@ import {
 import {
     // general types:
     Tag,
+    Role,
+    SemanticTag,
+    SemanticRole,
     
     
     
     // hooks:
     createUseSheet,
+    useTestSemantic,
     
     
     
@@ -464,10 +468,6 @@ export function CarouselItem<TElement extends HTMLElement = HTMLElement>(props: 
             {...props}
             
             
-            // essentials:
-            tag={props.tag ?? 'div'}
-            
-            
             // classes:
             mainClass={props.mainClass ?? ''}
         />
@@ -487,19 +487,28 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
         CarouselVariant
 {
     // essentials:
-    scrollRef? : React.Ref<HTMLElement> // setter ref
+    scrollRef?         : React.Ref<HTMLElement> // setter ref
     
     
     // semantics:
-    itemsTag?  : Tag
-    itemTag?   : Tag
+    itemsTag?          : Tag
+    itemTag?           : Tag
+    
+    itemsRole?         : Role
+    itemRole?          : Role
+    
+    itemsSemanticTag?  : SemanticTag
+    itemSemanticTag?   : SemanticTag
+    
+    itemsSemanticRole? : SemanticRole
+    itemSemanticRole?  : SemanticRole
     
     
     // children:
-    children?  : React.ReactNode
-    prevBtn?   : React.ReactChild | boolean | null
-    nextBtn?   : React.ReactChild | boolean | null
-    nav?       : React.ReactChild | boolean | null
+    children?          : React.ReactNode
+    prevBtn?           : React.ReactChild | boolean | null
+    nextBtn?           : React.ReactChild | boolean | null
+    nav?               : React.ReactChild | boolean | null
 }
 export function Carousel<TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) {
     // styles:
@@ -524,6 +533,15 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         itemsTag,
         itemTag,
         
+        itemsRole,
+        itemRole,
+        
+        itemsSemanticTag,
+        itemSemanticTag,
+        
+        itemsSemanticRole,
+        itemSemanticRole,
+        
         
         // children:
         children,
@@ -536,8 +554,15 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     // fn props:
     const itemsTotal = (children && (Array.isArray(children) ? children.length : 1)) || 0;
-    const itemsTagFn = itemsTag ?? 'ul';
-    const itemTagFn  = itemTag  ?? ['ul', 'ol'].includes(itemsTagFn) ? 'li' : 'div';
+    
+    const listTag             = ['ul', 'ol'] as Array<Tag>;
+    const listRole            = 'list';
+    const itemsSemanticTagFn  = itemsSemanticTag  ?? listTag;
+    const itemsSemanticRoleFn = itemsSemanticRole ?? listRole;
+    const [, , isList, isSemanticList] = useTestSemantic({ tag: itemsTag, role: itemsRole, semanticTag: itemsSemanticTagFn, semanticRole: itemsSemanticRoleFn }, { semanticTag: listTag, semanticRole: listRole });
+    
+    const itemSemanticTagFn   = itemSemanticTag  ?? (isSemanticList ? 'li'       : [null]);
+    const itemSemanticRoleFn  = itemSemanticRole ?? (isList         ? 'listitem' : [null]);
     
     
     
@@ -929,7 +954,10 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // semantics:
-                    tag={itemsTagFn}
+                    tag ={itemsTag }
+                    role={itemsRole}
+                    semanticTag ={itemsSemanticTagFn }
+                    semanticRole={itemsSemanticRoleFn}
                     
                     
                     // classes:
@@ -948,13 +976,22 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         
                         
                         // semantics:
-                        tag={child.props.tag ?? itemTagFn}
+                        tag ={child.props.tag  ?? itemTag }
+                        role={child.props.role ?? itemRole}
+                        semanticTag ={child.props.semanticTag  ?? itemSemanticTagFn }
+                        semanticRole={child.props.semanticRole ?? itemSemanticRoleFn}
                     />
                     :
                     <CarouselItem
                         // essentials:
                         key={index}
-                        tag={itemTagFn}
+                        
+                        
+                        // semantics:
+                        tag ={itemTag }
+                        role={itemRole}
+                        semanticTag ={itemSemanticTagFn }
+                        semanticRole={itemSemanticRoleFn}
                     >
                         { child }
                     </CarouselItem>
@@ -963,7 +1000,6 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 
                 { infiniteLoop && <Element<TElement>
                     // essentials:
-                    tag={itemsTagFn}
                     elmRef={(elm) => {
                         setRef(scrollRef, elm);
                         setRef(listDummyRef, elm);
