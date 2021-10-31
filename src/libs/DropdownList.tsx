@@ -325,7 +325,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? null                         }
+            preferredTag={props.preferredTag   ?? [null]                       }
             preferredRole={props.preferredRole ?? calculatePreferredRole(props)}
         >
             <DropdownListElement<TElement, TCloseType>
