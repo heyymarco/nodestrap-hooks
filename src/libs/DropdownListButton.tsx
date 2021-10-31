@@ -137,7 +137,7 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
                 
                 
                 // semantics:
-                tag={listTag}
+                tag ={listTag }
                 role={listRole}
                 semanticTag ={listSemanticTag }
                 semanticRole={listSemanticRole}
