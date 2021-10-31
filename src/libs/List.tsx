@@ -1169,7 +1169,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : null    )} /* not using <button> for "button" because the children may contain any_html_elements */
+            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : [null]  )} /* not using <button> for "button" because the children may contain any_html_elements */
             preferredRole={props.preferredRole ?? (props.href ? 'link' : 'button')}
             
             
