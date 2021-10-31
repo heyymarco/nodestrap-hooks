@@ -365,7 +365,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         // cleanups:
         return () => {
             document.removeEventListener('click', handleClick);
-            document.removeEventListener('focus', handleFocus);
+            document.removeEventListener('focus', handleFocus, { capture: true });
         };
     }, [onActiveChange, isVisible, targetRef]);
     
