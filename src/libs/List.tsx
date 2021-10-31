@@ -619,7 +619,7 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(':nth-child(n)', [
+                            ...children('*', [ // *:first-child | *:last-child => specificity weight = 1
                                 variants([
                                     isFirstChild([
                                         layout({
@@ -664,7 +664,7 @@ export const usesListVariants = () => {
                             
                             
                             // children:
-                            ...children(':nth-child(n)', [
+                            ...children('*', [ // *:first-child | *:last-child => specificity weight = 1
                                 variants([
                                     isFirstChild([
                                         layout({
