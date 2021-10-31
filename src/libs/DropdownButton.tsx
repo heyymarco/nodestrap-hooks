@@ -235,7 +235,7 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 
                 
                 // popups:
-                targetRef={props.targetRef ?? buttonRef}
+                targetRef={props.targetRef ?? buttonRef.current}
                 
                 
                 // accessibilities:
