@@ -464,9 +464,10 @@ export function Button(props: ButtonProps) {
             semanticTag ={semanticTag }
             semanticRole={semanticRole}
             
+            aria-label={props['aria-label'] ?? label}
+            
             
             // accessibilities:
-            aria-label={label}
             enabled={props.enabled ?? !(props.disabled ?? false)}
             press={props.press ?? active}
             
