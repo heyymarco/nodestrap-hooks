@@ -370,9 +370,10 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
             semanticTag ={props.semanticTag  ?? [null]  }
             semanticRole={props.semanticRole ?? 'status'}
             
+            aria-label={props['aria-label'] ?? label}
+            
             
             // accessibilities:
-            aria-label={label}
             {...{
                 active        : activeFn,
                 inheritActive : false,
