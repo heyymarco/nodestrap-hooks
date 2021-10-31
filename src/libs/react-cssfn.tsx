@@ -146,12 +146,22 @@ export const setRef = <TElement extends HTMLElement>(elmRef: React.Ref<TElement>
     } // if
 };
 
-export interface SemanticProps {
+export interface SemanticOptions
+{
     // semantics:
     preferredTag?  : PreferredTag
     preferredRole? : PreferredRole
 }
-export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: SemanticProps = props) => {
+export interface SemanticProps
+    extends
+        SemanticOptions,
+        React.AriaAttributes
+{
+    // semantics:
+    tag?           : Tag
+    role?          : Role
+}
+export const defineSemantic = (props: SemanticProps, options: SemanticOptions = props) => {
     const roleAbs       : Role|undefined = props.role ??                  (Array.isArray(options.preferredRole) ? (options.preferredRole?.[0] ?? undefined) : (options.preferredRole ?? undefined));
     const isDesiredType : boolean        = !!roleAbs  &&                  (Array.isArray(options.preferredRole) ?  options.preferredRole.includes(roleAbs)  : (options.preferredRole === roleAbs ));
     
@@ -169,7 +179,7 @@ export const defineSemantic = <TElement extends HTMLElement = HTMLElement>(props
         isSemanticTag,
     ] as const;
 };
-export const useTestSemantic = <TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>, options: SemanticProps) => {
+export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) => {
     const preferredTag = ((): PreferredTag => {
         if (!props.preferredTag) return options.preferredTag;
 
@@ -345,17 +355,11 @@ const isHtmlProp = (propName: string) => propName.startsWith('on') || propName.s
 export interface ElementProps<TElement extends HTMLElement = HTMLElement>
     extends
         React.DOMAttributes<TElement>,
-        React.AriaAttributes,
         SemanticProps
 {
     // essentials:
     style?          : React.CSSProperties
     elmRef?         : React.Ref<TElement> // setter ref
-    
-    
-    // semantics:
-    tag?            : Tag
-    role?           : Role
     
     
     // identifiers:
