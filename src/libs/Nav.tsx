@@ -42,7 +42,7 @@ export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavIt
             {...props}
             
             
-            // accessibilities:
+            // semantics:
             aria-current={props['aria-current'] ?? (props.active ? 'page' : undefined)}
         />
     );
@@ -60,7 +60,7 @@ export function NavPrevItem<TElement extends HTMLElement = HTMLElement>(props: N
             {...props}
             
             
-            // accessibilities:
+            // semantics:
             aria-label={props['aria-label'] ?? 'Previous'}
         >
             {
@@ -86,7 +86,7 @@ export function NavNextItem<TElement extends HTMLElement = HTMLElement>(props: N
             {...props}
             
             
-            // accessibilities:
+            // semantics:
             aria-label={props['aria-label'] ?? 'Next'}
         >
             {
