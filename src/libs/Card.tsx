@@ -414,8 +414,8 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? 'article'}
-            preferredRole={props.preferredRole ?? 'article'}
+            semanticTag ={props.semanticTag  ?? 'article'}
+            semanticRole={props.semanticRole ?? 'article'}
             
             
             // accessibilities:

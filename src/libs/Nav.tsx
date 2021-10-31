@@ -145,8 +145,8 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? 'nav'}
-            preferredRole={props.preferredRole ?? 'navigation'}
+            semanticTag ={props.semanticTag  ?? 'nav'       }
+            semanticRole={props.semanticRole ?? 'navigation'}
             
             
             // layouts:

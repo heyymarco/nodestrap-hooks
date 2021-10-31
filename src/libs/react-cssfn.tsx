@@ -42,8 +42,8 @@ import {
 // semantics:
 export type Tag           = keyof JSX.IntrinsicElements
 export type Role          = React.AriaRole
-export type PreferredTag  = SingleOrArray<Optional<Tag>>
-export type PreferredRole = SingleOrArray<Optional<Role>>
+export type SemanticTag  = SingleOrArray<Optional<Tag>>
+export type SemanticRole = SingleOrArray<Optional<Role>>
 
 
 
@@ -111,8 +111,8 @@ export const createUseSheet    = <TClassName extends ClassName = ClassName>(clas
 export interface SemanticOptions
 {
     // semantics:
-    preferredTag?  : PreferredTag
-    preferredRole? : PreferredRole
+    semanticTag?  : SemanticTag
+    semanticRole? : SemanticRole
 }
 export interface SemanticProps
     extends
@@ -120,15 +120,15 @@ export interface SemanticProps
         React.AriaAttributes
 {
     // semantics:
-    tag?           : Tag
-    role?          : Role
+    tag?          : Tag
+    role?         : Role
 }
 export const useSemantic     = (props: SemanticProps, options: SemanticOptions = props) => {
-    const roleAbs       : Role|undefined = props.role ??                  (Array.isArray(options.preferredRole) ? (options.preferredRole?.[0] ?? undefined) : (options.preferredRole ?? undefined));
-    const isDesiredType : boolean        = !!roleAbs  &&                  (Array.isArray(options.preferredRole) ?  options.preferredRole.includes(roleAbs)  : (options.preferredRole === roleAbs ));
+    const roleAbs       : Role|undefined = props.role   ??                  (Array.isArray(options.semanticRole) ? (options.semanticRole?.[0] ?? undefined) : (options.semanticRole ?? undefined));
+    const isDesiredType : boolean        = !!roleAbs    &&                  (Array.isArray(options.semanticRole) ?  options.semanticRole.includes(roleAbs)  : (options.semanticRole === roleAbs ));
     
-    const tagFn         : Tag|undefined  = props.tag  ?? (isDesiredType ? (Array.isArray(options.preferredTag)  ? (options.preferredTag?.[0] ?? undefined)  : (options.preferredTag  ?? undefined)) : undefined);
-    const isSemanticTag : boolean        = !!tagFn    &&                  (Array.isArray(options.preferredTag)  ?  options.preferredTag.includes(tagFn)     : (options.preferredTag  === tagFn   ));
+    const tagFn         : Tag|undefined  = props.tag    ?? (isDesiredType ? (Array.isArray(options.semanticTag)  ? (options.semanticTag?.[0] ?? undefined)  : (options.semanticTag  ?? undefined)) : undefined);
+    const isSemanticTag : boolean        = !!tagFn      &&                  (Array.isArray(options.semanticTag)  ?  options.semanticTag.includes(tagFn)     : (options.semanticTag  === tagFn   ));
     
     const roleFn        : Role|undefined = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs; /* `''` => do not render role attribute, `undefined` => lets the BaseComponent decide the appropriate role */
     
@@ -142,35 +142,35 @@ export const useSemantic     = (props: SemanticProps, options: SemanticOptions =
     ] as const;
 };
 export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) => {
-    const preferredTag = ((): PreferredTag => {
-        if (!props.preferredTag) return options.preferredTag;
+    const semanticTag = ((): SemanticTag => {
+        if (!props.semanticTag) return options.semanticTag;
 
         
         
-        if (props.preferredTag === options.preferredTag) return options.preferredTag;
+        if (props.semanticTag === options.semanticTag) return options.semanticTag;
         
-        const preferredTag1 = Array.isArray(props.preferredTag)   ? props.preferredTag   : [props.preferredTag];
-        const preferredTag2 = Array.isArray(options.preferredTag) ? options.preferredTag : [options.preferredTag];
-        const intersect     = preferredTag1.filter((p) => preferredTag2.includes(p));
+        const semanticTag1 = Array.isArray(props.semanticTag)   ? props.semanticTag   : [props.semanticTag];
+        const semanticTag2 = Array.isArray(options.semanticTag) ? options.semanticTag : [options.semanticTag];
+        const intersect    = semanticTag1.filter((p) => semanticTag2.includes(p));
         return (intersect.length) ? intersect : null;
     })();
     
-    const preferredRole = ((): PreferredRole => {
-        if (!props.preferredRole) return options.preferredRole;
+    const semanticRole = ((): SemanticRole => {
+        if (!props.semanticRole) return options.semanticRole;
 
         
         
-        if (props.preferredRole === options.preferredRole) return options.preferredRole;
+        if (props.semanticRole === options.semanticRole) return options.semanticRole;
         
-        const preferredRole1 = Array.isArray(props.preferredRole)   ? props.preferredRole   : [props.preferredRole];
-        const preferredRole2 = Array.isArray(options.preferredRole) ? options.preferredRole : [options.preferredRole];
-        const intersect      =  preferredRole1.filter((p) => preferredRole2.includes(p));
+        const semanticRole1 = Array.isArray(props.semanticRole)   ? props.semanticRole   : [props.semanticRole];
+        const semanticRole2 = Array.isArray(options.semanticRole) ? options.semanticRole : [options.semanticRole];
+        const intersect     =  semanticRole1.filter((p) => semanticRole2.includes(p));
         return (intersect.length) ? intersect : null;
     })();
     
     
     
-    return useSemantic(props, { preferredTag, preferredRole });
+    return useSemantic(props, { semanticTag, semanticRole });
 }
 
 

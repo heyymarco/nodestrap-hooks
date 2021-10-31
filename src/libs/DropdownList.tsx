@@ -133,7 +133,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 // utilities:
-export const calculatePreferredRole = <TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) => {
+export const calculateSemanticRole = <TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) => {
     if (props.role) return null;
     
     
@@ -325,8 +325,8 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? [null]                       }
-            preferredRole={props.preferredRole ?? calculatePreferredRole(props)}
+            semanticTag ={props.semanticTag  ?? [null]                      }
+            semanticRole={props.semanticRole ?? calculateSemanticRole(props)}
         >
             <DropdownListElement<TElement, TCloseType>
                 // other props:

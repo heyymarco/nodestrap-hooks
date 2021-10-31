@@ -372,8 +372,8 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? [null]   }
-            preferredRole={props.preferredRole ?? 'tooltip'}
+            semanticTag ={props.semanticTag  ?? [null]   }
+            semanticRole={props.semanticRole ?? 'tooltip'}
             
             
             // accessibilities:

@@ -1153,9 +1153,9 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     /* not using <button> for "button" because the children may contain any_html_elements */
     // fn props:
-    // const preferredTag  = props.preferredTag  ?? (props.href ? 'a'    : 'button');
-    // const preferredRole = props.preferredRole ?? (props.href ? 'link' : 'button');
-    // const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, preferredTag, preferredRole }, { preferredTag: 'button', preferredRole: 'button' });
+    // const semanticTag  = props.semanticTag  ?? (props.href ? 'a'    : 'button');
+    // const semanticRole = props.semanticRole ?? (props.href ? 'link' : 'button');
+    // const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
     
     
     
@@ -1169,8 +1169,8 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? (props.href ? 'a'    : [null]  )} /* not using <button> for "button" because the children may contain any_html_elements */
-            preferredRole={props.preferredRole ?? (props.href ? 'link' : 'button')}
+            semanticTag ={props.semanticTag  ?? (props.href ? 'a'    : [null]  )} /* not using <button> for "button" because the children may contain any_html_elements */
+            semanticRole={props.semanticRole ?? (props.href ? 'link' : 'button')}
             
             
             // accessibilities:
@@ -1284,14 +1284,14 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const listTag       = ['ul', 'ol'] as Array<Tag>;
-    const listRole      = 'list';
-    const preferredTag  = props.preferredTag  ?? listTag;
-    const preferredRole = props.preferredRole ?? listRole;
-    const [, , isList, isSemanticList] = useTestSemantic({ tag: props.tag, role: props.role, preferredTag, preferredRole }, { preferredTag: listTag, preferredRole: listRole });
+    const listTag      = ['ul', 'ol'] as Array<Tag>;
+    const listRole     = 'list';
+    const semanticTag  = props.semanticTag  ?? listTag;
+    const semanticRole = props.semanticRole ?? listRole;
+    const [, , isList, isSemanticList] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: listTag, semanticRole: listRole });
     
-    const wrapTag       = isSemanticList ? 'li' : undefined;
-    const wrapRole      = isList ? (isSemanticList ? '' : 'listitem') : '';
+    const wrapTag      = isSemanticList ? 'li' : undefined;
+    const wrapRole     = isList ? (isSemanticList ? '' : 'listitem') : '';
     
     
     
@@ -1303,8 +1303,8 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             
             
             // semantics:
-            preferredTag={preferredTag}
-            preferredRole={preferredRole}
+            semanticTag ={semanticTag }
+            semanticRole={semanticRole}
             
             
             // accessibilities:

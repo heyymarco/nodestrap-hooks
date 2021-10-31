@@ -590,8 +590,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? [null]  }
-            preferredRole={props.preferredRole ?? 'dialog'}
+            semanticTag ={props.semanticTag  ?? [null]  }
+            semanticRole={props.semanticRole ?? 'dialog'}
             
             
             // accessibilities:

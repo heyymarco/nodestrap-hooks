@@ -1,8 +1,12 @@
 top priority:
-fix overflow detection Navbar padding-end
-fix aria on List
+re-check aria-***
+tag => // essentials: => // semantics:
+role => // accessibilities: => // semantics:
+Range & Carousel => set sub elements semanticTag, semanticRole
+SingleOrArray => single or readonly array
 remove unused translate() on firefox
 Progress
+[stucked] fix overflow detection Navbar padding-end
 
 
 
@@ -16,4 +20,5 @@ Range => dial variant
 Media => for profile image, video, static images, gifs, svgs, etc
 fix focus-visible
 List:variant_tab => move up tab border radius from ListItem to Wrapper
+fix targetRef change aware on Popup, Tooltip, Navscroll
 Navbar => use List

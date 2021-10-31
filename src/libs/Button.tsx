@@ -451,9 +451,9 @@ export function Button(props: ButtonProps) {
     
     
     // fn props:
-    const preferredTag  = props.preferredTag  ?? (props.href ? 'a'    : 'button');
-    const preferredRole = props.preferredRole ?? (props.href ? 'link' : 'button');
-    const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, preferredTag, preferredRole }, { preferredTag: 'button', preferredRole: 'button' });
+    const semanticTag  = props.semanticTag  ?? (props.href ? 'a'    : 'button');
+    const semanticRole = props.semanticRole ?? (props.href ? 'link' : 'button');
+    const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
     
     
     
@@ -465,8 +465,8 @@ export function Button(props: ButtonProps) {
             
             
             // semantics:
-            preferredTag={preferredTag}
-            preferredRole={preferredRole}
+            semanticTag ={semanticTag }
+            semanticRole={semanticRole}
             
             
             // accessibilities:

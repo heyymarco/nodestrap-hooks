@@ -8,8 +8,8 @@ import {
     // general types:
     Tag,
     Role,
-    PreferredTag,
-    PreferredRole,
+    SemanticTag,
+    SemanticRole,
 }                           from './react-cssfn' // cssfn for react
 import {
     // general types:
@@ -29,7 +29,7 @@ import {
     
     
     // utilities:
-    calculatePreferredRole,
+    calculateSemanticRole,
     
     
     
@@ -74,10 +74,10 @@ export interface DropdownListButtonProps<TCloseType = DropdownListCloseType>
         DropdownListElementProps<HTMLButtonElement, TCloseType>
 {
     // semantics:
-    listTag?           : Tag
-    listRole?          : Role
-    listPreferredTag?  : PreferredTag
-    listPreferredRole? : PreferredRole
+    listTag?          : Tag
+    listRole?         : Role
+    listSemanticTag?  : SemanticTag
+    listSemanticRole? : SemanticRole
 }
 export function DropdownListButton<TCloseType = DropdownListCloseType>(props: DropdownListButtonProps<TCloseType>) {
     // rest props:
@@ -98,13 +98,13 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
         // semantics:
         listTag,
         listRole,
-        listPreferredTag,
-        listPreferredRole,
+        listSemanticTag,
+        listSemanticRole,
         
         tag,            // delete, replace with: listTag
         role,           // delete, replace with: listRole
-        preferredTag,   // delete, replace with: listPreferredTag
-        preferredRole,  // delete, replace with: listPreferredRole
+        semanticTag,    // delete, replace with: listSemanticTag
+        semanticRole,   // delete, replace with: listSemanticRole
         
         
         // identifiers:
@@ -128,8 +128,8 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
             
             
             // semantics:
-            dropdownPreferredTag={props.dropdownPreferredTag   ?? [null]                       }
-            dropdownPreferredRole={props.dropdownPreferredRole ?? calculatePreferredRole(props)}
+            dropdownSemanticTag={props.dropdownSemanticTag   ?? [null]                      }
+            dropdownSemanticRole={props.dropdownSemanticRole ?? calculateSemanticRole(props)}
         >
             <DropdownListElement<HTMLElement, TCloseType>
                 // other props:
@@ -139,8 +139,8 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
                 // semantics:
                 tag={listTag}
                 role={listRole}
-                preferredTag={listPreferredTag}
-                preferredRole={listPreferredRole}
+                semanticTag ={listSemanticTag }
+                semanticRole={listSemanticRole}
             >
                 { children }
             </DropdownListElement>

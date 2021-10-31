@@ -9,8 +9,8 @@ import {
     // general types:
     Tag,
     Role,
-    PreferredTag,
-    PreferredRole,
+    SemanticTag,
+    SemanticRole,
     
     
     
@@ -76,10 +76,10 @@ export interface DropdownButtonProps<TCloseType = DropdownCloseType>
     
     
     // semantics:
-    dropdownTag?           : Tag
-    dropdownRole?          : Role
-    dropdownPreferredTag?  : PreferredTag
-    dropdownPreferredRole? : PreferredRole
+    dropdownTag?          : Tag
+    dropdownRole?         : Role
+    dropdownSemanticTag?  : SemanticTag
+    dropdownSemanticRole? : SemanticRole
 }
 export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownButtonProps<TCloseType>) {
     // states:
@@ -96,8 +96,8 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
         // semantics:
         dropdownTag,
         dropdownRole,
-        dropdownPreferredTag,
-        dropdownPreferredRole,
+        dropdownSemanticTag,
+        dropdownSemanticRole,
         
         
         // accessibilities:
@@ -140,8 +140,8 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
         // semantics:
         tag,            // delete, replace with: dropdownTag
         role,           // delete, replace with: dropdownRole
-        preferredTag,   // delete, replace with: dropdownPreferredTag
-        preferredRole,  // delete, replace with: dropdownPreferredRole
+        semanticTag,    // delete, replace with: dropdownSemanticTag
+        semanticRole,   // delete, replace with: dropdownSemanticRole
         
         
         // identifiers:
@@ -227,8 +227,8 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 // semantics:
                 tag={dropdownTag}
                 role={dropdownRole}
-                preferredTag={dropdownPreferredTag}
-                preferredRole={dropdownPreferredRole}
+                semanticTag ={dropdownSemanticTag }
+                semanticRole={dropdownSemanticRole}
                 
                 
                 // popups:

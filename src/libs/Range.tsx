@@ -1001,8 +1001,8 @@ export function Range(props: RangeProps) {
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? [null]  }
-            preferredRole={props.preferredRole ?? 'slider'}
+            semanticTag ={props.semanticTag  ?? [null]  }
+            semanticRole={props.semanticRole ?? 'slider'}
             
             
             // accessibilities:

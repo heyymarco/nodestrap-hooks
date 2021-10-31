@@ -254,7 +254,7 @@ export function Radio(props: RadioProps) {
     
     // fn props:
     const isButton          = !!props.checkStyle && ['btn', 'togglerBtn'].includes(props.checkStyle);
-    const preferredRole     = props.preferredRole ?? (isButton ? 'button'  : 'radio');
+    const semanticRole      = props.semanticRole ?? (isButton ? 'button'  : 'radio');
     
     
     
@@ -266,7 +266,7 @@ export function Radio(props: RadioProps) {
             
             
             // semantics:
-            preferredRole={preferredRole}
+            semanticRole={semanticRole}
             
             
             // essentials:

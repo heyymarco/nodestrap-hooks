@@ -247,8 +247,8 @@ export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupPr
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? [null] }
-            preferredRole={props.preferredRole ?? 'group'}
+            semanticTag ={props.semanticTag  ?? [null] }
+            semanticRole={props.semanticRole ?? 'group'}
             
             
             // layouts:

@@ -1152,8 +1152,8 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? 'nav'}
-            preferredRole={props.preferredRole ?? 'navigation'}
+            semanticTag ={props.semanticTag  ?? 'nav'       }
+            semanticRole={props.semanticRole ?? 'navigation'}
             
             
             // essentials:

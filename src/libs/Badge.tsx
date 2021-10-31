@@ -367,8 +367,8 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
             
             // semantics:
             tag={props.tag ?? 'span'}
-            preferredTag={props.preferredTag   ?? [null]  }
-            preferredRole={props.preferredRole ?? 'status'}
+            semanticTag ={props.semanticTag  ?? [null]  }
+            semanticRole={props.semanticRole ?? 'status'}
             
             
             // accessibilities:
