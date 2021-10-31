@@ -249,9 +249,10 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             semanticTag ={props.semanticTag  ?? ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']}
             semanticRole={props.semanticRole ?? 'heading'                           }
             
+            aria-expanded={props['aria-expanded'] ?? isActive}
+            
             
             // accessibilities:
-            aria-expanded={props['aria-expanded'] ?? isActive}
             active={isActive}
             
             
