@@ -429,7 +429,7 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? null   }
+            preferredTag={props.preferredTag   ?? [null] }
             preferredRole={props.preferredRole ?? 'alert'}
             
             
