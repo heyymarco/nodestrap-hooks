@@ -417,8 +417,6 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
             semanticTag ={props.semanticTag  ?? 'article'}
             semanticRole={props.semanticRole ?? 'article'}
             
-            
-            // accessibilities:
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
