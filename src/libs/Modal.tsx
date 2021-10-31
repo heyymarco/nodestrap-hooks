@@ -593,9 +593,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             semanticTag ={props.semanticTag  ?? [null]  }
             semanticRole={props.semanticRole ?? 'dialog'}
             
+            aria-modal={props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)}
+            
             
             // accessibilities:
-            aria-modal={props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)}
             {...{
                 active        : activePassiveState.active,
                 inheritActive : false,
