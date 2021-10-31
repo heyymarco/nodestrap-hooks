@@ -1,20 +1,19 @@
 top priority:
 SingleOrArray => single or readonly array
-remove unused translate() on firefox
 Progress
-[stucked] fix overflow detection Navbar padding-end
 
 
 
 medium priority:
+fix targetRef change aware on Popup, Tooltip, Navscroll
 css-config => filter valid props
 
 
 
 low priority:
+[stucked] fix overflow detection Navbar padding-end
 Range => dial variant
 Media => for profile image, video, static images, gifs, svgs, etc
-fix focus-visible
 List:variant_tab => move up tab border radius from ListItem to Wrapper
-fix targetRef change aware on Popup, Tooltip, Navscroll
+fix focus-visible
 Navbar => use List
