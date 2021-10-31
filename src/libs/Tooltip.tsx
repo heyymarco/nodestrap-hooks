@@ -288,7 +288,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
     
     
     // fn props:
-    const newActiveDn = isEnabled(props.targetRef?.current) && (isHover || isFocus);
+    const newActiveDn = isEnabled((props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current) && (isHover || isFocus);
     if (activeDn !== newActiveDn) { // change detected => apply the change
         setActiveDn(newActiveDn); // remember the last change
     }
@@ -307,7 +307,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
     
     // dom effects:
     useEffect(() => {
-        const target = props.targetRef?.current;
+        const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
         if (!target) return; // target was not specified => nothing to do
         if (active !== undefined) return; // controllable [active] is set => no set uncontrollable required
         
@@ -357,8 +357,8 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         return () => {
             target.removeEventListener('mouseenter', handleHover);
             target.removeEventListener('mouseleave', handleLeave);
-            target.removeEventListener('focus', handleFocus);
-            target.removeEventListener('blur', handleBlur);
+            target.removeEventListener('focus', handleFocus, { capture: true });
+            target.removeEventListener('blur', handleBlur, { capture: true });
         };
     }, [props.targetRef, active]);
     
