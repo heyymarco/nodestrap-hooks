@@ -184,8 +184,11 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 }}
                 
                 
-                // accessibilities:
+                // semantics:
                 aria-expanded={props['aria-expanded'] ?? isActive}
+                
+                
+                // accessibilities:
                 {...{
                     label,
                 }}
