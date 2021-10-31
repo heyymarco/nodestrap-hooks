@@ -1284,14 +1284,14 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     
     
     // fn props:
-    const listTag      = ['ul', 'ol'] as Array<Tag>;
-    const listRole     = 'list';
-    const semanticTag  = props.semanticTag  ?? listTag;
-    const semanticRole = props.semanticRole ?? listRole;
+    const listTag          = ['ul', 'ol'] as Array<Tag>;
+    const listRole         = 'list';
+    const semanticTag      = props.semanticTag  ?? listTag;
+    const semanticRole     = props.semanticRole ?? listRole;
     const [, , isList, isSemanticList] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: listTag, semanticRole: listRole });
     
-    const wrapTag      = isSemanticList ? 'li' : undefined;
-    const wrapRole     = isList ? (isSemanticList ? '' : 'listitem') : '';
+    const wrapSemanticTag  = (isSemanticList ? 'li'       : [null]);
+    const wrapSemanticRole = (isList         ? 'listitem' : [null]);
     
     
     
@@ -1322,11 +1322,11 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                 <Element
                     // essentials:
                     key={index}
-                    tag={wrapTag}
                     
                     
-                    // accessibilities:
-                    role={wrapRole}
+                    // semantics:
+                    semanticTag ={wrapSemanticTag }
+                    semanticRole={wrapSemanticRole}
                 >
                     {
                         isTypeOf(child, ListItem)
