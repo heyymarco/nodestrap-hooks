@@ -926,8 +926,8 @@ export function Check(props: CheckProps) {
     const pressFn           = props.press ?? ((isActive && isToggler) || undefined); // supports for togglerBtn
     
     const tag               = props.tag           ?? (isButton ? undefined : 'span');
-    const preferredTag      = props.preferredTag  ?? (isButton ? 'button' : null);
-    const preferredRole     = props.preferredRole ?? (isButton ? 'button' : 'checkbox');
+    const preferredTag      = props.preferredTag  ?? (isButton ? 'button'  : [null]);
+    const preferredRole     = props.preferredRole ?? (isButton ? 'button'  : 'checkbox');
     const [, , isCheckable] = useTestSemantic({ tag, role: props.role, preferredTag, preferredRole }, { preferredTag: null, preferredRole: ['checkbox', 'radio'] });
     const [, , isPressable] = useTestSemantic({ tag, role: props.role, preferredTag, preferredRole }, { preferredTag: null, preferredRole: 'button' });
     const ariaChecked       = props['aria-checked'] ?? (isCheckable ? isActive : undefined);
