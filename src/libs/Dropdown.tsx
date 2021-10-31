@@ -378,7 +378,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? null    }
+            preferredTag={props.preferredTag   ?? [null]  }
             preferredRole={props.preferredRole ?? 'dialog'}
             
             
