@@ -252,6 +252,12 @@ export function Radio(props: RadioProps) {
     
     
     
+    // fn props:
+    const isButton          = !!props.checkStyle && ['btn', 'togglerBtn'].includes(props.checkStyle);
+    const preferredRole     = props.preferredRole ?? (isButton ? 'button'  : 'radio');
+    
+    
+    
     // jsx:
     return (
         <Check
@@ -260,7 +266,7 @@ export function Radio(props: RadioProps) {
             
             
             // semantics:
-            preferredRole={props.preferredRole ?? 'radio'}
+            preferredRole={preferredRole}
             
             
             // essentials:
