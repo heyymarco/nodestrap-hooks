@@ -2,7 +2,6 @@ top priority:
 re-check aria-***
 tag => // essentials: => // semantics:
 role => // accessibilities: => // semantics:
-Range & Carousel => set sub elements semanticTag, semanticRole
 SingleOrArray => single or readonly array
 remove unused translate() on firefox
 Progress
