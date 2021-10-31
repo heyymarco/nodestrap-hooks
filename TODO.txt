@@ -1,11 +1,10 @@
 top priority:
-SingleOrArray => single or readonly array
+fix targetRef change aware on Popup, Tooltip, Navscroll
 Progress
 
 
 
 medium priority:
-fix targetRef change aware on Popup, Tooltip, Navscroll
 css-config => filter valid props
 
 
