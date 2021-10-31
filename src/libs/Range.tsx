@@ -1043,12 +1043,10 @@ export function Range(props: RangeProps) {
             semanticTag ={props.semanticTag  ?? [null]  }
             semanticRole={props.semanticRole ?? 'slider'}
             
-            
-            // accessibilities:
             aria-orientation={props['aria-orientation'] ?? (orientationVertical ? 'vertical' : 'horizontal')}
-            aria-valuenow={props['aria-valuenow'] ?? valueFn}
-            aria-valuemin={props['aria-valuemin'] ?? (negativeFn ? maxFn : minFn)}
-            aria-valuemax={props['aria-valuemax'] ?? (negativeFn ? minFn : maxFn)}
+            aria-valuenow   ={props['aria-valuenow'   ] ?? valueFn}
+            aria-valuemin   ={props['aria-valuemin'   ] ?? (negativeFn ? maxFn : minFn)}
+            aria-valuemax   ={props['aria-valuemax'   ] ?? (negativeFn ? minFn : maxFn)}
             
             
             // variants:
