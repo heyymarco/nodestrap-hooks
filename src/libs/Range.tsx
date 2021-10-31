@@ -1001,7 +1001,7 @@ export function Range(props: RangeProps) {
             
             
             // semantics:
-            preferredTag={props.preferredTag   ?? null     }
+            preferredTag={props.preferredTag   ?? [null]  }
             preferredRole={props.preferredRole ?? 'slider'}
             
             
