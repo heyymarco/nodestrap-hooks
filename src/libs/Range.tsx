@@ -570,29 +570,39 @@ export interface RangeProps
         NudeVariant
 {
     // essentials:
-    trackStyle?      : React.CSSProperties
-    trackRef?        : React.Ref<HTMLElement> // setter ref
+    trackStyle?               : React.CSSProperties
+    trackRef?                 : React.Ref<HTMLElement> // setter ref
     
-    trackLowerStyle? : React.CSSProperties
-    trackLowerRef?   : React.Ref<HTMLElement> // setter ref
+    trackLowerStyle?          : React.CSSProperties
+    trackLowerRef?            : React.Ref<HTMLElement> // setter ref
     
-    trackUpperStyle? : React.CSSProperties
-    trackUpperRef?   : React.Ref<HTMLElement> // setter ref
+    trackUpperStyle?          : React.CSSProperties
+    trackUpperRef?            : React.Ref<HTMLElement> // setter ref
     
-    thumbStyle?      : React.CSSProperties
-    thumbRef?        : React.Ref<HTMLElement> // setter ref
+    thumbStyle?               : React.CSSProperties
+    thumbRef?                 : React.Ref<HTMLElement> // setter ref
     
     
     // semantics:
-    trackTag?        : Tag
-    trackLowerTag?   : Tag
-    trackUpperTag?   : Tag
-    thumbTag?        : Tag
+    trackTag?                 : Tag
+    trackLowerTag?            : Tag
+    trackUpperTag?            : Tag
+    thumbTag?                 : Tag
     
-    trackRole?       : Role
-    trackLowerRole?  : Role
-    trackUpperRole?  : Role
-    thumbRole?       : Role
+    trackRole?                : Role
+    trackLowerRole?           : Role
+    trackUpperRole?           : Role
+    thumbRole?                : Role
+    
+    trackSemanticTag?         : SemanticTag
+    trackLowerSemanticTag?    : SemanticTag
+    trackUpperSemanticTag?    : SemanticTag
+    thumbSemanticTag?         : SemanticTag
+    
+    trackSemanticRole?        : SemanticRole
+    trackLowerSemanticRole?   : SemanticRole
+    trackUpperSemanticRole?   : SemanticRole
+    thumbSemanticRole?        : SemanticRole
     
     
     // classes:
@@ -660,6 +670,16 @@ export function Range(props: RangeProps) {
         trackLowerRole,
         trackUpperRole,
         thumbRole,
+        
+        trackSemanticTag,
+        trackLowerSemanticTag,
+        trackUpperSemanticTag,
+        thumbSemanticTag,
+        
+        trackSemanticRole,
+        trackLowerSemanticRole,
+        trackUpperSemanticRole,
+        thumbSemanticRole,
         
         
         // classes:
@@ -960,8 +980,10 @@ export function Range(props: RangeProps) {
             
             
             // semantics:
-            tag={trackLowerTag}
+            tag ={trackLowerTag }
             role={trackLowerRole}
+            semanticTag ={trackLowerSemanticTag }
+            semanticRole={trackLowerSemanticRole}
             
             
             // classes:
@@ -987,8 +1009,10 @@ export function Range(props: RangeProps) {
             
             
             // semantics:
-            tag={trackUpperTag}
+            tag ={trackUpperTag }
             role={trackUpperRole}
+            semanticTag ={trackUpperSemanticTag }
+            semanticRole={trackUpperSemanticRole}
             
             
             // classes:
@@ -1150,8 +1174,10 @@ export function Range(props: RangeProps) {
                 
                 
                 // semantics:
-                tag={trackTag}
+                tag ={trackTag }
                 role={trackRole}
+                semanticTag ={trackSemanticTag }
+                semanticRole={trackSemanticRole}
                 
                 
                 // accessibilities:
@@ -1186,8 +1212,10 @@ export function Range(props: RangeProps) {
                     
                     
                     // semantics:
-                    tag={thumbTag}
+                    tag ={thumbTag }
                     role={thumbRole}
+                    semanticTag ={thumbSemanticTag }
+                    semanticRole={thumbSemanticRole}
                     
                     
                     // accessibilities:
