@@ -490,7 +490,7 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
             }}
             
             
-            // accessibilities:
+            // semantics:
             aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
             
             
