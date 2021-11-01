@@ -323,7 +323,21 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         } // if isVisible
     }, [isVisible]);
     
+    /*
+        because `onActiveChange` might be different every time the Dropdown is rendered,
+        so, to avoid unnecessary setup (cleanup then setup again) of `useEffect`,
+        the `onActiveChange` needs to be wrapped in `useRef` object.
+    */
+    const onActiveChangeRef   = useRef(onActiveChange);
+    onActiveChangeRef.current = onActiveChange;
+    
     useEffect(() => {
+        const onActiveChange = onActiveChangeRef.current;
+        if (!onActiveChange) return; // [onActiveChange] was not set => nothing to do
+        if (!isVisible)      return; // dropdown is not shown        => nothing to do
+        
+        
+        
         const handleClick = (e: MouseEvent) => {
             if (e.button !== 0) return; // only handle left click
             
@@ -333,15 +347,10 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             handleFocus({ target: e.target } as FocusEvent);
         };
         const handleFocus = (e: FocusEvent) => {
-            if (!isVisible)      return; // dropdown is not shown => nothing to do
-            if (!onActiveChange) return; // [onActiveChange] is not set  => nothing to do
-            
-            
-            
             const focusedTarget = e.target;
             if (!focusedTarget) return;
             // check if focusedTarget is inside dropdown or not:
-            if ((focusedTarget instanceof HTMLElement) && childRef.current && isSelfOrDescendantOf(focusedTarget, childRef.current)) return; // focus is still in dropdown => nothing to do
+            if ((focusedTarget instanceof HTMLElement) && childRef.current && isSelfOrDescendantOf(focusedTarget, childRef.current)) return; // focus is still inside dropdown => nothing to do
             
             
             
@@ -357,6 +366,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         
         
         
+        // setups:
         document.addEventListener('click', handleClick);
         document.addEventListener('focus', handleFocus, { capture: true }); // force `focus` as bubbling
         
@@ -367,7 +377,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             document.removeEventListener('click', handleClick);
             document.removeEventListener('focus', handleFocus, { capture: true });
         };
-    }, [onActiveChange, isVisible, targetRef]);
+    }, [onActiveChangeRef, isVisible, targetRef]);
     
     
     
