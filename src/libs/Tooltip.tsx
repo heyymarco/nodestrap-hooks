@@ -310,7 +310,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         if (active !== undefined) return; // controllable [active] was set => no uncontrollable manipulation required
         
         const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
-        if (!target) return; // target was not specified => nothing to do
+        if (!target) return; // target was not set => nothing to do
         
         
         
@@ -361,7 +361,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             target.removeEventListener('focus', handleFocus, { capture: true });
             target.removeEventListener('blur', handleBlur, { capture: true });
         };
-    }, [active, props.targetRef]);
+    }, [active, props.targetRef]); // (re)run the setups & cleanups on every time the `active` & tooltip's target changed
     
     
     
