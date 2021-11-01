@@ -381,7 +381,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             document.removeEventListener('click', handleClick);
             document.removeEventListener('focus', handleFocus, { capture: true });
         };
-    }, [isVisible, targetRef]); // (re)run the setups & cleanups on every time the dropdown's visible & target dropdown changed
+    }, [isVisible, targetRef]); // (re)run the setups & cleanups on every time the dropdown's visible & dropdown's target changed
     
     
     
