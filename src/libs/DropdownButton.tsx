@@ -1,7 +1,7 @@
 // react (builds html using javascript):
 import {
     default as React,
-    useRef,
+    useState,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -165,7 +165,13 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
     
     
     // dom effects:
-    const buttonRef = useRef<HTMLButtonElement|null>(null);
+    /*
+    we use `useState` instead of `useRef` for storing the ButtonIcon's DOM reference.
+    so if the DOM reference changed, it triggers a new render,
+    and then pass the correct (newest) DOM reference to the Dropdown.
+    */
+    // const buttonRef = useRef<HTMLButtonElement|null>(null);
+    const [buttonRef, setButtonRef] = useState<HTMLButtonElement|null>(null);
     
     
     
@@ -180,7 +186,7 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 // essentials:
                 elmRef={(elm) => {
                     setRef(elmRef, elm);
-                    setRef(buttonRef, elm);
+                    setButtonRef(elm);
                 }}
                 
                 
@@ -235,7 +241,7 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 
                 
                 // popups:
-                targetRef={props.targetRef ?? buttonRef.current}
+                targetRef={props.targetRef ?? buttonRef}
                 
                 
                 // accessibilities:
