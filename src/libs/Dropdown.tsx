@@ -349,12 +349,15 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         const handleFocus = (e: FocusEvent) => {
             const focusedTarget = e.target;
             if (!focusedTarget) return;
-            // check if focusedTarget is inside dropdown or not:
+            
+            
+            
+            // check if focusedTarget is inside the dropdown or not:
             if ((focusedTarget instanceof HTMLElement) && childRef.current && isSelfOrDescendantOf(focusedTarget, childRef.current)) return; // focus is still inside dropdown => nothing to do
             
             
             
-            // `targetRef` is dropdown friend, so focus on `targetRef` is considered not to lose focus on dropdown:
+            // `targetRef` is dropdown friend, so focus on `targetRef` is considered not to lost focus on dropdown:
             const target = (targetRef instanceof HTMLElement) ? targetRef : targetRef?.current;
             if ((focusedTarget instanceof HTMLElement) && target && isSelfOrDescendantOf(focusedTarget, target)) return;
             
@@ -377,7 +380,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             document.removeEventListener('click', handleClick);
             document.removeEventListener('focus', handleFocus, { capture: true });
         };
-    }, [isVisible, targetRef]);
+    }, [isVisible, targetRef]); // (re)run the setups & cleanups on every time the dropdown's visible & target dropdown changed
     
     
     
