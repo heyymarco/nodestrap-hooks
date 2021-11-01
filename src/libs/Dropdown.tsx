@@ -332,9 +332,10 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     onActiveChangeRef.current = onActiveChange;
     
     useEffect(() => {
+        if (!isVisible)      return; // dropdown is not shown        => nothing to do
+        
         const onActiveChange = onActiveChangeRef.current;
         if (!onActiveChange) return; // [onActiveChange] was not set => nothing to do
-        if (!isVisible)      return; // dropdown is not shown        => nothing to do
         
         
         
