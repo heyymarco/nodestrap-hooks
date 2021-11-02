@@ -327,7 +327,8 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             popperRef.current?.destroy();
             popperRef.current = null;
         };
-    }, [props.targetRef, props.popupPlacement, props.popupModifiers, props.popupPosition]);
+    }, [props.targetRef, props.popupPlacement, props.popupModifiers, props.popupPosition]); // (re)create the function on every time the popup's properties changes
+    // (re)run the function on every time the function's reference changes:
     useLayoutEffect(createPopperCb, [createPopperCb]); // primary   chance (in case of `targetRef` is not the parent element)
     useEffect(createPopperCb, [createPopperCb]);       // secondary chance (in case of `targetRef` is the parent element)
     
@@ -354,7 +355,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         }));
         popperRef.current.update();
     };
-    // (re)run the function on every time the popup's visible changed:
+    // (re)run the function on every time the popup's visible changes:
     useLayoutEffect(updatePopperOptions, [isVisible]); // primary   chance (in case of `targetRef` is not the parent element)
     useEffect(updatePopperOptions, [isVisible]);       // secondary chance (in case of `targetRef` is the parent element)
     
