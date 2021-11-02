@@ -193,19 +193,28 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
         if (!propEnabled)              return; // control is disabled => no response required
         if (propReadOnly)              return; // control is readOnly => no response required
         if (props.press !== undefined) return; // controllable [press] is set => no uncontrollable required
-
-
-
+        
+        
+        
+        // handlers:
         const handleRelease = () => {
             setPressDn(false);
         }
+        
+        
+        
+        // setups:
         window.addEventListener('mouseup', handleRelease);
         window.addEventListener('keyup',   handleRelease);
+        
+        
+        
+        // cleanups:
         return () => {
             window.removeEventListener('mouseup', handleRelease);
             window.removeEventListener('keyup',   handleRelease);
         }
-    }, [propEnabled, propReadOnly, props.press]);
+    }, [propEnabled, propReadOnly, props.press]); // (re)run the setups & cleanups on every time the prop** changes
 
 
 
