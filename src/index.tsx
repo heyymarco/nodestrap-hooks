@@ -37,7 +37,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
 //             import BadgeApp                         from './apps/BadgeApp';                  // span     status (semantic)
 //                 import BusyApp                      from './apps/BusyApp';                   // span     status (semantic)
-//             import TooltipApp                       from './apps/TooltipApp';                // div      tooltip (semantic)
+            import TooltipApp                       from './apps/TooltipApp';                // div      tooltip (semantic)
 //         import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
@@ -54,14 +54,14 @@ import reportWebVitals from './reportWebVitals';
 //                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
 //     import IconApp                                  from './apps/IconApp';                   // span
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
-    import GroupApp                                 from './apps/GroupApp';                  // div      group (semantic)
+//     import GroupApp                                 from './apps/GroupApp';                  // div      group (semantic)
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <GroupApp />
+    <TooltipApp />
     ,
     document.getElementById('root')
 );

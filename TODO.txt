@@ -1,6 +1,4 @@
 top priority:
-fix Tooltip tip
-add targetRef='prev|next|parent' to Popup, Tooltip
 add Tooltip debounce
 Progress
 
