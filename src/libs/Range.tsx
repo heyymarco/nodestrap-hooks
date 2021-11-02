@@ -791,7 +791,7 @@ export function Range(props: RangeProps) {
         } // if
         
         return value;
-    }, [minFn, maxFn, stepFn, negativeFn]);
+    }, [minFn, maxFn, stepFn, negativeFn]); // (re)create the function on every time the constraints changes
     const triggerInputChange = (value: number) => {
         const inputElm = inputRef.current;
         if (!inputElm) return;
@@ -862,7 +862,7 @@ export function Range(props: RangeProps) {
             default:
                 return value; // no change
         } // switch
-    }, [minFn, maxFn, stepFn, negativeFn, trimValue]), /*initialState: */valueCtrl ?? parseNumber(defaultValue) ?? trimValue(defaultValueFn));
+    }, [minFn, maxFn, stepFn, negativeFn, trimValue]) /* (re)create the reducer function on every time the constraints changes */, /*initialState: */valueCtrl ?? parseNumber(defaultValue) ?? trimValue(defaultValueFn));
     
     
     
@@ -876,18 +876,15 @@ export function Range(props: RangeProps) {
     // dom effects:
     const hasLoaded      = useRef<boolean>(false);
     useEffect(() => {
-        if (hasLoaded.current) return;
+        if (hasLoaded.current) return; // the effect should only run once
+        hasLoaded.current = true;
         
         
         
         if (valueRaw !== valueFn) {
             setValueDn({ type: 'setValue', payload: valueFn, triggerChange: true });
         } // if
-        
-        
-        
-        hasLoaded.current = true;
-    }, [valueRaw, valueFn]);
+    }, [valueRaw, valueFn]); // the effect should only run once
     
     
     
