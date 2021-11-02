@@ -562,23 +562,29 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     const childRef = useRef<TElement|null>(null);
     
     useEffect(() => {
-        if (isVisible) {
-            childRef.current?.focus({ preventScroll: true }); // when actived => focus the ModalElement, so the user able to use [esc] key to close the Modal
-        } // if isVisible
-    }, [isVisible]);
+        if (!isVisible) return; // modal is not shown => nothing to do
+        
+        
+        
+        // setups:
+        childRef.current?.focus({ preventScroll: true }); // when actived => focus the ModalElement, so the user able to use [esc] key to close the modal
+    }, [isVisible]); // (re)run the setups on every time the modal's visible changes
     
     useLayoutEffect(() => {
-        if (isNoBackInteractive) {
-            document.body.classList.add(sheet.body);
-            
-            
-            
-            // cleanups:
-            return () => {
-                document.body.classList.remove(sheet.body);
-            };
-        } // if isNoBackInteractive
-    }, [isNoBackInteractive, sheet.body]);
+        if (!isNoBackInteractive) return; // only for no_back_interactive mode
+        
+        
+        
+        // setups:
+        document.body.classList.add(sheet.body);
+        
+        
+        
+        // cleanups:
+        return () => {
+            document.body.classList.remove(sheet.body);
+        };
+    }, [isNoBackInteractive, sheet.body]); // (re)run the setups on every time the no_back_interactive & sheet.body changes
     
     
     
