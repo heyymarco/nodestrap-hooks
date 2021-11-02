@@ -324,7 +324,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         
         // setups:
         childRef.current?.focus({ preventScroll: true }); // when actived => focus the dropdown, so the user able to use [esc] key to close the dropdown
-    }, [isVisible]); // (re)run the setups on every time the dropdown's visible changed
+    }, [isVisible]); // (re)run the setups on every time the dropdown's visible changes
     
     /*
         because `onActiveChange` might be different every time the Dropdown is rendered,
@@ -384,7 +384,7 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
             document.removeEventListener('click', handleClick);
             document.removeEventListener('focus', handleFocus, { capture: true });
         };
-    }, [isVisible, targetRef]); // (re)run the setups & cleanups on every time the dropdown's visible & dropdown's target changed
+    }, [isVisible, targetRef]); // (re)run the setups & cleanups on every time the dropdown's visible & dropdown's target changes
     
     
     
