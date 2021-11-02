@@ -1,12 +1,8 @@
 top priority:
+optimize (use(Layout)?Effect|useCallback)\s*\(
+
 add targetRef='prev|next|parent' to Popup, Tooltip
 Progress
-
-optimize (use(Layout)?Effect|useCallback)\s*\(
-optimized:
-    Navscroll
-    Dropdown
-    Tooltip
 
 
 

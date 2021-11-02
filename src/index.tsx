@@ -23,7 +23,7 @@ import reportWebVitals from './reportWebVitals';
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
 //             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
-                import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
+//                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
 //         import CardApp                              from './apps/CardApp';                   // article  article (semantic)
 //         import PopupApp                             from './apps/PopupApp';                  // div
 //             import AlertApp                         from './apps/AlertApp';                  // div      alert (semantic)
@@ -37,7 +37,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
 //             import BadgeApp                         from './apps/BadgeApp';                  // span     status (semantic)
 //                 import BusyApp                      from './apps/BusyApp';                   // span     status (semantic)
-//             import TooltipApp                       from './apps/TooltipApp';                // div      tooltip (semantic)
+            import TooltipApp                       from './apps/TooltipApp';                // div      tooltip (semantic)
 //         import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
@@ -61,7 +61,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <NavscrollApp />
+    <TooltipApp />
     ,
     document.getElementById('root')
 );
