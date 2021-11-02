@@ -578,7 +578,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     // sync dummyElm scrolling position to itemsElm scrolling position, once at startup:
     useEffect(() => {
-        if (!infiniteLoop) return;
+        if (!infiniteLoop) return; // only for infiniteLoop mode
         
         const dummyElm = listDummyRef.current;
         if (!dummyElm) return; // dummyElm must be exist to sync
@@ -588,12 +588,14 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         
         
         
+        // fn props:
         const itemsCurrent = itemsElm.scrollLeft;
         const ratio        = (dummyElm.scrollWidth - dummyElm.clientWidth) / (itemsElm.scrollWidth - itemsElm.clientWidth);
         const dummyCurrent = itemsCurrent * ratio;
         
         
         
+        // setups:
         dummyElm.scrollTo({
             left     : Math.round(
                 Math.min(Math.max(
@@ -603,17 +605,18 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             
             behavior : ('instant' as any) // no scrolling animation during sync
         });
-    }, [infiniteLoop]);
+    }, [infiniteLoop]); // (re)run the setups on every time the infiniteLoop mode changes
     
     // sync itemsElm scrolling position to dummyElm scrolling position, every `scrollBy()`/`scrollTo()` called:
     useEffect(() => {
-        if (!infiniteLoop) return;
+        if (!infiniteLoop) return; // only for infiniteLoop mode
         
         const dummyElm = listDummyRef.current;
         if (!dummyElm) return; // dummyElm must be exist for syncing
         
         
         
+        // functions:
         const calculateScrollItems = (dummyElm: HTMLElement, itemsElm: HTMLElement, optionsOrX: ScrollToOptions|number|undefined, relative: boolean) => {
             const dummyCurrent  = relative ? dummyElm.scrollLeft : 0;
             const dummyLeft     =  (typeof(optionsOrX) !== 'number') ? (optionsOrX?.left ?? 0) : optionsOrX;
@@ -638,6 +641,10 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 behavior : dummyBehavior,
             };
         };
+        
+        
+        
+        // setups:
         
         const oriScrollBy = dummyElm.scrollBy;
         dummyElm.scrollBy = (function(this: HTMLElement, optionsOrX?: ScrollToOptions|number, y?: number) {
@@ -683,7 +690,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             dummyElm.scrollBy = oriScrollBy;
             dummyElm.scrollTo = oriScrollTo;
         };
-    }, [infiniteLoop, dummyDiff, itemsTotal]);
+    }, [infiniteLoop]); // (re)run the setups & cleanups on every time the infiniteLoop mode changes
     
     
     
