@@ -241,6 +241,8 @@ export const useCompactState = <TElement extends HTMLElement = HTMLElement>(prop
         
         
         
+        // setups:
+        
         // update for the first time:
         handleUpdate();
         
@@ -309,7 +311,7 @@ export const useCompactState = <TElement extends HTMLElement = HTMLElement>(prop
         return () => {
             resizeObserver?.disconnect();
         };
-    }, [props.compact, navbarRef]);
+    }, [props.compact, navbarRef]); // (re)run the setups & cleanups on every time the `props.compact` changes
     
     
     
