@@ -372,6 +372,8 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
         
         
         
+        // setups:
+        
         // update for the first time:
         (async () => {
             await updateFirstRowItems(); // needs to be called first before handleUpdate, because the item's margin affected the resizing calculation
@@ -472,7 +474,7 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
             mutationObserver?.disconnect();
             firstRowItems.forEach((firstRowItem) => firstRowItem.classList.remove('firstRow'));
         };
-    }, [props.orientation, props.size]);
+    }, [props.orientation, props.size]); // (re)run the setups & cleanups on every time the masonry's orientation & size changes
     
     
     
