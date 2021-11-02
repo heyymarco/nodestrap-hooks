@@ -331,8 +331,16 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     useLayoutEffect(createPopperCb, [createPopperCb]); // primary   chance (in case of `targetRef` is not the parent element)
     useEffect(createPopperCb, [createPopperCb]);       // secondary chance (in case of `targetRef` is the parent element)
     
-    const updatePopperOptionsCb = useCallback(() => {
+    const visibleRef = useRef({ isVisible, wasVisible: !isVisible });
+    visibleRef.current.isVisible = isVisible;
+    const updatePopperOptions = () => {
         if (!popperRef.current) return; // popper was not already created => nothing to do
+        
+        
+        
+        const visible = visibleRef.current;
+        if (visible.wasVisible === visible.isVisible) return; // `isVisible` was not changed => nothing to do
+        visible.wasVisible = visible.isVisible;
         
         
         
@@ -341,14 +349,14 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             modifiers: [
                 ...(options.modifiers ?? []),
                 
-                { name: 'eventListeners', enabled: isVisible },
+                { name: 'eventListeners', enabled: visible.isVisible },
             ],
         }));
-        
         popperRef.current.update();
-    }, [isVisible]); // (re)create the function on every time the popup's visible changed
-    useLayoutEffect(updatePopperOptionsCb, [updatePopperOptionsCb]); // primary   chance (in case of `targetRef` is not the parent element)
-    useEffect(updatePopperOptionsCb, [updatePopperOptionsCb]);       // secondary chance (in case of `targetRef` is the parent element)
+    };
+    // (re)run the function on every time the popup's visible changed:
+    useLayoutEffect(updatePopperOptions, [isVisible]); // primary   chance (in case of `targetRef` is not the parent element)
+    useEffect(updatePopperOptions, [isVisible]);       // secondary chance (in case of `targetRef` is the parent element)
     
     
     
