@@ -361,7 +361,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             target.removeEventListener('focus', handleFocus, { capture: true });
             target.removeEventListener('blur', handleBlur, { capture: true });
         };
-    }, [active, props.targetRef]); // (re)run the setups & cleanups on every time the `active` & tooltip's target changed
+    }, [active, props.targetRef]); // (re)run the setups & cleanups on every time the `active` & tooltip's target changes
     
     
     
