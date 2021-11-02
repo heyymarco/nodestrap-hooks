@@ -568,7 +568,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         // setups:
         childRef.current?.focus({ preventScroll: true }); // when actived => focus the ModalElement, so the user able to use [esc] key to close the modal
-    }, [isVisible]); // (re)run the setups on every time the modal's visible changes
+    }, [isVisible]); // (re)run the setups on every time the modal is shown
     
     useLayoutEffect(() => {
         if (!isNoBackInteractive) return; // only for no_back_interactive mode
