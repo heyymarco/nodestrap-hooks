@@ -397,7 +397,7 @@ export interface NavscrollProps<TElement extends HTMLElement = HTMLElement>
         NavProps<TElement>
 {
     // scrolls:
-    targetRef?       : React.RefObject<HTMLElement> // getter ref
+    targetRef?       : React.RefObject<HTMLElement>|HTMLElement|null // getter ref
     targetFilter?    : (e: HTMLElement) => boolean
     interpolation?   : boolean
 }
@@ -422,7 +422,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
     
     // dom effects:
     useEffect(() => {
-        const target = props.targetRef?.current;
+        const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
         if (!target) return; // target was not set => nothing to do
         
         
@@ -519,6 +519,8 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
         };
         
         
+        
+        // setups:
         
         // update for the first time:
         (async () => {
@@ -625,7 +627,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
             mutationObserver?.disconnect();
             detachDescendants?.(); // detach
         };
-    }, [props.targetRef, props.targetFilter, props.interpolation]);
+    }, [props.targetRef, props.targetFilter, props.interpolation]); // (re)run the setups & cleanups on every time the navscroll's target, targetFilter, & interpolation changed
     
     
     
@@ -635,7 +637,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
         
         
         
-        const target = props.targetRef?.current;
+        const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
         if (!target) return; // target was not set => nothing to do
         
         
@@ -779,7 +781,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
                     }}
                 >
                     {child.props.children && (Array.isArray(child.props.children) ? child.props.children : [child.props.children]).map((child, index) => (
-                        (isTypeOf(child, Navscroll) && (child.props.targetRef === undefined))
+                        (isTypeOf(child, Navscroll) && (!child.props.targetRef))
                         ?
                         mutateNestedNavscroll(child.props, child.key ?? index, /*deepLevelsParent: */deepLevelsCurrent)
                         :
