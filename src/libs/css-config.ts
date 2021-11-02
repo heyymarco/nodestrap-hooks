@@ -835,6 +835,16 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          */
         if ((/(None|Excited|Enable|Disable|Active|Passive|Press|Release|Check|Clear|Hover|Arrive|Leave|Focus|Blur|Valid|Unvalid|Invalid|Uninvalid|Full|Compact)(Block|Inline)?$/).test(propName)) continue; // exclude
 
+        // props starting with inline|block:
+        /**
+         * Eg:
+         * inlineSizeInline
+         *  blockSizeInline
+         * inlineSizeBlock
+         *  blockSizeBlock
+         */
+        if ((/^((inline|block)(Size)(Inline|Block))$/).test(propName)) continue; // exclude
+        
         // special props:
         /**
          * Eg:
@@ -845,17 +855,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          * valid   => (icon)Valid   => valid
          * invalid => (icon)Invalid => invalid
          */
-        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|transDuration|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
-        
-        // props starting with inline|block:
-        /**
-         * Eg:
-         * inlineSizeInline
-         *  blockSizeInline
-         * inlineSizeBlock
-         *  blockSizeBlock
-         */
-        if ((/^((inline|block)(Size)(Inline|Block))$/).test(propName)) continue; // exclude
+        if ((/^(backgGrad|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|transDuration|(top|bottom|left|right)Transform|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
 
         // props starting with `@`:
         /**
