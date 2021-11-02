@@ -1,5 +1,4 @@
 top priority:
-fix weird (left|right|top|bottom)Transform
 Progress
 Range => dial variant
 
@@ -14,5 +13,6 @@ low priority:
 Media => for profile image, video, static images, gifs, svgs, etc
 List:variant_tab => move up tab border radius from ListItem to Wrapper
 fix focus-visible
+
 Navbar => use List
 [stucked] fix overflow detection Navbar padding-end
