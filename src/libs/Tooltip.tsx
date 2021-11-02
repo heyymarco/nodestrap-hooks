@@ -266,6 +266,9 @@ export interface TooltipProps<TElement extends HTMLElement = HTMLElement>
     extends
         PopupProps<TElement>
 {
+    // debounces:
+    activeDelay?  : number
+    passiveDelay? : number
 }
 export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: TooltipProps<TElement>) {
     // styles:
@@ -276,7 +279,8 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
     // states:
     const [isHover , setIsHover ] = useState<boolean>(false);
     const [isFocus , setIsFocus ] = useState<boolean>(false);
-    const [activeDn, setActiveDn] = useState<boolean>(false);
+    const [activeDn, setActiveDn] = useState<boolean>(false); // instant  active
+    const [activeDb, setActiveDb] = useState<boolean>(false); // debounce active
     
     
     
@@ -285,6 +289,12 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         // accessibilities:
         active,         // from accessibilities
         inheritActive,  // from accessibilities
+        
+        
+        
+        // debounces:
+        activeDelay  = 300,
+        passiveDelay = 500,
     ...restProps}  = props;
     
     
@@ -304,6 +314,39 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             activeDn // uncontrollable active
         )
     );
+    
+    const enableDebounce = (activeDelay > 0) || (passiveDelay > 0);
+    useEffect(() => {
+        if (!enableDebounce) return;
+        
+        
+        
+        // setups:
+        const delay = (activeFn ? activeDelay : passiveDelay);
+        const timeoutHandler = (
+            (delay > 0)
+            ?
+            // asynchronous:
+            setTimeout(() => {
+                setActiveDb(activeFn);
+            }, delay)
+            :
+            // synchronous:
+            (() => {
+                setActiveDb(activeFn);
+                return null;
+            })()
+        );
+        
+        
+        
+        // cleanups:
+        return () => {
+            if (timeoutHandler) clearTimeout(timeoutHandler); // cancel the `setTimeout` (if not too late)
+        };
+    }, [activeFn, enableDebounce, activeDelay, passiveDelay]); // (re)run the setups & cleanups on every time the `activeFn` changes
+    
+    const activeDbFn = enableDebounce ? activeDb : activeFn;
     
     
     
@@ -381,7 +424,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             
             // accessibilities:
             {...{
-                active        : activeFn,
+                active        : activeDbFn,
                 inheritActive : false,
             }}
             
