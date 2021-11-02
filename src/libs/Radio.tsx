@@ -241,7 +241,7 @@ export function Radio(props: RadioProps) {
         return () => {
             radio.removeEventListener('clear', handleClear);
         };
-    }, [setActive]);
+    }, [setActive]); // the effect should only run once, `setActive()` guaranteed never to mutate
     
     
     
