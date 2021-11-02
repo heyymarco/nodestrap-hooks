@@ -420,12 +420,14 @@ export const useValidInvalidState  = (props: ValidationProps, validator?: Valida
     
     // watch the changes once (only at startup):
     useLayoutEffect(() => {
-        if (valided === undefined) {
-            // now validator has been loaded => re-*set the initial* state of `valided` with any values other than `undefined`
-            // once set, this effect will never be executed again
-            setValided(validator ? validator() : defaultValided);
-        }
-    }, [valided, validator]);
+        if (valided !== undefined) return; // the effect should only run once
+        
+        
+        
+        // now validator has been loaded => re-*set the initial* state of `valided` with any values other than `undefined`
+        // once set, this effect will never be executed again
+        setValided(validator ? validator() : defaultValided);
+    }, [valided, validator]); // the effect should only run once
     
     
     
