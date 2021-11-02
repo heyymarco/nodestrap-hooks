@@ -127,6 +127,8 @@ export const usesTooltipLayout = () => {
                             
                             // borders:
                             ...expandBorderStroke(), // expand borderStroke css vars
+                            borderInlineStartColor : 'transparent',
+                            borderBlockStartColor  : 'transparent',
                             
                             
                             
@@ -149,7 +151,7 @@ export const usesTooltipLayout = () => {
                         // children:
                         ...children(arrowWrapperElm, [
                             layout({
-                                [tooltipPos] : 'calc(100% - 1px)',
+                                [tooltipPos] : 'calc(100% - 0.7px)',
                                 
                                 
                                 
