@@ -318,10 +318,13 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
     const childRef = useRef<TElement|null>(null);
     
     useEffect(() => {
-        if (isVisible) {
-            childRef.current?.focus({ preventScroll: true }); // when actived => focus the dropdown, so the user able to use [esc] key to close the dropdown
-        } // if isVisible
-    }, [isVisible]);
+        if (!isVisible)      return; // dropdown is not shown        => nothing to do
+        
+        
+        
+        // setups:
+        childRef.current?.focus({ preventScroll: true }); // when actived => focus the dropdown, so the user able to use [esc] key to close the dropdown
+    }, [isVisible]); // (re)run the setups on every time the dropdown's visible changed
     
     /*
         because `onActiveChange` might be different every time the Dropdown is rendered,
