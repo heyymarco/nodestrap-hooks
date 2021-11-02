@@ -1,6 +1,12 @@
 top priority:
-fix targetRef change aware on Popup, Tooltip, Navscroll
+add targetRef='prev|next|parent' to Popup, Tooltip
 Progress
+
+optimize (use(Layout)?Effect|useCallback)\s*\(
+optimized:
+    Navscroll
+    Dropdown
+    Tooltip
 
 
 

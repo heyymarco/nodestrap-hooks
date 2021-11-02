@@ -17,13 +17,13 @@ import reportWebVitals from './reportWebVitals';
 //     import LabelApp                                 from './apps/LabelApp';                  // div
 //     import ContentApp                               from './apps/ContentApp';                // div      ???
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
-        import CarouselApp                          from './apps/CarouselApp';               // div      ???
+//         import CarouselApp                          from './apps/CarouselApp';               // div      ???
 //     import ContainerApp                             from './apps/ContainerApp';              // div
 //     import IndicatorApp                             from './apps/IndicatorApp';              // div
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
 //             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
-//                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
+                import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
 //         import CardApp                              from './apps/CardApp';                   // article  article (semantic)
 //         import PopupApp                             from './apps/PopupApp';                  // div
 //             import AlertApp                         from './apps/AlertApp';                  // div      alert (semantic)
@@ -61,7 +61,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <CarouselApp />
+    <NavscrollApp />
     ,
     document.getElementById('root')
 );
