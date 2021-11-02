@@ -627,7 +627,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
             mutationObserver?.disconnect();
             detachDescendants?.(); // detach
         };
-    }, [props.targetRef, props.targetFilter, props.interpolation]); // (re)run the setups & cleanups on every time the navscroll's target, targetFilter, & interpolation changed
+    }, [props.targetRef, props.targetFilter, props.interpolation]); // (re)run the setups & cleanups on every time the navscroll's target, targetFilter, & interpolation changes
     
     
     
