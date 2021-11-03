@@ -221,9 +221,9 @@ export const useListVariant = (props: ListVariant) => {
 
 
 // styles:
-// const wrapperElm  = ['li', '*']; // poor specificity
-export const wrapperElm  = ':nth-child(n)'; // better specificity
-export const listItemElm = ':first-child';
+// const wrapperElm  = ['li', '*'];                // inconsistent specificity
+export const wrapperElm  = '*';                    // zero specificity
+export const listItemElm = ':where(:first-child)'; // zero specificity
 
 
 
@@ -584,7 +584,7 @@ export const usesListLayout = () => {
                             // children:
                             ...children('*', [ // *:first-child | *:last-child => specificity weight = 1
                                 variants([
-                                    isFirstChild([
+                                    rule(':where(:first-child)', [
                                         layout({
                                             // borders:
                                             // add rounded corners on top:
@@ -592,7 +592,7 @@ export const usesListLayout = () => {
                                             [borderRadiusDecls.borderStartEndRadius  ] : 'inherit', // copy wrapper's borderRadius
                                         }),
                                     ]),
-                                    isLastChild([
+                                    rule(':where(:last-child)', [
                                         layout({
                                             // borders:
                                             // add rounded corners on bottom:
