@@ -46,6 +46,7 @@ import {
     
     // utilities:
     usesGeneralProps,
+    usesPrefixedProps,
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
@@ -53,20 +54,13 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    notOrientationBlock,
-    isOrientationBlock,
+    OrientationRuleOptions,
+    normalizeOrientationRule,
+    usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
-    ThemeName,
-    outlinedOf,
-    mildOf,
-    usesBackg,
-    usesBorder,
     usesBorderStroke,
-    expandBorderStroke,
     usesBorderRadius,
-    expandBorderRadius,
-    usesPadding,
     
     
     
@@ -82,36 +76,20 @@ import {
 }                           from './Basic'
 import {
     // hooks:
-    usesBorderAsContainer,
-    usesBorderAsSeparatorBlock,
-    usesBorderAsSeparatorInline,
-}                           from './Content'
-import {
-    // styles:
-    wrapperElm,
-    listItemElm,
-    usesListLayout,
-    usesListVariants,
-    
-    
-    
-    // react components:
-    ListItem,
-    
-    ListProps,
-    List,
-}                           from './List'
-import {
-    // hooks:
     ListStyle,
     ListVariant,
     
     
     
-    // react components:
-    GroupProps,
-    Group,
-}                           from './Group'
+    // styles:
+    listItemElm,
+    usesListLayout,
+}                           from './List'
+
+
+
+// defaults:
+const defaultOrientationRuleOptions: OrientationRuleOptions = { defaultOrientation: 'inline' };
 
 
 
@@ -143,16 +121,42 @@ export const usesProgressBarVars = () => {
 
 
 // styles:
-export const usesProgressLayout = () => {
+export const usesProgressLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesListLayout(),
+            usesListLayout(options),
         ]),
         layout({
             // layouts:
             justifyContent : 'start',   // if wrappers are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first wrapper should be visible first
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+        variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(orientationBlockRule,  [ // block
+                layout({
+                    // overwrites propName = propName{Block}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+                }),
+            ]),
+            rule(orientationInlineRule, [ // inline
+                layout({
+                    // overwrites propName = propName{Inline}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesProgressVariants = () => {
@@ -178,11 +182,16 @@ export const usesProgressVariants = () => {
         ]),
     ]);
 };
-export const usesProgress = () => {
+export const usesProgress = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesProgressLayout(),
+            usesProgressLayout(options),
             
             // variants:
             usesProgressVariants(),
@@ -254,7 +263,7 @@ export const usesProgressBarLayout = () => {
                     
                     
                     // customize:
-                    ...usesGeneralProps(cssProps), // apply general cssProps
+                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
                 }),
             ]),
         }),
@@ -317,7 +326,12 @@ export const useProgressBarSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        /* no config props yet */
+        // sizes:
+        minInlineSize        : '10rem',
+        minBlockSize         : 'unset',
+        
+        minInlineSizeBlock   : 'unset',
+        minBlockSizeBlock    : '10rem',
     };
 }, { prefix: 'prgs' });
 
