@@ -28,6 +28,11 @@ import {
     
     
     
+    // react components:
+    Element,
+    
+    
+    
     // utilities:
     parseNumber,
 }                           from './react-cssfn' // cssfn for react
@@ -82,6 +87,21 @@ import {
     usesBorderAsSeparatorInline,
 }                           from './Content'
 import {
+    // styles:
+    wrapperElm,
+    listItemElm,
+    usesListLayout,
+    usesListVariants,
+    
+    
+    
+    // react components:
+    ListItem,
+    
+    ListProps,
+    List,
+}                           from './List'
+import {
     // hooks:
     ListStyle,
     ListVariant,
@@ -123,53 +143,15 @@ export const usesProgressBarVars = () => {
 
 
 // styles:
-const progressBarElm = ':nth-child(n)';
-
-
-
 export const usesProgressLayout = () => {
-    // dependencies:
-    
-    // colors:
-    const [border      ] = usesBorder();
-    
-    // borders:
-    const [borderStroke] = usesBorderStroke();
-    const [borderRadius] = usesBorderRadius();
-    
-    
-    
     return composition([
         imports([
-            // colors:
-            border(),
-            
-            // borders:
-            borderStroke(),
-            borderRadius(),
-            usesBorderAsContainer({     // make a nicely rounded corners
-                orientationBlockRule  : '.block',
-                orientationInlineRule : ':not(.block)',
-            }),
+            // layouts:
+            usesListLayout(),
         ]),
         layout({
             // layouts:
-         // display        : 'flex',    // customizable orientation // already defined in variant `.block`/`.inline`
-         // flexDirection  : 'column',  // customizable orientation // already defined in variant `.block`/`.inline`
             justifyContent : 'start',   // if wrappers are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first wrapper should be visible first
-            alignItems     : 'stretch', // wrappers width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
-            flexWrap       : 'nowrap',  // no wrapping
-            
-            
-            
-            // borders:
-            ...expandBorderStroke(), // expand borderStroke css vars
-            ...expandBorderRadius(), // expand borderRadius css vars
-            
-            
-            
-            // sizes:
-            minInlineSize  : 0, // See https://github.com/twbs/bootstrap/pull/22740#issuecomment-305868106
         }),
     ]);
 };
@@ -193,42 +175,6 @@ export const usesProgressVariants = () => {
             
             // layouts:
             sizes(),
-        ]),
-        variants([
-            notOrientationBlock([ // inline
-                layout({
-                    // layouts:
-                    display           : 'flex',        // use block flexbox, so it takes the entire parent's width
-                    flexDirection     : 'row',         // items are stacked horizontally
-                    
-                    
-                    
-                    // children:
-                    ...children(progressBarElm, [
-                        imports([
-                            // borders:
-                            usesBorderAsSeparatorInline(),
-                        ]),
-                    ]),
-                }),
-            ]),
-            isOrientationBlock([ // block
-                layout({
-                    // layouts:
-                    display           : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
-                    flexDirection     : 'column',      // items are stacked vertically
-                    
-                    
-                    
-                    // children:
-                    ...children(progressBarElm, [
-                        imports([
-                            // borders:
-                            usesBorderAsSeparatorBlock(),
-                        ]),
-                    ]),
-                }),
-            ]),
         ]),
     ]);
 };
@@ -261,46 +207,56 @@ export const usesProgressBarLayout = () => {
     const [, , borderStrokeDecls] = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
     
+    // range vars:
+    const [progressBarVars , progressBarVarRefs] = usesProgressBarVars();
+    
     
     
     return composition([
-        imports([
-            // layouts:
-            usesBasicLayout(),
-        ]),
         layout({
-            // layouts:
-            display        : 'inline-block', // use inline block, so it takes the width & height as we set
-            
-            
-            
-            // borders:
-            [borderStrokeDecls.borderWidth]            : 0, // discard border
-            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
-            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
-            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
-            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
-            
-            
-            
-            // positions:
-            verticalAlign  : 'baseline', // label's text should be aligned with sibling text, so the label behave like <span> wrapper
-            
-            
-            
             // sizes:
-            boxSizing      : 'border-box',     // the final size is including borders & paddings
-            flex           : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+            flex : [[progressBarVarRefs.progressBarValueRatio, progressBarVarRefs.progressBarValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
             
             
             
-            // typos:
-            textAlign      : 'start', // flow to the document's writing flow
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
+            // children:
+            ...children(listItemElm, [
+                imports([
+                    // layouts:
+                    usesBasicLayout(),
+                    
+                    // progressBar vars:
+                    progressBarVars(),
+                ]),
+                layout({
+                    // layouts:
+                    display   : 'block',  // fills the entire wrapper's width
+                    
+                    
+                    
+                    // borders:
+                    [borderStrokeDecls.borderWidth]            : 0, // discard border
+                    [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+                    [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+                    [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+                    
+                    
+                    
+                    // sizes:
+                    flex      : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+                    
+                    
+                    
+                    // typos:
+                    textAlign : 'center',
+                    
+                    
+                    
+                    // customize:
+                    ...usesGeneralProps(cssProps), // apply general cssProps
+                }),
+            ]),
         }),
     ]);
 };
@@ -315,44 +271,35 @@ export const usesProgressBarVariants = () => {
         }),
     ]));
     
-    // range vars:
-    const [progressBarVars , progressBarVarRefs] = usesProgressBarVars();
-    
     
     
     return composition([
-        imports([
-            // variants:
-            usesBasicVariants(),
-            
-            // layouts:
-            sizes(),
-            
-            // progressBar vars:
-            progressBarVars(),
-        ]),
-        variants([
-            rule(':not(.inline)>*>&', [ // block
-                layout({
-                    blockSize  : `calc(${progressBarVarRefs.progressBarValueRatio} * 100%)`,
-                }),
+        layout({
+            // children:
+            ...children(listItemElm, [
+                imports([
+                    // variants:
+                    usesBasicVariants(),
+                    
+                    // layouts:
+                    sizes(),
+                ]),
             ]),
-            rule('.inline>*>&', [ // inline
-                layout({
-                    inlineSize : `calc(${progressBarVarRefs.progressBarValueRatio} * 100%)`,
-                }),
-            ]),
-        ]),
+        }),
     ]);
 };
 export const usesProgressBar = () => {
     return composition([
-        imports([
-            // layouts:
-            usesProgressBarLayout(),
-            
-            // variants:
-            usesProgressBarVariants(),
+        variants([
+            rule('&&', [ // makes `.ProgressBar` is more specific than `wrapperElm`
+                imports([
+                    // layouts:
+                    usesProgressBarLayout(),
+                    
+                    // variants:
+                    usesProgressBarVariants(),
+                ]),
+            ]),
         ]),
     ]);
 };
@@ -404,12 +351,21 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
             {...props}
             
             
+            // semantics:
+            semanticTag ={props.semanticTag  ?? [null] }
+            semanticRole={props.semanticRole ?? 'group'}
+            
+            aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
+            
+            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 orientationVariant.class,
             ]}
-        />
+        >
+            { props.children }
+        </Basic>
     );
 }
 
@@ -449,22 +405,15 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
     
     // jsx:
     return (
-        <Basic<TElement>
-            // other props:
-            {...props}
-            
-            
+        <Element
             // semantics:
             semanticTag ={props.semanticTag  ?? [null]       }
             semanticRole={props.semanticRole ?? 'progressbar'}
             
-            aria-valuenow   ={props['aria-valuenow'   ] ?? valueFn}
-            aria-valuemin   ={props['aria-valuemin'   ] ?? (negativeFn ? maxFn : minFn)}
-            aria-valuemax   ={props['aria-valuemax'   ] ?? (negativeFn ? minFn : maxFn)}
             
-            
-            // variants:
-            mild={props.mild ?? false}
+            aria-valuenow={props['aria-valuenow'   ] ?? valueFn}
+            aria-valuemin={props['aria-valuemin'   ] ?? (negativeFn ? maxFn : minFn)}
+            aria-valuemax={props['aria-valuemax'   ] ?? (negativeFn ? minFn : maxFn)}
             
             
             // classes:
@@ -476,6 +425,15 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
                 // values:
                 [progressBarVarDecls.progressBarValueRatio]: valueRatio,
             }}
-        />
+        >
+            <Basic<TElement>
+                // other props:
+                {...props}
+                
+                
+                // variants:
+                mild={props.mild ?? false}
+            />
+        </Element>
     );
 }

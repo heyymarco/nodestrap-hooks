@@ -59,7 +59,7 @@ function App() {
 						theme='danger' size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
 
-						value={50}
+						value={60}
 					>
 						50%
 					</ProgressBar>
