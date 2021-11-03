@@ -510,7 +510,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // sizes:
-        minInlineSize        : '8rem',
+        minInlineSize        : 'unset',
         minBlockSize         : 'unset',
         
         minInlineSizeBlock   : 'unset',
