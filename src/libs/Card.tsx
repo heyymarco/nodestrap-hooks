@@ -255,31 +255,8 @@ export const usesCardLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
-};
-export const usesCardVariants = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
-    
-    
-    return composition([
-        imports([
-            // variants:
-            usesIndicatorVariants(),
-            usesContentVariants(),
-            
-            // layouts:
-            sizes(),
-        ]),
         variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
             notOrientationInline([ // block
                 layout({
                     // layouts:
@@ -314,6 +291,30 @@ export const usesCardVariants = () => {
                     ]),
                 }),
             ]),
+        ]),
+    ]);
+};
+export const usesCardVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizeVariant((sizeName) => composition([
+        layout({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    
+    
+    return composition([
+        imports([
+            // variants:
+            usesIndicatorVariants(),
+            usesContentVariants(),
+            
+            // layouts:
+            sizes(),
         ]),
     ]);
 };
