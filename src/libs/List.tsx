@@ -560,6 +560,7 @@ export const usesListLayout = () => {
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
         variants([
+            /* the orientation variants are part of layout */
             notOrientationInline([ // block
                 layout({
                     // layouts:
