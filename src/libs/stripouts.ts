@@ -142,7 +142,7 @@ export const stripoutList = () => composition([
         
         
         // children:
-        ...children('li', [
+        ...children('*', [
             layout({
                 display    : unset,
                 textAlign  : unset,
