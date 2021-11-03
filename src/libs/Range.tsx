@@ -45,6 +45,7 @@ import {
     
     // utilities:
     setRef,
+    parseNumber,
     
     
     
@@ -535,26 +536,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         thumbPaddingBlock    : 0,
     };
 }, { prefix: 'rnge' });
-
-
-
-// utilities:
-const isSingleValue = (num: string|ReadonlyArray<string>): num is string => (typeof(num) === 'string') || (Array.isArray(num) && (num.length === 1));
-const parseNumber = (num: number|string|ReadonlyArray<string>|null|undefined): number|null => {
-    if (typeof(num) === 'number') return num;
-    if (!num) return null;
-    
-    
-    
-    if (!isSingleValue(num)) return null;
-    if (!num) return null;
-    
-    
-    
-    num = Number.parseFloat(num);
-    if (isNaN(num)) return null;
-    return num;
-};
 
 
 
