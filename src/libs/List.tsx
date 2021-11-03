@@ -222,8 +222,8 @@ export const useListVariant = (props: ListVariant) => {
 
 // styles:
 // const wrapperElm  = ['li', '*']; // poor specificity
-const wrapperElm  = ':nth-child(n)'; // better specificity
-const listItemElm = ':first-child';
+export const wrapperElm  = ':nth-child(n)'; // better specificity
+export const listItemElm = ':first-child';
 
 
 
@@ -494,7 +494,7 @@ export const usesListLayout = () => {
     
     // borders:
     const [borderStroke] = usesBorderStroke();
-    const [borderRadius] = usesBorderRadius();
+    const [borderRadius, , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -559,45 +559,7 @@ export const usesListLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
-};
-export const usesListVariants = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
-    // colors:
-    const [iconColor, iconColorRefs] = usesIconColor();
-    const [         , backgRefs    ] = usesBackg();
-    
-    // borders:
-    const [, , borderDecls]                       = usesBorder();
-    const [, borderStrokeRefs, borderStrokeDecls] = usesBorderStroke();
-    const [, , borderRadiusDecls]                 = usesBorderRadius();
-    
-    
-    
-    return composition([
-        imports([
-            // variants:
-            usesIndicatorVariants(),
-            
-            // layouts:
-            sizes(),
-        ]),
         variants([
-            rule('.content', [ // content
-                imports([
-                    usesContentVariants(),
-                ]),
-            ]),
-            
             notOrientationInline([ // block
                 layout({
                     // layouts:
@@ -687,6 +649,45 @@ export const usesListVariants = () => {
                         }),
                     ]),
                 }),
+            ]),
+        ]),
+    ]);
+};
+export const usesListVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizeVariant((sizeName) => composition([
+        layout({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    // colors:
+    const [iconColor, iconColorRefs] = usesIconColor();
+    const [         , backgRefs    ] = usesBackg();
+    
+    // borders:
+    const [, , borderDecls]                       = usesBorder();
+    const [, borderStrokeRefs, borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls]                 = usesBorderRadius();
+    
+    
+    
+    return composition([
+        imports([
+            // variants:
+            usesIndicatorVariants(),
+            
+            // layouts:
+            sizes(),
+        ]),
+        variants([
+            rule('.content', [ // content
+                imports([
+                    usesContentVariants(),
+                ]),
             ]),
         ]),
         variants([
