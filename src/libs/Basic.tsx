@@ -161,11 +161,16 @@ export const isOrientationInline = (styles: StyleCollection) => isOrientation('i
 export interface OrientationRuleOptions {
     defaultOrientation? : OrientationName
 }
+export const normalizeOrientationRule = (options: OrientationRuleOptions, defaultOptions: OrientationRuleOptions): Required<OrientationRuleOptions> => {
+    return {
+        defaultOrientation: options.defaultOrientation ?? defaultOptions.defaultOrientation ?? 'block',
+    };
+};
 export const usesOrientationRule = (options: OrientationRuleOptions = {}) => {
     // options:
     const {
-        defaultOrientation = 'block',
-    } = options;
+        defaultOrientation,
+    } = normalizeOrientationRule(options, { defaultOrientation: 'block' });
     const orientationBlockRule  = (defaultOrientation === 'block' ) ? ':not(.inline)' : '.inline';
     const orientationInlineRule = (defaultOrientation === 'inline') ? ':not(.block)'  : '.block';
     
