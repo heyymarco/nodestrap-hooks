@@ -511,9 +511,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         // sizes:
         minInlineSize        : '8rem',
-        minBlockSize         : 'auto',
+        minBlockSize         : 'unset',
         
-        minInlineSizeBlock   : 'auto',
+        minInlineSizeBlock   : 'unset',
         minBlockSizeBlock    : '8rem',
         
         
