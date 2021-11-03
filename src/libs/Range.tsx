@@ -357,37 +357,8 @@ export const usesRangeLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
-};
-export const usesRangeVariants = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
-    // colors:
-    const [, mildRefs           ] = usesMildVariant();
-    
-    // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
-    
-    
-    
-    return composition([
-        imports([
-            // variants:
-            usesEditableControlVariants(),
-            
-            // layouts:
-            sizes(),
-            usesNudeVariant(),
-        ]),
         variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
             notOrientationBlock([ // inline
                 layout({
                     // layouts:
@@ -442,6 +413,38 @@ export const usesRangeVariants = () => {
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
                 }),
             ]),
+        ]),
+    ]);
+};
+export const usesRangeVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizeVariant((sizeName) => composition([
+        layout({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    // colors:
+    const [, mildRefs           ] = usesMildVariant();
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
+    return composition([
+        imports([
+            // variants:
+            usesEditableControlVariants(),
+            
+            // layouts:
+            sizes(),
+            usesNudeVariant(),
+        ]),
+        variants([
             isNude([
                 layout({
                     // foregrounds:
