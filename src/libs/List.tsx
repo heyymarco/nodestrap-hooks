@@ -69,8 +69,8 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    notOrientationInline,
-    isOrientationInline,
+    OrientationRuleOptions,
+    usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
     ThemeName,
@@ -238,7 +238,12 @@ export const usesListItemInheritMildVariant = () => {
         ]),
     ]);
 };
-export const usesListItemInheritParentVariants = () => {
+export const usesListItemInheritParentVariants = (options: OrientationRuleOptions = {}) => {
+    // options:
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     return composition([
         variants([
             rule('.content>*>&', [ // content
@@ -254,13 +259,13 @@ export const usesListItemInheritParentVariants = () => {
                 ]),
             ]),
             
-            rule(':not(.inline)>*>&', [ // block
+            rule(`${orientationBlockRule}>*>&`,  [ // block
                 imports([
                     // borders:
                     usesBorderAsSeparatorBlock(),
                 ]),
             ]),
-            rule('.inline>*>&', [ // inline
+            rule(`${orientationInlineRule}>*>&`, [ // inline
                 imports([
                     // borders:
                     usesBorderAsSeparatorInline(),
@@ -486,7 +491,12 @@ export const useListActionItemSheet = createUseSheet(() => [
 
 
 
-export const usesListLayout = () => {
+export const usesListLayout = (options: OrientationRuleOptions = {}) => {
+    // options:
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     // dependencies:
     
     // colors:
@@ -510,7 +520,10 @@ export const usesListLayout = () => {
             // borders:
             borderStroke(),
             borderRadius(),
-            usesBorderAsContainer(),    // make a nicely rounded corners
+            usesBorderAsContainer({     // make a nicely rounded corners
+                orientationBlockRule,
+                orientationInlineRule,
+            }),
         ]),
         layout({
             // layouts:
@@ -561,7 +574,7 @@ export const usesListLayout = () => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            notOrientationInline([ // block
+            rule(orientationBlockRule,  [ // block
                 layout({
                     // layouts:
                     display           : 'flex',        // use block flexbox, so it takes the entire parent's width
@@ -606,7 +619,7 @@ export const usesListLayout = () => {
                     ]),
                 }),
             ]),
-            isOrientationInline([ // inline
+            rule(orientationInlineRule, [ // inline
                 layout({
                     // layouts:
                     display           : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
@@ -654,7 +667,12 @@ export const usesListLayout = () => {
         ]),
     ]);
 };
-export const usesListVariants = () => {
+export const usesListVariants = (options: OrientationRuleOptions = {}) => {
+    // options:
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     // dependencies:
     
     // layouts:
@@ -791,7 +809,7 @@ export const usesListVariants = () => {
                                 variants([
                                     isPassive([
                                         variants([
-                                            rule(':not(.inline)&', [ // block
+                                            rule(`${orientationBlockRule}&`,  [ // block
                                                 layout({
                                                     // borders:
                                                     // show parent border right:
@@ -799,7 +817,7 @@ export const usesListVariants = () => {
                                                     borderInlineStartColor : 'transparent',
                                                 }),
                                             ]),
-                                            rule('.inline&', [ // inline
+                                            rule(`${orientationInlineRule}&`, [ // inline
                                                 layout({
                                                     // borders:
                                                     // show parent border bottom:
@@ -811,7 +829,7 @@ export const usesListVariants = () => {
                                     ]),
                                     isActive([
                                         variants([
-                                            rule(':not(.inline)&', [ // block
+                                            rule(`${orientationBlockRule}&`,  [ // block
                                                 layout({
                                                     // borders:
                                                     // hide parent border right:
@@ -824,7 +842,7 @@ export const usesListVariants = () => {
                                                     [borderRadiusDecls.borderEndStartRadius]   : cssProps.tabBorderRadius,
                                                 }),
                                             ]),
-                                            rule('.inline&', [ // inline
+                                            rule(`${orientationInlineRule}&`, [ // inline
                                                 layout({
                                                     // borders:
                                                     // hide parent border bottom:
@@ -845,7 +863,7 @@ export const usesListVariants = () => {
                     ]),
                 }),
                 variants([
-                    notOrientationInline([ // block
+                    rule(orientationBlockRule,  [ // block
                         layout({
                             // layouts:
                             // tab directions are block (down) but List direction are inline:
@@ -870,7 +888,7 @@ export const usesListVariants = () => {
                             ]),
                         }),
                     ]),
-                    isOrientationInline([ // inline
+                    rule(orientationInlineRule, [ // inline
                         layout({
                             // layouts:
                             // tab directions are inline (right) but List direction are block:
