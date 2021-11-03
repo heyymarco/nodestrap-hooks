@@ -14,6 +14,7 @@ import {
     
     // layouts:
     layout,
+    children,
     
     
     
@@ -46,8 +47,21 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    notOrientationInline,
-    isOrientationInline,
+    OrientationName,
+    notOrientationBlock,
+    isOrientationBlock,
+    OrientationVariant,
+    useOrientationVariant,
+    ThemeName,
+    outlinedOf,
+    mildOf,
+    usesBackg,
+    usesBorder,
+    usesBorderStroke,
+    expandBorderStroke,
+    usesBorderRadius,
+    expandBorderRadius,
+    usesPadding,
     
     
     
@@ -62,17 +76,15 @@ import {
     Basic,
 }                           from './Basic'
 import {
-    // styles:
-    usesListLayout,
-    usesListVariants,
-}                           from './List'
+    // hooks:
+    usesBorderAsContainer,
+    usesBorderAsSeparatorBlock,
+    usesBorderAsSeparatorInline,
+}                           from './Content'
 import {
     // hooks:
     ListStyle,
     ListVariant,
-    
-    OrientationName,
-    OrientationVariant,
     
     
     
@@ -111,12 +123,54 @@ export const usesProgressBarVars = () => {
 
 
 // styles:
+const progressBarElm = ':nth-child(n)';
+
+
+
 export const usesProgressLayout = () => {
+    // dependencies:
+    
+    // colors:
+    const [border      ] = usesBorder();
+    
+    // borders:
+    const [borderStroke] = usesBorderStroke();
+    const [borderRadius] = usesBorderRadius();
+    
+    
+    
     return composition([
         imports([
-            // layouts:
-            usesListLayout(),
+            // colors:
+            border(),
+            
+            // borders:
+            borderStroke(),
+            borderRadius(),
+            usesBorderAsContainer({     // make a nicely rounded corners
+                orientationBlockRule  : '.block',
+                orientationInlineRule : ':not(.block)',
+            }),
         ]),
+        layout({
+            // layouts:
+         // display        : 'flex',    // customizable orientation // already defined in variant `.block`/`.inline`
+         // flexDirection  : 'column',  // customizable orientation // already defined in variant `.block`/`.inline`
+            justifyContent : 'start',   // if wrappers are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first wrapper should be visible first
+            alignItems     : 'stretch', // wrappers width are 100% of the parent (for variant `.block`) or height (for variant `.inline`)
+            flexWrap       : 'nowrap',  // no wrapping
+            
+            
+            
+            // borders:
+            ...expandBorderStroke(), // expand borderStroke css vars
+            ...expandBorderRadius(), // expand borderRadius css vars
+            
+            
+            
+            // sizes:
+            minInlineSize  : 0, // See https://github.com/twbs/bootstrap/pull/22740#issuecomment-305868106
+        }),
     ]);
 };
 export const usesProgressVariants = () => {
@@ -135,22 +189,44 @@ export const usesProgressVariants = () => {
     return composition([
         imports([
             // variants:
-            usesListVariants(),
+            usesBasicVariants(),
             
             // layouts:
             sizes(),
         ]),
         variants([
-            notOrientationInline([ // block
+            notOrientationBlock([ // inline
                 layout({
                     // layouts:
-                    display : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+                    display           : 'flex',        // use block flexbox, so it takes the entire parent's width
+                    flexDirection     : 'row',         // items are stacked horizontally
+                    
+                    
+                    
+                    // children:
+                    ...children(progressBarElm, [
+                        imports([
+                            // borders:
+                            usesBorderAsSeparatorInline(),
+                        ]),
+                    ]),
                 }),
             ]),
-            isOrientationInline([ // inline
+            isOrientationBlock([ // block
                 layout({
                     // layouts:
-                    display : 'flex',        // use block flexbox, so it takes the entire parent's width
+                    display           : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+                    flexDirection     : 'column',      // items are stacked vertically
+                    
+                    
+                    
+                    // children:
+                    ...children(progressBarElm, [
+                        imports([
+                            // borders:
+                            usesBorderAsSeparatorBlock(),
+                        ]),
+                    ]),
                 }),
             ]),
         ]),
@@ -179,6 +255,14 @@ export const useProgressSheet = createUseSheet(() => [
 
 
 export const usesProgressBarLayout = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -187,6 +271,15 @@ export const usesProgressBarLayout = () => {
         layout({
             // layouts:
             display        : 'inline-block', // use inline block, so it takes the width & height as we set
+            
+            
+            
+            // borders:
+            [borderStrokeDecls.borderWidth]            : 0, // discard border
+            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
+            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
+            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
+            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
             
             
             
@@ -287,7 +380,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface ProgressProps<TElement extends HTMLElement = HTMLElement>
     extends
-        GroupProps<TElement>
+        BasicProps<TElement>,
+        
+        // layouts:
+        OrientationVariant
 {
 }
 export function Progress<TElement extends HTMLElement = HTMLElement>(props: ProgressProps<TElement>) {
@@ -296,18 +392,23 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
     
     
     
+    // variants:
+    const orientationVariant    = useOrientationVariant(props);
+    const orientationHorizontal = (orientationVariant.class === 'inline');
+    
+    
+    
     return (
-        <Group<TElement>
+        <Basic<TElement>
             // other props:
             {...props}
             
             
-            // variants:
-            orientation={props.orientation ?? 'inline'}
-            
-            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            variantClasses={[...(props.variantClasses ?? []),
+                orientationVariant.class,
+            ]}
         />
     );
 }

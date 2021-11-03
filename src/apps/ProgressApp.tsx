@@ -45,15 +45,23 @@ function App() {
 					outlined={outlined} mild={mild}
 
 					orientation={orientation}
-					listStyle={listStyle}
 				>
                     <ProgressBar
-						theme={theme} size={size} gradient={enableGrad}
-						outlined={outlined} mild={mild}
+						// theme={theme} size={size} gradient={enableGrad}
+						// outlined={outlined}
+						mild={mild}
 
 						value={30}
 					>
 						30%
+					</ProgressBar>
+                    <ProgressBar
+						theme='danger' size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						value={50}
+					>
+						50%
 					</ProgressBar>
                 </Progress>
 				<p>
