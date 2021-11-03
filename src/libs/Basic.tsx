@@ -171,8 +171,8 @@ export const usesOrientationRule = (options?: OrientationRuleOptions) => {
     const {
         defaultOrientation,
     } = normalizeOrientationRule(options, { defaultOrientation: 'block' });
-    const orientationBlockRule  = (defaultOrientation === 'block' ) ? ':not(.inline)' : '.inline';
-    const orientationInlineRule = (defaultOrientation === 'inline') ? ':not(.block)'  : '.block';
+    const orientationBlockRule  = (defaultOrientation === 'block' ) ? ':not(.inline)' : '.block';
+    const orientationInlineRule = (defaultOrientation === 'inline') ? ':not(.block)'  : '.inline';
     
     
     
