@@ -50,6 +50,8 @@ function App() {
                     <ProgressBar
 						theme={theme} size={size} gradient={enableGrad}
 						outlined={outlined} mild={mild}
+
+						value={30}
 					>
 						30%
 					</ProgressBar>

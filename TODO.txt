@@ -1,6 +1,7 @@
 top priority:
 Progress
 Range => dial variant
+simplify class name
 
 
 

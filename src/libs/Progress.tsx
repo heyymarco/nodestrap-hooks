@@ -24,7 +24,15 @@ import {
 import {
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    parseNumber,
 }                           from './react-cssfn' // cssfn for react
+import {
+    createCssVar,
+}                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
     
@@ -38,9 +46,8 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesNudeVariant,
-    NudeVariant,
-    useNudeVariant,
+    notOrientationInline,
+    isOrientationInline,
     
     
     
@@ -54,6 +61,11 @@ import {
     BasicProps,
     Basic,
 }                           from './Basic'
+import {
+    // styles:
+    usesListLayout,
+    usesListVariants,
+}                           from './List'
 import {
     // hooks:
     ListStyle,
@@ -71,7 +83,101 @@ import {
 
 
 
+// hooks:
+
+// progressBar vars:
+
+export interface ProgressBarVars {
+    /**
+     * ProgressBar's thumb ratio.
+     */
+    progressBarValueRatio : any
+}
+const [progressBarVarRefs, progressBarVarDecls] = createCssVar<ProgressBarVars>();
+
+/**
+ * Uses ProgressBar variables.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents ProgressBar variables definitions.
+ */
+export const usesProgressBarVars = () => {
+    return [
+        () => composition([
+        ]),
+        progressBarVarRefs,
+        progressBarVarDecls,
+    ] as const;
+};
+
+
+
 // styles:
+export const usesProgressLayout = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesListLayout(),
+        ]),
+    ]);
+};
+export const usesProgressVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizeVariant((sizeName) => composition([
+        layout({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    
+    
+    return composition([
+        imports([
+            // variants:
+            usesListVariants(),
+            
+            // layouts:
+            sizes(),
+        ]),
+        variants([
+            notOrientationInline([ // block
+                layout({
+                    // layouts:
+                    display : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+                }),
+            ]),
+            isOrientationInline([ // inline
+                layout({
+                    // layouts:
+                    display : 'flex',        // use block flexbox, so it takes the entire parent's width
+                }),
+            ]),
+        ]),
+    ]);
+};
+export const usesProgress = () => {
+    return composition([
+        imports([
+            // layouts:
+            usesProgressLayout(),
+            
+            // variants:
+            usesProgressVariants(),
+        ]),
+    ]);
+};
+
+export const useProgressSheet = createUseSheet(() => [
+    mainComposition([
+        imports([
+            usesProgress(),
+        ]),
+    ]),
+]);
+
+
+
 export const usesProgressBarLayout = () => {
     return composition([
         imports([
@@ -90,8 +196,8 @@ export const usesProgressBarLayout = () => {
             
             
             // sizes:
-            /* -- auto size depends on the text's/content's size -- */
-            boxSizing      : 'content-box', // the final size is excluding borders & paddings
+            boxSizing      : 'border-box',     // the final size is including borders & paddings
+            flex           : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
             
             
             
@@ -116,6 +222,9 @@ export const usesProgressBarVariants = () => {
         }),
     ]));
     
+    // range vars:
+    const [progressBarVars , progressBarVarRefs] = usesProgressBarVars();
+    
     
     
     return composition([
@@ -125,7 +234,21 @@ export const usesProgressBarVariants = () => {
             
             // layouts:
             sizes(),
-            usesNudeVariant(),
+            
+            // progressBar vars:
+            progressBarVars(),
+        ]),
+        variants([
+            rule(':not(.inline)>*>&', [ // block
+                layout({
+                    blockSize  : `calc(${progressBarVarRefs.progressBarValueRatio} * 100%)`,
+                }),
+            ]),
+            rule('.inline>*>&', [ // inline
+                layout({
+                    inlineSize : `calc(${progressBarVarRefs.progressBarValueRatio} * 100%)`,
+                }),
+            ]),
         ]),
     ]);
 };
@@ -168,6 +291,11 @@ export interface ProgressProps<TElement extends HTMLElement = HTMLElement>
 {
 }
 export function Progress<TElement extends HTMLElement = HTMLElement>(props: ProgressProps<TElement>) {
+    // styles:
+    const sheet = useProgressSheet();
+    
+    
+    
     return (
         <Group<TElement>
             // other props:
@@ -176,6 +304,10 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
             
             // variants:
             orientation={props.orientation ?? 'inline'}
+            
+            
+            // classes:
+            mainClass={props.mainClass ?? sheet.main}
         />
     );
 }
@@ -189,11 +321,29 @@ export interface ProgressBarProps<TElement extends HTMLElement = HTMLElement>
     extends
         BasicProps<TElement>
 {
+    // values:
+    value?    : string | number
+    min?      : string | number
+    max?      : string | number
 }
 export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: ProgressBarProps<TElement>) {
     // styles:
     const sheet = useProgressBarSheet();
-
+    
+    
+    
+    // fn props:
+    const valueFn    : number  = parseNumber(props.value)  ?? 0;
+    const minFn      : number  = parseNumber(props.min)    ?? 0;
+    const maxFn      : number  = parseNumber(props.max)    ?? 100;
+    const negativeFn : boolean = (maxFn < minFn);
+    const valueRatio : number  = (valueFn - minFn) / (maxFn - minFn);
+    
+    
+    
+    // progressBar vars:
+    const [, , progressBarVarDecls] = usesProgressBarVars();
+    
     
     
     // jsx:
@@ -203,14 +353,28 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
             {...props}
             
             
+            // semantics:
+            semanticTag ={props.semanticTag  ?? [null]       }
+            semanticRole={props.semanticRole ?? 'progressbar'}
+            
+            aria-valuenow   ={props['aria-valuenow'   ] ?? valueFn}
+            aria-valuemin   ={props['aria-valuemin'   ] ?? (negativeFn ? maxFn : minFn)}
+            aria-valuemax   ={props['aria-valuemax'   ] ?? (negativeFn ? minFn : maxFn)}
+            
             
             // variants:
             mild={props.mild ?? false}
             
             
-            
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            
+            
+            // styles:
+            style={{...(props.style ?? {}),
+                // values:
+                [progressBarVarDecls.progressBarValueRatio]: valueRatio,
+            }}
         />
     );
 }
