@@ -158,10 +158,10 @@ export const notOrientationInline = (styles: StyleCollection) => notOrientation(
 export const isOrientationBlock  = (styles: StyleCollection) => isOrientation('block' , styles);
 export const isOrientationInline = (styles: StyleCollection) => isOrientation('inline', styles);
 
-export interface OrientationOptions {
+export interface OrientationRuleOptions {
     defaultOrientation? : OrientationName
 }
-export const usesOrientationRule = (options: OrientationOptions = {}) => {
+export const usesOrientationRule = (options: OrientationRuleOptions = {}) => {
     // options:
     const {
         defaultOrientation = 'block',
