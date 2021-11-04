@@ -28,6 +28,7 @@ import {
     
     // rules:
     variants,
+    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // general types:
@@ -70,8 +71,10 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    notOrientationBlock,
-    isOrientationBlock,
+    OrientationRuleOptions,
+    defaultInlineOrientationRuleOptions,
+    normalizeOrientationRule,
+    usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
     isNude,
@@ -133,6 +136,11 @@ import triggerChange        from 'react-trigger-change'
 
 
 
+// defaults:
+const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions;
+
+
+
 // hooks:
 
 // range vars:
@@ -180,7 +188,13 @@ export const trackLowerElm = '.tracklower';
 export const trackUpperElm = '.trackupper';
 export const thumbElm      = '.thumb';
 
-export const usesRangeLayout = () => {
+export const usesRangeLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     // dependencies:
     
     // borders:
@@ -229,8 +243,8 @@ export const usesRangeLayout = () => {
             ...children(trackElm, [
                 imports([
                     usesBorderAsContainer({ // make a nicely rounded corners
-                        orientationBlockRule  : '.block&',
-                        orientationInlineRule : ':not(.block)&',
+                        orientationBlockRule  : `${orientationBlockRule}&`,
+                        orientationInlineRule : `${orientationInlineRule}&`,
                     }),
                 ]),
                 layout({
@@ -359,34 +373,7 @@ export const usesRangeLayout = () => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            notOrientationBlock([ // inline
-                layout({
-                    // layouts:
-                    display        : 'flex',        // use block flexbox, so it takes the entire parent's width
-                    flexDirection  : 'row',         // items are stacked horizontally
-                    
-                    
-                    
-                    // children:
-                    ...children('::before', [
-                        imports([
-                            fillTextLineHeightLayout(),
-                        ]),
-                    ]),
-                    ...children(trackElm, [
-                        layout({
-                            // layouts:
-                            flexDirection : 'row',    // items are stacked horizontally
-                        }),
-                    ]),
-                    
-                    
-                    
-                    // overwrites propName = propName{Inline}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
-                }),
-            ]),
-            isOrientationBlock([ // block
+            rule(orientationBlockRule,  [ // block
                 layout({
                     // layouts:
                     display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
@@ -411,6 +398,33 @@ export const usesRangeLayout = () => {
                     
                     // overwrites propName = propName{Block}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+                }),
+            ]),
+            rule(orientationInlineRule, [ // inline
+                layout({
+                    // layouts:
+                    display        : 'flex',        // use block flexbox, so it takes the entire parent's width
+                    flexDirection  : 'row',         // items are stacked horizontally
+                    
+                    
+                    
+                    // children:
+                    ...children('::before', [
+                        imports([
+                            fillTextLineHeightLayout(),
+                        ]),
+                    ]),
+                    ...children(trackElm, [
+                        layout({
+                            // layouts:
+                            flexDirection : 'row',    // items are stacked horizontally
+                        }),
+                    ]),
+                    
+                    
+                    
+                    // overwrites propName = propName{Inline}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
                 }),
             ]),
         ]),
