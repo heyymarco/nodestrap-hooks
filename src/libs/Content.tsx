@@ -53,6 +53,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    usesOrientationRule,
     usesBorder,
     usesBorderStroke,
     expandBorderStroke,
@@ -153,11 +154,12 @@ export interface BorderContainerOptions {
 }
 export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
     // options:
+    const [defaultOrientationBlockRule, defaultOrientationInlineRule] = usesOrientationRule();
     const {
         itemsSelector         = '*',
         
-        orientationBlockRule  = ':not(.inline)',
-        orientationInlineRule = '.inline',
+        orientationBlockRule  = defaultOrientationBlockRule,
+        orientationInlineRule = defaultOrientationInlineRule,
     } = options;
     
     
