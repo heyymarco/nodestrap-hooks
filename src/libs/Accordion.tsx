@@ -105,20 +105,7 @@ const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
     *modified* Collapse
 */
 
-export const usesAccordionItemLayout = () => {
-    return composition([
-        imports([
-            // layouts:
-            usesCollapseLayout(),
-            usesListItemLayout(),
-        ]),
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
-};
-export const usesAccordionItemVariants = (options?: OrientationRuleOptions) => {
+export const usesAccordionItemLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
@@ -127,6 +114,37 @@ export const usesAccordionItemVariants = (options?: OrientationRuleOptions) => {
     
     
     
+    return composition([
+        imports([
+            // layouts:
+            usesCollapseLayout({
+                orientationBlockRule  : parentOrientationBlockRule,
+                orientationInlineRule : parentOrientationInlineRule,
+            }),
+            usesListItemLayout(options), // already handled the `parentOrientation(Block|Inline)Rule` internally
+        ]),
+        layout({
+            // customize:
+            ...usesGeneralProps(cssProps), // apply general cssProps
+        }),
+        variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(parentOrientationBlockRule,  [ // block
+                layout({
+                    // overwrites propName = propName{Block}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+                }),
+            ]),
+            rule(parentOrientationInlineRule, [ // inline
+                layout({
+                    // overwrites propName = propName{Inline}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
+                }),
+            ]),
+        ]),
+    ]);
+};
+export const usesAccordionItemVariants = () => {
     // dependencies:
     
     // layouts:
@@ -142,25 +160,11 @@ export const usesAccordionItemVariants = (options?: OrientationRuleOptions) => {
     return composition([
         imports([
             // variants:
-            usesCollapseVariants(parentOrientationBlockRule, parentOrientationInlineRule),
-            usesListItemVariants(options),
+            usesCollapseVariants(),
+            usesListItemVariants(),
             
             // layouts:
             sizes(),
-        ]),
-        variants([
-            rule(parentOrientationBlockRule,  [ // block
-                layout({
-                    // overwrites propName = propName{Block}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
-                }),
-            ]),
-            rule(parentOrientationInlineRule, [ // inline
-                layout({
-                    // overwrites propName = propName{Inline}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
-                }),
-            ]),
         ]),
     ]);
 };
@@ -181,10 +185,10 @@ export const usesAccordionItem = (options?: OrientationRuleOptions) => {
     return composition([
         imports([
             // layouts:
-            usesAccordionItemLayout(),
+            usesAccordionItemLayout(options),
             
             // variants:
-            usesAccordionItemVariants(options),
+            usesAccordionItemVariants(),
             
             // states:
             usesAccordionItemStates(),
