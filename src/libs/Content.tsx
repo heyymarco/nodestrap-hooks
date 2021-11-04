@@ -53,6 +53,9 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    OrientationRuleOptions,
+    defaultBlockOrientationRuleOptions,
+    normalizeOrientationRule,
     usesOrientationRule,
     usesBorder,
     usesBorderStroke,
@@ -79,6 +82,11 @@ import {
     stripoutFigure,
     stripoutImage,
 }                           from './stripouts'
+
+
+
+// defaults:
+const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
 
@@ -146,20 +154,15 @@ export const usesContainer = () => {
 
 
 // borders:
-export interface BorderContainerOptions {
-    itemsSelector?         : SelectorCollection
-    
-    orientationBlockRule?  : SelectorCollection
-    orientationInlineRule? : SelectorCollection
+export interface BorderContainerOptions extends OrientationRuleOptions {
+    itemsSelector? : SelectorCollection
 }
-export const usesBorderAsContainer = (options: BorderContainerOptions = {}) => {
+export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
     // options:
-    const [defaultOrientationBlockRule, defaultOrientationInlineRule] = usesOrientationRule();
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
     const {
-        itemsSelector         = '*',
-        
-        orientationBlockRule  = defaultOrientationBlockRule,
-        orientationInlineRule = defaultOrientationInlineRule,
+        itemsSelector = '*',
     } = options;
     
     
