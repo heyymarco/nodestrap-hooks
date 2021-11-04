@@ -55,6 +55,7 @@ import {
     usesSizeVariant,
     OrientationName,
     OrientationRuleOptions,
+    defaultInlineOrientationRuleOptions,
     normalizeOrientationRule,
     usesOrientationRule,
     OrientationVariant,
@@ -89,7 +90,7 @@ import {
 
 
 // defaults:
-const defaultOrientationRuleOptions: OrientationRuleOptions = { defaultOrientation: 'inline' };
+const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions;
 
 
 
