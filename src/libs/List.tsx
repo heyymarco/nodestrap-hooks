@@ -270,6 +270,8 @@ export const usesListItemLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    const parentOrientationBlockRule  = `${orientationBlockRule}>*>&`;
+    const parentOrientationInlineRule = `${orientationInlineRule}>*>&`;
     
     
     
@@ -294,13 +296,13 @@ export const usesListItemLayout = (options?: OrientationRuleOptions) => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(`${orientationBlockRule}>*>&`,  [ // block
+            rule(parentOrientationBlockRule,  [ // block
                 imports([
                     // borders:
                     usesBorderAsSeparatorBlock(),
                 ]),
             ]),
-            rule(`${orientationInlineRule}>*>&`, [ // inline
+            rule(parentOrientationInlineRule, [ // inline
                 imports([
                     // borders:
                     usesBorderAsSeparatorInline(),
