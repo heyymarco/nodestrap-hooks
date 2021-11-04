@@ -63,7 +63,7 @@ import {
     
     
     // styles:
-    usesListItemInheritParentVariants,
+    usesListItemBaseLayout,
     
     
     
@@ -98,8 +98,16 @@ const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
 // styles:
-export const usesGroupItemLayout = () => {
+export const usesGroupItemLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
+        imports([
+            usesListItemBaseLayout(options),
+        ]),
         layout({
             // no layout modification needed.
             // the layout is belong to the Button/Radio/Check itself.
@@ -117,12 +125,7 @@ export const usesGroupItemLayout = () => {
         }),
     ]);
 };
-export const usesGroupItemVariants = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
+export const usesGroupItemVariants = () => {
     // dependencies:
     
     // layouts:
@@ -137,9 +140,6 @@ export const usesGroupItemVariants = (options?: OrientationRuleOptions) => {
     
     return composition([
         imports([
-            // variants:
-            usesListItemInheritParentVariants(options),
-            
             // layouts:
             sizes(),
         ]),
@@ -156,10 +156,10 @@ export const usesGroupItem = (options?: OrientationRuleOptions) => {
             rule('&&', [ // makes `.GroupItem` is more specific than `.FooButton.FooVariant`
                 imports([
                     // layouts:
-                    usesGroupItemLayout(),
+                    usesGroupItemLayout(options),
                     
                     // variants:
-                    usesGroupItemVariants(options),
+                    usesGroupItemVariants(),
                 ]),
             ]),
         ]),
