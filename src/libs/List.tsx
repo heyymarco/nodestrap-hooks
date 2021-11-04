@@ -70,6 +70,8 @@ import {
     usesSizeVariant,
     OrientationName,
     OrientationRuleOptions,
+    defaultBlockOrientationRuleOptions,
+    normalizeOrientationRule,
     usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
@@ -176,6 +178,11 @@ import {
 
 
 
+// defaults:
+const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
+
+
+
 // hooks:
 
 // states:
@@ -238,8 +245,9 @@ export const usesListItemInheritMildVariant = () => {
         ]),
     ]);
 };
-export const usesListItemInheritParentVariants = (options: OrientationRuleOptions = {}) => {
+export const usesListItemInheritParentVariants = (options?: OrientationRuleOptions) => {
     // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
     
     
@@ -299,7 +307,12 @@ export const usesListItemLayout = () => {
         }),
     ]);
 };
-export const usesListItemVariants = () => {
+export const usesListItemVariants = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     // dependencies:
     
     // layouts:
@@ -317,7 +330,7 @@ export const usesListItemVariants = () => {
             // variants:
             usesIndicatorVariants(),
             usesListItemInheritMildVariant(),
-            usesListItemInheritParentVariants(),
+            usesListItemInheritParentVariants(options),
             
             // layouts:
             sizes(),
@@ -332,14 +345,19 @@ export const usesListItemStates = () => {
         ]),
     ]);
 };
-export const usesListItem = () => {
+export const usesListItem = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
             usesListItemLayout(),
             
             // variants:
-            usesListItemVariants(),
+            usesListItemVariants(options),
             
             // states:
             usesListItemStates(),
@@ -491,8 +509,9 @@ export const useListActionItemSheet = createUseSheet(() => [
 
 
 
-export const usesListLayout = (options: OrientationRuleOptions = {}) => {
+export const usesListLayout = (options?: OrientationRuleOptions) => {
     // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
     
     
@@ -667,8 +686,9 @@ export const usesListLayout = (options: OrientationRuleOptions = {}) => {
         ]),
     ]);
 };
-export const usesListVariants = (options: OrientationRuleOptions = {}) => {
+export const usesListVariants = (options?: OrientationRuleOptions) => {
     // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
     
     
@@ -1065,14 +1085,19 @@ export const usesListStates = () => {
         ]),
     ]);
 };
-export const usesList = () => {
+export const usesList = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesListLayout(),
+            usesListLayout(options),
             
             // variants:
-            usesListVariants(),
+            usesListVariants(options),
             
             // states:
             usesListStates(),
