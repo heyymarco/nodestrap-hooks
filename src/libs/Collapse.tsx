@@ -44,6 +44,10 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
+    OrientationRuleOptions,
+    defaultBlockOrientationRuleOptions,
+    normalizeOrientationRule,
+    usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
 }                           from './Basic'
@@ -82,6 +86,11 @@ import {
     PopupProps,
     Popup,
 }                           from './Popup'
+
+
+
+// defaults:
+const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
 
@@ -135,7 +144,13 @@ export const usesActivePassiveState = () => {
 
 
 // styles:
-export const usesCollapseLayout = () => {
+export const usesCollapseLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -145,9 +160,24 @@ export const usesCollapseLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+        variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(orientationBlockRule,  [ // block
+                layout({
+                    // overwrites propName = propName{Block}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+                }),
+            ]),
+            rule(orientationInlineRule, [ // inline
+                layout({
+                    // overwrites propName = propName{Inline}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
+                }),
+            ]),
+        ]),
     ]);
 };
-export const usesCollapseVariants = (blockSelector = ':not(.inline)', inlineSelector = '.inline') => {
+export const usesCollapseVariants = () => {
     // dependencies:
     
     // layouts:
@@ -168,20 +198,6 @@ export const usesCollapseVariants = (blockSelector = ':not(.inline)', inlineSele
             // layouts:
             sizes(),
         ]),
-        variants([
-            rule(blockSelector, [ // block
-                layout({
-                    // overwrites propName = propName{Block}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
-                }),
-            ]),
-            rule(inlineSelector, [ // inline
-                layout({
-                    // overwrites propName = propName{Inline}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
-                }),
-            ]),
-        ]),
     ]);
 };
 export const usesCollapseStates = () => {
@@ -200,11 +216,16 @@ export const usesCollapseStates = () => {
         ]),
     ]);
 };
-export const usesCollapse = () => {
+export const usesCollapse = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesCollapseLayout(),
+            usesCollapseLayout(options),
             
             // variants:
             usesCollapseVariants(),
