@@ -266,7 +266,7 @@ export const usesListItemInheritParentVariants = () => {
 
 
 
-export const usesListItemLayout = (options?: OrientationRuleOptions) => {
+export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
@@ -276,24 +276,6 @@ export const usesListItemLayout = (options?: OrientationRuleOptions) => {
     
     
     return composition([
-        imports([
-            // layouts:
-            usesIndicatorLayout(),
-        ]),
-        layout({
-            // layouts:
-            display   : 'block',  // fills the entire wrapper's width
-            
-            
-            
-            // sizes:
-            flex      : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
-        }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
             rule(parentOrientationBlockRule,  [ // block
@@ -309,6 +291,34 @@ export const usesListItemLayout = (options?: OrientationRuleOptions) => {
                 ]),
             ]),
         ]),
+    ]);
+};
+export const usesListItemLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
+    return composition([
+        imports([
+            // layouts:
+            usesIndicatorLayout(),
+            usesListItemBaseLayout(options),
+        ]),
+        layout({
+            // layouts:
+            display   : 'block',  // fills the entire wrapper's width
+            
+            
+            
+            // sizes:
+            flex      : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
+        }),
     ]);
 };
 export const usesListItemVariants = () => {
