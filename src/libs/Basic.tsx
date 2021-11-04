@@ -161,6 +161,8 @@ export const isOrientationInline = (styles: StyleCollection) => isOrientation('i
 export interface OrientationRuleOptions {
     defaultOrientation? : OrientationName
 }
+export const defaultBlockOrientationRuleOptions : OrientationRuleOptions = { defaultOrientation: 'block'  };
+export const defaultInlineOrientationRuleOptions: OrientationRuleOptions = { defaultOrientation: 'inline' };
 export const normalizeOrientationRule = (options: OrientationRuleOptions|undefined, defaultOptions: OrientationRuleOptions): Required<OrientationRuleOptions> => {
     return {
         defaultOrientation: options?.defaultOrientation ?? defaultOptions.defaultOrientation ?? 'block',
