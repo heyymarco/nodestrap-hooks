@@ -187,7 +187,7 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
     return composition([
         imports([
             // resets:
-            stripoutFocusableElement(), // clear browser's default styles
+            stripoutFocusableElement(),     // clear browser's default styles
             
             // colors:
             border(),
@@ -195,10 +195,7 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
             // borders:
             borderStroke(),
             borderRadius(),
-            usesBorderAsContainer({     // make a nicely rounded corners
-                orientationBlockRule,
-                orientationInlineRule,
-            }),
+            usesBorderAsContainer(options), // make a nicely rounded corners
             
             // animations:
             anim(),
