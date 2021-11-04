@@ -15,6 +15,7 @@ import type {
 import {
     // general types:
     StyleCollection,
+    SelectorCollection,
     PropList,
     
     
@@ -159,22 +160,30 @@ export const isOrientationBlock  = (styles: StyleCollection) => isOrientation('b
 export const isOrientationInline = (styles: StyleCollection) => isOrientation('inline', styles);
 
 export interface OrientationRuleOptions {
-    defaultOrientation? : OrientationName
+    defaultOrientation?    : OrientationName
+    orientationBlockRule?  : SelectorCollection
+    orientationInlineRule? : SelectorCollection
 }
 export const defaultBlockOrientationRuleOptions : OrientationRuleOptions = { defaultOrientation: 'block'  };
 export const defaultInlineOrientationRuleOptions: OrientationRuleOptions = { defaultOrientation: 'inline' };
 export const normalizeOrientationRule = (options: OrientationRuleOptions|undefined, defaultOptions: OrientationRuleOptions): Required<OrientationRuleOptions> => {
+    const defaultOrientation    = options?.defaultOrientation ?? defaultOptions.defaultOrientation ?? 'block';
+    
+    const orientationBlockRule  = options?.orientationBlockRule  ?? ((defaultOrientation === 'block' ) ? ':not(.inline)' : '.block' );
+    const orientationInlineRule = options?.orientationInlineRule ?? ((defaultOrientation === 'inline') ? ':not(.block)'  : '.inline');
+    
     return {
-        defaultOrientation: options?.defaultOrientation ?? defaultOptions.defaultOrientation ?? 'block',
+        defaultOrientation,
+        orientationBlockRule,
+        orientationInlineRule,
     };
 };
 export const usesOrientationRule = (options?: OrientationRuleOptions) => {
     // options:
     const {
-        defaultOrientation,
+        orientationBlockRule,
+        orientationInlineRule,
     } = normalizeOrientationRule(options, { defaultOrientation: 'block' });
-    const orientationBlockRule  = (defaultOrientation === 'block' ) ? ':not(.inline)' : '.block';
-    const orientationInlineRule = (defaultOrientation === 'inline') ? ':not(.block)'  : '.inline';
     
     
     
