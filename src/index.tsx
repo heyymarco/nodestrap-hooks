@@ -44,7 +44,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
 //                         import CloseButtonApp       from './apps/CloseButtonApp';            //     button|a     button|link (semantic)
 //             import EditableControlApp               from './apps/EditableControlApp';        // div
-//                 import RangeApp                     from './apps/RangeApp';                  // div      range (semantic)
+                import RangeApp                     from './apps/RangeApp';                  // div      range (semantic)
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';    // div
 //                     import InputApp                 from './apps/InputApp';                  // span
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';  // div
@@ -55,14 +55,14 @@ import reportWebVitals from './reportWebVitals';
 //     import IconApp                                  from './apps/IconApp';                   // span
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
 //     import GroupApp                                 from './apps/GroupApp';                  // div      group (semantic)
-        import ProgressApp                          from './apps/ProgressApp';               // div      group (semantic)
+//         import ProgressApp                          from './apps/ProgressApp';               // div      group (semantic)
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ProgressApp />
+    <RangeApp />
     ,
     document.getElementById('root')
 );

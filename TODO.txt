@@ -1,5 +1,9 @@
 top priority:
+fix content mode on List
+add vertical ListSeparatorItem
 Progress
+fix Group menu inconsistent position
+merged variant of layout to layout
 Range => dial variant
 simplify class name
 
