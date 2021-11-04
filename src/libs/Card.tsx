@@ -166,7 +166,7 @@ export const usesCardBodyLayout = () => {
 export const usesCardLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
     
     
     
@@ -271,7 +271,7 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockRule,  [ // block
+            rule(orientationBlockSelector,  [ // block
                 layout({
                     // layouts:
                     display        : 'flex',        // use block flexbox, so it takes the entire parent's width
@@ -288,7 +288,7 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
                     ]),
                 }),
             ]),
-            rule(orientationInlineRule, [ // inline
+            rule(orientationInlineSelector, [ // inline
                 layout({
                     // layouts:
                     display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed

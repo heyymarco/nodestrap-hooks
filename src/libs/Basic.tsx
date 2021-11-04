@@ -160,38 +160,38 @@ export const isOrientationBlock  = (styles: StyleCollection) => isOrientation('b
 export const isOrientationInline = (styles: StyleCollection) => isOrientation('inline', styles);
 
 export interface OrientationRuleOptions {
-    defaultOrientation?    : OrientationName
-    orientationBlockRule?  : SelectorCollection
-    orientationInlineRule? : SelectorCollection
+    defaultOrientation?        : OrientationName
+    orientationBlockSelector?  : SelectorCollection
+    orientationInlineSelector? : SelectorCollection
 }
 export const defaultBlockOrientationRuleOptions : OrientationRuleOptions = { defaultOrientation: 'block'  };
 export const defaultInlineOrientationRuleOptions: OrientationRuleOptions = { defaultOrientation: 'inline' };
 export const normalizeOrientationRule = (options: OrientationRuleOptions|undefined, defaultOptions: OrientationRuleOptions): Required<OrientationRuleOptions> => {
     const defaultOrientation    = options?.defaultOrientation    ?? defaultOptions.defaultOrientation    ?? 'block';
     
-    const orientationBlockRule  = options?.orientationBlockRule  ?? defaultOptions.orientationBlockRule  ?? ((defaultOrientation === 'block' ) ? ':not(.inline)' : '.block' );
-    const orientationInlineRule = options?.orientationInlineRule ?? defaultOptions.orientationInlineRule ?? ((defaultOrientation === 'inline') ? ':not(.block)'  : '.inline');
+    const orientationBlockSelector  = options?.orientationBlockSelector  ?? defaultOptions.orientationBlockSelector  ?? ((defaultOrientation === 'block' ) ? ':not(.inline)' : '.block' );
+    const orientationInlineSelector = options?.orientationInlineSelector ?? defaultOptions.orientationInlineSelector ?? ((defaultOrientation === 'inline') ? ':not(.block)'  : '.inline');
     
     return {
         ...options,
         
         defaultOrientation,
-        orientationBlockRule,
-        orientationInlineRule,
+        orientationBlockSelector,
+        orientationInlineSelector,
     };
 };
 export const usesOrientationRule = (options?: OrientationRuleOptions) => {
     // options:
     const {
-        orientationBlockRule,
-        orientationInlineRule,
+        orientationBlockSelector,
+        orientationInlineSelector,
     } = normalizeOrientationRule(options, { defaultOrientation: 'block' });
     
     
     
     return [
-        orientationBlockRule,
-        orientationInlineRule,
+        orientationBlockSelector,
+        orientationInlineSelector,
     ] as const;
 };
 

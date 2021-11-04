@@ -191,9 +191,9 @@ export const thumbElm      = '.thumb';
 export const usesRangeLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
-    const parentOrientationBlockRule  = `${orientationBlockRule}&`;
-    const parentOrientationInlineRule = `${orientationInlineRule}&`;
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
+    const parentOrientationBlockSelector  = `${orientationBlockSelector}&`;
+    const parentOrientationInlineSelector = `${orientationInlineSelector}&`;
     
     
     
@@ -245,8 +245,8 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
             ...children(trackElm, [
                 imports([
                     usesBorderAsContainer({ // make a nicely rounded corners
-                        orientationBlockRule  : parentOrientationBlockRule,
-                        orientationInlineRule : parentOrientationInlineRule,
+                        orientationBlockSelector  : parentOrientationBlockSelector,
+                        orientationInlineSelector : parentOrientationInlineSelector,
                     }),
                 ]),
                 layout({
@@ -375,7 +375,7 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockRule,  [ // block
+            rule(orientationBlockSelector,  [ // block
                 layout({
                     // layouts:
                     display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
@@ -402,7 +402,7 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
                 }),
             ]),
-            rule(orientationInlineRule, [ // inline
+            rule(orientationInlineSelector, [ // inline
                 layout({
                     // layouts:
                     display        : 'flex',        // use block flexbox, so it takes the entire parent's width

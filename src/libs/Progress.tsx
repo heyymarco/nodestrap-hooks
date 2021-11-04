@@ -125,7 +125,7 @@ export const usesProgressBarVars = () => {
 export const usesProgressLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
     
     
     
@@ -145,13 +145,13 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockRule,  [ // block
+            rule(orientationBlockSelector,  [ // block
                 layout({
                     // overwrites propName = propName{Block}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
                 }),
             ]),
-            rule(orientationInlineRule, [ // inline
+            rule(orientationInlineSelector, [ // inline
                 layout({
                     // overwrites propName = propName{Inline}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),

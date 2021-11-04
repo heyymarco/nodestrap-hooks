@@ -108,9 +108,9 @@ const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 export const usesAccordionItemLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
-    const parentOrientationBlockRule  = `${orientationBlockRule}>*>&`;
-    const parentOrientationInlineRule = `${orientationInlineRule}>*>&`;
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
+    const parentOrientationBlockSelector  = `${orientationBlockSelector}>*>&`;
+    const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&`;
     
     
     
@@ -118,10 +118,10 @@ export const usesAccordionItemLayout = (options?: OrientationRuleOptions) => {
         imports([
             // layouts:
             usesCollapseLayout({
-                orientationBlockRule  : parentOrientationBlockRule,
-                orientationInlineRule : parentOrientationInlineRule,
+                orientationBlockSelector  : parentOrientationBlockSelector,
+                orientationInlineSelector : parentOrientationInlineSelector,
             }),
-            usesListItemLayout(options), // already handled the `parentOrientation(Block|Inline)Rule` internally
+            usesListItemLayout(options), // already handled the `parentOrientation(Block|Inline)Selector` internally
         ]),
         layout({
             // customize:
@@ -129,13 +129,13 @@ export const usesAccordionItemLayout = (options?: OrientationRuleOptions) => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(parentOrientationBlockRule,  [ // block
+            rule(parentOrientationBlockSelector,  [ // block
                 layout({
                     // overwrites propName = propName{Block}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
                 }),
             ]),
-            rule(parentOrientationInlineRule, [ // inline
+            rule(parentOrientationInlineSelector, [ // inline
                 layout({
                     // overwrites propName = propName{Inline}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),

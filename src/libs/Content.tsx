@@ -160,7 +160,7 @@ export interface BorderContainerOptions extends OrientationRuleOptions {
 export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
     const {
         itemsSelector = '*',
     } = options;
@@ -187,7 +187,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
         //     overflow : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
         // }),
         variants([
-            !!orientationBlockRule && rule(orientationBlockRule, [
+            !!orientationBlockSelector  && rule(orientationBlockSelector,  [
                 layout({
                     // children:
                     ...children(itemsSelector, [
@@ -226,7 +226,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                     ]),
                 }),
             ]),
-            !!orientationInlineRule && rule(orientationInlineRule, [
+            !!orientationInlineSelector && rule(orientationInlineSelector, [
                 layout({
                     // children:
                     ...children(itemsSelector, [
@@ -265,7 +265,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                     ]),
                 }),
             ]),
-            (!orientationBlockRule && !orientationInlineRule) && noRule([
+            (!orientationBlockSelector  && !orientationInlineSelector) && noRule([
                 layout({
                     // children:
                     ...children(itemsSelector, [
