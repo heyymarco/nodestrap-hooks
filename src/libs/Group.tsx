@@ -48,6 +48,9 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    OrientationRuleOptions,
+    defaultBlockOrientationRuleOptions,
+    normalizeOrientationRule,
 }                           from './Basic'
 import {
     // hooks:
@@ -89,6 +92,11 @@ import {
 
 
 
+// defaults:
+const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
+
+
+
 // styles:
 export const usesGroupItemLayout = () => {
     return composition([
@@ -109,7 +117,12 @@ export const usesGroupItemLayout = () => {
         }),
     ]);
 };
-export const usesGroupItemVariants = () => {
+export const usesGroupItemVariants = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     // dependencies:
     
     // layouts:
@@ -125,14 +138,19 @@ export const usesGroupItemVariants = () => {
     return composition([
         imports([
             // variants:
-            usesListItemInheritParentVariants(),
+            usesListItemInheritParentVariants(options),
             
             // layouts:
             sizes(),
         ]),
     ]);
 };
-export const usesGroupItem = () => {
+export const usesGroupItem = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         variants([
             rule('&&', [ // makes `.GroupItem` is more specific than `.FooButton.FooVariant`
@@ -141,7 +159,7 @@ export const usesGroupItem = () => {
                     usesGroupItemLayout(),
                     
                     // variants:
-                    usesGroupItemVariants(),
+                    usesGroupItemVariants(options),
                 ]),
             ]),
         ]),
