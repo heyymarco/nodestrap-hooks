@@ -20,6 +20,7 @@ import {
     
     // rules:
     variants,
+    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -40,8 +41,10 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    notOrientationInline,
-    isOrientationInline,
+    OrientationRuleOptions,
+    defaultBlockOrientationRuleOptions,
+    normalizeOrientationRule,
+    usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
     usesBorder,
@@ -79,6 +82,11 @@ import {
 import {
     stripoutFocusableElement,
 }                           from './stripouts'
+
+
+
+// defaults:
+const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
 
@@ -155,7 +163,13 @@ export const usesCardBodyLayout = () => {
     ]);
 };
 
-export const usesCardLayout = () => {
+export const usesCardLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     // dependencies:
     
     // colors:
@@ -181,7 +195,10 @@ export const usesCardLayout = () => {
             // borders:
             borderStroke(),
             borderRadius(),
-            usesBorderAsContainer(),    // make a nicely rounded corners
+            usesBorderAsContainer({     // make a nicely rounded corners
+                orientationBlockRule,
+                orientationInlineRule,
+            }),
             
             // animations:
             anim(),
@@ -257,7 +274,7 @@ export const usesCardLayout = () => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            notOrientationInline([ // block
+            rule(orientationBlockRule,  [ // block
                 layout({
                     // layouts:
                     display        : 'flex',        // use block flexbox, so it takes the entire parent's width
@@ -274,7 +291,7 @@ export const usesCardLayout = () => {
                     ]),
                 }),
             ]),
-            isOrientationInline([ // inline
+            rule(orientationInlineRule, [ // inline
                 layout({
                     // layouts:
                     display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
@@ -326,11 +343,16 @@ export const usesCardStates = () => {
         ]),
     ]);
 };
-export const usesCard = () => {
+export const usesCard = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesCardLayout(),
+            usesCardLayout(options),
             
             // variants:
             usesCardVariants(),
