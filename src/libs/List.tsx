@@ -245,13 +245,7 @@ export const usesListItemInheritMildVariant = () => {
         ]),
     ]);
 };
-export const usesListItemInheritParentVariants = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
-    
-    
-    
+export const usesListItemInheritParentVariants = () => {
     return composition([
         variants([
             rule('.content>*>&', [ // content
@@ -266,26 +260,19 @@ export const usesListItemInheritParentVariants = (options?: OrientationRuleOptio
                     usesContentVariants(),
                 ]),
             ]),
-            
-            rule(`${orientationBlockRule}>*>&`,  [ // block
-                imports([
-                    // borders:
-                    usesBorderAsSeparatorBlock(),
-                ]),
-            ]),
-            rule(`${orientationInlineRule}>*>&`, [ // inline
-                imports([
-                    // borders:
-                    usesBorderAsSeparatorInline(),
-                ]),
-            ]),
         ]),
     ]);
 };
 
 
 
-export const usesListItemLayout = () => {
+export const usesListItemLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -305,14 +292,24 @@ export const usesListItemLayout = () => {
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
         }),
+        variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(`${orientationBlockRule}>*>&`,  [ // block
+                imports([
+                    // borders:
+                    usesBorderAsSeparatorBlock(),
+                ]),
+            ]),
+            rule(`${orientationInlineRule}>*>&`, [ // inline
+                imports([
+                    // borders:
+                    usesBorderAsSeparatorInline(),
+                ]),
+            ]),
+        ]),
     ]);
 };
-export const usesListItemVariants = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
+export const usesListItemVariants = () => {
     // dependencies:
     
     // layouts:
@@ -330,7 +327,7 @@ export const usesListItemVariants = (options?: OrientationRuleOptions) => {
             // variants:
             usesIndicatorVariants(),
             usesListItemInheritMildVariant(),
-            usesListItemInheritParentVariants(options),
+            usesListItemInheritParentVariants(),
             
             // layouts:
             sizes(),
@@ -354,10 +351,10 @@ export const usesListItem = (options?: OrientationRuleOptions) => {
     return composition([
         imports([
             // layouts:
-            usesListItemLayout(),
+            usesListItemLayout(options),
             
             // variants:
-            usesListItemVariants(options),
+            usesListItemVariants(),
             
             // states:
             usesListItemStates(),
