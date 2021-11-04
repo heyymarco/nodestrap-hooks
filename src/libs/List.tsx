@@ -625,7 +625,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             // children:
                             ...children('*', [ // *:first-child | *:last-child => specificity weight = 1
                                 variants([
-                                    rule(':where(:first-child)', [
+                                    isFirstChild([
                                         layout({
                                             // borders:
                                             // add rounded corners on top:
@@ -633,7 +633,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                                             [borderRadiusDecls.borderStartEndRadius  ] : 'inherit', // copy wrapper's borderRadius
                                         }),
                                     ]),
-                                    rule(':where(:last-child)', [
+                                    isLastChild([
                                         layout({
                                             // borders:
                                             // add rounded corners on bottom:
