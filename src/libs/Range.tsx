@@ -192,6 +192,8 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockRule, orientationInlineRule] = usesOrientationRule(options);
+    const parentOrientationBlockRule  = `${orientationBlockRule}&`;
+    const parentOrientationInlineRule = `${orientationInlineRule}&`;
     
     
     
@@ -243,8 +245,8 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
             ...children(trackElm, [
                 imports([
                     usesBorderAsContainer({ // make a nicely rounded corners
-                        orientationBlockRule  : `${orientationBlockRule}&`,
-                        orientationInlineRule : `${orientationInlineRule}&`,
+                        orientationBlockRule  : parentOrientationBlockRule,
+                        orientationInlineRule : parentOrientationInlineRule,
                     }),
                 ]),
                 layout({
