@@ -489,11 +489,16 @@ export const usesRangeStates = () => {
         ]),
     ]);
 };
-export const usesRange = () => {
+export const usesRange = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesRangeLayout(),
+            usesRangeLayout(options),
             
             // variants:
             usesRangeVariants(),
