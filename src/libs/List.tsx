@@ -364,6 +364,12 @@ export const useListItemSheet = createUseSheet(() => [
 
 
 export const usesListSeparatorItemLayout = () => {
+    // options:
+    const [, orientationInlineSelector] = usesOrientationRule(defaultOrientationRuleOptions);
+    const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&`;
+    
+    
+    
     // dependencies:
     
     // spacings:
@@ -398,6 +404,30 @@ export const usesListSeparatorItemLayout = () => {
                 }),
             ]),
         }),
+        variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(parentOrientationInlineSelector, [
+                layout({
+                    // children:
+                    ...children('hr', [
+                        layout({
+                            // appearances:
+                            // rotate the <hr> 90 deg:
+                            writingMode: 'vertical-lr',
+                            
+                            
+                            
+                            // sizes:
+                            // block vertically:
+                            inlineSize     : 'fill-available',
+                            fallbacks      : {
+                                inlineSize : '100%',
+                            },
+                        }),
+                    ]),
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesListSeparatorItem = () => {

@@ -1,5 +1,4 @@
 top priority:
-add vertical ListSeparatorItem
 Progress
 fix Group menu inconsistent position
 merged variant of layout to layout
