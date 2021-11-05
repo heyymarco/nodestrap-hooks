@@ -244,6 +244,14 @@ export const usesListItemInheritMildVariant = () => {
     ]);
 };
 export const usesListItemInheritParentVariants = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
     return composition([
         variants([
             rule('.content>*>&', [ // .content>*>.listItem => specificity weight excluding parent = 1
@@ -257,6 +265,21 @@ export const usesListItemInheritParentVariants = () => {
                     // variants:
                     usesContentVariants(),
                 ]),
+                layout({
+                    // borders:
+                    /* border & borderRadius are already handled by listItem => do not re-define */
+                    
+                    // undef borders surrounding List:
+                    [borderStrokeDecls.borderWidth] : undefined as unknown as null,
+                    
+                 // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // undef rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
+                    [borderRadiusDecls.borderStartEndRadius]   : undefined as unknown as null,
+                    // undef rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : undefined as unknown as null,
+                    [borderRadiusDecls.borderEndEndRadius]     : undefined as unknown as null,
+                }),
             ]),
         ]),
     ]);
