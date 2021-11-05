@@ -144,13 +144,6 @@ export const useSizeVariant = (props: SizeVariant) => {
 
 //#region orientation
 export type OrientationName = 'block'|'inline'
-export interface OrientationVars {
-    /**
-     * configured orientation.
-     */
-    orientation : any
-}
-const [orientationRefs, orientationDecls] = createCssVar<OrientationVars>();
 
 export const notOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`:not(.${orientationName})`, styles);
 export const isOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`.${orientationName}`, styles);
@@ -194,45 +187,6 @@ export const usesOrientationRule = (options?: OrientationRuleOptions) => {
         orientationInlineSelector,
     ] as const;
 };
-
-/**
- * Uses configurable orientation.  
- * For example: `block`, `inline`.
- * @param factory Customize the callback to create orientation definitions for each orientation in `options`.
- * @param options Customize the orientation options.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents orientation definitions for each orientation in `options`.
- */
-export const usesOrientationVariant = (factory = orientationOf, options = orientationOptions()) => {
-    return [
-        () => composition([
-            variants([
-                options.map((orientationName) => isOrientation(orientationName,
-                    factory(orientationName)
-                )),
-            ]),
-        ]),
-        orientationRefs,
-        orientationDecls,
-    ] as const;
-};
-/**
- * Creates orientation definitions for the given `orientationName`.
- * @param orientationName The given orientation name written in camel case.
- * @returns A `StyleCollection` represents orientation definitions for the given `orientationName`.
- */
-export const orientationOf = (orientationName: OrientationName) => composition([
-    layout({
-        display: orientationName,
-    }),
-    vars({
-        [orientationDecls.orientation]: orientationName,
-    }),
-]);
-/**
- * Gets the all available orientation options.
- * @returns A `OrientationName[]` represents the all available orientation options.
- */
-export const orientationOptions = (): OrientationName[] => ['block', 'inline'];
 
 export interface OrientationVariant {
     orientation?: OrientationName
