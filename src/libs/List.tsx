@@ -546,7 +546,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             border(),
             
             // borders:
-            borderStroke(),
+            // borderStroke(), // moved out to dedicated border stroke for each list & wrapper
             borderRadius(),
             usesBorderAsContainer(options), // make a nicely rounded corners
         ]),
@@ -567,6 +567,9 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             
             // borders:
             ...children(['&', wrapperElm], [
+                imports([
+                    borderStroke(), // dedicated border stroke for each list & wrapper
+                ]),
                 layout({
                     // borders:
                     ...expandBorderStroke(), // expand borderStroke css vars
