@@ -101,6 +101,7 @@ import spacers              from './spacers'     // configurable spaces defs
 
 export const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions;
 
+
 // appearances:
 
 export type ButtonStyle = 'link'|'icon'|'ghost' // might be added more styles in the future
