@@ -553,7 +553,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
     
     // borders:
     const [borderStroke] = usesBorderStroke();
-    const [borderRadius] = usesBorderRadius();
+    const [borderRadius, , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -602,12 +602,6 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             
             // children:
             ...children(wrapperElm, [
-                imports([
-                    usesBorderAsContainer({ // make a nicely rounded corners
-                        orientationBlockSelector  : `:where(${orientationBlockSelector})&`,
-                        orientationInlineSelector : `:where(${orientationInlineSelector})&`,
-                    }),
-                ]),
                 layout({
                     // layouts:
                     display        : 'flex',    // use block flexbox, so it takes the entire List's width
@@ -620,6 +614,59 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                     // sizes:
                     flex           : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
                 }),
+                variants([
+                    // copy a nicely rounded corners from parent
+                    rule(`:where(${orientationBlockSelector})&`,  [ // :where(...) => zero specificity => easy to overwrite
+                        layout({
+                            // children:
+                            ...children('*', [
+                                variants([
+                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on top:
+                                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on bottom:
+                                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                ]),
+                            ]),
+                        }),
+                    ]),
+                    rule(`:where(${orientationInlineSelector})&`, [ // :where(...) => zero specificity => easy to overwrite
+                        layout({
+                            // children:
+                            ...children('*', [
+                                variants([
+                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on left:
+                                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on right:
+                                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                ]),
+                            ]),
+                        }),
+                    ]),
+                ]),
             ]),
             
             
