@@ -29,8 +29,6 @@ import {
     variants,
     rule,
     noRule,
-    isFirstChild,
-    isLastChild,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -566,13 +564,13 @@ export const usesMediaFill = () => {
             ]),
         }),
         variants([
-            isFirstChild([
+            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // spacings:
                     marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
                 }),
             ]),
-            isLastChild([
+            rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // spacings:
                     marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
