@@ -20,7 +20,7 @@ import reportWebVitals from './reportWebVitals';
 //         import CarouselApp                          from './apps/CarouselApp';               // div      ???
 //     import ContainerApp                             from './apps/ContainerApp';              // div
 //     import IndicatorApp                             from './apps/IndicatorApp';              // div
-        import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
+//         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
 //             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
 //                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
@@ -54,7 +54,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
 //     import IconApp                                  from './apps/IconApp';                   // span
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
-//     import GroupApp                                 from './apps/GroupApp';                  // div      group (semantic)
+    import GroupApp                                 from './apps/GroupApp';                  // div      group (semantic)
 //         import ProgressApp                          from './apps/ProgressApp';               // div      group (semantic)
 
 
@@ -62,7 +62,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ListApp />
+    <GroupApp />
     ,
     document.getElementById('root')
 );

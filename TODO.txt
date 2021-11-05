@@ -1,6 +1,5 @@
 top priority:
 Progress
-fix Group menu inconsistent position
 merged variant of layout to layout
 Range => dial variant
 simplify class name
