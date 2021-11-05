@@ -632,7 +632,17 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             
                             
                             // children:
-                            ...children(':not(_)', [ // specificity is higher than `.content` (specificity = 1) but lower than `.btn.btn` (specificity = 2)
+                            /*
+                                a hack with :not(_)
+                                the total selector combined with parent is like this: `.list.inline>*>:not(_):where(:first-child)`, the specificity weight = 2.1
+                                the specificity of 2.1 is a bit higher than:
+                                * `.list.content`             , the specificity weight = 2
+                                * `.someComponent.togglerBtn` , the specificity weight = 2
+                                but can be easily overriden by specificity weight >= 3, like:
+                                * `.list.btn.btn`             , the specificity weight = 3
+                                * `.someComponent.boo.foo`    , the specificity weight = 3
+                            */
+                            ...children(':not(_)', [
                                 variants([
                                     rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                         layout({
@@ -677,7 +687,17 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             
                             
                             // children:
-                            ...children(':not(_)', [ // specificity is higher than `.content` (specificity = 1) but lower than `.btn.btn` (specificity = 2)
+                            /*
+                                a hack with :not(_)
+                                the total selector combined with parent is like this: `.list.inline>*>:not(_):where(:first-child)`, the specificity weight = 2.1
+                                the specificity of 2.1 is a bit higher than:
+                                * `.list.content`             , the specificity weight = 2
+                                * `.someComponent.togglerBtn` , the specificity weight = 2
+                                but can be easily overriden by specificity weight >= 3, like:
+                                * `.list.btn.btn`             , the specificity weight = 3
+                                * `.someComponent.boo.foo`    , the specificity weight = 3
+                            */
+                            ...children(':not(_)', [
                                 variants([
                                     rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                         layout({
