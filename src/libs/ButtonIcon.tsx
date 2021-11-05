@@ -44,6 +44,8 @@ import {
     useSizeVariant  as basicUseSizeVariant,
     
     OrientationName,
+    OrientationRuleOptions,
+    normalizeOrientationRule,
     OrientationVariant,
     
     expandBorderRadius,
@@ -56,6 +58,11 @@ import {
     cssDecls as bcssDecls,
 }                           from './Basic'
 import {
+    // defaults:
+    defaultOrientationRuleOptions,
+    
+    
+    
     // hooks:
     ButtonStyle,
     ButtonVariant,
@@ -90,6 +97,11 @@ import {
     Icon,
 }                           from './Icon'
 import typos                from './typos/index' // configurable typography (texting) defs
+
+
+
+// defaults:
+export { defaultOrientationRuleOptions };
 
 
 
@@ -136,11 +148,16 @@ export const useSizeVariant = (props: SizeVariant) => basicUseSizeVariant(props 
 
 
 // styles:
-export const usesButtonIconLayout = () => {
+export const usesButtonIconLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesButtonLayout(),
+            usesButtonLayout(options),
         ]),
         layout({
             // customize:
@@ -201,11 +218,16 @@ export const usesButtonIconStates = () => {
         ]),
     ]);
 };
-export const usesButtonIcon = () => {
+export const usesButtonIcon = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesButtonIconLayout(),
+            usesButtonIconLayout(options),
             
             // variants:
             usesButtonIconVariants(),
