@@ -814,6 +814,12 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                     usesButtonLayout(),
                                 ]),
                                 layout({
+                                    // accessibilities:
+                                    // undef cursor:
+                                    cursor : undefined as unknown as null,
+                                    
+                                    
+                                    
                                     // customize:
                                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'btn')), // apply general cssProps starting with btn***
                                 }),
