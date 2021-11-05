@@ -332,7 +332,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     useLayoutEffect(createPopperCb, [createPopperCb]); // primary   chance (in case of `targetRef` is not the parent element)
     useEffect(createPopperCb, [createPopperCb]);       // secondary chance (in case of `targetRef` is the parent element)
     
-    const visibleRef = useRef({ isVisible, wasVisible: !isVisible });
+    const visibleRef = useRef({ isVisible, wasVisible: null as (boolean|null) });
     visibleRef.current.isVisible = isVisible;
     const updatePopperOptions = () => {
         if (!popperRef.current) return; // popper was not already created => nothing to do
