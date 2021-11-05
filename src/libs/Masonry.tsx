@@ -47,8 +47,10 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    notOrientationInline,
-    isOrientationInline,
+    OrientationRuleOptions,
+    defaultBlockOrientationRuleOptions,
+    normalizeOrientationRule,
+    usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
 }                           from './Basic'
@@ -67,8 +69,19 @@ import spacers              from './spacers'     // configurable spaces defs
 
 
 
+// defaults:
+export const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
+
+
+
 // styles:
-export const usesMasonryLayout = () => {
+export const usesMasonryLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -78,31 +91,9 @@ export const usesMasonryLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
-};
-export const usesMasonryVariants = () => {
-    // dependencies:
-    
-    // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
-    
-    
-    
-    return composition([
-        imports([
-            // variants:
-            usesContentVariants(),
-            
-            // layouts:
-            sizes(),
-        ]),
         variants([
-            notOrientationInline([ // block
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(orientationBlockSelector,  [ // block
                 layout({
                     // layouts:
                     display             : 'grid', // use css block grid for layouting, the core of our Masonry layout
@@ -143,7 +134,7 @@ export const usesMasonryVariants = () => {
                     ]),
                 }),
             ]),
-            isOrientationInline([ // inline
+            rule(orientationInlineSelector, [ // inline
                 layout({
                     // layouts:
                     display             : 'inline-grid', // use css inline grid for layouting, the core of our Masonry layout
@@ -187,11 +178,39 @@ export const usesMasonryVariants = () => {
         ]),
     ]);
 };
-export const usesMasonry = () => {
+export const usesMasonryVariants = () => {
+    // dependencies:
+    
+    // layouts:
+    const [sizes] = usesSizeVariant((sizeName) => composition([
+        layout({
+            // overwrites propName = propName{SizeName}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+        }),
+    ]));
+    
+    
+    
+    return composition([
+        imports([
+            // variants:
+            usesContentVariants(),
+            
+            // layouts:
+            sizes(),
+        ]),
+    ]);
+};
+export const usesMasonry = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesMasonryLayout(),
+            usesMasonryLayout(options),
             
             // variants:
             usesMasonryVariants(),
