@@ -58,12 +58,9 @@ import {
     cssDecls as bcssDecls,
 }                           from './Basic'
 import {
-    // defaults:
+    // hooks:
     defaultOrientationRuleOptions,
     
-    
-    
-    // hooks:
     ButtonStyle,
     ButtonVariant,
     
@@ -100,14 +97,11 @@ import typos                from './typos/index' // configurable typography (tex
 
 
 
-// defaults:
-export { defaultOrientationRuleOptions };
-
-
-
 // hooks:
 
 // layouts:
+
+export { defaultOrientationRuleOptions };
 
 //#region sizes
 export type SizeName = 'xs'|'sm'|'lg'|'xl' | string
