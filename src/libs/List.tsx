@@ -632,7 +632,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             
                             
                             // children:
-                            ...children('*', [
+                            ...children(':not(_)', [ // specificity is higher than `.content` (specificity = 1) but lower than `.btn.btn` (specificity = 2)
                                 variants([
                                     rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                         layout({
@@ -677,7 +677,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             
                             
                             // children:
-                            ...children('*', [
+                            ...children(':not(_)', [ // specificity is higher than `.content` (specificity = 1) but lower than `.btn.btn` (specificity = 2)
                                 variants([
                                     rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                         layout({
