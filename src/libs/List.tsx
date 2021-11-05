@@ -237,7 +237,7 @@ export const listItemElm = ':where(:first-child)'; // zero specificity
 export const usesListItemInheritMildVariant = () => {
     return composition([
         variants([
-            rule('.mild>*>&', [ // content
+            rule('.mild>*>&', [ // .mild>*>.listItem => specificity weight excluding parent = 1
                 imports([
                     mildOf(true),
                 ]),
@@ -248,7 +248,7 @@ export const usesListItemInheritMildVariant = () => {
 export const usesListItemInheritParentVariants = () => {
     return composition([
         variants([
-            rule('.content>*>&', [ // content
+            rule('.content>*>&', [ // .content>*>.listItem => specificity weight excluding parent = 1
                 imports([
                     // media:
                     usesContentMedia(),
@@ -270,8 +270,8 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
-    const parentOrientationBlockSelector  = `${orientationBlockSelector}>*>&`;
-    const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&`;
+    const parentOrientationBlockSelector  = `${orientationBlockSelector}>*>&`;  // :not(.inline)>*>.listItem => specificity weight excluding parent = 1
+    const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&`; //      .inline >*>.listItem => specificity weight excluding parent = 1
     
     
     
@@ -290,7 +290,7 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
                     usesBorderAsSeparatorInline(),
                 ]),
             ]),
-        ]),
+        ], { minSpecificityWeight: 2 }), // increase the specificity to win with .content variant
     ]);
 };
 export const usesListItemLayout = (options?: OrientationRuleOptions) => {
