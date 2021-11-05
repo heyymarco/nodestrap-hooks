@@ -1,5 +1,4 @@
 top priority:
-fix content mode on List
 add vertical ListSeparatorItem
 Progress
 fix Group menu inconsistent position
