@@ -181,10 +181,9 @@ export const usesModalElementLayout = () => {
             
             
             // animations:
-            boxShadow   : animRefs.boxShadow,
-            filter      : animRefs.filter,
-            transf      : animRefs.transf,
-            anim        : animRefs.anim,
+            boxShadow : animRefs.boxShadow,
+            filter    : animRefs.filter,
+            anim      : animRefs.anim,
             
             
             
