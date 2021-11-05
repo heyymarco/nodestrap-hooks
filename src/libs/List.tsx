@@ -614,59 +614,6 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                     // sizes:
                     flex           : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
                 }),
-                variants([
-                    // copy a nicely rounded corners from parent
-                    rule(`:where(${orientationBlockSelector})&`,  [ // :where(...) => zero specificity => easy to overwrite
-                        layout({
-                            // children:
-                            ...children('*', [
-                                variants([
-                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
-                                        layout({
-                                            // borders:
-                                            // add rounded corners on top:
-                                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
-                                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
-                                        }),
-                                    ]),
-                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
-                                        layout({
-                                            // borders:
-                                            // add rounded corners on bottom:
-                                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
-                                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
-                                        }),
-                                    ]),
-                                ]),
-                            ]),
-                        }),
-                    ]),
-                    rule(`:where(${orientationInlineSelector})&`, [ // :where(...) => zero specificity => easy to overwrite
-                        layout({
-                            // children:
-                            ...children('*', [
-                                variants([
-                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
-                                        layout({
-                                            // borders:
-                                            // add rounded corners on left:
-                                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
-                                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
-                                        }),
-                                    ]),
-                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
-                                        layout({
-                                            // borders:
-                                            // add rounded corners on right:
-                                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
-                                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
-                                        }),
-                                    ]),
-                                ]),
-                            ]),
-                        }),
-                    ]),
-                ]),
             ]),
             
             
@@ -693,6 +640,30 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                         layout({
                             // layouts:
                             flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
+                            
+                            
+                            
+                            // children:
+                            ...children('*', [
+                                variants([
+                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on top:
+                                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on bottom:
+                                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                ]),
+                            ]),
                         }),
                     ]),
                 }),
@@ -714,6 +685,30 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                         layout({
                             // layouts:
                             flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
+                            
+                            
+                            
+                            // children:
+                            ...children('*', [
+                                variants([
+                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on left:
+                                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                                        layout({
+                                            // borders:
+                                            // add rounded corners on right:
+                                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
+                                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
+                                        }),
+                                    ]),
+                                ]),
+                            ]),
                         }),
                     ]),
                 }),
