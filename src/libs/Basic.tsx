@@ -145,13 +145,6 @@ export const useSizeVariant = (props: SizeVariant) => {
 //#region orientation
 export type OrientationName = 'block'|'inline'
 
-export const notOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`:not(.${orientationName})`, styles);
-export const isOrientation = (orientationName: OrientationName, styles: StyleCollection) => rule(`.${orientationName}`, styles);
-export const notOrientationBlock  = (styles: StyleCollection) => notOrientation('block' , styles);
-export const notOrientationInline = (styles: StyleCollection) => notOrientation('inline', styles);
-export const isOrientationBlock  = (styles: StyleCollection) => isOrientation('block' , styles);
-export const isOrientationInline = (styles: StyleCollection) => isOrientation('inline', styles);
-
 export interface OrientationRuleOptions {
     defaultOrientation?        : OrientationName
     orientationBlockSelector?  : SelectorCollection
