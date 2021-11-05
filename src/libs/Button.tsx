@@ -95,12 +95,11 @@ import spacers              from './spacers'     // configurable spaces defs
 
 
 
-// defaults:
-export const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions;
-
-
-
 // hooks:
+
+// layouts:
+
+export const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions;
 
 // appearances:
 
