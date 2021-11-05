@@ -243,47 +243,6 @@ export const usesListItemInheritMildVariant = () => {
         ]),
     ]);
 };
-export const usesListItemInheritParentVariants = () => {
-    // dependencies:
-    
-    // borders:
-    const [, , borderStrokeDecls] = usesBorderStroke();
-    const [, , borderRadiusDecls] = usesBorderRadius();
-    
-    
-    
-    return composition([
-        variants([
-            rule('.content>*>&', [ // .content>*>.listItem => specificity weight excluding parent = 1
-                imports([
-                    // media:
-                    usesContentMedia(),
-                    
-                    // layouts:
-                    usesContentLayout(),
-                    
-                    // variants:
-                    usesContentVariants(),
-                ]),
-                layout({
-                    // borders:
-                    /* border & borderRadius are already handled by listItem => do not re-define */
-                    
-                    // undef borders surrounding List:
-                    [borderStrokeDecls.borderWidth] : undefined as unknown as null,
-                    
-                 // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                    // undef rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
-                    [borderRadiusDecls.borderStartEndRadius]   : undefined as unknown as null,
-                    // undef rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius]   : undefined as unknown as null,
-                    [borderRadiusDecls.borderEndEndRadius]     : undefined as unknown as null,
-                }),
-            ]),
-        ]),
-    ]);
-};
 
 
 
@@ -360,7 +319,6 @@ export const usesListItemVariants = () => {
             // variants:
             usesIndicatorVariants(),
             usesListItemInheritMildVariant(),
-            usesListItemInheritParentVariants(),
             
             // layouts:
             sizes(),
@@ -738,9 +696,9 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
     const [         , backgRefs    ] = usesBackg();
     
     // borders:
-    const [, , borderDecls]                       = usesBorder();
+    const [,                 , borderDecls      ] = usesBorder();
     const [, borderStrokeRefs, borderStrokeDecls] = usesBorderStroke();
-    const [, , borderRadiusDecls]                 = usesBorderRadius();
+    const [,                 , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -755,8 +713,41 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
         variants([
             rule('.content', [ // content
                 imports([
+                    // variants:
                     usesContentVariants(),
                 ]),
+                layout({
+                    // children:
+                    ...children(wrapperElm, [
+                        layout({
+                            // children:
+                            ...children('*', [
+                                imports([
+                                    // media:
+                                    usesContentMedia(),
+                                    
+                                    // layouts:
+                                    usesContentLayout(),
+                                ]),
+                                layout({
+                                    // borders:
+                                    /* border & borderRadius are already handled by listItem => do not re-define */
+                                    
+                                    // undef borders surrounding List:
+                                    [borderStrokeDecls.borderWidth] : undefined as unknown as null,
+                                    
+                                 // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                                    // undef rounded corners on top:
+                                    [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
+                                    [borderRadiusDecls.borderStartEndRadius]   : undefined as unknown as null,
+                                    // undef rounded corners on bottom:
+                                    [borderRadiusDecls.borderEndStartRadius]   : undefined as unknown as null,
+                                    [borderRadiusDecls.borderEndEndRadius]     : undefined as unknown as null,
+                                }),
+                            ]),
+                        }),
+                    ]),
+                }),
             ]),
         ]),
         variants([
