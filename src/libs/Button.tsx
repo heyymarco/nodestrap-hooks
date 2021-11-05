@@ -44,8 +44,10 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationName,
-    notOrientationBlock,
-    isOrientationBlock,
+    OrientationRuleOptions,
+    defaultInlineOrientationRuleOptions,
+    normalizeOrientationRule,
+    usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
     gradientOf,
@@ -90,6 +92,11 @@ import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
+
+
+
+// defaults:
+const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions;
 
 
 
@@ -155,7 +162,13 @@ export const noBackground = () => {
     ]);
 };
 
-export const usesButtonLayout = () => {
+export const usesButtonLayout = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
+    
+    
+    
     return composition([
         imports([
             // layouts:
@@ -190,6 +203,21 @@ export const usesButtonLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+        variants([
+            /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(orientationBlockSelector,  [ // block
+                layout({
+                    // layouts:
+                    flexDirection  : 'column', // items are stacked vertically
+                }),
+            ]),
+            rule(orientationInlineSelector, [ // inline
+                layout({
+                    // layouts:
+                    flexDirection  : 'row',    // items are stacked horizontally
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesButtonVariants = () => {
@@ -225,19 +253,6 @@ export const usesButtonVariants = () => {
             sizes(),
         ]),
         variants([
-            notOrientationBlock([ // inline
-                layout({
-                    // layouts:
-                    flexDirection  : 'row',    // items are stacked horizontally
-                }),
-            ]),
-            isOrientationBlock([ // block
-                layout({
-                    // layouts:
-                    flexDirection  : 'column', // items are stacked vertically
-                }),
-            ]),
-            
             rule(['.link', '.icon', '.ghost'], [
                 imports([
                     noBackground(),
@@ -341,11 +356,16 @@ export const usesButtonStates = () => {
         ]),
     ]);
 };
-export const usesButton = () => {
+export const usesButton = (options?: OrientationRuleOptions) => {
+    // options:
+    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
+    
+    
+    
     return composition([
         imports([
             // layouts:
-            usesButtonLayout(),
+            usesButtonLayout(options),
             
             // variants:
             usesButtonVariants(),
