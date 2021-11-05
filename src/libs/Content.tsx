@@ -192,7 +192,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                     // children:
                     ...children(itemsSelector, [
                         variants([
-                            isFirstChild([
+                            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
                                     [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
@@ -207,7 +207,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
-                            isLastChild([
+                            rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
                                     [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
@@ -231,7 +231,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                     // children:
                     ...children(itemsSelector, [
                         variants([
-                            isFirstChild([
+                            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
                                     [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
@@ -246,7 +246,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
-                            isLastChild([
+                            rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
                                     [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
