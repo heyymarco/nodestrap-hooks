@@ -11,7 +11,7 @@ import {
 	SizeName,
 } 					from '../libs/Basic';
 import {
-	Progress, ProgressBar, ListStyle,
+	Progress, ProgressBar,
 	OrientationName,
 }						from '../libs/Progress';
 
@@ -32,9 +32,6 @@ function App() {
 
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<OrientationName|undefined>(undefined);
-
-	const listStyles = [undefined, 'content','flat','flush','btn','tab','breadcrumb','bullet'];
-	const [listStyle,    setListStyle     ] = useState<ListStyle|undefined>(undefined);
 
 
     return (
@@ -146,21 +143,6 @@ function App() {
 									onChange={(e) => setOrientation((e.target.value || undefined) as (OrientationName|undefined))}
 								/>
 								{`${ori}`}
-							</label>
-						)
-					}
-				</p>
-				<p>
-					ListStyle:
-					{
-						listStyles.map(st =>
-							<label key={st ?? ''}>
-								<input type='radio'
-									value={st}
-									checked={listStyle===st}
-									onChange={(e) => setListStyle((e.target.value || undefined) as (ListStyle|undefined))}
-								/>
-								{`${st}`}
 							</label>
 						)
 					}
