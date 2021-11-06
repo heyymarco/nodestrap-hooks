@@ -53,6 +53,7 @@ import {
 import {
     // hooks:
     usesSizeVariant,
+    
     OrientationName,
     OrientationRuleOptions,
     defaultInlineOrientationRuleOptions,
@@ -60,6 +61,7 @@ import {
     usesOrientationRule,
     OrientationVariant,
     useOrientationVariant,
+    
     usesBorderStroke,
     usesBorderRadius,
     
@@ -76,12 +78,6 @@ import {
     Basic,
 }                           from './Basic'
 import {
-    // hooks:
-    ListStyle,
-    ListVariant,
-    
-    
-    
     // styles:
     listItemElm,
     usesListLayout,
@@ -387,7 +383,6 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
     );
 }
 
-export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
 
 
