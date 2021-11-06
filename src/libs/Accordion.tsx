@@ -62,11 +62,11 @@ import {
     // hooks:
     defaultOrientationRuleOptions,
     
-    ListStyle,
-    ListVariant,
-    
     OrientationName,
     OrientationVariant,
+    
+    ListStyle,
+    ListVariant,
     
     
     
@@ -365,8 +365,9 @@ export { ListSeparatorItem, ListSeparatorItem as AccordionSeparatorItem, ListSep
 
 // Accordion => List
 
-export type { ListProps, ListProps as AccordionProps }
-export { List as default, List as Accordion }
+export type { OrientationName, OrientationVariant }
 
 export type { ListStyle, ListVariant }
-export type { OrientationName, OrientationVariant }
+
+export type { ListProps, ListProps as AccordionProps }
+export { List as default, List as Accordion }
