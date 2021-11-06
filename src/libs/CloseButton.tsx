@@ -57,4 +57,5 @@ CloseButton.prototype = ButtonIcon.prototype; // mark as ButtonIcon compatible
 export { CloseButton as default }
 
 export type { OrientationName, OrientationVariant }
+
 export type { ButtonStyle, ButtonVariant, ButtonType }
