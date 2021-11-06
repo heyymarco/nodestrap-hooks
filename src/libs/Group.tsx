@@ -49,11 +49,12 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationRuleOptions,
-    defaultBlockOrientationRuleOptions,
     normalizeOrientationRule,
 }                           from './Basic'
 import {
     // hooks:
+    defaultOrientationRuleOptions,
+    
     ListStyle,
     ListVariant,
     
@@ -92,8 +93,11 @@ import {
 
 
 
-// defaults:
-const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
+// hooks:
+
+// layouts:
+
+export { defaultOrientationRuleOptions };
 
 
 
