@@ -268,6 +268,6 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
 DropdownButton.prototype = ButtonIcon.prototype; // mark as ButtonIcon compatible
 export { DropdownButton as default }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
-
 export type { OrientationName, OrientationVariant }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }

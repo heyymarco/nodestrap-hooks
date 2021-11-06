@@ -511,6 +511,6 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
 }
 export { Dropdown as default }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
-
 export type { OrientationName, OrientationVariant }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }

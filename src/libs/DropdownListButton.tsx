@@ -150,8 +150,8 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
 DropdownListButton.prototype = DropdownButton.prototype; // mark as DropdownButton compatible
 export { DropdownListButton as default }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
-
 export type { OrientationName, OrientationVariant }
+
+export type { PopupPlacement, PopupModifier, PopupPosition }
 
 export type { ListStyle, ListVariant }
