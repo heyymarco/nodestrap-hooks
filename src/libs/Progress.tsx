@@ -14,6 +14,7 @@ import {
     
     // layouts:
     layout,
+    vars,
     children,
     
     
@@ -62,6 +63,9 @@ import {
     OrientationVariant,
     useOrientationVariant,
     
+    notOutlined,
+    notMild,
+    usesMildVariant,
     mildOf,
     usesBorderStroke,
     usesBorderRadius,
@@ -83,6 +87,7 @@ import {
     listItemElm,
     usesListLayout,
 }                           from './List'
+import colors               from './colors'      // configurable colors & theming defs
 
 
 
@@ -93,8 +98,68 @@ import {
 export const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions;
 
 
+// colors:
 
-// hooks:
+//#region alternate backg
+export interface AltBackgVars {
+    /**
+     * functional alternate background color.
+     */
+    altBackgFn     : any
+    /**
+     * final alternate background color.
+     */
+    altBackgCol    : any
+    /**
+     * final alternate background layers.
+     */
+    altBackg       : any
+}
+const [altBackgRefs, altBackgDecls] = createCssVar<AltBackgVars>();
+
+/**
+ * Uses alternate background layer(s).
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents alternate background layer(s) definitions.
+ */
+export const usesAltBackg = () => {
+    // dependencies:
+    const [, mildRefs    ] = usesMildVariant();
+    
+    
+    
+    return [
+        () => composition([
+            vars({
+                [altBackgDecls.altBackgFn]  : mildRefs.backgMildFn,
+                [altBackgDecls.altBackgCol] : 'transparent',
+                [altBackgDecls.altBackg]    : [ // single array => makes the JSS treat as comma separated values
+                    // layering: backg1 | backg2 | backg3 ...
+                    
+                    // bottom layer:
+                    altBackgRefs.altBackgCol,
+                ],
+            }),
+            variants([
+                notOutlined([
+                    vars({
+                        [altBackgDecls.altBackgCol] : colors.backg,
+                    }),
+                    variants([
+                        notMild([
+                            vars({
+                                [altBackgDecls.altBackgCol] : altBackgRefs.altBackgFn,
+                            }),
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ]),
+        altBackgRefs,
+        altBackgDecls,
+    ] as const;
+};
+//#endregion alternate backg
+
 
 // progressBar vars:
 
@@ -129,14 +194,29 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
     
     
     
+    // dependencies:
+    
+    // colors:
+    const [altBackg, altBackgRefs] = usesAltBackg();
+    
+    
+    
     return composition([
         imports([
+            // colors:
+            altBackg(),
+            
             // layouts:
             usesListLayout(options),
         ]),
         layout({
             // layouts:
             justifyContent : 'start',   // if wrappers are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first wrapper should be visible first
+            
+            
+            
+            // backgrounds:
+            backg          : altBackgRefs.altBackg,
             
             
             
@@ -167,6 +247,9 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
                 }),
             ]),
+        ]),
+        variants([
+
         ]),
     ]);
 };
