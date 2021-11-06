@@ -17,11 +17,6 @@ import {
     // utilities:
     setRef,
 }                           from './react-cssfn' // cssfn for react
-import type {
-    // hooks:
-    OrientationName,
-    OrientationVariant,
-}                           from './Basic'
 import {
     // hooks:
     TogglerActiveProps,
@@ -32,6 +27,12 @@ import {
     PopupPlacement,
     PopupModifier,
     PopupPosition,
+    
+    
+    
+    // hooks:
+    OrientationName,
+    OrientationVariant,
     
     
     
