@@ -85,8 +85,11 @@ import {
 
 
 
-// defaults:
-const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
+// hooks:
+
+// layouts:
+
+export const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
 
