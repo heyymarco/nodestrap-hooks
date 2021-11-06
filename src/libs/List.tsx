@@ -367,7 +367,8 @@ export const useListItemSheet = createUseSheet(() => [
 
 export const usesListSeparatorItemLayout = () => {
     // options:
-    const [, orientationInlineSelector] = usesOrientationRule(defaultOrientationRuleOptions);
+    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(defaultOrientationRuleOptions);
+    const parentOrientationBlockSelector  = `${orientationBlockSelector}>*>&`;
     const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&`;
     
     
@@ -381,6 +382,15 @@ export const usesListSeparatorItemLayout = () => {
     
     return composition([
         layout({
+            // layouts:
+            display        : 'flex',    // use block flexbox, so it takes the entire wrapper's width
+            flexDirection  : 'row',     // items are stacked horizontally
+            justifyContent : 'center',  // center items (text, icon, etc) horizontally
+            alignItems     : 'center',  // center items (text, icon, etc) vertically
+            flexWrap       : 'nowrap',  // no wrapping
+            
+            
+            
             // spacings:
             [paddingDecls.paddingInline] : 0, // discard padding
             [paddingDecls.paddingBlock]  : 0, // discard padding
@@ -392,6 +402,11 @@ export const usesListSeparatorItemLayout = () => {
                 layout({
                     // foregrounds:
                     foreg            : 'inherit',
+                    
+                    
+                    
+                    // sizes:
+                    flex             : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
                     
                     
                     
@@ -408,23 +423,25 @@ export const usesListSeparatorItemLayout = () => {
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
+            rule(parentOrientationBlockSelector, [
+                layout({
+                    // layouts:
+                    flexDirection     : 'row',    // items are stacked horizontally
+                }),
+            ]),
             rule(parentOrientationInlineSelector, [
                 layout({
+                    // layouts:
+                    flexDirection     : 'column', // items are stacked vertically
+                    
+                    
+                    
                     // children:
                     ...children('hr', [
                         layout({
                             // appearances:
                             // rotate the <hr> 90 deg:
                             writingMode: 'vertical-lr',
-                            
-                            
-                            
-                            // sizes:
-                            // block vertically:
-                            inlineSize     : 'fill-available',
-                            fallbacks      : {
-                                inlineSize : '100%',
-                            },
                         }),
                     ]),
                 }),
