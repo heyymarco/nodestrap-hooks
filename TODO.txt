@@ -1,6 +1,6 @@
 top priority:
+ListSeparatorItem => change height 100% to flex to avoid DropdownList too height on orientation='inline'
 Progress
-merged variant of layout to layout
 Range => dial variant
 simplify class name
 
