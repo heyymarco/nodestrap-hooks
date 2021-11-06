@@ -39,7 +39,6 @@ import {
     // hooks:
     usesSizeVariant,
     OrientationRuleOptions,
-    defaultBlockOrientationRuleOptions,
     normalizeOrientationRule,
     usesOrientationRule,
 }                           from './Basic'
@@ -61,6 +60,8 @@ import {
 }                           from './Collapse'
 import {
     // hooks:
+    defaultOrientationRuleOptions,
+    
     ListStyle,
     ListVariant,
     
@@ -88,11 +89,6 @@ import {
     // hooks:
     usePropEnabled,
 }                           from './accessibilities'
-
-
-
-// defaults:
-const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
 
