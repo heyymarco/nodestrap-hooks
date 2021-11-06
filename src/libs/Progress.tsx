@@ -62,6 +62,7 @@ import {
     OrientationVariant,
     useOrientationVariant,
     
+    mildOf,
     usesBorderStroke,
     usesBorderRadius,
     
@@ -219,6 +220,20 @@ export const useProgressSheet = createUseSheet(() => [
 
 
 
+export const usesProgressBarInheritMildVariant = () => {
+    return composition([
+        variants([
+            rule('.mild>&', [ // .mild>.progress => specificity weight excluding parent = 1
+                imports([
+                    mildOf(true),
+                ]),
+            ]),
+        ]),
+    ]);
+};
+
+
+
 export const usesProgressBarLayout = () => {
     // dependencies:
     
@@ -300,6 +315,7 @@ export const usesProgressBarVariants = () => {
                 imports([
                     // variants:
                     usesBasicVariants(),
+                    usesProgressBarInheritMildVariant(),
                     
                     // layouts:
                     sizes(),

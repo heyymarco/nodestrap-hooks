@@ -46,7 +46,61 @@ function App() {
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
 						// outlined={outlined}
-						mild={mild}
+						// mild={mild}
+
+						value={30}
+					>
+						30%
+					</ProgressBar>
+                    <ProgressBar
+						theme='danger' size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						value={50}
+					>
+						50%
+					</ProgressBar>
+                </Progress>
+
+				<br />
+
+				<Progress
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={true}
+
+					orientation={orientation}
+				>
+                    <ProgressBar
+						// theme={theme} size={size} gradient={enableGrad}
+						// outlined={outlined}
+						// mild={mild}
+
+						value={30}
+					>
+						30%
+					</ProgressBar>
+                    <ProgressBar
+						theme='danger' size={size} gradient={enableGrad}
+						outlined={outlined} mild={mild}
+
+						value={50}
+					>
+						50%
+					</ProgressBar>
+                </Progress>
+				
+				<br />
+
+				<Progress
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={true} mild={mild}
+
+					orientation={orientation}
+				>
+                    <ProgressBar
+						// theme={theme} size={size} gradient={enableGrad}
+						// outlined={outlined}
+						// mild={mild}
 
 						value={30}
 					>
