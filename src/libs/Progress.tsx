@@ -146,12 +146,22 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
             rule(orientationBlockSelector,  [ // block
                 layout({
+                    // layouts:
+                    display : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+                    
+                    
+                    
                     // overwrites propName = propName{Block}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
                 }),
             ]),
             rule(orientationInlineSelector, [ // inline
                 layout({
+                    // layouts:
+                    display : 'flex',        // use block flexbox, so it takes the entire parent's width
+                    
+                    
+                    
                     // overwrites propName = propName{Inline}:
                     ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
                 }),
@@ -224,7 +234,8 @@ export const usesProgressBarLayout = () => {
     return composition([
         layout({
             // sizes:
-            flex : [[progressBarVarRefs.progressBarValueRatio, progressBarVarRefs.progressBarValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+            flex     : [[progressBarVarRefs.progressBarValueRatio, progressBarVarRefs.progressBarValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+            overflow : 'hidden',
             
             
             
@@ -327,7 +338,7 @@ export const useProgressBarSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         // sizes:
-        minInlineSize        : '10rem',
+        minInlineSize        : 'unset',
         minBlockSize         : 'unset',
         
         minInlineSizeBlock   : 'unset',
@@ -353,12 +364,28 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
     
     
     
+    // rest props:
+    const {
+        // children:
+        children,
+    /*...restProps*/}  = props;
+    
+    
+    
     // variants:
-    const orientationVariant    = useOrientationVariant(props);
-    const orientationHorizontal = (orientationVariant.class === 'inline');
+    const orientationVariant  = useOrientationVariant(props);
+    const orientationVertical = (orientationVariant.class === 'block');
     
     
     
+    // jsx fn props:
+    const restProgressBar = (
+        <div></div>
+    );
+    
+    
+    
+    // jsx:
     return (
         <Basic<TElement>
             // other props:
@@ -369,7 +396,7 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
             semanticTag ={props.semanticTag  ?? [null] }
             semanticRole={props.semanticRole ?? 'group'}
             
-            aria-orientation={props['aria-orientation'] ?? (orientationHorizontal ? 'horizontal' : 'vertical')}
+            aria-orientation={props['aria-orientation'] ?? (orientationVertical ? 'vertical' : 'horizontal')}
             
             
             // classes:
@@ -378,7 +405,9 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
                 orientationVariant.class,
             ]}
         >
-            { props.children }
+            { orientationVertical ? restProgressBar : null }
+            { orientationVertical ? (Array.isArray(children) ? children : [children]).slice().reverse() : children }
+            { orientationVertical ? null : restProgressBar }
         </Basic>
     );
 }
