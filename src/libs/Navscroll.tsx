@@ -827,5 +827,6 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
 Navscroll.prototype = Nav.prototype; // mark as Nav compatible
 export { Navscroll as default }
 
-export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
+
+export type { ListStyle, ListVariant }

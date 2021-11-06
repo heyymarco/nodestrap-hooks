@@ -163,5 +163,6 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
 Nav.prototype = List.prototype; // mark as List compatible
 export { Nav as default }
 
-export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
+
+export type { ListStyle, ListVariant }
