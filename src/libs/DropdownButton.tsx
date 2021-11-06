@@ -269,4 +269,5 @@ DropdownButton.prototype = ButtonIcon.prototype; // mark as ButtonIcon compatibl
 export { DropdownButton as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }
+
 export type { OrientationName, OrientationVariant }

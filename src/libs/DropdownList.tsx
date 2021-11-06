@@ -341,6 +341,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
 export { DropdownList as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }
+
 export type { OrientationName, OrientationVariant }
 
 export type { ListStyle, ListVariant }

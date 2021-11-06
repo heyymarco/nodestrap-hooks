@@ -151,6 +151,7 @@ DropdownListButton.prototype = DropdownButton.prototype; // mark as DropdownButt
 export { DropdownListButton as default }
 
 export type { PopupPlacement, PopupModifier, PopupPosition }
+
 export type { OrientationName, OrientationVariant }
 
 export type { ListStyle, ListVariant }
