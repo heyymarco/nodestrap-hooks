@@ -55,11 +55,11 @@ import {
     // hooks:
     defaultOrientationRuleOptions,
     
-    ListStyle,
-    ListVariant,
-    
     OrientationName,
     OrientationVariant,
+    
+    ListStyle,
+    ListVariant,
     
     
     
@@ -294,5 +294,6 @@ export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupPr
 Group.prototype = List.prototype; // mark as List compatible
 export { Group as default }
 
-export type { ListStyle, ListVariant }
 export type { OrientationName, OrientationVariant }
+
+export type { ListStyle, ListVariant }
