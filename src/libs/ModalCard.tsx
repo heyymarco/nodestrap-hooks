@@ -626,5 +626,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
 }
 export { ModalCard as default }
 
-export type { ModalStyle, ModalVariant }
 export type { OrientationName, OrientationVariant }
+
+export type { ModalStyle, ModalVariant }

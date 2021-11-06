@@ -594,5 +594,6 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
 }
 export { ModalSide as default }
 
-export type { ModalStyle, ModalVariant }
 export type { OrientationName, OrientationVariant }
+
+export type { ModalStyle, ModalVariant }
