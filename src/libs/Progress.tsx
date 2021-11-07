@@ -92,6 +92,13 @@ import {
     
     
     
+    // configs:
+    cssProps as bcssProps,
+    cssDecls as bcssDecls,
+    cssVals  as bcssVals,
+    
+    
+    
     // react components:
     BasicProps,
     Basic,
@@ -440,6 +447,9 @@ export const usesProgressBarLayout = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
                 }),
+                vars({
+                    [bcssDecls.backgGrad] : cssProps.backgGrad,
+                }),
             ]),
         }),
     ]);
@@ -568,6 +578,15 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // backgrounds:
+        backgGrad                : bcssProps.backgGrad,
+        backgGradBlock           : (() => {
+            const value = [[...bcssVals.backgGrad[0]]];
+            value[0][0] = value[0][0].replace('180deg', '270deg');
+            return value;
+        })(),
+        
+        
+        
         itemBackgOverlayImg      : 'linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)',
         itemBackgOverlaySize     : '1rem',
         itemBackgOverlaySizeSm   : '0.25rem',
