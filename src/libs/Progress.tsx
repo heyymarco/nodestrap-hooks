@@ -104,9 +104,15 @@ import {
     Basic,
 }                           from './Basic'
 import {
+    // hooks:
+    ListBasicStyle,
+    
+    
+    
     // styles:
     listItemElm,
     usesListLayout,
+    usesListBasicVariants,
 }                           from './List'
 import colors               from './colors'      // configurable colors & theming defs
 import spacers              from './spacers'     // configurable spaces defs
@@ -253,6 +259,17 @@ export const usesRunningState = () => {
 
 // appearances:
 
+export type ProgressStyle = ListBasicStyle // might be added more styles in the future
+export interface ProgressVariant {
+    progressStyle?: ProgressStyle
+}
+export const useProgressVariant = (props: ProgressVariant) => {
+    return {
+        class: props.progressStyle ? props.progressStyle : null,
+    };
+};
+
+
 export type ProgressBarStyle = 'striped'|'running' // might be added more styles in the future
 export interface ProgressBarVariant {
     progressBarStyle?: SingleOrArray<ProgressBarStyle>
@@ -346,6 +363,7 @@ export const usesProgressVariants = () => {
         imports([
             // variants:
             usesBasicVariants(),
+            usesListBasicVariants(),
             
             // layouts:
             sizes(),
@@ -654,7 +672,10 @@ export interface ProgressProps<TElement extends HTMLElement = HTMLElement>
         BasicProps<TElement>,
         
         // layouts:
-        OrientationVariant
+        OrientationVariant,
+        
+        // appearances:
+        ProgressVariant
 {
 }
 export function Progress<TElement extends HTMLElement = HTMLElement>(props: ProgressProps<TElement>) {
@@ -675,6 +696,8 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
     // variants:
     const orientationVariant  = useOrientationVariant(props);
     const orientationVertical = (orientationVariant.class === 'block');
+    
+    const progressVariant     = useProgressVariant(props);
     
     
     
@@ -738,6 +761,7 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 orientationVariant.class,
+                progressVariant.class,
             ]}
         >
             { orientationVertical ? restProgressBar : null }
