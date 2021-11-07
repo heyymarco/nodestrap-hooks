@@ -430,7 +430,7 @@ export const usesProgressBarVariants = () => {
                             // backgrounds:
                             backg : [ // single array => makes the JSS treat as comma separated values
                                 // top layer:
-                                cssProps.itemBackgOverlay,
+                                `${cssProps.itemBackgOverlayImg} left/${cssProps.itemBackgOverlaySize} ${cssProps.itemBackgOverlaySize}`,
                                 
                                 // bottom layer:
                                 backgRefs.backg,
@@ -470,17 +470,12 @@ export const useProgressBarSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    // forked from Bootstrap 5:
-    const itemBackgOverlayImg = 'linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)';
-    
-    
-    
     return {
         // backgrounds:
-        itemBackgOverlayImg      :   itemBackgOverlayImg,
-        itemBackgOverlay         : [[itemBackgOverlayImg, 'left/1rem 1rem'      ]],
-        itemBackgOverlaySm       : [[itemBackgOverlayImg, 'left/0.25rem 0.25rem']],
-        itemBackgOverlayLg       : [[itemBackgOverlayImg, 'left/3rem 3rem'      ]],
+        itemBackgOverlayImg      : 'linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)',
+        itemBackgOverlaySize     : '1rem',
+        itemBackgOverlaySizeSm   : '0.25rem',
+        itemBackgOverlaySizeLg   : '3rem',
         
         
         
