@@ -4,6 +4,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    SingleOrArray,
+}                           from './types'      // cssfn's types
 import {
     // compositions:
     composition,
@@ -68,6 +71,7 @@ import {
     notMild,
     usesMildVariant,
     mildOf,
+    usesBackg,
     usesBorderStroke,
     usesBorderRadius,
     
@@ -184,6 +188,19 @@ export const usesProgressBarVars = () => {
         progressBarVarRefs,
         progressBarVarDecls,
     ] as const;
+};
+
+
+// appearances:
+
+export type ProgressBarStyle = 'striped' // might be added more styles in the future
+export interface ProgressBarVariant {
+    progressBarStyle?: SingleOrArray<ProgressBarStyle>
+}
+export const useProgressBarVariant = (props: ProgressBarVariant) => {
+    return {
+        class: props.progressBarStyle ? ((Array.isArray(props.progressBarStyle) ? props.progressBarStyle : [props.progressBarStyle]).filter((style) => !!style).join(' ') || null) : null,
+    };
 };
 
 
@@ -377,6 +394,9 @@ export const usesProgressBarLayout = () => {
 export const usesProgressBarVariants = () => {
     // dependencies:
     
+    // colors:
+    const [, backgRefs] = usesBackg();
+    
     // layouts:
     const [sizes] = usesSizeVariant((sizeName) => composition([
         layout({
@@ -401,6 +421,25 @@ export const usesProgressBarVariants = () => {
                 ]),
             ]),
         }),
+        variants([
+            rule('.striped', [
+                layout({
+                    // children:
+                    ...children(listItemElm, [
+                        layout({
+                            // backgrounds:
+                            backg : [ // single array => makes the JSS treat as comma separated values
+                                // top layer:
+                                cssProps.itemBackgOverlay,
+                                
+                                // bottom layer:
+                                backgRefs.backg,
+                            ],
+                        }),
+                    ]),
+                }),
+            ]),
+        ]),
     ]);
 };
 export const usesProgressBar = () => {
@@ -431,7 +470,20 @@ export const useProgressBarSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    // forked from Bootstrap 5:
+    const itemBackgOverlayImg = 'linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)';
+    
+    
+    
     return {
+        // backgrounds:
+        itemBackgOverlayImg      :   itemBackgOverlayImg,
+        itemBackgOverlay         : [[itemBackgOverlayImg, 'left/1rem 1rem'      ]],
+        itemBackgOverlaySm       : [[itemBackgOverlayImg, 'left/0.25rem 0.25rem']],
+        itemBackgOverlayLg       : [[itemBackgOverlayImg, 'left/3rem 3rem'      ]],
+        
+        
+        
         // sizes:
         minInlineSize            : 'unset', // fills the entire parent's width:
         minBlockSize             : 'auto',  // depends on ProgressBar's height
@@ -591,7 +643,10 @@ export type { OrientationName, OrientationVariant }
 
 export interface ProgressBarProps<TElement extends HTMLElement = HTMLElement>
     extends
-        BasicProps<TElement>
+        BasicProps<TElement>,
+        
+        // appearances:
+        ProgressBarVariant
 {
     // values:
     value?    : string | number
@@ -600,7 +655,12 @@ export interface ProgressBarProps<TElement extends HTMLElement = HTMLElement>
 }
 export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: ProgressBarProps<TElement>) {
     // styles:
-    const sheet = useProgressBarSheet();
+    const sheet              = useProgressBarSheet();
+    
+    
+    
+    // variants:
+    const progressBarVariant = useProgressBarVariant(props);
     
     
     
@@ -642,6 +702,9 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
                 // values:
                 [progressBarVarDecls.progressBarValueRatio]: valueRatio,
             }}
+            variantClasses={[...(props.variantClasses ?? []),
+                progressBarVariant.class,
+            ]}
         >
             <Basic<TElement>
                 // other props:
