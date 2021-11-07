@@ -250,9 +250,6 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
                 }),
             ]),
         ]),
-        variants([
-
-        ]),
     ]);
 };
 export const usesProgressVariants = () => {
@@ -350,7 +347,9 @@ export const usesProgressBarLayout = () => {
                 ]),
                 layout({
                     // layouts:
-                    display   : 'block',  // fills the entire wrapper's width
+                    display        : 'flex',   // fills the entire wrapper's width
+                    justifyContent : 'center', // center items (text, icon, etc) horizontally
+                    alignItems     : 'center', // center items (text, icon, etc) vertically
                     
                     
                     
@@ -365,11 +364,6 @@ export const usesProgressBarLayout = () => {
                     
                     // sizes:
                     flex      : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
-                    
-                    
-                    
-                    // typos:
-                    textAlign : 'center',
                     
                     
                     
