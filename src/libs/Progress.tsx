@@ -538,18 +538,18 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     //#region keyframes
     const keyframesItemRunning      : PropEx.Keyframes = {
         from : {
-            backgroundPositionX : '1rem',
+            backgroundPositionX : ['1rem', 0],
         },
         to   : {
-            backgroundPositionX : 0,
+            backgroundPositionX : [0, 0],
         },
     };
     const keyframesItemRunningBlock : PropEx.Keyframes = {
         from : {
-            backgroundPositionY : '1rem',
+            backgroundPositionY : ['1rem', 0],
         },
         to   : {
-            backgroundPositionY : 0,
+            backgroundPositionY : [0, 0],
         },
     };
     //#endregion keyframes
