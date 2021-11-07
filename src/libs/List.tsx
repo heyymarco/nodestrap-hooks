@@ -797,17 +797,6 @@ export const usesListBasicVariants = (options?: ListBasicVariantOptions) => {
                             // borders:
                             // kill separator between items:
                             [borderStrokeDecls.borderWidth] : 0,
-                            
-                            
-                            
-                            // children:
-                            ...children(listItemElm, [
-                                layout({
-                                    // borders:
-                                    // kill border on each item:
-                                    [borderStrokeDecls.borderWidth] : 0,
-                                }),
-                            ]),
                         }),
                     ]),
                 }),
@@ -894,7 +883,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
         imports([
             usesListBasicVariants({
                 additionRemoveBorderSelector    : ['.btn', '.tab', '.breadcrumb', '.bullet'],
-                additionRemoveSeparatorSelector : ['.breadcrumb'],
+                additionRemoveSeparatorSelector : ['.btn', '.tab', '.breadcrumb', '.bullet'],
                 minSpecificityWeight            : 2,
             }),
         ]),
@@ -910,12 +899,6 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                     // children:
                     ...children(wrapperElm, [
                         layout({
-                            // borders:
-                            // kill separator between buttons:
-                            [borderStrokeDecls.borderWidth] : 0,
-                            
-                            
-                            
                             // children:
                             ...children(listItemElm, [
                                 imports([
@@ -942,12 +925,6 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                     // children:
                     ...children(wrapperElm, [
                         layout({
-                            // borders:
-                            // kill separator between tabs:
-                            [borderStrokeDecls.borderWidth] : 0,
-                            
-                            
-                            
                             // children:
                             ...children(listItemElm, [
                                 layout({
@@ -1138,12 +1115,6 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                     // children:
                     ...children(wrapperElm, [
                         layout({
-                            // borders:
-                            // kill separator between bullets:
-                            [borderStrokeDecls.borderWidth] : 0,
-                            
-                            
-                            
                             // sizes:
                             flex        : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
                             
