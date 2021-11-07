@@ -35,6 +35,7 @@ import {
     
     
     // utilities:
+    isTypeOf,
     parseNumber,
 }                           from './react-cssfn' // cssfn for react
 import {
@@ -447,6 +448,28 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
+// utilities:
+const calculateValues = <TElement extends HTMLElement = HTMLElement>(props: ProgressBarProps<TElement>) => {
+    // fn props:
+    const valueFn    : number  = parseNumber(props.value)  ?? 0;
+    const minFn      : number  = parseNumber(props.min)    ?? 0;
+    const maxFn      : number  = parseNumber(props.max)    ?? 100;
+    const negativeFn : boolean = (maxFn < minFn);
+    const valueRatio : number  = (valueFn - minFn) / (maxFn - minFn);
+    
+    
+    
+    return {
+        valueFn,
+        minFn,
+        maxFn,
+        negativeFn,
+        valueRatio,
+    };
+}
+
+
+
 // react components:
 
 export interface ProgressProps<TElement extends HTMLElement = HTMLElement>
@@ -459,7 +482,8 @@ export interface ProgressProps<TElement extends HTMLElement = HTMLElement>
 }
 export function Progress<TElement extends HTMLElement = HTMLElement>(props: ProgressProps<TElement>) {
     // styles:
-    const sheet = useProgressSheet();
+    const sheet    = useProgressSheet();
+    const barSheet = useProgressBarSheet();
     
     
     
@@ -477,9 +501,44 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
     
     
     
+    // progressBar vars:
+    const [, , progressBarVarDecls] = usesProgressBarVars();
+    
+    
+    
     // jsx fn props:
+    const remainingValueRatio = 1 - Math.min((
+        (Array.isArray(children) ? children : [children]).map((child) => {
+            // <ProgressBar> component:
+            if (isTypeOf(child, ProgressBar)) {
+                // fn props:
+                const { valueRatio } = calculateValues(child.props);
+                return valueRatio;
+            }// if
+            
+            
+            
+            // other component:
+            return 0;
+        })
+        .reduce((accum, valueRatio) => accum + valueRatio) // sum
+    ), 1);
     const restProgressBar = (
-        <div></div>
+        <Element
+            // semantics:
+            aria-hidden={true} // just a dummy element, no meaningful content here
+            
+            
+            // classes:
+            mainClass={barSheet.main}
+            
+            
+            // styles:
+            style={{...(props.style ?? {}),
+                // values:
+                [progressBarVarDecls.progressBarValueRatio]: remainingValueRatio,
+            }}
+        ></Element>
     );
     
     
@@ -531,11 +590,13 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
     
     
     // fn props:
-    const valueFn    : number  = parseNumber(props.value)  ?? 0;
-    const minFn      : number  = parseNumber(props.min)    ?? 0;
-    const maxFn      : number  = parseNumber(props.max)    ?? 100;
-    const negativeFn : boolean = (maxFn < minFn);
-    const valueRatio : number  = (valueFn - minFn) / (maxFn - minFn);
+    const {
+        valueFn,
+        minFn,
+        maxFn,
+        negativeFn,
+        valueRatio,
+    } = calculateValues(props);
     
     
     
