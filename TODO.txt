@@ -1,17 +1,20 @@
 top priority:
-css-config => filter valid props
+List:variant_tab => move up tab border radius from ListItem to Wrapper
 
 
 
 medium priority:
 Range => dial variant
+Media => for profile image, video, static images, gifs, svgs, etc
 
 
 
 low priority:
-Media => for profile image, video, static images, gifs, svgs, etc
-List:variant_tab => move up tab border radius from ListItem to Wrapper
+css-config => filter valid props
 fix focus-visible
 
+
+
+stucked:
 Navbar => use List
 [stucked] fix overflow detection Navbar padding-end
