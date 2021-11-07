@@ -8,6 +8,11 @@ import type {
     SingleOrArray,
 }                           from './types'      // cssfn's types
 import {
+    // general types:
+    SelectorCollection,
+    
+    
+    
     // compositions:
     composition,
     mainComposition,
@@ -743,6 +748,73 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
         ]),
     ]);
 };
+export interface ListBasicVariantOptions {
+    additionRemoveBorderSelector?    : SelectorCollection
+    additionRemoveSeparatorSelector? : SelectorCollection
+    
+    minSpecificityWeight?            : number
+}
+export const usesListBasicVariants = (options?: ListBasicVariantOptions) => {
+    // options:
+    const {
+        additionRemoveBorderSelector,
+        additionRemoveSeparatorSelector,
+        minSpecificityWeight,
+    } = options ?? {};
+    
+    
+    
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
+    return composition([
+        variants([
+            rule(['.flat', '.flush', additionRemoveBorderSelector], [
+                layout({
+                    // borders:
+                    // kill borders surrounding List:
+                    [borderStrokeDecls.borderWidth] : 0,
+                    
+                 // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // remove rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : 0,
+                    [borderRadiusDecls.borderStartEndRadius]   : 0,
+                    // remove rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : 0,
+                    [borderRadiusDecls.borderEndEndRadius]     : 0,
+                }),
+            ]),
+            rule(['.flat', '.joined', additionRemoveSeparatorSelector], [
+                layout({
+                    // children:
+                    ...children(wrapperElm, [
+                        layout({
+                            // borders:
+                            // kill separator between items:
+                            [borderStrokeDecls.borderWidth] : 0,
+                            
+                            
+                            
+                            // children:
+                            ...children(listItemElm, [
+                                layout({
+                                    // borders:
+                                    // kill border on each item:
+                                    [borderStrokeDecls.borderWidth] : 0,
+                                }),
+                            ]),
+                        }),
+                    ]),
+                }),
+            ]),
+        ], { minSpecificityWeight: minSpecificityWeight }),
+    ]);
+}
 export const usesListVariants = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
@@ -819,46 +891,14 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                 }),
             ]),
         ]),
-        variants([
-            rule(['.flat', '.flush', '.btn', '.tab', '.breadcrumb', '.bullet'], [
-                layout({
-                    // borders:
-                    // kill borders surrounding List:
-                    [borderStrokeDecls.borderWidth] : 0,
-                    
-                 // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                    // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : 0,
-                    [borderRadiusDecls.borderStartEndRadius]   : 0,
-                    // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius]   : 0,
-                    [borderRadiusDecls.borderEndEndRadius]     : 0,
-                }),
-            ]),
-            rule(['.flat', '.joined', '.breadcrumb'], [
-                layout({
-                    // children:
-                    ...children(wrapperElm, [
-                        layout({
-                            // borders:
-                            // kill separator between items:
-                            [borderStrokeDecls.borderWidth] : 0,
-                            
-                            
-                            
-                            // children:
-                            ...children(listItemElm, [
-                                layout({
-                                    // borders:
-                                    // kill border on each item:
-                                    [borderStrokeDecls.borderWidth] : 0,
-                                }),
-                            ]),
-                        }),
-                    ]),
-                }),
-            ]),
-            
+        imports([
+            usesListBasicVariants({
+                additionRemoveBorderSelector    : ['.btn', '.tab', '.breadcrumb', '.bullet'],
+                additionRemoveSeparatorSelector : ['.breadcrumb'],
+                minSpecificityWeight            : 2,
+            }),
+        ]),
+        variants([ 
             rule('.btn', [
                 layout({
                     // spacings:
