@@ -191,12 +191,6 @@ export const usesButtonLayout = (options?: OrientationRuleOptions) => {
             
             
             
-            // sizes:
-            /* -- auto size depends on the text's/content's size -- */
-            boxSizing      : 'content-box', // the final size is excluding borders & paddings
-            
-            
-            
             // typos:
             textAlign      : 'center',
             
@@ -391,19 +385,24 @@ export const useButtonSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
+        // sizes:
+        boxSizing          : 'content-box', // the final size is excluding borders & paddings
+        
+        
+        
         //#region spacings
-        gapInline   : spacers.sm,
-        gapBlock    : spacers.sm,
-        gapInlineSm : spacers.xs,
-        gapBlockSm  : spacers.xs,
-        gapInlineLg : spacers.md,
-        gapBlockLg  : spacers.md,
+        gapInline          : spacers.sm,
+        gapBlock           : spacers.sm,
+        gapInlineSm        : spacers.xs,
+        gapBlockSm         : spacers.xs,
+        gapInlineLg        : spacers.md,
+        gapBlockLg         : spacers.md,
         //#endregion spacings
         
         
         
         // typos:
-        whiteSpace : 'normal',
+        whiteSpace         : 'normal',
         
         
         
