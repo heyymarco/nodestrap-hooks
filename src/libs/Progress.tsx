@@ -7,7 +7,15 @@ import {
 import type {
     SingleOrArray,
 }                           from './types'      // cssfn's types
+import type {
+    PropEx,
+}                           from './css-types'   // ts defs support for cssfn
 import {
+    // general types:
+    StyleCollection,
+    
+    
+    
     // compositions:
     composition,
     mainComposition,
@@ -24,6 +32,7 @@ import {
     
     // rules:
     variants,
+    states,
     rule,
 }                           from './cssfn'       // cssfn core
 import {
@@ -191,9 +200,53 @@ export const usesProgressBarVars = () => {
 };
 
 
+//#region running
+export interface RunningVars {
+    animRunning   : any
+}
+const [runningRefs, runningDecls] = createCssVar<RunningVars>();
+
+// {
+//     const [, , , propsManager] = usesAnim();
+//     propsManager.registerAnim(runningRefs.animRunning);
+// }
+
+const selectorIsRunning  = '.running'
+const selectorNotRunning = ':not(.running)'
+
+export const isRunning  = (styles: StyleCollection) => rule(selectorIsRunning,  styles);
+export const notRunning = (styles: StyleCollection) => rule(selectorNotRunning, styles);
+
+/**
+ * Uses running states.
+ * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents running state definitions.
+ */
+export const usesRunningState = () => {
+    return [
+        () => composition([
+            states([
+                notRunning([
+                    vars({
+                        [runningDecls.animRunning] : 'initial',
+                    }),
+                ]),
+                isRunning([
+                    vars({
+                        [runningDecls.animRunning] : cssProps.animItemRunning,
+                    }),
+                ]),
+            ]),
+        ]),
+        runningRefs,
+        runningDecls,
+    ] as const;
+};
+//#endregion running
+
+
 // appearances:
 
-export type ProgressBarStyle = 'striped' // might be added more styles in the future
+export type ProgressBarStyle = 'striped'|'running' // might be added more styles in the future
 export interface ProgressBarVariant {
     progressBarStyle?: SingleOrArray<ProgressBarStyle>
 }
@@ -397,6 +450,9 @@ export const usesProgressBarVariants = () => {
     // colors:
     const [, backgRefs] = usesBackg();
     
+    // animations:
+    const [running, runningRefs] = usesRunningState();
+    
     // layouts:
     const [sizes] = usesSizeVariant((sizeName) => composition([
         layout({
@@ -423,6 +479,10 @@ export const usesProgressBarVariants = () => {
         }),
         variants([
             rule('.striped', [
+                imports([
+                    // states:
+                    running(),
+                ]),
                 layout({
                     // children:
                     ...children(listItemElm, [
@@ -435,6 +495,11 @@ export const usesProgressBarVariants = () => {
                                 // bottom layer:
                                 backgRefs.backg,
                             ],
+                            
+                            
+                            
+                            // animations:
+                            anim  : runningRefs.animRunning,
                         }),
                     ]),
                 }),
@@ -470,7 +535,38 @@ export const useProgressBarSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
+    //#region keyframes
+    const keyframesItemRunning      : PropEx.Keyframes = {
+        from : {
+            backgroundPositionX : '1rem',
+        },
+        to   : {
+            backgroundPositionX : 0,
+        },
+    };
+    const keyframesItemRunningBlock : PropEx.Keyframes = {
+        from : {
+            backgroundPositionY : '1rem',
+        },
+        to   : {
+            backgroundPositionY : 0,
+        },
+    };
+    //#endregion keyframes
+    
+    
+    
     return {
+        //#region animations
+        '@keyframes itemRunning'      : keyframesItemRunning,
+        '@keyframes itemRunningBlock' : keyframesItemRunningBlock,
+        
+        animItemRunning               : [['1000ms', 'linear', 'both', 'infinite', keyframesItemRunning]],
+        animItemRunningBlock          : [['1000ms', 'linear', 'both', 'infinite', keyframesItemRunningBlock]],
+        //#endregion animations
+        
+        
+        
         // backgrounds:
         itemBackgOverlayImg      : 'linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)',
         itemBackgOverlaySize     : '1rem',
