@@ -55,7 +55,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
 //     import IconApp                                  from './apps/IconApp';                   // span
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
-        import ProgressApp                          from './apps/ProgressApp';               // div      group (semantic)
+    import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 
 

@@ -1,12 +1,11 @@
 top priority:
-Progress
-Range => dial variant
 simplify class name
+css-config => filter valid props
 
 
 
 medium priority:
-css-config => filter valid props
+Range => dial variant
 
 
 
