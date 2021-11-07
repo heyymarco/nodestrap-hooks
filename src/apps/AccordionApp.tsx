@@ -37,7 +37,7 @@ function App() {
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<Accordions.OrientationName|undefined>(undefined);
 
-	const listStyles = [undefined, 'content','flat','flush','joined','btn','tab','breadcrumb','bullet','numbered'];
+	const listStyles = [undefined, 'flat','flush','joined','content','btn','tab','breadcrumb','bullet','numbered'];
 	const [listStyle,    setListStyle     ] = useState<Accordions.ListStyle|undefined>(undefined);
 
 	

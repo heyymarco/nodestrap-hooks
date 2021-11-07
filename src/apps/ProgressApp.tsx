@@ -13,6 +13,7 @@ import {
 import {
 	Progress, ProgressBar,
 	OrientationName,
+	ProgressStyle,
 }						from '../libs/Progress';
 
 
@@ -33,6 +34,9 @@ function App() {
 	const orientations = [undefined, 'block', 'inline'];
 	const [orientation,    setOrientation     ] = useState<OrientationName|undefined>(undefined);
 
+	const progressStyles = [undefined, 'flat','flush','joined'];
+	const [progressStyle,    setProgressStyle     ] = useState<ProgressStyle|undefined>(undefined);
+
 
     return (
         <div className="App">
@@ -42,6 +46,7 @@ function App() {
 					outlined={outlined} mild={mild}
 
 					orientation={orientation}
+					progressStyle={progressStyle}
 				>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
@@ -59,6 +64,7 @@ function App() {
 					outlined={outlined} mild={mild}
 
 					orientation={orientation}
+					progressStyle={progressStyle}
 				>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
@@ -77,6 +83,7 @@ function App() {
 					outlined={outlined} mild={mild}
 
 					orientation={orientation}
+					progressStyle={progressStyle}
 				>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
@@ -95,6 +102,7 @@ function App() {
 					outlined={outlined} mild={mild}
 
 					orientation={orientation}
+					progressStyle={progressStyle}
 				>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
@@ -122,6 +130,7 @@ function App() {
 					outlined={outlined} mild={true}
 
 					orientation={orientation}
+					progressStyle={progressStyle}
 				>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
@@ -149,6 +158,7 @@ function App() {
 					outlined={true} mild={mild}
 
 					orientation={orientation}
+					progressStyle={progressStyle}
 				>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
@@ -250,6 +260,21 @@ function App() {
 									onChange={(e) => setOrientation((e.target.value || undefined) as (OrientationName|undefined))}
 								/>
 								{`${ori}`}
+							</label>
+						)
+					}
+				</p>
+				<p>
+					ProgressStyle:
+					{
+						progressStyles.map(st =>
+							<label key={st ?? ''}>
+								<input type='radio'
+									value={st}
+									checked={progressStyle===st}
+									onChange={(e) => setProgressStyle((e.target.value || undefined) as (ProgressStyle|undefined))}
+								/>
+								{`${st}`}
 							</label>
 						)
 					}
