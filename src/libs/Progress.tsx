@@ -89,6 +89,7 @@ import {
     usesListLayout,
 }                           from './List'
 import colors               from './colors'      // configurable colors & theming defs
+import spacers              from './spacers'     // configurable spaces defs
 
 
 
@@ -438,11 +439,31 @@ export const useProgressBarSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         // sizes:
-        minInlineSize        : 'unset',
-        minBlockSize         : 'unset',
+        minInlineSize            : 'unset', // fills the entire parent's width:
+        minBlockSize             : 'auto',  // depends on ProgressBar's height
         
-        minInlineSizeBlock   : 'unset',
-        minBlockSizeBlock    : '10rem',
+        minInlineSizeBlock       : 'auto',  // depends on ProgressBar's width
+        minBlockSizeBlock        : '10rem', // manually set the min height
+        
+        
+        
+        itemBoxSizing            : 'border-box', // the final size is including borders & paddings
+        
+        itemMinInlineSize        : 'unset',
+        itemMinBlockSize         : spacers.md,
+        itemMinBlockSizeSm       : spacers.xs,
+        itemMinBlockSizeLg       : spacers.xl,
+        
+        itemMinBlockSizeBlock    : 'unset',
+        itemMinInlineSizeBlock   : spacers.md,
+        itemMinInlineSizeBlockSm : spacers.xs,
+        itemMinInlineSizeBlockLg : spacers.xl,
+        
+        
+        
+        // spacings:
+        itemPaddingInline        : 0,
+        itemPaddingBlock         : 0,
     };
 }, { prefix: 'prgs' });
 

@@ -49,6 +49,22 @@ function App() {
 						// mild={mild}
 
 						value={30}
+					/>
+                </Progress>
+
+				<br />
+				<Progress
+					theme={theme} size={size} gradient={enableGrad}
+					outlined={outlined} mild={mild}
+
+					orientation={orientation}
+				>
+                    <ProgressBar
+						// theme={theme} size={size} gradient={enableGrad}
+						// outlined={outlined}
+						// mild={mild}
+
+						value={30}
 					>
 						30%
 					</ProgressBar>
