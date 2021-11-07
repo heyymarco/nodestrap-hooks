@@ -25,7 +25,7 @@ function App() {
 	const [enableGrad, setEnableGrad] = useState(false);
 	const [outlined,   setOutlined  ] = useState(false);
 	const [mild,       setMild      ] = useState(false);
-	const [nude,       setNude      ] = useState(false);
+	const [nude,       setNude      ] = useState(true);
 
 	const [enabled,    setEnabled   ] = useState(true);
 	const [active,      setActive   ] = useState(false);
