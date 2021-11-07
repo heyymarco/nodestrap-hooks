@@ -6,7 +6,10 @@ import {
     Classes,
     Styles,
     StyleSheet,
-
+    
+    
+    
+    CreateGenerateId,
     create as createJss,
 }                           from 'jss'          // base technology of our cssfn components
 // official jss-plugins:
@@ -44,6 +47,7 @@ import type {
 // utilities:
 import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
 import { camelCase }        from 'camel-case'   // camel-case  support for jss
+import warning              from 'tiny-warning'
 
 
 
@@ -87,7 +91,23 @@ export type PropList                                             = Dictionary<Js
 
 
 // jss:
-const customJss = createJss().setup({plugins:[
+const createGenerateId : CreateGenerateId = (options = {}) => {
+    let idCounter    = 0;
+    const maxCounter = 1e10;
+    
+    
+    
+    return (rule, sheet): string => {
+        idCounter++;
+        if (idCounter > maxCounter) warning(false, `[JSS] You might have a memory leak. ID counter is at ${idCounter}.`)
+        
+        
+        
+        const prefix = sheet?.options?.classNamePrefix || 'c';
+        return `${prefix}${idCounter}`;
+    };
+};
+const customJss = createJss().setup({createGenerateId, plugins:[
     jssPluginGlobal(),    // requires to be placed before all other plugins
     jssPluginExtend(),
     jssPluginNested(),

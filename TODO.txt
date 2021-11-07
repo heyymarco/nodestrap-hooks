@@ -1,5 +1,4 @@
 top priority:
-simplify class name
 css-config => filter valid props
 
 
