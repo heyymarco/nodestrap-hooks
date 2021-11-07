@@ -220,7 +220,8 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 // appearances:
 
-export type ListStyle = 'content'|'flat'|'flush'|'joined'|'btn'|'tab'|'breadcrumb'|'bullet'|'numbered' // might be added more styles in the future
+export type ListBasicStyle = 'flat'|'flush'|'joined';
+export type ListStyle      = ListBasicStyle|'content'|'btn'|'tab'|'breadcrumb'|'bullet'|'numbered' // might be added more styles in the future
 export interface ListVariant {
     listStyle?: SingleOrArray<ListStyle>
 }
