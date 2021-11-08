@@ -724,7 +724,7 @@ const config = {
         /**
          * A list of valid icon-font's content.
          */
-        items : fontItems,
+        items : fontItems as unknown as string[],
 
         /**
          * The css style of icon-font to be loaded.
