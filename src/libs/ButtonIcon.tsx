@@ -37,7 +37,6 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    SizeName        as BasicSizeName,
     isSize          as basicIsSize,
     usesSizeVariant as basicUsesSizeVariant,
     SizeVariant     as BasicSizeVariant,
@@ -104,9 +103,9 @@ import typos                from './typos/index' // configurable typography (tex
 export { defaultOrientationRuleOptions };
 
 //#region sizes
-export type SizeName = 'xs'|'sm'|'lg'|'xl' | string
+export type SizeName = 'xs'|'sm'|'lg'|'xl' | (string & {})
 
-export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSize(sizeName as BasicSizeName, styles);
+export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSize(sizeName, styles);
 
 /**
  * Uses basic sizes.  
@@ -115,7 +114,7 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSi
  * @param options Customize the size options.
  * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
-export const usesSizeVariant = (factory = sizeOf, options = sizeOptions()) => basicUsesSizeVariant(factory, options as BasicSizeName[]);
+export const usesSizeVariant = (factory = sizeOf, options = sizeOptions()) => basicUsesSizeVariant(factory, options);
 /**
  * Creates sizing definitions for the given `sizeName`.
  * @param sizeName The given size name written in camel case.
@@ -307,7 +306,7 @@ export interface IconProps
 
 export interface ButtonIconProps
     extends
-        ButtonProps,
+        Omit<ButtonProps, 'size'>,
         IconProps,
         
         // layouts:

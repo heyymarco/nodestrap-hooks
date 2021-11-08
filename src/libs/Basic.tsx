@@ -86,7 +86,7 @@ import typos                from './typos/index' // configurable typography (tex
 // layouts:
 
 //#region sizes
-export type SizeName = 'sm'|'lg' | string
+export type SizeName = 'sm'|'lg' | (string & {})
 export interface SizeVars {
     // empty (might be added soon)
 }

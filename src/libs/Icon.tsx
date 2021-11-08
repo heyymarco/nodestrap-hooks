@@ -63,7 +63,6 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 import {
     // hooks:
-    SizeName        as BasicSizeName,
     isSize          as basicIsSize,
     usesSizeVariant as basicUsesSizeVariant,
     SizeVariant     as BasicSizeVariant,
@@ -101,9 +100,9 @@ import {
 // layouts:
 
 //#region sizes
-export type SizeName = 'sm'|'nm'|'md'|'lg'|'1em' | string
+export type SizeName = 'sm'|'nm'|'md'|'lg'|'1em' | (string & {})
 
-export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSize(sizeName as BasicSizeName, styles);
+export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSize(sizeName, styles);
 
 /**
  * Uses basic sizes.  
@@ -114,7 +113,7 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSi
  */
 export const usesSizeVariant = (sizeOverwrite?: Cust.Ref, factory = sizeOf, options = sizeOptions()) => {
     // dependencies:
-    const [sizes, sizeRefs, sizeDecls, ...restSizes] = basicUsesSizeVariant(factory, options as BasicSizeName[]);
+    const [sizes, sizeRefs, sizeDecls, ...restSizes] = basicUsesSizeVariant(factory, options);
     
     
     
