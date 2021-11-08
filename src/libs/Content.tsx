@@ -754,7 +754,7 @@ export const usesContentBasicLayout = () => {
         }),
     ]);
 };
-export const usesContentVariants = () => {
+export const usesContentBasicVariants = () => {
     // dependencies:
     
     // layouts:
@@ -769,11 +769,19 @@ export const usesContentVariants = () => {
     
     return composition([
         imports([
+            // layouts:
+            sizes(),
+        ]),
+    ]);
+};
+export const usesContentVariants = () => {
+    return composition([
+        imports([
             // variants:
             usesBasicVariants(),
             
             // layouts:
-            sizes(),
+            usesContentBasicVariants(),
         ]),
     ]);
 };
