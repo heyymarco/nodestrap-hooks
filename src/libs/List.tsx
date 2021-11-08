@@ -1485,55 +1485,66 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                 listVariant.class,
             ]}
         >
-            {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
-                <Element
-                    // essentials:
-                    key={index}
-                    
-                    
-                    // semantics:
-                    semanticTag ={wrapSemanticTag }
-                    semanticRole={wrapSemanticRole}
-                >
-                    {
-                        isTypeOf(child, ListItem)
-                        ?
-                        <child.type
-                            // other props:
-                            {...child.props}
-                            
-                            
-                            // behaviors:
-                            actionCtrl={child.props.actionCtrl ?? actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
-                            
-                            
-                            // events:
-                            onAnimationEnd={(e) => {
-                                child.props.onAnimationEnd?.(e);
+            {children && (Array.isArray(children) ? children : [children]).map((child, index) => {
+                const isListItem = isTypeOf(child, ListItem);
+                
+                
+                
+                // handlers:
+                const handleAnimationEnd = (e: React.AnimationEvent<HTMLElement>) => {
+                    // triggers `List`'s onAnimationEnd event
+                    e.currentTarget.parentElement?.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
+                };
+                
+                
+                
+                // jsx:
+                return (
+                    <Element
+                        // essentials:
+                        key={index}
+                        
+                        
+                        // semantics:
+                        semanticTag ={wrapSemanticTag }
+                        semanticRole={wrapSemanticRole}
+                    >
+                        {
+                            isListItem
+                            ?
+                            <child.type
+                                // other props:
+                                {...child.props}
                                 
                                 
+                                // behaviors:
+                                actionCtrl={child.props.actionCtrl ?? actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
                                 
-                                // triggers `List`'s onAnimationEnd event
-                                e.currentTarget.parentElement?.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
-                            }}
-                        />
-                        :
-                        <ListItem
-                            // behaviors:
-                            actionCtrl={actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
-                            
-                            
-                            // events:
-                            onAnimationEnd={(e) => {
-                                // triggers `List`'s onAnimationEnd event
-                                e.currentTarget.parentElement?.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
-                            }}
-                        >
-                            { child }
-                        </ListItem>
-                    }
-                </Element>
-            ))}
+                                
+                                // events:
+                                onAnimationEnd={(e) => {
+                                    child.props.onAnimationEnd?.(e);
+                                    
+                                    
+                                    
+                                    handleAnimationEnd(e);
+                                }}
+                            />
+                            :
+                            <ListItem
+                                // behaviors:
+                                actionCtrl={actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
+                                
+                                
+                                // events:
+                                onAnimationEnd={handleAnimationEnd}
+                            >
+                                { child }
+                            </ListItem>
+                        }
+                    </Element>
+                );
+            })}
         </Indicator>
     );
 }
