@@ -718,6 +718,7 @@ export const usesContentBasicLayout = () => {
     // dependencies:
     
     // borders:
+    const [, , borderDecls      ] = usesBorder();
     const [, , borderStrokeDecls] = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
     
@@ -737,6 +738,7 @@ export const usesContentBasicLayout = () => {
             // borders:
             
             // undef borders:
+            [borderDecls.borderCol]         : undefined as unknown as null,
             [borderStrokeDecls.borderWidth] : undefined as unknown as null,
             
          // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
