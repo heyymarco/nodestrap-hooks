@@ -35,6 +35,8 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -56,8 +58,8 @@ import {
 }                           from './Basic'
 import {
     // styles:
-    usesContentLayout,
-    usesContentVariants,
+    usesContentBasicLayout,
+    usesContentBasicVariants,
 }                           from './Content'
 import {
     // hooks:
@@ -99,23 +101,17 @@ export const usesLabelLayout = () => {
             
             
             // positions:
-            verticalAlign  : 'baseline', // label's text should be aligned with sibling text, so the label behave like <span> wrapper
-            
-            
-            
-            // sizes:
-            /* -- auto size depends on the text's/content's size -- */
-            boxSizing      : 'content-box', // the final size is excluding borders & paddings
+            verticalAlign  : 'baseline',     // label's text should be aligned with sibling text, so the label behave like <span> wrapper
             
             
             
             // typos:
-            textAlign      : 'start', // flow to the document's writing flow
+            textAlign      : 'start',        // flow to the document's writing flow
             
             
             
             // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
+            ...usesGeneralProps(cssProps),   // apply general cssProps
         }),
     ]);
 };
@@ -145,10 +141,10 @@ export const usesLabelVariants = () => {
             rule('.content', [ // content
                 imports([
                     // layouts:
-                    usesContentLayout(),
+                    usesContentBasicLayout(),
                     
                     // variants:
-                    usesContentVariants(),
+                    usesContentBasicVariants(),
                 ]),
             ]),
         ]),
