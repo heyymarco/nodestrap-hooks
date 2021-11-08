@@ -738,16 +738,19 @@ export const usesContentBasicLayout = () => {
             // borders:
             
             // undef borders:
-            [borderDecls.borderCol]         : undefined as unknown as null,
+            [borderDecls.borderFn ] : undefined as unknown as null,
+            [borderDecls.borderCol] : undefined as unknown as null,
+            
+            [borderStrokeDecls.border     ] : undefined as unknown as null,
             [borderStrokeDecls.borderWidth] : undefined as unknown as null,
             
          // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
             // undef rounded corners on top:
             [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
-            [borderRadiusDecls.borderStartEndRadius]   : undefined as unknown as null,
+            [borderRadiusDecls.borderStartEndRadius  ] : undefined as unknown as null,
             // undef rounded corners on bottom:
-            [borderRadiusDecls.borderEndStartRadius]   : undefined as unknown as null,
-            [borderRadiusDecls.borderEndEndRadius]     : undefined as unknown as null,
+            [borderRadiusDecls.borderEndStartRadius  ] : undefined as unknown as null,
+            [borderRadiusDecls.borderEndEndRadius    ] : undefined as unknown as null,
         }),
     ]);
 };
