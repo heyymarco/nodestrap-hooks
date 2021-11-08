@@ -1486,10 +1486,6 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
             ]}
         >
             {children && (Array.isArray(children) ? children : [children]).map((child, index) => {
-                const isListItem = isTypeOf(child, ListItem);
-                
-                
-                
                 // handlers:
                 const handleAnimationEnd = (e: React.AnimationEvent<HTMLElement>) => {
                     // triggers `List`'s onAnimationEnd event
@@ -1510,7 +1506,7 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                         semanticRole={wrapSemanticRole}
                     >
                         {
-                            isListItem
+                            isTypeOf(child, ListItem)
                             ?
                             <child.type
                                 // other props:
