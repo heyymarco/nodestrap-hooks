@@ -767,7 +767,7 @@ const config = {
 
 // react components:
 
-export type IconList = ((typeof fontItems)[number]) & (string & {})
+export type IconList = ((typeof fontItems)[number]) | (string & {})
 
 export interface IconProps<TElement extends HTMLElement = HTMLElement>
     extends
