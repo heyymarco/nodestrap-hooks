@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -68,6 +68,22 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    stripoutList,
+    stripoutFocusableElement,
+}                           from './stripouts'
+import {
+    borderRadiuses,
+}                           from './borders'     // configurable borders & border radiuses defs
+import spacers              from './spacers'     // configurable spaces defs
+import {
+    // configs:
+    cssProps as hcssProps,
+}                           from './typos/horizontal-rule'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -168,18 +184,6 @@ import {
     // styles:
     usesIconImage,
 }                           from './Icon'
-import {
-    stripoutList,
-    stripoutFocusableElement,
-}                           from './stripouts'
-import {
-    borderRadiuses,
-}                           from './borders'     // configurable borders & border radiuses defs
-import spacers              from './spacers'     // configurable spaces defs
-import {
-    // configs:
-    cssProps as hcssProps,
-}                           from './typos/horizontal-rule'
 
 
 
