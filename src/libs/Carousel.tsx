@@ -60,6 +60,15 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    stripoutList,
+    stripoutScrollbar,
+    stripoutImage,
+}                           from './stripouts'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -99,11 +108,6 @@ import {
     NavscrollProps,
     Navscroll,
 }                           from './Navscroll'
-import {
-    stripoutList,
-    stripoutScrollbar,
-    stripoutImage,
-}                           from './stripouts'
 
 
 
