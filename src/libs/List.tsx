@@ -258,8 +258,18 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
-    const parentOrientationBlockSelector  = `${orientationBlockSelector}>*>&`;  // :not(.inline)>*>.listItem => specificity weight excluding parent = 1
-    const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&`; //      .inline >*>.listItem => specificity weight excluding parent = 1
+    /*
+        a hack with :not(_)
+        the total selector combined with parent is like this: `:not(.inline)>*>.listItem:not(_)`, the specificity weight = 2.1
+        the specificity of 2.1 is a bit higher than:
+        * `.list.content`             , the specificity weight = 2
+        * `.someComponent.togglerBtn` , the specificity weight = 2
+        but can be easily overriden by specificity weight >= 3, like:
+        * `.list.btn.btn`             , the specificity weight = 3
+        * `.someComponent.boo.foo`    , the specificity weight = 3
+    */
+    const parentOrientationBlockSelector  = `${orientationBlockSelector}>*>&:not(_)`;
+    const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&:not(_)`;
     
     
     
@@ -278,7 +288,7 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
                     usesBorderAsSeparatorInline(),
                 ]),
             ]),
-        ], { minSpecificityWeight: 2 }), // increase the specificity to win with .content variant
+        ]),
     ]);
 };
 export const usesListItemLayout = (options?: OrientationRuleOptions) => {
