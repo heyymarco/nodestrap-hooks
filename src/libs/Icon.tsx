@@ -767,6 +767,8 @@ const config = {
 
 // react components:
 
+export type IconList = ((typeof fontItems)[number]) & (string & {})
+
 export interface IconProps<TElement extends HTMLElement = HTMLElement>
     extends
         ElementProps<TElement>,
@@ -779,7 +781,7 @@ export interface IconProps<TElement extends HTMLElement = HTMLElement>
         MildVariant
 {
     // appearances:
-    icon: string
+    icon: IconList
 }
 export function Icon<TElement extends HTMLElement = HTMLElement>(props: IconProps<TElement>) {
     // styles:
