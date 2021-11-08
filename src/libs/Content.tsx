@@ -694,12 +694,9 @@ export const usesContentMedia = () => {
 
 
 
-export const usesContentLayout = () => {
+export const usesContentBasicLayout = () => {
     return composition([
         imports([
-            // layouts:
-            usesBasicLayout(),
-            
             // borders:
             usesBorderAsContainer({ itemsSelector: mediaElm }), // make a nicely rounded corners
         ]),
@@ -714,44 +711,13 @@ export const usesContentLayout = () => {
         }),
     ]);
 };
-export const usesContentBasicLayout = () => {
-    // dependencies:
-    
-    // borders:
-    const [, , borderDecls      ] = usesBorder();
-    const [, , borderStrokeDecls] = usesBorderStroke();
-    const [, , borderRadiusDecls] = usesBorderRadius();
-    
-    
-    
+export const usesContentLayout = () => {
     return composition([
         imports([
-            usesContentLayout(),
-        ]),
-        layout({
             // layouts:
-            // undef display:
-            display : undefined as unknown as null,
-            
-            
-            
-            // borders:
-            
-            // undef borders:
-            [borderDecls.borderFn ] : undefined as unknown as null,
-            [borderDecls.borderCol] : undefined as unknown as null,
-            
-            [borderStrokeDecls.border     ] : undefined as unknown as null,
-            [borderStrokeDecls.borderWidth] : undefined as unknown as null,
-            
-         // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-            // undef rounded corners on top:
-            [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
-            [borderRadiusDecls.borderStartEndRadius  ] : undefined as unknown as null,
-            // undef rounded corners on bottom:
-            [borderRadiusDecls.borderEndStartRadius  ] : undefined as unknown as null,
-            [borderRadiusDecls.borderEndEndRadius    ] : undefined as unknown as null,
-        }),
+            usesBasicLayout(),
+            usesContentBasicLayout(),
+        ]),
     ]);
 };
 export const usesContentBasicVariants = () => {
