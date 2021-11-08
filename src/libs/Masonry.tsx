@@ -43,6 +43,11 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import spacers              from './spacers'     // configurable spaces defs
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -66,7 +71,6 @@ import {
     ContentProps,
     Content,
 }                           from './Content'
-import spacers              from './spacers'     // configurable spaces defs
 
 
 
