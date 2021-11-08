@@ -385,11 +385,6 @@ export const useButtonSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        // sizes:
-        boxSizing          : 'content-box', // the final size is excluding borders & paddings
-        
-        
-        
         //#region spacings
         gapInline          : spacers.sm,
         gapBlock           : spacers.sm,
