@@ -714,6 +714,41 @@ export const usesContentLayout = () => {
         }),
     ]);
 };
+export const usesContentBasicLayout = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
+    return composition([
+        imports([
+            usesContentLayout(),
+        ]),
+        layout({
+            // layouts:
+            // undef display:
+            display : undefined as unknown as null,
+            
+            
+            
+            // borders:
+            
+            // undef borders:
+            [borderStrokeDecls.borderWidth] : undefined as unknown as null,
+            
+         // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+            // undef rounded corners on top:
+            [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
+            [borderRadiusDecls.borderStartEndRadius]   : undefined as unknown as null,
+            // undef rounded corners on bottom:
+            [borderRadiusDecls.borderEndStartRadius]   : undefined as unknown as null,
+            [borderRadiusDecls.borderEndEndRadius]     : undefined as unknown as null,
+        }),
+    ]);
+};
 export const usesContentVariants = () => {
     // dependencies:
     
