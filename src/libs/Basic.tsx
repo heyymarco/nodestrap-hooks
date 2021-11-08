@@ -244,7 +244,7 @@ export const useNudeVariant = (props: NudeVariant) => {
 // colors:
 
 //#region themes
-export type ThemeName = (keyof typeof colorThemes) | string
+export type ThemeName = (keyof typeof colorThemes) | (string & {})
 export interface ThemeVars {
     /**
      * themed foreground color.
