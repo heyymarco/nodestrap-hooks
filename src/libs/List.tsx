@@ -124,7 +124,7 @@ import {
     
     // styles:
     usesContentMedia,
-    usesContentLayout,
+    usesContentBasicLayout,
     usesContentVariants,
 }                           from './Content'
 import {
@@ -838,7 +838,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
     
     // borders:
     const [,                 , borderDecls      ] = usesBorder();
-    const [, borderStrokeRefs, borderStrokeDecls] = usesBorderStroke();
+    const [, borderStrokeRefs,                  ] = usesBorderStroke();
     const [,                 , borderRadiusDecls] = usesBorderRadius();
     
     
@@ -868,23 +868,8 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                     usesContentMedia(),
                                     
                                     // layouts:
-                                    usesContentLayout(),
+                                    usesContentBasicLayout(),
                                 ]),
-                                layout({
-                                    // borders:
-                                    /* border & borderRadius are already handled by listItem => do not re-define */
-                                    
-                                    // undef borders surrounding List:
-                                    [borderStrokeDecls.borderWidth] : undefined as unknown as null,
-                                    
-                                 // borderRadius : undefined as unknown as null, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                                    // undef rounded corners on top:
-                                    [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
-                                    [borderRadiusDecls.borderStartEndRadius]   : undefined as unknown as null,
-                                    // undef rounded corners on bottom:
-                                    [borderRadiusDecls.borderEndStartRadius]   : undefined as unknown as null,
-                                    [borderRadiusDecls.borderEndEndRadius]     : undefined as unknown as null,
-                                }),
                             ]),
                         }),
                     ]),
