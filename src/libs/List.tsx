@@ -260,7 +260,7 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
     const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
     /*
         a hack with :not(_)
-        the total selector combined with parent is like this: `:not(.inline)>*>.listItem:not(_)`, the specificity weight = 2.1
+        the total selector combined with parent is something like this: `:not(.inline)>*>.listItem:not(_)`, the specificity weight = 2.1
         the specificity of 2.1 is a bit higher than:
         * `.list.content`             , the specificity weight = 2
         * `.someComponent.togglerBtn` , the specificity weight = 2
@@ -669,7 +669,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             // children:
                             /*
                                 a hack with :not(_)
-                                the total selector combined with parent is like this: `.list.inline>*>:not(_):where(:first-child)`, the specificity weight = 2.1
+                                the total selector combined with parent is something like this: `.list:not(.inline)>*>:not(_):where(:first-child)`, the specificity weight = 2.1
                                 the specificity of 2.1 is a bit higher than:
                                 * `.list.content`             , the specificity weight = 2
                                 * `.someComponent.togglerBtn` , the specificity weight = 2
@@ -724,7 +724,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             // children:
                             /*
                                 a hack with :not(_)
-                                the total selector combined with parent is like this: `.list.inline>*>:not(_):where(:first-child)`, the specificity weight = 2.1
+                                the total selector combined with parent is something like this: `.list:not(.inline)>*>:not(_):where(:first-child)`, the specificity weight = 2.1
                                 the specificity of 2.1 is a bit higher than:
                                 * `.list.content`             , the specificity weight = 2
                                 * `.someComponent.togglerBtn` , the specificity weight = 2
@@ -895,7 +895,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
             usesListBasicVariants({
                 additionRemoveBorderSelector    : ['.btn', '.tab', '.breadcrumb', '.bullet'],
                 additionRemoveSeparatorSelector : ['.btn', '.tab', '.breadcrumb', '.bullet'],
-                minSpecificityWeight            : 2,
+                // minSpecificityWeight            : 2, // not needed
             }),
         ]),
         variants([ 
@@ -1193,6 +1193,12 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                 }),
             ]),
         ], { minSpecificityWeight: 2 }),
+        /*
+            the total selector combined with parent is something like this: `.list.btn.btn`, the specificity weight = 3
+            the specificity of 3 is a bit higher than:
+            *      `:not(.inline)>*>.listItem:not(_)`           , the specificity weight = 2.1 (listItem's borderSeparator)
+            * `.list:not(.inline)>*>:not(_):where(:first-child)`, the specificity weight = 2.1 (listItem's borderRadius)
+        */
     ]);
 };
 export const usesListStates = () => {
