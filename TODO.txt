@@ -1,11 +1,10 @@
 top priority:
-List:variant_tab => move up tab border radius from ListItem to Wrapper
+Media => for profile image, video, static images, gifs, svgs, etc
 
 
 
 medium priority:
 Range => dial variant
-Media => for profile image, video, static images, gifs, svgs, etc
 
 
 
@@ -18,3 +17,4 @@ fix focus-visible
 stucked:
 Navbar => use List
 [stucked] fix overflow detection Navbar padding-end
+[stucked] List:variant_tab => move up tab border radius from ListItem to Wrapper
