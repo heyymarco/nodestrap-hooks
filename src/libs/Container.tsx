@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our cssfn components
@@ -44,6 +44,14 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    breakpoints,
+    isScreenWidthAtLeast,
+}                           from './breakpoints'
+
+// nodestrap components:
 import {
     // hooks:
     expandBorderRadius,
@@ -62,10 +70,6 @@ import {
     BasicProps,
     Basic,
 }                           from './Basic'
-import {
-    breakpoints,
-    isScreenWidthAtLeast,
-}                           from './breakpoints'
 
 
 
