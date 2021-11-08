@@ -57,29 +57,35 @@ export type { JssStyle, JssValue, Classes, Styles, StyleSheet }
 export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
-export type Style                                                = ExtendableStyle
+export type Style                                                = (ExtendableStyle & {})
 export type StyleCollection                                      = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
-export type ClassName                                            = string
-export type RealClass                                            = `.${ClassName}`
-export type PseudoClass                                          = `:${ClassName}`
+export type ClassName                                            = string        // not a really string: [A-Z_a-z-]+
+export type RealClass                                            = (`.${ClassName}` & {})
+export type PseudoClass                                          = (`:${ClassName}` & {})
 export type Class                                                = RealClass|PseudoClass
 export type ClassEntry<TClassName extends ClassName = ClassName> = readonly [TClassName, StyleCollection]
 export type ClassList <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
 
 export type OptionalString                                       = OptionalOrFalse<string>
 
-export type UniversalSelector                                    = '*'
-export type RealElementSelector                                  = string
-export type PseudoElementSelector                                = `::${string}`
+export type UniversalSelector                                    = ('*'           & {})
+export type RealElementSelector                                  = (string        & {}) // not a really string: [A-Z_a-z-]+
+export type PseudoElementSelector                                = (`::${string}` & {}) // not a really string: [A-Z_a-z-]+
 export type ElementSelector                                      = RealElementSelector|PseudoElementSelector
-export type ClassSelector                                        = Class
-export type IdSelector                                           = `#${string}`
+export type ClassSelector                                        = (Class  & {})
+export type IdSelector                                           = (`#${string}`  & {})
 export type SingleSelector                                       = UniversalSelector|ElementSelector|ClassSelector|IdSelector
-export type Selector                                             = SingleSelector|`${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`|`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`
+export type Selector                                             = | SingleSelector
+                                                                   | (`${SingleSelector}${SingleSelector}`                                                    & {})
+                                                                   | (`${SingleSelector}${SingleSelector}${SingleSelector}`                                   & {})
+                                                                   | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`                  & {})
+                                                                   | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}` & {})
 export type SelectorCollection                                   = SingleOrDeepArray<OptionalOrFalse<Selector>>
 
-export type NestedSelector                                       = '&'|`&${Selector}`|`${Selector}&`
+export type NestedSelector                                       = | '&'
+                                                                   | (`&${Selector}` & {})
+                                                                   | (`${Selector}&` & {})
 
 export type RuleEntry                                            = readonly [SelectorCollection, StyleCollection]
 export type RuleEntrySource                                      = ProductOrFactory<OptionalOrFalse<RuleEntry>>
