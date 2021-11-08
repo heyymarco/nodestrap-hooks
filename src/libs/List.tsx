@@ -125,7 +125,7 @@ import {
     // styles:
     usesContentMedia,
     usesContentBasicLayout,
-    usesContentVariants,
+    usesContentBasicVariants,
 }                           from './Content'
 import {
     // hooks:
@@ -855,7 +855,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
             rule('.content', [ // content
                 imports([
                     // variants:
-                    usesContentVariants(),
+                    usesContentBasicVariants(),
                 ]),
                 layout({
                     // children:
