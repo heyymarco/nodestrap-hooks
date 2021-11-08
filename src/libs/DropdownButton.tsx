@@ -58,7 +58,7 @@ export type { DropdownCloseType }
 
 export interface DropdownButtonProps<TCloseType = DropdownCloseType>
     extends
-        ButtonIconProps,
+        Omit<ButtonIconProps, 'size'>,
         TogglerActiveProps<TCloseType>,
         
         DropdownProps<HTMLButtonElement, TCloseType>
