@@ -90,6 +90,7 @@ import {
     
     
     // react components:
+    IconProps as IconIconProps,
     Icon,
 }                           from './Icon'
 import typos                from './typos/index' // configurable typography (texting) defs
@@ -298,9 +299,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export type IconPosition = 'start'|'end'
 export interface IconProps
+    extends
+        Partial<Pick<IconIconProps, 'icon'>>
 {
     // appearances:
-    icon?         : string
     iconPosition? : IconPosition
 }
 
