@@ -835,7 +835,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          */
         if ((/(None|Excited|Enable|Disable|Active|Passive|Press|Release|Check|Clear|Hover|Arrive|Leave|Focus|Blur|Valid|Unvalid|Invalid|Uninvalid|Full|Compact)(Block|Inline)?$/).test(propName)) continue; // exclude
 
-        // props starting with inline|block:
+        // some props ending with inline|block:
         /**
          * Eg:
          * inlineSizeInline
@@ -843,7 +843,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
          * inlineSizeBlock
          *  blockSizeBlock
          */
-        if ((/^(((inline|block)|(min|max)(Inline|Block))(Size)(Inline|Block))$/).test(propName)) continue; // exclude
+        if ((/^(((((inline|block)|(min|max)(Inline|Block))Size)|cursor)(Inline|Block))$/).test(propName)) continue; // exclude
         
         // special props:
         /**
