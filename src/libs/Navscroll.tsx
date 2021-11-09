@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useReducer,
@@ -10,6 +10,8 @@ import {
     // utilities:
     isTypeOf,
 }                           from './react-cssfn' // cssfn for react
+
+// nodestrap components:
 import {
     // react components:
     ListItemProps,
