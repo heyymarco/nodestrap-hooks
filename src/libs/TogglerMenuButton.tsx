@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -44,6 +44,15 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import typos                from './typos/index' // configurable typography (texting) defs
+import {
+    // hooks:
+    usePropActive,
+}                           from './accessibilities'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -82,11 +91,6 @@ import {
     // hooks:
     isPress,
 }                           from './ActionControl'
-import {
-    // hooks:
-    usePropActive,
-}                           from './accessibilities'
-import typos                from './typos/index' // configurable typography (texting) defs
 import {
     // styles:
     labelElm,
