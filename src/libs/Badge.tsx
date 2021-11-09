@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -38,6 +38,19 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    borderRadiuses,
+}                           from './borders'     // configurable borders & border radiuses defs
+import typos                from './typos/index' // configurable typography (texting) defs
+import {
+    // styles:
+    fillTextLineHeightLayout,
+    fillTextLineWidthLayout,
+}                           from './layouts'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -65,15 +78,6 @@ import {
     PopupProps,
     Popup,
 }                           from './Popup'
-import typos                from './typos/index' // configurable typography (texting) defs
-import {
-    borderRadiuses,
-}                           from './borders'     // configurable borders & border radiuses defs
-import {
-    // styles:
-    fillTextLineHeightLayout,
-    fillTextLineWidthLayout,
-}                           from './layouts'
 
 
 
