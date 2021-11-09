@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -41,10 +41,16 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import spacers              from './spacers'     // configurable spaces defs
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
 }                           from './Basic'
+import Icon                 from './Icon'
 import {
     // styles:
     usesContentLayout,
@@ -69,9 +75,7 @@ import {
     PopupProps,
     Popup,
 }                           from './Popup'
-import Icon                 from './Icon'
 import CloseButton          from './CloseButton'
-import spacers              from './spacers'     // configurable spaces defs
 
 
 
