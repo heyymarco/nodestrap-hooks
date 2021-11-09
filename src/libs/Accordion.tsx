@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -35,6 +35,14 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    // hooks:
+    usePropEnabled,
+}                           from './accessibilities'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -47,17 +55,6 @@ import {
     TogglerActiveProps,
     useTogglerActive,
 }                           from './Indicator'
-import {
-    // styles:
-    usesCollapseLayout,
-    usesCollapseVariants,
-    usesCollapseStates,
-    
-    
-    
-    // react components:
-    Collapse,
-}                           from './Collapse'
 import {
     // hooks:
     defaultOrientationRuleOptions,
@@ -86,9 +83,16 @@ import {
     List,
 }                           from './List'
 import {
-    // hooks:
-    usePropEnabled,
-}                           from './accessibilities'
+    // styles:
+    usesCollapseLayout,
+    usesCollapseVariants,
+    usesCollapseStates,
+    
+    
+    
+    // react components:
+    Collapse,
+}                           from './Collapse'
 
 
 
