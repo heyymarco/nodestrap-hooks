@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -14,23 +14,14 @@ import {
     // hooks:
     createUseSheet,
 }                           from './react-cssfn' // cssfn for react
+
+// nodestrap utilities:
 import {
     // hooks:
-    EditableControlElement,
-    
-    
-    
-    // styles:
-    usesEditableControlLayout,
-    usesEditableControlVariants,
-    usesEditableControlStates,
-    
-    
-    
-    // react components:
-    EditableControlProps,
-    EditableControl,
-}                           from './EditableControl'
+    usePropEnabled,
+}                           from './accessibilities'
+
+// nodestrap components:
 import {
     // hooks:
     usePressReleaseState,
@@ -49,8 +40,21 @@ import {
 }                           from './ActionControl'
 import {
     // hooks:
-    usePropEnabled,
-}                           from './accessibilities'
+    EditableControlElement,
+    
+    
+    
+    // styles:
+    usesEditableControlLayout,
+    usesEditableControlVariants,
+    usesEditableControlStates,
+    
+    
+    
+    // react components:
+    EditableControlProps,
+    EditableControl,
+}                           from './EditableControl'
 
 
 
