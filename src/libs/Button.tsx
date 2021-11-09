@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -40,6 +40,14 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    borderRadiuses,
+}                           from './borders'     // configurable borders & border radiuses defs
+import spacers              from './spacers'     // configurable spaces defs
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -90,10 +98,6 @@ import {
     ActionControlProps,
     ActionControl,
 }                           from './ActionControl'
-import {
-    borderRadiuses,
-}                           from './borders'     // configurable borders & border radiuses defs
-import spacers              from './spacers'     // configurable spaces defs
 
 
 
