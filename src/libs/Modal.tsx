@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useState,
@@ -62,6 +62,13 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    stripoutFocusableElement,
+}                           from './stripouts'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -83,9 +90,6 @@ import {
     IndicatorProps,
     Indicator,
 }                           from './Indicator'
-import {
-    stripoutFocusableElement,
-}                           from './stripouts'
 
 
 
