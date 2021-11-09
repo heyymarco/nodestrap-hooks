@@ -1490,7 +1490,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
-        filterExcited        : [['contrast(120%)']],
+        filterExcited        : [['invert(80%)']],
         
         '@keyframes excited' : keyframesExcited,
         animExcited          : [['150ms', 'ease', 'both', 'alternate-reverse', 5, keyframesExcited]],
