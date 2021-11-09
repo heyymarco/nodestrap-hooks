@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -31,6 +31,18 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    stripoutTextbox,
+}                           from './stripouts'
+import {
+    // hooks:
+    usePropEnabled,
+    usePropReadOnly,
+}                           from './accessibilities'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -49,14 +61,6 @@ import {
     EditableTextControlProps,
     EditableTextControl,
 }                           from './EditableTextControl'
-import {
-    // hooks:
-    usePropEnabled,
-    usePropReadOnly,
-}                           from './accessibilities'
-import {
-    stripoutTextbox,
-}                           from './stripouts'
 
 
 
