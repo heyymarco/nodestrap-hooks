@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -35,6 +35,11 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import typos                from './typos/index' // configurable typography (texting) defs
+
+// nodestrap components:
 import {
     // hooks:
     isSize          as basicIsSize,
@@ -56,6 +61,17 @@ import {
     cssProps as bcssProps,
     cssDecls as bcssDecls,
 }                           from './Basic'
+import {
+    // configs:
+    cssProps as icssProps,
+    cssDecls as icssDecls,
+    
+    
+    
+    // react components:
+    IconProps as IconIconProps,
+    Icon,
+}                           from './Icon'
 import {
     // hooks:
     defaultOrientationRuleOptions,
@@ -82,18 +98,6 @@ import {
     ButtonProps,
     Button,
 }                           from './Button'
-import {
-    // configs:
-    cssProps as icssProps,
-    cssDecls as icssDecls,
-    
-    
-    
-    // react components:
-    IconProps as IconIconProps,
-    Icon,
-}                           from './Icon'
-import typos                from './typos/index' // configurable typography (texting) defs
 
 
 
