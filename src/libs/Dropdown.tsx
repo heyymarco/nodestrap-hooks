@@ -95,11 +95,6 @@ export const usesDropdownElementLayout = () => {
             stripoutFocusableElement(), // clear browser's default styles
         ]),
         layout({
-            // layouts:
-            display : 'block',
-            
-            
-            
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'element')), // apply general cssProps starting with element***
         }),
