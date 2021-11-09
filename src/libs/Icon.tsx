@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useMemo,
@@ -61,6 +61,14 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    // styles:
+    fillTextLineHeightLayout,
+}                           from './layouts'
+
+// nodestrap components:
 import {
     // hooks:
     isSize          as basicIsSize,
@@ -88,10 +96,6 @@ import {
     cssProps as bcssProps,
 }                           from './Basic'
 import fontItems            from './Icon-font-material'
-import {
-    // styles:
-    fillTextLineHeightLayout,
-}                           from './layouts'
 
 
 
