@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -45,11 +45,21 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
     mildOf,
 }                           from './Basic'
+import {
+    // hooks:
+    usesIconColor,
+    
+    
+    // styles:
+    usesIconImage,
+}                           from './Icon'
 import {
     // hooks:
     isActive,
@@ -81,14 +91,6 @@ import {
     EditableControlProps,
     EditableControl,
 }                           from './EditableControl'
-import {
-    // hooks:
-    usesIconColor,
-    
-    
-    // styles:
-    usesIconImage,
-}                           from './Icon'
 
 
 
