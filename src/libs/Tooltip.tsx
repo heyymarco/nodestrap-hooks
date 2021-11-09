@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useState,
@@ -39,6 +39,11 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import typos                from './typos/index' // configurable typography (texting) defs
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -66,7 +71,6 @@ import {
     PopupProps,
     Popup,
 }                           from './Popup'
-import typos                from './typos/index' // configurable typography (texting) defs
 
 
 
