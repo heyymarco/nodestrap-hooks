@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useState,
@@ -17,6 +17,8 @@ import {
     // utilities:
     setRef,
 }                           from './react-cssfn' // cssfn for react
+
+// nodestrap components:
 import {
     // hooks:
     TogglerActiveProps,
