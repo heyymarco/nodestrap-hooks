@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -11,6 +11,8 @@ import {
     SemanticTag,
     SemanticRole,
 }                           from './react-cssfn' // cssfn for react
+
+// nodestrap components:
 import {
     // general types:
     PopupPlacement,
