@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -45,6 +45,8 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -77,10 +79,6 @@ import {
 }                           from './List'
 import {
     // react components:
-    VisuallyHidden,
-}                           from './VisuallyHidden'
-import {
-    // react components:
     Popup,
 }                           from './Popup'
 import {
@@ -91,6 +89,10 @@ import {
     // react components:
     Dropdown,
 }                           from './Dropdown'
+import {
+    // react components:
+    VisuallyHidden,
+}                           from './VisuallyHidden'
 
 
 
