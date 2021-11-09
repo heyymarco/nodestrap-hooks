@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -38,6 +38,8 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -46,6 +48,17 @@ import {
     useExcitedState,
     TogglerExcitedProps,
 }                           from './Basic'
+import {
+    // hooks:
+    OrientationName,
+    OrientationVariant,
+    
+    
+    
+    // react components:
+    CardProps,
+    Card,
+}                           from './Card'
 import {
     // hooks:
     ModalStyle,
@@ -82,17 +95,6 @@ import {
     // react components:
     Collapse,
 }                           from './Collapse'
-import {
-    // hooks:
-    OrientationName,
-    OrientationVariant,
-    
-    
-    
-    // react components:
-    CardProps,
-    Card,
-}                           from './Card'
 import CloseButton          from './CloseButton'
 
 
