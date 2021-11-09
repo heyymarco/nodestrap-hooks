@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useReducer,
@@ -67,6 +67,27 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import {
+    borderRadiuses,
+}                           from './borders'     // configurable borders & border radiuses defs
+import {
+    // styles:
+    fillTextLineHeightLayout,
+    fillTextLineWidthLayout,
+}                           from './layouts'
+import {
+    // hooks:
+    usePropEnabled,
+    usePropReadOnly,
+}                           from './accessibilities'
+
+// others libs:
+// @ts-ignore
+import triggerChange        from 'react-trigger-change'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -99,6 +120,10 @@ import {
     useArriveLeaveState,
 }                           from './Control'
 import {
+    // hooks:
+    usePressReleaseState,
+}                           from './ActionControl'
+import {
     // styles:
     usesEditableControlLayout,
     usesEditableControlVariants,
@@ -110,31 +135,10 @@ import {
     EditableControl,
 }                           from './EditableControl'
 import {
-    // hooks:
-    usePressReleaseState,
-}                           from './ActionControl'
-import {
     // react components:
     EditableActionControl,
     EditableActionControlProps,
 }                           from './EditableActionControl'
-import {
-    // hooks:
-    usePropEnabled,
-    usePropReadOnly,
-}                           from './accessibilities'
-import {
-    borderRadiuses,
-}                           from './borders'     // configurable borders & border radiuses defs
-import {
-    // styles:
-    fillTextLineHeightLayout,
-    fillTextLineWidthLayout,
-}                           from './layouts'
-
-// others libs:
-// @ts-ignore
-import triggerChange        from 'react-trigger-change'
 
 
 
