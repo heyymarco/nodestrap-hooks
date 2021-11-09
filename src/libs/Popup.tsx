@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useRef,
@@ -42,6 +42,21 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// others libs:
+import {
+    // general types:
+    Instance            as Popper,
+    Placement           as PopupPlacement,
+    Modifier            as PopupModifier,
+    PositioningStrategy as PopupPosition,
+    
+    
+    
+    createPopper,
+}                           from '@popperjs/core'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -72,17 +87,6 @@ import {
     IndicatorProps,
     Indicator,
 }                           from './Indicator'
-import {
-    // general types:
-    Instance            as Popper,
-    Placement           as PopupPlacement,
-    Modifier            as PopupModifier,
-    PositioningStrategy as PopupPosition,
-    
-    
-    
-    createPopper,
-}                           from '@popperjs/core'
 
 
 
