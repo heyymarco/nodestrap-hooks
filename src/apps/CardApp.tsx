@@ -13,8 +13,7 @@ import {
 import Basic   from '../libs/Basic';
 import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
-import Card from '../libs/Card';
-import type * as Cards from '../libs/Card';
+import {Card, OrientationName, CardStyle} from '../libs/Card';
 import { Button } from '../libs/Button';
 
 
@@ -36,11 +35,14 @@ function App() {
 	const [active,      setActive   ] = useState(false);
 
 	const orientations = [undefined, 'block', 'inline'];
-	const [orientation,    setOrientation     ] = useState<Cards.OrientationName|undefined>(undefined);
+	const [orientation,    setOrientation     ] = useState<OrientationName|undefined>(undefined);
 
+	const cardStyles = [undefined, 'flat','flush','joined'];
+	const [cardStyle,    setCardStyle     ] = useState<CardStyle|undefined>(undefined);
 	
 
-    return (
+    
+	return (
         <div className="App">
             <Container>
                 <Basic
@@ -67,7 +69,7 @@ function App() {
 					theme={theme} size={size} gradient={enableGrad}
 					outlined={outlined} mild={mild}
 
-					enabled={enabled} active={active} orientation={orientation}
+					enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}
 
 					header={
 						<h4>Header</h4>
@@ -78,11 +80,11 @@ function App() {
 				>
 					<p>Hello world</p>
                 </Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}>
 					Lorem ipsum dolor sit amet consectetur adipisicing elit.
 					Lorem ipsum dolor sit amet consectetur adipisicing elit.
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}
 					header=
 						'Lorem ipsum dolor'
 					
@@ -94,30 +96,30 @@ function App() {
 						'dolor sit amet'
 					
 				/>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}>
 					<h5>Card title</h5>
 					<p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
 					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}>
 					<h5>Card title</h5>
 					<h6>Card subtitle</h6>
 					<p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
 					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}>
 					<img src='https://picsum.photos/300/200' alt='' />
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}>
 					<img src='https://picsum.photos/300/200' alt='' />
 					<h5>Card title</h5>
 					<p>This is a wider card with supporting text below as a natural lead-in to additional content.<br>
 					</br>This content is a little bit longer.</p>
 					<p>Last updated 3 mins ago</p>
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}
 					header=
 						'Lorem ipsum dolor'
 
@@ -126,7 +128,7 @@ function App() {
 				>
 					<img src='https://picsum.photos/300/200' alt='' />
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}
 					header=
 						'Lorem ipsum dolor'
 
@@ -139,7 +141,7 @@ function App() {
 					</br>This content is a little bit longer.</p>
 					<p>Last updated 3 mins ago</p>
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}
 					header=
 						'Lorem ipsum dolor'
 
@@ -160,7 +162,7 @@ function App() {
 					<p>Last updated 3 mins ago</p>
 					<img src='https://picsum.photos/300/200' alt='' />
 				</Card>
-				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation}>
+				<Card theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled} active={active} orientation={orientation} cardStyle={cardStyle}>
 					<figure>
 						<img src='https://picsum.photos/300/200' alt='' />
 
@@ -268,9 +270,24 @@ function App() {
 								<input type='radio'
 									value={ori}
 									checked={orientation===ori}
-									onChange={(e) => setOrientation((e.target.value || undefined) as (Cards.OrientationName|undefined))}
+									onChange={(e) => setOrientation((e.target.value || undefined) as (OrientationName|undefined))}
 								/>
 								{`${ori}`}
+							</label>
+						)
+					}
+				</p>
+				<p>
+					CardStyle:
+					{
+						cardStyles.map(st =>
+							<label key={st ?? ''}>
+								<input type='radio'
+									value={st}
+									checked={cardStyle===st}
+									onChange={(e) => setCardStyle((e.target.value || undefined) as (CardStyle|undefined))}
+								/>
+								{`${st}`}
 							</label>
 						)
 					}

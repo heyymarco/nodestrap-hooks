@@ -120,6 +120,19 @@ import {
 export const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
+// appearances:
+
+export type CardStyle = 'flat'|'flush'|'joined' // might be added more styles in the future
+export interface CardVariant {
+    cardStyle?: CardStyle
+}
+export const useCardVariant = (props: CardVariant) => {
+    return {
+        class: props.cardStyle ? props.cardStyle : null,
+    };
+};
+
+
 
 // styles:
 const headerElm = ['header', '.header'];
@@ -349,6 +362,10 @@ export const usesCardVariants = () => {
         }),
     ]));
     
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
     
     
     return composition([
@@ -359,6 +376,35 @@ export const usesCardVariants = () => {
             
             // layouts:
             sizes(),
+        ]),
+        variants([
+            rule(['.flat', '.flush'], [
+                layout({
+                    // borders:
+                    // kill borders surrounding Card:
+                    [borderStrokeDecls.borderWidth] : 0,
+                    
+                 // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
+                    // remove rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : 0,
+                    [borderRadiusDecls.borderStartEndRadius]   : 0,
+                    // remove rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius]   : 0,
+                    [borderRadiusDecls.borderEndEndRadius]     : 0,
+                }),
+            ]),
+            rule(['.flat', '.joined'], [
+                layout({
+                    // children:
+                    ...children([headerElm, footerElm, bodyElm], [
+                        layout({
+                            // borders:
+                            // kill separator between items:
+                            [borderStrokeDecls.borderWidth] : 0,
+                        }),
+                    ]),
+                }),
+            ]),
         ]),
     ]);
 };
@@ -428,7 +474,10 @@ export interface CardProps<TElement extends HTMLElement = HTMLElement>
         IndicatorProps<TElement>,
         
         // layouts:
-        OrientationVariant
+        OrientationVariant,
+        
+        // appearances:
+        CardVariant
 {
     // essentials:
     headerStyle?          : React.CSSProperties
@@ -489,6 +538,7 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
     // variants:
     const orientationVariant    = useOrientationVariant(props);
     const orientationHorizontal = (orientationVariant.class === 'inline');
+    const cardVariant           = useCardVariant(props);
     
     
     
@@ -569,6 +619,7 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 orientationVariant.class,
+                cardVariant.class,
             ]}
         >
             { header && <Element
