@@ -312,9 +312,6 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
     
     // dependencies:
     
-    // layouts:
-    const [, , containerDecls   ] = usesContainer();
-    
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
     
@@ -394,9 +391,6 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
     
     
     // dependencies:
-    
-    // layouts:
-    const [, , containerDecls   ] = usesContainer();
     
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
