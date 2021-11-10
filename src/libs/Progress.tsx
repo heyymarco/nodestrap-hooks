@@ -249,7 +249,7 @@ export const usesRunningState = () => {
                 ]),
                 isRunning([
                     vars({
-                        [runningDecls.animRunning] : cssProps.animItemRunning,
+                        [runningDecls.animRunning] : cssProps.itemAnimRunning,
                     }),
                 ]),
             ]),
@@ -593,8 +593,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         '@keyframes itemRunning'      : keyframesItemRunning,
         '@keyframes itemRunningBlock' : keyframesItemRunningBlock,
         
-        animItemRunning               : [['1000ms', 'linear', 'both', 'infinite', keyframesItemRunning]],
-        animItemRunningBlock          : [['1000ms', 'linear', 'both', 'infinite', keyframesItemRunningBlock]],
+        itemAnimRunning               : [['1000ms', 'linear', 'both', 'infinite', keyframesItemRunning]],
+        itemAnimRunningBlock          : [['1000ms', 'linear', 'both', 'infinite', keyframesItemRunningBlock]],
         //#endregion animations
         
         
