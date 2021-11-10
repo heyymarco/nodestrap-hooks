@@ -71,10 +71,6 @@ import {
 
 // nodestrap utilities:
 import {
-    stripoutList,
-    stripoutFocusableElement,
-}                           from './stripouts'
-import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
@@ -82,6 +78,10 @@ import {
     // configs:
     cssProps as hcssProps,
 }                           from './typos/horizontal-rule'
+import {
+    stripoutList,
+    stripoutFocusableElement,
+}                           from './stripouts'
 
 // nodestrap components:
 import {
