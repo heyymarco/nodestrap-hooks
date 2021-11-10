@@ -6,6 +6,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    Optional,
+}                           from './types'       // cssfn's types
 import {
     // compositions:
     composition,
@@ -491,28 +494,40 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
         CarouselVariant
 {
     // essentials:
-    scrollRef?         : React.Ref<HTMLElement> // setter ref
+    scrollRef?           : React.Ref<HTMLElement> // setter ref
     
     
     // semantics:
-    itemsTag?          : Tag
-    itemTag?           : Tag
+    itemsTag?            : Tag
+    itemTag?             : Tag
     
-    itemsRole?         : Role
-    itemRole?          : Role
+    itemsRole?           : Role
+    itemRole?            : Role
     
-    itemsSemanticTag?  : SemanticTag
-    itemSemanticTag?   : SemanticTag
+    itemsSemanticTag?    : SemanticTag
+    itemSemanticTag?     : SemanticTag
     
-    itemsSemanticRole? : SemanticRole
-    itemSemanticRole?  : SemanticRole
+    itemsSemanticRole?   : SemanticRole
+    itemSemanticRole?    : SemanticRole
+    
+    
+    // classes:
+    itemsMainClass?      : Optional<string>
+    itemsClasses?        : Optional<string>[]
+    itemsVariantClasses? : Optional<string>[]
+    itemsStateClasses?   : Optional<string>[]
+    
+    itemMainClass?       : Optional<string>
+    itemClasses?         : Optional<string>[]
+    itemVariantClasses?  : Optional<string>[]
+    itemStateClasses?    : Optional<string>[]
     
     
     // children:
-    children?          : React.ReactNode
-    prevBtn?           : React.ReactChild | boolean | null
-    nextBtn?           : React.ReactChild | boolean | null
-    nav?               : React.ReactChild | boolean | null
+    children?            : React.ReactNode
+    prevBtn?             : React.ReactChild | boolean | null
+    nextBtn?             : React.ReactChild | boolean | null
+    nav?                 : React.ReactChild | boolean | null
 }
 export function Carousel<TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) {
     // styles:
@@ -545,6 +560,18 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         
         itemsSemanticRole,
         itemSemanticRole,
+        
+        
+        // classes:
+        itemsMainClass,
+        itemsClasses,
+        itemsVariantClasses,
+        itemsStateClasses,
+        
+        itemMainClass,
+        itemClasses,
+        itemVariantClasses,
+        itemStateClasses,
         
         
         // children:
@@ -972,7 +999,12 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // classes:
-                    mainClass='items'
+                    mainClass={itemsMainClass}
+                    classes={[...(itemsClasses ?? []),
+                        'items',
+                    ]}
+                    variantClasses={itemsVariantClasses}
+                    stateClasses={itemsStateClasses}
                 >
                 {(Array.isArray(children) ? children : [children]).map((child, index) => (
                     isTypeOf(child, CarouselItem)
@@ -991,6 +1023,13 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         role={child.props.role ?? itemRole}
                         semanticTag ={child.props.semanticTag  ?? itemSemanticTagFn }
                         semanticRole={child.props.semanticRole ?? itemSemanticRoleFn}
+                        
+                        
+                        // classes:
+                        mainClass={itemMainClass}
+                        classes={itemClasses}
+                        variantClasses={itemVariantClasses}
+                        stateClasses={itemStateClasses}
                     />
                     :
                     <CarouselItem
