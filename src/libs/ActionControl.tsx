@@ -208,7 +208,7 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
         
         
         // setups:
-        window.addEventListener('mouseup', handleRelease);
+        window.addEventListener('mouseup', () => setTimeout(handleRelease, 0)); // setTimeout => make sure the `mouseup` event fires after the `click` event, so the user has a chance to change the `press` prop
         window.addEventListener('keyup',   handleRelease);
         
         
