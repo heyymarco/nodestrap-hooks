@@ -1,6 +1,7 @@
 // react:
 import {
     default as React,
+    Children,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -36,6 +37,11 @@ import {
     
     // hooks:
     createUseSheet,
+    
+    
+    
+    // utilities:
+    setRef,
     
     
     
@@ -543,6 +549,9 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
     
     
     // jsx:
+    if (!Children.count(header))   setRef(headerRef, null);
+    if (!Children.count(children)) setRef(bodyRef  , null);
+    if (!Children.count(footer))   setRef(footerRef, null);
     return (
         <Indicator<TElement>
             // other props:
