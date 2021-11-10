@@ -979,25 +979,9 @@ export function Check(props: CheckProps) {
                 
                 
                 
-                // toggling active/passive is on `onMouseUp` phrase, so the `usePressReleaseState()` doesn't have a chance for calling `handleRelease()` first
-                if (!isToggler) {
-                    if (!e.defaultPrevented) {
-                        handleToggleActive();
-                        e.preventDefault();
-                    } // if
-                } // if
-            }}
-            onMouseUp={(e) => {
-                props.onMouseUp?.(e);
-                
-                
-                
-                // toggling active/passive is on `onMouseUp` phrase, so the `usePressReleaseState()` doesn't have a chance for calling `handleRelease()` first
-                if (isToggler) {
-                    if (!e.defaultPrevented) {
-                        handleToggleActive();
-                        e.preventDefault();
-                    } // if
+                if (!e.defaultPrevented) {
+                    handleToggleActive();
+                    e.preventDefault();
                 } // if
             }}
             onKeyDown={(e) => {
