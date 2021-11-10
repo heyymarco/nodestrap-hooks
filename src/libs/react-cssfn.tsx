@@ -1,11 +1,11 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
     useMemo,
     useLayoutEffect,
 }                           from 'react'        // base technology of our cssfn components
 
-// jss   (builds css  using javascript):
+// jss:
 import {
     // general types:
     Classes,
