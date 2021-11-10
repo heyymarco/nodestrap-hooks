@@ -321,11 +321,6 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
     
     
     return composition([
-        vars({
-            // borders:
-            // if the current separator also acts as a container => the border width is effectively gone (just for separator only)
-            [containerDecls.containerBorderWidth] : '0px', // use `0px` instead of `0`, to avoid `calc()` error
-        }),
         layout({
             // borders:
             borderInlineWidth : 0, // remove (left|right)-border
@@ -409,11 +404,6 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
     
     
     return composition([
-        vars({
-            // borders:
-            // if the current separator also acts as a container => the border width is effectively gone (just for separator only)
-            [containerDecls.containerBorderWidth] : '0px', // use `0px` instead of `0`, to avoid `calc()` error
-        }),
         layout({
             // borders:
             borderBlockWidth  : 0, // remove (top|bottom)-border
