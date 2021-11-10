@@ -1,4 +1,7 @@
 top priority:
+async mouseup after click
+Card => add aria & elmRef for header & footer
+Card => add flat|flush|joined
 Media => for profile image, video, static images, gifs, svgs, etc
 
 

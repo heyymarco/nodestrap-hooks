@@ -14,8 +14,9 @@ import reportWebVitals from './reportWebVitals';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
 // import BasicApp                                     from './apps/BasicApp';                  // div
-//     import LabelApp                                 from './apps/LabelApp';                  // div
+//     import IconApp                                  from './apps/IconApp';                   // span
 //     import ContentApp                               from './apps/ContentApp';                // div      ???
+//     import LabelApp                                 from './apps/LabelApp';                  // div
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
 //         import CarouselApp                          from './apps/CarouselApp';               // div      ???
 //     import ContainerApp                             from './apps/ContainerApp';              // div
@@ -23,7 +24,7 @@ import reportWebVitals from './reportWebVitals';
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
-            import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
+//             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
 //                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
 //         import CardApp                              from './apps/CardApp';                   // article  article (semantic)
 //         import PopupApp                             from './apps/PopupApp';                  // div
@@ -45,24 +46,23 @@ import reportWebVitals from './reportWebVitals';
 //                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
 //                         import CloseButtonApp       from './apps/CloseButtonApp';            //     button|a     button|link (semantic)
 //             import EditableControlApp               from './apps/EditableControlApp';        // div
-//                 import RangeApp                     from './apps/RangeApp';                  // div      range (semantic)
+//                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';    // div
 //                     import InputApp                 from './apps/InputApp';                  // span
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';  // div
+//                         import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
-//                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
-//     import IconApp                                  from './apps/IconApp';                   // span
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
-//     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
+    import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <NavApp />
+    <ProgressApp />
     ,
     document.getElementById('root')
 );
