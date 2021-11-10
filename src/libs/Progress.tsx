@@ -1,4 +1,4 @@
-// react (builds html using javascript):
+// react:
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
@@ -64,6 +64,12 @@ import {
     usesSuffixedProps,
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import colors               from './colors'      // configurable colors & theming defs
+import spacers              from './spacers'     // configurable spaces defs
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
@@ -114,8 +120,6 @@ import {
     usesListLayout,
     usesListBasicVariants,
 }                           from './List'
-import colors               from './colors'      // configurable colors & theming defs
-import spacers              from './spacers'     // configurable spaces defs
 
 
 
