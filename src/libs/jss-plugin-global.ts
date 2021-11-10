@@ -1,4 +1,4 @@
-// jss   (builds css  using javascript):
+// jss:
 import {
     Plugin,
 
