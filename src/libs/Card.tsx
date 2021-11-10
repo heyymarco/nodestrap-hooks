@@ -4,6 +4,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    Optional,
+}                           from './types'       // cssfn's types
 import {
     // compositions:
     composition,
@@ -23,8 +26,21 @@ import {
     rule,
 }                           from './cssfn'       // cssfn core
 import {
+    // general types:
+    Tag,
+    Role,
+    SemanticTag,
+    SemanticRole,
+    
+    
+    
     // hooks:
     createUseSheet,
+    
+    
+    
+    // react components:
+    Element,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -100,8 +116,8 @@ export const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 
 
 // styles:
-const headerElm = 'header';
-const footerElm = 'footer';
+const headerElm = ['header', '.header'];
+const footerElm = ['footer', '.footer'];
 const bodyElm   = '.body';
 
 export const usesCardItemLayout = () => {
@@ -408,6 +424,52 @@ export interface CardProps<TElement extends HTMLElement = HTMLElement>
         // layouts:
         OrientationVariant
 {
+    // essentials:
+    headerStyle?          : React.CSSProperties
+    headerRef?            : React.Ref<HTMLElement> // setter ref
+    
+    bodyStyle?            : React.CSSProperties
+    bodyRef?              : React.Ref<HTMLElement> // setter ref
+    
+    footerStyle?          : React.CSSProperties
+    footerRef?            : React.Ref<HTMLElement> // setter ref
+    
+    
+    // semantics:
+    headerTag?            : Tag
+    bodyTag?              : Tag
+    footerTag?            : Tag
+    
+    headerRole?           : Role
+    bodyRole?             : Role
+    footerRole?           : Role
+    
+    headerSemanticTag?    : SemanticTag
+    bodySemanticTag?      : SemanticTag
+    footerSemanticTag?    : SemanticTag
+    
+    headerSemanticRole?   : SemanticRole
+    bodySemanticRole?     : SemanticRole
+    footerSemanticRole?   : SemanticRole
+    
+    
+    // classes:
+    headerMainClass?      : Optional<string>
+    headerClasses?        : Optional<string>[]
+    headerVariantClasses? : Optional<string>[]
+    headerStateClasses?   : Optional<string>[]
+    
+    bodyMainClass?        : Optional<string>
+    bodyClasses?          : Optional<string>[]
+    bodyVariantClasses?   : Optional<string>[]
+    bodyStateClasses?     : Optional<string>[]
+    
+    footerMainClass?      : Optional<string>
+    footerClasses?        : Optional<string>[]
+    footerVariantClasses? : Optional<string>[]
+    footerStateClasses?   : Optional<string>[]
+    
+    
     // children:
     header? : React.ReactNode
     footer? : React.ReactNode
@@ -426,6 +488,52 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
     
     // rest props:
     const {
+        // essentials:
+        headerStyle,
+        headerRef,
+        
+        bodyStyle,
+        bodyRef,
+        
+        footerStyle,
+        footerRef,
+        
+        
+        // semantics:
+        headerTag,
+        bodyTag,
+        footerTag,
+        
+        headerRole,
+        bodyRole,
+        footerRole,
+        
+        headerSemanticTag,
+        bodySemanticTag,
+        footerSemanticTag,
+        
+        headerSemanticRole,
+        bodySemanticRole,
+        footerSemanticRole,
+        
+        
+        // classes:
+        headerMainClass,
+        headerClasses,
+        headerVariantClasses,
+        headerStateClasses,
+        
+        bodyMainClass,
+        bodyClasses,
+        bodyVariantClasses,
+        bodyStateClasses,
+        
+        footerMainClass,
+        footerClasses,
+        footerVariantClasses,
+        footerStateClasses,
+        
+        
         // children:
         children,
         header,
@@ -454,15 +562,86 @@ export function Card<TElement extends HTMLElement = HTMLElement>(props: CardProp
                 orientationVariant.class,
             ]}
         >
-            { header && <header>
+            { header && <Element
+                // essentials:
+                elmRef={headerRef}
+                
+                
+                // semantics:
+                tag ={headerTag ?? 'header'}
+                role={headerRole}
+                semanticTag ={headerSemanticTag}
+                semanticRole={headerSemanticRole}
+                
+                
+                // classes:
+                mainClass={headerMainClass}
+                classes={[...(headerClasses ?? []),
+                    'header',
+                ]}
+                variantClasses={headerVariantClasses}
+                stateClasses={headerStateClasses}
+                
+                
+                // styles:
+                style={headerStyle}
+            >
                 { header }
-            </header> }
-            { children && <div className='body'>
+            </Element> }
+            
+            { children && <Element
+                // essentials:
+                elmRef={bodyRef}
+                
+                
+                // semantics:
+                tag ={bodyTag }
+                role={bodyRole}
+                semanticTag ={bodySemanticTag }
+                semanticRole={bodySemanticRole}
+                
+                
+                // classes:
+                mainClass={bodyMainClass}
+                classes={[...(bodyClasses ?? []),
+                    'body',
+                ]}
+                variantClasses={bodyVariantClasses}
+                stateClasses={bodyStateClasses}
+                
+                
+                // styles:
+                style={bodyStyle}
+            >
                 { children }
-            </div> }
-            { footer && <footer>
+            </Element> }
+            
+            { footer && <Element
+                // essentials:
+                elmRef={footerRef}
+                
+                
+                // semantics:
+                tag ={footerTag ?? 'footer'}
+                role={footerRole}
+                semanticTag ={footerSemanticTag}
+                semanticRole={footerSemanticRole}
+                
+                
+                // classes:
+                mainClass={footerMainClass}
+                classes={[...(footerClasses ?? []),
+                    'footer',
+                ]}
+                variantClasses={footerVariantClasses}
+                stateClasses={footerStateClasses}
+                
+                
+                // styles:
+                style={footerStyle}
+            >
                 { footer }
-            </footer> }
+            </Element> }
         </Indicator>
     );
 }
