@@ -244,6 +244,30 @@ export const listItemElm = ':where(:first-child)'; // zero specificity
 
 
 
+export const stripoutCommonBasicLayout = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderStrokeDecls] = usesBorderStroke();
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    
+    
+    return composition([
+        layout({
+            // borders:
+            // undef border stroke:
+            [borderStrokeDecls.border     ] : undefined as unknown as null,
+            [borderStrokeDecls.borderWidth] : undefined as unknown as null,
+            
+            // undef border radius:
+            [borderRadiusDecls.borderStartStartRadius] : undefined as unknown as null,
+            [borderRadiusDecls.borderStartEndRadius  ] : undefined as unknown as null,
+            [borderRadiusDecls.borderEndStartRadius  ] : undefined as unknown as null,
+            [borderRadiusDecls.borderEndEndRadius    ] : undefined as unknown as null,
+        }),
+    ]);
+};
 export const usesListItemInheritMildVariant = () => {
     return composition([
         variants([
@@ -305,6 +329,11 @@ export const usesListItemLayout = (options?: OrientationRuleOptions) => {
         imports([
             // layouts:
             usesIndicatorLayout(),
+            
+            // resets:
+            stripoutCommonBasicLayout(),
+            
+            // layouts:
             usesListItemBaseLayout(options),
         ]),
         layout({
@@ -499,6 +528,9 @@ export const usesListActionItemLayout = () => {
         imports([
             // layouts:
             usesActionControlLayout(),
+            
+            // resets:
+            stripoutCommonBasicLayout(),
             
             // colors:
             usesThemeDefault(),
