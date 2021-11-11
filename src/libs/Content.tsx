@@ -418,7 +418,6 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             rule(':where(:not(:first-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
-                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on top:
                     [borderRadiusDecls.borderStartStartRadius] : '0px',
                     [borderRadiusDecls.borderStartEndRadius  ] : '0px',
@@ -427,7 +426,6 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
-                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on bottom:
                     [borderRadiusDecls.borderEndStartRadius  ] : '0px',
                     [borderRadiusDecls.borderEndEndRadius    ] : '0px',
@@ -512,7 +510,6 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             rule(':where(:not(:first-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
-                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on left:
                     [borderRadiusDecls.borderStartStartRadius] : '0px',
                     [borderRadiusDecls.borderEndStartRadius  ] : '0px',
@@ -521,7 +518,6 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
                 layout({
                     // borders:
-                    // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on right:
                     [borderRadiusDecls.borderStartEndRadius  ] : '0px',
                     [borderRadiusDecls.borderEndEndRadius    ] : '0px',
