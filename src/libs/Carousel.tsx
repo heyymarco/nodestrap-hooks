@@ -584,7 +584,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     
     // fn props:
-    const itemsTotal = (children && (Array.isArray(children) ? children.length : 1)) || 0;
+    const itemsTotal          = React.Children.count(children);
     
     const listTag             = ['ul', 'ol'] as Array<Tag>;
     const listRole            = 'list';
