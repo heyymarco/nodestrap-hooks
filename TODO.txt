@@ -1,9 +1,10 @@
 top priority:
-fix border on bullet on Carousel
+rename ...expand** to ...apply**
 
 
 
 medium priority:
+fix Carousel fast clicking
 Media => for profile image, video, static images, gifs, svgs, etc
 Range => dial variant
 
