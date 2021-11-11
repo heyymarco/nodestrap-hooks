@@ -291,10 +291,12 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
                             
                             // borders:
                             ...expandBorderRadius(), // expand borderRadius css vars
-                            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
-                            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
-                            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
-                            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+                            // remove rounded corners on top:
+                            [borderRadiusDecls.borderStartStartRadius] : '0px',
+                            [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                            // remove rounded corners on bottom:
+                            [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                            [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                             
                             
                             
@@ -475,10 +477,12 @@ export const usesRangeVariants = () => {
                     
                     
                     // borders:
-                    [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
-                    [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
-                    [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
-                    [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+                    // remove rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                    // remove rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                     
                     
                     
