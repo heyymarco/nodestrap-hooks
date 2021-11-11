@@ -412,8 +412,8 @@ export const usesListSeparatorItemLayout = () => {
             
             
             // spacings:
-            [paddingDecls.paddingInline] : 0, // discard padding
-            [paddingDecls.paddingBlock]  : 0, // discard padding
+            [paddingDecls.paddingInline] : '0px', // discard padding
+            [paddingDecls.paddingBlock ] : '0px', // discard padding
             
             
             
@@ -793,15 +793,14 @@ export const usesListBasicVariants = (options?: ListBasicVariantOptions) => {
                 layout({
                     // borders:
                     // kill borders surrounding List:
-                    [borderStrokeDecls.borderWidth] : 0,
+                    [borderStrokeDecls.borderWidth           ] : '0px',
                     
-                 // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : 0,
-                    [borderRadiusDecls.borderStartEndRadius]   : 0,
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
                     // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius]   : 0,
-                    [borderRadiusDecls.borderEndEndRadius]     : 0,
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                 }),
             ]),
             rule(['.flat', '.joined', additionRemoveSeparatorSelector], [
@@ -811,7 +810,7 @@ export const usesListBasicVariants = (options?: ListBasicVariantOptions) => {
                         layout({
                             // borders:
                             // kill separator between items:
-                            [borderStrokeDecls.borderWidth] : 0,
+                            [borderStrokeDecls.borderWidth] : '0px',
                         }),
                     ]),
                 }),
