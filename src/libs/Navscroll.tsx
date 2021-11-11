@@ -749,7 +749,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
         </Nav>
     );
     const mutateListItems = (children: React.ReactNode, deepLevelsParent: number[]) => (
-        children && (Array.isArray(children) ? children : [children]).map((child, index) => {
+        React.Children.map(children, (child, index) => {
             const deepLevelsCurrent = [...deepLevelsParent, index];
             
             return (
@@ -782,7 +782,7 @@ export function Navscroll<TElement extends HTMLElement = HTMLElement>(props: Nav
                         } // if
                     }}
                 >
-                    {child.props.children && (Array.isArray(child.props.children) ? child.props.children : [child.props.children]).map((child, index) => (
+                    {React.Children.map(child.props.children, (child, index) => (
                         (isTypeOf(child, Navscroll) && (!child.props.targetRef))
                         ?
                         mutateNestedNavscroll(child.props, child.key ?? index, /*deepLevelsParent: */deepLevelsCurrent)
