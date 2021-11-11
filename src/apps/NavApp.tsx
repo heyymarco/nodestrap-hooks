@@ -154,7 +154,7 @@ function App() {
 
 					enabled={enabled} active={active} actionCtrl={actionCtrl}
 					orientation={orientation}
-					listStyle={listStyle ?? ['content', 'tab']}
+					listStyle={listStyle ?? 'tab'}
 				>
 					<Item active={true}>Active</Item>
 					<Item href='http://www.google.com'>Link</Item>

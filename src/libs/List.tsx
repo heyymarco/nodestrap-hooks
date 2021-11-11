@@ -99,7 +99,6 @@ import {
     ThemeName,
     outlinedOf,
     mildOf,
-    usesBackg,
     usesBorder,
     usesBorderStroke,
     expandBorderStroke,
@@ -1271,6 +1270,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
+        tabTextAlign      : 'center',
         tabBorderRadius   : bcssProps.borderRadius,
         tabBorderRadiusSm : bcssProps.borderRadiusSm,
         tabBorderRadiusLg : bcssProps.borderRadiusLg,
