@@ -871,13 +871,13 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
     ]));
     
     // colors:
-    const [iconColor, iconColorRefs] = usesIconColor();
-    const [         , backgRefs    ] = usesBackg();
+    const [         , backgRefs                 ] = usesBackg();
+    const [         ,              , borderDecls] = usesBorder();
+    const [iconColor, iconColorRefs             ] = usesIconColor();
     
     // borders:
-    const [,                 , borderDecls      ] = usesBorder();
-    const [, borderStrokeRefs,                  ] = usesBorderStroke();
-    const [,                 , borderRadiusDecls] = usesBorderRadius();
+    const [borderStroke, borderStrokeRefs,                  ] = usesBorderStroke();
+    const [            ,                 , borderRadiusDecls] = usesBorderRadius();
     
     
     
@@ -961,10 +961,14 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                         layout({
                             // children:
                             ...children(listItemElm, [
+                                imports([
+                                    // borders:
+                                    borderStroke(),
+                                ]),
                                 layout({
                                     // borders:
+                                    ...expandBorderStroke(), // expand borderStroke css vars
                                     [borderDecls.borderCol] : 'inherit', // change borderColor independent to child's theme color
-                                    borderWidth             : borderStrokeRefs.borderWidth, 
                                     backgroundClip          : 'padding-box',
                                     
                                     
@@ -1150,9 +1154,13 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                             
                             // children:
                             ...children(listItemElm, [
+                                imports([
+                                    // borders:
+                                    borderStroke(),
+                                ]),
                                 layout({
                                     // borders:
-                                    borderWidth  : borderStrokeRefs.borderWidth, 
+                                    ...expandBorderStroke(), // expand borderStroke css vars
                                     
                                     // big rounded corners on top:
                                     [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.pill,
