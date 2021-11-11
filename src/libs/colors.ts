@@ -1,5 +1,6 @@
 // cssfn:
 import type {
+    Optional,
     Dictionary,
     ValueOf,
     DictionaryOf,
@@ -18,9 +19,9 @@ import Color                from 'color'        // color utilities
 
 // might be removed if *css 4* color() -or- color-mod() was released
 
+const textColor = (color: Color) => (color.isLight() ? themes.dark : themes.light)
 const thinLevel = 0.5
 const thinColor = (color: Color) => color.alpha(thinLevel)
-const textColor = (color: Color) => (color.isLight() ? themes.dark : themes.light)
 const mildLevel = 0.8
 const mildColor = (color: Color) => color.mix(page1.backg as Color, mildLevel)
 const boldLevel = 0.8
@@ -75,17 +76,6 @@ const page3 = {
     foregBold : boldColor(page2.foreg),
 };
 
-const themesThin = {
-    primaryThin   : thinColor(themes.primary),
-    secondaryThin : thinColor(themes.secondary),
-    successThin   : thinColor(themes.success),
-    infoThin      : thinColor(themes.info),
-    warningThin   : thinColor(themes.warning),
-    dangerThin    : thinColor(themes.danger),
-    lightThin     : thinColor(themes.light),
-    darkThin      : thinColor(themes.dark),
-};
-
 const themesText = {
     primaryText   : textColor(themes.primary),
     secondaryText : textColor(themes.secondary),
@@ -95,6 +85,17 @@ const themesText = {
     dangerText    : textColor(themes.danger),
     lightText     : textColor(themes.light),
     darkText      : textColor(themes.dark),
+};
+
+const themesThin = {
+    primaryThin   : thinColor(themes.primary),
+    secondaryThin : thinColor(themes.secondary),
+    successThin   : thinColor(themes.success),
+    infoThin      : thinColor(themes.info),
+    warningThin   : thinColor(themes.warning),
+    dangerThin    : thinColor(themes.danger),
+    lightThin     : thinColor(themes.light),
+    darkThin      : thinColor(themes.dark),
 };
 
 const themesMild = {
@@ -125,8 +126,8 @@ const allColors = {
     ...page1,
     ...page2,
     ...page3,
-    ...themesThin,
     ...themesText,
+    ...themesThin,
     ...themesMild,
     ...themesBold,
 };
@@ -140,7 +141,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return new Proxy(allColors as unknown as ColorProxy, {
         get: (t, prop: string) => {
             const color = (allColors as Dictionary<Color>)[prop];
-            return (color.alpha() === 1) ? color.hex() : color.toString();
+            if (color === undefined) return undefined;
+            return stringColor(color);
         },
     });
 }, { prefix: 'col' });
@@ -179,3 +181,27 @@ export {
     themesProxy     as themes,
     themesTextProxy as themesText,
 }
+
+
+
+// utilities:
+const stringColor = (color: Color) => (color.alpha() === 1) ? color.hex() : color.toString();
+
+export const defineTheme = (name: string, color: Optional<Color|string>) => {
+    if (!color) {
+        (cssVals as DictionaryOf<typeof cssVals>)[   name      ] = undefined as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`] = undefined as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`] = undefined as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Mild`] = undefined as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Bold`] = undefined as any;
+    }
+    else {
+        if (typeof(color) === 'string') color = Color(color);
+        
+        (cssVals as DictionaryOf<typeof cssVals>)[   name      ] = color            as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`] = textColor(color) as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`] = thinColor(color) as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Mild`] = mildColor(color) as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Bold`] = boldColor(color) as any;
+    } // if
+};
