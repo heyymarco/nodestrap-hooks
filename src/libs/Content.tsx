@@ -66,7 +66,6 @@ import {
     normalizeOrientationRule,
     usesOrientationRule,
     
-    usesBorder,
     usesBorderStroke,
     expandBorderStroke,
     usesBorderRadius,
@@ -640,11 +639,7 @@ const mediaElm = ['figure', 'img', 'svg', 'video', '.media'];
 export const usesContentMediaLayout = () => {
     // dependencies:
     
-    // colors:
-    const [border               ] = usesBorder();
-    
     // borders:
-    const [borderStroke         ] = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
     
     
@@ -652,12 +647,6 @@ export const usesContentMediaLayout = () => {
     return composition([
         imports([
             stripoutImage(), // clear browser's default styling on image
-            
-            // colors:
-            border(),
-            
-            // borders:
-            borderStroke(),
             
             // spacings:
             usesMediaFill(),
