@@ -139,7 +139,7 @@ export const noBackground = () => {
                 ]),
                 layout({
                     // borders:
-                    [borderStrokeDecls.borderWidth]  : 0, // noBorder if not explicitly `.outlined`
+                    [borderStrokeDecls.borderWidth]  : '0px', // noBorder if not explicitly `.outlined`
                 }),
             ]),
         ]),
