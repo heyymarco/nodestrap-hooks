@@ -382,15 +382,14 @@ export const usesCardVariants = () => {
                 layout({
                     // borders:
                     // kill borders surrounding Card:
-                    [borderStrokeDecls.borderWidth] : 0,
+                    [borderStrokeDecls.borderWidth           ] : '0px',
                     
-                 // borderRadius : 0, // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : 0,
-                    [borderRadiusDecls.borderStartEndRadius]   : 0,
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
                     // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius]   : 0,
-                    [borderRadiusDecls.borderEndEndRadius]     : 0,
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                 }),
             ]),
             rule(['.flat', '.joined'], [
@@ -400,7 +399,7 @@ export const usesCardVariants = () => {
                         layout({
                             // borders:
                             // kill separator between items:
-                            [borderStrokeDecls.borderWidth] : 0,
+                            [borderStrokeDecls.borderWidth] : '0px',
                         }),
                     ]),
                 }),
