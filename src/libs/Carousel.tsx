@@ -1237,7 +1237,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     targetRef={(infiniteLoop ? listDummyRef : listRef)}
                     interpolation={true}
                 >
-                    {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
+                    {React.Children.map(children, (child, index) => (
                         <NavscrollItem
                             // essentials:
                             key={index}
