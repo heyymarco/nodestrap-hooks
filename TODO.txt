@@ -1,4 +1,5 @@
 top priority:
+fix border on bullet on Carousel
 
 
 
