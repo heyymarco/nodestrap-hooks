@@ -936,7 +936,7 @@ export const expandBorderStroke = (cssProps?: { border: Cust.Ref, borderWidth: C
         // borders:
         // cssProps.borderStroke** => ref.borderStroke**
         ...(cssProps ? {
-            [borderStrokeDecls.border]      : cssProps.border,
+            [borderStrokeDecls.border     ] : cssProps.border,
             [borderStrokeDecls.borderWidth] : cssProps.borderWidth,
         } : null),
         border      : borderStrokeRefs.border,      // all border properties
@@ -985,9 +985,9 @@ export const expandBorderRadius = (cssProps?: { borderRadius: Cust.Ref }): PropL
         // cssProps.borderRadius** => ref.borderRadius**
         ...(cssProps ? {
             [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius,
-            [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius,
-            [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius,
-            [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius,
+            [borderRadiusDecls.borderStartEndRadius  ] : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndStartRadius  ] : cssProps.borderRadius,
+            [borderRadiusDecls.borderEndEndRadius    ] : cssProps.borderRadius,
         } : null),
         borderRadius           : undefined as unknown as null,            // delete short prop
         borderStartStartRadius : borderRadiusRefs.borderStartStartRadius, // overwrite radius prop
@@ -1037,7 +1037,7 @@ export const expandPadding = (cssProps?: { paddingInline: Cust.Ref, paddingBlock
         // cssProps.padding** => ref.padding**
         ...(cssProps ? {
             [paddingDecls.paddingInline] : cssProps.paddingInline,
-            [paddingDecls.paddingBlock]  : cssProps.paddingBlock,
+            [paddingDecls.paddingBlock ] : cssProps.paddingBlock,
         } : null),
         padding       : undefined as unknown as null, // delete short prop
         paddingInline : paddingRefs.paddingInline,    // overwrite padding prop
