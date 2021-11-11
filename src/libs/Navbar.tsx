@@ -1219,7 +1219,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
                     e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
                 }}
             >
-                {(Array.isArray(children) ? children : [children]).map((child, index) => (
+                {React.Children.map(children, (child, index) => (
                     isTypeOf(child, NavbarMenu)
                     ?
                     <child.type
