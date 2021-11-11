@@ -714,7 +714,7 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
     
     // jsx fn props:
     const remainingValueRatio = 1 - Math.min((
-        (Array.isArray(children) ? children : [children]).map((child) => {
+        React.Children.toArray(children).map((child) => {
             // <ProgressBar> component:
             if (isTypeOf(child, ProgressBar)) {
                 // fn props:
@@ -771,7 +771,7 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
             ]}
         >
             { orientationVertical ? restProgressBar : null }
-            { orientationVertical ? (Array.isArray(children) ? children : [children]).slice().reverse() : children }
+            { orientationVertical ? React.Children.toArray(children).slice().reverse() : children }
             { orientationVertical ? null : restProgressBar }
         </Basic>
     );
