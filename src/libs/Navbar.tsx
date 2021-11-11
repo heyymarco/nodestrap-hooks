@@ -437,8 +437,8 @@ export const usesSecondaryLayout = () => {
             
             
             // spacings:
-            [paddingDecls.paddingInline] : 0, // discard padding
-            [paddingDecls.paddingBlock]  : 0, // discard padding
+            [paddingDecls.paddingInline] : '0px', // discard padding
+            [paddingDecls.paddingBlock ] : '0px', // discard padding
         }),
     ]);
 };
@@ -559,16 +559,18 @@ export const usesMenuLayout = () => {
         ]),
         layout({
             // borders:
-            [borderStrokeDecls.borderWidth]            : 0, // discard border
-            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
-            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
-            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
-            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+            [borderStrokeDecls.borderWidth           ] : '0px', // discard border
+            // remove rounded corners on top:
+            [borderRadiusDecls.borderStartStartRadius] : '0px',
+            [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+            // remove rounded corners on bottom:
+            [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+            [borderRadiusDecls.borderEndEndRadius    ] : '0px',
             
             
             
             // sizes:
-            flex         : [[0, 1, 'auto']], // ungrowable, shrinkable (if menu allows wrap), initial from it's width
+            flex : [[0, 1, 'auto']], // ungrowable, shrinkable (if menu allows wrap), initial from it's width
             
             
             
