@@ -147,7 +147,7 @@ export const calculateSemanticRole = <TElement extends HTMLElement = HTMLElement
     
     const children   = props.children;
     const actionCtrl = props.actionCtrl ?? true;
-    if (children && (Array.isArray(children) ? children : [children]).some((child) =>
+    if (React.Children.toArray(children).some((child) =>
         isTypeOf(child, ListItem)
         ?
         !(child.props.actionCtrl ?? actionCtrl) // ListItem is not an actionCtrl => not a menu item => role='dialog'
