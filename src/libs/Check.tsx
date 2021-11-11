@@ -584,13 +584,12 @@ export const usesCheckVariants = () => {
                             
                             
                             // borders:
-                         // borderRadius : '0.5em', // make circle corners // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                             // circle corners on top:
                             [borderRadiusDecls.borderStartStartRadius] : '0.5em',
-                            [borderRadiusDecls.borderStartEndRadius]   : '0.5em',
+                            [borderRadiusDecls.borderStartEndRadius  ] : '0.5em',
                             // circle corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius]   : '0.5em',
-                            [borderRadiusDecls.borderEndEndRadius]     : '0.5em',
+                            [borderRadiusDecls.borderEndStartRadius  ] : '0.5em',
+                            [borderRadiusDecls.borderEndEndRadius    ] : '0.5em',
                             
                             
                             
