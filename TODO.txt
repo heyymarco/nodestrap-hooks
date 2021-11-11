@@ -1,5 +1,5 @@
 top priority:
-Card => add flat|flush|joined
+fix Card flat => media separator must be gone
 Media => for profile image, video, static images, gifs, svgs, etc
 
 

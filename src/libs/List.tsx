@@ -395,6 +395,9 @@ export const usesListSeparatorItemLayout = () => {
     
     // dependencies:
     
+    // colors:
+    const [, borderRefs    ] = usesBorder();
+    
     // spacings:
     const [, , paddingDecls] = usesPadding();
     
@@ -421,7 +424,7 @@ export const usesListSeparatorItemLayout = () => {
             ...children('hr', [
                 layout({
                     // foregrounds:
-                    foreg            : 'inherit',
+                    foreg            : borderRefs.borderCol,
                     
                     
                     
