@@ -871,7 +871,6 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
     ]));
     
     // colors:
-    const [         , backgRefs                 ] = usesBackg();
     const [         ,              , borderDecls] = usesBorder();
     const [iconColor, iconColorRefs             ] = usesIconColor();
     
@@ -1004,7 +1003,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                                 layout({
                                                     // borders:
                                                     // hide parent border right:
-                                                    borderInlineEndColor   : backgRefs.backgCol,
+                                                    borderInlineEndWidth   : '0px',
                                                     // add rounded corners on left:
                                                     [borderRadiusDecls.borderStartStartRadius] : cssProps.tabBorderRadius,
                                                     [borderRadiusDecls.borderEndStartRadius  ] : cssProps.tabBorderRadius,
@@ -1014,7 +1013,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                                 layout({
                                                     // borders:
                                                     // hide parent border bottom:
-                                                    borderBlockEndColor    : backgRefs.backgCol,
+                                                    borderBlockEndWidth    : '0px',
                                                     // add rounded corners on top:
                                                     [borderRadiusDecls.borderStartStartRadius] : cssProps.tabBorderRadius,
                                                     [borderRadiusDecls.borderStartEndRadius  ] : cssProps.tabBorderRadius,
