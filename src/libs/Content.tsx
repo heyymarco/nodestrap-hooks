@@ -196,7 +196,15 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                         variants([
                             rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                    /*
+                                        if the_current_element is a_child_of_container and also a_separator,
+                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        so we can calculate the correct inner_borderRadius.
+                                        
+                                        that's why we set `!important` to the `containerBorderWidth`.
+                                    */
+                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    
                                     [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
                                 }),
@@ -211,7 +219,15 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                             ]),
                             rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                    /*
+                                        if the_current_element is a_child_of_container and also a_separator,
+                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        so we can calculate the correct inner_borderRadius.
+                                        
+                                        that's why we set `!important` to the `containerBorderWidth`.
+                                    */
+                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    
                                     [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
                                 }),
@@ -235,7 +251,15 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                         variants([
                             rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                    /*
+                                        if the_current_element is a_child_of_container and also a_separator,
+                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        so we can calculate the correct inner_borderRadius.
+                                        
+                                        that's why we set `!important` to the `containerBorderWidth`.
+                                    */
+                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    
                                     [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
                                 }),
@@ -250,7 +274,15 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                             ]),
                             rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
                                 vars({
-                                    [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                                    /*
+                                        if the_current_element is a_child_of_container and also a_separator,
+                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        so we can calculate the correct inner_borderRadius.
+                                        
+                                        that's why we set `!important` to the `containerBorderWidth`.
+                                    */
+                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    
                                     [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
                                     [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
                                 }),
@@ -272,7 +304,15 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                     // children:
                     ...children(itemsSelector, [
                         vars({
-                            [containerDecls.containerBorderWidth           ] : 'inherit', // reads parent's prop
+                            /*
+                                if the_current_element is a_child_of_container and also a_separator,
+                                the deleted `containerBorderWidth` in separator must be pointed to container,
+                                so we can calculate the correct inner_borderRadius.
+                                
+                                that's why we set `!important` to the `containerBorderWidth`.
+                            */
+                            [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                            
                             [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
                             [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
                             [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
@@ -315,6 +355,9 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
     
+    // layouts:
+    const [, , containerDecls   ] = usesContainer();
+    
     
     
     return composition([
@@ -326,6 +369,17 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
             
             // shadows:
             boxShadow         : undefined, // remove shadow
+        }),
+        vars({
+            /*
+                if the_current_element is a container,
+                the `containerBorderWidth` will be deleted (not follows `borderWidth`),
+                because the_current_element becomes a separator.
+                
+                use `0px` instead of 0,
+                because the value will be calculated in `calc()` expression.
+            */
+            [containerDecls.containerBorderWidth] : '0px',
         }),
         
         // removes unecessary border stroke:
@@ -395,6 +449,9 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
     // borders:
     const [, , borderRadiusDecls] = usesBorderRadius();
     
+    // layouts:
+    const [, , containerDecls   ] = usesContainer();
+    
     
     
     return composition([
@@ -406,6 +463,17 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
             
             // shadows:
             boxShadow         : undefined, // remove shadow
+        }),
+        vars({
+            /*
+                if the_current_element is a container,
+                the `containerBorderWidth` will be deleted (not follows `borderWidth`),
+                because the_current_element becomes a separator.
+                
+                use `0px` instead of 0,
+                because the value will be calculated in `calc()` expression.
+            */
+            [containerDecls.containerBorderWidth] : '0px',
         }),
         
         // removes unecessary border stroke:
