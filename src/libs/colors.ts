@@ -189,6 +189,12 @@ const stringColor = (color: Color) => (color.alpha() === 1) ? color.hex() : colo
 
 export const defineTheme = (name: string, color: Optional<Color|string>) => {
     if (!color) {
+        delete (themes     as DictionaryOf<typeof themes>    )[   name      ];
+        delete (themesText as DictionaryOf<typeof themesText>)[`${name}Text`];
+        delete (themesThin as DictionaryOf<typeof themesThin>)[`${name}Thin`];
+        delete (themesMild as DictionaryOf<typeof themesMild>)[`${name}Mild`];
+        delete (themesBold as DictionaryOf<typeof themesBold>)[`${name}Bold`];
+        
         (cssVals as DictionaryOf<typeof cssVals>)[   name      ] = undefined as any;
         (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`] = undefined as any;
         (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`] = undefined as any;
@@ -198,10 +204,22 @@ export const defineTheme = (name: string, color: Optional<Color|string>) => {
     else {
         if (typeof(color) === 'string') color = Color(color);
         
-        (cssVals as DictionaryOf<typeof cssVals>)[   name      ] = color            as any;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`] = textColor(color) as any;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`] = thinColor(color) as any;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Mild`] = mildColor(color) as any;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Bold`] = boldColor(color) as any;
+        const theme     = color            as any;
+        const themeText = textColor(color) as any;
+        const themeThin = thinColor(color) as any;
+        const themeMild = mildColor(color) as any;
+        const themeBold = boldColor(color) as any;
+        
+        (themes     as DictionaryOf<typeof themes>    )[   name      ] = theme;
+        (themesText as DictionaryOf<typeof themesText>)[`${name}Text`] = themeText;
+        (themesThin as DictionaryOf<typeof themesThin>)[`${name}Thin`] = themeThin;
+        (themesMild as DictionaryOf<typeof themesMild>)[`${name}Mild`] = themeMild;
+        (themesBold as DictionaryOf<typeof themesBold>)[`${name}Bold`] = themeBold;
+        
+        (cssVals as DictionaryOf<typeof cssVals>)[   name      ] = theme;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`] = themeText;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`] = themeThin;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Mild`] = themeMild;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Bold`] = themeBold;
     } // if
 };
