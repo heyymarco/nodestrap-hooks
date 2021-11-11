@@ -1006,7 +1006,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     variantClasses={itemsVariantClasses}
                     stateClasses={itemsStateClasses}
                 >
-                {(Array.isArray(children) ? children : [children]).map((child, index) => (
+                {React.Children.map(children, (child, index) => (
                     isTypeOf(child, CarouselItem)
                     ?
                     <child.type
@@ -1086,7 +1086,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         normalizeScrollItems(itemsElm);
                     }}
                 >
-                {(Array.isArray(children) ? children : [children]).map((child, index) => (
+                {React.Children.map(children, (child, index) => (
                     <div
                         // essentials:
                         key={index}
