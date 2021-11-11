@@ -218,14 +218,19 @@ export const usesNudeVariant = () => {
                     
                     
                     // borders:
-                    [borderStrokeDecls.borderWidth]  : 0, // discard border
-                 // [borderRadiusDecls.borderRadius] : 0, // do not discard borderRadius, causing boxShadow looks weird
+                    [borderStrokeDecls.borderWidth]  : '0px', // discard border
+                 // // remove rounded corners on top:
+                 // [borderRadiusDecls.borderStartStartRadius] : '0px', // do not discard borderRadius, causing boxShadow looks weird
+                 // [borderRadiusDecls.borderStartEndRadius]   : '0px', // do not discard borderRadius, causing boxShadow looks weird
+                 // // remove rounded corners on bottom:
+                 // [borderRadiusDecls.borderEndStartRadius]   : '0px', // do not discard borderRadius, causing boxShadow looks weird
+                 // [borderRadiusDecls.borderEndEndRadius]     : '0px', // do not discard borderRadius, causing boxShadow looks weird
                     
                     
                     
                     // spacings:
-                    [paddingDecls.paddingInline] : 0, // discard padding
-                    [paddingDecls.paddingBlock]  : 0, // discard padding
+                    [paddingDecls.paddingInline] : '0px', // discard padding
+                    [paddingDecls.paddingBlock]  : '0px', // discard padding
                 }),
             ]),
         ]),
