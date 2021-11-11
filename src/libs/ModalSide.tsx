@@ -320,24 +320,6 @@ export const usesModalSideVariants = () => {
             sizes(),
         ]),
         variants([
-            rule('.inlineStart', [
-                layout({
-                    // layouts:
-                    
-                    // child default sizes:
-                    justifyItems : 'start',   // align left horizontally
-                    alignItems   : 'stretch', // stretch    vertically
-                }),
-            ]),
-            rule('.inlineEnd', [
-                layout({
-                    // layouts:
-                    
-                    // child default sizes:
-                    justifyItems : 'end',     // align left horizontally
-                    alignItems   : 'stretch', // stretch    vertically
-                }),
-            ]),
             rule('.blockStart', [
                 layout({
                     // layouts:
@@ -354,6 +336,24 @@ export const usesModalSideVariants = () => {
                     // child default sizes:
                     justifyItems : 'stretch', // stretch   horizontally
                     alignItems   : 'end',     // align top vertically
+                }),
+            ]),
+            rule('.inlineStart', [
+                layout({
+                    // layouts:
+                    
+                    // child default sizes:
+                    justifyItems : 'start',   // align left horizontally
+                    alignItems   : 'stretch', // stretch    vertically
+                }),
+            ]),
+            rule('.inlineEnd', [
+                layout({
+                    // layouts:
+                    
+                    // child default sizes:
+                    justifyItems : 'end',     // align left horizontally
+                    alignItems   : 'stretch', // stretch    vertically
                 }),
             ]),
         ]),
