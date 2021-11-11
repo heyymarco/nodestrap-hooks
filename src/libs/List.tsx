@@ -1501,7 +1501,7 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                 listVariant.class,
             ]}
         >
-            {children && (Array.isArray(children) ? children : [children]).map((child, index) => {
+            {React.Children.map(children, (child, index) => {
                 // handlers:
                 const handleAnimationEnd = (e: React.AnimationEvent<HTMLElement>) => {
                     // triggers `List`'s onAnimationEnd event
