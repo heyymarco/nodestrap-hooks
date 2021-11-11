@@ -173,47 +173,15 @@ export const usesModalSideElementVariants = () => {
     
     return composition([
         variants([
-            rule('.inlineStart>&', [
-                layout({
-                    // children:
-                    ...children(['&', '*'], [ // Card
-                        layout({
-                            // borders:
-                         // borderStartStartRadius : 0, // remove border radius on left_top
-                         // borderEndStartRadius   : 0, // remove border radius on left_bottom
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            [borderRadiusDecls.borderStartStartRadius] : 0, // remove border radius on left_top
-                            [borderRadiusDecls.borderEndStartRadius]   : 0, // remove border radius on left_bottom
-                        }),
-                    ]),
-                }),
-            ]),
-            rule('.inlineEnd>&', [
-                layout({
-                    // children:
-                    ...children(['&', '*'], [ // Card
-                        layout({
-                            // borders:
-                         // borderStartEndRadius : 0, // remove border radius on right_top
-                         // borderEndEndRadius   : 0, // remove border radius on right_bottom
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            [borderRadiusDecls.borderStartEndRadius] : 0, // remove border radius on right_top
-                            [borderRadiusDecls.borderEndEndRadius]   : 0, // remove border radius on right_bottom
-                        }),
-                    ]),
-                }),
-            ]),
             rule('.blockStart>&', [
                 layout({
                     // children:
                     ...children(['&', '*'], [ // Card
                         layout({
                             // borders:
-                         // borderStartStartRadius : 0, // remove border radius on top_left
-                         // borderStartEndRadius   : 0, // remove border radius on top_right
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            [borderRadiusDecls.borderStartStartRadius] : 0, // remove border radius on top_left
-                            [borderRadiusDecls.borderStartEndRadius]   : 0, // remove border radius on top_right
+                            // remove rounded corners on top:
+                            [borderRadiusDecls.borderStartStartRadius] : '0px',
+                            [borderRadiusDecls.borderStartEndRadius  ] : '0px',
                         }),
                     ]),
                 }),
@@ -224,11 +192,35 @@ export const usesModalSideElementVariants = () => {
                     ...children(['&', '*'], [ // Card
                         layout({
                             // borders:
-                         // borderEndStartRadius : 0, // remove border radius on bottom_left
-                         // borderEndEndRadius   : 0, // remove border radius on bottom_right
-                            // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
-                            [borderRadiusDecls.borderEndStartRadius] : 0, // remove border radius on bottom_left
-                            [borderRadiusDecls.borderEndEndRadius]   : 0, // remove border radius on bottom_right
+                            // remove rounded corners on bottom:
+                            [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                            [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                        }),
+                    ]),
+                }),
+            ]),
+            rule('.inlineStart>&', [
+                layout({
+                    // children:
+                    ...children(['&', '*'], [ // Card
+                        layout({
+                            // borders:
+                            // remove rounded corners on left:
+                            [borderRadiusDecls.borderStartStartRadius] : '0px',
+                            [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                        }),
+                    ]),
+                }),
+            ]),
+            rule('.inlineEnd>&', [
+                layout({
+                    // children:
+                    ...children(['&', '*'], [ // Card
+                        layout({
+                            // borders:
+                            // remove rounded corners on right:
+                            [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                            [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                         }),
                     ]),
                 }),
