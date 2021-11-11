@@ -265,20 +265,18 @@ export const usesButtonVariants = () => {
                 ]),
                 layout({
                     // borders:
-                 // borderRadius   : borderRadiuses.sm, // small rounded corner // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // small rounded corners on top:
                     [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.sm,
-                    [borderRadiusDecls.borderStartEndRadius]   : borderRadiuses.sm,
+                    [borderRadiusDecls.borderStartEndRadius  ] : borderRadiuses.sm,
                     // small rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius]   : borderRadiuses.sm,
-                    [borderRadiusDecls.borderEndEndRadius]     : borderRadiuses.sm,
+                    [borderRadiusDecls.borderEndStartRadius  ] : borderRadiuses.sm,
+                    [borderRadiusDecls.borderEndEndRadius    ] : borderRadiuses.sm,
                     
                     
                     
                     // spacings:
-                 // padding        : spacers.xs, // do not modify padding directly, but use our custom vars so the children can calculate their negative margin (if any):
                     [paddingDecls.paddingInline] : spacers.xs,
-                    [paddingDecls.paddingBlock]  : spacers.xs,
+                    [paddingDecls.paddingBlock ] : spacers.xs,
                     
                     
                     
