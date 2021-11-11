@@ -207,7 +207,6 @@ export const usesBadgeVariants = () => {
             rule(['.pill', '.circle'], [
                 layout({
                     // borders:
-                 // borderRadius : borderRadiuses.pill, // big rounded corner // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // big rounded corners on top:
                     [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.pill,
                     [borderRadiusDecls.borderStartEndRadius]   : borderRadiuses.pill,
