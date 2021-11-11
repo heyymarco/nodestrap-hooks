@@ -453,16 +453,18 @@ export const usesProgressBarLayout = () => {
                     
                     
                     // borders:
-                    [borderStrokeDecls.borderWidth]            : 0, // discard border
-                    [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
-                    [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
-                    [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
-                    [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+                    [borderStrokeDecls.borderWidth           ] : '0px', // discard border
+                    // remove rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                    // remove rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                     
                     
                     
                     // sizes:
-                    flex      : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+                    flex : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
                     
                     
                     
