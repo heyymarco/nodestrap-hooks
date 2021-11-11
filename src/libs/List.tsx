@@ -967,10 +967,8 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                                     // hide parent border right:
                                                     borderInlineEndColor   : backgRefs.backgCol,
                                                     // add rounded corners on left:
-                                                 // borderStartStartRadius : cssProps.tabBorderRadius,
-                                                 // borderEndStartRadius   : cssProps.tabBorderRadius,
                                                     [borderRadiusDecls.borderStartStartRadius] : cssProps.tabBorderRadius,
-                                                    [borderRadiusDecls.borderEndStartRadius]   : cssProps.tabBorderRadius,
+                                                    [borderRadiusDecls.borderEndStartRadius  ] : cssProps.tabBorderRadius,
                                                 }),
                                             ]),
                                             rule(`${orientationInlineSelector}&`, [ // inline
@@ -979,10 +977,8 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                                     // hide parent border bottom:
                                                     borderBlockEndColor    : backgRefs.backgCol,
                                                     // add rounded corners on top:
-                                                 // borderStartStartRadius : cssProps.tabBorderRadius,
-                                                 // borderStartEndRadius   : cssProps.tabBorderRadius,
                                                     [borderRadiusDecls.borderStartStartRadius] : cssProps.tabBorderRadius,
-                                                    [borderRadiusDecls.borderStartEndRadius]   : cssProps.tabBorderRadius,
+                                                    [borderRadiusDecls.borderStartEndRadius  ] : cssProps.tabBorderRadius,
                                                 }),
                                             ]),
                                         ]),
