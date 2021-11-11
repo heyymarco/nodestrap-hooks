@@ -420,8 +420,8 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : 0,
-                    [borderRadiusDecls.borderStartEndRadius]   : 0,
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
                 }),
             ]),
             rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
@@ -429,8 +429,8 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius]   : 0,
-                    [borderRadiusDecls.borderEndEndRadius]     : 0,
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                 }),
             ]),
         ]),
@@ -514,8 +514,8 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on left:
-                    [borderRadiusDecls.borderStartStartRadius] : 0,
-                    [borderRadiusDecls.borderEndStartRadius]   : 0,
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
                 }),
             ]),
             rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
@@ -523,8 +523,8 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
                     // borders:
                     // do not modify borderRadius directly, but use our custom vars so the children can calculate their inner borderRadius:
                     // remove rounded corners on right:
-                    [borderRadiusDecls.borderStartEndRadius]   : 0,
-                    [borderRadiusDecls.borderEndEndRadius]     : 0,
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
                 }),
             ]),
         ]),
@@ -675,10 +675,12 @@ export const usesContentMediaLayout = () => {
             // borders:
             ...expandBorderStroke(), // expand borderStroke css vars
             ...expandBorderRadius(), // expand borderRadius css vars
-            [borderRadiusDecls.borderStartStartRadius] : 0, // discard borderRadius
-            [borderRadiusDecls.borderStartEndRadius]   : 0, // discard borderRadius
-            [borderRadiusDecls.borderEndStartRadius]   : 0, // discard borderRadius
-            [borderRadiusDecls.borderEndEndRadius]     : 0, // discard borderRadius
+            // remove rounded corners on top:
+            [borderRadiusDecls.borderStartStartRadius] : '0px',
+            [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+            // remove rounded corners on bottom:
+            [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+            [borderRadiusDecls.borderEndEndRadius    ] : '0px',
         }),
         imports([
             // borders:
