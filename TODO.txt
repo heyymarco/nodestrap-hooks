@@ -1,10 +1,9 @@
 top priority:
-fix Card flat => media separator must be gone
-Media => for profile image, video, static images, gifs, svgs, etc
 
 
 
 medium priority:
+Media => for profile image, video, static images, gifs, svgs, etc
 Range => dial variant
 
 
