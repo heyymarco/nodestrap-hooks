@@ -283,7 +283,7 @@ export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupPr
             // variants:
             mild={props.mild ?? false}
         >
-            {children && (Array.isArray(children) ? children : [children]).map((child, index) => (
+            {React.Children.map(children, (child, index) => (
                 <GroupItem
                     // essentials:
                     key={index}
