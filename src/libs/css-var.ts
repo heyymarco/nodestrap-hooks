@@ -1,10 +1,10 @@
 // cssfn:
 import type {
     Dictionary,
-}                           from './types'      // cssfn's types
+}                           from './types'       // cssfn's types
 import type {
     Cust,
-}                           from './css-types'  // ts defs support for cssfn
+}                           from './css-types'   // ts defs support for cssfn
 
 
 
