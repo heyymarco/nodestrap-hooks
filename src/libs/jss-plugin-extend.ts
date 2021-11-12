@@ -7,7 +7,7 @@ import type {
     StyleSheet,
 }                           from 'jss'           // base technology of our cssfn components
 
-// others:
+// others libs:
 import warning              from 'tiny-warning'
 
 

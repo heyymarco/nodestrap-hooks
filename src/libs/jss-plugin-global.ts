@@ -6,6 +6,7 @@ import {
     RuleList,
     StyleSheet,
 }                           from 'jss'           // base technology of our cssfn components
+// custom jss-plugins:
 import type {
     Style,
 }                           from './jss-plugin-extend'
