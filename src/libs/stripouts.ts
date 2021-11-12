@@ -17,7 +17,7 @@ import {
     isActive,
     isFocus,
     isFocusVisible,
-}                           from './cssfn'      // cssfn core
+}                           from './cssfn'       // cssfn core
 
 
 
