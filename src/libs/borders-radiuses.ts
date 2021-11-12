@@ -2,8 +2,8 @@
 import type {
     Prop,
     Cust,
-}                           from './css-types'  // ts defs support for jss
-import createCssConfig      from './css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
+}                           from './css-types'   // ts defs support for cssfn
+import createCssConfig      from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 
 
