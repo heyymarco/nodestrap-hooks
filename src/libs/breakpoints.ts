@@ -8,7 +8,7 @@ import {
     // rules:
     rule,
     noRule,
-}                           from './cssfn'      // cssfn core
+}                           from './cssfn'       // cssfn core
 
 
 
