@@ -11,7 +11,7 @@ import {
     
     CreateGenerateId,
     create as createJss,
-}                           from 'jss'          // base technology of our cssfn components
+}                           from 'jss'           // base technology of our cssfn components
 // official jss-plugins:
 import jssPluginNested      from 'jss-plugin-nested'
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
@@ -37,16 +37,16 @@ import type {
     Dictionary,
     ValueOf,
     DictionaryOf,
-}                           from './types'      // cssfn's types
+}                           from './types'       // cssfn's types
 import type {
     Prop,
     PropEx,
     Cust,
-}                           from './css-types'  // ts defs support for jss
+}                           from './css-types'   // ts defs support for cssfn
 
-// utilities:
-import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
-import { camelCase }        from 'camel-case'   // camel-case  support for jss
+// others libs:
+import { pascalCase }       from 'pascal-case'   // pascal-case support for jss
+import { camelCase }        from 'camel-case'    // camel-case  support for jss
 import warning              from 'tiny-warning'
 
 
