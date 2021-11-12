@@ -5,11 +5,11 @@ import type {
     Dictionary,
     ValueOf,
     DictionaryOf,
-}                           from './types'      // cssfn's types
+}                           from './types'       // cssfn's types
 import type {
     PropEx,
     Cust,
-}                           from './css-types'  // ts defs support for cssfn
+}                           from './css-types'   // ts defs support for cssfn
 import {
     // general types:
     StyleSheet,
@@ -27,11 +27,11 @@ import {
     // rules:
     rule,
     noRule,
-}                           from './cssfn'      // cssfn core
+}                           from './cssfn'       // cssfn core
 
-// utilities:
-import { pascalCase }       from 'pascal-case'  // pascal-case support for jss
-import { camelCase }        from 'camel-case'   // camel-case  support for jss
+// others libs:
+import { pascalCase }       from 'pascal-case'   // pascal-case support for jss
+import { camelCase }        from 'camel-case'    // camel-case  support for jss
 
 
 
