@@ -2,13 +2,13 @@
 import type {
     PropEx,
     Cust,
-}                           from './css-types'  // ts defs support for jss
-import createCssConfig      from './css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
+}                           from './css-types'   // ts defs support for cssfn
+import createCssConfig      from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 
 
 // general types:
-type Length = PropEx.Length | Cust.Expr
+export type Length = PropEx.Length | Cust.Expr
 
 
 
