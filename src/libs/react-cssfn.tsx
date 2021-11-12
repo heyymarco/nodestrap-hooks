@@ -3,7 +3,7 @@ import {
     default as React,
     useMemo,
     useLayoutEffect,
-}                           from 'react'        // base technology of our cssfn components
+}                           from 'react'         // base technology of our cssfn components
 
 // jss:
 import {
@@ -12,7 +12,7 @@ import {
     Styles,
 
     SheetsManager,
-}                           from 'jss'          // base technology of our cssfn components
+}                           from 'jss'           // base technology of our cssfn components
 
 // cssfn:
 import type {
@@ -20,7 +20,7 @@ import type {
     SingleOrArray,
     Factory,
     ProductOrFactory,
-}                           from './types'      // cssfn's types
+}                           from './types'       // cssfn's types
 import {
     // general types:
     ClassName,
@@ -33,7 +33,7 @@ import {
     
     // cssfn hooks:
     usesCssfn,
-}                           from './cssfn'      // cssfn core
+}                           from './cssfn'       // cssfn core
 
 
 
