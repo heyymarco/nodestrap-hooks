@@ -7,11 +7,18 @@ import type {
 }                           from './types'      // cssfn's types
 import type {
     Prop,
+    Cust,
 }                           from './css-types'  // ts defs support for jss
 import createCssConfig      from './css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // other libs:
 import Color                from 'color'        // color utilities
+
+
+
+// general types:
+type ColorType = Prop.Color | Cust.Expr
+export type { ColorType as Color }
 
 
 
@@ -137,7 +144,7 @@ const allColors = {
 
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     type ColorList  = typeof allColors;
-    type ColorProxy = { [key in keyof ColorList]: Prop.Color };
+    type ColorProxy = { [key in keyof ColorList]: ColorType };
     return new Proxy(allColors as unknown as ColorProxy, {
         get: (t, prop: string) => {
             const color = (allColors as Dictionary<Color>)[prop];
