@@ -1,3 +1,4 @@
+// nodestrap components:
 import generals,
        * as general        from './general'
 import * as secondary      from './secondary'

@@ -2,32 +2,40 @@
 import type {
     Prop,
     Cust,
-}                           from '../css-types'  // ts defs support for jss
+}                           from '../css-types'   // ts defs support for cssfn
 import {
     // styles:
     createSheet,
-
-
+    
+    
+    
     // compositions:
     global,
-
-
+    
+    
+    
     // layouts:
     layout,
-
-
+    
+    
+    
     // rules:
     rule,
-}                           from '../cssfn'      // cssfn core
+}                           from '../cssfn'       // cssfn core
 import {
     createCssConfig,
-
-
+    
+    
+    
     // utilities:
     usesGeneralProps,
-}                           from '../css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
+}                           from '../css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap utilities:
+import colors               from '../colors'      // configurable colors & theming defs
+
+// nodestrap components:
 import gens                 from './general'
-import colors               from '../colors'     // configurable colors & theming defs
 
 
 

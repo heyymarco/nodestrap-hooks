@@ -1,45 +1,52 @@
 // cssfn:
 import type {
     SingleOrArray,
-}                           from '../types'      // cssfn's types
+}                           from '../types'       // cssfn's types
 import type {
     Prop,
     Cust,
-}                           from '../css-types'  // ts defs support for jss
+}                           from '../css-types'   // ts defs support for cssfn
 import {
     // general types:
     Selector,
-
-
+    
+    
+    
     // styles:
     createSheet,
-
-
+    
+    
+    
     // compositions:
     global,
-
-
+    
+    
+    
     // layouts:
     layout,
     adjacentSiblings,
-
-
+    
+    
+    
     // rules:
     variants,
     rule,
     isFirstChild,
     isLastChild,
     isNotLastChild,
-}                           from '../cssfn'      // cssfn core
+}                           from '../cssfn'       // cssfn core
 import {
     createCssConfig,
-
-
+    
+    
+    
     // utilities:
     usesGeneralProps,
     usesSuffixedProps,
     overwriteProps,
-}                           from '../css-config' // Stores & retrieves configuration using *css custom properties* (css variables)
+}                           from '../css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
+
+// nodestrap components:
 import gens                 from './general'
 
 
