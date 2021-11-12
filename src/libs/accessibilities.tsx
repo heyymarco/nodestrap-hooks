@@ -3,7 +3,7 @@ import {
     default as React,
     createContext,
     useContext,
-}                           from 'react'             // base technology of our cssfn components
+}                           from 'react'         // base technology of our nodestrap components
 
 
 
