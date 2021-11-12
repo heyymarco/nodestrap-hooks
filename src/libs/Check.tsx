@@ -557,7 +557,7 @@ export const usesCheckVariants = () => {
                     ...overwriteProps(cssDecls, usesPrefixedProps(cssProps, 'btn')),
                 }),
             ]),
-            rule('.togglerBtn', [ // todo: fix blinky when mouseUp
+            rule('.togglerBtn', [
                 layout({
                     ...children(labelElm, [
                         layout({
