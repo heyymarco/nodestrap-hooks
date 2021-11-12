@@ -1,10 +1,13 @@
-import type { Property }    from 'csstype' // ts defs support for jss
+// custom jss-plugins:
 import type { Style }       from './jss-plugin-extend'
 
 // cssfn:
 import type {
     Dictionary,
-}                           from './types'      // cssfn's types
+}                           from './types'       // cssfn's types
+
+// others libs:
+import type { Property }    from 'csstype'       // ts defs support for cssfn
 
 
 
