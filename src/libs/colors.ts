@@ -24,15 +24,16 @@ export type { ColorType as Color }
 
 // color fn:
 
-// might be removed if *css 4* color() -or- color-mod() was released
-
+// might be removed if *css 4* `color()` -or- `color-mod()` already exists
+const config = {
+    thinLevel : 0.5,
+    mildLevel : 0.8,
+    boldLevel : 0.8,
+};
 const textColor = (color: Color) => (color.isLight() ? themes.dark : themes.light)
-const thinLevel = 0.5
-const thinColor = (color: Color) => color.alpha(thinLevel)
-const mildLevel = 0.8
-const mildColor = (color: Color) => color.mix(page1.backg as Color, mildLevel)
-const boldLevel = 0.8
-const boldColor = (color: Color) => color.mix(page2.foreg as Color, boldLevel)
+const thinColor = (color: Color) => color.alpha(config.thinLevel)
+const mildColor = (color: Color) => color.mix(page1.backg as Color, config.mildLevel)
+const boldColor = (color: Color) => color.mix(page2.foreg as Color, config.boldLevel)
 
 
 
@@ -158,6 +159,43 @@ const colors = cssProps;
 
 
 
+// might be removed if *css 4* `color()` -or- `color-mod()` already exists
+export const configProxy = new Proxy(
+    config,
+    {
+        set : (config, propName: string, newValue: any): boolean => {
+            if (!(propName in config)) return false; // the requested prop does not exist
+            if ((typeof(newValue) !== 'number') || (newValue < 0) || (newValue > 1)) return false; // invalid value
+            
+            
+            
+            // compare `oldValue` & `newValue`:
+            const oldValue = (config as any)[propName];
+            if (oldValue === newValue) return true; // success but no change => no need to update
+            
+            
+            
+            // apply changes & update:
+            (config as any)[propName] = newValue;
+            
+            
+            
+            defineBackg(page1.backg);
+            defineForeg(page2.foreg);
+            for (const [themeName, themeColor] of Object.entries(themes)) {
+                defineTheme(themeName, themeColor);
+            } // for
+            
+            
+            
+            return true; // notify the operation was completed successfully
+        },
+    }
+);
+export { configProxy as config }
+
+
+
 const createProxy = <TColorGroup extends { [key in keyof TColorGroup]: Color },>(colorGroup: TColorGroup) => new Proxy(colorGroup as unknown as { [key in keyof TColorGroup]: ValueOf<typeof colors> }, {
     get: (cg, prop: string): (ValueOf<typeof colors>|undefined) => {
         if (!(prop in colorGroup)) return undefined; // not found
@@ -165,18 +203,16 @@ const createProxy = <TColorGroup extends { [key in keyof TColorGroup]: Color },>
         return (colors as DictionaryOf<typeof colors>)[prop];
     },
     set: (cg, prop: string, newValue: ValueOf<typeof colors>) => {
-        if (prop in colorGroup) { // already exists => update
-            (colors as DictionaryOf<typeof colors>)[prop] = newValue;
-        }
-        else { // create a new one and stored both to colorGroup & colors
-            const colorValue = Color(newValue);
-
-            (colorGroup as Dictionary<Color>)[prop]   = colorValue;
-
-            (cssVals as DictionaryOf<typeof cssVals>)[prop] = (colorValue.alpha() === 1) ? colorValue.hex() : colorValue.toString();
+        const colorValue = Color(newValue);
+        
+        (cssVals as DictionaryOf<typeof cssVals>)[prop] = colorValue as any;
+        
+        if (prop in colorGroup) {
+            (colorGroup as Dictionary<Color>)[prop]         = colorValue;
         } // if
         
-
+        
+        
         return true;
     },
 });
@@ -194,6 +230,46 @@ export {
 // utilities:
 const stringColor = (color: Color) => (color.alpha() === 1) ? color.hex() : color.toString();
 
+export const defineBackg = (color: Color|string, autoDefineForeg = true) => {
+    if (typeof(color) === 'string') color = Color(color);
+    
+    const backg     = color            as any;
+    const backgThin = thinColor(color) as any;
+    const backgMild = mildColor(color) as any;
+    const backgBold = boldColor(color) as any;
+    
+    page1.backg       = backg;
+    page3.backgThin   = backgThin;
+    page3.backgMild   = backgMild;
+    page3.backgBold   = backgBold;
+    
+    cssVals.backg     = backg;
+    cssVals.backgThin = backgThin;
+    cssVals.backgMild = backgMild;
+    cssVals.backgBold = backgBold;
+    
+    
+    
+    if (autoDefineForeg) defineForeg(textColor(color));
+};
+export const defineForeg = (color: Color|string) => {
+    if (typeof(color) === 'string') color = Color(color);
+    
+    const foreg     = color            as any;
+    const foregThin = thinColor(color) as any;
+    const foregMild = mildColor(color) as any;
+    const foregBold = boldColor(color) as any;
+    
+    page2.foreg       = foreg;
+    page3.foregThin   = foregThin;
+    page3.foregMild   = foregMild;
+    page3.foregBold   = foregBold;
+    
+    cssVals.foreg     = foreg;
+    cssVals.foregThin = foregThin;
+    cssVals.foregMild = foregMild;
+    cssVals.foregBold = foregBold;
+};
 export const defineTheme = (name: string, color: Optional<Color|string>) => {
     if (!color) {
         delete (themes     as DictionaryOf<typeof themes>    )[   name      ];
@@ -223,10 +299,10 @@ export const defineTheme = (name: string, color: Optional<Color|string>) => {
         (themesMild as DictionaryOf<typeof themesMild>)[`${name}Mild`] = themeMild;
         (themesBold as DictionaryOf<typeof themesBold>)[`${name}Bold`] = themeBold;
         
-        (cssVals as DictionaryOf<typeof cssVals>)[   name      ] = theme;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`] = themeText;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`] = themeThin;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Mild`] = themeMild;
-        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Bold`] = themeBold;
+        (cssVals as DictionaryOf<typeof cssVals>)[   name      ]       = theme;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`]       = themeText;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`]       = themeThin;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Mild`]       = themeMild;
+        (cssVals as DictionaryOf<typeof cssVals>)[`${name}Bold`]       = themeBold;
     } // if
 };
