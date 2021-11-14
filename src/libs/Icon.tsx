@@ -218,10 +218,10 @@ export const usesMildVariant = (factory?: Factory<StyleCollection>) => {
             ]),
             vars({
                 // delete unused imported vars:
-                [mildDecls.foregMildFn] : null,
+                [mildDecls.foregFn] : null,
             }),
             vars({
-                [mildDecls.backgMildFn] : fallbacks(
+                [mildDecls.backgFn] : fallbacks(
                  // themeRefs.backgMildImpt,  // first  priority
                     themeRefs.backgMildTheme, // second priority
                  // themeRefs.backgMildCond,  // third  priority
@@ -268,10 +268,10 @@ export const usesForeg = (foregOverwrite?: Cust.Ref) => {
                     cssProps.foreg,       // default => uses config's foreground
                 ),
                 [foregDecls.foreg]   : fallbacks(
-                 // outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
-                    mildRefs.backgMildTg,         // toggle mild     (if `usesMildVariant()` applied)
+                 // outlinedRefs.backgTg, // toggle outlined (if `usesOutlinedVariant()` applied)
+                    mildRefs.backgTg,     // toggle mild     (if `usesMildVariant()` applied)
                     
-                    foregRefs.foregFn,            // default => uses our `foregFn`
+                    foregRefs.foregFn,    // default => uses our `foregFn`
                 ),
             }),
         ]),
@@ -310,7 +310,7 @@ export const usesIconColor = () => {
         () => composition([
             vars({
                 [iconColorDecls.iconCol]       : fallbacks(
-                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
+                    outlinedRefs.foregTg,         // toggle outlined (if `usesOutlinedVariant()` applied)
                     iconColorRefs.iconColMildTg,  // toggle mild     (if `usesMildVariant()` applied)
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
@@ -321,7 +321,7 @@ export const usesIconColor = () => {
             variants([
                 isMild([
                     vars({
-                        [iconColorDecls.iconColMildTg] : outlinedRefs.foregOutlinedFn,
+                        [iconColorDecls.iconColMildTg] : outlinedRefs.foregFn,
                     }),
                 ]),
             ]),
