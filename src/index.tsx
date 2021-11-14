@@ -22,7 +22,7 @@ import reportWebVitals from './reportWebVitals';
 //     import ContainerApp                             from './apps/ContainerApp';              // div
 //     import IndicatorApp                             from './apps/IndicatorApp';              // div
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
-//             import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
+            import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
 //             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
 //                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
@@ -53,7 +53,7 @@ import reportWebVitals from './reportWebVitals';
 //                         import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
-                        import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
+//                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
 //     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
@@ -62,7 +62,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <TogglerMenuButtonApp />
+    <GroupApp />
     ,
     document.getElementById('root')
 );
