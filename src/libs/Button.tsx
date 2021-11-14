@@ -308,12 +308,12 @@ export const usesButtonVariants = () => {
                                 so we fix it:
                                 => currentColor = foreg color at `.mild` variant
                             */
-                            [foregDecls.foreg] : mildRefs.foregMildFn,
+                            [foregDecls.foreg] : mildRefs.foregFn,
                         }),
                     ]),
                     isOutlined([
                         vars({
-                            [foregDecls.foreg] : outlinedRefs.foregOutlinedFn,
+                            [foregDecls.foreg] : outlinedRefs.foregFn,
                         }),
                     ]),
                 ]),
