@@ -384,16 +384,16 @@ export const usesThemeVariant = (factory = themeOf, options = themeOptions()) =>
  */
 export const themeOf = (themeName: ThemeName) => composition([
     vars({
-        [themeDecls.foregTheme]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgTheme]         : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderTheme]        : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        [themeDecls.foregTheme        ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgTheme        ] : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderTheme       ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
         [themeDecls.foregOutlinedTheme] : themeRefs.backgTheme,
         
-        [themeDecls.foregMildTheme]     : themeRefs.borderTheme,
-        [themeDecls.backgMildTheme]     : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.foregMildTheme    ] : themeRefs.borderTheme,
+        [themeDecls.backgMildTheme    ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusTheme]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+        [themeDecls.focusTheme        ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 /**
@@ -416,29 +416,18 @@ export const usesThemeDefault = (themeName: ThemeName|null = null) => {
  * @returns A `StyleCollection` represents the conditional color definitions for the given `themeName`.
  */
 export const usesThemeCond = (themeName: ThemeName|null) => composition([
-    (themeName ? vars({
-        [themeDecls.foregCond]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgCond]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderCond]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+    vars({
+        [themeDecls.foregCond        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgCond        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderCond       ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.foregOutlinedCond]  : themeRefs.backgCond,
+        [themeDecls.foregOutlinedCond]  : !themeName ? null : themeRefs.backgCond,
         
-        [themeDecls.foregMildCond]      : themeRefs.borderCond,
-        [themeDecls.backgMildCond]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.foregMildCond    ]  : !themeName ? null : themeRefs.borderCond,
+        [themeDecls.backgMildCond    ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusCond]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
-    }) : vars({
-        [themeDecls.foregCond]          : null,
-        [themeDecls.backgCond]          : null,
-        [themeDecls.borderCond]         : null,
-        
-        [themeDecls.foregOutlinedCond]  : null,
-        
-        [themeDecls.foregMildCond]      : null,
-        [themeDecls.backgMildCond]      : null,
-        
-        [themeDecls.focusCond]          : null,
-    })),
+        [themeDecls.focusCond        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+    }),
 ]);
 /**
  * Creates an important conditional color definitions for the given `themeName`.
@@ -446,29 +435,18 @@ export const usesThemeCond = (themeName: ThemeName|null) => composition([
  * @returns A `StyleCollection` represents the important conditional color definitions for the given `themeName`.
  */
 export const usesThemeImpt = (themeName: ThemeName|null) => composition([
-    (themeName ? vars({
-        [themeDecls.foregImpt]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgImpt]          : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderImpt]         : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+    vars({
+        [themeDecls.foregImpt        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgImpt        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderImpt       ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.foregOutlinedImpt]  : themeRefs.backgImpt,
+        [themeDecls.foregOutlinedImpt]  : !themeName ? null : themeRefs.backgImpt,
         
-        [themeDecls.foregMildImpt]      : themeRefs.borderImpt,
-        [themeDecls.backgMildImpt]      : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.foregMildImpt    ]  : !themeName ? null : themeRefs.borderImpt,
+        [themeDecls.backgMildImpt    ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusImpt]          : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
-    }) : vars({
-        [themeDecls.foregImpt]          : null,
-        [themeDecls.backgImpt]          : null,
-        [themeDecls.borderImpt]         : null,
-        
-        [themeDecls.foregOutlinedImpt]  : null,
-        
-        [themeDecls.foregMildImpt]      : null,
-        [themeDecls.backgMildImpt]      : null,
-        
-        [themeDecls.focusImpt]          : null,
-    })),
+        [themeDecls.focusImpt        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+    }),
 ]);
 
 export interface ThemeVariant {
