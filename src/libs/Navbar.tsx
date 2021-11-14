@@ -330,10 +330,6 @@ export const useCompactState = <TElement extends HTMLElement = HTMLElement>(prop
 //#region menus animations
 export interface MenusAnimVars {
     /**
-     * none animation.
-     */
-    animNone  : any
-    /**
      * final animation for the menus.
      */
     menusAnim : any

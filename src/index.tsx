@@ -29,7 +29,7 @@ import reportWebVitals from './reportWebVitals';
 //         import CardApp                              from './apps/CardApp';                   // article  article (semantic)
 //         import PopupApp                             from './apps/PopupApp';                  // div
 //             import AlertApp                         from './apps/AlertApp';                  // div      alert (semantic)
-            import ModalApp                         from './apps/ModalApp';                  // div      dialog (semantic)
+//             import ModalApp                         from './apps/ModalApp';                  // div      dialog (semantic)
 //                 import ModalCardApp                 from './apps/ModalCardApp';              // div      dialog (semantic)
 //                 import ModalSideApp                 from './apps/ModalSideApp';              // div      dialog (semantic)
 //             import CollapseApp                      from './apps/CollapseApp';               // div
@@ -54,7 +54,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
-//     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
+    import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
 //     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 
@@ -62,7 +62,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ModalApp />
+    <NavbarApp />
     ,
     document.getElementById('root')
 );
