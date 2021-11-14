@@ -518,22 +518,22 @@ export interface OutlinedVars {
     /**
      * functional foreground color - at outlined variant.
      */
-    foregOutlinedFn : any
+    foregFn : any
     /**
      * toggles on foreground color - at outlined variant.
      */
-    foregOutlinedTg : any
+    foregTg : any
     
     
     
     /**
      * functional background color - at outlined variant.
      */
-    backgOutlinedFn : any
+    backgFn : any
     /**
      * toggles on background color - at outlined variant.
      */
-    backgOutlinedTg : any
+    backgTg : any
 }
 const [outlinedRefs, outlinedDecls] = createCssVar<OutlinedVars>();
 
@@ -561,7 +561,7 @@ export const usesOutlinedVariant = (factory = outlinedOf) => {
                 themes(),
             ]),
             vars({
-                [outlinedDecls.foregOutlinedFn] : fallbacks(
+                [outlinedDecls.foregFn] : fallbacks(
                     themeRefs.foregOutlinedImpt,  // first  priority
                     themeRefs.foregOutlinedTheme, // second priority
                     themeRefs.foregOutlinedCond,  // third  priority
@@ -569,7 +569,7 @@ export const usesOutlinedVariant = (factory = outlinedOf) => {
                     cssProps.foreg,               // default => uses config's foreground
                 ),
                 
-                [outlinedDecls.backgOutlinedFn] : 'transparent', // set background to transparent, regardless of the theme colors
+                [outlinedDecls.backgFn] : 'transparent', // set background to transparent, regardless of the theme colors
             }),
             variants([
                 notOutlined(factory(false)),
@@ -588,8 +588,8 @@ export const usesOutlinedVariant = (factory = outlinedOf) => {
 export const outlinedOf = (toggle: (boolean|null) = true) => composition([
     vars({
         // *toggle on/off* the outlined props:
-        [outlinedDecls.foregOutlinedTg] : toggle ? outlinedRefs.foregOutlinedFn : ((toggle !== null) ? 'initial' : null),
-        [outlinedDecls.backgOutlinedTg] : toggle ? outlinedRefs.backgOutlinedFn : ((toggle !== null) ? 'initial' : null),
+        [outlinedDecls.foregTg] : toggle ? outlinedRefs.foregFn : ((toggle !== null) ? 'initial' : null),
+        [outlinedDecls.backgTg] : toggle ? outlinedRefs.backgFn : ((toggle !== null) ? 'initial' : null),
     }),
 ]);
 
@@ -608,22 +608,22 @@ export interface MildVars {
     /**
      * functional foreground color - at mild variant.
      */
-    foregMildFn : any
+    foregFn : any
     /**
      * toggles on foreground color - at mild variant.
      */
-    foregMildTg : any
+    foregTg : any
     
     
     
     /**
      * functional background color - at mild variant.
      */
-    backgMildFn : any
+    backgFn : any
     /**
      * toggles on background color - at mild variant.
      */
-    backgMildTg : any
+    backgTg : any
 }
 const [mildRefs, mildDecls] = createCssVar<MildVars>();
 
@@ -652,7 +652,7 @@ export const usesMildVariant = (factory = mildOf) => {
                 themes(),
             ]),
             vars({
-                [mildDecls.foregMildFn] : fallbacks(
+                [mildDecls.foregFn] : fallbacks(
                     themeRefs.foregMildImpt,  // first  priority
                     themeRefs.foregMildTheme, // second priority
                     themeRefs.foregMildCond,  // third  priority
@@ -660,7 +660,7 @@ export const usesMildVariant = (factory = mildOf) => {
                     cssProps.foreg,           // default => uses config's foreground
                 ),
                 
-                [mildDecls.backgMildFn] : fallbacks(
+                [mildDecls.backgFn] : fallbacks(
                     themeRefs.backgMildImpt,  // first  priority
                     themeRefs.backgMildTheme, // second priority
                     themeRefs.backgMildCond,  // third  priority
@@ -685,8 +685,8 @@ export const usesMildVariant = (factory = mildOf) => {
 export const mildOf = (toggle: (boolean|null) = true) => composition([
     vars({
         // *toggle on/off* the mildification props:
-        [mildDecls.foregMildTg] : toggle ? mildRefs.foregMildFn : ((toggle !== null) ? 'initial' : null),
-        [mildDecls.backgMildTg] : toggle ? mildRefs.backgMildFn : ((toggle !== null) ? 'initial' : null),
+        [mildDecls.foregTg] : toggle ? mildRefs.foregFn : ((toggle !== null) ? 'initial' : null),
+        [mildDecls.backgTg] : toggle ? mildRefs.backgFn : ((toggle !== null) ? 'initial' : null),
     }),
 ]);
 
@@ -737,10 +737,10 @@ export const usesForeg = () => {
                     cssProps.foreg,       // default => uses config's foreground
                 ),
                 [foregDecls.foreg]   : fallbacks(
-                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
-                    mildRefs.foregMildTg,         // toggle mild     (if `usesMildVariant()` applied)
+                    outlinedRefs.foregTg, // toggle outlined (if `usesOutlinedVariant()` applied)
+                    mildRefs.foregTg,     // toggle mild     (if `usesMildVariant()` applied)
                     
-                    foregRefs.foregFn,            // default => uses our `foregFn`
+                    foregRefs.foregFn,    // default => uses our `foregFn`
                 ),
             }),
         ]),
@@ -798,10 +798,10 @@ export const usesBackg = () => {
                     cssProps.backg,       // default => uses config's background
                 ),
                 [backgDecls.backgCol]  : fallbacks(
-                    outlinedRefs.backgOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
-                    mildRefs.backgMildTg,         // toggle mild     (if `usesMildVariant()` applied)
+                    outlinedRefs.backgTg, // toggle outlined (if `usesOutlinedVariant()` applied)
+                    mildRefs.backgTg,     // toggle mild     (if `usesMildVariant()` applied)
                     
-                    backgRefs.backgFn,            // default => uses our `backgFn`
+                    backgRefs.backgFn,    // default => uses our `backgFn`
                 ),
                 [backgDecls.backg]     : [ // single array => makes the JSS treat as comma separated values
                     // layering: backg1 | backg2 | backg3 ...
@@ -859,9 +859,9 @@ export const usesBorder = () => {
                     cssProps.borderColor,  // default => uses config's border color
                 ),
                 [borderDecls.borderCol] : fallbacks(
-                    outlinedRefs.foregOutlinedTg, // toggle outlined (if `usesOutlinedVariant()` applied)
+                    outlinedRefs.foregTg,  // toggle outlined (if `usesOutlinedVariant()` applied)
                     
-                    borderRefs.borderFn,          // default => uses our `borderFn`
+                    borderRefs.borderFn,   // default => uses our `borderFn`
                 ),
             }),
         ]),
