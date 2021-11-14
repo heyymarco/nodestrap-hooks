@@ -608,7 +608,7 @@ export const usesCheckVariants = () => {
             isNude([
                 layout({
                     // foregrounds:
-                    foreg     : [[mildRefs.foregMildFn], '!important'], // no valid/invalid animation
+                    foreg     : [[mildRefs.foregFn], '!important'], // no valid/invalid animation
                     
                     
                     
