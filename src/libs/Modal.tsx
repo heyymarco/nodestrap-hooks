@@ -100,10 +100,6 @@ import {
 //#region modal animations
 export interface ModalAnimVars {
     /**
-     * none animation.
-     */
-    animNone  : any
-    /**
      * final animation for the modal.
      */
     modalAnim : any
