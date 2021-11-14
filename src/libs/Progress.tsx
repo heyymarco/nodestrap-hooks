@@ -162,7 +162,7 @@ export const usesAltBackg = () => {
     return [
         () => composition([
             vars({
-                [altBackgDecls.altBackgFn]  : mildRefs.backgMildFn,
+                [altBackgDecls.altBackgFn]  : mildRefs.backgFn,
                 [altBackgDecls.altBackgCol] : 'transparent',
                 [altBackgDecls.altBackg]    : [ // single array => makes the JSS treat as comma separated values
                     // layering: backg1 | backg2 | backg3 ...
