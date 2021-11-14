@@ -214,8 +214,8 @@ export const usesValidInvalidState = () => {
             
             
             vars({
-                [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregMildFn,
-                [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgMildFn,
+                [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregFn,
+                [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgFn,
             }),
             variants([
                 isOutlined([
@@ -234,8 +234,8 @@ export const usesValidInvalidState = () => {
             states([
                 isActive([
                     vars({
-                        [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregMildFn,
-                        [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgMildFn,
+                        [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregFn,
+                        [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgFn,
                     }),
                 ]),
             ]),
