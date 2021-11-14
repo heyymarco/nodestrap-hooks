@@ -137,27 +137,15 @@ import {
 //#region check animations
 export interface CheckAnimVars {
     /**
-     * none filter.
-     */
-    filterNone  : any
-    /**
      * final filter for the checkbox.
      */
     checkFilter : any
     
     /**
-     * none transform.
-     */
-    transfNone  : any
-    /**
      * final transform for the checkbox.
      */
     checkTransf : any
     
-    /**
-     * none animation.
-     */
-    animNone    : any
     /**
      * final animation for the checkbox.
      */
