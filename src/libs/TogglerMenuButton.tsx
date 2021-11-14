@@ -145,10 +145,6 @@ export interface SvgAnimVars {
     
     
     /**
-     * none transform.
-     */
-    transfNone       : any
-    /**
      * final transform for the svg top.
      */
     svgTopTransf     : any
@@ -161,10 +157,6 @@ export interface SvgAnimVars {
      */
     svgBtmTransf     : any
     
-    /**
-     * none animation.
-     */
-    animNone         : any
     /**
      * final animation for the svg top.
      */
