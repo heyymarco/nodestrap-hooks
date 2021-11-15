@@ -112,18 +112,18 @@ import {
 
 //#region validInvalid
 export interface ValidInvalidVars {
-    animValidUnvalid       : any
-    animInvalidUninvalid   : any
+    animValid   : any
+    animInvalid : any
     
-    foregValidInvalidStart : any
-    backgValidInvalidStart : any
+    foregStart  : any
+    backgStart  : any
 }
 const [validInvalidRefs, validInvalidDecls] = createCssVar<ValidInvalidVars>();
 
 {
     const [, , , propsManager] = usesAnim();
-    propsManager.registerAnim(validInvalidRefs.animValidUnvalid);
-    propsManager.registerAnim(validInvalidRefs.animInvalidUninvalid);
+    propsManager.registerAnim(validInvalidRefs.animValid);
+    propsManager.registerAnim(validInvalidRefs.animInvalid);
 }
 
 // .vald will be added after validating-animation done:
@@ -191,51 +191,51 @@ export const usesValidInvalidState = () => {
             states([
                 isValidating([
                     vars({
-                        [validInvalidDecls.animValidUnvalid]     : cssProps.animValid,
+                        [validInvalidDecls.animValid]   : cssProps.animValid,
                     }),
                 ]),
                 isUnvalidating([
                     vars({
-                        [validInvalidDecls.animValidUnvalid]     : cssProps.animUnvalid,
+                        [validInvalidDecls.animValid]   : cssProps.animUnvalid,
                     }),
                 ]),
                 
                 isInvalidating([
                     vars({
-                        [validInvalidDecls.animInvalidUninvalid] : cssProps.animInvalid,
+                        [validInvalidDecls.animInvalid] : cssProps.animInvalid,
                     }),
                 ]),
                 isUninvalidating([
                     vars({
-                        [validInvalidDecls.animInvalidUninvalid] : cssProps.animUninvalid,
+                        [validInvalidDecls.animInvalid] : cssProps.animUninvalid,
                     }),
                 ]),
             ]),
             
             
             vars({
-                [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregFn,
-                [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgFn,
+                [validInvalidDecls.foregStart] : mildRefs.foregFn,
+                [validInvalidDecls.backgStart] : mildRefs.backgFn,
             }),
             variants([
                 isOutlined([
                     vars({
-                        [validInvalidDecls.foregValidInvalidStart] : foregRefs.foregFn,
-                        [validInvalidDecls.backgValidInvalidStart] : backgRefs.backgFn,
+                        [validInvalidDecls.foregStart] : foregRefs.foregFn,
+                        [validInvalidDecls.backgStart] : backgRefs.backgFn,
                     }),
                 ]),
                 isMild([
                     vars({
-                        [validInvalidDecls.foregValidInvalidStart] : foregRefs.foregFn,
-                        [validInvalidDecls.backgValidInvalidStart] : backgRefs.backgFn,
+                        [validInvalidDecls.foregStart] : foregRefs.foregFn,
+                        [validInvalidDecls.backgStart] : backgRefs.backgFn,
                     }),
                 ]),
             ]),
             states([
                 isActive([
                     vars({
-                        [validInvalidDecls.foregValidInvalidStart] : mildRefs.foregFn,
-                        [validInvalidDecls.backgValidInvalidStart] : mildRefs.backgFn,
+                        [validInvalidDecls.foregStart] : mildRefs.foregFn,
+                        [validInvalidDecls.backgStart] : mildRefs.backgFn,
                     }),
                 ]),
             ]),
@@ -612,7 +612,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     // dependencies:
     const [, {foreg}] = usesForeg();
     const [, {backg}] = usesBackg();
-    const [, {foregValidInvalidStart, backgValidInvalidStart}] = usesValidInvalidState();
+    const [, {foregStart: foregValidInvalidStart, backgStart: backgValidInvalidStart}] = usesValidInvalidState();
     
     
     
