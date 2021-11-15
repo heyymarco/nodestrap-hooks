@@ -1086,25 +1086,25 @@ export const usesAnim = () => {
         () => composition([
             vars({
                 [animDecls.boxShadowNone] : [[0, 0, 'transparent']],
-                [animDecls.boxShadow]     : [ // single array => makes the JSS treat as comma separated values
+                [animDecls.boxShadow    ] : [ // single array => makes the JSS treat as comma separated values
                     // layering: boxShadow1 | boxShadow2 | boxShadow3 ...
                     
                     // layers:
                     ...propsManager.boxShadows().map(fallbackNoneBoxShadow),
                 ],
                 
-                [animDecls.filterNone]    : 'brightness(100%)',
-                [animDecls.filter]        : [[ // double array => makes the JSS treat as space separated values
+                [animDecls.filterNone   ] : 'brightness(100%)',
+                [animDecls.filter       ] : [[ // double array => makes the JSS treat as space separated values
                     // combining: filter1 * filter2 * filter3 ...
                     
                     // layers:
                     ...propsManager.filters().map(fallbackNoneFilter),
                 ]],
                 
-                [animDecls.transfNone]    : 'translate(0)',
+                [animDecls.transfNone   ] : 'translate(0)',
                 
-                [animDecls.animNone]      : 'none',
-                [animDecls.anim]          : [ // single array => makes the JSS treat as comma separated values
+                [animDecls.animNone     ] : 'none',
+                [animDecls.anim         ] : [ // single array => makes the JSS treat as comma separated values
                     // layering: anim1 | anim2 | anim3 ...
                     
                     // layers:
