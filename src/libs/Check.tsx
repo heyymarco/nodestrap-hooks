@@ -660,8 +660,8 @@ export const usesCheckStates = () => {
             // children:
             ...children(inputElm, [
                 vars({
-                    [focusBlurDecls.boxShadowFocusBlur] : 'inherit',
-                    [focusBlurDecls.animFocusBlur]      : 'inherit',
+                    [focusBlurDecls.boxShadow] : 'inherit',
+                    [focusBlurDecls.anim     ] : 'inherit',
                 }),
             ]),
         }),
