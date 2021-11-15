@@ -137,15 +137,15 @@ export interface AltBackgVars {
     /**
      * functional alternate background color.
      */
-    altBackgFn     : any
+    backgFn     : any
     /**
      * final alternate background color.
      */
-    altBackgCol    : any
+    backgCol    : any
     /**
      * final alternate background layers.
      */
-    altBackg       : any
+    backg       : any
 }
 const [altBackgRefs, altBackgDecls] = createCssVar<AltBackgVars>();
 
@@ -162,24 +162,24 @@ export const usesAltBackg = () => {
     return [
         () => composition([
             vars({
-                [altBackgDecls.altBackgFn]  : mildRefs.backgFn,
-                [altBackgDecls.altBackgCol] : 'transparent',
-                [altBackgDecls.altBackg]    : [ // single array => makes the JSS treat as comma separated values
+                [altBackgDecls.backgFn ] : mildRefs.backgFn,
+                [altBackgDecls.backgCol] : 'transparent',
+                [altBackgDecls.backg   ] : [ // single array => makes the JSS treat as comma separated values
                     // layering: backg1 | backg2 | backg3 ...
                     
                     // bottom layer:
-                    altBackgRefs.altBackgCol,
+                    altBackgRefs.backgCol,
                 ],
             }),
             variants([
                 notOutlined([
                     vars({
-                        [altBackgDecls.altBackgCol] : colors.backg,
+                        [altBackgDecls.backgCol] : colors.backg,
                     }),
                     variants([
                         notMild([
                             vars({
-                                [altBackgDecls.altBackgCol] : altBackgRefs.altBackgFn,
+                                [altBackgDecls.backgCol] : altBackgRefs.backgFn,
                             }),
                         ]),
                     ]),
@@ -316,7 +316,7 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
             
             
             // backgrounds:
-            backg          : altBackgRefs.altBackg,
+            backg          : altBackgRefs.backg,
             
             
             
