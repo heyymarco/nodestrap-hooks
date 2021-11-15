@@ -160,7 +160,7 @@ export interface RangeVars {
     /**
      * final background layers of the Range.
      */
-    rangeBackg      : any
+    backg      : any
 }
 const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>();
 
@@ -177,7 +177,7 @@ export const usesRangeVars = () => {
     return [
         () => composition([
             vars({
-                [rangeVarDecls.rangeBackg] : backgRefs.backg,
+                [rangeVarDecls.backg] : backgRefs.backg,
             }),
         ]),
         rangeVarRefs,
@@ -285,7 +285,7 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
                             
                             
                             // backgrounds:
-                            backg : rangeVarRefs.rangeBackg,
+                            backg : rangeVarRefs.backg,
                             
                             
                             
