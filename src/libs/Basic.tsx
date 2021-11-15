@@ -1134,15 +1134,15 @@ export const fallbackNoneAnim      = (anim      : Cust.Ref|Cust.General) => isRe
 
 //#region excited
 export interface ExcitedVars {
-    filterExcited : any
-    animExcited   : any
+    filter : any
+    anim   : any
 }
 const [excitedRefs, excitedDecls] = createCssVar<ExcitedVars>();
 
 {
     const [, , , propsManager] = usesAnim();
-    propsManager.registerFilter(excitedRefs.filterExcited);
-    propsManager.registerAnim(excitedRefs.animExcited);
+    propsManager.registerFilter(excitedRefs.filter);
+    propsManager.registerAnim(excitedRefs.anim);
 }
 
 const selectorIsExcited  = '.excited'
@@ -1161,8 +1161,8 @@ export const usesExcitedState = () => {
             states([
                 isExcited([
                     vars({
-                        [excitedDecls.filterExcited] : cssProps.filterExcited,
-                        [excitedDecls.animExcited]   : cssProps.animExcited,
+                        [excitedDecls.filter] : cssProps.filterExcited,
+                        [excitedDecls.anim  ] : cssProps.animExcited,
                     }),
                 ]),
             ]),
@@ -1365,7 +1365,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const [, , , propsManager] = usesAnim();
     const filters = propsManager.filters();
     
-    const [, {filterExcited} ] = usesExcitedState();
+    const [, {filter: filterExcited} ] = usesExcitedState();
     
     
     
