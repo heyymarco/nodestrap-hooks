@@ -137,15 +137,15 @@ export interface AltBackgVars {
     /**
      * functional alternate background color.
      */
-    backgFn     : any
+    backgFn  : any
     /**
      * final alternate background color.
      */
-    backgCol    : any
+    backgCol : any
     /**
      * final alternate background layers.
      */
-    backg       : any
+    backg    : any
 }
 const [altBackgRefs, altBackgDecls] = createCssVar<AltBackgVars>();
 
@@ -199,7 +199,7 @@ export interface ProgressBarVars {
     /**
      * ProgressBar's thumb ratio.
      */
-    progressBarValueRatio : any
+    valueRatio : any
 }
 const [progressBarVarRefs, progressBarVarDecls] = createCssVar<ProgressBarVars>();
 
@@ -430,7 +430,7 @@ export const usesProgressBarLayout = () => {
     return composition([
         layout({
             // sizes:
-            flex     : [[progressBarVarRefs.progressBarValueRatio, progressBarVarRefs.progressBarValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+            flex     : [[progressBarVarRefs.valueRatio, progressBarVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
             overflow : 'hidden',
             
             
@@ -742,7 +742,7 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
             // styles:
             style={{...(props.style ?? {}),
                 // values:
-                [progressBarVarDecls.progressBarValueRatio]: remainingValueRatio,
+                [progressBarVarDecls.valueRatio]: remainingValueRatio,
             }}
         ></Element>
     );
@@ -840,7 +840,7 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
             // styles:
             style={{...(props.style ?? {}),
                 // values:
-                [progressBarVarDecls.progressBarValueRatio]: valueRatio,
+                [progressBarVarDecls.valueRatio]: valueRatio,
             }}
             variantClasses={[...(props.variantClasses ?? []),
                 progressBarVariant.class,
