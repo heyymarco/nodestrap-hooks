@@ -219,7 +219,7 @@ export const usesProgressBarVars = () => {
 
 //#region running
 export interface RunningVars {
-    anim   : any
+    anim : any
 }
 const [runningRefs, runningDecls] = createCssVar<RunningVars>();
 
