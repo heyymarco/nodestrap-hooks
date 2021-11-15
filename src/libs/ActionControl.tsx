@@ -96,15 +96,15 @@ import {
 
 //#region pressRelease
 export interface PressReleaseVars {
-    filterPressRelease : any
-    animPressRelease   : any
+    filter : any
+    anim   : any
 }
 const [pressReleaseRefs, pressReleaseDecls] = createCssVar<PressReleaseVars>();
 
 {
     const [, , , propsManager] = usesAnim();
-    propsManager.registerFilter(pressReleaseRefs.filterPressRelease);
-    propsManager.registerAnim(pressReleaseRefs.animPressRelease);
+    propsManager.registerFilter(pressReleaseRefs.filter);
+    propsManager.registerAnim(pressReleaseRefs.anim);
 }
 
 // .pressed will be added after pressing-animation done:
@@ -143,19 +143,19 @@ export const usesPressReleaseState = () => {
             states([
                 isPressed([
                     vars({
-                        [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
+                        [pressReleaseDecls.filter] : cssProps.filterPress,
                     }),
                 ]),
                 isPressing([
                     vars({
-                        [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
-                        [pressReleaseDecls.animPressRelease]   : cssProps.animPress,
+                        [pressReleaseDecls.filter] : cssProps.filterPress,
+                        [pressReleaseDecls.anim  ] : cssProps.animPress,
                     }),
                 ]),
                 isReleasing([
                     vars({
-                        [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
-                        [pressReleaseDecls.animPressRelease]   : cssProps.animRelease,
+                        [pressReleaseDecls.filter] : cssProps.filterPress,
+                        [pressReleaseDecls.anim  ] : cssProps.animRelease,
                     }),
                 ]),
             ]),
@@ -287,44 +287,6 @@ export const usePressReleaseState  = (props: ActionControlProps, mouses: number[
 };
 //#endregion pressRelease
 
-//#region activePassive as pressRelease
-/**
- * @deprecated The method should not be used
- * Uses active & passive states as press & release states.
- * @returns A `StyleCollection` represents active & passive state definitions.
- */
-export const usesActivePassiveAsPressReleaseState = () => {
-    // dependencies:
-    
-    // states:
-    const [, , pressReleaseDecls] = usesPressReleaseState();
-    
-    
-    
-    return composition([
-        states([
-            isActived([
-                vars({
-                    [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
-                }),
-            ]),
-            isActivating([
-                vars({
-                    [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
-                    [pressReleaseDecls.animPressRelease]   : cssProps.animPress,
-                }),
-            ]),
-            isPassivating([
-                vars({
-                    [pressReleaseDecls.filterPressRelease] : cssProps.filterPress,
-                    [pressReleaseDecls.animPressRelease]   : cssProps.animRelease,
-                }),
-            ]),
-        ]),
-    ]);
-};
-//#endregion activePassive as pressRelease
-
 
 
 // styles:
@@ -422,7 +384,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const [, , , propsManager] = usesAnim();
     const filters = propsManager.filters();
     
-    const [, {filterPressRelease}] = usesPressReleaseState();
+    const [, {filter: filterPressRelease}] = usesPressReleaseState();
     
     
     
