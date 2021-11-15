@@ -179,16 +179,16 @@ export const usesThemeVariant = (factory?: Factory<StyleCollection>, options?: T
             ]),
             vars({
                 // delete unused imported vars:
-                [themeDecls.foregTheme]         : null,
-                [themeDecls.borderTheme]        : null,
-                [themeDecls.foregOutlinedTheme] : null,
-                [themeDecls.foregMildTheme]     : null,
-                [themeDecls.focusTheme]         : null,
+                [themeDecls.foreg        ] : null,
+                [themeDecls.border       ] : null,
+                [themeDecls.foregOutlined] : null,
+                [themeDecls.foregMild    ] : null,
+                [themeDecls.focus        ] : null,
             }),
             vars({
                 // prevent theme from inheritance, so the Icon always use currentColor if the theme is not set
-                [themeDecls.backgTheme]     : 'initial',
-                [themeDecls.backgMildTheme] : 'initial',
+                [themeDecls.backg        ] : 'initial',
+                [themeDecls.backgMild    ] : 'initial',
             }),
         ]),
         themeRefs,
@@ -223,7 +223,7 @@ export const usesMildVariant = (factory?: Factory<StyleCollection>) => {
             vars({
                 [mildDecls.backgFn] : fallbacks(
                  // themeRefs.backgMildImpt,  // first  priority
-                    themeRefs.backgMildTheme, // second priority
+                    themeRefs.backgMild,      // second priority
                  // themeRefs.backgMildCond,  // third  priority
                     
                     cssProps.foreg,           // default => uses config's foreground
@@ -262,7 +262,7 @@ export const usesForeg = (foregOverwrite?: Cust.Ref) => {
             vars({
                 [foregDecls.foregFn] : fallbacks(
                  // themeRefs.backgImpt,  // first  priority
-                    themeRefs.backgTheme, // second priority
+                    themeRefs.backg,      // second priority
                  // themeRefs.backgCond,  // third  priority
                     
                     cssProps.foreg,       // default => uses config's foreground
