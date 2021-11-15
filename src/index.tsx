@@ -14,8 +14,8 @@ import reportWebVitals from './reportWebVitals';
 // import BreakpointsApp from './apps/BreakpointsApp';
 
 // import BasicApp                                     from './apps/BasicApp';                  // div
-    import IconApp                                  from './apps/IconApp';                   // span
-//     import ContentApp                               from './apps/ContentApp';                // div      ???
+//     import IconApp                                  from './apps/IconApp';                   // span
+    import ContentApp                               from './apps/ContentApp';                // div      ???
 //     import LabelApp                                 from './apps/LabelApp';                  // div
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
 //         import CarouselApp                          from './apps/CarouselApp';               // div      ???
@@ -62,7 +62,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <IconApp />
+    <ContentApp />
     ,
     document.getElementById('root')
 );

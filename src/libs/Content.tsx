@@ -574,9 +574,9 @@ export const usesMediaFill = () => {
     // dependencies:
     
     // spacings:
-    const [, paddingRefs]       = usesPadding();
-    const positivePaddingInline = paddingRefs.paddingInline;
-    const positivePaddingBlock  = paddingRefs.paddingBlock;
+    const [, containerRefs]     = usesContainer();
+    const positivePaddingInline = containerRefs.paddingInline;
+    const positivePaddingBlock  = containerRefs.paddingBlock;
     const negativePaddingInline = `calc(0px - ${positivePaddingInline})`;
     const negativePaddingBlock  = `calc(0px - ${positivePaddingBlock })`;
     
