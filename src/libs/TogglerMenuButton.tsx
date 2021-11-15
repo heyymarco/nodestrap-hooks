@@ -567,7 +567,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
-        animActive             : [[animDuration, 'ease-out', 'both', icssProps['@keyframes active']  ]],
+        animActive             : [[animDuration, 'ease-out', 'both', icssProps['@keyframes active' ] ]],
         animPassive            : [[animDuration, 'ease-out', 'both', icssProps['@keyframes passive'] ]],
         //#endregion animations
     };
