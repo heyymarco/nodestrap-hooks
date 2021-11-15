@@ -106,15 +106,15 @@ import {
 
 //#region enableDisable
 export interface EnableDisableVars {
-    filterEnableDisable : any
-    animEnableDisable   : any
+    filter : any
+    anim   : any
 }
 const [enableDisableRefs, enableDisableDecls] = createCssVar<EnableDisableVars>();
 
 {
     const [, , , propsManager] = usesAnim();
-    propsManager.registerFilter(enableDisableRefs.filterEnableDisable);
-    propsManager.registerAnim(enableDisableRefs.animEnableDisable);
+    propsManager.registerFilter(enableDisableRefs.filter);
+    propsManager.registerAnim(enableDisableRefs.anim);
 }
 
 // if all below are not set => enabled:
@@ -146,19 +146,19 @@ export const usesEnableDisableState = () => {
             states([
                 isEnabling([
                     vars({
-                        [enableDisableDecls.filterEnableDisable] : cssProps.filterDisable,
-                        [enableDisableDecls.animEnableDisable]   : cssProps.animEnable,
+                        [enableDisableDecls.filter] : cssProps.filterDisable,
+                        [enableDisableDecls.anim  ] : cssProps.animEnable,
                     }),
                 ]),
                 isDisabling([
                     vars({
-                        [enableDisableDecls.filterEnableDisable] : cssProps.filterDisable,
-                        [enableDisableDecls.animEnableDisable]   : cssProps.animDisable,
+                        [enableDisableDecls.filter] : cssProps.filterDisable,
+                        [enableDisableDecls.anim  ] : cssProps.animDisable,
                     }),
                 ]),
                 isDisabled([
                     vars({
-                        [enableDisableDecls.filterEnableDisable] : cssProps.filterDisable,
+                        [enableDisableDecls.filter] : cssProps.filterDisable,
                     }),
                 ]),
             ]),
@@ -253,15 +253,15 @@ export const useEnableDisableState = (props: IndicationProps & ElementProps) => 
 
 //#region activePassive
 export interface ActivePassiveVars {
-    filterActivePassive : any
-    animActivePassive   : any
+    filter : any
+    anim   : any
 }
 const [activePassiveRefs, activePassiveDecls] = createCssVar<ActivePassiveVars>();
 
 {
     const [, , , propsManager] = usesAnim();
-    propsManager.registerFilter(activePassiveRefs.filterActivePassive);
-    propsManager.registerAnim(activePassiveRefs.animActivePassive);
+    propsManager.registerFilter(activePassiveRefs.filter);
+    propsManager.registerAnim(activePassiveRefs.anim);
 }
 
 // .actived will be added after activating-animation done:
@@ -293,19 +293,19 @@ export const usesActivePassiveState = () => {
             states([
                 isActived([
                     vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.filter] : cssProps.filterActive,
                     }),
                 ]),
                 isActivating([
                     vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animActive,
+                        [activePassiveDecls.filter] : cssProps.filterActive,
+                        [activePassiveDecls.anim  ] : cssProps.animActive,
                     }),
                 ]),
                 isPassivating([
                     vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
+                        [activePassiveDecls.filter] : cssProps.filterActive,
+                        [activePassiveDecls.anim  ] : cssProps.animPassive,
                     }),
                 ]),
             ]),
@@ -591,8 +591,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const [, , , propsManager] = usesAnim();
     const filters = propsManager.filters();
     
-    const [, {filterEnableDisable}] = usesEnableDisableState();
-    const [, {filterActivePassive}] = usesActivePassiveState();
+    const [, {filter: filterEnableDisable}] = usesEnableDisableState();
+    const [, {filter: filterActivePassive}] = usesActivePassiveState();
     
     
     
