@@ -224,21 +224,21 @@ export const usesCheckAnim = () => {
 
 //#region checkClear
 export interface CheckClearVars {
-    filterCheckClearIn  : any
-    filterCheckClearOut : any
-    transfCheckClearIn  : any
-    transfCheckClearOut : any
-    animCheckClear      : any
+    filterIn  : any
+    filterOut : any
+    transfIn  : any
+    transfOut : any
+    anim      : any
 }
 const [checkClearRefs, checkClearDecls] = createCssVar<CheckClearVars>();
 
 {
     const [, , , checkPropsManager] = usesCheckAnim();
-    checkPropsManager.registerFilter(checkClearRefs.filterCheckClearIn);
-    checkPropsManager.registerFilter(checkClearRefs.filterCheckClearOut);
-    checkPropsManager.registerTransf(checkClearRefs.transfCheckClearIn);
-    checkPropsManager.registerTransf(checkClearRefs.transfCheckClearOut);
-    checkPropsManager.registerAnim(checkClearRefs.animCheckClear);
+    checkPropsManager.registerFilter(checkClearRefs.filterIn);
+    checkPropsManager.registerFilter(checkClearRefs.filterOut);
+    checkPropsManager.registerTransf(checkClearRefs.transfIn);
+    checkPropsManager.registerTransf(checkClearRefs.transfOut);
+    checkPropsManager.registerAnim(checkClearRefs.anim);
 }
 
 /**
@@ -251,38 +251,38 @@ export const usesCheckClearState = () => {
             states([
                 isActived([
                     vars({
-                        [checkClearDecls.filterCheckClearIn]  : cssProps.filterCheck,
+                        [checkClearDecls.filterIn ] : cssProps.filterCheck,
                         
-                        [checkClearDecls.transfCheckClearIn]  : cssProps.transfCheck,
+                        [checkClearDecls.transfIn ] : cssProps.transfCheck,
                     }),
                 ]),
                 isActivating([
                     vars({
-                        [checkClearDecls.filterCheckClearIn]  : cssProps.filterCheck,
-                        [checkClearDecls.filterCheckClearOut] : cssProps.filterClear,
+                        [checkClearDecls.filterIn ] : cssProps.filterCheck,
+                        [checkClearDecls.filterOut] : cssProps.filterClear,
                         
-                        [checkClearDecls.transfCheckClearIn]  : cssProps.transfCheck,
-                        [checkClearDecls.transfCheckClearOut] : cssProps.transfClear,
+                        [checkClearDecls.transfIn ] : cssProps.transfCheck,
+                        [checkClearDecls.transfOut] : cssProps.transfClear,
                         
-                        [checkClearDecls.animCheckClear]      : cssProps.animCheck,
+                        [checkClearDecls.anim     ] : cssProps.animCheck,
                     }),
                 ]),
                 isPassivating([
                     vars({
-                        [checkClearDecls.filterCheckClearIn]  : cssProps.filterCheck,
-                        [checkClearDecls.filterCheckClearOut] : cssProps.filterClear,
+                        [checkClearDecls.filterIn ] : cssProps.filterCheck,
+                        [checkClearDecls.filterOut] : cssProps.filterClear,
                         
-                        [checkClearDecls.transfCheckClearIn]  : cssProps.transfCheck,
-                        [checkClearDecls.transfCheckClearOut] : cssProps.transfClear,
+                        [checkClearDecls.transfIn ] : cssProps.transfCheck,
+                        [checkClearDecls.transfOut] : cssProps.transfClear,
                         
-                        [checkClearDecls.animCheckClear]      : cssProps.animClear,
+                        [checkClearDecls.anim     ] : cssProps.animClear,
                     }),
                 ]),
                 isPassived([
                     vars({
-                        [checkClearDecls.filterCheckClearOut] : cssProps.filterClear,
+                        [checkClearDecls.filterOut] : cssProps.filterClear,
                         
-                        [checkClearDecls.transfCheckClearOut] : cssProps.transfClear,
+                        [checkClearDecls.transfOut] : cssProps.transfClear,
                     }),
                 ]),
             ]),
@@ -699,7 +699,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const filters = checkPropsManager.filters();
     const transfs = checkPropsManager.transfs();
     
-    const [, {filterCheckClearIn, filterCheckClearOut, transfCheckClearIn, transfCheckClearOut}] = usesCheckClearState();
+    const [, {filterIn: filterCheckClearIn, filterOut: filterCheckClearOut, transfIn: transfCheckClearIn, transfOut: transfCheckClearOut}] = usesCheckClearState();
     
     
     
