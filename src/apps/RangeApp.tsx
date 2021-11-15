@@ -172,7 +172,7 @@ function App() {
 						setSlider4(e.currentTarget.valueAsNumber);
 					}}
 
-					style={{ [themeDecls.backgTheme]: `hsl(${slider4}deg, 100%, 50%)` }}
+					style={{ [themeDecls.backg]: `hsl(${slider4}deg, 100%, 50%)` }}
 				/>
 				<span>{ slider4 }</span>
 				<br /><br />
