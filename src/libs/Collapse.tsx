@@ -123,19 +123,19 @@ export const usesActivePassiveState = () => {
             states([
                 isActived([
                     vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
+                        [activePassiveDecls.filter] : cssProps.filterActive,
                     }),
                 ]),
                 isActivating([
                     vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animActive,
+                        [activePassiveDecls.filter] : cssProps.filterActive,
+                        [activePassiveDecls.anim  ] : cssProps.animActive,
                     }),
                 ]),
                 isPassivating([
                     vars({
-                        [activePassiveDecls.filterActivePassive] : cssProps.filterActive,
-                        [activePassiveDecls.animActivePassive]   : cssProps.animPassive,
+                        [activePassiveDecls.filter] : cssProps.filterActive,
+                        [activePassiveDecls.anim  ] : cssProps.animPassive,
                     }),
                 ]),
             ]),
