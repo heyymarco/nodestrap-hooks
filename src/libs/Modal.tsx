@@ -102,7 +102,7 @@ export interface ModalAnimVars {
     /**
      * final animation for the modal.
      */
-    modalAnim : any
+    anim : any
 }
 const [modalAnimRefs, modalAnimDecls] = createCssVar<ModalAnimVars>();
 
@@ -121,17 +121,17 @@ export const usesModalAnim = () => {
                 anim(),
             ]),
             vars({
-                [modalAnimDecls.modalAnim] : animRefs.animNone,
+                [modalAnimDecls.anim] : animRefs.animNone,
             }),
             states([
                 isActivating([
                     vars({
-                        [modalAnimDecls.modalAnim] : cssProps.animActive,
+                        [modalAnimDecls.anim] : cssProps.animActive,
                     }),
                 ]),
                 isPassivating([
                     vars({
-                        [modalAnimDecls.modalAnim] : cssProps.animPassive,
+                        [modalAnimDecls.anim] : cssProps.animPassive,
                     }),
                 ]),
             ]),
@@ -257,7 +257,7 @@ export const usesModalLayout = () => {
             
             
             // animations:
-            anim         : modalAnimRefs.modalAnim,
+            anim         : modalAnimRefs.anim,
             
             
             
