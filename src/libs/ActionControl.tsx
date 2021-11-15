@@ -66,12 +66,6 @@ import {
 }                           from './Basic'
 import {
     // hooks:
-    isActived,
-    isActivating,
-    isPassivating,
-}                           from './Indicator'
-import {
-    // hooks:
     markActive,
     
     
