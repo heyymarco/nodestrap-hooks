@@ -155,7 +155,7 @@ export interface RangeVars {
     /**
      * Range's thumb ratio.
      */
-    rangeValueRatio : any
+    valueRatio : any
     
     /**
      * final background layers of the Range.
@@ -307,7 +307,7 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
                     ...children(trackLowerElm, [
                         layout({
                             // sizes:
-                            flex : [[rangeVarRefs.rangeValueRatio, rangeVarRefs.rangeValueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+                            flex : [[rangeVarRefs.valueRatio, rangeVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `valueRatio` for the grow/shrink ratio
                             
                             
                             
@@ -318,7 +318,7 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
                     ...children(trackUpperElm, [
                         layout({
                             // sizes:
-                            flex : [[`calc(1 - ${rangeVarRefs.rangeValueRatio})`, `calc(1 - ${rangeVarRefs.rangeValueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - rangeValueRatio` for the grow/shrink ratio
+                            flex : [[`calc(1 - ${rangeVarRefs.valueRatio})`, `calc(1 - ${rangeVarRefs.valueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - valueRatio` for the grow/shrink ratio
                             
                             
                             
@@ -1081,7 +1081,7 @@ export function Range(props: RangeProps) {
             // styles:
             style={{...(props.style ?? {}),
                 // values:
-                [rangeVarDecls.rangeValueRatio]: valueRatio,
+                [rangeVarDecls.valueRatio]: valueRatio,
             }}
             
             
