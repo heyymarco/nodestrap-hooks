@@ -119,8 +119,8 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'primary') => indic
 
 //#region focusBlur
 export interface FocusBlurVars {
-    boxShadowFocusBlur : any
-    animFocusBlur      : any
+    boxShadow : any
+    anim      : any
     
     
     
@@ -145,8 +145,8 @@ const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
 
 {
     const [, , , propsManager] = usesAnim();
-    propsManager.registerBoxShadow(focusBlurRefs.boxShadowFocusBlur);
-    propsManager.registerAnim(focusBlurRefs.animFocusBlur);
+    propsManager.registerBoxShadow(focusBlurRefs.boxShadow);
+    propsManager.registerAnim(focusBlurRefs.anim);
 }
 
 // .focused will be added after focusing-animation done:
@@ -211,19 +211,19 @@ export const usesFocusBlurState = () => {
             states([
                 isFocused([
                     vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusLy,
+                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowFocusLy,
                     }),
                 ]),
                 isFocusing([
                     vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusLy,
-                        [focusBlurDecls.animFocusBlur]      : cssProps.animFocus,
+                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowFocusLy,
+                        [focusBlurDecls.anim     ] : cssProps.animFocus,
                     }),
                 ]),
                 isBlurring([
                     vars({
-                        [focusBlurDecls.boxShadowFocusBlur] : focusBlurRefs.boxShadowFocusLy,
-                        [focusBlurDecls.animFocusBlur]      : cssProps.animBlur,
+                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowFocusLy,
+                        [focusBlurDecls.anim     ] : cssProps.animBlur,
                     }),
                 ]),
             ]),
@@ -330,15 +330,15 @@ export const useFocusBlurState  = <TElement extends HTMLElement = HTMLElement>(p
 
 //#region arriveLeave
 export interface ArriveLeaveVars {
-    filterArriveLeave : any
-    animArriveLeave   : any
+    filter : any
+    anim   : any
 }
 const [arriveLeaveRefs, arriveLeaveDecls] = createCssVar<ArriveLeaveVars>();
 
 {
     const [, , , propsManager] = usesAnim();
-    propsManager.registerFilter(arriveLeaveRefs.filterArriveLeave);
-    propsManager.registerAnim(arriveLeaveRefs.animArriveLeave);
+    propsManager.registerFilter(arriveLeaveRefs.filter);
+    propsManager.registerAnim(arriveLeaveRefs.anim);
 }
 
 // .arrived will be added after arriving-animation done:
@@ -381,19 +381,19 @@ export const usesArriveLeaveState = () => {
             states([
                 isArrived([
                     vars({
-                        [arriveLeaveDecls.filterArriveLeave] : cssProps.filterArrive,
+                        [arriveLeaveDecls.filter] : cssProps.filterArrive,
                     }),
                 ]),
                 isArriving([
                     vars({
-                        [arriveLeaveDecls.filterArriveLeave] : cssProps.filterArrive,
-                        [arriveLeaveDecls.animArriveLeave]   : cssProps.animArrive,
+                        [arriveLeaveDecls.filter] : cssProps.filterArrive,
+                        [arriveLeaveDecls.anim  ] : cssProps.animArrive,
                     }),
                 ]),
                 isLeaving([
                     vars({
-                        [arriveLeaveDecls.filterArriveLeave] : cssProps.filterArrive,
-                        [arriveLeaveDecls.animArriveLeave]   : cssProps.animLeave,
+                        [arriveLeaveDecls.filter] : cssProps.filterArrive,
+                        [arriveLeaveDecls.anim  ] : cssProps.animLeave,
                     }),
                 ]),
             ]),
@@ -617,8 +617,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const boxShadows = propsManager.boxShadows();
     const filters    = propsManager.filters();
     
-    const [, {boxShadowFocusBlur}] = usesFocusBlurState();
-    const [, {filterArriveLeave} ] = usesArriveLeaveState();
+    const [, {boxShadow : boxShadowFocusBlur}] = usesFocusBlurState();
+    const [, {filter    : filterArriveLeave }] = usesArriveLeaveState();
     
     
     
