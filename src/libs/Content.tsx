@@ -872,3 +872,14 @@ export function Content<TElement extends HTMLElement = HTMLElement>(props: Conte
     );
 }
 export { Content as default }
+
+
+
+export function Article(props: ContentProps) { return <Content {...props} semanticTag='article' semanticRole='article' />       }
+export function Section(props: ContentProps) { return <Content {...props} semanticTag='section' semanticRole='region' />        }
+export function Aside  (props: ContentProps) { return <Content {...props} semanticTag='aside'   semanticRole='complementary' /> }
+
+// mark as Content compatible:
+Article.prototype = Content.prototype;
+Section.prototype = Content.prototype;
+Aside.prototype   = Content.prototype;
