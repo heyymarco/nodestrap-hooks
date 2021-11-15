@@ -127,19 +127,15 @@ export interface FocusBlurVars {
     /**
      * functional boxShadow color - at focus state.
      */
-    boxShadowFocusFn   : any
+    boxShadowFn  : any
     /**
      * final boxShadow color - at focus state.
      */
-    boxShadowFocusCol  : any
+    boxShadowCol : any
     /**
      * final boxShadow single layer - at focus state.
      */
-    boxShadowFocusLy   : any
-    /**
-     * toggles on boxShadow single layer - at focus state.
-     */
-    boxShadowFocusTg   : any
+    boxShadowLy  : any
 }
 const [focusBlurRefs, focusBlurDecls] = createCssVar<FocusBlurVars>();
 
@@ -186,43 +182,43 @@ export const usesFocusBlurState = () => {
     return [
         () => composition([
             vars({
-                [focusBlurDecls.boxShadowFocusFn]  : fallbacks(
+                [focusBlurDecls.boxShadowFn]  : fallbacks(
                     themeRefs.focusImpt,  // first  priority
                     themeRefs.focus,      // second priority
                     themeRefs.focusCond,  // third  priority
                     
                     colors.secondaryThin, // default => uses secondary theme, because its color is neutral
                 ),
-                [focusBlurDecls.boxShadowFocusCol] : fallbacks(
+                [focusBlurDecls.boxShadowCol] : fallbacks(
                     // no toggle outlined nor toggle mild yet (might be added in the future)
                     
-                    focusBlurRefs.boxShadowFocusFn, // default => uses our `boxShadowFocusFn`
+                    focusBlurRefs.boxShadowFn, // default => uses our `boxShadowFn`
                 ),
-                [focusBlurDecls.boxShadowFocusLy]  : [[ // double array => makes the JSS treat as space separated values
+                [focusBlurDecls.boxShadowLy]  : [[ // double array => makes the JSS treat as space separated values
                     // combining: pos width spread color ...
                     
                     // boxShadowFocus pos, width, spread, etc:
                     cssProps.boxShadowFocus,
                     
                     // boxShadowFocus color:
-                    focusBlurRefs.boxShadowFocusCol,
+                    focusBlurRefs.boxShadowCol,
                 ]],
             }),
             states([
                 isFocused([
                     vars({
-                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowFocusLy,
+                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowLy,
                     }),
                 ]),
                 isFocusing([
                     vars({
-                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowFocusLy,
+                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowLy,
                         [focusBlurDecls.anim     ] : cssProps.animFocus,
                     }),
                 ]),
                 isBlurring([
                     vars({
-                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowFocusLy,
+                        [focusBlurDecls.boxShadow] : focusBlurRefs.boxShadowLy,
                         [focusBlurDecls.anim     ] : cssProps.animBlur,
                     }),
                 ]),
