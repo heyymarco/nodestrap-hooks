@@ -113,7 +113,7 @@ export interface ValidInvalidVars extends EditableControlValidInvalidVars {
     /**
      * final validation icon image.
      */
-    iconImgValidInvalid : any
+    iconImg : any
 }
 const [validInvalidRefs, validInvalidDecls] = createCssVar<ValidInvalidVars>();
 
@@ -133,19 +133,19 @@ export const usesValidInvalidState = () => {
                 validInvalid(),
             ]),
             vars({
-                [validInvalidDecls.iconImgValidInvalid] : 'none',
+                [validInvalidDecls.iconImg] : 'none',
             }),
             states([
                 isValid([
                     vars({
                         // apply a *valid* icon indicator:
-                        [validInvalidDecls.iconImgValidInvalid] : cssProps.iconValid,
+                        [validInvalidDecls.iconImg] : cssProps.iconValid,
                     }),
                 ]),
                 isInvalid([
                     vars({
                         // apply an *invalid* icon indicator:
-                        [validInvalidDecls.iconImgValidInvalid] : cssProps.iconInvalid,
+                        [validInvalidDecls.iconImg] : cssProps.iconInvalid,
                     }),
                 ]),
             ]),
@@ -184,7 +184,7 @@ export const usesEditableTextControlLayout = () => {
             ...children(iconElm, [
                 imports([
                     usesIconImage(
-                        /*iconImage: */validInvalidRefs.iconImgValidInvalid,
+                        /*iconImage: */validInvalidRefs.iconImg,
                         /*iconColor: */iconColorRefs.iconCol
                     ),
                 ]),
