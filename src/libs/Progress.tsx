@@ -219,13 +219,13 @@ export const usesProgressBarVars = () => {
 
 //#region running
 export interface RunningVars {
-    animRunning   : any
+    anim   : any
 }
 const [runningRefs, runningDecls] = createCssVar<RunningVars>();
 
 // {
 //     const [, , , propsManager] = usesAnim();
-//     propsManager.registerAnim(runningRefs.animRunning);
+//     propsManager.registerAnim(runningRefs.anim);
 // }
 
 const selectorIsRunning  = '.running'
@@ -244,12 +244,12 @@ export const usesRunningState = () => {
             states([
                 notRunning([
                     vars({
-                        [runningDecls.animRunning] : 'initial',
+                        [runningDecls.anim] : 'initial',
                     }),
                 ]),
                 isRunning([
                     vars({
-                        [runningDecls.animRunning] : cssProps.itemAnimRunning,
+                        [runningDecls.anim] : cssProps.itemAnimRunning,
                     }),
                 ]),
             ]),
@@ -533,7 +533,7 @@ export const usesProgressBarVariants = () => {
                             
                             
                             // animations:
-                            anim  : runningRefs.animRunning,
+                            anim  : runningRefs.anim,
                         }),
                     ]),
                 }),
