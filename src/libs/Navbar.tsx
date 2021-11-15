@@ -332,7 +332,7 @@ export interface MenusAnimVars {
     /**
      * final animation for the menus.
      */
-    menusAnim : any
+    anim : any
 }
 const [menusAnimRefs, menusAnimDecls] = createCssVar<MenusAnimVars>();
 
@@ -351,17 +351,17 @@ export const usesMenusAnim = () => {
                 anim(),
             ]),
             vars({
-                [menusAnimDecls.menusAnim] : animRefs.animNone,
+                [menusAnimDecls.anim] : animRefs.animNone,
             }),
             states([
                 isActivating([
                     vars({
-                        [menusAnimDecls.menusAnim] : cssProps.menusAnimActive,
+                        [menusAnimDecls.anim] : cssProps.menusAnimActive,
                     }),
                 ]),
                 isPassivating([
                     vars({
-                        [menusAnimDecls.menusAnim] : cssProps.menusAnimPassive,
+                        [menusAnimDecls.anim] : cssProps.menusAnimPassive,
                     }),
                 ]),
             ]),
@@ -486,7 +486,7 @@ export const usesMenusLayout = () => {
             
             
             // animations:
-            anim           : menusAnimRefs.menusAnim,
+            anim           : menusAnimRefs.anim,
             
             
             
