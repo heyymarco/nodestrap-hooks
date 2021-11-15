@@ -430,7 +430,7 @@ export const usesProgressBarLayout = () => {
     return composition([
         layout({
             // sizes:
-            flex     : [[progressBarVarRefs.valueRatio, progressBarVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `rangeValueRatio` for the grow/shrink ratio
+            flex     : [[progressBarVarRefs.valueRatio, progressBarVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `valueRatio` for the grow/shrink ratio
             overflow : 'hidden',
             
             
