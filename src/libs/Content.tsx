@@ -98,18 +98,18 @@ export const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 //#region containers
 export interface ContainerVars {
     // borders:
-    containerBorderWidth            : any
+    borderWidth            : any
     
-    containerBorderStartStartRadius : any
-    containerBorderStartEndRadius   : any
-    containerBorderEndStartRadius   : any
-    containerBorderEndEndRadius     : any
+    borderStartStartRadius : any
+    borderStartEndRadius   : any
+    borderEndStartRadius   : any
+    borderEndEndRadius     : any
     
     
     
     // spacings:
-    containerPaddingInline          : any
-    containerPaddingBlock           : any
+    paddingInline          : any
+    paddingBlock           : any
 }
 const [containerRefs, containerDecls] = createCssVar<ContainerVars>();
 
@@ -133,18 +133,18 @@ export const usesContainer = () => {
         () => composition([
             vars({
                 // borders:
-                [containerDecls.containerBorderWidth]            : borderStrokeRefs.borderWidth,
+                [containerDecls.borderWidth           ] : borderStrokeRefs.borderWidth,
                 
-                [containerDecls.containerBorderStartStartRadius] : borderRadiusRefs.borderStartStartRadius,
-                [containerDecls.containerBorderStartEndRadius]   : borderRadiusRefs.borderStartEndRadius,
-                [containerDecls.containerBorderEndStartRadius]   : borderRadiusRefs.borderEndStartRadius,
-                [containerDecls.containerBorderEndEndRadius]     : borderRadiusRefs.borderEndEndRadius,
+                [containerDecls.borderStartStartRadius] : borderRadiusRefs.borderStartStartRadius,
+                [containerDecls.borderStartEndRadius  ] : borderRadiusRefs.borderStartEndRadius,
+                [containerDecls.borderEndStartRadius  ] : borderRadiusRefs.borderEndStartRadius,
+                [containerDecls.borderEndEndRadius    ] : borderRadiusRefs.borderEndEndRadius,
                 
                 
                 
                 // spacings:
-                [containerDecls.containerPaddingInline]          : paddingRefs.paddingInline,
-                [containerDecls.containerPaddingBlock]           : paddingRefs.paddingBlock,
+                [containerDecls.paddingInline]          : paddingRefs.paddingInline,
+                [containerDecls.paddingBlock ]          : paddingRefs.paddingBlock,
             }),
         ]),
         containerRefs,
@@ -197,21 +197,21 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
                                         so we can calculate the correct inner_borderRadius.
                                         
-                                        that's why we set `!important` to the `containerBorderWidth`.
+                                        that's why we set `!important` to the `containerDecls.borderWidth`.
                                     */
-                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
                                     
-                                    [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
                                     // add rounded corners on top:
-                                    [borderRadiusDecls.borderStartStartRadius      ] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderStartEndRadius        ] : `calc(${containerRefs.containerBorderStartEndRadius  } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
                                     
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
@@ -220,21 +220,21 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
                                         so we can calculate the correct inner_borderRadius.
                                         
-                                        that's why we set `!important` to the `containerBorderWidth`.
+                                        that's why we set `!important` to the `containerDecls.borderWidth`.
                                     */
-                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
                                     
-                                    [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
                                     // add rounded corners on bottom:
-                                    [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
                                     
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
@@ -252,21 +252,21 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
                                         so we can calculate the correct inner_borderRadius.
                                         
-                                        that's why we set `!important` to the `containerBorderWidth`.
+                                        that's why we set `!important` to the `containerDecls.borderWidth`.
                                     */
-                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
                                     
-                                    [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
                                     // add rounded corners on left:
-                                    [borderRadiusDecls.borderStartStartRadius      ] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
                                     
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
@@ -275,21 +275,21 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerBorderWidth` in separator must be pointed to container,
+                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
                                         so we can calculate the correct inner_borderRadius.
                                         
-                                        that's why we set `!important` to the `containerBorderWidth`.
+                                        that's why we set `!important` to the `containerDecls.borderWidth`.
                                     */
-                                    [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
                                     
-                                    [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
                                 }),
                                 layout({
                                     // borders:
                                     // add rounded corners on right:
-                                    [borderRadiusDecls.borderStartEndRadius        ] : `calc(${containerRefs.containerBorderStartEndRadius  } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
                                     
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
@@ -305,28 +305,28 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                         vars({
                             /*
                                 if the_current_element is a_child_of_container and also a_separator,
-                                the deleted `containerBorderWidth` in separator must be pointed to container,
+                                the deleted `containerDecls.borderWidth` in separator must be pointed to container,
                                 so we can calculate the correct inner_borderRadius.
                                 
-                                that's why we set `!important` to the `containerBorderWidth`.
+                                that's why we set `!important` to the `containerDecls.borderWidth`.
                             */
-                            [containerDecls.containerBorderWidth           ] : 'inherit !important', // reads parent's prop
+                            [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
                             
-                            [containerDecls.containerBorderStartStartRadius] : 'inherit', // reads parent's prop
-                            [containerDecls.containerBorderStartEndRadius  ] : 'inherit', // reads parent's prop
-                            [containerDecls.containerBorderEndStartRadius  ] : 'inherit', // reads parent's prop
-                            [containerDecls.containerBorderEndEndRadius    ] : 'inherit', // reads parent's prop
+                            [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
+                            [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
+                            [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
+                            [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
                         }),
                         layout({
                             // borders:
                             
                             // add rounded corners on top:
-                            [borderRadiusDecls.borderStartStartRadius      ] : `calc(${containerRefs.containerBorderStartStartRadius} - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
-                            [borderRadiusDecls.borderStartEndRadius        ] : `calc(${containerRefs.containerBorderStartEndRadius  } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
                             
                             // add rounded corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius        ] : `calc(${containerRefs.containerBorderEndStartRadius  } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
-                            [borderRadiusDecls.borderEndEndRadius          ] : `calc(${containerRefs.containerBorderEndEndRadius    } - ${containerRefs.containerBorderWidth} - min(${containerRefs.containerBorderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
                             
                             /* recursive calculation of borderRadius is not supported yet */
                         }),
@@ -372,13 +372,13 @@ export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}
         vars({
             /*
                 if the_current_element is a container,
-                the `containerBorderWidth` will be deleted (not follows `borderWidth`),
+                the `containerDecls.borderWidth` will be deleted (not follows `borderWidth`),
                 because the_current_element becomes a separator.
                 
                 use `0px` instead of 0,
                 because the value will be calculated in `calc()` expression.
             */
-            [containerDecls.containerBorderWidth] : '0px',
+            [containerDecls.borderWidth] : '0px',
         }),
         
         // removes unecessary border stroke:
@@ -464,13 +464,13 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
         vars({
             /*
                 if the_current_element is a container,
-                the `containerBorderWidth` will be deleted (not follows `borderWidth`),
+                the `containerDecls.borderWidth` will be deleted (not follows `borderWidth`),
                 because the_current_element becomes a separator.
                 
                 use `0px` instead of 0,
                 because the value will be calculated in `calc()` expression.
             */
-            [containerDecls.containerBorderWidth] : '0px',
+            [containerDecls.borderWidth] : '0px',
         }),
         
         // removes unecessary border stroke:
