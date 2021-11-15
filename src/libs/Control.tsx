@@ -188,7 +188,7 @@ export const usesFocusBlurState = () => {
             vars({
                 [focusBlurDecls.boxShadowFocusFn]  : fallbacks(
                     themeRefs.focusImpt,  // first  priority
-                    themeRefs.focusTheme, // second priority
+                    themeRefs.focus,      // second priority
                     themeRefs.focusCond,  // third  priority
                     
                     colors.secondaryThin, // default => uses secondary theme, because its color is neutral
