@@ -256,102 +256,102 @@ export interface ThemeVars {
     /**
      * themed foreground color.
      */
-    foregTheme         : any
+    foreg             : any
     /**
      * themed background color.
      */
-    backgTheme         : any
+    backg             : any
     /**
      * themed border color.
      */
-    borderTheme        : any
+    border            : any
     
     /**
      * themed foreground color - at outlined variant.
      */
-    foregOutlinedTheme : any
+    foregOutlined     : any
     
     /**
      * themed foreground color - at mild variant.
      */
-    foregMildTheme     : any
+    foregMild         : any
     /**
      * themed background color - at mild variant.
      */
-    backgMildTheme     : any
+    backgMild         : any
     
     /**
      * themed focus color - at focused state.
      */
-    focusTheme         : any
+    focus             : any
     
     
     
     /**
      * conditional unthemed foreground color.
      */
-    foregCond          : any
+    foregCond         : any
     /**
      * conditional unthemed background color.
      */
-    backgCond          : any
+    backgCond         : any
     /**
      * conditional unthemed border color.
      */
-    borderCond         : any
+    borderCond        : any
     
     /**
      * conditional unthemed foreground color - at outlined variant.
      */
-    foregOutlinedCond  : any
+    foregOutlinedCond : any
     
     /**
      * conditional unthemed foreground color - at mild variant.
      */
-    foregMildCond      : any
+    foregMildCond     : any
     /**
      * conditional unthemed background color - at mild variant.
      */
-    backgMildCond      : any
+    backgMildCond     : any
     
     /**
      * conditional unthemed focus color - at focused state.
      */
-    focusCond          : any
+    focusCond         : any
     
     
     
     /**
      * important conditional unthemed foreground color.
      */
-    foregImpt          : any
+    foregImpt         : any
     /**
      * important conditional unthemed background color.
      */
-    backgImpt          : any
+    backgImpt         : any
     /**
      * important conditional unthemed border color.
      */
-    borderImpt         : any
+    borderImpt        : any
     
     /**
      * important conditional unthemed foreground color - at outlined variant.
      */
-    foregOutlinedImpt  : any
+    foregOutlinedImpt : any
     
     /**
      * important conditional unthemed foreground color - at mild variant.
      */
-    foregMildImpt      : any
+    foregMildImpt     : any
     /**
      * important conditional unthemed background color - at mild variant.
      */
-    backgMildImpt      : any
+    backgMildImpt     : any
     
     /**
      * important conditional unthemed focus color - at focused state.
      */
-    focusImpt          : any
+    focusImpt         : any
 }
 const [themeRefs, themeDecls] = createCssVar<ThemeVars>();
 
@@ -384,16 +384,16 @@ export const usesThemeVariant = (factory = themeOf, options = themeOptions()) =>
  */
 export const themeOf = (themeName: ThemeName) => composition([
     vars({
-        [themeDecls.foregTheme        ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgTheme        ] : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderTheme       ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        [themeDecls.foreg            ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backg            ] : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.border           ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.foregOutlinedTheme] : themeRefs.backgTheme,
+        [themeDecls.foregOutlined    ] : themeRefs.backg,
         
-        [themeDecls.foregMildTheme    ] : themeRefs.borderTheme,
-        [themeDecls.backgMildTheme    ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.foregMild        ] : themeRefs.border,
+        [themeDecls.backgMild        ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusTheme        ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+        [themeDecls.focus            ] : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 /**
@@ -417,16 +417,16 @@ export const usesThemeDefault = (themeName: ThemeName|null = null) => {
  */
 export const usesThemeCond = (themeName: ThemeName|null) => composition([
     vars({
-        [themeDecls.foregCond        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgCond        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderCond       ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        [themeDecls.foregCond        ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgCond        ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderCond       ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.foregOutlinedCond]  : !themeName ? null : themeRefs.backgCond,
+        [themeDecls.foregOutlinedCond] : !themeName ? null : themeRefs.backgCond,
         
-        [themeDecls.foregMildCond    ]  : !themeName ? null : themeRefs.borderCond,
-        [themeDecls.backgMildCond    ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.foregMildCond    ] : !themeName ? null : themeRefs.borderCond,
+        [themeDecls.backgMildCond    ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusCond        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+        [themeDecls.focusCond        ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 /**
@@ -436,16 +436,16 @@ export const usesThemeCond = (themeName: ThemeName|null) => composition([
  */
 export const usesThemeImpt = (themeName: ThemeName|null) => composition([
     vars({
-        [themeDecls.foregImpt        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
-        [themeDecls.backgImpt        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
-        [themeDecls.borderImpt       ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
+        [themeDecls.foregImpt        ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Text`], // light on dark base color | dark on light base color
+        [themeDecls.backgImpt        ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[   themeName      ], // base color
+        [themeDecls.borderImpt       ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Bold`], // 20% base color + 80% page's foreground
         
-        [themeDecls.foregOutlinedImpt]  : !themeName ? null : themeRefs.backgImpt,
+        [themeDecls.foregOutlinedImpt] : !themeName ? null : themeRefs.backgImpt,
         
-        [themeDecls.foregMildImpt    ]  : !themeName ? null : themeRefs.borderImpt,
-        [themeDecls.backgMildImpt    ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
+        [themeDecls.foregMildImpt    ] : !themeName ? null : themeRefs.borderImpt,
+        [themeDecls.backgMildImpt    ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Mild`], // 20% base color + 80% page's background
         
-        [themeDecls.focusImpt        ]  : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
+        [themeDecls.focusImpt        ] : !themeName ? null : (colors as DictionaryOf<typeof colors>)[`${themeName}Thin`], // 50% transparency of base color
     }),
 ]);
 
@@ -563,7 +563,7 @@ export const usesOutlinedVariant = (factory = outlinedOf) => {
             vars({
                 [outlinedDecls.foregFn] : fallbacks(
                     themeRefs.foregOutlinedImpt,  // first  priority
-                    themeRefs.foregOutlinedTheme, // second priority
+                    themeRefs.foregOutlined,      // second priority
                     themeRefs.foregOutlinedCond,  // third  priority
                     
                     cssProps.foreg,               // default => uses config's foreground
@@ -654,7 +654,7 @@ export const usesMildVariant = (factory = mildOf) => {
             vars({
                 [mildDecls.foregFn] : fallbacks(
                     themeRefs.foregMildImpt,  // first  priority
-                    themeRefs.foregMildTheme, // second priority
+                    themeRefs.foregMild,      // second priority
                     themeRefs.foregMildCond,  // third  priority
                     
                     cssProps.foreg,           // default => uses config's foreground
@@ -662,7 +662,7 @@ export const usesMildVariant = (factory = mildOf) => {
                 
                 [mildDecls.backgFn] : fallbacks(
                     themeRefs.backgMildImpt,  // first  priority
-                    themeRefs.backgMildTheme, // second priority
+                    themeRefs.backgMild,      // second priority
                     themeRefs.backgMildCond,  // third  priority
                     
                     cssProps.backg,           // default => uses config's background
@@ -731,7 +731,7 @@ export const usesForeg = () => {
             vars({
                 [foregDecls.foregFn] : fallbacks(
                     themeRefs.foregImpt,  // first  priority
-                    themeRefs.foregTheme, // second priority
+                    themeRefs.foreg,      // second priority
                     themeRefs.foregCond,  // third  priority
                     
                     cssProps.foreg,       // default => uses config's foreground
@@ -792,7 +792,7 @@ export const usesBackg = () => {
                 
                 [backgDecls.backgFn]   : fallbacks(
                     themeRefs.backgImpt,  // first  priority
-                    themeRefs.backgTheme, // second priority
+                    themeRefs.backg,      // second priority
                     themeRefs.backgCond,  // third  priority
                     
                     cssProps.backg,       // default => uses config's background
@@ -853,7 +853,7 @@ export const usesBorder = () => {
             vars({
                 [borderDecls.borderFn]  : fallbacks(
                     themeRefs.borderImpt,  // first  priority
-                    themeRefs.borderTheme, // second priority
+                    themeRefs.border,      // second priority
                     themeRefs.borderCond,  // third  priority
                     
                     cssProps.borderColor,  // default => uses config's border color
