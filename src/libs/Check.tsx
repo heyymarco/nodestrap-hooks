@@ -139,17 +139,17 @@ export interface CheckAnimVars {
     /**
      * final filter for the checkbox.
      */
-    checkFilter : any
+    filter : any
     
     /**
      * final transform for the checkbox.
      */
-    checkTransf : any
+    transf : any
     
     /**
      * final animation for the checkbox.
      */
-    checkAnim   : any
+    anim   : any
 }
 const [checkAnimRefs, checkAnimDecls] = createCssVar<CheckAnimVars>();
 
@@ -185,21 +185,21 @@ export const usesCheckAnim = () => {
                 anim(),
             ]),
             vars({
-                [checkAnimDecls.checkFilter]        : [[ // double array => makes the JSS treat as space separated values
+                [checkAnimDecls.filter] : [[ // double array => makes the JSS treat as space separated values
                     // combining: filter1 * filter2 * filter3 ...
                     
                     // layers:
                     ...checkPropsManager.filters().map(fallbackNoneFilter),
                 ]],
                 
-                [checkAnimDecls.checkTransf]        : [[ // double array => makes the JSS treat as space separated values
+                [checkAnimDecls.transf] : [[ // double array => makes the JSS treat as space separated values
                     // combining: transf1 * transf2 * transf3 ...
                     
                     // layers:
                     ...checkPropsManager.transfs().map(fallbackNoneTransf),
                 ]],
                 
-                [checkAnimDecls.checkAnim]          : [ // single array => makes the JSS treat as comma separated values
+                [checkAnimDecls.anim  ] : [ // single array => makes the JSS treat as comma separated values
                     // layering: anim1 | anim2 | anim3 ...
                     
                     // layers:
@@ -421,9 +421,9 @@ export const usesCheckLayout = () => {
                             
                             
                             // animations:
-                            filter    : checkAnimRefs.checkFilter,
-                            transf    : checkAnimRefs.checkTransf,
-                            anim      : checkAnimRefs.checkAnim,
+                            filter    : checkAnimRefs.filter,
+                            transf    : checkAnimRefs.transf,
+                            anim      : checkAnimRefs.anim,
                         }),
                     ]),
                     
