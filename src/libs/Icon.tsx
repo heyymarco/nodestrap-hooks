@@ -83,6 +83,7 @@ import {
     
     usesOutlinedVariant,
     
+    notMild,
     isMild,
     usesMildVariant        as basicUsesMildVariant,
     MildVariant,
@@ -315,10 +316,13 @@ export const usesIconColor = () => {
                     
                     foregRefs.foregFn,            // default => uses our `foregFn`
                 ),
-                
-                [iconColorDecls.iconColMildTg] : 'initial',
             }),
             variants([
+                notMild([
+                    vars({
+                        [iconColorDecls.iconColMildTg] : 'initial',
+                    }),
+                ]),
                 isMild([
                     vars({
                         [iconColorDecls.iconColMildTg] : outlinedRefs.foregFn,
