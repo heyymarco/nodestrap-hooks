@@ -134,41 +134,41 @@ export const usesThemeActive  = (themeName: ThemeName|null = 'secondary') => con
 
 //#region svg animations
 export interface SvgAnimVars {
-    svgTopTransfIn   : any
-    svgMidTransfIn   : any
-    svgBtmTransfIn   : any
+    topTransfIn  : any
+    midTransfIn  : any
+    btmTransfIn  : any
     
-    svgTopTransfOut  : any
-    svgMidTransfOut  : any
-    svgBtmTransfOut  : any
+    topTransfOut : any
+    midTransfOut : any
+    btmTransfOut : any
     
     
     
     /**
      * final transform for the svg top.
      */
-    svgTopTransf     : any
+    topTransf    : any
     /**
      * final transform for the svg middle.
      */
-    svgMidTransf     : any
+    midTransf    : any
     /**
      * final transform for the svg bottom.
      */
-    svgBtmTransf     : any
+    btmTransf    : any
     
     /**
      * final animation for the svg top.
      */
-    svgTopAnim       : any
+    topAnim      : any
     /**
      * final animation for the svg middle.
      */
-    svgMidAnim       : any
+    midAnim      : any
     /**
      * final animation for the svg bottom.
      */
-    svgBtmAnim       : any
+    btmAnim      : any
 }
 const [svgAnimRefs, svgAnimDecls] = createCssVar<SvgAnimVars>();
 
@@ -182,39 +182,39 @@ export const usesSvgAnim = () => {
     
     // css vars:
     const transfNoneVars = () => vars({
-        [svgAnimDecls.svgTopTransfIn]  : animRefs.transfNone,
-        [svgAnimDecls.svgMidTransfIn]  : animRefs.transfNone,
-        [svgAnimDecls.svgBtmTransfIn]  : animRefs.transfNone,
+        [svgAnimDecls.topTransfIn]  : animRefs.transfNone,
+        [svgAnimDecls.midTransfIn]  : animRefs.transfNone,
+        [svgAnimDecls.btmTransfIn]  : animRefs.transfNone,
         
-        [svgAnimDecls.svgTopTransfOut] : animRefs.transfNone,
-        [svgAnimDecls.svgMidTransfOut] : animRefs.transfNone,
-        [svgAnimDecls.svgBtmTransfOut] : animRefs.transfNone,
+        [svgAnimDecls.topTransfOut] : animRefs.transfNone,
+        [svgAnimDecls.midTransfOut] : animRefs.transfNone,
+        [svgAnimDecls.btmTransfOut] : animRefs.transfNone,
     });
     const transfInVars   = () => vars({
-        [svgAnimDecls.svgTopTransfIn]  : cssProps.svgTopTransfIn,
-        [svgAnimDecls.svgMidTransfIn]  : cssProps.svgMidTransfIn,
-        [svgAnimDecls.svgBtmTransfIn]  : cssProps.svgBtmTransfIn,
+        [svgAnimDecls.topTransfIn]  : cssProps.svgTopTransfIn,
+        [svgAnimDecls.midTransfIn]  : cssProps.svgMidTransfIn,
+        [svgAnimDecls.btmTransfIn]  : cssProps.svgBtmTransfIn,
     });
     const transfOutVars  = () => vars({
-        [svgAnimDecls.svgTopTransfOut] : cssProps.svgTopTransfOut,
-        [svgAnimDecls.svgMidTransfOut] : cssProps.svgMidTransfOut,
-        [svgAnimDecls.svgBtmTransfOut] : cssProps.svgBtmTransfOut,
+        [svgAnimDecls.topTransfOut] : cssProps.svgTopTransfOut,
+        [svgAnimDecls.midTransfOut] : cssProps.svgMidTransfOut,
+        [svgAnimDecls.btmTransfOut] : cssProps.svgBtmTransfOut,
     });
     
     const animNoneVars   = () => vars({
-        [svgAnimDecls.svgTopAnim]   : animRefs.animNone,
-        [svgAnimDecls.svgMidAnim]   : animRefs.animNone,
-        [svgAnimDecls.svgBtmAnim]   : animRefs.animNone,
+        [svgAnimDecls.topAnim]   : animRefs.animNone,
+        [svgAnimDecls.midAnim]   : animRefs.animNone,
+        [svgAnimDecls.btmAnim]   : animRefs.animNone,
     });
     const animInVars     = () => vars({
-        [svgAnimDecls.svgTopAnim]   : cssProps.svgTopAnimIn,
-        [svgAnimDecls.svgMidAnim]   : cssProps.svgMidAnimIn,
-        [svgAnimDecls.svgBtmAnim]   : cssProps.svgBtmAnimIn,
+        [svgAnimDecls.topAnim]   : cssProps.svgTopAnimIn,
+        [svgAnimDecls.midAnim]   : cssProps.svgMidAnimIn,
+        [svgAnimDecls.btmAnim]   : cssProps.svgBtmAnimIn,
     });
     const animOutVars    = () => vars({
-        [svgAnimDecls.svgTopAnim]   : cssProps.svgTopAnimOut,
-        [svgAnimDecls.svgMidAnim]   : cssProps.svgMidAnimOut,
-        [svgAnimDecls.svgBtmAnim]   : cssProps.svgBtmAnimOut,
+        [svgAnimDecls.topAnim]   : cssProps.svgTopAnimOut,
+        [svgAnimDecls.midAnim]   : cssProps.svgMidAnimOut,
+        [svgAnimDecls.btmAnim]   : cssProps.svgBtmAnimOut,
     });
     
     
@@ -257,17 +257,17 @@ export const usesSvgAnim = () => {
                 ]),
             ]),
             vars({
-                [svgAnimDecls.svgTopTransf] : [[ // double array => makes the JSS treat as space separated values
-                    svgAnimRefs.svgTopTransfIn,
-                    svgAnimRefs.svgTopTransfOut,
+                [svgAnimDecls.topTransf] : [[ // double array => makes the JSS treat as space separated values
+                    svgAnimRefs.topTransfIn,
+                    svgAnimRefs.topTransfOut,
                 ]],
-                [svgAnimDecls.svgMidTransf] : [[ // double array => makes the JSS treat as space separated values
-                    svgAnimRefs.svgMidTransfIn,
-                    svgAnimRefs.svgMidTransfOut,
+                [svgAnimDecls.midTransf] : [[ // double array => makes the JSS treat as space separated values
+                    svgAnimRefs.midTransfIn,
+                    svgAnimRefs.midTransfOut,
                 ]],
-                [svgAnimDecls.svgBtmTransf] : [[ // double array => makes the JSS treat as space separated values
-                    svgAnimRefs.svgBtmTransfIn,
-                    svgAnimRefs.svgBtmTransfOut,
+                [svgAnimDecls.btmTransf] : [[ // double array => makes the JSS treat as space separated values
+                    svgAnimRefs.btmTransfIn,
+                    svgAnimRefs.btmTransfOut,
                 ]],
             }),
         ]),
@@ -316,22 +316,22 @@ export const usesSvgLayout = () => {
                     isNthChild(0, 1, [
                         layout({
                             // animations:
-                            transf : svgAnimRefs.svgTopTransf,
-                            anim   : svgAnimRefs.svgTopAnim,
+                            transf : svgAnimRefs.topTransf,
+                            anim   : svgAnimRefs.topAnim,
                         }),
                     ]),
                     isNthChild(0, 2, [
                         layout({
                             // animations:
-                            transf : svgAnimRefs.svgMidTransf,
-                            anim   : svgAnimRefs.svgMidAnim,
+                            transf : svgAnimRefs.midTransf,
+                            anim   : svgAnimRefs.midAnim,
                         }),
                     ]),
                     isNthChild(0, 3, [
                         layout({
                             // animations:
-                            transf : svgAnimRefs.svgBtmTransf,
-                            anim   : svgAnimRefs.svgBtmAnim,
+                            transf : svgAnimRefs.btmTransf,
+                            anim   : svgAnimRefs.btmAnim,
                         }),
                     ]),
                 ]),
@@ -470,7 +470,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     //#region transforms hamburger menu to cross menu
     const keyframesSvgTopIn  : PropEx.Keyframes = {
         from : {
-            transform : svgAnimRefs.svgTopTransfOut,
+            transform : svgAnimRefs.topTransfOut,
         },
         '43%': {
             transform : [['rotate(-45deg)', 'scaleX(1.35)', 'translate(0, 37.5%)' ]],
@@ -479,23 +479,23 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             transform : [['rotate(-60deg)', 'scaleX(1.35)', 'translate(0, 37.5%)' ]],
         },
         to   : {
-            transform : svgAnimRefs.svgTopTransfIn,
+            transform : svgAnimRefs.topTransfIn,
         },
     };
     const keyframesSvgMidIn  : PropEx.Keyframes = {
         from : {
-            transform : svgAnimRefs.svgMidTransfOut,
+            transform : svgAnimRefs.midTransfOut,
         },
         '19%': {
             transform : [[                  'scaleX(1.35)'                        ]],
         },
         to   : {
-            transform : svgAnimRefs.svgMidTransfIn,
+            transform : svgAnimRefs.midTransfIn,
         },
     };
     const keyframesSvgBtmIn  : PropEx.Keyframes = {
         from : {
-            transform : svgAnimRefs.svgBtmTransfOut,
+            transform : svgAnimRefs.btmTransfOut,
         },
         '43%': {
             transform : [['rotate(45deg)' , 'scaleX(1.35)', 'translate(0, -37.5%)']],
@@ -504,7 +504,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             transform : [['rotate(60deg)' , 'scaleX(1.35)', 'translate(0, -37.5%)']],
         },
         to   : {
-            transform : svgAnimRefs.svgBtmTransfIn,
+            transform : svgAnimRefs.btmTransfIn,
         },
     };
     //#endregion transforms hamburger menu to cross menu
