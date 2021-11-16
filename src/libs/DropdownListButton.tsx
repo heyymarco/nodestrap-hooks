@@ -3,16 +3,14 @@ import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
 
-// cssfn:
+// nodestrap components:
 import {
     // general types:
     Tag,
     Role,
     SemanticTag,
     SemanticRole,
-}                           from './react-cssfn' // cssfn for react
-
-// nodestrap components:
+}                           from './Element'
 import {
     // general types:
     PopupPlacement,
