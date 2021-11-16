@@ -19,16 +19,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // react components:
-    Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -46,6 +36,15 @@ import {
 import spacers              from './spacers'     // configurable spaces defs
 
 // nodestrap components:
+import {
+    // react components:
+    Element,
+    
+    
+    
+    // utilities:
+    isTypeOf,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
