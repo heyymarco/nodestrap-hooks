@@ -47,12 +47,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // react components:
-    ElementProps,
-    Element,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -80,6 +74,13 @@ import {
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
 import typos                from './typos/index' // configurable typography (texting) defs
+
+// nodestrap components:
+import {
+    // react components:
+    ElementProps,
+    Element,
+}                           from './Element'
 
 
 
