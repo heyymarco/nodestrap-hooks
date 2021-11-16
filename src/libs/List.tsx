@@ -38,24 +38,8 @@ import {
     escapeSvg,
 }                           from './cssfn'       // cssfn core
 import {
-    // general types:
-    Tag,
-    
-    
-    
     // hooks:
     createUseSheet,
-    useTestSemantic,
-    
-    
-    
-    // react components:
-    Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -84,6 +68,25 @@ import {
 }                           from './stripouts'
 
 // nodestrap components:
+import {
+    // general types:
+    Tag,
+    
+    
+    
+    // hooks:
+    useTestSemantic,
+    
+    
+    
+    // react components:
+    Element,
+    
+    
+    
+    // utilities:
+    isTypeOf,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
