@@ -24,11 +24,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // utilities:
-    isTypeOf,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -47,6 +42,10 @@ import {
 }                           from './accessibilities'
 
 // nodestrap components:
+import {
+    // utilities:
+    isTypeOf,
+}                           from './Element'
 import {
     // hooks:
     ListStyle,
