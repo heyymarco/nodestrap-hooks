@@ -35,11 +35,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // react components:
-    ElementProps,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -75,6 +70,10 @@ import {
 import triggerChange        from 'react-trigger-change'
 
 // nodestrap components:
+import {
+    // hooks:
+    SemanticProps,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
@@ -168,7 +167,7 @@ export const usesEnableDisableState = () => {
     ] as const;
 };
 
-export const useEnableDisableState = (props: IndicationProps & ElementProps) => {
+export const useEnableDisableState = (props: IndicationProps & SemanticProps) => {
     // fn props:
     const propEnabled = usePropEnabled(props);
     const htmlCtrls   = [
@@ -330,7 +329,7 @@ export const markActive = () => composition([
  */
 export const usesThemeActive = (themeName: ThemeName|null = 'secondary') => usesThemeCond(themeName);
 
-export const useActivePassiveState = (props: IndicationProps & ElementProps, activeDn?: boolean) => {
+export const useActivePassiveState = (props: IndicationProps & SemanticProps, activeDn?: boolean) => {
     // fn props:
     const propActive = usePropActive(props, null);
     const isCheckbox = (props.tag === 'input') && ((props as any).type === 'checkbox');
