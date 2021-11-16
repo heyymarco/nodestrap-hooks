@@ -38,17 +38,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // react components:
-    Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
-    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -66,6 +55,16 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap components:
+import {
+    // react components:
+    Element,
+    
+    
+    
+    // utilities:
+    isTypeOf,
+    setRef,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
