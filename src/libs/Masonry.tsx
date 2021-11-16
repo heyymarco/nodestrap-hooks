@@ -27,11 +27,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // utilities:
-    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -48,6 +43,10 @@ import {
 import spacers              from './spacers'     // configurable spaces defs
 
 // nodestrap components:
+import {
+    // utilities:
+    setRef,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
