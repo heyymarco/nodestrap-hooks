@@ -38,12 +38,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    useTestSemantic,
-    
-    
-    
-    // utilities:
-    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -72,6 +66,15 @@ import {
 }                           from './accessibilities'
 
 // nodestrap components:
+import {
+    // hooks:
+    useTestSemantic,
+    
+    
+    
+    // utilities:
+    setRef,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
