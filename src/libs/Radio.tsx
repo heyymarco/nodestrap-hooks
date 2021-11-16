@@ -27,11 +27,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // utilities:
-    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -45,6 +40,10 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap components:
+import {
+    // utilities:
+    setRef,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
