@@ -28,29 +28,8 @@ import {
     rule,
 }                           from './cssfn'       // cssfn core
 import {
-    // general types:
-    Tag,
-    Role,
-    SemanticTag,
-    SemanticRole,
-    
-    
-    
     // hooks:
     createUseSheet,
-    useTestSemantic,
-    
-    
-    
-    // react components:
-    ElementProps,
-    Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
-    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -72,6 +51,30 @@ import {
 }                           from './stripouts'
 
 // nodestrap components:
+import {
+    // general types:
+    Tag,
+    Role,
+    SemanticTag,
+    SemanticRole,
+    
+    
+    
+    // hooks:
+    useTestSemantic,
+    
+    
+    
+    // react components:
+    ElementProps,
+    Element,
+    
+    
+    
+    // utilities:
+    isTypeOf,
+    setRef,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
