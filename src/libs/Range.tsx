@@ -31,27 +31,8 @@ import {
     rule,
 }                           from './cssfn'       // cssfn core
 import {
-    // general types:
-    Tag,
-    Role,
-    SemanticTag,
-    SemanticRole,
-    
-    
-    
     // hooks:
     createUseSheet,
-    
-    
-    
-    // utilities:
-    setRef,
-    parseNumber,
-    
-    
-    
-    // react components:
-    Element,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -88,6 +69,24 @@ import {
 import triggerChange        from 'react-trigger-change'
 
 // nodestrap components:
+import {
+    // general types:
+    Tag,
+    Role,
+    SemanticTag,
+    SemanticRole,
+    
+    
+    
+    // utilities:
+    setRef,
+    parseNumber,
+    
+    
+    
+    // react components:
+    Element,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
