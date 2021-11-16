@@ -35,18 +35,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // react components:
-    ElementProps,
-    Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
-    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -69,6 +57,17 @@ import {
 }                           from './stripouts'
 
 // nodestrap components:
+import {
+    // react components:
+    ElementProps,
+    Element,
+    
+    
+    
+    // utilities:
+    isTypeOf,
+    setRef,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
