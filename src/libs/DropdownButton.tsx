@@ -4,7 +4,7 @@ import {
     useState,
 }                           from 'react'         // base technology of our nodestrap components
 
-// cssfn:
+// nodestrap components:
 import {
     // general types:
     Tag,
@@ -16,9 +16,7 @@ import {
     
     // utilities:
     setRef,
-}                           from './react-cssfn' // cssfn for react
-
-// nodestrap components:
+}                           from './Element'
 import {
     // hooks:
     TogglerActiveProps,
