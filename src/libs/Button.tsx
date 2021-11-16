@@ -27,7 +27,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    useTestSemantic,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssConfig,
@@ -48,6 +47,10 @@ import {
 import spacers              from './spacers'     // configurable spaces defs
 
 // nodestrap components:
+import {
+    // hooks:
+    useTestSemantic,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
