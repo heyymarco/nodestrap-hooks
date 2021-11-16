@@ -40,12 +40,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // react components:
-    ElementProps,
-    Element,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -69,6 +63,11 @@ import {
 }                           from './layouts'
 
 // nodestrap components:
+import {
+    // react components:
+    ElementProps,
+    Element,
+}                           from './Element'
 import {
     // hooks:
     isSize          as basicIsSize,
