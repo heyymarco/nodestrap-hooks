@@ -70,7 +70,7 @@ import {
 import triggerChange        from 'react-trigger-change'
 
 // nodestrap components:
-import {
+import type {
     // hooks:
     SemanticProps,
 }                           from './Element'
