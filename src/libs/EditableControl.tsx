@@ -37,11 +37,6 @@ import {
 import {
     // hooks:
     createUseSheet,
-    
-    
-    
-    // utilities:
-    setRef,
 }                           from './react-cssfn' // cssfn for react
 import {
     createCssVar,
@@ -75,6 +70,10 @@ import {
 }                           from './validations'
 
 // nodestrap components:
+import {
+    // utilities:
+    setRef,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
