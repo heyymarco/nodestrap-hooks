@@ -37,15 +37,15 @@ import {
 
 // nodestrap utilities:
 import {
+    // utilities:
+    isTypeOf,
+}                           from './utilities'
+import {
     // hooks:
     usePropEnabled,
 }                           from './accessibilities'
 
 // nodestrap components:
-import {
-    // utilities:
-    isTypeOf,
-}                           from './Element'
 import {
     // hooks:
     ListStyle,
