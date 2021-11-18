@@ -54,16 +54,17 @@ import {
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
+// nodestrap utilities:
+import {
+    // utilities:
+    isTypeOf,
+    setRef,
+}                           from './utilities'
+
 // nodestrap components:
 import {
     // react components:
     Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
-    setRef,
 }                           from './Element'
 import {
     // hooks:
