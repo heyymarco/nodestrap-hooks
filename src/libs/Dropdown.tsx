@@ -35,6 +35,11 @@ import {
 
 // nodestrap utilities:
 import {
+    // utilities:
+    isTypeOf,
+    setRef,
+}                           from './utilities'
+import {
     stripoutFocusableElement,
 }                           from './stripouts'
 
@@ -43,12 +48,6 @@ import {
     // react components:
     ElementProps,
     Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
-    setRef,
 }                           from './Element'
 import {
     // hooks:
