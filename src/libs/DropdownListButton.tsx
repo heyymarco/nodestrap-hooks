@@ -4,7 +4,7 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // nodestrap components:
-import {
+import type {
     // general types:
     Tag,
     Role,
