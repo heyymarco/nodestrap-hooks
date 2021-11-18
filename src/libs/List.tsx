@@ -55,10 +55,6 @@ import {
 
 // nodestrap utilities:
 import {
-    // utilities:
-    isTypeOf,
-}                           from './utilities'
-import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
@@ -70,6 +66,10 @@ import {
     stripoutList,
     stripoutFocusableElement,
 }                           from './stripouts'
+import {
+    // utilities:
+    isTypeOf,
+}                           from './utilities'
 
 // nodestrap components:
 import {
