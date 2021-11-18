@@ -43,6 +43,10 @@ import {
 
 // nodestrap utilities:
 import {
+    // utilities:
+    setRef,
+}                           from './utilities'
+import {
     stripoutFocusableElement,
 }                           from './stripouts'
 
@@ -53,11 +57,6 @@ import {
     Role,
     SemanticTag,
     SemanticRole,
-    
-    
-    
-    // utilities:
-    setRef,
     
     
     
