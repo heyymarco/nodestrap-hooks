@@ -51,6 +51,11 @@ import {
 
 // nodestrap utilities:
 import {
+    // utilities:
+    setRef,
+    parseNumber,
+}                           from './utilities'
+import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import {
@@ -75,12 +80,6 @@ import {
     Role,
     SemanticTag,
     SemanticRole,
-    
-    
-    
-    // utilities:
-    setRef,
-    parseNumber,
     
     
     
