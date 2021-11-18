@@ -41,12 +41,12 @@ import {
 
 // nodestrap utilities:
 import spacers              from './spacers'     // configurable spaces defs
-
-// nodestrap components:
 import {
     // utilities:
     setRef,
-}                           from './Element'
+}                           from './utilities'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
