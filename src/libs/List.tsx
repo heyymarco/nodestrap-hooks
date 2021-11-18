@@ -55,6 +55,10 @@ import {
 
 // nodestrap utilities:
 import {
+    // utilities:
+    isTypeOf,
+}                           from './utilities'
+import {
     borderRadiuses,
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
@@ -81,11 +85,6 @@ import {
     
     // react components:
     Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
 }                           from './Element'
 import {
     // hooks:
