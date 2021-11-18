@@ -53,13 +53,13 @@ import {
 
 // nodestrap utilities:
 import {
+    stripoutFocusableElement,
+}                           from './stripouts'
+import {
     // utilities:
     isTypeOf,
     setRef,
 }                           from './utilities'
-import {
-    stripoutFocusableElement,
-}                           from './stripouts'
 
 // nodestrap components:
 import {
