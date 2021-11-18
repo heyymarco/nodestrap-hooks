@@ -4,6 +4,12 @@ import {
     useState,
 }                           from 'react'         // base technology of our nodestrap components
 
+// nodestrap utilities:
+import {
+    // utilities:
+    setRef,
+}                           from './utilities'
+
 // nodestrap components:
 import {
     // general types:
@@ -11,11 +17,6 @@ import {
     Role,
     SemanticTag,
     SemanticRole,
-    
-    
-    
-    // utilities:
-    setRef,
 }                           from './Element'
 import {
     // hooks:
