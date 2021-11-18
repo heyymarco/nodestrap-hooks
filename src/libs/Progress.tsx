@@ -55,6 +55,11 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap utilities:
+import {
+    // utilities:
+    isTypeOf,
+    parseNumber,
+}                           from './utilities'
 import colors               from './colors'      // configurable colors & theming defs
 import spacers              from './spacers'     // configurable spaces defs
 
@@ -62,12 +67,6 @@ import spacers              from './spacers'     // configurable spaces defs
 import {
     // react components:
     Element,
-    
-    
-    
-    // utilities:
-    isTypeOf,
-    parseNumber,
 }                           from './Element'
 import {
     // hooks:
