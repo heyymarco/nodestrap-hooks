@@ -101,16 +101,14 @@ export const isTypeOf = <TProps,>(element: React.ReactNode, funcComponent: React
             (element.type === funcComponent)
             ||
             (
-                (typeof element.type === 'function')
+                (typeof(element.type) === 'function')
+                &&
+                element.type.prototype
+                &&
+                funcComponent.prototype
                 &&
                 (
-                    (
-                        element.type.prototype
-                        &&
-                        funcComponent.prototype
-                        &&
-                        (element.type.prototype === funcComponent.prototype)
-                    )
+                    (element.type.prototype === funcComponent.prototype)
                     ||
                     (element.type.prototype instanceof funcComponent)
                 )
