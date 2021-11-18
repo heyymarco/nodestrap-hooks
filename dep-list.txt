@@ -14,5 +14,7 @@
 @nodestrap/stripouts
 @nodestrap/breakpoints
 @nodestrap/layouts
+
+@nodestrap/utilities
 @nodestrap/accessibilities
 @nodestrap/validations
