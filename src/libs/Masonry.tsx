@@ -40,11 +40,11 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap utilities:
+import spacers              from './spacers'     // configurable spaces defs
 import {
     // utilities:
     setRef,
 }                           from './utilities'
-import spacers              from './spacers'     // configurable spaces defs
 
 // nodestrap components:
 import {
