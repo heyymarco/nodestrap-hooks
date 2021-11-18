@@ -38,6 +38,10 @@ import {
 
 // nodestrap utilities:
 import {
+    // utilities:
+    setRef,
+}                           from './utilities'
+import {
     // hooks:
     Result as ValResult,
     usePropValidation,
@@ -50,10 +54,6 @@ import {
 }                           from './validations'
 
 // nodestrap components:
-import {
-    // utilities:
-    setRef,
-}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
