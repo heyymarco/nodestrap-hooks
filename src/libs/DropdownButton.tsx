@@ -11,7 +11,7 @@ import {
 }                           from './utilities'
 
 // nodestrap components:
-import {
+import type {
     // general types:
     Tag,
     Role,
