@@ -56,6 +56,10 @@ import {
 
 // nodestrap utilities:
 import {
+    // utilities:
+    setRef,
+}                           from './utilities'
+import {
     // styles:
     fillTextLineHeightLayout,
 }                           from './layouts'
@@ -69,11 +73,6 @@ import {
 import {
     // hooks:
     useTestSemantic,
-    
-    
-    
-    // utilities:
-    setRef,
 }                           from './Element'
 import {
     // hooks:
