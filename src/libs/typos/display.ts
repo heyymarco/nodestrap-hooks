@@ -10,7 +10,7 @@ import {
     
     
     // compositions:
-    global,
+    globalDef,
 }                           from '../cssfn'       // cssfn core
 import {
     createCssConfig,
@@ -58,7 +58,7 @@ export default cssProps;
 
 // create a new styleSheet & attach:
 createSheet(() => [
-    global([
+    globalDef([
         usesLevelingRule(cssProps, cssDecls, ['.display-']),
     ]),
 ])

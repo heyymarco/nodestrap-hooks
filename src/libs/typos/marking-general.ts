@@ -6,7 +6,7 @@ import {
     
     
     // compositions:
-    global,
+    globalDef,
     
     
     
@@ -26,7 +26,7 @@ import gens                 from './general'
 
 // create a new styleSheet & attach:
 createSheet(() => [
-    global([
+    globalDef([
         rule(['del', 's', 'ins', 'u', 'small', '.small', 'strong', 'b', 'em', 'i'], [
             layout({
                 // layouts:

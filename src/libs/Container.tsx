@@ -16,7 +16,7 @@ import {
     // compositions:
     composition,
     mainComposition,
-    global,
+    globalDef,
     imports,
     
     
@@ -216,7 +216,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // create a new styleSheet & attach:
 createSheet(() => [
-    global([
+    globalDef([
         // the container size is determined by screen width:
         Object.keys(breakpoints)
         .map((breakpointName) => isScreenWidthAtLeast(breakpointName, [

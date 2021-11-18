@@ -10,7 +10,7 @@ import {
     
     
     // compositions:
-    global,
+    globalDef,
     
     
     
@@ -57,7 +57,7 @@ export default cssProps;
 
 // create a new styleSheet & attach:
 createSheet(() => [
-    global([
+    globalDef([
         rule(['hr'], [
             layout({
                 // layouts:

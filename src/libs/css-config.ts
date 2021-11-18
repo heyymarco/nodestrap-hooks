@@ -21,7 +21,7 @@ import {
 
 
     // compositions:
-    global,
+    globalDef,
 
 
     // rules:
@@ -555,7 +555,7 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
 
         // create a new styleSheet & attach:
         genStyleSheet = createSheet([
-            global([
+            globalDef([
                 rule(settings.rule, genProps),
                 noRule(genKeyframes),
             ]),

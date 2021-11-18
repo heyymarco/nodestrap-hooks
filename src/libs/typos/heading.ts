@@ -18,7 +18,7 @@ import {
     
     
     // compositions:
-    global,
+    globalDef,
     
     
     
@@ -162,7 +162,7 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
     ];
 };
 createSheet(() => [
-    global([
+    globalDef([
         usesLevelingRule(cssProps, cssDecls, ['h', '.h']),
     ]),
 ])

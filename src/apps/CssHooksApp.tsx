@@ -8,7 +8,7 @@ import {
 import {
     compositionOf,
     mainComposition,
-    global,
+    globalDef,
 
     layout,
 
@@ -109,7 +109,7 @@ const useAwesomeButtonStyle = createUseSheet([
     compositionOf('other', [
 
     ]),
-    global([
+    globalDef([
         [ ':root', {
             '--glob-var': '"hello global"',
         }],

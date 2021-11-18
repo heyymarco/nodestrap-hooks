@@ -6,7 +6,7 @@ import {
 // cssfn:
 import {
     createSheet,
-    global,
+    globalDef,
     rule,
     layout,
     variants,
@@ -19,7 +19,7 @@ import {
 
 
 createSheet(() => [
-    global([
+    globalDef([
         rule('.btn', [
             layout({
                 '--btn-name': '"this is btn"',
