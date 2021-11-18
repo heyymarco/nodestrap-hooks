@@ -39,11 +39,13 @@ import {
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
-// nodestrap components:
+// nodestrap utilities:
 import {
     // utilities:
     setRef,
-}                           from './Element'
+}                           from './utilities'
+
+// nodestrap components:
 import {
     // hooks:
     usesSizeVariant,
