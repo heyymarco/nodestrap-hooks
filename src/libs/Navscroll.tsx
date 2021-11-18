@@ -5,11 +5,13 @@ import {
     useEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
-// nodestrap components:
+// nodestrap utilities:
 import {
     // utilities:
     isTypeOf,
-}                           from './Element'
+}                           from './utilities'
+
+// nodestrap components:
 import {
     // react components:
     ListItemProps,
