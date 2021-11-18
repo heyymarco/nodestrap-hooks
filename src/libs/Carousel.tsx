@@ -45,15 +45,15 @@ import {
 
 // nodestrap utilities:
 import {
-    // utilities:
-    isTypeOf,
-    setRef,
-}                           from './utilities'
-import {
     stripoutList,
     stripoutScrollbar,
     stripoutImage,
 }                           from './stripouts'
+import {
+    // utilities:
+    isTypeOf,
+    setRef,
+}                           from './utilities'
 
 // nodestrap components:
 import {
