@@ -56,13 +56,13 @@ import {
 
 // nodestrap utilities:
 import {
-    // utilities:
-    setRef,
-}                           from './utilities'
-import {
     // styles:
     fillTextLineHeightLayout,
 }                           from './layouts'
+import {
+    // utilities:
+    setRef,
+}                           from './utilities'
 import {
     // hooks:
     usePropEnabled,
