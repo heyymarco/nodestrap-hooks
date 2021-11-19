@@ -21,8 +21,9 @@
 @nodestrap/validations
 
 @nodestrap/element
-@nodestrap/visually-hidden
 @nodestrap/basic
-@nodestrap/icon
 @nodestrap/content
 @nodestrap/container
+
+@nodestrap/visually-hidden
+@nodestrap/icon
