@@ -347,7 +347,8 @@ export const usesIconColor = () => {
  * Otherwise, the combination of `base` url followed by `target` url.
  */
 export const concatUrl = (base: string, target: string) => {
-    const dummyUrl  = new URL('http://dummy')
+    const dummyUrl  = new URL('http://dummy');
+    if (!base.endsWith('/') || !base.endsWith('\\')) base += '/';
     const baseUrl   = new URL(base, dummyUrl);
     const targetUrl = new URL(target, baseUrl);
 
@@ -710,13 +711,13 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
-const config = {
+export const config = {
     font: {
         /**
          * A `url directory` pointing to the collection of the icon's fonts.  
          * It's the `front-end url`, not the physical path on the server.
          */
-        path  : '/fonts/',
+        path  : '/fonts',
 
         /**
          * A list of icon's fonts with extensions.  
@@ -750,7 +751,7 @@ const config = {
          * A `url directory` pointing to the collection of the icon's images.  
          * It's the `front-end url`, not the physical path on the server.
          */
-        path  : '/icons/',
+        path  : '/icons',
 
         /**
          * A list of icon's images with extensions.  
@@ -773,8 +774,17 @@ const config = {
 
 
 // react components:
-
-export type IconList = ((typeof fontItems)[number]) | (string & {})
+type CustomIconList  =
+|'instagram'
+|'whatsapp'
+|'close'
+|'busy'
+|'prev'
+|'next'
+|'dropdown'
+|'dropright'
+|'dropleft';
+export type IconList = CustomIconList | ((typeof fontItems)[number]) | (string & {})
 
 export interface IconProps<TElement extends HTMLElement = HTMLElement>
     extends
