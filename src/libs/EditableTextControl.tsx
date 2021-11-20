@@ -54,14 +54,6 @@ import {
 }                           from './Basic'
 import {
     // hooks:
-    usesIconColor,
-    
-    
-    // styles:
-    usesIconImage,
-}                           from './Icon'
-import {
-    // hooks:
     isActive,
 }                           from './Indicator'
 import {
@@ -91,6 +83,14 @@ import {
     EditableControlProps,
     EditableControl,
 }                           from './EditableControl'
+import {
+    // hooks:
+    usesIconColor,
+    
+    
+    // styles:
+    usesIconImage,
+}                           from './Icon'
 
 
 
