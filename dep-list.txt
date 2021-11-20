@@ -20,8 +20,13 @@
 @nodestrap/accessibilities
 @nodestrap/validations
 
+// generics:
 @nodestrap/element
 @nodestrap/basic
+@nodestrap/indicator
+@nodestrap/control
+@nodestrap/action-control
+
 @nodestrap/content
 @nodestrap/container
 
