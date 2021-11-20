@@ -215,10 +215,12 @@ export function Label<TElement extends HTMLElement = HTMLElement>(props: LabelPr
             {...props}
             
             
+            // semantics:
+            tag={props.tag ?? 'span'}
+            
             
             // variants:
             mild={props.mild ?? true}
-            
             
             
             // classes:
