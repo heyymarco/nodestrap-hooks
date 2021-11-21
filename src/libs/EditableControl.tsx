@@ -581,8 +581,9 @@ export const usesEditableControlStates = () => {
         ]),
     ]);
 };
-export const usesEditableControl = () => {
-    return composition([
+
+export const useEditableControlSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesEditableControlLayout(),
@@ -592,14 +593,6 @@ export const usesEditableControl = () => {
             
             // states:
             usesEditableControlStates(),
-        ]),
-    ]);
-};
-
-export const useEditableControlSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesEditableControl(),
         ]),
     ]),
 ]);
