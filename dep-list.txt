@@ -34,8 +34,13 @@
 @nodestrap/content  [simplified styles]
 @nodestrap/container    [simplified styles]
 
-// components:
+// simple components:
 @nodestrap/visually-hidden  [simplified styles]
 @nodestrap/icon [simplified styles]
 @nodestrap/label    [simplified styles]
 @nodestrap/masonry  [simplified styles]
+@nodestrap/button  [simplified styles]
+@nodestrap/button-icon  [simplified styles]
+@nodestrap/close-button  [simplified styles]
+
+// composite components:
