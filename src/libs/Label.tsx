@@ -150,22 +150,15 @@ export const usesLabelVariants = () => {
         ]),
     ]);
 };
-export const usesLabel = () => {
-    return composition([
+
+export const useLabelSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesLabelLayout(),
             
             // variants:
             usesLabelVariants(),
-        ]),
-    ]);
-};
-
-export const useLabelSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesLabel(),
         ]),
     ]),
 ]);
