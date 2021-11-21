@@ -357,30 +357,18 @@ export const usesButtonStates = () => {
         ]),
     ]);
 };
-export const usesButton = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useButtonSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
-            usesButtonLayout(options),
+            usesButtonLayout(),
             
             // variants:
             usesButtonVariants(),
             
             // states:
             usesButtonStates(),
-        ]),
-    ]);
-};
-
-export const useButtonSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesButton(),
         ]),
     ]),
 ]);
