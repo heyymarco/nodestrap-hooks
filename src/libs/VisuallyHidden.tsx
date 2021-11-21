@@ -68,19 +68,11 @@ export const usesVisuallyHiddenLayout = () => {
     ]);
 };
 
-export const usesVisuallyHidden = () => {
-    return composition([
-        imports([
-            // layouts:
-            usesVisuallyHiddenLayout(),
-        ]),
-    ]);
-};
-
 export const useVisuallyHiddenSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesVisuallyHidden(),
+            // layouts:
+            usesVisuallyHiddenLayout(),
         ]),
     ]),
 ]);
