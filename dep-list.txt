@@ -22,18 +22,20 @@
 
 // abstract components:
 @nodestrap/element
-@nodestrap/basic
-@nodestrap/indicator
-@nodestrap/control
-@nodestrap/action-control
-@nodestrap/editable-control
-@nodestrap/editable-text-control
-@nodestrap/editable-action-control
+@nodestrap/basic    [simplified styles]
+@nodestrap/indicator    [simplified styles]
+@nodestrap/control  [simplified styles]
+@nodestrap/action-control   [simplified styles]
+@nodestrap/editable-control [simplified styles]
+@nodestrap/editable-text-control    [simplified styles]
+@nodestrap/editable-action-control  [simplified styles]
 
 // generic components:
-@nodestrap/content
-@nodestrap/container
+@nodestrap/content  [simplified styles]
+@nodestrap/container    [simplified styles]
 
 // components:
-@nodestrap/visually-hidden
-@nodestrap/icon
+@nodestrap/visually-hidden  [simplified styles]
+@nodestrap/icon [simplified styles]
+@nodestrap/label    [simplified styles]
+@nodestrap/masonry  [simplified styles]
