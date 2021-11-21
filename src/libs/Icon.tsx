@@ -608,8 +608,8 @@ export const usesIconImage       = (img: Cust.Ref, foregOverwrite?: Cust.Ref, si
     ]);
 };
 
-export const usesIcon = () => {
-    return composition([
+export const useIconSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesIconLayout(),
@@ -631,9 +631,8 @@ export const usesIcon = () => {
                 ]),
             ]),
         ]),
-    ]);
-};
-
+    ]),
+]);
 export const useIcon = <TElement extends HTMLElement = HTMLElement>(props: IconProps<TElement>) => {
     return useMemo(() => {
         const iconImg = (() => {
@@ -674,13 +673,6 @@ export const useIcon = <TElement extends HTMLElement = HTMLElement>(props: IconP
         };
     }, [props.icon]);
 };
-export const useIconSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesIcon(),
-        ]),
-    ]),
-]);
 
 
 
