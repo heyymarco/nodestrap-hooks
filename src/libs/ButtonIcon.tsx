@@ -216,30 +216,18 @@ export const usesButtonIconStates = () => {
         ]),
     ]);
 };
-export const usesButtonIcon = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useButtonIconSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
-            usesButtonIconLayout(options),
+            usesButtonIconLayout(),
             
             // variants:
             usesButtonIconVariants(),
             
             // states:
             usesButtonIconStates(),
-        ]),
-    ]);
-};
-
-export const useButtonIconSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesButtonIcon(),
         ]),
     ]),
 ]);
