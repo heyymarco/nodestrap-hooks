@@ -208,27 +208,15 @@ export const usesMasonryVariants = () => {
         ]),
     ]);
 };
-export const usesMasonry = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
-        imports([
-            // layouts:
-            usesMasonryLayout(options),
-            
-            // variants:
-            usesMasonryVariants(),
-        ]),
-    ]);
-};
 
 export const useMasonrySheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesMasonry(),
+            // layouts:
+            usesMasonryLayout(),
+            
+            // variants:
+            usesMasonryVariants(),
         ]),
     ]),
 ]);
