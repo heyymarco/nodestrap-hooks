@@ -1338,22 +1338,15 @@ export const usesBasicVariants = () => {
         ]),
     ]);
 };
-export const usesBasic = () => {
-    return composition([
+
+export const useBasicSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesBasicLayout(),
             
             // variants:
             usesBasicVariants(),
-        ]),
-    ]);
-};
-
-export const useBasicSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesBasic(),
         ]),
     ]),
 ]);
