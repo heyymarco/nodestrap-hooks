@@ -559,8 +559,9 @@ export const usesIndicatorStates = () => {
         ]),
     ]);
 };
-export const usesIndicator = () => {
-    return composition([
+
+export const useIndicatorSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesIndicatorLayout(),
@@ -570,14 +571,6 @@ export const usesIndicator = () => {
             
             // states:
             usesIndicatorStates(),
-        ]),
-    ]);
-};
-
-export const useIndicatorSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesIndicator(),
         ]),
     ]),
 ]);
