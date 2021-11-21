@@ -178,8 +178,9 @@ export const usesInputStates = () => {
         ]),
     ]);
 };
-export const usesInput = () => {
-    return composition([
+
+export const useInputSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesInputLayout(),
@@ -189,14 +190,6 @@ export const usesInput = () => {
             
             // states:
             usesInputStates(),
-        ]),
-    ]);
-};
-
-export const useInputSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesInput(),
         ]),
     ]),
 ]);
