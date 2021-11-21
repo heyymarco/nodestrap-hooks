@@ -214,8 +214,9 @@ export const usesFormStates = () => {
         ]),
     ]);
 };
-export const usesForm = () => {
-    return composition([
+
+export const useFormSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesFormLayout(),
@@ -225,14 +226,6 @@ export const usesForm = () => {
             
             // states:
             usesFormStates(),
-        ]),
-    ]);
-};
-
-export const useFormSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesForm(),
         ]),
     ]),
 ]);
@@ -291,6 +284,10 @@ export function Form(props: FormProps) {
             // semantics:
             semanticTag ={props.semanticTag  ?? 'form'}
             semanticRole={props.semanticRole ?? 'form'}
+            
+            
+            // variants:
+            mild={props.mild ?? true}
             
             
             // classes:
