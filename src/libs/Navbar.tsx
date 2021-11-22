@@ -11,11 +11,6 @@ import type {
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
-    // general types:
-    Style,
-    
-    
-    
     // compositions:
     composition,
     mainComposition,
@@ -950,7 +945,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             menusPositionCompact         : 'absolute',
             menusMarginBlockStartCompact : bcssProps.paddingBlock,
             menusPaddingBlockEndCompact  : bcssProps.paddingBlock,
-        } as Style,
+        } as {},
         //#endregion making menus floating (on mobile), not shifting the content
     };
 }, { prefix: 'navb' });
