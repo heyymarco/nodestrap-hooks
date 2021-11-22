@@ -499,30 +499,18 @@ export const usesRangeStates = () => {
         ]),
     ]);
 };
-export const usesRange = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useRangeSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
-            usesRangeLayout(options),
+            usesRangeLayout(),
             
             // variants:
             usesRangeVariants(),
             
             // states:
             usesRangeStates(),
-        ]),
-    ]);
-};
-
-export const useRangeSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesRange(),
         ]),
     ]),
 ]);
