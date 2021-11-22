@@ -48,14 +48,14 @@ import reportWebVitals from './reportWebVitals';
 //                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
 //                         import CloseButtonApp       from './apps/CloseButtonApp';            //     button|a     button|link (semantic)
 //             import EditableControlApp               from './apps/EditableControlApp';        // div
-                import FormApp                      from './apps/FormApp';                   // form     form (semantic)
+//                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';    // div
 //                     import InputApp                 from './apps/InputApp';                  // span
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';  // div
 //                         import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
-//                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
+                        import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
 //     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
@@ -64,7 +64,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <FormApp />
+    <TogglerMenuButtonApp />
     ,
     document.getElementById('root')
 );

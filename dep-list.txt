@@ -46,5 +46,9 @@
 @nodestrap/input  [simplified styles]
 @nodestrap/range  [simplified styles]
 @nodestrap/check  [simplified styles]
+@nodestrap/radio  [simplified styles]
+@nodestrap/toggler-menu-button  [simplified styles]
 
 // composite components:
+@nodestrap/list  [simplified styles]
+@nodestrap/navbar  [simplified styles]
