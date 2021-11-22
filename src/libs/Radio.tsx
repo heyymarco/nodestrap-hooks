@@ -151,8 +151,9 @@ export const usesRadioStates = () => {
         ]),
     ]);
 };
-export const usesRadio = () => {
-    return composition([
+
+export const useRadioSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesRadioLayout(),
@@ -162,14 +163,6 @@ export const usesRadio = () => {
             
             // states:
             usesRadioStates(),
-        ]),
-    ]);
-};
-
-export const useRadioSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesRadio(),
         ]),
     ]),
 ]);
