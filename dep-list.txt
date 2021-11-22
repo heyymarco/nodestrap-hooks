@@ -51,4 +51,19 @@
 
 // composite components:
 @nodestrap/list  [simplified styles]
+@nodestrap/card  [simplified styles]
+
+// composite components:
+@nodestrap/popup  [simplified styles]
+todo badge
+todo busy
+@nodestrap/alert  [simplified styles]
+todo tooltip
+todo collapse
+todo dropdown
+todo dropdown+list
+todo dropdown+button
+todo dropdown+list+button
+
+todo progress
 @nodestrap/navbar  [simplified styles]

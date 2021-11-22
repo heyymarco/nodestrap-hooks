@@ -30,7 +30,10 @@ import reportWebVitals from './reportWebVitals';
 //                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
 //         import CardApp                              from './apps/CardApp';                   // article  article (semantic)
 //         import PopupApp                             from './apps/PopupApp';                  // div
+//             import BadgeApp                         from './apps/BadgeApp';                  // span     status (semantic)
+//                 import BusyApp                      from './apps/BusyApp';                   // span     status (semantic)
 //             import AlertApp                         from './apps/AlertApp';                  // div      alert (semantic)
+//             import TooltipApp                       from './apps/TooltipApp';                // div      tooltip (semantic)
 //             import ModalApp                         from './apps/ModalApp';                  // div      dialog (semantic)
 //                 import ModalCardApp                 from './apps/ModalCardApp';              // div      dialog (semantic)
 //                 import ModalSideApp                 from './apps/ModalSideApp';              // div      dialog (semantic)
@@ -39,9 +42,6 @@ import reportWebVitals from './reportWebVitals';
 //                     import DropdownListApp          from './apps/DropdownListApp';           // div      dialog|menu (semantic)
 //                 import DropdownButtonApp            from './apps/DropdownButtonApp';         // div      dialog (semantic)
 //                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
-//             import BadgeApp                         from './apps/BadgeApp';                  // span     status (semantic)
-//                 import BusyApp                      from './apps/BusyApp';                   // span     status (semantic)
-//             import TooltipApp                       from './apps/TooltipApp';                // div      tooltip (semantic)
 //         import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
