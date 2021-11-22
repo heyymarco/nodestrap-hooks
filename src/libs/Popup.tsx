@@ -206,8 +206,9 @@ export const usesPopupStates = () => {
         ]),
     ]);
 };
-export const usesPopup = () => {
-    return composition([
+
+export const usePopupSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesPopupLayout(),
@@ -217,14 +218,6 @@ export const usesPopup = () => {
             
             // states:
             usesPopupStates(),
-        ]),
-    ]);
-};
-
-export const usePopupSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesPopup(),
         ]),
     ]),
 ]);
