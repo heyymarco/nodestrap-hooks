@@ -83,6 +83,18 @@ import {
     usesAnim,
 }                           from './Basic'
 import {
+    // styles:
+    usesIndicatorLayout,
+    usesIndicatorVariants,
+    usesIndicatorStates,
+    
+    
+    
+    // react components:
+    IndicatorProps,
+    Indicator,
+}                           from './Indicator'
+import {
     // hooks:
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
@@ -95,18 +107,6 @@ import {
     usesContentLayout,
     usesContentVariants,
 }                           from './Content'
-import {
-    // styles:
-    usesIndicatorLayout,
-    usesIndicatorVariants,
-    usesIndicatorStates,
-    
-    
-    
-    // react components:
-    IndicatorProps,
-    Indicator,
-}                           from './Indicator'
 
 
 
@@ -412,30 +412,18 @@ export const usesCardStates = () => {
         ]),
     ]);
 };
-export const usesCard = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useCardSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
-            usesCardLayout(options),
+            usesCardLayout(),
             
             // variants:
             usesCardVariants(),
             
             // states:
             usesCardStates(),
-        ]),
-    ]);
-};
-
-export const useCardSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesCard(),
         ]),
     ]),
 ]);
