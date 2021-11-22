@@ -59,9 +59,8 @@ import {
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
 import {
-    // configs:
-    cssProps as hcssProps,
-}                           from './typos/horizontal-rule'
+    horizontalRule,
+}                           from './typos/index'
 import {
     stripoutList,
     stripoutFocusableElement,
@@ -457,8 +456,8 @@ export const usesListSeparatorItemLayout = () => {
                     
                     
                     // spacings:
-                    marginBlockStart : `calc(${hcssProps.marginBlockStart} / 2)`,
-                    marginBlockEnd   : `calc(${hcssProps.marginBlockEnd  } / 2)`,
+                    marginBlockStart : `calc(${horizontalRule.cssProps.marginBlockStart} / 2)`,
+                    marginBlockEnd   : `calc(${horizontalRule.cssProps.marginBlockEnd  } / 2)`,
                 }),
             ]),
         }),
