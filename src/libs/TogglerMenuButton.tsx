@@ -435,8 +435,9 @@ export const usesTogglerMenuButtonStates = () => {
         ]),
     ]);
 };
-export const usesTogglerMenuButton = () => {
-    return composition([
+
+export const useTogglerMenuButtonSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesTogglerMenuButtonLayout(),
@@ -446,14 +447,6 @@ export const usesTogglerMenuButton = () => {
             
             // states:
             usesTogglerMenuButtonStates(),
-        ]),
-    ]);
-};
-
-export const useTogglerMenuButtonSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesTogglerMenuButton(),
         ]),
     ]),
 ]);
