@@ -97,10 +97,6 @@ import {
     fallbackNoneAnim,
 }                           from './Basic'
 import {
-    // styles:
-    usesIconImage,
-}                           from './Icon'
-import {
     // hooks:
     isActived,
     isActivating,
@@ -115,10 +111,6 @@ import {
 }                           from './Control'
 import {
     // styles:
-    usesButtonLayout,
-}                           from './Button'
-import {
-    // styles:
     usesEditableActionControlLayout,
     usesEditableActionControlVariants,
     usesEditableActionControlStates,
@@ -129,6 +121,14 @@ import {
     EditableActionControlProps,
     EditableActionControl,
 }                           from './EditableActionControl'
+import {
+    // styles:
+    usesIconImage,
+}                           from './Icon'
+import {
+    // styles:
+    usesButtonLayout,
+}                           from './Button'
 
 
 
