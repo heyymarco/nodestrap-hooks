@@ -845,8 +845,9 @@ export const usesNavbarStates = () => {
         ]),
     ]);
 };
-export const usesNavbar = () => {
-    return composition([
+
+export const useNavbarSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesNavbarLayout(),
@@ -856,14 +857,6 @@ export const usesNavbar = () => {
             
             // states:
             usesNavbarStates(),
-        ]),
-    ]);
-};
-
-export const useNavbarSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesNavbar(),
         ]),
     ]),
 ]);
