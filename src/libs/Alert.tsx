@@ -48,12 +48,13 @@ import {
     // hooks:
     usesSizeVariant,
 }                           from './Basic'
-import Icon                 from './Icon'
 import {
     // styles:
     usesContentLayout,
     usesContentVariants,
 }                           from './Content'
+import Icon                 from './Icon'
+import CloseButton          from './CloseButton'
 import {
     // general types:
     PopupPlacement,
@@ -73,7 +74,6 @@ import {
     PopupProps,
     Popup,
 }                           from './Popup'
-import CloseButton          from './CloseButton'
 
 
 
@@ -202,8 +202,9 @@ export const usesAlertStates = () => {
         ]),
     ]);
 };
-export const usesAlert = () => {
-    return composition([
+
+export const useAlertSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesAlertLayout(),
@@ -213,14 +214,6 @@ export const usesAlert = () => {
             
             // states:
             usesAlertStates(),
-        ]),
-    ]);
-};
-
-export const useAlertSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesAlert(),
         ]),
     ]),
 ]);
