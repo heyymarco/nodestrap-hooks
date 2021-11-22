@@ -20,7 +20,7 @@
 @nodestrap/accessibilities
 @nodestrap/validations
 
-// abstract components:
+// abstracts:
 @nodestrap/element
 @nodestrap/basic    [simplified styles]
 @nodestrap/indicator    [simplified styles]
@@ -30,7 +30,7 @@
 @nodestrap/editable-text-control    [simplified styles]
 @nodestrap/editable-action-control  [simplified styles]
 
-// generic components:
+// contents:
 @nodestrap/content  [simplified styles]
 @nodestrap/container    [simplified styles]
 
