@@ -669,8 +669,9 @@ export const usesCheckStates = () => {
         }),
     ]);
 };
-export const usesCheck = () => {
-    return composition([
+
+export const useCheckSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesCheckLayout(),
@@ -680,14 +681,6 @@ export const usesCheck = () => {
             
             // states:
             usesCheckStates(),
-        ]),
-    ]);
-};
-
-export const useCheckSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesCheck(),
         ]),
     ]),
 ]);
