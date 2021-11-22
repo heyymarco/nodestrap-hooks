@@ -133,19 +133,6 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    usesBorderAsContainer,
-    usesBorderAsSeparatorBlock,
-    usesBorderAsSeparatorInline,
-    
-    
-    
-    // styles:
-    usesContentMedia,
-    usesContentBasicLayout,
-    usesContentBasicVariants,
-}                           from './Content'
-import {
-    // hooks:
     usesThemeDefault as controlUsesThemeDefault,
     usesThemeActive  as controlUsesThemeActive,
     isFocus,
@@ -169,14 +156,18 @@ import {
     ActionControl,
 }                           from './ActionControl'
 import {
+    // hooks:
+    usesBorderAsContainer,
+    usesBorderAsSeparatorBlock,
+    usesBorderAsSeparatorInline,
+    
+    
+    
     // styles:
-    usesButtonLayout,
-    
-    
-    
-    // react components:
-    ButtonType,
-}                           from './Button'
+    usesContentMedia,
+    usesContentBasicLayout,
+    usesContentBasicVariants,
+}                           from './Content'
 import {
     // hooks:
     usesIconColor,
@@ -185,6 +176,15 @@ import {
     // styles:
     usesIconImage,
 }                           from './Icon'
+import {
+    // styles:
+    usesButtonLayout,
+    
+    
+    
+    // react components:
+    ButtonType,
+}                           from './Button'
 
 
 
@@ -385,30 +385,18 @@ export const usesListItemStates = () => {
         ]),
     ]);
 };
-export const usesListItem = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useListItemSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
-            usesListItemLayout(options),
+            usesListItemLayout(),
             
             // variants:
             usesListItemVariants(),
             
             // states:
             usesListItemStates(),
-        ]),
-    ]);
-};
-
-export const useListItemSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesListItem(),
         ]),
     ]),
 ]);
@@ -502,8 +490,9 @@ export const usesListSeparatorItemLayout = () => {
         ]),
     ]);
 };
-export const usesListSeparatorItem = () => {
-    return composition([
+
+export const useListSeparatorItemSheet = createUseSheet(() => [
+    mainComposition([
         variants([
             rule('&&', [ // makes `.ListSeparatorItem` is more specific than `.ListSeparator`
                 imports([
@@ -511,13 +500,6 @@ export const usesListSeparatorItem = () => {
                     usesListSeparatorItemLayout(),
                 ]),
             ]),
-        ]),
-    ]);
-};
-export const useListSeparatorItemSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesListSeparatorItem(),
         ]),
     ]),
 ]);
@@ -577,8 +559,9 @@ export const usesListActionItemStates = () => {
         ]),
     ]);
 };
-export const usesListActionItem = () => {
-    return composition([
+
+export const useListActionItemSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesListActionItemLayout(),
@@ -588,14 +571,6 @@ export const usesListActionItem = () => {
             
             // states:
             usesListActionItemStates(),
-        ]),
-    ]);
-};
-
-export const useListActionItemSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesListActionItem(),
         ]),
     ]),
 ]);
@@ -1233,30 +1208,18 @@ export const usesListStates = () => {
         ]),
     ]);
 };
-export const usesList = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
-        imports([
-            // layouts:
-            usesListLayout(options),
-            
-            // variants:
-            usesListVariants(options),
-            
-            // states:
-            usesListStates(),
-        ]),
-    ]);
-};
 
 export const useListSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesList(),
+            // layouts:
+            usesListLayout(),
+            
+            // variants:
+            usesListVariants(),
+            
+            // states:
+            usesListStates(),
         ]),
     ]),
 ]);
