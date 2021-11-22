@@ -42,5 +42,9 @@
 @nodestrap/button  [simplified styles]
 @nodestrap/button-icon  [simplified styles]
 @nodestrap/close-button  [simplified styles]
+@nodestrap/form  [simplified styles]
+@nodestrap/input  [simplified styles]
+@nodestrap/range  [simplified styles]
+@nodestrap/check  [simplified styles]
 
 // composite components:
