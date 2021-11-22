@@ -49,21 +49,26 @@
 @nodestrap/radio  [simplified styles]
 @nodestrap/toggler-menu-button  [simplified styles]
 
-// composite components:
+// layouts:
 @nodestrap/list  [simplified styles]
 @nodestrap/card  [simplified styles]
 
-// composite components:
+// statuses:
 @nodestrap/popup  [simplified styles]
 todo badge
 todo busy
+
+notifications:
 @nodestrap/alert  [simplified styles]
 todo tooltip
+
+// menus:
 todo collapse
 todo dropdown
 todo dropdown+list
 todo dropdown+button
 todo dropdown+list+button
 
+// composite components:
 todo progress
 @nodestrap/navbar  [simplified styles]
