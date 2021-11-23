@@ -37,6 +37,10 @@ import {
 }                           from './Basic'
 import {
     // react components:
+    VisuallyHidden,
+}                           from './VisuallyHidden'
+import {
+    // react components:
     Icon,
 }                           from './Icon'
 import {
@@ -58,10 +62,6 @@ import {
     BadgeProps,
     Badge,
 }                           from './Badge'
-import {
-    // react components:
-    VisuallyHidden,
-}                           from './VisuallyHidden'
 
 
 
