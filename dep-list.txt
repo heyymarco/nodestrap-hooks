@@ -70,11 +70,11 @@ notifications:
 @nodestrap/dropdown-list-button  [simplified styles]
 
 // composite components:
+todo progress
 todo nav
 todo navscroll
 todo accordion
 todo group
-todo progress
 @nodestrap/navbar  [simplified styles]
 
 // dialogs:
