@@ -205,8 +205,9 @@ export const usesTooltipStates = () => {
         ]),
     ]);
 };
-export const usesTooltip = () => {
-    return composition([
+
+export const useTooltipSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesTooltipLayout(),
@@ -216,14 +217,6 @@ export const usesTooltip = () => {
             
             // states:
             usesTooltipStates(),
-        ]),
-    ]);
-};
-
-export const useTooltipSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesTooltip(),
         ]),
     ]),
 ]);
