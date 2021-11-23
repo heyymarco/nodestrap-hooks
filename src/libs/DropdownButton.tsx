@@ -24,6 +24,11 @@ import {
     useTogglerActive,
 }                           from './Indicator'
 import {
+    // react components:
+    ButtonIconProps,
+    ButtonIcon,
+}                           from './ButtonIcon'
+import {
     // general types:
     PopupPlacement,
     PopupModifier,
@@ -43,11 +48,6 @@ import {
     DropdownProps,
     Dropdown,
 }                           from './Dropdown'
-import {
-    // react components:
-    ButtonIconProps,
-    ButtonIcon,
-}                           from './ButtonIcon'
 
 
 
