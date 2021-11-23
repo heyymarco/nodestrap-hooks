@@ -160,8 +160,9 @@ export const usesDropdownStates = () => {
         ]),
     ]);
 };
-export const usesDropdown = () => {
-    return composition([
+
+export const useDropdownSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesDropdownLayout(),
@@ -171,14 +172,6 @@ export const usesDropdown = () => {
             
             // states:
             usesDropdownStates(),
-        ]),
-    ]);
-};
-
-export const useDropdownSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesDropdown(),
         ]),
     ]),
 ]);
