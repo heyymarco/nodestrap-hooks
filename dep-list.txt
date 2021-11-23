@@ -63,12 +63,21 @@ notifications:
 @nodestrap/tooltip  [simplified styles]
 
 // menus:
-todo collapse
-todo dropdown
-todo dropdown+list
-todo dropdown+button
-todo dropdown+list+button
+@nodestrap/collapse  [simplified styles]
+@nodestrap/dropdown  [simplified styles]
+@nodestrap/dropdown-list  [simplified styles]
+@nodestrap/dropdown-button  [simplified styles]
+@nodestrap/dropdown-list-button  [simplified styles]
 
 // composite components:
+todo nav
+todo navscroll
+todo accordion
+todo group
 todo progress
 @nodestrap/navbar  [simplified styles]
+
+// dialogs:
+todo modal
+todo modal card
+todo modal side
