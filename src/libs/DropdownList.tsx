@@ -106,8 +106,9 @@ export const usesDropdownListElementLayout = () => {
         }),
     ]);
 };
-export const usesDropdownListElement = () => {
-    return composition([
+
+export const useDropdownListElementSheet = createUseSheet(() => [
+    mainComposition([
         variants([
             rule('&&', [ // makes `.DropdownListElement` is more specific than `.List`
                 imports([
@@ -115,14 +116,6 @@ export const usesDropdownListElement = () => {
                     usesDropdownListElementLayout(),
                 ]),
             ]),
-        ]),
-    ]);
-};
-
-export const useDropdownListElementSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesDropdownListElement(),
         ]),
     ]),
 ]);
