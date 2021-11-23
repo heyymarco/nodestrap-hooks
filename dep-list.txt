@@ -55,12 +55,12 @@
 
 // statuses:
 @nodestrap/popup  [simplified styles]
-todo badge
-todo busy
+@nodestrap/badge  [simplified styles]
+@nodestrap/busy  [simplified styles]
 
 notifications:
 @nodestrap/alert  [simplified styles]
-todo tooltip
+@nodestrap/tooltip  [simplified styles]
 
 // menus:
 todo collapse
