@@ -109,8 +109,9 @@ export const usesBusyStates = () => {
         ]),
     ]);
 };
-export const usesBusy = () => {
-    return composition([
+
+export const useBusySheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesBusyLayout(),
@@ -120,14 +121,6 @@ export const usesBusy = () => {
             
             // states:
             usesBusyStates(),
-        ]),
-    ]);
-};
-
-export const useBusySheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesBusy(),
         ]),
     ]),
 ]);
