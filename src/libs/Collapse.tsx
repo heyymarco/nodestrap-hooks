@@ -222,30 +222,18 @@ export const usesCollapseStates = () => {
         ]),
     ]);
 };
-export const usesCollapse = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useCollapseSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
-            usesCollapseLayout(options),
+            usesCollapseLayout(),
             
             // variants:
             usesCollapseVariants(),
             
             // states:
             usesCollapseStates(),
-        ]),
-    ]);
-};
-
-export const useCollapseSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesCollapse(),
         ]),
     ]),
 ]);
