@@ -75,6 +75,7 @@ todo nav
 todo navscroll
 todo accordion
 todo group
+todo carousel
 @nodestrap/navbar  [simplified styles]
 
 // dialogs:
