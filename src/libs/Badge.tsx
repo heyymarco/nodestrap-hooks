@@ -254,8 +254,9 @@ export const usesBadgeStates = () => {
         ]),
     ]);
 };
-export const usesBadge = () => {
-    return composition([
+
+export const useBadgeSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesBadgeLayout(),
@@ -265,14 +266,6 @@ export const usesBadge = () => {
             
             // states:
             usesBadgeStates(),
-        ]),
-    ]);
-};
-
-export const useBadgeSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesBadge(),
         ]),
     ]),
 ]);
