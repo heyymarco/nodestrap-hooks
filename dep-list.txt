@@ -73,9 +73,9 @@ notifications:
 @nodestrap/progress  [simplified styles]
 @nodestrap/nav  [simplified styles]
 @nodestrap/navscroll  [simplified styles]
-todo accordion
-todo group
-todo carousel
+@nodestrap/accordion  [simplified styles]
+@nodestrap/group  [simplified styles]
+@nodestrap/carousel  [simplified styles]
 @nodestrap/navbar  [simplified styles]
 
 // dialogs:
