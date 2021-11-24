@@ -55,6 +55,10 @@ import {
     normalizeOrientationRule,
 }                           from './Basic'
 import {
+    // react components:
+    VisuallyHidden,
+}                           from './VisuallyHidden'
+import {
     // hooks:
     defaultOrientationRuleOptions,
     
@@ -89,10 +93,6 @@ import {
     // react components:
     Dropdown,
 }                           from './Dropdown'
-import {
-    // react components:
-    VisuallyHidden,
-}                           from './VisuallyHidden'
 
 
 
@@ -152,31 +152,19 @@ export const usesGroupItemVariants = () => {
         ]),
     ]);
 };
-export const usesGroupItem = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useGroupItemSheet = createUseSheet(() => [
+    mainComposition([
         variants([
             rule('&&', [ // makes `.GroupItem` is more specific than `.FooButton.FooVariant`
                 imports([
                     // layouts:
-                    usesGroupItemLayout(options),
+                    usesGroupItemLayout(),
                     
                     // variants:
                     usesGroupItemVariants(),
                 ]),
             ]),
-        ]),
-    ]);
-};
-
-export const useGroupItemSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesGroupItem(),
         ]),
     ]),
 ]);
