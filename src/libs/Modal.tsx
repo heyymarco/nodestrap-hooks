@@ -205,22 +205,15 @@ export const usesModalElementStates = () => {
         ]),
     ]);
 };
-export const usesModalElement = () => {
-    return composition([
+
+export const useModalElementSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesModalElementLayout(),
             
             // states:
             usesModalElementStates(),
-        ]),
-    ]);
-};
-
-export const useModalElementSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesModalElement(),
         ]),
     ]),
 ]);
@@ -330,20 +323,6 @@ export const usesModalStates = () => {
         ]),
     ]);
 };
-export const usesModal = () => {
-    return composition([
-        imports([
-            // layouts:
-            usesModalLayout(),
-            
-            // variants:
-            usesModalVariants(),
-            
-            // states:
-            usesModalStates(),
-        ]),
-    ]);
-};
 
 export const usesDocumentBodyLayout = () => {
     return composition([
@@ -357,7 +336,14 @@ export const usesDocumentBodyLayout = () => {
 export const useModalSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesModal(),
+            // layouts:
+            usesModalLayout(),
+            
+            // variants:
+            usesModalVariants(),
+            
+            // states:
+            usesModalStates(),
         ]),
     ]),
     compositionOf('body', [
