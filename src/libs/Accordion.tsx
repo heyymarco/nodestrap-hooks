@@ -184,30 +184,18 @@ export const usesAccordionItemStates = () => {
         ]),
     ]);
 };
-export const usesAccordionItem = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
+
+export const useAccordionItemSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
-            usesAccordionItemLayout(options),
+            usesAccordionItemLayout(),
             
             // variants:
             usesAccordionItemVariants(),
             
             // states:
             usesAccordionItemStates(),
-        ]),
-    ]);
-};
-
-export const useAccordionItemSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesAccordionItem(),
         ]),
     ]),
 ]);
