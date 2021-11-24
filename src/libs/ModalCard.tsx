@@ -54,6 +54,8 @@ import {
     // styles:
     usesResponsiveContainerGridLayout,
 }                           from './Container'
+import Button               from './Button'
+import CloseButton          from './CloseButton'
 import {
     // hooks:
     OrientationName,
@@ -94,8 +96,6 @@ import {
     ModalProps,
     Modal,
 }                           from './Modal'
-import Button               from './Button'
-import CloseButton          from './CloseButton'
 
 
 
@@ -206,24 +206,6 @@ export const usesModalCardElementStates = () => {
         ]),
     ]);
 };
-export const usesModalCardElement = () => {
-    return composition([
-        variants([
-            rule('&&', [ // makes `.ModalCardElement` is more specific than `.Popup`
-                imports([
-                    // layouts:
-                    usesModalCardElementLayout(),
-                    
-                    // variants:
-                    usesModalCardElementVariants(),
-                    
-                    // states:
-                    usesModalCardElementStates(),
-                ]),
-            ]),
-        ]),
-    ]);
-};
 
 export const usesActionBarLayout = () => {
     return composition([
@@ -254,8 +236,19 @@ export const usesActionBarLayout = () => {
 
 export const useModalCardElementSheet = createUseSheet(() => [
     mainComposition([
-        imports([
-            usesModalCardElement(),
+        variants([
+            rule('&&', [ // makes `.ModalCardElement` is more specific than `.Popup`
+                imports([
+                    // layouts:
+                    usesModalCardElementLayout(),
+                    
+                    // variants:
+                    usesModalCardElementVariants(),
+                    
+                    // states:
+                    usesModalCardElementStates(),
+                ]),
+            ]),
         ]),
     ]),
     compositionOf('actionBar', [
@@ -373,8 +366,9 @@ export const usesModalCardStates = () => {
         ]),
     ]);
 };
-export const usesModalCard = () => {
-    return composition([
+
+export const useModalCardSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesModalCardLayout(),
@@ -384,14 +378,6 @@ export const usesModalCard = () => {
             
             // states:
             usesModalCardStates(),
-        ]),
-    ]);
-};
-
-export const useModalCardSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesModalCard(),
         ]),
     ]),
 ]);
