@@ -372,27 +372,15 @@ export const usesProgressVariants = () => {
         ]),
     ]);
 };
-export const usesProgress = (options?: OrientationRuleOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    
-    
-    
-    return composition([
-        imports([
-            // layouts:
-            usesProgressLayout(options),
-            
-            // variants:
-            usesProgressVariants(),
-        ]),
-    ]);
-};
 
 export const useProgressSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            usesProgress(),
+            // layouts:
+            usesProgressLayout(),
+            
+            // variants:
+            usesProgressVariants(),
         ]),
     ]),
 ]);
@@ -539,8 +527,9 @@ export const usesProgressBarVariants = () => {
         ]),
     ]);
 };
-export const usesProgressBar = () => {
-    return composition([
+
+export const useProgressBarSheet = createUseSheet(() => [
+    mainComposition([
         variants([
             rule('&&', [ // makes `.ProgressBar` is more specific than `wrapperElm`
                 imports([
@@ -551,14 +540,6 @@ export const usesProgressBar = () => {
                     usesProgressBarVariants(),
                 ]),
             ]),
-        ]),
-    ]);
-};
-
-export const useProgressBarSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesProgressBar(),
         ]),
     ]),
 ]);
