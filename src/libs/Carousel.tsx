@@ -418,22 +418,15 @@ export const usesCarouselVariants = () => {
         ]),
     ]);
 };
-export const usesCarousel = () => {
-    return composition([
+
+export const useCarouselSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesCarouselLayout(),
             
             // variants:
             usesCarouselVariants(),
-        ]),
-    ]);
-};
-
-export const useCarouselSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesCarousel(),
         ]),
     ]),
 ]);
