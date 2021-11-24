@@ -4,6 +4,7 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // nodestrap components:
+import Icon                 from './Icon'
 import {
     // hooks:
     OrientationName,
@@ -23,7 +24,6 @@ import {
     ListProps,
     List,
 }                           from './List'
-import Icon                 from './Icon'
 
 
 
