@@ -48,6 +48,7 @@ import {
     useExcitedState,
     TogglerExcitedProps,
 }                           from './Basic'
+import CloseButton          from './CloseButton'
 import {
     // hooks:
     OrientationName,
@@ -59,6 +60,10 @@ import {
     CardProps,
     Card,
 }                           from './Card'
+import {
+    // react components:
+    Collapse,
+}                           from './Collapse'
 import {
     // hooks:
     ModalStyle,
@@ -91,11 +96,6 @@ import {
     // react components:
     ModalCardCloseType,
 }                           from './ModalCard'
-import {
-    // react components:
-    Collapse,
-}                           from './Collapse'
-import CloseButton          from './CloseButton'
 
 
 
@@ -243,8 +243,9 @@ export const usesModalSideElementStates = () => {
         ]),
     ]);
 };
-export const usesModalSideElement = () => {
-    return composition([
+
+export const useModalSideElementSheet = createUseSheet(() => [
+    mainComposition([
         variants([
             rule('&&', [ // makes `.ModalSideElement` is more specific than `.Collapse`
                 imports([
@@ -258,14 +259,6 @@ export const usesModalSideElement = () => {
                     usesModalSideElementStates(),
                 ]),
             ]),
-        ]),
-    ]);
-};
-
-export const useModalSideElementSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesModalSideElement(),
         ]),
     ]),
     compositionOf('actionBar', [
@@ -367,8 +360,9 @@ export const usesModalSideStates = () => {
         ]),
     ]);
 };
-export const usesModalSide = () => {
-    return composition([
+
+export const useModalSideSheet = createUseSheet(() => [
+    mainComposition([
         imports([
             // layouts:
             usesModalSideLayout(),
@@ -378,14 +372,6 @@ export const usesModalSide = () => {
             
             // states:
             usesModalSideStates(),
-        ]),
-    ]);
-};
-
-export const useModalSideSheet = createUseSheet(() => [
-    mainComposition([
-        imports([
-            usesModalSide(),
         ]),
     ]),
 ]);
