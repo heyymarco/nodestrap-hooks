@@ -6,7 +6,7 @@ import type {
 import createCssConfig      from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap utilities:
-import * as radius          from './borders-radiuses'
+import * as radius          from './borders-radiuses.js'
 
 
 
