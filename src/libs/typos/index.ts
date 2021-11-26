@@ -1,23 +1,23 @@
 // nodestrap components:
 import generals,
-       * as general        from './general'
-import * as secondary      from './secondary'
+       * as general        from './general.js'
+import * as secondary      from './secondary.js'
 
-import * as paragraph      from './paragraph'
-import * as lead           from './lead'
+import * as paragraph      from './paragraph.js'
+import * as lead           from './lead.js'
 
-import * as heading        from './heading'
-import * as display        from './display'
+import * as heading        from './heading.js'
+import * as display        from './display.js'
 
-import * as blockquote     from './blockquote'
+import * as blockquote     from './blockquote.js'
 
-import * as markingMark    from './marking-mark'
-import * as markingCode    from './marking-code'
-import * as markingKbd     from './marking-kbd'
+import * as markingMark    from './marking-mark.js'
+import * as markingCode    from './marking-code.js'
+import * as markingKbd     from './marking-kbd.js'
 
-import * as markingGeneral from './marking-general'
+import * as markingGeneral from './marking-general.js'
 
-import * as horizontalRule from './horizontal-rule'
+import * as horizontalRule from './horizontal-rule.js'
 
 
 
