@@ -35,7 +35,7 @@ import {
 import colors               from '../colors'      // configurable colors & theming defs
 
 // nodestrap components:
-import gens                 from './general'
+import gens                 from './general.js'
 
 
 
