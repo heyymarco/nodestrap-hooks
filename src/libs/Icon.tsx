@@ -95,7 +95,7 @@ import {
     // configs:
     cssProps as bcssProps,
 }                           from './Basic'
-import fontItems            from './Icon-font-material.js'
+import fontItems            from './Icon-font-material'
 
 
 
