@@ -17,11 +17,11 @@ import {
 }                           from '../css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap components:
-import gens                 from './general.js'
+import gens                 from './general'
 import {
     default as heads,
     usesLevelingRule,
-}                           from './heading.js'
+}                           from './heading'
 
 
 

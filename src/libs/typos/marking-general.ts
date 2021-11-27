@@ -20,7 +20,7 @@ import {
 }                           from '../cssfn'       // cssfn core
 
 // nodestrap components:
-import gens                 from './general.js'
+import gens                 from './general'
 
 
 

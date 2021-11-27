@@ -35,8 +35,8 @@ import {
 import colors               from '../colors'      // configurable colors & theming defs
 
 // nodestrap components:
-import marks                from './marking-mark.js'
-import codes                from './marking-code.js'
+import marks                from './marking-mark'
+import codes                from './marking-code'
 
 
 
