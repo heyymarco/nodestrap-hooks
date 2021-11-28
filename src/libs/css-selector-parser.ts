@@ -241,14 +241,14 @@ const identifierParamsToString = (identifierParams: IdentifierParams|null|undefi
 export const selectorToString = (selector: Selector): string => {
     return (
         selector
-        .map((item) => {
-            if (typeof(item) === 'string') return item; // combinator
+        .map((part) => {
+            if (typeof(part) === 'string') return part; // combinator
             
             const [
                 identifierType,
                 identifierName = '',
                 identifierParams,
-            ] = item;
+            ] = part;
             
             return `${identifierType}${identifierName}${identifierParamsToString(identifierParams)}`;
         })
