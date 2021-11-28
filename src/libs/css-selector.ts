@@ -488,6 +488,13 @@ export const selectorToString = (selector: Selector): string => {
         .join('')
     );
 };
+export const selectorsToString = (selectors: SelectorList): string => {
+    return (
+        selectors
+        .map(selectorToString)
+        .join(', ')
+    );
+}
 
 
 
@@ -497,7 +504,7 @@ export const isSelector = (test: Identifier|Selector): test is Selector => {
         Selector   : may separated by Combinator (string) but cannot starts_with Combinator (string)
     */
     return (typeof(test[0]) !== 'string'); // check the type of the first element
-}
+};
 export type MapIdentifiersCallback = (identifier: Identifier) => Identifier|Selector
 export const mapIdentifiers = (selectors: SelectorList, callbackFn: MapIdentifiersCallback): SelectorList => {
     return (
@@ -546,14 +553,5 @@ export const mapIdentifiers = (selectors: SelectorList, callbackFn: MapIdentifie
             })
             .flat()
         )
-    );
-}
-export const splitSelectors = (expression: string): string[]|null => {
-    const selectors = parseSelectors(expression);
-    if (!selectors) return null;
-    
-    return (
-        selectors
-        .map((selector): string => selectorToString(selector))
     );
 };
