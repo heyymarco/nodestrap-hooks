@@ -405,20 +405,39 @@ export const parseSelectors = (expression: string): Selector[]|null => {
     if (!isEof()) return null; // syntax error: not all expression are valid selector
     return allSelectors;
 };
+
+
+
+export const isWildParams = (identifierParams: IdentifierParams): identifierParams is string => {
+    return (typeof(identifierParams) === 'string');
+};
+export const isSelectors = (identifierParams: IdentifierParams): identifierParams is Selector[] => {
+    return (
+        !isWildParams(identifierParams)
+        &&
+        identifierParams.some((part) => (typeof(part) !== 'string')) // contains at least 1 non-string (or Identifier, or readonly [])
+    );
+};
+export const isIdentifierAttrParam = (identifierParams: IdentifierParams): identifierParams is IdentifierAttrParam => {
+    return (
+        !isWildParams(identifierParams)
+        &&
+        !identifierParams.some((part) => (typeof(part) !== 'string')) // NOT contains at least 1 non-string (or Identifier, or readonly [])
+    );
+};
 const identifierParamsToString = (identifierParams: IdentifierParams|null|undefined): string => {
     if ((identifierParams === null) || (identifierParams === undefined)) return '';
     
-    if (typeof(identifierParams) === 'string') return `(${identifierParams})`;
+    if (isWildParams(identifierParams)) return `(${identifierParams})`;
     
-    const isSelectorArr = (test: IdentifierAttrParam | Selector[]): test is Selector[] => test.some((part) => typeof(part) !== 'string');
-    if (isSelectorArr(identifierParams)) {
+    if (isSelectors(identifierParams)) {
         return `(${
             identifierParams
             .map((selector): string => selectorToString(selector))
             .join(', ')
         })`;
     }
-    else {
+    else { // if isIdentifierAttrParam(identifierParams)
         const [
             name,
             operator,
@@ -437,17 +456,26 @@ const identifierParamsToString = (identifierParams: IdentifierParams|null|undefi
         } // if
     } // if
 };
+
+
+
+export const isCombinator = (part: Identifier|Combinator): part is Combinator => {
+    return (typeof(part) === 'string');
+};
+export const isIdentifier = (part: Identifier|Combinator): part is Identifier => {
+    return (typeof(part) !== 'string');
+};
 export const selectorToString = (selector: Selector): string => {
     return (
         selector
         .map((part): string => {
-            if (typeof(part) === 'string') return part; // combinator
+            if (isCombinator(part)) return part;
             
             const [
                 identifierType,
                 identifierName = '',
                 identifierParams,
-            ] = part;
+            ] = part; // isIdentifier(part)
             
             if (identifierType === '[') {
                 return identifierParamsToString(identifierParams);
@@ -459,6 +487,66 @@ export const selectorToString = (selector: Selector): string => {
         .join('')
     );
 };
+
+
+
+export const isSelector = (test: Identifier|Selector): test is Selector => {
+    /*
+        Identifier : always starts_with IdentifierType (string)
+        Selector   : may separated by Combinator (string) but cannot starts_with Combinator (string)
+    */
+    return (typeof(test[0]) !== 'string'); // check the type of the first element
+}
+export type MapIdentifiersCallback = (identifier: Identifier) => Identifier|Selector
+export const mapIdentifiers = (selectors: Selector[], callbackFn: MapIdentifiersCallback): Selector[] => {
+    return (
+        selectors
+        .map((selector) =>
+            selector
+            .map((part): Selector => {
+                if (isCombinator(part)) return [part];
+                
+                
+                
+                let replacement = callbackFn(part); // isIdentifier(part)
+                
+                
+                
+                if (replacement === part) { // if not replaced by `callbackFn` (same by reference)
+                    const [
+                        , // skip: identifierType,
+                        , // skip: identifierName = '',
+                        identifierParams,
+                    ] = part; // isIdentifier(part)
+                    
+                    if (identifierParams && isSelectors(identifierParams)) {
+                        const oldSelectors = identifierParams;
+                        const newSelectors = (
+                            oldSelectors
+                            .map((selector): Selector =>
+                                selector
+                                .map((part): Selector => {
+                                    if (isCombinator(part)) return [part];
+                                    
+                                    const replacement = callbackFn(part);
+                                    return isSelector(replacement) ? replacement : [replacement];
+                                })
+                                .flat()
+                            )
+                        );
+                        
+                        replacement = [...part.slice(2), newSelectors] as unknown as Identifier;
+                    } // if
+                } // if
+                
+                
+                
+                return isSelector(replacement) ? replacement : [replacement];
+            })
+            .flat()
+        )
+    );
+}
 export const splitSelectors = (expression: string): string[]|null => {
     const selectors = parseSelectors(expression);
     if (!selectors) return null;
