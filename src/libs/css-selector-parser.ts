@@ -140,7 +140,11 @@ export const parseSelectors = (expression: string): Selector[]|null => {
             selector.push(identifier);
             
             let nextIdentifier : Identifier|null
-            while(nextIdentifier = parseIdentifier()) selector.push(nextIdentifier);
+            do {
+                nextIdentifier = parseIdentifier();
+                if (nextIdentifier) selector.push(nextIdentifier);
+            }
+            while(nextIdentifier);
         } // while
         
         return selector;
