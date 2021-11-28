@@ -10,13 +10,14 @@ export type IdentifierAttrOptions  = 'i' | 'I' | 's' | 'S'
 export type IdentifierAttrParam    = | readonly[IdentifierAttrName                                                                    ]
                                      | readonly[IdentifierAttrName, IdentifierAttrOperator, IdentifierAttrValue                       ]
                                      | readonly[IdentifierAttrName, IdentifierAttrOperator, IdentifierAttrValue, IdentifierAttrOptions]
-export type IdentifierParams       = IdentifierAttrParam | Selector[] | string
+export type IdentifierParams       = IdentifierAttrParam | SelectorList | string
 export type Identifier             = | readonly [IdentifierSpecialType       /* no_name */  /* no_param */                                ]
                                      | readonly [IdentifierParamType  , null /* no_name */, IdentifierAttrParam                           ]
                                      | readonly [IdentifierNamedType  , IdentifierName      /* no_param */                                ]
                                      | readonly [':'                  , IdentifierName    , Exclude<IdentifierParams, IdentifierAttrParam>]
 export type Combinator             = ' ' | '>' | '~' | '+'
 export type Selector               = (Identifier|Combinator)[]
+export type SelectorList           = Selector[]
 
 
 
@@ -25,7 +26,7 @@ const specialPseudoClassList       = ['is', 'where', 'not'];
 
 
 
-export const parseSelectors = (expression: string): Selector[]|null => {
+export const parseSelectors = (expression: string): SelectorList|null => {
     const expressionLength = expression.length;
     let pos = 0;
     
@@ -205,10 +206,10 @@ export const parseSelectors = (expression: string): Selector[]|null => {
         
         return true;
     };
-    const parseSelectors = (): Selector[]|null => {
+    const parseSelectors = (): SelectorList|null => {
         const originPos = pos;
         
-        const selectors : Selector[] = [];
+        const selectors : SelectorList = [];
         
         while (!isEof()) {
             skipWhitespace();
@@ -248,7 +249,7 @@ export const parseSelectors = (expression: string): Selector[]|null => {
         
         return expression.substring(originPos + 1, pos - 1);
     };
-    const parseSelectorParams = (): Selector[]|null => {
+    const parseSelectorParams = (): SelectorList|null => {
         const originPos = pos;
         
         if (!eatOpeningBracket()) return null;
@@ -411,7 +412,7 @@ export const parseSelectors = (expression: string): Selector[]|null => {
 export const isWildParams = (identifierParams: IdentifierParams): identifierParams is string => {
     return (typeof(identifierParams) === 'string');
 };
-export const isSelectors = (identifierParams: IdentifierParams): identifierParams is Selector[] => {
+export const isSelectors = (identifierParams: IdentifierParams): identifierParams is SelectorList => {
     return (
         !isWildParams(identifierParams)
         &&
@@ -498,7 +499,7 @@ export const isSelector = (test: Identifier|Selector): test is Selector => {
     return (typeof(test[0]) !== 'string'); // check the type of the first element
 }
 export type MapIdentifiersCallback = (identifier: Identifier) => Identifier|Selector
-export const mapIdentifiers = (selectors: Selector[], callbackFn: MapIdentifiersCallback): Selector[] => {
+export const mapIdentifiers = (selectors: SelectorList, callbackFn: MapIdentifiersCallback): SelectorList => {
     return (
         selectors
         .map((selector) =>
