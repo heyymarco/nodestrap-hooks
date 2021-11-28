@@ -38,7 +38,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const skipWhitespace = (): void => {
         while (!isEof() && whitespaceList.includes(expression[pos])) pos++;
     };
-    const eatSeparator = (): boolean => {
+    const eatComma = (): boolean => {
         if (expression[pos] !== ',') return false;
         pos++; return true; // move forward & return true
     };
@@ -216,7 +216,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             
             if (selectors.length) {
                 // the next selector must be separated by comma:
-                if (!eatSeparator()) break; // no more next selector
+                if (!eatComma()) break; // no more next selector
                 
                 skipWhitespace();
             } // if
