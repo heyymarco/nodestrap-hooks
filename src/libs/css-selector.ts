@@ -1,18 +1,27 @@
-export type IdentifierSpecialType = '&' | '*'
-export type IdentifierNamedType   = '' | '#' | '.' | ':' | '::'
-export type IdentifierType        = IdentifierSpecialType | IdentifierNamedType
-export type IdentifierName        = string & {}
-export type IdentifierParams      = Selector[] | string
-export type Identifier            = | readonly [IdentifierSpecialType]
-                                    | readonly [IdentifierNamedType  , IdentifierName]
-                                    | readonly [IdentifierNamedType  , IdentifierName, IdentifierParams]
-export type Combinator            = ' ' | '>' | '~' | '+'
-export type Selector              = (Identifier|Combinator)[]
+export type IdentifierSpecialType  = '&' | '*'
+export type IdentifierParamType    = '['
+export type IdentifierNamedType    = '' | '#' | '.' | ':' | '::'
+export type IdentifierType         = IdentifierSpecialType | IdentifierParamType | IdentifierNamedType
+export type IdentifierName         = string & {}
+export type IdentifierAttrName     = IdentifierName
+export type IdentifierAttrOperator = '=' | '~=' | '|=' | '^=' | '$=' | '*='
+export type IdentifierAttrValue    = string & {}
+export type IdentifierAttrOptions  = 'i' | 'I' | 's' | 'S'
+export type IdentifierAttrParam    = | readonly[IdentifierAttrName                                                                    ]
+                                     | readonly[IdentifierAttrName, IdentifierAttrOperator, IdentifierAttrValue                       ]
+                                     | readonly[IdentifierAttrName, IdentifierAttrOperator, IdentifierAttrValue, IdentifierAttrOptions]
+export type IdentifierParams       = IdentifierAttrParam | Selector[] | string
+export type Identifier             = | readonly [IdentifierSpecialType       /* no_name */  /* no_param */                                ]
+                                     | readonly [IdentifierParamType  , null /* no_name */, IdentifierAttrParam                           ]
+                                     | readonly [IdentifierNamedType  , IdentifierName      /* no_param */                                ]
+                                     | readonly [':'                  , IdentifierName    , Exclude<IdentifierParams, IdentifierAttrParam>]
+export type Combinator             = ' ' | '>' | '~' | '+'
+export type Selector               = (Identifier|Combinator)[]
 
 
 
-const whitespaceList              = [' ', '\n', '\r', '\t', '\f', '\v'];
-const specialPseudoClassList      = ['is', 'where', 'not'];
+const whitespaceList               = [' ', '\n', '\r', '\t', '\f', '\v'];
+const specialPseudoClassList       = ['is', 'where', 'not'];
 
 
 
@@ -35,18 +44,24 @@ export const parseSelectors = (expression: string): Selector[]|null => {
     
     const parseIdentifierType = (): IdentifierType => {
         const char = expression[pos];
-        if (char === '&') { pos++; return '&'; }
-        if (char === '*') { pos++; return '*'; }
-        if (char === '#') { pos++; return '#'; }
-        if (char === '.') { pos++; return '.'; }
-        if (char === ':') {
-            pos++;
-            if (expression[pos] === ':') { pos++; return '::'; }
-            return ':'
-        } // if
-        return '';
+        switch (char) {
+            case '&':
+            case '*':
+            case '[':
+            case '#':
+            case '.':
+                pos++; return char;
+            case ':':
+                pos++;
+                if (expression[pos] === ':') { pos++; return '::'; }
+                return ':';
+            
+            default:
+                return '';
+        } // switch
     }
-    const isValidIdentifierChar = (char: string): boolean => {
+    const isValidIdentifierChar = (): boolean => {
+        const char = expression[pos];
         if ((char >= 'a') && (char <= 'z')) return true;
         if ((char >= 'A') && (char <= 'Z')) return true;
         if ((char >= '0') && (char <= '9')) return true;
@@ -57,8 +72,8 @@ export const parseSelectors = (expression: string): Selector[]|null => {
     const parseIdentifierName = (): string|null => {
         const originPos = pos;
         
-        while (!isEof() && isValidIdentifierChar(expression[pos])) pos++; // move forward until out of valid chars
-        if (pos === originPos) return null; // pos not moved => nothing to parse => null
+        while (!isEof() && isValidIdentifierChar()) pos++; // move forward until out of valid chars
+        if (pos === originPos) { pos = originPos; return null; } // pos not moved => nothing to parse => revert changes & return null
         
         return expression.substring(originPos, pos);
     };
@@ -66,11 +81,32 @@ export const parseSelectors = (expression: string): Selector[]|null => {
         const originPos = pos;
         
         const type = parseIdentifierType();
-        if ((type !== '&') && (type !== '*')) {
-            const name = parseIdentifierName();
-            if (!name) { pos = originPos; return null; } // revert changes & return null
+        if ((type === '&') || (type === '*')) {
+            return [
+                type,
+            ];
+        }
+        else if (type === '[') {
+            const attrParams = parseAttrParams();
+            if (!attrParams) { pos = originPos; return null; } // syntax error: missing attrParams => revert changes & return null
             
-            if (type === ':') { // pseudo class
+            return [
+                type,
+                null,
+                attrParams,
+            ];
+        }
+        else {
+            const name = parseIdentifierName();
+            if (!name) { pos = originPos; return null; } // syntax error: missing name => revert changes & return null
+            
+            if (type !== ':') {
+                return [
+                    type,
+                    name,
+                ];
+            } // if
+            else { // pseudo class
                 if (specialPseudoClassList.includes(name)) {
                     const selectorParams = parseSelectorParams();
                     if (!selectorParams) { pos = originPos; return null; } // syntax error: missing required selector parameter(s) => revert changes & return null
@@ -82,23 +118,22 @@ export const parseSelectors = (expression: string): Selector[]|null => {
                 }
                 else {
                     const wildParams = parseWildParams();
-                    if (wildParams !== null) return [
-                        type,
-                        name,
-                        wildParams,
-                    ];
+                    if (wildParams === null) {
+                        return [
+                            type,
+                            name,
+                        ];
+                    }
+                    else {
+                        return [
+                            type,
+                            name,
+                            wildParams,
+                        ];
+                    } // if
                 } // if
             } // if
-            
-            return [
-                type,
-                name,
-            ];
         } // if
-        
-        return [
-            type,
-        ];
     };
     const parseCombinator = (): Combinator|null => {
         const originPos = pos;
@@ -110,11 +145,11 @@ export const parseSelectors = (expression: string): Selector[]|null => {
         if (char === '~') { pos++; return '~'; }
         if (char === '+') { pos++; return '+'; }
         if (pos > originPos) {
-            const currentPos = pos;  // 1. backup
-            if (parseIdentifier()) { // 2. destructive test
-                pos = currentPos;    // 3. restore
-                return ' ';
-            } // if
+            const currentPos = pos;         // 1. backup
+            const test = parseIdentifier(); // 2. destructive test
+            pos = currentPos;               // 3. restore
+            
+            if (test) return ' ';
         } // if
         return null;
     };
@@ -156,6 +191,10 @@ export const parseSelectors = (expression: string): Selector[]|null => {
     };
     const eatClosingBracket = (): boolean => {
         if (expression[pos] !== ')') return false;
+        pos++; return true; // move forward & return true
+    };
+    const eatClosingSquareBracket = (): boolean => {
+        if (expression[pos] !== ']') return false;
         pos++; return true; // move forward & return true
     };
     const eatNonBracket = (): boolean => {
@@ -220,6 +259,145 @@ export const parseSelectors = (expression: string): Selector[]|null => {
         
         return selectors ?? []; // null => empty selector => empty array
     };
+    const parseIdentifierAttrOperator = (): IdentifierAttrOperator|null => {
+        const originPos = pos;
+        
+        const char = expression[pos];
+        switch (char) {
+            case '=':
+                pos++; return char;
+            
+            case '~':
+            case '|':
+            case '^':
+            case '$':
+            case '*':
+                pos++;
+                if (expression[pos] !== '=') { pos = originPos; return null; } // syntax error: missing `=` => revert changes & return null
+                pos++;
+                return `${char}=`;
+            
+            default:
+                return null;
+        } // switch
+    };
+    const parseIdentifierAttrOptions = (): IdentifierAttrOptions|null => {
+        const char = expression[pos];
+        switch (char) {
+            case 'i':
+            case 'I':
+                pos++; return 'i';
+            
+            case 's':
+            case 'S':
+                pos++; return 's';
+            
+            default:
+                return null;
+        } // switch
+    }
+    const parseNudeString = (): string|null => {
+        const originPos = pos;
+        
+        while (!isEof() && isValidIdentifierChar()) pos++; // move forward until out of valid chars
+        if (pos === originPos) { pos = originPos; return null; } // pos not moved => nothing to parse => revert changes & return null
+        
+        return expression.substring(originPos, pos);
+    };
+    const eatTypeQuote = (quotChar: "'" | '"'): boolean => {
+        if (expression[pos] !== quotChar) return false;
+        pos++; return true; // move forward & return true
+    };
+    const isValidStringChar = (quotChar: "'" | '"'): boolean => {
+        const char = expression[pos];
+        if (char === quotChar) {
+            return ((pos >= 1) && (expression[pos - 1] === '\\')); // looking for previously escape char
+        }
+        else if (char === '\\') {
+            return ((pos + 1) < expressionLength);
+        }
+        else {
+            return true;
+        } // if
+    };
+    const parseQuoteString = (quotChar: "'" | '"'): string|null => {
+        const originPos = pos;
+        
+        if (!eatTypeQuote(quotChar)) return null; // must starts with quote
+        
+        while (!isEof() && isValidStringChar(quotChar)) pos++; // move forward until out of valid chars
+        
+        if (!eatTypeQuote(quotChar)) { pos = originPos; return null; } // syntax error: missing quote => revert changes & return null
+        
+        const value = expression.substring(originPos + 1, pos - 1);
+        if (quotChar === "'") {
+            return value.replaceAll(/(?<!\\)'/g, "\\'");
+        }
+        else {
+            return value.replaceAll(/(?<!\\)"/g, '\\"');
+        } // if
+    };
+    const parseString = (): string|null => {
+        return (
+            parseQuoteString("'")
+            ??
+            parseQuoteString('"')
+            ??
+            parseNudeString()
+        );
+    }
+    const parseAttrParams = (): IdentifierAttrParam|null => {
+        const originPos = pos;
+        
+        // if (!eatOpeningSquareBracket()) return null; // already eaten by `parseIdentifierType()`
+        
+        skipWhitespace();
+        
+        const name = parseIdentifierName();
+        if (!name) { pos = originPos; return null; } // syntax error: missing name => revert changes & return null
+        
+        skipWhitespace();
+        
+        const operator = parseIdentifierAttrOperator();
+        if (!operator) {
+            if (!eatClosingSquareBracket()) { pos = originPos; return null; } // syntax error: missing `]` => revert changes & return null
+            
+            return [
+                name,
+            ];
+        }
+        else {
+            skipWhitespace();
+            
+            const value = parseString();
+            if (!value) { pos = originPos; return null; } // syntax error: missing value => revert changes & return null
+            
+            skipWhitespace();
+            
+            const options = parseIdentifierAttrOptions();
+            if (options) {
+                skipWhitespace();
+            } // if
+            
+            if (!eatClosingSquareBracket()) { pos = originPos; return null; } // syntax error: missing `]` => revert changes & return null
+            
+            if (!options) {
+                return [
+                    name,
+                    operator,
+                    value,
+                ];
+            }
+            else {
+                return [
+                    name,
+                    operator,
+                    value,
+                    options,
+                ];
+            } // if
+        } // if
+    };
     
     
     
@@ -232,16 +410,37 @@ const identifierParamsToString = (identifierParams: IdentifierParams|null|undefi
     
     if (typeof(identifierParams) === 'string') return `(${identifierParams})`;
     
-    return `(${
-        identifierParams
-        .map((selector) => selectorToString(selector))
-        .join(', ')
-    })`;
+    const isSelectorArr = (test: IdentifierAttrParam | Selector[]): test is Selector[] => test.some((part) => typeof(part) !== 'string');
+    if (isSelectorArr(identifierParams)) {
+        return `(${
+            identifierParams
+            .map((selector): string => selectorToString(selector))
+            .join(', ')
+        })`;
+    }
+    else {
+        const [
+            name,
+            operator,
+            value,
+            options,
+        ] = identifierParams;
+        
+        if (options) {
+            return `[${name}${operator}"${value}" ${options}]`;
+        }
+        else if (value) {
+            return `[${name}${operator}"${value}"]`;
+        }
+        else {
+            return `[${name}]`;
+        } // if
+    } // if
 };
 export const selectorToString = (selector: Selector): string => {
     return (
         selector
-        .map((part) => {
+        .map((part): string => {
             if (typeof(part) === 'string') return part; // combinator
             
             const [
@@ -250,7 +449,12 @@ export const selectorToString = (selector: Selector): string => {
                 identifierParams,
             ] = part;
             
-            return `${identifierType}${identifierName}${identifierParamsToString(identifierParams)}`;
+            if (identifierType === '[') {
+                return identifierParamsToString(identifierParams);
+            }
+            else {
+                return `${identifierType}${identifierName}${identifierParamsToString(identifierParams)}`;
+            } // if
         })
         .join('')
     );
@@ -261,6 +465,6 @@ export const splitSelectors = (expression: string): string[]|null => {
     
     return (
         selectors
-        .map((selector) => selectorToString(selector))
+        .map((selector): string => selectorToString(selector))
     );
 };
