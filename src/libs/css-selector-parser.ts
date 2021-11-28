@@ -71,7 +71,7 @@ export const parseSelectors = (expression: string): Selector[]|null => {
             if (!name) { pos = originPos; return null; } // revert changes & return null
             
             if (type === ':') { // pseudo class
-                if (name && specialPseudoClassList.includes(name)) {
+                if (specialPseudoClassList.includes(name)) {
                     const selectorParams = parseSelectorParams();
                     if (!selectorParams) { pos = originPos; return null; } // syntax error: missing required selector parameter(s) => revert changes & return null
                     return [
