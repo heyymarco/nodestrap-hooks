@@ -112,12 +112,12 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         const type = parseSelectorType();
         if (type === null) return null; // syntax error: missing type => no changes made & return null
         
-        if ((type === '&') || (type === '*')) {
+        if ((type === '&') || (type === '*')) { // UnnamedSelector
             return [
                 type,
             ];
         }
-        else if (type === '[') {
+        else if (type === '[') { // AttrSelector
             const attrSelectorParams = parseAttrSelectorParams();
             if (!attrSelectorParams) { pos = originPos; return null; } // syntax error: missing attrSelectorParams => revert changes & return null
             
@@ -127,20 +127,20 @@ export const parseSelectors = (expression: string): SelectorList|null => {
                 attrSelectorParams,
             ];
         }
-        else {
+        else { // NamedSelector
             const name = parseIdentifierName();
             if (!name) { pos = originPos; return null; } // syntax error: missing name => revert changes & return null
             
-            if (type !== ':') {
+            if (type !== ':') { // NonParamSelector
                 return [
                     type,
                     name,
                 ];
-            } // if
-            else { // pseudo class
+            }
+            else { // PseudoClassSelector
                 if (specialPseudoClassList.includes(name)) {
                     const selectorParams = parseSelectorParams();
-                    if (!selectorParams) { pos = originPos; return null; } // syntax error: missing required selector parameter(s) => revert changes & return null
+                    if (!selectorParams) { pos = originPos; return null; } // syntax error: missing selectorParams => revert changes & return null
                     return [
                         type,
                         name,
