@@ -337,37 +337,37 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const parseNudeString = (): string|null => {
         return parseIdentifierName();
     };
-    const eatTypeQuote = (quotChar: "'" | '"'): boolean => {
-        if (expression[pos] !== quotChar) return false;
+    const eatQuote = (quoteChar: "'" | '"'): boolean => {
+        if (expression[pos] !== quoteChar) return false;
         pos++; return true; // move forward & return true
     };
-    const isValidStringChar = (quotChar: "'" | '"'): boolean => {
+    const isValidStringChar = (quoteChar: "'" | '"'): boolean => {
         const char = expression[pos];
-        if (char === quotChar) {
-            return ((pos >= 1) && (expression[pos - 1] === '\\')); // looking for previously escape char
+        if (char === quoteChar) {
+            return ((pos >= 1) && (expression[pos - 1] === '\\')); // looking backward escape char
         }
         else if (char === '\\') {
-            return ((pos + 1) < expressionLength);
+            return ((pos + 1) < expressionLength); // looking forward has any char
         }
         else {
-            return true;
+            return true; // any chars other than quoteChar & backwardChar
         } // if
     };
-    const parseQuoteString = (quotChar: "'" | '"'): string|null => {
+    const parseQuoteString = (quoteChar: "'" | '"'): string|null => {
         const originPos = pos;
         
-        if (!eatTypeQuote(quotChar)) return null; // must starts with quote
+        if (!eatQuote(quoteChar)) return null; // syntax error: missing opening_quoteChar => no changes made & return null
         
-        while (!isEof() && isValidStringChar(quotChar)) pos++; // move forward until invalid
+        while (!isEof() && isValidStringChar(quoteChar)) pos++; // move forward until invalid
         
-        if (!eatTypeQuote(quotChar)) { pos = originPos; return null; } // syntax error: missing quote => revert changes & return null
+        if (!eatQuote(quoteChar)) { pos = originPos; return null; } // syntax error: missing closing_quoteChar => revert changes & return null
         
-        const value = expression.substring(originPos + 1, pos - 1);
-        if (quotChar === "'") {
-            return value.replaceAll(/(?<!\\)'/g, "\\'");
+        const value = expression.substring(originPos + 1, pos - 1); // excludes the opening_quoteChar & closing_quoteChar
+        if (quoteChar === "'") { // single quoteChar
+            return value.replaceAll(/(?<!\\)"/g, '\\"'); // escape the unescaped double quoteChar, so both single & double quoteChar are escaped
         }
-        else {
-            return value.replaceAll(/(?<!\\)"/g, '\\"');
+        else { // double quoteChar
+            return value.replaceAll(/(?<!\\)'/g, "\\'"); // escape the unescaped single quoteChar, so both single & double quoteChar are escaped
         } // if
     };
     const parseString = (): string|null => {
