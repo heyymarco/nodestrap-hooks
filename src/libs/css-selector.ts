@@ -196,12 +196,12 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         const selector : Selector = [];
         
         while (!isEof()) {
-            // skipWhitespace(); // already included in `parseCombinator()`, do not `skipWhitespace()` here => causing descendant_combinator (space) unrecognized
+            // skipWhitespace(); // already included in `parseCombinator()`, do not `skipWhitespace()` here => causing DescendantCombinator (space) unrecognized
             
             if (selector.length) {
-                // the next simpleSelector must be separated by combinator:
+                // the next SelectorSequence must be separated by combinator:
                 const combinator = parseCombinator();
-                if (!combinator) break; // no more next simpleSelector
+                if (!combinator) break; // no more next SelectorSequence
                 selector.push(combinator);
             } // if
             
@@ -211,12 +211,14 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             if (!simpleSelector) { pos = originPos; return null; } // syntax error: missing simpleSelector => revert changes & return null
             selector.push(simpleSelector);
             
-            let nextSequence : SimpleSelector|null
+            //#region SelectorSequence
+            let nextSequence : SimpleSelector|null;
             do {
                 nextSequence = parseSimpleSelector();
                 if (nextSequence) selector.push(nextSequence);
             }
             while(nextSequence);
+            //#endregion SelectorSequence
         } // while
         
         return selector;
