@@ -236,11 +236,11 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         if (expression[pos] !== ']') return false;
         pos++; return true; // move forward & return true
     };
-    const eatNonBracket = (): boolean => {
+    const eatNonBrackets = (): boolean => {
         const originPos = pos;
         
-        while (!isEof() && (expression[pos] !== '(') && (expression[pos] !== ')')) pos++;
-        if (pos === originPos) return false; // pos was not moved => nothing to eat => false
+        while (!isEof() && (expression[pos] !== '(') && (expression[pos] !== ')')) pos++; // move forward until unmatch
+        if (pos === originPos) return false; // pos was not moved => nothing to eat => no changes made & return false
         
         return true;
     };
@@ -272,12 +272,12 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         if (!eatOpeningBracket()) return null;
         
         while (!isEof()) {
-            let eaten = eatNonBracket();
+            let eaten = eatNonBrackets();
             
             const nestedWildParams = parseWildParams();
             if (nestedWildParams !== null) {
                 eaten = true;
-                eatNonBracket();
+                eatNonBrackets();
             } // if
             
             if (!eaten) break;
