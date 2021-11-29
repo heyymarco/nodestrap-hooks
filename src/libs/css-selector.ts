@@ -14,13 +14,13 @@ export type NamedSelector         = ElementSelector | IdSelector | ClassSelector
 export type SelectorType          = UnnamedSelector | AttrSelector | NamedSelector
 export type SelectorName          = string & {}
 
-export type AttrSelectorName      = SelectorName
+export type AttrSelectorName      = string & {}
 export type AttrSelectorOperator  = '=' | '~=' | '|=' | '^=' | '$=' | '*='
 export type AttrSelectorValue     = string & {}
 export type AttrSelectorOptions   = 'i' | 'I' | 's' | 'S'
-export type AttrSelectorParams    = | readonly[AttrSelectorName                                                              ]
-                                    | readonly[AttrSelectorName, AttrSelectorOperator, AttrSelectorValue                     ]
-                                    | readonly[AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions]
+export type AttrSelectorParams    = | readonly [AttrSelectorName                                                              ]
+                                    | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue                     ]
+                                    | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions]
 
 export type SelectorParams        = AttrSelectorParams | SelectorList | string
 export type SimpleSelector        = | readonly [UnnamedSelector            /* no_name */  /* no_param */                             ]
