@@ -304,38 +304,36 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         
         const char = expression[pos];
         switch (char) {
-            case '=':
+            case '=': // ExactOperator
                 pos++; return char;
             
-            case '~':
-            case '|':
-            case '^':
-            case '$':
-            case '*':
+            case '~': // SpaceSeparatedOperator
+            case '|': // SubsOperator
+            case '^': // BeginsWithOperator
+            case '$': // EndsWithOperator
+            case '*': // IncludesOperator
                 pos++;
                 if (expression[pos] !== '=') { pos = originPos; return null; } // syntax error: missing `=` => revert changes & return null
                 pos++;
                 return `${char}=`;
             
             default:
-                return null;
+                return null; // unknown expression => return null
         } // switch
     };
     const parseAttrSelectorOptions = (): AttrSelectorOptions|null => {
         const char = expression[pos];
         switch (char) {
-            case 'i':
-            case 'I':
-                pos++; return 'i';
-            
-            case 's':
-            case 'S':
-                pos++; return 's';
+            case 'i': // case-insensitively
+            case 'I': // case-insensitively
+            case 's': // case-sensitively
+            case 'S': // case-sensitively
+                pos++; return char;
             
             default:
-                return null;
+                return null; // unknown expression => return null
         } // switch
-    }
+    };
     const parseNudeString = (): string|null => {
         return parseIdentifierName();
     };
