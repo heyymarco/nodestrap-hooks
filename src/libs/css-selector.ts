@@ -56,10 +56,6 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const skipWhitespace = (): void => {
         while (!isEof() && whitespaceList.includes(expression[pos])) pos++;
     };
-    const eatComma = (): boolean => {
-        if (expression[pos] !== ',') return false;
-        pos++; return true; // move forward & return true
-    };
     
     const parseSelectorType = (): SelectorType|null => {
         const char = expression[pos];
@@ -224,6 +220,10 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         return selector;
     };
     
+    const eatComma = (): boolean => {
+        if (expression[pos] !== ',') return false;
+        pos++; return true; // move forward & return true
+    };
     const eatOpeningBracket = (): boolean => {
         if (expression[pos] !== '(') return false;
         pos++; return true; // move forward & return true
@@ -253,8 +253,8 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             skipWhitespace();
             
             if (selectors.length) {
-                // the next selector must be separated by comma:
-                if (!eatComma()) break; // no more next selector
+                // the next Selector must be separated by comma:
+                if (!eatComma()) break; // no more next Selector
                 
                 skipWhitespace();
             } // if
@@ -269,7 +269,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const parseWildParams = (): string|null => {
         const originPos = pos;
         
-        if (!eatOpeningBracket()) return null;
+        if (!eatOpeningBracket()) return null; // syntax error: missing `(` => no changes made & return null
         
         while (!isEof()) {
             let eaten = eatNonBrackets();
@@ -280,23 +280,24 @@ export const parseSelectors = (expression: string): SelectorList|null => {
                 eatNonBrackets();
             } // if
             
-            if (!eaten) break;
+            if (!eaten) break; // nothing more to eat => break
         } // while
         
-        if (!eatClosingBracket()) { pos = originPos; return null; } // revert changes & return null
+        if (!eatClosingBracket()) { pos = originPos; return null; } // syntax error: missing `)` => revert changes & return null
         
         return expression.substring(originPos + 1, pos - 1);
     };
     const parseSelectorParams = (): SelectorList|null => {
         const originPos = pos;
         
-        if (!eatOpeningBracket()) return null;
+        if (!eatOpeningBracket()) return null; // syntax error: missing `(` => no changes made & return null
         
         const selectors = parseSelectors();
+        if (!selectors) { pos = originPos; return null; } // syntax error: missing selectors => revert changes & return null
         
-        if (!eatClosingBracket()) { pos = originPos; return null; } // revert changes & return null
+        if (!eatClosingBracket()) { pos = originPos; return null; } // syntax error: missing `)` => revert changes & return null
         
-        return selectors ?? []; // null => empty selector => empty array
+        return selectors;
     };
     const parseAttrSelectorOperator = (): AttrSelectorOperator|null => {
         const originPos = pos;
