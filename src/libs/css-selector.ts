@@ -378,7 +378,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             ??
             parseNudeString()
         );
-    }
+    };
     const parseAttrSelectorParams = (): AttrSelectorParams|null => {
         const originPos = pos;
         
@@ -392,18 +392,18 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         skipWhitespace();
         
         const operator = parseAttrSelectorOperator();
-        if (!operator) {
+        if (!operator) { // name only
             if (!eatClosingSquareBracket()) { pos = originPos; return null; } // syntax error: missing `]` => revert changes & return null
             
             return [
                 name,
             ];
         }
-        else {
+        else { // name=value
             skipWhitespace();
             
             const value = parseString();
-            if (!value) { pos = originPos; return null; } // syntax error: missing value => revert changes & return null
+            if (value === null) { pos = originPos; return null; } // syntax error: missing value => revert changes & return null
             
             skipWhitespace();
             
@@ -414,14 +414,14 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             
             if (!eatClosingSquareBracket()) { pos = originPos; return null; } // syntax error: missing `]` => revert changes & return null
             
-            if (!options) {
+            if (!options) { // name=value without options
                 return [
                     name,
                     operator,
                     value,
                 ];
             }
-            else {
+            else { // name=value options
                 return [
                     name,
                     operator,
@@ -435,7 +435,8 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     
     
     const allSelectors = parseSelectors();
-    if (!isEof()) return null; // syntax error: not all expression are valid selector
+    if (!allSelectors) return null; // syntax error: no recognized selector(s)
+    if (!isEof()) return null;      // syntax error: not all expression are valid selector
     return allSelectors;
 };
 
