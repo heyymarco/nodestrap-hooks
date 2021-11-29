@@ -61,26 +61,36 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         pos++; return true; // move forward & return true
     };
     
-    const parseSelectorType = (): SelectorType => {
+    const parseSelectorType = (): SelectorType|null => {
         const char = expression[pos];
         switch (char) {
-            case '&':
-            case '*':
-            case '[':
-            case '#':
-            case '.':
+            case '&': // ParentSelector
+            case '*': // UniversalSelector
+            case '[': // AttrSelector
+            case '#': // IdSelector
+            case '.': // ClassSelector
                 pos++; return char;
             case ':':
                 pos++;
-                if (expression[pos] === ':') { pos++; return '::'; }
-                return ':';
+                if (expression[pos] === ':') { pos++; return '::'; } // PseudoElementSelector
+                return ':'; // PseudoClassSelector
             
             default:
-                return '';
+                if (isValidIdentifierChar()) return ''; // ElementSelector
+                return null; // unknown expression => return null
         } // switch
-    }
+    };
     const isValidIdentifierChar = (): boolean => {
         const char = expression[pos];
+        
+        /*
+            using regex is easier, but the performance is slow
+        */
+        // return /[\w0-9-_]/.test(char);
+        
+        /*
+            using hard coded is more complex, but the performance is about 10-12x faster
+        */
         if ((char >= 'a') && (char <= 'z')) return true;
         if ((char >= 'A') && (char <= 'Z')) return true;
         if ((char >= '0') && (char <= '9')) return true;
@@ -91,8 +101,8 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const parseIdentifierName = (): string|null => {
         const originPos = pos;
         
-        while (!isEof() && isValidIdentifierChar()) pos++; // move forward until out of valid chars
-        if (pos === originPos) { pos = originPos; return null; } // pos not moved => nothing to parse => revert changes & return null
+        while (!isEof() && isValidIdentifierChar()) pos++; // move forward until invalid
+        if (pos === originPos) return null; // pos was not moved => nothing to parse => no changes made & return null
         
         return expression.substring(originPos, pos);
     };
@@ -100,6 +110,8 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         const originPos = pos;
         
         const type = parseSelectorType();
+        if (type === null) return null; // syntax error: missing type => no changes made & return null
+        
         if ((type === '&') || (type === '*')) {
             return [
                 type,
@@ -220,7 +232,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         const originPos = pos;
         
         while (!isEof() && (expression[pos] !== '(') && (expression[pos] !== ')')) pos++;
-        if (pos === originPos) return false; // pos not moved => nothing to eat => false
+        if (pos === originPos) return false; // pos was not moved => nothing to eat => false
         
         return true;
     };
@@ -316,12 +328,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         } // switch
     }
     const parseNudeString = (): string|null => {
-        const originPos = pos;
-        
-        while (!isEof() && isValidIdentifierChar()) pos++; // move forward until out of valid chars
-        if (pos === originPos) { pos = originPos; return null; } // pos not moved => nothing to parse => revert changes & return null
-        
-        return expression.substring(originPos, pos);
+        return parseIdentifierName();
     };
     const eatTypeQuote = (quotChar: "'" | '"'): boolean => {
         if (expression[pos] !== quotChar) return false;
@@ -344,7 +351,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         
         if (!eatTypeQuote(quotChar)) return null; // must starts with quote
         
-        while (!isEof() && isValidStringChar(quotChar)) pos++; // move forward until out of valid chars
+        while (!isEof() && isValidStringChar(quotChar)) pos++; // move forward until invalid
         
         if (!eatTypeQuote(quotChar)) { pos = originPos; return null; } // syntax error: missing quote => revert changes & return null
         
