@@ -28,7 +28,12 @@ export type SimpleSelector        = | readonly [UnnamedSelector            /* no
                                     | readonly [NamedSelector       , SelectorName        /* no_param */                             ]
                                     | readonly [PseudoClassSelector , SelectorName      , Exclude<SelectorParams, AttrSelectorParams>]
 
-export type Combinator            = ' ' | '>' | '~' | '+'
+export type DescendantCombinator  = ' '
+export type ChildCombinator       = '>'
+export type SiblingCombinator     = '~'
+export type NextSiblingCombinator = '+'
+export type Combinator            = DescendantCombinator | ChildCombinator | SiblingCombinator | NextSiblingCombinator
+
 export type Selector              = (SimpleSelector|Combinator)[]
 export type SelectorList          = Selector[]
 
