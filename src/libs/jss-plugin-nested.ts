@@ -67,7 +67,7 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
                         selector name:
                         string = the name of [element, ID, class, pseudo class, pseudo element] selector
                     */
-                    // name,
+                    // selectorName,
                     
                     /*
                         selector parameter(s):
