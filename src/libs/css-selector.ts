@@ -70,6 +70,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             case '#': // IdSelector
             case '.': // ClassSelector
                 pos++; return char;
+            
             case ':':
                 pos++;
                 if (expression[pos] === ':') { pos++; return '::'; } // PseudoElementSelector
@@ -172,17 +173,22 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         skipWhitespace();
         
         const char = expression[pos];
-        if (char === '>') { pos++; return '>'; }
-        if (char === '~') { pos++; return '~'; }
-        if (char === '+') { pos++; return '+'; }
-        if (pos > originPos) {
-            const currentPos = pos;             // 1. backup
-            const test = parseSimpleSelector(); // 2. destructive test
-            pos = currentPos;                   // 3. restore
+        switch (char) {
+            case '>': // ChildCombinator
+            case '~': // SiblingCombinator
+            case '+': // NextSiblingCombinator
+                pos++; return char;
             
-            if (test) return ' ';
-        } // if
-        return null;
+            default:
+            if (pos > originPos) { // previously had whitespace
+                const currentPos = pos;           // 1. backup
+                const test = parseSelectorType(); // 2. destructive test
+                pos = currentPos;                 // 3. restore
+                
+                if (test !== null) return ' '; // DescendantCombinator
+            } // if
+            return null; // unknown expression => return null
+        } // switch
     };
     const parseSelector = (): Selector|null => {
         const originPos = pos;
