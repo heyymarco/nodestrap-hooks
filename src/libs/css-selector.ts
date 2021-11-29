@@ -35,7 +35,7 @@ export type SelectorList          = Selector[]
 
 
 const whitespaceList                  = [' ', '\n', '\r', '\t', '\f', '\v'];
-const specialPseudoClassList          = ['is', 'where', 'not'];
+const specialPseudoClassList          = ['is', 'not', 'where', 'has'];
 
 
 
