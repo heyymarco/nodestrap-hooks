@@ -11,7 +11,7 @@ import type {
 import {
     SelectorList,
     parseSelectors,
-    mapIdentifiers,
+    mapSelectors,
     selectorsToString,
 }                           from './css-selector'
 
@@ -48,10 +48,10 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
     const combinedSelectors : SelectorList = (
         parentSelectors
         .map((parentSelector) =>
-            mapIdentifiers(nestedSelectors, (identifier) => {
+            mapSelectors(nestedSelectors, (selector) => {
                 const [
                     /*
-                        identifier types:
+                        selector types:
                         '&'  = parent         selector
                         '*'  = universal      selector
                         '['  = attribute      selector
@@ -61,32 +61,32 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
                         ':'  = pseudo class   selector
                         '::' = pseudo element selector
                     */
-                    type,
+                    selectorType,
                     
                     /*
-                        identifier name:
+                        selector name:
                         string = the name of [element, ID, class, pseudo class, pseudo element] selector
                     */
                     // name,
                     
                     /*
-                        identifier parameter(s):
+                        selector parameter(s):
                         string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
                         array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
                         SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
                     */
-                    // params,
-                ] = identifier;
+                    // selectorParams,
+                ] = selector;
                 
                 
                 
-                // we're only interested of identifier type '&'
+                // we're only interested of selector type '&'
                 
-                // replace identifier type of `&` with `parentSelector`:
-                if (type === '&') return parentSelector;
+                // replace selector type of `&` with `parentSelector`:
+                if (selectorType === '&') return parentSelector;
                 
-                // preserve the another identifier types:
-                return identifier;
+                // preserve the another selector types:
+                return selector;
             })
             .flat()
         )
