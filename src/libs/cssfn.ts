@@ -13,7 +13,6 @@ import {
     create as createJss,
 }                           from 'jss'           // base technology of our cssfn components
 // official jss-plugins:
-import jssPluginNested      from 'jss-plugin-nested'
 import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
@@ -24,6 +23,7 @@ import {
     ExtendableStyle,
     mergeStyle,
 }                           from './jss-plugin-extend'
+import jssPluginNested      from './jss-plugin-nested'
 import jssPluginShort       from './jss-plugin-short'
 
 // cssfn:
@@ -264,7 +264,7 @@ export interface CombinatorOptions {
 const defaultCombinatorOptions : Required<CombinatorOptions> = {
     groupSelectors  : true,
 };
-export const combinators      = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): PropList => {
+export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): PropList => {
     const {
         groupSelectors = defaultCombinatorOptions.groupSelectors,
     } = options;
@@ -302,10 +302,10 @@ export const combinators      = (combinator: string, selectors: SelectorCollecti
         );
     } // if
 };
-export const descendants      = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
-export const children         = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
-export const siblings         = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('~', selectors, styles, options);
-export const adjacentSiblings = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('+', selectors, styles, options);
+export const descendants  = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
+export const children     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
+export const siblings     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('~', selectors, styles, options);
+export const nextSiblings = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('+', selectors, styles, options);
 
 
 
