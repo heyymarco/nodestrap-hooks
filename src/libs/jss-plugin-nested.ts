@@ -34,9 +34,6 @@ const getOptions = (rule: Rule, container: any, optionsCache: any) => {
     delete (options as any).name;
     return options;
 };
-
-
-
 const combineSelector = (parentSelector: string, nestedSelector: string): string|null => {
     const parentSelectors = parseSelectors(parentSelector);
     if (!parentSelectors) return null; // parsing error => invalid selector
