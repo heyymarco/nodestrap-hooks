@@ -452,10 +452,10 @@ export const isAttrSelectorParams = (selectorParams: SelectorParams): selectorPa
         !isWildParams(selectorParams)
         &&
         /*
-            AttrSelectorParams : [ 'name', '=', 'value', 'I' ]
-            SelectorList       : [ [SimpleSelector|Combinator...]...[SimpleSelector|Combinator...] ]
+            AttrSelectorParams : [ AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions ]
+            SelectorList       : [ Selector...Selector ]
         */
-        (typeof(selectorParams[0]) === 'string') // AttrSelectorParams : the first element (name) must be a string
+        (typeof(selectorParams[0]) === 'string') // AttrSelectorParams : the first element (AttrSelectorName) must be a string
     );
 };
 export const isSelectors = (selectorParams: SelectorParams): selectorParams is SelectorList => {
@@ -463,10 +463,10 @@ export const isSelectors = (selectorParams: SelectorParams): selectorParams is S
         !isWildParams(selectorParams)
         &&
         /*
-            AttrSelectorParams : [ 'name', '=', 'value', 'I' ]
-            SelectorList       : [ [SimpleSelector|Combinator...]...[SimpleSelector|Combinator...] ]
+            AttrSelectorParams : [ AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions ]
+            SelectorList       : [ Selector...Selector ]
         */
-        (typeof(selectorParams[0]) !== 'string') // SelectorList : the first element (SimpleSelector) must be a NON-string or undefined
+        (typeof(selectorParams[0]) !== 'string') // SelectorList : the first element (Selector) must be a NON-string or undefined
     );
 };
 const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): string => {
@@ -544,10 +544,10 @@ export const selectorsToString = (selectors: SelectorList): string => {
 
 export const isSelector = (test: SimpleSelector|Selector): test is Selector => {
     /*
-        SimpleSelector : always starts_with SelectorType (string)
-        Selector       : may separated by Combinator (string) but cannot starts_with Combinator (string)
+        SimpleSelector : [ SelectorType, SelectorName, SelectorParams ]
+        Selector       : [ SimpleSelector...(SimpleSelector|Combinator)... ]
     */
-    return (typeof(test[0]) !== 'string'); // check the type of the first element
+    return (typeof(test[0]) !== 'string'); // Selector : the first element (SimpleSelector) must be a NON-string, the Combinator is guaranteed NEVER be the first element
 };
 export type MapSelectorCallback = (selector: SimpleSelector) => SimpleSelector|Selector
 export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorCallback): SelectorList => {
