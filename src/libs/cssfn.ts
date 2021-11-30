@@ -13,7 +13,6 @@ import {
     create as createJss,
 }                           from 'jss'           // base technology of our cssfn components
 // official jss-plugins:
-import jssPluginCamelCase   from 'jss-plugin-camel-case'
 import jssPluginExpand      from 'jss-plugin-expand'
 import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
 // custom jss-plugins:
@@ -25,6 +24,7 @@ import {
 }                           from './jss-plugin-extend'
 import jssPluginNested      from './jss-plugin-nested'
 import jssPluginShort       from './jss-plugin-short'
+import jssPluginCamelCase   from './jss-plugin-camel-case'
 
 // cssfn:
 import type {
