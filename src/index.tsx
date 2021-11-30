@@ -60,12 +60,14 @@ import reportWebVitals from './reportWebVitals';
 //     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 // import JssPluginGlobalApp from './apps/JssPluginGlobalApp';
-import JssPluginNestedApp from './apps/JssPluginNestedApp';
+// import JssPluginNestedApp from './apps/JssPluginNestedApp';
+// import JssPluginShortApp from './apps/JssPluginShortApp';
+import JssPluginCamelCaseApp from './apps/JssPluginCamelCaseApp';
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <JssPluginNestedApp />
+    <JssPluginCamelCaseApp />
     ,
     document.getElementById('root')
 );
