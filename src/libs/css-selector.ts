@@ -444,7 +444,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
 
 
 
-export const isWildParams = (selectorParams: SelectorParams): selectorParams is string => {
+export const isWildParams         = (selectorParams: SelectorParams): selectorParams is string => {
     return (typeof(selectorParams) === 'string');
 };
 export const isAttrSelectorParams = (selectorParams: SelectorParams): selectorParams is AttrSelectorParams => {
@@ -458,7 +458,7 @@ export const isAttrSelectorParams = (selectorParams: SelectorParams): selectorPa
         (typeof(selectorParams[0]) === 'string') // AttrSelectorParams : the first element (AttrSelectorName) must be a string
     );
 };
-export const isSelectors = (selectorParams: SelectorParams): selectorParams is SelectorList => {
+export const isSelectors          = (selectorParams: SelectorParams): selectorParams is SelectorList => {
     return (
         !isWildParams(selectorParams)
         &&
@@ -504,7 +504,7 @@ const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): 
 
 
 
-export const isCombinator = (selectorEntry: SelectorEntry): selectorEntry is Combinator => {
+export const isCombinator     = (selectorEntry: SelectorEntry): selectorEntry is Combinator => {
     return (typeof(selectorEntry) === 'string');
 };
 export const isSimpleSelector = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => {
@@ -573,7 +573,7 @@ export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCa
                 
                 
                 
-                if (replacement === selectorEntry) { // if not replaced by `callbackFn` (same by reference)
+                if (replacement === selectorEntry) { // if has not been replaced by `callbackFn` (same by reference)
                     const [
                         , // skip: selectorType,
                         , // skip: selectorName,
@@ -582,24 +582,12 @@ export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCa
                     
                     if (selectorParams && isSelectors(selectorParams)) {
                         const oldSelectors : SelectorList = selectorParams;
-                        const newSelectors : SelectorList = (
-                            oldSelectors
-                            .map((selector: Selector): Selector => // mutates a `Selector` to another `Selector`
-                                selector
-                                .map((selectorEntry: SelectorEntry): Selector => { // mutates a (SimpleSelector|Combinator) to ([SimpleSelector]|Selector)
-                                    if (isCombinator(selectorEntry)) return [selectorEntry];
-                                    
-                                    const replacement = callbackFn(selectorEntry);
-                                    return isSelector(replacement) ? replacement /* as Selector */ : [replacement] /* [as SimpleSelector] as Selector */;
-                                })
-                                .flat()
-                            )
-                        );
+                        const newSelectors : SelectorList = mapSelectors(oldSelectors, callbackFn); // recursively map the `oldSelectors`
                         
                         replacement = [
                             ...selectorEntry.slice(0, 2),  // take the `selectorType` & `selectorName`
                             newSelectors as SelectorParams // replace the `oldSelectors` to `newSelectors`
-                        ] as unknown as SimpleSelector;
+                        ] as unknown as SimpleSelector;    // don't worry TypeScript! I know what I'm doing
                     } // if
                 } // if
                 
