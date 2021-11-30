@@ -1,11 +1,19 @@
 // jss:
 import type {
     Plugin,
-    JssStyle,
+    JssStyle as Style,
 
     Rule,
     StyleSheet,
 }                           from 'jss'           // base technology of our cssfn components
+
+
+
+// utilities:
+type LiteralObject      = { [key: string]: any }
+const isLiteralObject   = (object: any): object is LiteralObject => object && (typeof(object) === 'object') && !Array.isArray(object);
+
+const isStyle           = (object: any): object is Style => isLiteralObject(object);
 
 
 
@@ -21,14 +29,14 @@ const shorts: Record<string, string> = {
     'gapBlock'  : 'rowGap',
 };
 
-const renameProps = (style: JssStyle): JssStyle => {
+const renameProps = (style: Style): Style => {
     // stores the style's entries __only_if__ the modification is needed:
     let styleArrLazy : [string, any][]|null = null;
     
     
     
     for (const [propName, propIndex] of Object.keys(style).map((propName, propIndex) => [propName, propIndex] as const)) {
-        if (!(propName in shorts)) continue; // not in list => ignore
+        if ((propName !== 'fallbacks') && !(propName in shorts)) continue; // not in list => ignore
         
         
         
@@ -41,8 +49,21 @@ const renameProps = (style: JssStyle): JssStyle => {
         */
         if (!styleArrLazy) styleArrLazy = Object.entries(style);
         
-        // set the expanded propName:
-        styleArrLazy[propIndex][0] = shorts[propName];
+        
+        
+        if (propName === 'fallbacks') {
+            const fallbacks = styleArrLazy[propIndex][1];
+            if (Array.isArray(fallbacks)) {
+                styleArrLazy[propIndex][1] = fallbacks.map((item) => isStyle(item) ? renameProps(item) : item);
+            }
+            else if (isStyle(fallbacks)) {
+                styleArrLazy[propIndex][1] = renameProps(fallbacks);
+            } // if
+        }
+        else {
+            // set the expanded propName:
+            styleArrLazy[propIndex][0] = shorts[propName];
+        } // if
     } // for
     
     
@@ -53,7 +74,7 @@ const renameProps = (style: JssStyle): JssStyle => {
 
 
 
-const onProcessStyle = (style: JssStyle, rule: Rule, sheet?: StyleSheet): JssStyle => {
+const onProcessStyle = (style: Style, rule: Rule, sheet?: StyleSheet): Style => {
     return renameProps(style);
 }
 

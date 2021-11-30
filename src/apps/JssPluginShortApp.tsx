@@ -19,14 +19,31 @@ const customJss = createJss().setup({plugins:[
 
 
 customJss.createStyleSheet({
-	test: {
+	test1: {
 		foreg     : 'darkBlue',
 		backg     : 'lightBlue',
 		anim      : 'initial',
 
 		gapInline : '10px',
 		gapBlock  : '10px',
-	}
+        
+        transf    : 'translate(0, 0)',
+        fallbacks : {
+            transf: 'translate(1px, 1px)',
+        },
+	},
+    test2: {
+        foreg     : 'darkBlue',
+		backg     : 'lightBlue',
+        fallbacks : [
+            {
+                foreg: 'darkRed',
+            },
+            {
+                backg: 'pink',
+            },
+        ] as any,
+    },
 })
 .attach();
 
