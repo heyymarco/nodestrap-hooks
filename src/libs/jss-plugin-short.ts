@@ -28,19 +28,21 @@ const renameProps = (style: JssStyle): JssStyle => {
     
     
     for (const [propName, propIndex] of Object.keys(style).map((propName, propIndex) => [propName, propIndex] as const)) {
-        if (propName in shorts) {
-            /*
-                initialize styleArrLazy (if was not initialized).
-                
-                convert LiteralObject to Array, so the prop order preserved.
-                the order of the prop is guaranteed to be __preserved__
-                so to rename the prop, just search with known `propIndex`.
-            */
-            if (!styleArrLazy) styleArrLazy = Object.entries(style);
+        if (!(propName in shorts)) continue; // not in list => ignore
+        
+        
+        
+        /*
+            initialize styleArrLazy (if was not initialized).
             
-            // set the expanded propName:
-            styleArrLazy[propIndex][0] = shorts[propName];
-        } // if
+            convert LiteralObject to Array, so the prop order preserved.
+            the order of the prop is guaranteed to be __preserved__
+            so to rename the prop, just search with known `propIndex`.
+        */
+        if (!styleArrLazy) styleArrLazy = Object.entries(style);
+        
+        // set the expanded propName:
+        styleArrLazy[propIndex][0] = shorts[propName];
     } // for
     
     
@@ -56,7 +58,7 @@ const onProcessStyle = (style: JssStyle, rule: Rule, sheet?: StyleSheet): JssSty
 }
 
 const onChangeValue = (propValue: string, propName: string, rule: Rule): string|null|false => {
-    if (!(propName in shorts)) return propValue;
+    if (!(propName in shorts)) return propValue; // not in list => ignore
     
     
     
