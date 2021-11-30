@@ -549,8 +549,17 @@ export const isSelector = (test: SimpleSelector|Selector): test is Selector => {
     */
     return (typeof(test[0]) !== 'string'); // Selector : the first element (SimpleSelector) must be a NON-string, the Combinator is guaranteed NEVER be the first element
 };
-export type MapSelectorCallback = (selector: SimpleSelector) => SimpleSelector|Selector
-export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorCallback): SelectorList => {
+export type MapSelectorsCallback = (selector: SimpleSelector) => SimpleSelector|Selector
+/**
+ * Creates a new `SelectorList` populated with the results of calling a provided `callbackFn` on every `SimpleSelector` in the `selectors`.  
+ * The nested `SimpleSelector` (if any) will also be passed to `callbackFn`.  
+ * The `Combinator` and its nested (if any) will not be passed to `callbackFn`.
+ * @param selectors The input `SelectorList`.
+ * @param callbackFn A function that is called for every `SimpleSelector` in the `selectors`.  
+ * Each time `callbackFn` executes, the returned value is added to the output `SelectorList`.
+ * @returns The output `SelectorList`.
+ */
+export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCallback): SelectorList => {
     return (
         selectors
         .map((selector) =>
