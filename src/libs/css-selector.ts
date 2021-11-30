@@ -34,7 +34,8 @@ export type SiblingCombinator     = '~'
 export type NextSiblingCombinator = '+'
 export type Combinator            = DescendantCombinator | ChildCombinator | SiblingCombinator | NextSiblingCombinator
 
-export type Selector              = (SimpleSelector|Combinator)[]
+export type SelectorEntry         = SimpleSelector | Combinator
+export type Selector              = SelectorEntry[]
 export type SelectorList          = Selector[]
 
 
@@ -503,23 +504,23 @@ const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): 
 
 
 
-export const isCombinator = (part: SimpleSelector|Combinator): part is Combinator => {
-    return (typeof(part) === 'string');
+export const isCombinator = (selectorEntry: SelectorEntry): selectorEntry is Combinator => {
+    return (typeof(selectorEntry) === 'string');
 };
-export const isSimpleSelector = (part: SimpleSelector|Combinator): part is SimpleSelector => {
-    return (typeof(part) !== 'string');
+export const isSimpleSelector = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => {
+    return (typeof(selectorEntry) !== 'string');
 };
 export const selectorToString = (selector: Selector): string => {
     return (
         selector
-        .map((part): string => {
-            if (isCombinator(part)) return part;
+        .map((selectorEntry): string => {
+            if (isCombinator(selectorEntry)) return selectorEntry;
             
             const [
                 selectorType,
                 selectorName = '',
                 selectorParams,
-            ] = part; // isSimpleSelector(part)
+            ] = selectorEntry; // isSimpleSelector(selectorEntry)
             
             if (selectorType === '[') {
                 return selectorParamsToString(selectorParams);
@@ -554,21 +555,21 @@ export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorCal
         selectors
         .map((selector) =>
             selector
-            .map((part): Selector => {
-                if (isCombinator(part)) return [part];
+            .map((selectorEntry): Selector => {
+                if (isCombinator(selectorEntry)) return [selectorEntry];
                 
                 
                 
-                let replacement = callbackFn(part); // isSimpleSelector(part)
+                let replacement = callbackFn(selectorEntry); // isSimpleSelector(selectorEntry)
                 
                 
                 
-                if (replacement === part) { // if not replaced by `callbackFn` (same by reference)
+                if (replacement === selectorEntry) { // if not replaced by `callbackFn` (same by reference)
                     const [
                         , // skip: selectorType,
                         , // skip: selectorName,
                         selectorParams,
-                    ] = part; // isSimpleSelector(part)
+                    ] = selectorEntry; // isSimpleSelector(selectorEntry)
                     
                     if (selectorParams && isSelectors(selectorParams)) {
                         const oldSelectors = selectorParams;
@@ -576,17 +577,17 @@ export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorCal
                             oldSelectors
                             .map((selector): Selector =>
                                 selector
-                                .map((part): Selector => {
-                                    if (isCombinator(part)) return [part];
+                                .map((selectorEntry): Selector => {
+                                    if (isCombinator(selectorEntry)) return [selectorEntry];
                                     
-                                    const replacement = callbackFn(part);
+                                    const replacement = callbackFn(selectorEntry);
                                     return isSelector(replacement) ? replacement : [replacement];
                                 })
                                 .flat()
                             )
                         );
                         
-                        replacement = [...part.slice(2), newSelectors] as unknown as SimpleSelector;
+                        replacement = [...selectorEntry.slice(2), newSelectors] as unknown as SimpleSelector;
                     } // if
                 } // if
                 
