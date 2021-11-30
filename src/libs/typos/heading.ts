@@ -24,7 +24,7 @@ import {
     
     // layouts:
     layout,
-    adjacentSiblings,
+    nextSiblings,
     
     
     
@@ -101,7 +101,7 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
     
     
     
-                ...adjacentSiblings(selectorsWithLevels, [
+                ...nextSiblings(selectorsWithLevels, [
                     /*
                      * treats subsequent headings as subtitles
                      * make it closer to the main heading
