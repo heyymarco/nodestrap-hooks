@@ -562,9 +562,9 @@ export type MapSelectorsCallback = (selector: SimpleSelector) => SimpleSelector|
 export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCallback): SelectorList => {
     return (
         selectors
-        .map((selector) =>
+        .map((selector: Selector): Selector => // mutates a `Selector` to another `Selector`
             selector
-            .map((selectorEntry): Selector => {
+            .map((selectorEntry: SelectorEntry): Selector => { // mutates a (SimpleSelector|Combinator) to ([SimpleSelector]|Selector)
                 if (isCombinator(selectorEntry)) return [selectorEntry];
                 
                 
@@ -581,30 +581,33 @@ export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCa
                     ] = selectorEntry; // isSimpleSelector(selectorEntry)
                     
                     if (selectorParams && isSelectors(selectorParams)) {
-                        const oldSelectors = selectorParams;
-                        const newSelectors = (
+                        const oldSelectors : SelectorList = selectorParams;
+                        const newSelectors : SelectorList = (
                             oldSelectors
-                            .map((selector): Selector =>
+                            .map((selector: Selector): Selector => // mutates a `Selector` to another `Selector`
                                 selector
-                                .map((selectorEntry): Selector => {
+                                .map((selectorEntry: SelectorEntry): Selector => { // mutates a (SimpleSelector|Combinator) to ([SimpleSelector]|Selector)
                                     if (isCombinator(selectorEntry)) return [selectorEntry];
                                     
                                     const replacement = callbackFn(selectorEntry);
-                                    return isSelector(replacement) ? replacement : [replacement];
+                                    return isSelector(replacement) ? replacement /* as Selector */ : [replacement] /* [as SimpleSelector] as Selector */;
                                 })
                                 .flat()
                             )
                         );
                         
-                        replacement = [...selectorEntry.slice(2), newSelectors] as unknown as SimpleSelector;
+                        replacement = [
+                            ...selectorEntry.slice(0, 2),  // take the `selectorType` & `selectorName`
+                            newSelectors as SelectorParams // replace the `oldSelectors` to `newSelectors`
+                        ] as unknown as SimpleSelector;
                     } // if
                 } // if
                 
                 
                 
-                return isSelector(replacement) ? replacement : [replacement];
+                return isSelector(replacement) ? replacement /* as Selector */ : [replacement] /* [as SimpleSelector] as Selector */;
             })
-            .flat()
+            .flat() // flattens [Selector...Selector] to Selector
         )
     );
 };
