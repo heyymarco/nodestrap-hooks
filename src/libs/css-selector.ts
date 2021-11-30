@@ -403,6 +403,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             skipWhitespace();
             
             const value = parseString();
+            // an empty value "" -or- '' is possible
             if (value === null) { pos = originPos; return null; } // syntax error: missing value => revert changes & return null
             
             skipWhitespace();
@@ -445,33 +446,35 @@ export const parseSelectors = (expression: string): SelectorList|null => {
 export const isWildParams = (selectorParams: SelectorParams): selectorParams is string => {
     return (typeof(selectorParams) === 'string');
 };
-export const isSelectors = (selectorParams: SelectorParams): selectorParams is SelectorList => {
-    return (
-        !isWildParams(selectorParams)
-        &&
-        selectorParams.some((part) => (typeof(part) !== 'string')) // contains at least 1 non-string (or SimpleSelector = readonly [])
-    );
-};
 export const isAttrSelectorParams = (selectorParams: SelectorParams): selectorParams is AttrSelectorParams => {
     return (
         !isWildParams(selectorParams)
         &&
-        !selectorParams.some((part) => (typeof(part) !== 'string')) // NOT contains at least 1 non-string (or SimpleSelector = readonly [])
+        /*
+            AttrSelectorParams : [ 'name', '=', 'value', 'I' ]
+            SelectorList       : [ [SimpleSelector|Combinator...]...[SimpleSelector|Combinator...] ]
+        */
+        (typeof(selectorParams[0]) === 'string') // AttrSelectorParams : the first element (name) must be a string
+    );
+};
+export const isSelectors = (selectorParams: SelectorParams): selectorParams is SelectorList => {
+    return (
+        !isWildParams(selectorParams)
+        &&
+        /*
+            AttrSelectorParams : [ 'name', '=', 'value', 'I' ]
+            SelectorList       : [ [SimpleSelector|Combinator...]...[SimpleSelector|Combinator...] ]
+        */
+        (typeof(selectorParams[0]) !== 'string') // SelectorList : the first element (SimpleSelector) must be a NON-string or undefined
     );
 };
 const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): string => {
     if ((selectorParams === null) || (selectorParams === undefined)) return '';
     
-    if (isWildParams(selectorParams)) return `(${selectorParams})`;
-    
-    if (isSelectors(selectorParams)) {
-        return `(${
-            selectorParams
-            .map((selector): string => selectorToString(selector))
-            .join(', ')
-        })`;
+    if (isWildParams(selectorParams)) {
+        return `(${selectorParams})`;
     }
-    else { // if isAttrSelectorParams(selectorParams)
+    else if (isAttrSelectorParams(selectorParams)) {
         const [
             name,
             operator,
@@ -482,12 +485,19 @@ const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): 
         if (options) {
             return `[${name}${operator}"${value}" ${options}]`;
         }
-        else if (value) {
+        else if (value !== undefined) { // an empty value "" -or- '' is possible
             return `[${name}${operator}"${value}"]`;
         }
         else {
             return `[${name}]`;
         } // if
+    }
+    else { // if (isSelectors(selectorParams)) {
+        return `(${
+            selectorParams
+            .map((selector): string => selectorToString(selector))
+            .join(', ')
+        })`;
     } // if
 };
 
