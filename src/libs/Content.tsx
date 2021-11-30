@@ -21,7 +21,7 @@ import {
     layout,
     vars,
     children,
-    adjacentSiblings,
+    nextSiblings,
     
     
     
@@ -536,8 +536,8 @@ export const usesMediaBorderSeparator = () => {
         layout({
             // children:
             // make sibling <media> closer:
-            // remove double border by removing top-border at the adjacent media(s)
-            ...adjacentSiblings(mediaElm, [
+            // remove double border by removing top-border at the next media(s)
+            ...nextSiblings(mediaElm, [
                 layout({
                     // borders:
                     borderBlockStartWidth  : 0, // remove top-border
@@ -607,7 +607,7 @@ export const usesMediaFill = () => {
             
             // children:
             // make sibling <media> closer (cancel out prev sibling's spacing):
-            ...adjacentSiblings(mediaElm, [
+            ...nextSiblings(mediaElm, [
                 layout({
                     // spacings:
                     marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
@@ -684,7 +684,7 @@ export const usesContentMedia = () => {
                 layout({
                     // children:
                     // following by another <a>:
-                    ...adjacentSiblings('a', [
+                    ...nextSiblings('a', [
                         layout({
                             // spacings:
                             // add a space between links:
