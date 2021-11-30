@@ -24,7 +24,7 @@ customJss.createStyleSheet({
 			'& input[type=checkbox][   data-test   *=   "you&me"    ]:nth-child(2n+5)' : {
 				color: 'red',
 	
-				'& div' : {
+				'& div[data-hello="you\'re awesome"][data-yeah="good\\\"yeah"]' : {
 					color: 'pink',
 				}
 			},
@@ -36,6 +36,12 @@ customJss.createStyleSheet({
 			},
 			'& div, & aside, &>footer, &:is(btn, .btn, #btn)': {
 				color: 'black',
+			},
+			'&.yeahh:is(:is(.very.amazing), :not(:so::bad))': {
+				color: 'purple',
+			},
+			'&.yesss:is(:is(.very&.amazing), :not(:so&::bad))': {
+				color: 'magenta',
 			},
 		},
 	}
