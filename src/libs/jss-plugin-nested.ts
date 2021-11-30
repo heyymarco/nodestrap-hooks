@@ -88,8 +88,8 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
                 // preserve the another selector types:
                 return selector;
             })
-            .flat()
         )
+        .flat() // flattens Array<SelectorList> to SelectorList
     );
     
     // convert back the parsed_object_tree to string:
