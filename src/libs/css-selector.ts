@@ -518,15 +518,15 @@ export const selectorToString = (selector: Selector): string => {
             
             const [
                 selectorType,
-                selectorName = '',
+                selectorName,
                 selectorParams,
             ] = selectorEntry; // isSimpleSelector(selectorEntry)
             
-            if (selectorType === '[') {
+            if (selectorType === '[') { // AttrSelector
                 return selectorParamsToString(selectorParams);
             }
             else {
-                return `${selectorType}${selectorName}${selectorParamsToString(selectorParams)}`;
+                return `${selectorType}${selectorName ?? ''}${selectorParamsToString(selectorParams)}`;
             } // if
         })
         .join('')
