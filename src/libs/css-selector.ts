@@ -538,7 +538,7 @@ export const selectorsToString = (selectors: SelectorList): string => {
         .map(selectorToString)
         .join(', ')
     );
-}
+};
 
 
 
