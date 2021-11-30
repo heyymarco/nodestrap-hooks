@@ -57,14 +57,15 @@ import reportWebVitals from './reportWebVitals';
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
-    import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
+//     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
-
+// import JssPluginGlobalApp from './apps/JssPluginGlobalApp';
+import JssPluginNestedApp from './apps/JssPluginNestedApp';
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ProgressApp />
+    <JssPluginNestedApp />
     ,
     document.getElementById('root')
 );

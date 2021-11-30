@@ -1,4 +1,9 @@
 top priority:
+add @cssfn/css-selector
+add jss-plugin-nested
+update cssfn (remove dependency: 'jss-plugin-nested')   nextSiblings
+update typos (heading)                                  nextSiblings
+update Content                                          nextSiblings
 
 
 
