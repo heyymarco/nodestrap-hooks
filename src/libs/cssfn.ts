@@ -12,8 +12,6 @@ import {
     CreateGenerateId,
     create as createJss,
 }                           from 'jss'           // base technology of our cssfn components
-// official jss-plugins:
-import jssPluginVendor      from 'jss-plugin-vendor-prefixer'
 // custom jss-plugins:
 import jssPluginGlobal      from './jss-plugin-global'
 import {
@@ -24,6 +22,7 @@ import {
 import jssPluginNested      from './jss-plugin-nested'
 import jssPluginShort       from './jss-plugin-short'
 import jssPluginCamelCase   from './jss-plugin-camel-case'
+import jssPluginVendor      from './jss-plugin-vendor'
 
 // cssfn:
 import type {
