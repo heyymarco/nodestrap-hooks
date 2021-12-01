@@ -2,6 +2,9 @@
 @cssfn/jss-plugin-short
 @cssfn/jss-plugin-extend
 @cssfn/jss-plugin-global
+@cssfn/jss-plugin-nested
+@cssfn/jss-plugin-camel-case
+@cssfn/jss-plugin-vendor
 @cssfn/css-types
 @cssfn/css-var
 @cssfn/cssfn
