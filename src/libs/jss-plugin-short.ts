@@ -36,6 +36,8 @@ const renameProps = (style: Style): Style => {
     
     
     for (const [propName, propIndex] of Object.keys(style).map((propName, propIndex) => [propName, propIndex] as const)) {
+        if (propName.startsWith('--')) continue; // ignores css variable
+        
         if ((propName !== 'fallbacks') && !(propName in shorts)) continue; // not in list => ignore
         
         
@@ -79,6 +81,8 @@ const onProcessStyle = (style: Style, rule: Rule, sheet?: StyleSheet): Style => 
 };
 
 const onChangeValue = (propValue: string, propName: string, rule: Rule): string|null|false => {
+    if (propName.startsWith('--')) return propValue; // ignores css variable
+    
     if (!(propName in shorts)) return propValue; // not in list => ignore
     
     
