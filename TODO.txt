@@ -6,6 +6,7 @@ update jss-plugin-short
 update cssfn (remove dependency: 'jss-plugin-nested', 'jss-plugin-camel-case')   nextSiblings
 update typos (heading)                                  nextSiblings
 update Content                                          nextSiblings
+update Control
 
 
 
