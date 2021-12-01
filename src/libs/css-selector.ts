@@ -559,12 +559,12 @@ export type MapSelectorsCallback = (selector: SimpleSelector) => SimpleSelector|
  * Each time `callbackFn` executes, the returned value is added to the output `SelectorList`.
  * @returns The output `SelectorList`.
  */
-export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCallback): SelectorList => {
+export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCallback): SelectorList => {
     return (
         selectors
         .map((selector: Selector): Selector => // mutates a `Selector` to another `Selector`
             selector
-            .map((selectorEntry: SelectorEntry): Selector => { // mutates a (SimpleSelector|Combinator) to ([SimpleSelector]|Selector)
+            .flatMap((selectorEntry: SelectorEntry): Selector => { // mutates a (SimpleSelector|Combinator) to ([SimpleSelector]|Selector)
                 if (isCombinator(selectorEntry)) return [selectorEntry];
                 
                 
@@ -582,7 +582,7 @@ export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCa
                     
                     if (selectorParams && isSelectors(selectorParams)) {
                         const oldSelectors : SelectorList = selectorParams;
-                        const newSelectors : SelectorList = mapSelectors(oldSelectors, callbackFn); // recursively map the `oldSelectors`
+                        const newSelectors : SelectorList = flatMapSelectors(oldSelectors, callbackFn); // recursively map the `oldSelectors`
                         
                         replacement = [
                             ...selectorEntry.slice(0, 2),  // take the `selectorType` & `selectorName`
@@ -595,7 +595,6 @@ export const mapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCa
                 
                 return isSelector(replacement) ? replacement /* as Selector */ : [replacement] /* [as SimpleSelector] as Selector */;
             })
-            .flat() // flattens [Selector...Selector] to Selector
         )
     );
 };
