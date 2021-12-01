@@ -87,8 +87,7 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
     const selectors = (Array.isArray(selector) ? selector : [selector]);
     const selectorsWithLevels =
         levels
-        .map((level) => selectors.map((selector) => `${selector}${level}`))
-        .flat(/*depth: */1);
+        .flatMap((level) => selectors.map((selector) => `${selector}${level}`))
     
     
     
