@@ -42,7 +42,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import DropdownListApp          from './apps/DropdownListApp';           // div      dialog|menu (semantic)
 //                 import DropdownButtonApp            from './apps/DropdownButtonApp';         // div      dialog (semantic)
 //                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
-//         import ControlApp                           from './apps/ControlApp';                // div
+        import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
 //                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
@@ -63,12 +63,12 @@ import reportWebVitals from './reportWebVitals';
 // import JssPluginNestedApp from './apps/JssPluginNestedApp';
 // import JssPluginShortApp from './apps/JssPluginShortApp';
 // import JssPluginCamelCaseApp from './apps/JssPluginCamelCaseApp';
-import JssPluginVendorApp from './apps/JssPluginVendorApp';
+// import JssPluginVendorApp from './apps/JssPluginVendorApp';
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <JssPluginVendorApp />
+    <ControlApp />
     ,
     document.getElementById('root')
 );

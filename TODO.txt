@@ -1,9 +1,10 @@
 top priority:
 add @cssfn/css-selector
 add jss-plugin-nested
-added jss-plugin-camel-case
+add jss-plugin-camel-case
+add jss-plugin-vendor
 update jss-plugin-short
-update cssfn (remove dependency: 'jss-plugin-nested', 'jss-plugin-camel-case')   nextSiblings
+update cssfn (remove dependency: 'jss-plugin-nested', 'jss-plugin-camel-case', 'jss-plugin-vendor-prefixer')   nextSiblings
 update typos (heading)                                  nextSiblings
 update Content                                          nextSiblings
 update Control
