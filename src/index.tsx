@@ -62,12 +62,13 @@ import reportWebVitals from './reportWebVitals';
 // import JssPluginGlobalApp from './apps/JssPluginGlobalApp';
 // import JssPluginNestedApp from './apps/JssPluginNestedApp';
 // import JssPluginShortApp from './apps/JssPluginShortApp';
-import JssPluginCamelCaseApp from './apps/JssPluginCamelCaseApp';
+// import JssPluginCamelCaseApp from './apps/JssPluginCamelCaseApp';
+import JssPluginVendorApp from './apps/JssPluginVendorApp';
 
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <JssPluginCamelCaseApp />
+    <JssPluginVendorApp />
     ,
     document.getElementById('root')
 );
