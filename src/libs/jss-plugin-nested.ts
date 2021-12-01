@@ -11,7 +11,7 @@ import type {
 import {
     SelectorList,
     parseSelectors,
-    mapSelectors,
+    flatMapSelectors,
     selectorsToString,
 }                           from './css-selector'
 
@@ -45,8 +45,8 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
     
     const combinedSelectors : SelectorList = (
         parentSelectors
-        .map((parentSelector) =>
-            mapSelectors(nestedSelectors, (selector) => {
+        .flatMap((parentSelector) =>
+            flatMapSelectors(nestedSelectors, (selector) => {
                 const [
                     /*
                         selector types:
@@ -87,7 +87,6 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
                 return selector;
             })
         )
-        .flat() // flattens Array<SelectorList> to SelectorList
     );
     
     // convert back the parsed_object_tree to string:
