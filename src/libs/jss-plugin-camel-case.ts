@@ -53,7 +53,7 @@ const renameProps = (style: Style): Style => {
             } // if
         }
         else {
-            // set the expanded propName:
+            // set the camelized propName:
             styleArrLazy[propIndex][0] = newPropName;
         } // if
     } // for
