@@ -76,7 +76,7 @@ const renameProps = (style: Style): Style => {
 
 const onProcessStyle = (style: Style, rule: Rule, sheet?: StyleSheet): Style => {
     return renameProps(style);
-}
+};
 
 const onChangeValue = (propValue: string, propName: string, rule: Rule): string|null|false => {
     if (!(propName in shorts)) return propValue; // not in list => ignore
