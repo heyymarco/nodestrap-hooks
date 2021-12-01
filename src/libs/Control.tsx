@@ -10,7 +10,6 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // general types:
-    JssValue,
     StyleCollection,
     
     
