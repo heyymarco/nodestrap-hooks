@@ -2,7 +2,7 @@
 import type {
     Plugin,
     JssStyle as Style,
-
+    
     Rule,
     StyleSheet,
 }                           from 'jss'           // base technology of our cssfn components
