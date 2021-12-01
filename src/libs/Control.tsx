@@ -614,18 +614,18 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     //#region keyframes
     const keyframesFocus  : PropEx.Keyframes = {
         from : {
-            boxShadow: [[[ // triple array => makes the JSS treat as comma separated values
+            boxShadow: [ // single array => makes the JSS treat as comma separated values
                 ...boxShadows.filter((b) => (b !== boxShadowFocusBlur)),
 
              // boxShadowFocusBlur, // missing the last => let's the browser interpolated it
-            ].map(fallbackNoneBoxShadow)]] as unknown as JssValue,
+            ].map(fallbackNoneBoxShadow),
         },
         to   : {
-            boxShadow: [[[ // triple array => makes the JSS treat as comma separated values
+            boxShadow: [ // single array => makes the JSS treat as comma separated values
                 ...boxShadows.filter((b) => (b !== boxShadowFocusBlur)),
 
                 boxShadowFocusBlur, // existing the last => let's the browser interpolated it
-            ].map(fallbackNoneBoxShadow)]] as unknown as JssValue,
+            ].map(fallbackNoneBoxShadow),
         },
     };
     const keyframesBlur   : PropEx.Keyframes = {
