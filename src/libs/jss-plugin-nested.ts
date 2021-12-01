@@ -35,9 +35,10 @@ const getOptions = (rule: Rule, container: any, optionsCache: any) => {
     return options;
 };
 const combineSelector = (parentSelector: string, nestedSelector: string): string|null => {
-    const parentSelectors = parseSelectors(parentSelector);
+    const parentSelectors : SelectorList|null = parentSelector ? parseSelectors(parentSelector) : [[]];
     if (!parentSelectors) return null; // parsing error => invalid selector
-    const nestedSelectors = parseSelectors(nestedSelector);
+    
+    const nestedSelectors : SelectorList|null = parseSelectors(nestedSelector);
     if (!nestedSelectors) return null; // parsing error => invalid selector
     
     
