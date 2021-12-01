@@ -326,7 +326,7 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
             
             return [
                 ...(Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
-                .map((ruleEntrySourceList: RuleEntrySource|RuleList): OptionalOrFalse<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
+                .flatMap((ruleEntrySourceList: RuleEntrySource|RuleList): OptionalOrFalse<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
                     const isOptionalString                = (value: any): value is OptionalString => {
                         if (value === null)      return true; // optional `null`
                         if (value === undefined) return true; // optional `undefined`
@@ -440,7 +440,6 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
                     if (isOptionalRuleEntry(ruleEntrySourceList))   return [ruleEntrySourceList];
                     return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
                 })
-                .flat(/*depth: */1) // flatten: OptionalOrFalse<RuleEntry>[][] => OptionalOrFalse<RuleEntry>[]
                 .filter((optionalRuleEntry): optionalRuleEntry is RuleEntry => !!optionalRuleEntry)
                 .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
                     let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
