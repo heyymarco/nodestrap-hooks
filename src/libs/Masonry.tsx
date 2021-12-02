@@ -2,7 +2,6 @@
 import {
     default as React,
     useRef,
-    useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -40,6 +39,9 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap utilities:
+import {
+    useIsomorphicLayoutEffect,
+}                           from './hooks'
 import spacers              from './spacers'     // configurable spaces defs
 import {
     // utilities:
@@ -277,7 +279,7 @@ export function Masonry<TElement extends HTMLElement = HTMLElement>(props: Mason
     
     // dom effects:
     const masonryRef            = useRef<TElement|null>(null);
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         const masonry = masonryRef.current;
         if (!masonry) return; // masonry was unloaded => nothing to do
         
