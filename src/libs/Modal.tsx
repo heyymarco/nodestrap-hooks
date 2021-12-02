@@ -4,7 +4,6 @@ import {
     useState,
     useRef,
     useEffect,
-    useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -52,6 +51,9 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap utilities:
+import {
+    useIsomorphicLayoutEffect,
+}                           from './hooks'
 import {
     stripoutFocusableElement,
 }                           from './stripouts'
@@ -553,7 +555,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         childRef.current?.focus({ preventScroll: true }); // when actived => focus the ModalElement, so the user able to use [esc] key to close the modal
     }, [isVisible]); // (re)run the setups on every time the modal is shown
     
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (!isNoBackInteractive) return; // only for no_back_interactive mode
         
         
