@@ -2,7 +2,6 @@
 import {
     default as React,
     useState,
-    useLayoutEffect,
     useRef,
 }                           from 'react'         // base technology of our nodestrap components
 
@@ -53,6 +52,9 @@ import {
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
 // nodestrap utilities:
+import {
+    useIsomorphicLayoutEffect,
+}                           from './hooks'
 import {
     // utilities:
     setRef,
@@ -422,7 +424,7 @@ export const useValidInvalidState  = (props: ValidationProps, validator?: Valida
     
     
     // watch the changes once (only at startup):
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (valided !== undefined) return; // the effect should only run once
         
         
