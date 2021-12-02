@@ -42,7 +42,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import DropdownListApp          from './apps/DropdownListApp';           // div      dialog|menu (semantic)
 //                 import DropdownButtonApp            from './apps/DropdownButtonApp';         // div      dialog (semantic)
 //                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
-        import ControlApp                           from './apps/ControlApp';                // div
+//         import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
 //                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
@@ -50,7 +50,7 @@ import reportWebVitals from './reportWebVitals';
 //             import EditableControlApp               from './apps/EditableControlApp';        // div
 //                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';    // div
-//                     import InputApp                 from './apps/InputApp';                  // span
+                    import InputApp                 from './apps/InputApp';                  // span
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';  // div
 //                         import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
@@ -68,7 +68,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ControlApp />
+    <InputApp />
     ,
     document.getElementById('root')
 );

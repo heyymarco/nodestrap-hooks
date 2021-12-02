@@ -19,6 +19,7 @@
 @nodestrap/layouts
 @nodestrap/typos
 
+@nodestrap/hooks
 @nodestrap/utilities
 @nodestrap/accessibilities
 @nodestrap/validations
