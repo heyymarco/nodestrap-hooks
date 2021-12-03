@@ -456,8 +456,8 @@ export function Button(props: ButtonProps) {
     
     
     // fn props:
-    const semanticTag  = props.semanticTag  ?? (props.href ? 'a'    : 'button');
-    const semanticRole = props.semanticRole ?? (props.href ? 'link' : 'button');
+    const semanticTag  = props.semanticTag  ?? (props.href ? 'a'    : ['button', 'a']);
+    const semanticRole = props.semanticRole ?? (props.href ? 'link' : ['button', 'link']);
     const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
     
     
