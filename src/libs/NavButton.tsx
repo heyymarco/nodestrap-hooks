@@ -1,29 +1,8 @@
 // react:
 import {
     default as React,
+    useMemo,
 }                           from 'react'         // base technology of our nodestrap components
-
-// cssfn:
-import {
-    // general types:
-    StyleCollection,
-    
-    
-    
-    // compositions:
-    composition,
-    mainComposition,
-    imports,
-    
-    
-    
-    // layouts:
-    layout,
-    vars,
-}                           from './cssfn'       // cssfn core
-
-// nodestrap utilities:
-import typos                from './typos/index' // configurable typography (texting) defs
 
 // others libs:
 import {
@@ -35,18 +14,8 @@ import {
 // nodestrap components:
 import {
     // hooks:
-    isSize          as basicIsSize,
-    usesSizeVariant as basicUsesSizeVariant,
-    SizeVariant     as BasicSizeVariant,
-    useSizeVariant  as basicUseSizeVariant,
-    
     OrientationName,
-    OrientationRuleOptions,
-    normalizeOrientationRule,
     OrientationVariant,
-    
-    expandBorderRadius,
-    expandPadding,
 }                           from './Basic'
 import {
     // utilities:
@@ -82,9 +51,9 @@ export const resolvePath = (to: To, fromPathname = '/'): Path => {
         (
             toPathname.startsWith('/')
             ?
-            toPathname // eg:   /shoes/foo
+            toPathname                                // absolute path, eg:   /shoes/foo
             :
-            resolvePathname(toPathname, fromPathname) // eg:   ../shoes/foo   +   /product
+            resolvePathname(toPathname, fromPathname) // relative path, eg:   ../shoes/foo
         )
         :
         fromPathname
@@ -136,11 +105,72 @@ const normalizeHash = (hash: string): string => {
     );
 }
 
+
+
+// hooks:
+interface CurrentActiveProps {
+    // nav matches:
+    caseSensitive? : boolean
+    end?           : boolean
+    
+    
+    // children:
+    children?      : React.ReactNode
+}
+const useCurrentActive = (props: CurrentActiveProps): boolean => {
+    const children = props.children;
+    const to = isReactRouterLink(children) ? children.props.to : (isNextLink(children) ? children.props.href : undefined);
+    
+    /*
+    assumes each current path segment === each route segment,
+    so each `to` segment starts with `../` => go up one segment (go up one route)
+    */
+    const currentPathname = window?.location?.pathname ?? '';
+    
+    
+    
+    return useMemo((): boolean => {
+        if (!to) return false;
+        let targetPathname  = resolvePath(to, currentPathname).pathname;
+        
+        // ensure the pathname has a trailing slash if the original to value had one.
+        const hasTrailingSlash = ((typeof(to) === 'string') ? parsePath(to) : to).pathname?.endsWith('/');
+        if (hasTrailingSlash && !targetPathname.endsWith('/')) targetPathname += '/';
+        
+        
+        
+        let currentPathname2 = currentPathname;
+        if (!props.caseSensitive) {
+            currentPathname2 = currentPathname2.toLocaleLowerCase();
+            targetPathname  = targetPathname.toLocaleLowerCase();
+        } // if
+        
+        
+        
+        return (
+            (currentPathname2 === targetPathname) // exact match
+            ||
+            (
+                !props.end
+                &&
+                (
+                    currentPathname2.startsWith(targetPathname)
+                    ||
+                    (currentPathname2.charAt(targetPathname.length) === '/') // sub match
+                )
+            )
+        );
+    }, [to, currentPathname, props.caseSensitive, props.end]);
+};
+
+
+
 // react components:
 
 export interface NavButtonProps
     extends
-        ButtonProps
+        ButtonProps,
+        CurrentActiveProps
 {
 }
 export function NavButton(props: NavButtonProps) {
@@ -148,24 +178,13 @@ export function NavButton(props: NavButtonProps) {
     const {
         // accessibilities:
         active,
-        
-        
-        // children:
-        children,
     ...restProps} = props;
     
     
     
     // fn props:
-    const activeFn = active ?? ((): boolean => {
-        const to = isReactRouterLink(children) ? children.props.to : (isNextLink(children) ? children.props.href : undefined);
-        if (!to) return false;
-        
-        const currentPathname = window?.location?.pathname ?? '';
-        const targetPathname  = resolvePath(to, currentPathname);
-        
-        return true;
-    })();
+    const activeDn = useCurrentActive(props);
+    const activeFn = active ?? activeDn;
     
     
     
