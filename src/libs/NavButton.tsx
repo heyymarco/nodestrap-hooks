@@ -130,7 +130,7 @@ const useCurrentActive = (props: CurrentActiveProps): boolean => {
     
     
     return useMemo((): boolean => {
-        if (!to) return false;
+        if (to === undefined) return false;
         let targetPathname  = resolvePath(to, currentPathname).pathname;
         
         // ensure the pathname has a trailing slash if the original to value had one.
