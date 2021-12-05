@@ -141,7 +141,7 @@ const useCurrentActive = (props: CurrentActiveProps): boolean|undefined => {
             &&
             (
                 currentPathname.startsWith(targetPathname)
-                ||
+                &&
                 (currentPathname.charAt(targetPathname.length) === '/') // sub segment
             )
         )
