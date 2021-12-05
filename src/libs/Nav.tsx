@@ -7,6 +7,11 @@ import {
 import Icon                 from './Icon'
 import {
     // hooks:
+    CurrentActiveProps,
+    useCurrentActive,
+}                           from './NavButton'
+import {
+    // hooks:
     OrientationName,
     OrientationVariant,
     
@@ -24,11 +29,6 @@ import {
     ListProps,
     List,
 }                           from './List'
-import {
-    // hooks:
-    CurrentActiveProps,
-    useCurrentActive,
-}                           from './NavButton'
 
 
 
@@ -42,7 +42,8 @@ export { useCurrentActive }
 
 export interface NavItemProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListItemProps<TElement>
+        ListItemProps<TElement>,
+        CurrentActiveProps
 {
 }
 export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
