@@ -24,6 +24,17 @@ import {
     ListProps,
     List,
 }                           from './List'
+import {
+    // hooks:
+    CurrentActiveProps,
+    useCurrentActive,
+}                           from './NavButton'
+
+
+
+// re-exports:
+export type { CurrentActiveProps }
+export { useCurrentActive }
 
 
 
@@ -35,15 +46,33 @@ export interface NavItemProps<TElement extends HTMLElement = HTMLElement>
 {
 }
 export function NavItem<TElement extends HTMLElement = HTMLElement>(props: NavItemProps<TElement>) {
+    // rest props:
+    const {
+        // accessibilities:
+        active,
+    ...restProps} = props;
+    
+    
+    
+    // fn props:
+    const activeDn = useCurrentActive(props);
+    const activeFn = active ?? activeDn;
+    
+    
+    
     // jsx:
     return (
         <ListItem<TElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             // semantics:
-            aria-current={props['aria-current'] ?? (props.active ? 'page' : undefined)}
+            aria-current={props['aria-current'] ?? (activeFn ? 'page' : undefined)}
+            
+            
+            // accessibilities:
+            active={activeFn}
         />
     );
 }
