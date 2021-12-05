@@ -24,6 +24,9 @@
 @nodestrap/accessibilities
 @nodestrap/validations
 
+// supports:
+@nodestrap/react-router-link
+
 // abstracts:
 @nodestrap/element
 @nodestrap/basic
@@ -44,6 +47,7 @@
 @nodestrap/label
 @nodestrap/masonry
 @nodestrap/button
+@nodestrap/nav-button
 @nodestrap/button-icon
 @nodestrap/close-button
 @nodestrap/form
