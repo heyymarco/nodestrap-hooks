@@ -2,18 +2,35 @@
 import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
-import {
+// doesn't work:
+// import {
+//     // general types:
+//     To,
+//     
+//     
+//     // hooks:
+//     useHref,
+// }                        from 'react-router'
+import type {
     // general types:
     To,
-    
-    
-    // hooks:
-    useHref,
 }                           from 'react-router'
-import {
-    // hooks:
+import * as reactRouter     from 'react-router'
+// doesn't work:
+// import {
+//     // hooks:
+//     useLinkClickHandler,
+// }                        from 'react-router-dom'
+import * as reactRouterDom  from 'react-router-dom'
+
+
+
+const {
+    useHref,
+} = reactRouter;
+const {
     useLinkClickHandler,
-}                           from 'react-router-dom'
+} = reactRouterDom;
 
 
 
