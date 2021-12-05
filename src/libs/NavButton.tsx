@@ -109,14 +109,14 @@ export interface CurrentActiveProps {
     // children:
     children?      : React.ReactNode
 }
-const useCurrentActive = (props: CurrentActiveProps): boolean => {
-    if (typeof(window) === 'undefined') return false; // server side rendering => not supported yet
+const useCurrentActive = (props: CurrentActiveProps): boolean|undefined => {
+    if (typeof(window) === 'undefined') return undefined; // server side rendering => not supported yet
     
     
     
     const children = props.children;
     const to = isReactRouterLink(children) ? children.props.to : (isNextLink(children) ? children.props.href : undefined);
-    if (to === undefined) return false; // neither ReactRouterLink nor NextLink exists
+    if (to === undefined) return undefined; // neither ReactRouterLink nor NextLink exists
     
     
     
