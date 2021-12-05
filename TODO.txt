@@ -1,5 +1,5 @@
 top priority:
-create custom Link component for NextJS
+auto close menu on Navbar
 
 
 
