@@ -1,13 +1,15 @@
 // react:
 import {
     default as React,
-    useMemo,
 }                           from 'react'         // base technology of our nodestrap components
+import {
+    useInRouterContext,
+    useResolvedPath,
+}                           from 'react-router'
 
 // others libs:
 import {
     To,
-    Path,
     parsePath,
 }                           from 'history'
 
@@ -38,11 +40,9 @@ import {
 
 
 /* forked from react-router v6 */
-export const resolvePath = (to: To, fromPathname = '/'): Path => {
+export const resolvePath = (to: To, fromPathname = '/'): string => {
     const {
         pathname : toPathname,
-        search   = '',
-        hash     = '',
     } = (typeof(to) === 'string') ? parsePath(to) : to;
     
     const pathname = (
@@ -51,30 +51,26 @@ export const resolvePath = (to: To, fromPathname = '/'): Path => {
         (
             toPathname.startsWith('/')
             ?
-            toPathname                                // absolute path, eg:   /shoes/foo
+            toPathname                                    // absolute path, eg:   /shoes/foo
             :
-            resolvePathname(toPathname, fromPathname) // relative path, eg:   ../shoes/foo
+            resolveRelativePath(toPathname, fromPathname) // relative path, eg:   ../shoes/foo
         )
         :
         fromPathname
     );
     
-    return {
-        pathname,
-        search : normalizeSearch(search),
-        hash   : normalizeHash(hash),
-    };
+    return pathname;
 };
 
-const resolvePathname = (relativePath: string, fromPathname: string): string => {
+const resolveRelativePath = (relativePath: string, fromPathname: string): string => {
     const segments = (
         fromPathname
-        .replace(/\/+$/, '') // remove the last /   =>   /products/foo   =>   /product/foo
+        .replace(/\/+$/, '') // remove the last /   =>   /products/foo/  =>   /products/foo
         .split('/')          // split by /          =>   /products/foo   =>   ['', 'products', 'foo']
     );
     const relativeSegments = relativePath.split('/');
     
-    relativeSegments.forEach(segment => {
+    relativeSegments.forEach((segment) => {
         if (segment === '..') {
             // Keep the root '' segment so the pathname starts at / when `join()`ed
             if (segments.length > 1) segments.pop(); // remove the last segment
@@ -86,29 +82,25 @@ const resolvePathname = (relativePath: string, fromPathname: string): string => 
     
     return (segments.length > 1) ? segments.join('/') : '/';
 };
-const normalizeSearch = (search: string): string => {
-    return (
-        (!search || (search === '?'))
-        ? ''
-        : search.startsWith('?')
-        ? search
-        : '?' + search
-    );
+
+
+
+// hacks:
+const _useInRouterContext = (): boolean => {
+    return (() => {
+        return useInRouterContext; // hack: conditionally call react hook
+    })()();
 };
-const normalizeHash = (hash: string): string => {
-    return (
-        (!hash || (hash === '#'))
-        ? ''
-        : hash.startsWith('#')
-        ? hash
-        : '#' + hash
-    );
-}
+const _useResolvedPath = (to: To): string => {
+    return (() => {
+        return useResolvedPath; // hack: conditionally call react hook
+    })()(to).pathname;
+};
 
 
 
 // hooks:
-interface CurrentActiveProps {
+export interface CurrentActiveProps {
     // nav matches:
     caseSensitive? : boolean
     end?           : boolean
@@ -118,49 +110,42 @@ interface CurrentActiveProps {
     children?      : React.ReactNode
 }
 const useCurrentActive = (props: CurrentActiveProps): boolean => {
+    if (typeof(window) === 'undefined') return false; // server side rendering => not supported yet
+    
+    
+    
     const children = props.children;
     const to = isReactRouterLink(children) ? children.props.to : (isNextLink(children) ? children.props.href : undefined);
-    
-    /*
-    assumes each current path segment === each route segment,
-    so each `to` segment starts with `../` => go up one segment (go up one route)
-    */
-    const currentPathname = window?.location?.pathname ?? '';
+    if (to === undefined) return false; // neither ReactRouterLink nor NextLink exists
     
     
     
-    return useMemo((): boolean => {
-        if (to === undefined) return false;
-        let targetPathname  = resolvePath(to, currentPathname).pathname;
-        
-        // ensure the pathname has a trailing slash if the original to value had one.
-        const hasTrailingSlash = ((typeof(to) === 'string') ? parsePath(to) : to).pathname?.endsWith('/');
-        if (hasTrailingSlash && !targetPathname.endsWith('/')) targetPathname += '/';
-        
-        
-        
-        let currentPathname2 = currentPathname;
-        if (!props.caseSensitive) {
-            currentPathname2 = currentPathname2.toLocaleLowerCase();
-            targetPathname  = targetPathname.toLocaleLowerCase();
-        } // if
-        
-        
-        
-        return (
-            (currentPathname2 === targetPathname) // exact match
-            ||
+    // let currentPathname = useLocation().pathname;        // only works in react-router
+    let currentPathname = window?.location?.pathname ?? ''; // works both in react-router & nextjs
+    let targetPathname = _useInRouterContext() ? _useResolvedPath(to) : resolvePath(to, currentPathname);
+    
+    
+    
+    if (!(props.caseSensitive ?? false)) {
+        currentPathname = currentPathname.toLocaleLowerCase();
+        targetPathname  = targetPathname.toLocaleLowerCase();
+    } // if
+    
+    
+    
+    return (
+        (currentPathname === targetPathname) // exact match
+        ||
+        (
+            !(props.end ?? false) // sub match
+            &&
             (
-                !props.end
-                &&
-                (
-                    currentPathname2.startsWith(targetPathname)
-                    ||
-                    (currentPathname2.charAt(targetPathname.length) === '/') // sub match
-                )
+                currentPathname.startsWith(targetPathname)
+                ||
+                (currentPathname.charAt(targetPathname.length) === '/') // sub segment
             )
-        );
-    }, [to, currentPathname, props.caseSensitive, props.end]);
+        )
+    );
 };
 
 
@@ -193,6 +178,10 @@ export function NavButton(props: NavButtonProps) {
         <Button
             // other props:
             {...restProps}
+            
+            
+            // semantics:
+            aria-current={props['aria-current'] ?? (activeFn ? 'page' : undefined)}
             
             
             // accessibilities:
