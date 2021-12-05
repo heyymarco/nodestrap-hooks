@@ -126,16 +126,28 @@ import {
     cssProps as ccssProps,
 }                           from './Container'
 import {
+    // hooks:
+    CurrentActiveProps,
+    useCurrentActive,
+    
+    
+    
     // react components:
-    ButtonProps,
-    Button,
-}                           from './Button'
+    NavButtonProps,
+    NavButton,
+}                           from './NavButton'
 import {
     // react components:
     CheckProps,
     Check,
 }                           from './Check'
 import TogglerMenuButton    from './TogglerMenuButton'
+
+
+
+// re-exports:
+export type { CurrentActiveProps }
+export { useCurrentActive }
 
 
 
@@ -958,24 +970,15 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface NavbarMenuProps
     extends
-        ButtonProps
+        NavButtonProps
 {
 }
 export function NavbarMenu(props: NavbarMenuProps) {
-    // fn props:
-    const pressFn = props.press ?? props.active;
-    
-    
-    
     // jsx:
     return (
-        <Button
+        <NavButton
             // other props:
             {...props}
-            
-            
-            // accessibilities:
-            press={pressFn}
             
             
             // variants:
