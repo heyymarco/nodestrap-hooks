@@ -78,18 +78,16 @@ export const ReactRouterLink = React.forwardRef<HTMLAnchorElement, ReactRouterLi
     // handlers:
     const internalHandleClick = useLinkClickHandler(to, { replace, state, target });
     const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
-        props.onClick?.(e);
+        props.onClick?.(e); // keep original onClick on <ReactRouterLink onClick={...} />
         
-        
-        
-        if (!e.defaultPrevented && !reloadDocument) internalHandleClick(e);
+        if (!e.defaultPrevented && !reloadDocument) internalHandleClick(e); // our click handler
     };
     
     
     
     // jsx:
     if (component) {
-        return React.cloneElement(component, {
+        return React.cloneElement<any>(component, {
             // essentials:
             ref,
             
@@ -102,7 +100,11 @@ export const ReactRouterLink = React.forwardRef<HTMLAnchorElement, ReactRouterLi
             
             
             // events:
-            onClick: handleClick,
+            onClick: ((e) => {
+                component.props.onClick?.(e); // keep original onClick on <FooComponent onClick={...} />
+                
+                handleClick(e);
+            }) as React.MouseEventHandler<HTMLAnchorElement>,
         });
     } // if
     return (
