@@ -31,7 +31,30 @@ function App() {
 				theme={theme} size={size} gradient={enableGrad}
 				outlined={outlined}
 			>
-                I'm inside a container
+				{/* <p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Et vero veritatis quam nobis omnis deserunt architecto eligendi corrupti inventore hic, ipsam ducimus qui possimus laboriosam explicabo odit a neque quasi?
+				</p> */}
+				<div style={{background: 'yellow'}} className='fill-self'>
+					<p>I'm fill the entire width</p>
+					<p>
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Et vero veritatis quam nobis omnis deserunt architecto eligendi corrupti inventore hic, ipsam ducimus qui possimus laboriosam explicabo odit a neque quasi?
+					</p>
+				</div>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Et vero veritatis quam nobis omnis deserunt architecto eligendi corrupti inventore hic, ipsam ducimus qui possimus laboriosam explicabo odit a neque quasi?
+				</p>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Et vero veritatis quam nobis omnis deserunt architecto eligendi corrupti inventore hic, ipsam ducimus qui possimus laboriosam explicabo odit a neque quasi?
+				</p>
+				<div style={{background: 'yellow'}} className='fill'>
+					<p>I'm fill the entire width</p>
+					<p>
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Et vero veritatis quam nobis omnis deserunt architecto eligendi corrupti inventore hic, ipsam ducimus qui possimus laboriosam explicabo odit a neque quasi?
+					</p>
+				</div>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Et vero veritatis quam nobis omnis deserunt architecto eligendi corrupti inventore hic, ipsam ducimus qui possimus laboriosam explicabo odit a neque quasi?
+				</p>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

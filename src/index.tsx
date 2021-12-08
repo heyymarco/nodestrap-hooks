@@ -21,7 +21,7 @@ import reportWebVitals from './reportWebVitals';
 //     import LabelApp                                 from './apps/LabelApp';                  // div
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
 //         import CarouselApp                          from './apps/CarouselApp';               // div      ???
-//     import ContainerApp                             from './apps/ContainerApp';              // div
+    import ContainerApp                             from './apps/ContainerApp';              // div
 //     import IndicatorApp                             from './apps/IndicatorApp';              // div
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
@@ -57,7 +57,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
-    import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
+//     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
 //     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 // import JssPluginGlobalApp from './apps/JssPluginGlobalApp';
@@ -69,7 +69,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <NavbarApp />
+    <ContainerApp />
     ,
     document.getElementById('root')
 );
