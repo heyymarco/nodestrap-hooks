@@ -391,8 +391,7 @@ export interface IconVars {
      */
     img : any
 }
-const [iconRefs, iconDecls] = createCssVar<IconVars>();
-const iconDecls_img_cache = iconDecls.img;
+const [iconRefs, iconDecls] = createCssVar<IconVars>({ minify: false }); // do not minify to make sure `style={{ --img: ... }}` is the same between in server (without `useIconSheet` rendered) & client (with `useIconSheet` rendered)
 
 export const usesIconLayout      = () => {
     // dependencies:
@@ -657,7 +656,7 @@ export const useIcon = <TElement extends HTMLElement = HTMLElement>(props: IconP
 
             style: {
                 // appearances:
-                [iconDecls_img_cache]: (() => {
+                [iconDecls.img]: (() => {
                     if (iconImg)    return `url("${iconImg}")`; // the url of the icon's image
 
                     if (isIconFont) return `"${props.icon}"`;   // the string of the icon's name
