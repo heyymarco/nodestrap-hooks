@@ -449,7 +449,7 @@ export const useTogglerMenuButtonSheet = createUseSheet(() => [
             usesTogglerMenuButtonStates(),
         ]),
     ]),
-]);
+], /*sheetId :*/'5sj70x1zsf'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
