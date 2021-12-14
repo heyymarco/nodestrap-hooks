@@ -808,7 +808,7 @@ export const useContentSheet = createUseSheet(() => [
             usesContentVariants(),
         ]),
     ]),
-]);
+], /*sheetId :*/'2h0i4lc78z'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
