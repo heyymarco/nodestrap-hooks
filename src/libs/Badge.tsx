@@ -268,7 +268,7 @@ export const useBadgeSheet = createUseSheet(() => [
             usesBadgeStates(),
         ]),
     ]),
-]);
+], /*sheetId :*/'a7wkthow0k'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
