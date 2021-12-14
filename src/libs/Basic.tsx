@@ -1349,7 +1349,7 @@ export const useBasicSheet = createUseSheet(() => [
             usesBasicVariants(),
         ]),
     ]),
-]);
+], /*sheetId :*/'rbkpy0qh2b'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
