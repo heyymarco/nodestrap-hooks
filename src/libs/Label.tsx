@@ -161,7 +161,7 @@ export const useLabelSheet = createUseSheet(() => [
             usesLabelVariants(),
         ]),
     ]),
-]);
+], /*sheetId :*/'si01upz9vr'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
