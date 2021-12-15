@@ -198,7 +198,7 @@ export const useAccordionItemSheet = createUseSheet(() => [
             usesAccordionItemStates(),
         ]),
     ]),
-]);
+], /*sheetId :*/'3mq5z5qt4v'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
