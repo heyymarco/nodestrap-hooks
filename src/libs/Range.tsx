@@ -869,6 +869,20 @@ export function Range(props: RangeProps) {
     
     
     // handlers:
+    const handleTouchSlider    = (e: React.TouchEvent<HTMLInputElement>) => {
+        if (e.touches.length === 1) { // only one finger touch
+            handleMouseSlider({
+                defaultPrevented : e.defaultPrevented,
+                preventDefault   : e.preventDefault,
+                
+                currentTarget    : e.currentTarget,
+                
+                buttons          : 1, // simulate left_click
+                clientX          : e.touches[0].clientX,
+                clientY          : e.touches[0].clientY,
+            } as React.MouseEvent<HTMLInputElement, MouseEvent>);
+        } // if
+    };
     const handleMouseSlider    = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
         if (!e.defaultPrevented) {
             if (!propEnabled)    return; // control is disabled => no response required
@@ -1069,6 +1083,20 @@ export function Range(props: RangeProps) {
                 
                 
                 handleMouseSlider(e);
+            }}
+            onTouchStart=   {(e) => {
+                props.onTouchStart?.(e);
+                
+                
+                
+                handleTouchSlider(e);
+            }}
+            onTouchMove=    {(e) => {
+                props.onTouchMove?.(e);
+                
+                
+                
+                handleTouchSlider(e);
             }}
             onKeyDown=      {(e) => {
                 props.onKeyDown?.(e);
