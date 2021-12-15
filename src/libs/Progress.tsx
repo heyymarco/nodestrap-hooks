@@ -383,7 +383,7 @@ export const useProgressSheet = createUseSheet(() => [
             usesProgressVariants(),
         ]),
     ]),
-]);
+], /*sheetId :*/'vcm24axqvn'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
@@ -542,7 +542,7 @@ export const useProgressBarSheet = createUseSheet(() => [
             ]),
         ]),
     ]),
-]);
+], /*sheetId :*/'ymt3ybn64g'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
