@@ -21,7 +21,7 @@ import reportWebVitals from './reportWebVitals';
 //     import LabelApp                                 from './apps/LabelApp';                  // div
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
 //         import CarouselApp                          from './apps/CarouselApp';               // div      ???
-    import ContainerApp                             from './apps/ContainerApp';              // div
+//     import ContainerApp                             from './apps/ContainerApp';              // div
 //     import IndicatorApp                             from './apps/IndicatorApp';              // div
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
@@ -46,7 +46,7 @@ import reportWebVitals from './reportWebVitals';
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
 //                     import NavButton                from './apps/NavButtonApp';              //     button|a     button|link (semantic)
-//                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
+                    import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
 //                         import CloseButtonApp       from './apps/CloseButtonApp';            //     button|a     button|link (semantic)
 //             import EditableControlApp               from './apps/EditableControlApp';        // div
 //                 import FormApp                      from './apps/FormApp';                   // form     form (semantic)
@@ -69,7 +69,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ContainerApp />
+    <ButtonIconApp />
     ,
     document.getElementById('root')
 );
