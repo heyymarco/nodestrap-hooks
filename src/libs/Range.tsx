@@ -160,7 +160,7 @@ export interface RangeVars {
      */
     backg      : any
 }
-const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>();
+const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>({ minify: false }); // do not minify to make sure `style={{ --valueRatio: ... }}` is the same between in server (without `usesRangeVars` rendered) & client (with `usesRangeVars` rendered)
 
 /**
  * Uses Range variables.
