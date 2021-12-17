@@ -587,11 +587,11 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
             // promise to regenerate the data in the future as soon as possible:
 
             _valid = false; // mark the `genProps` & `genKeyframes` as invalid
-            setTimeout(() => {
+            Promise.resolve().then(() => {
                 if (_valid) return; // has been previously generated => abort
                 rebuild();
                 _valid = true; // mark the `genProps` & `genKeyframes` as valid
-            }, 0);
+            });
         } // if
     }
     refresh(); // regenerate the `genProps` & `genKeyframes` for the first time
