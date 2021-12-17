@@ -329,7 +329,7 @@ export const markActive = () => composition([
  */
 export const usesThemeActive = (themeName: ThemeName|null = 'secondary') => usesThemeCond(themeName);
 
-export const useActivePassiveState = (props: IndicationProps & SemanticProps, activeDn?: boolean) => {
+export const useActivePassiveState = (props: IndicationProps & SemanticProps) => {
     // fn props:
     const propActive = usePropActive(props, null);
     const isCheckbox = (props.tag === 'input') && ((props as any).type === 'checkbox');
@@ -345,7 +345,7 @@ export const useActivePassiveState = (props: IndicationProps & SemanticProps, ac
     /*
      * state is active/passive based on [controllable active] (if set) and fallback to [uncontrollable active]
      */
-    const activeFn: boolean = propActive /*controllable*/ ?? activeDn /*uncontrollable*/ ?? false;
+    const activeFn: boolean = propActive /*controllable*/ ?? false;
 
     if (actived !== activeFn) { // change detected => apply the change & start animating
         setActived(activeFn);   // remember the last change
