@@ -13,20 +13,28 @@ import {
 
 
 export const breakpoints = {
-    xs  : 0,
-    sm  : 576,
-    md  : 768,
-    lg  : 992,
-    xl  : 1200,
-    xxl : 1400,
+    xs  : 0    as number|null|undefined,
+    sm  : 576  as number|null|undefined,
+    md  : 768  as number|null|undefined,
+    lg  : 992  as number|null|undefined,
+    xl  : 1200 as number|null|undefined,
+    xxl : 1400 as number|null|undefined,
 };
 export { breakpoints as default };
 
 
 
+export type BreakpointName = (keyof typeof breakpoints) | (string & {})
+
+
+
 const getSortedBreakpoints = () =>
     Object.entries(breakpoints)
-    .filter(([breakpointName, breakpointValue]) => breakpointName /*not an empty string*/ && (typeof(breakpointValue) === 'number') /*is a number*/)
+    .filter((breakpoint): breakpoint is [BreakpointName, number] =>
+        !!breakpoint[0] // not an empty string
+        &&
+        (typeof(breakpoint[1]) === 'number') // is a number
+    )
     .sort((a, b) => a[1] - b[1]); // sort from smallest value to biggest one
 
 
@@ -37,7 +45,7 @@ const getSortedBreakpoints = () =>
  * @returns the name of the next breakpoint, -or- `null` for the next biggest breakpoint.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const next = (breakpointName: string): string|null => {
+export const next = (breakpointName: BreakpointName): BreakpointName|null => {
     let wasFound = false;
     for (const [searchName] of getSortedBreakpoints()) {
         if (wasFound) return searchName;
@@ -57,7 +65,7 @@ export const next = (breakpointName: string): string|null => {
  * @returns the minimum width of the specified `breakpointName`, -or- `null` for the smallest breakpoint.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const min = (breakpointName: string): number|null => {
+export const min = (breakpointName: BreakpointName): number|null => {
     const value = getSortedBreakpoints().find(([searchName]) => (searchName === breakpointName))?.[1];
     if (value === undefined) throw new Error(`Breakpoint '${breakpointName}' is not found in breakpoints.`);
 
@@ -73,7 +81,7 @@ export const min = (breakpointName: string): number|null => {
  * @returns the maximum width of the specified `breakpointName`, -or- `null` for the smallest breakpoint.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const max = (breakpointName: string): number|null => {
+export const max = (breakpointName: BreakpointName): number|null => {
     const value = min(breakpointName);
     if (value === null) return null;
 
@@ -84,12 +92,12 @@ export const max = (breakpointName: string): number|null => {
 };
 
 /**
- * Returns a blank string for the smallest breakpoint, otherwise returns the `breakpointName` with a dash in front.
+ * Returns `null` for the smallest breakpoint, otherwise returns the `breakpointName` with a dash in front.
  * @param breakpointName the breakpoint's name to get the infix.
  * @returns `-${breakpointName}` -or- `null` for the smallest breakpoint.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const infix = (breakpointName: string): string|null => {
+export const infix = (breakpointName: BreakpointName): `-${BreakpointName}`|null => {
     if (min(breakpointName) === null) return null;
 
     
@@ -107,7 +115,7 @@ export const infix = (breakpointName: string): string|null => {
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const isScreenWidthAtLeast = (breakpointName: string, styles: StyleCollection) => {
+export const isScreenWidthAtLeast = (breakpointName: BreakpointName, styles: StyleCollection) => {
     const minWidth = min(breakpointName);
     return rule((minWidth ? `@media (min-width: ${minWidth}px)` : null), styles);
 };
@@ -119,7 +127,7 @@ export const isScreenWidthAtLeast = (breakpointName: string, styles: StyleCollec
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const isScreenWidthSmallerThan = (breakpointName: string, styles: StyleCollection) => {
+export const isScreenWidthSmallerThan = (breakpointName: BreakpointName, styles: StyleCollection) => {
     const maxWidth = max(breakpointName);
     return rule((maxWidth ? `@media (max-width: ${maxWidth}px)` : null), styles);
 };
@@ -132,7 +140,7 @@ export const isScreenWidthSmallerThan = (breakpointName: string, styles: StyleCo
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `lowerBreakpointName` or `upperBreakpointName` are not found in breakpoints.
  */
-export const isScreenWidthBetween = (lowerBreakpointName: string, upperBreakpointName: string, styles: StyleCollection) => {
+export const isScreenWidthBetween = (lowerBreakpointName: BreakpointName, upperBreakpointName: BreakpointName, styles: StyleCollection) => {
     const minWidth = min(lowerBreakpointName);
     const maxWidth = max(upperBreakpointName);
     if (minWidth && maxWidth) {
@@ -156,7 +164,7 @@ export const isScreenWidthBetween = (lowerBreakpointName: string, upperBreakpoin
  * @returns A `RuleEntry` represents the media rule.
  * @throws The specified `breakpointName` is not found in breakpoints.
  */
-export const isScreenWidth = (breakpointName: string, styles: StyleCollection) => {
+export const isScreenWidth = (breakpointName: BreakpointName, styles: StyleCollection) => {
     const minWidth = min(breakpointName);
     const nextBp   = next(breakpointName);
     const maxWidth = nextBp ? max(nextBp) : null;
