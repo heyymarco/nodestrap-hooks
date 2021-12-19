@@ -40,53 +40,83 @@ export interface SemanticProps
     role?         : Role
 }
 export const useSemantic     = (props: SemanticProps, options: SemanticOptions = props) => {
-    const roleAbs       : Role|undefined = props.role   ??                  (Array.isArray(options.semanticRole) ? (options.semanticRole?.[0] ?? undefined) : (options.semanticRole ?? undefined));
-    const isDesiredType : boolean        = !!roleAbs    &&                  (Array.isArray(options.semanticRole) ?  options.semanticRole.includes(roleAbs)  : (options.semanticRole === roleAbs ));
+    const {
+        tag,
+        role,
+    } = props;
     
-    const tagFn         : Tag|undefined  = props.tag    ?? (isDesiredType ? (Array.isArray(options.semanticTag)  ? (options.semanticTag?.[0] ?? undefined)  : (options.semanticTag  ?? undefined)) : undefined);
-    const isSemanticTag : boolean        = !!tagFn      &&                  (Array.isArray(options.semanticTag)  ?  options.semanticTag.includes(tagFn)     : (options.semanticTag  === tagFn   ));
+    const {
+        semanticTag,
+        semanticRole,
+    } = options;
     
-    const roleFn        : Role|undefined = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs; /* `''` => do not render role attribute, `undefined` => lets the BaseComponent decide the appropriate role */
-    
-    
-    
-    return [
-        tagFn,
-        roleFn,
-        isDesiredType,
-        isSemanticTag,
-    ] as const;
+    return useMemo(() => {
+        const roleAbs       : Role|undefined = role ??                  (Array.isArray(semanticRole) ? (semanticRole?.[0] ?? undefined) : (semanticRole ?? undefined));
+        const isDesiredType : boolean        = !!roleAbs &&             (Array.isArray(semanticRole) ?  semanticRole.includes(roleAbs)  : (semanticRole === roleAbs ));
+        
+        const tagFn         : Tag|undefined  = tag  ?? (isDesiredType ? (Array.isArray(semanticTag)  ? (semanticTag?.[0] ?? undefined)  : (semanticTag  ?? undefined)) : undefined);
+        const isSemanticTag : boolean        = !!tagFn   &&             (Array.isArray(semanticTag)  ?  semanticTag.includes(tagFn)     : (semanticTag  === tagFn   ));
+        
+        const roleFn        : Role|undefined = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs; /* `''` => do not render role attribute, `undefined` => lets the BaseComponent decide the appropriate role */
+        
+        
+        
+        return [
+            tagFn,
+            roleFn,
+            isDesiredType,
+            isSemanticTag,
+        ] as const;
+        // eslint-disable-next-line
+    }, [tag, role, ...(Array.isArray(semanticTag) ? semanticTag : [semanticTag]), ...(Array.isArray(semanticRole) ? semanticRole : [semanticRole])]);
 };
 export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) => {
-    const semanticTag = ((): SemanticTag => {
-        if (!props.semanticTag) return options.semanticTag;
-
-        
-        
-        if (props.semanticTag === options.semanticTag) return options.semanticTag;
-        
-        const semanticTag1 = Array.isArray(props.semanticTag)   ? props.semanticTag   : [props.semanticTag];
-        const semanticTag2 = Array.isArray(options.semanticTag) ? options.semanticTag : [options.semanticTag];
-        const intersect    = semanticTag1.filter((p) => semanticTag2.includes(p));
-        return (intersect.length) ? intersect : null;
-    })();
+    const {
+        semanticTag  : props_semanticTag,
+        semanticRole : props_semanticRole,
+    } = props;
     
-    const semanticRole = ((): SemanticRole => {
-        if (!props.semanticRole) return options.semanticRole;
-
+    const {
+        semanticTag  : options_semanticTag,
+        semanticRole : options_semanticRole,
+    } = options;
+    
+    const newOptions = useMemo(() => {
+        const semanticTag = ((): SemanticTag => {
+            if (!props_semanticTag) return options_semanticTag;
+            
+            
+            
+            if (props_semanticTag === options_semanticTag) return options_semanticTag;
+            
+            const semanticTag1 = Array.isArray(props_semanticTag)   ? props_semanticTag   : [props_semanticTag];
+            const semanticTag2 = Array.isArray(options_semanticTag) ? options_semanticTag : [options_semanticTag];
+            const intersect    = semanticTag1.filter((p) => semanticTag2.includes(p));
+            return (intersect.length) ? intersect : null;
+        })();
         
+        const semanticRole = ((): SemanticRole => {
+            if (!props_semanticRole) return options_semanticRole;
+            
+            
+            
+            if (props_semanticRole === options_semanticRole) return options_semanticRole;
+            
+            const semanticRole1 = Array.isArray(props_semanticRole)   ? props_semanticRole   : [props_semanticRole];
+            const semanticRole2 = Array.isArray(options_semanticRole) ? options_semanticRole : [options_semanticRole];
+            const intersect     =  semanticRole1.filter((p) => semanticRole2.includes(p));
+            return (intersect.length) ? intersect : null;
+        })();
         
-        if (props.semanticRole === options.semanticRole) return options.semanticRole;
-        
-        const semanticRole1 = Array.isArray(props.semanticRole)   ? props.semanticRole   : [props.semanticRole];
-        const semanticRole2 = Array.isArray(options.semanticRole) ? options.semanticRole : [options.semanticRole];
-        const intersect     =  semanticRole1.filter((p) => semanticRole2.includes(p));
-        return (intersect.length) ? intersect : null;
-    })();
+        return {
+            semanticTag,
+            semanticRole,
+        };
+    }, [props_semanticTag, props_semanticRole, options_semanticTag, options_semanticRole]);
     
     
     
-    return useSemantic(props, { semanticTag, semanticRole });
+    return useSemantic(props, newOptions);
 }
 
 
@@ -268,6 +298,38 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
     
     
     
+    // className:
+    const {
+        mainClass,
+        classes,
+        variantClasses,
+        stateClasses,
+    } = props;
+    const className = useMemo(() => {
+        return (
+            Array.from(new Set([
+                // main:
+                mainClass,
+                
+                
+                // additionals:
+                ...(classes ?? []),
+                
+                
+                // variants:
+                ...(variantClasses ?? []),
+                
+                
+                // states:
+                ...(stateClasses ?? []),
+            ].filter((c) => !!c))).join(' ')
+            ||
+            undefined
+        );
+    }, [mainClass, classes, variantClasses, stateClasses]);
+    
+    
+    
     // fn props:
     const [tag, role] = useSemantic(props);
     const Tag         = (tag ?? 'div');
@@ -283,26 +345,11 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
             
             // semantics:
             role={role || undefined}
-            aria-label={props['aria-label'] || undefined}
+            aria-label={props['aria-label'] || undefined} // ignores an empty string '' of aria-label
             
             
             // classes:
-            className={Array.from(new Set([
-                // main:
-                props.mainClass,
-                
-                
-                // additionals:
-                ...(props.classes ?? []),
-                
-                
-                // variants:
-                ...(props.variantClasses ?? []),
-                
-                
-                // states:
-                ...(props.stateClasses ?? []),
-            ].filter((c) => !!c))).join(' ') || undefined}
+            className={className}
         >
             { props.children }
         </Tag>
