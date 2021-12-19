@@ -265,7 +265,6 @@ export const usesModalCardLayout = () => {
         imports([
             // layouts:
             usesModalLayout(),
-            usesResponsiveContainerGridLayout(), // applies responsive container functionality using css grid
         ]),
         layout({
             // layouts:
@@ -324,6 +323,10 @@ export const usesModalCardLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
+        imports([
+            // layouts:
+            usesResponsiveContainerGridLayout(), // applies responsive container functionality using css grid
+        ]),
     ]);
 };
 export const usesModalCardVariants = () => {
