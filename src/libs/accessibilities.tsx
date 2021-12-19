@@ -220,12 +220,13 @@ export interface AccessibilityProps extends Partial<Accessibility>
     children?        : React.ReactNode
 }
 export function AccessibilityProvider(props: AccessibilityProps) {
+    // fn props:
+    const propAccess = usePropAccessibility(props);
+    
+    
+    
     return (
-        <Context.Provider value={{
-            enabled  : props.enabled  ?? _defaultEnabled,
-            readOnly : props.readOnly ?? _defaultReadOnly,
-            active   : props.active   ?? _defaultActive,
-        }}>
+        <Context.Provider value={propAccess}>
             {props.children}
         </Context.Provider>
     );
