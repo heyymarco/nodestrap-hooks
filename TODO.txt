@@ -1,5 +1,7 @@
 top priority:
--- none --
+fix accordion on the last (bottom)
+fix indicator togglerActiveReducer
+remove nude variant on Check, Label, Popup, & Range
 
 
 

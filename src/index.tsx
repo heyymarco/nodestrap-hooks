@@ -15,7 +15,7 @@ import reportWebVitals from './reportWebVitals';
 
 
 // import VisuallyHidden                               from './apps/VisuallyHidden';            // span
-// import BasicApp                                     from './apps/BasicApp';                  // div
+import BasicApp                                     from './apps/BasicApp';                  // div
 //     import IconApp                                  from './apps/IconApp';                   // span
 //     import ContentApp                               from './apps/ContentApp';                // div      ???
 //     import LabelApp                                 from './apps/LabelApp';                  // div
@@ -53,7 +53,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';    // div
 //                     import InputApp                 from './apps/InputApp';                  // span
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';  // div
-                        import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
+//                         import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
@@ -69,7 +69,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <RangeApp />
+    <BasicApp />
     ,
     document.getElementById('root')
 );

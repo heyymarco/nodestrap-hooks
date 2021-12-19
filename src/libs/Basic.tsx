@@ -1315,13 +1315,13 @@ export const usesBasicVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes]              = usesSizeVariant();
+    const [sizes]    = usesSizeVariant();
     
     // colors:
-    const [themes]             = usesThemeVariant();
-    const [gradient]           = usesGradientVariant();
-    const [outlined]           = usesOutlinedVariant();
-    const [mild]               = usesMildVariant();
+    const [themes]   = usesThemeVariant();
+    const [gradient] = usesGradientVariant();
+    const [outlined] = usesOutlinedVariant();
+    const [mild]     = usesMildVariant();
     
     
     
@@ -1329,6 +1329,7 @@ export const usesBasicVariants = () => {
         imports([
             // layouts:
             sizes(),
+            usesNudeVariant(),
             
             // colors:
             themes(),
@@ -1486,7 +1487,7 @@ export interface BasicProps<TElement extends HTMLElement = HTMLElement>
         // layouts:
         SizeVariant,
         // OrientationVariant,
-        // NudeVariant,
+        NudeVariant,
         
         // colors:
         ThemeVariant,
@@ -1503,6 +1504,7 @@ export function Basic<TElement extends HTMLElement = HTMLElement>(props: BasicPr
     
     // variants:
     const sizeVariant     = useSizeVariant(props);
+    const nudeVariant     = useNudeVariant(props);
     
     const themeVariant    = useThemeVariant(props);
     const gradientVariant = useGradientVariant(props);
@@ -1523,7 +1525,8 @@ export function Basic<TElement extends HTMLElement = HTMLElement>(props: BasicPr
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 sizeVariant.class,
-
+                nudeVariant.class,
+                
                 themeVariant.class,
                 gradientVariant.class,
                 outlinedVariant.class,
