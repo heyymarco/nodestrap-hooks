@@ -15,7 +15,7 @@ import type {
 // general types:
 
 // semantics:
-export type Tag          = keyof JSX.IntrinsicElements
+export type Tag          = keyof JSX.IntrinsicElements | ''
 export type Role         = React.AriaRole
 export type SemanticTag  = SingleOrArray<Optional<Tag>>
 export type SemanticRole = SingleOrArray<Optional<Role>>
@@ -332,7 +332,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
     
     // fn props:
     const [tag, role] = useSemantic(props);
-    const Tag         = (tag ?? 'div');
+    const Tag         = (tag || 'div');                   // ignores an empty string '' of tag
     
     
     
@@ -344,7 +344,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
             
             
             // semantics:
-            role={role || undefined}
+            role={role || undefined}                      // ignores an empty string '' of role
             aria-label={props['aria-label'] || undefined} // ignores an empty string '' of aria-label
             
             
