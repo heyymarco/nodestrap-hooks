@@ -1,6 +1,9 @@
 top priority:
 fix accordion on the last (bottom)
 fix indicator togglerActiveReducer
+add Gatsby support on ActionControl
+add setter colors as string to Color
+fix Button press={props.press ?? active} => press={props.press ?? (active || undefined)}
 remove nude variant on Check, Label, Popup, & Range
 
 

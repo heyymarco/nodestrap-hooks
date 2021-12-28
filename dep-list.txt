@@ -23,6 +23,8 @@
 @nodestrap/utilities
 @nodestrap/accessibilities
 @nodestrap/validations
+@nodestrap/dimensions
+@nodestrap/responsive
 
 // supports:
 @nodestrap/react-router-link

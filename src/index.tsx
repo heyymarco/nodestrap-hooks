@@ -12,10 +12,11 @@ import reportWebVitals from './reportWebVitals';
 // import ColorApp from './apps/ColorApp';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
+import ResponsiveApp from './apps/ResponsiveApp';
 
 
 // import VisuallyHidden                               from './apps/VisuallyHidden';            // span
-import BasicApp                                     from './apps/BasicApp';                  // div
+// import BasicApp                                     from './apps/BasicApp';                  // div
 //     import IconApp                                  from './apps/IconApp';                   // span
 //     import ContentApp                               from './apps/ContentApp';                // div      ???
 //     import LabelApp                                 from './apps/LabelApp';                  // div
@@ -69,7 +70,7 @@ import BasicApp                                     from './apps/BasicApp';     
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <BasicApp />
+    <ResponsiveApp />
     ,
     document.getElementById('root')
 );
