@@ -1,5 +1,6 @@
 // react:
 import {
+    default as React,
     useRef,
     useReducer as _useReducer,
 }                           from 'react'         // base technology of our nodestrap components
