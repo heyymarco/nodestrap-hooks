@@ -10,6 +10,12 @@ import type {
     SingleOrArray,
 }                           from './types'       // cssfn's types
 
+// nodestrap utilities:
+import {
+    // utilities:
+    setRef,
+}                           from './utilities'
+
 
 
 // general types:
@@ -267,6 +273,7 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
 {
     // essentials:
     style?          : React.CSSProperties
+    outerRef?       : React.Ref<TElement> // setter ref
     elmRef?         : React.Ref<TElement> // setter ref
     
     
@@ -284,7 +291,10 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
     // html props:
     const htmlProps = useMemo(() => {
         const htmlProps : {} = {
-            ref : props.elmRef,
+            ref : (elm: HTMLElement) => {
+                setRef(props.outerRef, elm);
+                setRef(props.elmRef  , elm);
+            },
         };
         
         for (const name in props) {
