@@ -1,7 +1,8 @@
 top priority:
 fix accordion on the last (bottom)
 fix indicator togglerActiveReducer
-add Gatsby support on ActionControl
+add Gatsby & Remix support on ActionControl
+add client side Form for Remix
 add setter colors as string to Color
 fix Button press={props.press ?? active} => press={props.press ?? (active || undefined)}
 remove nude variant on Check, Label, Popup, & Range

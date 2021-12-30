@@ -13,6 +13,7 @@ import reportWebVitals from './reportWebVitals';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 import ResponsiveApp from './apps/ResponsiveApp';
+import DimensionApp from './apps/DimensionApp';
 
 
 // import VisuallyHidden                               from './apps/VisuallyHidden';            // span
@@ -70,7 +71,7 @@ import ResponsiveApp from './apps/ResponsiveApp';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ResponsiveApp />
+    <DimensionApp />
     ,
     document.getElementById('root')
 );
