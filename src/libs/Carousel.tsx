@@ -843,6 +843,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             
             
             if (infiniteLoop && dummyElm) {
+                let itemsShifted = false;
                 if (itemsElm && isBeginOfScroll(itemsElm)) {
                     // move the last item to the first:
                     const item = itemsElm.lastElementChild;
@@ -853,6 +854,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         
                         
                         itemsElm.insertBefore(item, itemsElm.firstElementChild); // insert the items at the beginning
+                        itemsShifted = true;
                         
                         
                         
@@ -868,13 +870,21 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 
                 
                 
-                if (isBeginOfScroll(dummyElm)) {
-                    // scroll to last:
-                    scrollTo(dummyElm.lastElementChild as (HTMLElement|null));
+                const doScroll = () => {
+                    if (isBeginOfScroll(dummyElm)) {
+                        // scroll to last:
+                        scrollTo(dummyElm.lastElementChild as (HTMLElement|null));
+                    }
+                    else {
+                        // scroll to previous:
+                        scrollBy(dummyElm, false);
+                    } // if
+                };
+                if (itemsShifted) {
+                    setTimeout(doScroll, 0); // wait until scrolling shift completed and then doScroll()
                 }
                 else {
-                    // scroll to previous:
-                    scrollBy(dummyElm, false);
+                    doScroll();
                 } // if
                 
                 
@@ -907,6 +917,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
             
             
             if (infiniteLoop && dummyElm) {
+                let itemsShifted = false;
                 if (itemsElm && isEndOfScroll(itemsElm)) {
                     // move the first item to the last:
                     const item = itemsElm.firstElementChild;
@@ -917,6 +928,7 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                         
                         
                         itemsElm.append(item); // insert the items at the end
+                        itemsShifted = true;
                         
                         
                         
@@ -932,13 +944,21 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 
                 
                 
-                if (isEndOfScroll(dummyElm)) {
-                    // scroll to first:
-                    scrollTo(dummyElm.firstElementChild as (HTMLElement|null));
+                const doScroll = () => {
+                    if (isEndOfScroll(dummyElm)) {
+                        // scroll to first:
+                        scrollTo(dummyElm.firstElementChild as (HTMLElement|null));
+                    }
+                    else {
+                        // scroll to next:
+                        scrollBy(dummyElm, true);
+                    } // if
+                };
+                if (itemsShifted) {
+                    setTimeout(doScroll, 0); // wait until scrolling shift completed and then doScroll()
                 }
                 else {
-                    // scroll to next:
-                    scrollBy(dummyElm, true);
+                    doScroll();
                 } // if
                 
                 
