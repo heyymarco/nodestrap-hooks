@@ -51,6 +51,7 @@ import {
     // hooks:
     usesSizeVariant,
     mildOf,
+    usesPadding,
 }                           from './Basic'
 import {
     // hooks:
@@ -167,6 +168,9 @@ export const usesEditableTextControlLayout = () => {
     // colors:
     const [iconColor   , iconColorRefs   ] = usesIconColor();
     
+    // spacings:
+    const [            , paddingRefs     ] = usesPadding();
+    
     // states:
     const [            , validInvalidRefs] = usesValidInvalidState();
     
@@ -197,9 +201,15 @@ export const usesEditableTextControlLayout = () => {
                     
                     // sizes:
                     boxSizing         : 'border-box', // the final size is including borders & paddings
-                    blockSize         :            cssProps.iconSize,
-                    inlineSize        : `calc(${cssProps.iconSize} *  1.25)`, // make sure the icon's image ratio is 1.25 or less
-                    marginInlineStart : `calc(${cssProps.iconSize} * -1.25)`, // sizeless (ghost): cancel-out icon's width with negative margin, so it doen't take up space
+                    blockSize         : cssProps.iconSize,
+                    aspectRatio       : 1.5, // make sure the icon's image ratio is 1.5 or less
+                    
+                    
+                    
+                    // positions:
+                    position          : 'absolute',
+                    insetInlineEnd    : paddingRefs.paddingInline,
+                    insetBlockStart   : `calc(50% - (${cssProps.iconSize} / 2))`,
                     maskPosition      : 'right', // align icon to the right
                     
                     
