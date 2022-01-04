@@ -117,8 +117,8 @@ export const usesAccordionItemLayout = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
-    const parentOrientationBlockSelector  = `${orientationBlockSelector}>*>&`;
-    const parentOrientationInlineSelector = `${orientationInlineSelector}>*>&`;
+    const parentOrientationBlockSelector  = [`${orientationBlockSelector}>*>&` , `${orientationBlockSelector}>&` ];
+    const parentOrientationInlineSelector = [`${orientationInlineSelector}>*>&`, `${orientationInlineSelector}>&`];
     
     
     
@@ -220,6 +220,10 @@ export interface AccordionItemProps<TElement extends HTMLElement = HTMLElement>
 {
     // accessibilities:
     label?          : string | React.ReactNode
+    
+    
+    // popups:
+    lazy?           : boolean
 }
 export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props: AccordionItemProps<TElement>) {
     // styles:
@@ -334,6 +338,10 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             enabled={propEnabled}
             inheritActive={props.inheritActive ?? true} // change default value to `true`
             active={isActive}
+            
+            
+            // popups:
+            lazy={props.lazy}
             
             
             // classes:
