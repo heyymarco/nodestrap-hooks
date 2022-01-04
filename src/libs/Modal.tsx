@@ -487,6 +487,7 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseTy
         IndicatorProps<TElement>,
         ModalElementProps<TElement, TCloseType>
 {
+    lazy? : boolean
 }
 export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalProps<TElement, TCloseType>) {
     // styles:
@@ -687,6 +688,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                         
                         onActiveChange?.(newActive, closeType);
                     }}
+                    
+                    
+                    // children:
+                    children={(!(props.lazy ?? false) || isVisible) && children.props.children}
                 />
                 :
                 <ModalElement<TElement, TCloseType>
@@ -711,7 +716,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                         onActiveChange?.(newActive, closeType);
                     }}
                 >
-                    { children }
+                    { (!(props.lazy ?? false) || isVisible) && props.children }
                 </ModalElement>
             }
         </Indicator>
