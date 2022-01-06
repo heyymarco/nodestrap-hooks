@@ -5,11 +5,6 @@ import {
 
 // cssfn:
 import {
-    // general types:
-    SelectorCollection,
-    
-    
-    
     // compositions:
     composition,
     mainComposition,
@@ -19,7 +14,6 @@ import {
     
     // layouts:
     layout,
-    vars,
     children,
     nextSiblings,
     
@@ -28,15 +22,11 @@ import {
     // rules:
     variants,
     rule,
-    noRule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
     createUseSheet,
 }                           from './react-cssfn' // cssfn for react
-import {
-    createCssVar,
-}                           from './css-var'     // Declares & retrieves *css variables* (css custom properties).
 import {
     createCssConfig,
     
@@ -61,16 +51,9 @@ import {
     // hooks:
     usesSizeVariant,
     
-    OrientationRuleOptions,
-    defaultBlockOrientationRuleOptions,
-    normalizeOrientationRule,
-    usesOrientationRule,
-    
-    usesBorderStroke,
     expandBorderStroke,
     usesBorderRadius,
     expandBorderRadius,
-    usesPadding,
     expandPadding,
     
     
@@ -85,487 +68,13 @@ import {
     BasicProps,
     Basic,
 }                           from './Basic'
+import {
+    // hooks:
+    usesContainer,
+    usesBorderAsContainer,
+    usesBorderAsSeparatorBlock,
+}                           from './Container'
 
-
-
-// hooks:
-
-// layouts:
-
-export const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
-
-
-//#region containers
-export interface ContainerVars {
-    // borders:
-    borderWidth            : any
-    
-    borderStartStartRadius : any
-    borderStartEndRadius   : any
-    borderEndStartRadius   : any
-    borderEndEndRadius     : any
-    
-    
-    
-    // spacings:
-    paddingInline          : any
-    paddingBlock           : any
-}
-const [containerRefs, containerDecls] = createCssVar<ContainerVars>();
-
-/**
- * Uses container.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents container definitions.
- */
-export const usesContainer = () => {
-    // dependencies:
-    
-    // borders:
-    const [, borderStrokeRefs] = usesBorderStroke();
-    const [, borderRadiusRefs] = usesBorderRadius();
-    
-    // spacings:
-    const [, paddingRefs     ] = usesPadding();
-    
-    
-    
-    return [
-        () => composition([
-            vars({
-                // borders:
-                [containerDecls.borderWidth           ] : borderStrokeRefs.borderWidth,
-                
-                [containerDecls.borderStartStartRadius] : borderRadiusRefs.borderStartStartRadius,
-                [containerDecls.borderStartEndRadius  ] : borderRadiusRefs.borderStartEndRadius,
-                [containerDecls.borderEndStartRadius  ] : borderRadiusRefs.borderEndStartRadius,
-                [containerDecls.borderEndEndRadius    ] : borderRadiusRefs.borderEndEndRadius,
-                
-                
-                
-                // spacings:
-                [containerDecls.paddingInline]          : paddingRefs.paddingInline,
-                [containerDecls.paddingBlock ]          : paddingRefs.paddingBlock,
-            }),
-        ]),
-        containerRefs,
-        containerDecls,
-    ] as const;
-};
-//#endregion containers
-
-
-// borders:
-export interface BorderContainerOptions extends OrientationRuleOptions {
-    itemsSelector? : SelectorCollection
-}
-export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
-    // options:
-    options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
-    const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
-    const {
-        itemsSelector = '*',
-    } = options;
-    
-    
-    
-    // dependencies:
-    
-    // layouts:
-    const [container, containerRefs, containerDecls   ] = usesContainer();
-    
-    // borders:
-    const [         ,              , borderRadiusDecls] = usesBorderRadius();
-    
-    
-    
-    return composition([
-        imports([
-            // layouts:
-            container(),
-        ]),
-        // layout({
-        //     // borders:
-        //     overflow : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
-        // }),
-        variants([
-            !!orientationBlockSelector  && rule(orientationBlockSelector,  [
-                layout({
-                    // children:
-                    ...children(itemsSelector, [
-                        variants([
-                            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on top:
-                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                            rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on bottom:
-                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                        ]),
-                    ]),
-                }),
-            ]),
-            !!orientationInlineSelector && rule(orientationInlineSelector, [
-                layout({
-                    // children:
-                    ...children(itemsSelector, [
-                        variants([
-                            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on left:
-                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                            rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on right:
-                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                        ]),
-                    ]),
-                }),
-            ]),
-            (!orientationBlockSelector  && !orientationInlineSelector) && noRule([
-                layout({
-                    // children:
-                    ...children(itemsSelector, [
-                        vars({
-                            /*
-                                if the_current_element is a_child_of_container and also a_separator,
-                                the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                so we can calculate the correct inner_borderRadius.
-                                
-                                that's why we set `!important` to the `containerDecls.borderWidth`.
-                            */
-                            [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                            
-                            [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
-                            [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
-                            [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
-                            [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
-                        }),
-                        layout({
-                            // borders:
-                            
-                            // add rounded corners on top:
-                            [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            
-                            // add rounded corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            
-                            /* recursive calculation of borderRadius is not supported yet */
-                        }),
-                    ]),
-                }),
-            ]),
-        ]),
-    ]);
-};
-
-
-export interface BorderSeparatorOptions {
-    replaceLast? : boolean
-}
-export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}) => {
-    // options:
-    const {
-        replaceLast  = false,
-    } = options;
-    
-    
-    
-    // dependencies:
-    
-    // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
-    
-    // layouts:
-    const [, , containerDecls   ] = usesContainer();
-    
-    
-    
-    return composition([
-        layout({
-            // borders:
-            borderInlineWidth : 0, // remove (left|right)-border
-            
-            
-            
-            // shadows:
-            boxShadow         : undefined, // remove shadow
-        }),
-        vars({
-            /*
-                if the_current_element is a container,
-                the `containerDecls.borderWidth` will be deleted (not follows `borderWidth`),
-                because the_current_element becomes a separator.
-                
-                use `0px` instead of 0,
-                because the value will be calculated in `calc()` expression.
-            */
-            [containerDecls.borderWidth] : '0px',
-        }),
-        
-        // removes unecessary border stroke:
-        variants([
-            // supports for Card too
-            
-            // assumes the Card *always* have a body, so the second-last-item is always a body
-            // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
-            // and
-            // remove double border by removing bottom-border starting from the third-last-item to the first-item
-            // and
-            // an *exception* for the second-last-item (the body), do not remove the bottom-border, we need it for the replacement of the footer's top-border
-            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    borderBlockEndWidth    : 0, // remove bottom-border
-                }),
-            ]),
-            
-            
-            
-            // remove top-border at the header, so that it wouldn't collide with the Card's top-border
-            // remove top-border at the footer, as the replacement => use second-last-item bottom-border (from the body)
-            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    borderBlockStartWidth  : 0, // remove top-border
-                }),
-            ]),
-        ]),
-        
-        // removes unecessary border radius:
-        // although the border stroke was/not removed, it *affects* the children's border radius
-        // do not remove border radius at the parent's corners (:first-child & :last-child)
-        variants([
-            rule(':where(:not(:first-child))', [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : '0px',
-                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                }),
-            ]),
-            rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                }),
-            ]),
-        ]),
-    ]);
-};
-export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}) => {
-    // options:
-    const {
-        replaceLast  = false,
-    } = options;
-    
-    
-    
-    // dependencies:
-    
-    // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
-    
-    // layouts:
-    const [, , containerDecls   ] = usesContainer();
-    
-    
-    
-    return composition([
-        layout({
-            // borders:
-            borderBlockWidth  : 0, // remove (top|bottom)-border
-            
-            
-            
-            // shadows:
-            boxShadow         : undefined, // remove shadow
-        }),
-        vars({
-            /*
-                if the_current_element is a container,
-                the `containerDecls.borderWidth` will be deleted (not follows `borderWidth`),
-                because the_current_element becomes a separator.
-                
-                use `0px` instead of 0,
-                because the value will be calculated in `calc()` expression.
-            */
-            [containerDecls.borderWidth] : '0px',
-        }),
-        
-        // removes unecessary border stroke:
-        variants([
-            // supports for Card too
-            
-            // assumes the Card *always* have a body, so the second-last-item is always a body
-            // remove right-border at the last-item, so that it wouldn't collide with the Card's right-border
-            // and
-            // remove double border by removing right-border starting from the third-last-item to the first-item
-            // and
-            // an *exception* for the second-last-item (the body), do not remove the right-border, we need it for the replacement of the footer's left-border
-            rule((replaceLast ? ':where(:not(:nth-last-child(2)))' : '&'), [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    borderInlineEndWidth   : 0, // remove right-border
-                }),
-            ]),
-            
-            
-            
-            // remove left-border at the header, so that it wouldn't collide with the Card's left-border
-            // remove left-border at the footer, as the replacement => use second-last-item right-border (from the body)
-            rule([':where(:first-child)', (replaceLast && ':where(:last-child)')], [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    borderInlineStartWidth : 0, // remove left-border
-                }),
-            ]),
-        ]),
-        
-        // removes unecessary border radius:
-        // although the border stroke was/not removed, it *affects* the children's border radius
-        // do not remove border radius at the parent's corners (:first-child & :last-child)
-        variants([
-            rule(':where(:not(:first-child))', [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    // remove rounded corners on left:
-                    [borderRadiusDecls.borderStartStartRadius] : '0px',
-                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                }),
-            ]),
-            rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    // remove rounded corners on right:
-                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                }),
-            ]),
-        ]),
-    ]);
-};
-
-
-export const usesMediaBorderSeparator = () => {
-    return composition([
-        imports([
-            // borders:
-            usesBorderAsSeparatorBlock(),
-        ]),
-        layout({
-            // children:
-            // make sibling <media> closer:
-            // remove double border by removing top-border at the next media(s)
-            ...nextSiblings(mediaElm, [
-                layout({
-                    // borders:
-                    borderBlockStartWidth  : 0, // remove top-border
-                }),
-            ]),
-        }),
-        variants([
-            // supports for Card too
-            
-            // because we avoid modifying paragraph's top-border, we delegate the top-border to the <media>
-            // so, we need to restore bottom-border that was removed by `usesBorderAsSeparatorBlock()`
-            rule('&', [
-                layout({
-                    // borders:
-                    borderBlockEndWidth    : undefined, // restore bottom-border
-                }),
-            ]),
-            // then replace the algoritm above with this one:
-            // remove bottom-border at the last-item, so that it wouldn't collide with the Card's bottom-border
-            rule(':where(:last-child)', [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    borderBlockEndWidth    : 0, // remove bottom-border
-                }),
-            ]),
-        ]),
-    ]);
-};
 
 
 // spacings:
@@ -669,7 +178,7 @@ export const usesContentMediaLayout = () => {
         }),
         imports([
             // borders:
-            usesMediaBorderSeparator(),
+            usesBorderAsSeparatorBlock({ itemsSelector: mediaElm }),
         ]),
     ]);
 };
