@@ -111,7 +111,7 @@ import {
 import {
     // hooks:
     usesBorderAsContainer,
-}                           from './Content'
+}                           from './Container'
 import {
     // hooks:
     useFocusBlurState,
