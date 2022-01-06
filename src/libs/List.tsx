@@ -159,9 +159,8 @@ import {
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
     usesBorderAsSeparatorInline,
-    
-    
-    
+}                           from './Container'
+import {
     // styles:
     usesContentMedia,
     usesContentBasicLayout,
@@ -628,11 +627,6 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                 imports([
                     borderStroke(), // dedicated border stroke for each list & wrapper
                 ]),
-                layout({
-                    // borders:
-                    ...expandBorderStroke(), // expand borderStroke css vars
-                    ...expandBorderRadius(), // expand borderRadius css vars
-                }),
             ]),
             
             
@@ -657,6 +651,17 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            
+            
+            
+            // borders:
+            ...children(['&', wrapperElm], [
+                layout({
+                    // borders:
+                    ...expandBorderStroke(), // expand borderStroke css vars
+                    ...expandBorderRadius(), // expand borderRadius css vars
+                }),
+            ]),
         }),
         variants([
             /* the orientation variants are part of the layout, because without these variants the layout is broken */
