@@ -40,8 +40,8 @@
 @nodestrap/editable-action-control
 
 // contents:
-@nodestrap/content
 @nodestrap/container
+@nodestrap/content
 
 // simple components:
 @nodestrap/visually-hidden

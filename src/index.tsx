@@ -22,7 +22,7 @@ import reportWebVitals from './reportWebVitals';
 //     import ContentApp                               from './apps/ContentApp';                // div      ???
 //     import LabelApp                                 from './apps/LabelApp';                  // div
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
-        import CarouselApp                          from './apps/CarouselApp';               // div      ???
+//         import CarouselApp                          from './apps/CarouselApp';               // div      ???
 //     import ContainerApp                             from './apps/ContainerApp';              // div
 //     import IndicatorApp                             from './apps/IndicatorApp';              // div
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
@@ -55,7 +55,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';    // div
 //                     import InputApp                 from './apps/InputApp';                  // span
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';  // div
-//                         import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
+                        import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <CarouselApp />
+    <RangeApp />
     ,
     document.getElementById('root')
 );
