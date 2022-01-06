@@ -99,9 +99,8 @@ import {
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
     usesBorderAsSeparatorInline,
-    
-    
-    
+}                           from './Container'
+import {
     // styles:
     usesContentMedia,
     usesContentLayout,
@@ -323,7 +322,7 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
                     ...children([headerElm, footerElm, bodyElm], [
                         imports([
                             // borders:
-                            usesBorderAsSeparatorBlock({ replaceLast  : true }),
+                            usesBorderAsSeparatorBlock({ swapFirstItem: true }),
                         ]),
                     ]),
                 }),
@@ -340,7 +339,7 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
                     ...children([headerElm, footerElm, bodyElm], [
                         imports([
                             // borders:
-                            usesBorderAsSeparatorInline({ replaceLast  : true }),
+                            usesBorderAsSeparatorInline({ swapFirstItem: true }),
                         ]),
                     ]),
                 }),
