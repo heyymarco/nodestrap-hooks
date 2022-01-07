@@ -155,6 +155,12 @@ import {
     ActionControl,
 }                           from './ActionControl'
 import {
+    // selectors:
+    selectorIsFirstVisibleChild,
+    selectorIsLastVisibleChild,
+    
+    
+    
     // hooks:
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
@@ -694,7 +700,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             */
                             ...children(':not(_)', [
                                 variants([
-                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                                    rule(selectorIsFirstVisibleChild, [
                                         layout({
                                             // borders:
                                             // add rounded corners on top:
@@ -702,7 +708,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                                             [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
                                         }),
                                     ]),
-                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                                    rule(selectorIsLastVisibleChild,  [
                                         layout({
                                             // borders:
                                             // add rounded corners on bottom:
@@ -749,7 +755,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                             */
                             ...children(':not(_)', [
                                 variants([
-                                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                                    rule(selectorIsFirstVisibleChild, [
                                         layout({
                                             // borders:
                                             // add rounded corners on left:
@@ -757,7 +763,7 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                                             [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
                                         }),
                                     ]),
-                                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                                    rule(selectorIsLastVisibleChild,  [
                                         layout({
                                             // borders:
                                             // add rounded corners on right:
