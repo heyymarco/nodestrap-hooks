@@ -94,6 +94,17 @@ import {
 
 
 
+// selectors:
+// :where(...) => zero specificity => easy to overwrite
+export const selectorIsVisibleChild        : SelectorCollection = ':where(:not(.foreign):not(.overlay))';
+export const selectorIsFirstVisibleChild   : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:first-child, .first-visible-child)';
+export const selectorIsLastVisibleChild    : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:last-child , .last-visible-child )';
+export const selectorNotfirstVisibleChild  : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:not(:first-child):not(.first-visible-child))';
+export const selectorNotLastVisibleChild   : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:not(:last-child):not(.last-visible-child))';
+export const selectorNotSecondVisibleChild : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:not(:nth-child(2)))';
+
+
+
 // hooks:
 
 // layouts:
@@ -199,7 +210,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                     // children:
                     ...children(itemsSelector, [
                         variants([
-                            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                            rule(selectorIsFirstVisibleChild, [
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
@@ -222,7 +233,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
-                            rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                            rule(selectorIsLastVisibleChild,  [
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
@@ -254,7 +265,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                     // children:
                     ...children(itemsSelector, [
                         variants([
-                            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                            rule(selectorIsFirstVisibleChild, [
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
@@ -277,7 +288,7 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                                     /* recursive calculation of borderRadius is not supported yet */
                                 }),
                             ]),
-                            rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                            rule(selectorIsLastVisibleChild,  [
                                 vars({
                                     /*
                                         if the_current_element is a_child_of_container and also a_separator,
@@ -308,34 +319,38 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
                 layout({
                     // children:
                     ...children(itemsSelector, [
-                        vars({
-                            /*
-                                if the_current_element is a_child_of_container and also a_separator,
-                                the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                so we can calculate the correct inner_borderRadius.
-                                
-                                that's why we set `!important` to the `containerDecls.borderWidth`.
-                            */
-                            [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                            
-                            [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
-                            [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
-                            [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
-                            [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
-                        }),
-                        layout({
-                            // borders:
-                            
-                            // add rounded corners on top:
-                            [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            
-                            // add rounded corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                            
-                            /* recursive calculation of borderRadius is not supported yet */
-                        }),
+                        variants([
+                            rule(selectorIsVisibleChild, [
+                                vars({
+                                    /*
+                                        if the_current_element is a_child_of_container and also a_separator,
+                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
+                                        so we can calculate the correct inner_borderRadius.
+                                        
+                                        that's why we set `!important` to the `containerDecls.borderWidth`.
+                                    */
+                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
+                                    
+                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
+                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
+                                }),
+                                layout({
+                                    // borders:
+                                    
+                                    // add rounded corners on top:
+                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    
+                                    // add rounded corners on bottom:
+                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                                    
+                                    /* recursive calculation of borderRadius is not supported yet */
+                                }),
+                            ]),
+                        ]),
                     ]),
                 }),
             ]),
@@ -393,9 +408,9 @@ const usesBorderAsSeparator = (block: boolean, options: BorderSeparatorOptions =
             
             // children:
             // remove double border by removing top-border at the subsequent sibling(s)
-            ...nextSiblings(itemsSelector, [
+            ...nextSiblings(`${itemsSelector}${selectorIsVisibleChild}`, [
                 variants([
-                    rule((swapFirstItem ? ':where(:not(:nth-child(2)))' : '&'), [ // *note : move the first separator to the second child
+                    rule((swapFirstItem ? selectorNotSecondVisibleChild : '&'), [ // *note : move the first separator to the second child
                         layout({
                             // borders:
                             [`border${block ? 'Block' : 'Inline'}StartWidth`] : 0, // remove top-border
@@ -406,7 +421,7 @@ const usesBorderAsSeparator = (block: boolean, options: BorderSeparatorOptions =
         }),
         variants([
             // remove top-border at the first-child, so that it wouldn't collide with the container's top-border
-            rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+            rule(selectorIsFirstVisibleChild, [
                 layout({
                     // borders:
                     [`border${block ? 'Block' : 'Inline'}StartWidth`] : 0, // remove top-border
@@ -415,7 +430,7 @@ const usesBorderAsSeparator = (block: boolean, options: BorderSeparatorOptions =
             
             // remove bottom-border at the last-child, so that it wouldn't collide with the container's bottom-border
             // *note : `:first-child` => move the first separator to the second child
-            rule([':where(:last-child)', (swapFirstItem && ':where(:first-child)')],  [ // :where(...) => zero specificity => easy to overwrite
+            rule([selectorIsLastVisibleChild, (swapFirstItem && selectorIsFirstVisibleChild)],  [
                 layout({
                     // borders:
                     [`border${block ? 'Block' : 'Inline'}EndWidth`  ] : 0, // remove top-border
@@ -427,21 +442,43 @@ const usesBorderAsSeparator = (block: boolean, options: BorderSeparatorOptions =
         // although the border stroke was/not removed, it *affects* the children's border radius
         // do not remove border radius at the parent's corners (:first-child & :last-child)
         variants([
-            rule(':where(:not(:first-child))', [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : '0px',
-                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                }),
+            rule(selectorNotfirstVisibleChild, [
+                (
+                    block
+                    ?
+                    layout({
+                        // borders:
+                        // remove rounded corners on top:
+                        [borderRadiusDecls.borderStartStartRadius] : '0px',
+                        [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                    })
+                    :
+                    layout({
+                        // borders:
+                        // remove rounded corners on left:
+                        [borderRadiusDecls.borderStartStartRadius] : '0px',
+                        [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                    })
+                ),
             ]),
-            rule(':where(:not(:last-child))', [ // :where(...) => zero specificity => easy to overwrite
-                layout({
-                    // borders:
-                    // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                }),
+            rule(selectorNotLastVisibleChild,  [
+                (
+                    block
+                    ?
+                    layout({
+                        // borders:
+                        // remove rounded corners on bottom:
+                        [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                        [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                    })
+                    :
+                    layout({
+                        // borders:
+                        // remove rounded corners on right:
+                        [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                        [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                    })
+                ),
             ]),
         ]),
     ]);
@@ -558,13 +595,13 @@ export const usesContainerChildrenFill = (options: ContainerChildrenOptions = {}
                     marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
                 }),
                 variants([
-                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                    rule(selectorIsFirstVisibleChild, [
                         layout({
                             // spacings:
                             marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
                         }),
                     ]),
-                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                    rule(selectorIsLastVisibleChild,  [
                         layout({
                             // spacings:
                             marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
@@ -582,7 +619,7 @@ export const usesContainerChildrenFill = (options: ContainerChildrenOptions = {}
                     ]),
                 }),
                 variants([
-                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                    rule(selectorIsFirstVisibleChild, [
                         layout({
                             ...children('*', [ // * => zero specificity => easy to overwrite
                                 layout({
@@ -592,7 +629,7 @@ export const usesContainerChildrenFill = (options: ContainerChildrenOptions = {}
                             ]),
                         }),
                     ]),
-                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                    rule(selectorIsLastVisibleChild,  [
                         layout({
                             ...children('*', [ // * => zero specificity => easy to overwrite
                                 layout({
