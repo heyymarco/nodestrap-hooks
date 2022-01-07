@@ -286,6 +286,12 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             actionCtrl={props.actionCtrl ?? true}
             
             
+            // classes:
+            classes={[...(props.classes ?? []),
+                (isActive ? null : 'last-visible-child'),
+            ]}
+            
+            
             // events:
             onClick={(e) => {
                 props.onClick?.(e);
