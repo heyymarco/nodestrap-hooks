@@ -162,9 +162,9 @@ import {
 }                           from './Container'
 import {
     // styles:
-    usesContentMedia,
     usesContentBasicLayout,
     usesContentBasicVariants,
+    usesContentChildren,
 }                           from './Content'
 import {
     // hooks:
@@ -306,13 +306,13 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
             rule(parentOrientationBlockSelector,  [ // block
                 imports([
                     // borders:
-                    usesBorderAsSeparatorBlock(),
+                    usesBorderAsSeparatorBlock(), // must be placed at the last
                 ]),
             ]),
             rule(parentOrientationInlineSelector, [ // inline
                 imports([
                     // borders:
-                    usesBorderAsSeparatorInline(),
+                    usesBorderAsSeparatorInline(), // must be placed at the last
                 ]),
             ]),
         ]),
@@ -675,10 +675,6 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                     
                     // children:
                     ...children(wrapperElm, [
-                        imports([
-                            // borders:
-                            usesBorderAsSeparatorBlock(),
-                        ]),
                         layout({
                             // layouts:
                             flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
@@ -717,6 +713,10 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                                 ]),
                             ]),
                         }),
+                        imports([
+                            // borders:
+                            usesBorderAsSeparatorBlock(), // must be placed at the last
+                        ]),
                     ]),
                 }),
             ]),
@@ -730,10 +730,6 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                     
                     // children:
                     ...children(wrapperElm, [
-                        imports([
-                            // borders:
-                            usesBorderAsSeparatorInline(),
-                        ]),
                         layout({
                             // layouts:
                             flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
@@ -772,6 +768,10 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                                 ]),
                             ]),
                         }),
+                        imports([
+                            // borders:
+                            usesBorderAsSeparatorInline(), // must be placed at the last
+                        ]),
                     ]),
                 }),
             ]),
@@ -881,11 +881,11 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                             // children:
                             ...children('*', [
                                 imports([
-                                    // media:
-                                    usesContentMedia(),
-                                    
                                     // layouts:
                                     usesContentBasicLayout(),
+                                    
+                                    // children:
+                                    usesContentChildren(),
                                 ]),
                             ]),
                         }),
