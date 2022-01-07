@@ -213,9 +213,14 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 }}
                 
                 
-                
                 // children:
                 children={buttonChildren}
+                
+                
+                // classes:
+                classes={[...(props.classes ?? []),
+                    'last-visible-child',
+                ]}
                 
                 
                 // events:
