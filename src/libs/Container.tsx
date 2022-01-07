@@ -510,7 +510,21 @@ export const usesResponsiveContainerGridLayout = () => {
     ]);
 };
 
-export const usesContainerFill = () => {
+export interface ContainerChildrenOptions {
+    fillSelector     ?: SelectorCollection
+    fillSelfSelector ?: SelectorCollection
+}
+export const usesContainerChildrenFill = (options: ContainerChildrenOptions = {}) => {
+    // options:
+    const {
+        fillSelector     = '.fill',
+        fillSelfSelector = '.fill-self',
+    } = options;
+    
+    
+    
+    // dependencies:
+    
     // spacings:
     const [, containerRefs]     = usesContainer();
     const positivePaddingInline = containerRefs.paddingInline;
@@ -520,16 +534,15 @@ export const usesContainerFill = () => {
     
     
     
-    const fillSelfSelector = '.fill-self';
-    const fillSelector     = ['.fill', fillSelfSelector];
+    const fillSelectorAndSelf = [fillSelector, fillSelfSelector];
     return composition([
         imports([
             // borders:
-            usesBorderAsContainer({ itemsSelector: fillSelector }), // make a nicely rounded corners
+            usesBorderAsContainer({ itemsSelector: fillSelectorAndSelf }), // make a nicely rounded corners
         ]),
         layout({
             // children:
-            ...children(fillSelector, [
+            ...children(fillSelectorAndSelf, [
                 layout({
                     // sizes:
                     // span to maximum width including parent's paddings:
@@ -594,6 +607,14 @@ export const usesContainerFill = () => {
         }),
     ]);
 };
+export const usesContainerChildren = (options: ContainerChildrenOptions = {}) => {
+    return composition([
+        imports([
+            // spacings:
+            usesContainerChildrenFill(options), // must be placed at the last
+        ]),
+    ]);
+};
 
 export const usesContainerLayout = () => {
     return composition([
@@ -628,14 +649,14 @@ export const usesContainerVariants = () => {
 export const useContainerSheet = createUseSheet(() => [
     mainComposition([
         imports([
-            // fills:
-            usesContainerFill(),
-            
             // layouts:
             usesContainerLayout(),
             
             // variants:
             usesContainerVariants(),
+            
+            // children:
+            usesContainerChildren(),
         ]),
     ]),
 ], /*sheetId :*/'dmgepbofol'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
