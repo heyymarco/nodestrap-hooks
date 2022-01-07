@@ -75,6 +75,12 @@ import {
     Basic,
 }                           from './Basic'
 import {
+    // selectors:
+    selectorIsFirstVisibleChild,
+    selectorIsLastVisibleChild,
+    
+    
+    
     // hooks:
     usesContainer,
     usesBorderAsContainer,
@@ -144,13 +150,13 @@ export const usesContentChildrenFill = (options: ContentChildrenOptions = {}) =>
                     ]),
                 }),
                 variants([
-                    rule(':where(:first-child)', [ // :where(...) => zero specificity => easy to overwrite
+                    rule(selectorIsFirstVisibleChild, [
                         layout({
                             // spacings:
                             marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
                         }),
                     ]),
-                    rule(':where(:last-child)',  [ // :where(...) => zero specificity => easy to overwrite
+                    rule(selectorIsLastVisibleChild,  [
                         layout({
                             // spacings:
                             marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
