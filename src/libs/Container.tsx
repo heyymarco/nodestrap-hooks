@@ -611,12 +611,8 @@ export const usesContainerChildrenFill = (options: ContainerChildrenOptions = {}
             ]),
             ...children(fillSelfSelector, [
                 layout({
-                    ...children('*', [ // * => zero specificity => easy to overwrite
-                        layout({
-                            // spacings:
-                            paddingInline : positivePaddingInline, // restore parent's padding with positive margin
-                        }),
-                    ]),
+                    // spacings:
+                    paddingInline : positivePaddingInline, // restore parent's padding with positive margin
                 }),
                 variants([
                     rule(selectorIsFirstVisibleChild, [
