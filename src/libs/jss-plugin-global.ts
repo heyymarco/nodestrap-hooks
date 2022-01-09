@@ -64,12 +64,12 @@ class GlobalStyleRule {
         (this as any).selector = '';    // for satisfying `jss-plugin-nested`
         
         const plugins : any = options?.jss?.plugins;
-        const onProcessStyle : ((style: Style, rule: Rule, sheet?: StyleSheet) => void) | undefined | null = plugins?.onProcessStyle;
+        const onProcessStyle : ((style: Style|null, rule: Rule, sheet?: StyleSheet) => Style) | undefined | null = plugins?.onProcessStyle;
         onProcessStyle?.call(plugins, ((this as any).style as Style), this as unknown as Rule, options?.sheet as (StyleSheet|undefined));
         
         
         
-        for (const [propName, propValue] of Object.entries(style)) {
+        for (const [propName, propValue] of Object.entries(style)) { // no need to iterate Symbol(s), because [prop: Symbol] is for storing nested rule
             // exceptions:
             if (propName.includes('&')) continue; // do not process nested rule
             if (propName === 'extend')  continue; // do not process `extend` prop
@@ -105,11 +105,11 @@ class GlobalStyleRule {
 
 
 
-const onCreateRule = (key: string, style: Style, options: any): (Rule|any) => {
+const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) => {
     switch (key) {
         case '':
         case '@global':
-            return new GlobalStyleRule(key, style, options);
+            return new GlobalStyleRule(key, style ?? {}, options);
         
         default:
             return null;

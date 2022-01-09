@@ -8,6 +8,9 @@ import type {
 }                           from 'jss'           // base technology of our cssfn components
 
 // cssfn:
+import type {
+    ValueOf,
+}                           from './types'       // cssfn's types
 import {
     SelectorList,
     parseSelectors,
@@ -95,7 +98,11 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
 
 
 
-const onProcessStyle = (style: Style, rule: Rule, sheet?: StyleSheet): Style => {
+const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Style => {
+    if (!style) return {};
+    
+    
+    
     if (rule.type !== 'style') return style;
     
     
@@ -106,8 +113,11 @@ const onProcessStyle = (style: Style, rule: Rule, sheet?: StyleSheet): Style => 
     
     
     let optionsCache = null;
-    for (const [nestedSelector, nestedStyle] of Object.entries(style)) {
-        const isNestedConditional = ((nestedSelector[0] === '@') && !['@font-face', '@keyframes'].includes(nestedSelector));
+    for (const [nestedSelector, nestedStyle] of [
+        ...Object.entries(style),
+        ...Object.getOwnPropertySymbols(style).map((sym): [string, ValueOf<typeof style>] => [sym.description ?? '', (style as any)[sym] as any]),
+    ]) {
+        const isNestedConditional = ((nestedSelector[0] === '@') && !['@global', '@font-face', '@keyframes'].includes(nestedSelector));
         const isNested            = !isNestedConditional && nestedSelector.includes('&');
         if (!isNestedConditional && !isNested) continue;
         
