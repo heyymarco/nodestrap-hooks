@@ -13,7 +13,8 @@ import type {
 import {
     // general types:
     StyleSheet,
-    PropList,
+    CssValue,
+    CssProps,
 
     
     // styles:
@@ -111,6 +112,7 @@ const settingsHandler: ProxyHandler<CssConfigSettings> = {
 
 
 
+export type CssConfigProps = { [PropName: string]: CssValue }
 /**
  * Create, read, update, and delete configurations using *css variables* (css custom properties) stored at `:root` level (default) or at the desired `rule`.  
  * The config's values can be *accessed directly* in CSS and DOM.
@@ -130,7 +132,7 @@ const settingsHandler: ProxyHandler<CssConfigSettings> = {
  * Supports delete property, eg:  
  * `myButtonConfig.vals.myFavColor = undefined
  */
-const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProps>, options?: CssConfigOptions): CssConfig<TProps> => {
+const createCssConfig = <TProps extends CssConfigProps>(initialProps: ProductOrFactory<TProps>, options?: CssConfigOptions): CssConfig<TProps> => {
     // settings:
     const settings: CssConfigSettings = {
         ...options,
@@ -155,7 +157,7 @@ const createCssConfig = <TProps extends {}>(initialProps: ProductOrFactory<TProp
     let _propsCache    : Dictionary</*original: */TValue>|null = null;
     const getProps    = (): Dictionary</*original: */TValue> => {
         if (!_propsCache) {
-            _propsCache = ((typeof(initialProps) === 'function') ? (initialProps as Factory<TProps>)() : initialProps);
+            _propsCache = ((typeof(initialProps) === 'function') ? (initialProps as Factory<TProps>)() : initialProps) as unknown as Dictionary</*original: */TValue>;
         } // if
         
         
@@ -789,8 +791,8 @@ export { createCssConfig, createCssConfig as default }
  * @param cssProps The collection of the css vars to be filtered.
  * @returns A `PropList` which is the copy of the `cssProps` that only having *general* props.
  */
-export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
-    const propList: PropList = {};
+export const usesGeneralProps = (cssProps: Refs<{}>): CssProps => {
+    const result: CssProps = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` matching with following:
 
@@ -867,9 +869,9 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
 
         
         // if not match => include it:
-        propList[propName] = (propValue as Cust.Ref);
+        result[propName] = (propValue as Cust.Ref);
     } // for
-    return propList;
+    return result;
 }
 
 /**
@@ -879,8 +881,8 @@ export const usesGeneralProps = (cssProps: Refs<{}>): PropList => {
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `prefix` name.  
  * The returning props has been normalized (renamed), so they don't start with `prefix`.
  */
-export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): PropList => {
-    const propList: PropList = {};
+export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): CssProps => {
+    const result: CssProps = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` not starting with specified `prefix`:
         if (!propName.startsWith(prefix)) continue; // exclude
@@ -895,9 +897,9 @@ export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): PropList 
          */
 
         // if match => normalize the case => include it:
-        propList[camelCase(propNameLeft)] = (propValue as Cust.Ref);
+        result[camelCase(propNameLeft)] = (propValue as Cust.Ref);
     } // for
-    return propList;
+    return result;
 }
 
 /**
@@ -907,9 +909,9 @@ export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): PropList 
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `suffix` name.  
  * The returning props has been normalized (renamed), so they don't end with `suffix`.
  */
-export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string): PropList => {
+export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string): CssProps => {
     suffix = pascalCase(suffix);
-    const propList: PropList = {};
+    const result: CssProps = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` not ending with specified `suffix`:
         if (!propName.endsWith(suffix)) continue; // exclude
@@ -923,9 +925,9 @@ export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string): PropList 
          */
 
         // if match => include it:
-        propList[propNameLeft] = (propValue as Cust.Ref);
+        result[propNameLeft] = (propValue as Cust.Ref);
     } // for
-    return propList;
+    return result;
 }
 
 /**
@@ -937,13 +939,13 @@ export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string): PropList 
  * --com-backgBak     : var(--com-backg)  
  * --com-boxShadowBak : var(--com-boxShadow)
  */
-export const backupProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): PropList => {
+export const backupProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): CssProps => {
     backupSuff = pascalCase(backupSuff);
-    const propList: PropList = {};
+    const result: CssProps = {};
     for (const propName of Object.keys(cssProps)) {
-        propList[`${propName}${backupSuff}`] = `var(${propName})`;
+        result[`${propName}${backupSuff}`] = `var(${propName})`;
     } // for
-    return propList;
+    return result;
 }
 
 /**
@@ -955,12 +957,12 @@ export const backupProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): Pro
  * --com-backg     : var(--com-backgBak)  
  * --com-boxShadow : var(--com-boxShadowBak)
  */
-export const restoreProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): PropList => {
-    const propList: PropList = {};
+export const restoreProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): CssProps => {
+    const result: CssProps = {};
     for (const propName of Object.keys(cssProps)) {
-        propList[propName] = `var(${propName}${backupSuff})`;
+        result[propName] = `var(${propName}${backupSuff})`;
     } // for
-    return propList;
+    return result;
 }
 
 /**
@@ -969,15 +971,15 @@ export const restoreProps = (cssProps: Refs<{}>, backupSuff: string = 'Bak'): Pr
  * @param cssProps The collection of the css vars for overwritting (source).
  * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDecls`.
  */
-export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssProps: Refs<{}>): PropList => {
-    const propList: PropList = {};
+export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssProps: Refs<{}>): CssProps => {
+    const result: CssProps = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         const targetPropName = (cssDecls as DictionaryOf<typeof cssDecls>)[propName];
         if (!targetPropName) continue; // target prop not found => skip
 
-        propList[targetPropName] = (propValue as Cust.Ref);
+        result[targetPropName] = (propValue as Cust.Ref);
     } // for
-    return propList;
+    return result;
 }
 
 /**
@@ -987,8 +989,8 @@ export const overwriteProps = <TProps extends {}>(cssDecls: Decls<TProps>, cssPr
  * The order must be from the most specific parent to the least specific one.
  * @returns A `PropList` which is the copy of the `cssProps` that overwrites to the specified `cssDeclss`.
  */
-export const overwriteParentProps = (cssProps: Refs<{}>, ...cssDeclss: Decls<{}>[]): PropList => {
-    const propList: PropList = {};
+export const overwriteParentProps = (cssProps: Refs<{}>, ...cssDeclss: Decls<{}>[]): CssProps => {
+    const result: CssProps = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         const targetPropName = ((): Cust.Decl => {
             for (const cssDecls of cssDeclss) {
@@ -999,7 +1001,7 @@ export const overwriteParentProps = (cssProps: Refs<{}>, ...cssDeclss: Decls<{}>
         })();
         if (!targetPropName) continue; // target prop not found => skip
         
-        propList[targetPropName] = (propValue as Cust.Ref);
+        result[targetPropName] = (propValue as Cust.Ref);
     }
-    return propList;
+    return result;
 }
