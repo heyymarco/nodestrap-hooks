@@ -5,6 +5,13 @@ sync css-config
 sync VisuallyHidden
 sync Basic
 
+fallbacks:
+sync Container
+sync Content
+sync Input
+sync Navbar
+sync stripouts
+
 
 top priority:
 fix accordion on the last (bottom)
