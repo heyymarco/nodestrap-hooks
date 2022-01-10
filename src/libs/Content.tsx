@@ -130,7 +130,7 @@ export const usesContentChildrenFill = (options: ContentChildrenOptions = {}) =>
                     inlineSize     : 'fill-available',
                     fallbacks      : {
                         inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
-                    },
+                    } as any,
                     
                     
                     

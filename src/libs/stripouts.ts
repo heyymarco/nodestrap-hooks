@@ -220,6 +220,6 @@ export const stripoutImage = () => composition([
         inlineSize     : 'fill-available',
         fallbacks      : {
             inlineSize : '100%',
-        },
+        } as any,
     }),
 ]);

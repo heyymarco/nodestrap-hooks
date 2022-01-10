@@ -114,7 +114,7 @@ export const usesInputLayout = () => {
                     inlineSize     : 'fill-available',
                     fallbacks      : {
                         inlineSize : `calc(100% + (${paddingRefs.paddingInline} * 2))`,
-                    },
+                    } as any,
                     
                     
                     

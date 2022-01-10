@@ -39,7 +39,7 @@ export const usesVisuallyHiddenLayout = () => {
             
             
             // positions:
-            position   : 'absolute !important',
+            position   : [['absolute'], '!important'],
             
             
             
@@ -63,7 +63,7 @@ export const usesVisuallyHiddenLayout = () => {
             
             
             // typos:
-            whiteSpace : 'nowrap !important',
+            whiteSpace : [['nowrap'], '!important'],
         }),
     ]);
 };

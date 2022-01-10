@@ -539,7 +539,7 @@ export const usesMenusCompactLayout = () => {
             inlineSize     : 'fill-available',
             fallbacks      : {
                 inlineSize : '-moz-available',
-            },
+            } as any,
         }),
     ]);
 };
