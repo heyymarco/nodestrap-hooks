@@ -55,48 +55,58 @@ export type { Classes, Styles, StyleSheet }
 export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
-export type StandardCssProps                                     = CssProperties<string | number>
-export type StandardCssValue                                     = (string & {}) | (number & {}) | [[(string & {}) | (number & {})], '!important']
-export type CustomCssValue                                       = undefined | null | StandardCssValue[] | (StandardCssValue|StandardCssValue[]|'!important')[]
-export type CssValue                                             = StandardCssValue | CustomCssValue
-export type JssProps                                             = { [key: string]: CssValue }
-export type CssProps                                             = { [key in keyof StandardCssProps]: (StandardCssProps[key] | [[StandardCssProps[key]], '!important'] | CustomCssValue) } & JssProps
-export type NestedProps                                          = { [key: symbol]: StyleCollection }
+export type KnownCssPropName                   = keyof CssProperties<string|number>
+export type KnownCssPropValue
+    <PropName extends KnownCssPropName>        = Exclude<CssProperties<string|number>[PropName], (undefined|null)>
+// comment docs disappears in TypeScript:
+// export type KnownCssProps                   = { [PropName in KnownCssPropName] ?: (KnownCssPropValue<PropName>|[[KnownCssPropValue<PropName>], '!important']) }
+// comment docs preserves in TypeScript:
+export type KnownCssProps                      = { [PropName in keyof CssProperties<string|number>] ?: (KnownCssPropValue<PropName>|[[KnownCssPropValue<PropName>], '!important']) }
 
-export type Style                                                = (CssProps | NestedProps) & { fallbacks ?: SingleOrArray<Style> }
-export type StyleCollection                                      = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
+export type BasicCssValue                      = (string & {}) | (number & {})
+export type CssValue                           = undefined | null | BasicCssValue | BasicCssValue[] | (BasicCssValue|BasicCssValue[]|'!important')[]
 
-export type ClassName                                            = string        // not a really string: [A-Z_a-z-]+
-export type RealClass                                            = (`.${ClassName}` & {})
-export type PseudoClass                                          = (`:${ClassName}` & {})
-export type Class                                                = RealClass|PseudoClass
-export type ClassEntry<TClassName extends ClassName = ClassName> = readonly [TClassName, StyleCollection]
-export type ClassList <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
+export type CustomCssProps                     = { [key: (Exclude<string, KnownCssPropName> & {})] : CssValue }
 
-export type OptionalString                                       = OptionalOrFalse<string>
+export type CssProps                           = KnownCssProps & CustomCssProps
+export type NestedProps                        = { [key: symbol] : StyleCollection }
 
-export type UniversalSelector                                    = ('*'           & {})
-export type RealElementSelector                                  = (string        & {}) // not a really string: [A-Z_a-z-]+
-export type PseudoElementSelector                                = (`::${string}` & {}) // not a really string: [A-Z_a-z-]+
-export type ElementSelector                                      = RealElementSelector|PseudoElementSelector
-export type ClassSelector                                        = (Class  & {})
-export type IdSelector                                           = (`#${string}`  & {})
-export type SingleSelector                                       = UniversalSelector|ElementSelector|ClassSelector|IdSelector
-export type Selector                                             = | SingleSelector
-                                                                   | (`${SingleSelector}${SingleSelector}`                                                    & {})
-                                                                   | (`${SingleSelector}${SingleSelector}${SingleSelector}`                                   & {})
-                                                                   | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`                  & {})
-                                                                   | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}` & {})
-export type SelectorCollection                                   = SingleOrDeepArray<OptionalOrFalse<Selector>>
+export type Style                              = CssProps & NestedProps
+export type StyleCollection                    = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
-export type NestedSelector                                       = | '&'
-                                                                   | (`&${Selector}` & {})
-                                                                   | (`${Selector}&` & {})
+export type ClassName                          = string        // not a really string: [A-Z_a-z-]+
+export type RealClass                          = (`.${ClassName}` & {})
+export type PseudoClass                        = (`:${ClassName}` & {})
+export type Class                              = RealClass|PseudoClass
+export type ClassEntry
+    <TClassName extends ClassName = ClassName> = readonly [TClassName, StyleCollection]
+export type ClassList
+    <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
 
-export type RuleEntry                                            = readonly [SelectorCollection, StyleCollection]
-export type RuleEntrySource                                      = ProductOrFactory<OptionalOrFalse<RuleEntry>>
-export type RuleList                                             = RuleEntrySource[]
-export type RuleCollection                                       = SingleOrArray<RuleEntrySource|RuleList>
+export type OptionalString                     = OptionalOrFalse<string>
+
+export type UniversalSelector                  = ('*'           & {})
+export type RealElementSelector                = (string        & {}) // not a really string: [A-Z_a-z-]+
+export type PseudoElementSelector              = (`::${string}` & {}) // not a really string: [A-Z_a-z-]+
+export type ElementSelector                    = RealElementSelector|PseudoElementSelector
+export type ClassSelector                      = (Class  & {})
+export type IdSelector                         = (`#${string}`  & {})
+export type SingleSelector                     = UniversalSelector|ElementSelector|ClassSelector|IdSelector
+export type Selector                           = | SingleSelector
+                                                 | (`${SingleSelector}${SingleSelector}`                                                    & {})
+                                                 | (`${SingleSelector}${SingleSelector}${SingleSelector}`                                   & {})
+                                                 | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`                  & {})
+                                                 | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}` & {})
+export type SelectorCollection                 = SingleOrDeepArray<OptionalOrFalse<Selector>>
+
+export type NestedSelector                     = | '&'
+                                                 | (`&${Selector}` & {})
+                                                 | (`${Selector}&` & {})
+
+export type RuleEntry                          = readonly [SelectorCollection, StyleCollection]
+export type RuleEntrySource                    = ProductOrFactory<OptionalOrFalse<RuleEntry>>
+export type RuleList                           = RuleEntrySource[]
+export type RuleCollection                     = SingleOrArray<RuleEntrySource|RuleList>
 
 
 
@@ -205,7 +215,7 @@ export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: Pro
             but to make more compatible with JSS' official `jss-plugin-global`
             we convert empty `className` to `'@global'`
          */
-        .map(([className, styles]): Style => ({ [className || '@global'] : mergeStyles(styles) })) // convert each `[className, styles]` to `{ className : mergeStyles(styles) | null }`
+        .map(([className, styles]): Style => ({ [className || '@global'] : mergeStyles(styles) as CssValue })) // convert each `[className, styles]` to `{ className : mergeStyles(styles) | null }`
     ) ?? emptyMergedStyle) as Styles<TClassName>;
 }
 
@@ -517,14 +527,14 @@ const defaultRuleOptions : Required<RuleOptions> = {
     ...defaultNestedRuleOptions,
     minSpecificityWeight  : 0,
 };
-export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): StyleCollection => {
+export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): NestedProps[] => {
     const {
         minSpecificityWeight = defaultRuleOptions.minSpecificityWeight,
     } = options;
     
     
     
-    return composition(
+    return (
         (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
         .flatMap((ruleEntrySourceList: RuleEntrySource|RuleList): OptionalOrFalse<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
             const isOptionalString                = (value: any): value is OptionalString => {
@@ -690,7 +700,7 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
             
             return [nestedSelectors, styles];
         })
-        .map(([nestedSelectors, styles]) => nestedRule(nestedSelectors, styles, options)),
+        .map(([nestedSelectors, styles]) => nestedRule(nestedSelectors, styles, options))
     );
 };
 // shortcut rules:
