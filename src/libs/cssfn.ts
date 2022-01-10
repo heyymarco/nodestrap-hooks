@@ -1,8 +1,6 @@
 // jss:
 import {
     // general types:
-    JssStyle,
-    JssValue,
     Classes,
     Styles,
     StyleSheet,
@@ -16,7 +14,6 @@ import {
 import jssPluginGlobal      from './jss-plugin-global'
 import {
     default as jssPluginExtend,
-    ExtendableStyle,
     mergeStyle,
 }                           from './jss-plugin-extend'
 import jssPluginNested      from './jss-plugin-nested'
@@ -43,6 +40,9 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 
 // others libs:
+import {
+    Properties as CssProperties,
+}                           from 'csstype'
 import { pascalCase }       from 'pascal-case'   // pascal-case support for jss
 import { camelCase }        from 'camel-case'    // camel-case  support for jss
 import warning              from 'tiny-warning'
@@ -51,11 +51,19 @@ import warning              from 'tiny-warning'
 
 // general types:
 
-export type { JssStyle, JssValue, Classes, Styles, StyleSheet }
+export type { Classes, Styles, StyleSheet }
 export type { Prop, PropEx, Cust }
 export type { Dictionary, ValueOf, DictionaryOf }
 
-export type Style                                                = (ExtendableStyle & {})
+export type StandardCssProps                                     = CssProperties<string | number>
+export type StandardCssValue                                     = (string & {}) | (number & {}) | [[(string & {}) | (number & {})], '!important']
+export type CustomCssValue                                       = undefined | null | StandardCssValue[] | (StandardCssValue|StandardCssValue[]|'!important')[]
+export type CssValue                                             = StandardCssValue | CustomCssValue
+export type JssProps                                             = { [key: string]: CssValue }
+export type PropList                                             = { [key in keyof StandardCssProps]: (StandardCssProps[key] | [[StandardCssProps[key]], '!important'] | CustomCssValue) } & JssProps
+export type NestedProps                                          = { [key: symbol]: StyleCollection }
+
+export type Style                                                = (PropList | NestedProps) & { fallbacks ?: SingleOrArray<Style> }
 export type StyleCollection                                      = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
 export type ClassName                                            = string        // not a really string: [A-Z_a-z-]+
@@ -89,8 +97,6 @@ export type RuleEntry                                            = readonly [Sel
 export type RuleEntrySource                                      = ProductOrFactory<OptionalOrFalse<RuleEntry>>
 export type RuleList                                             = RuleEntrySource[]
 export type RuleCollection                                       = SingleOrArray<RuleEntrySource|RuleList>
-
-export type PropList                                             = Dictionary<JssValue>
 
 
 
@@ -245,12 +251,12 @@ export const mergeStyles     = (styles: StyleCollection): Style|null => {
         
         
         
-        return new MergedStyle(styleValue);
+        return (new MergedStyle(styleValue) as Style);
     } // if
     
     
     
-    const mergedStyles: Style = new MergedStyle();
+    const mergedStyles: Style = (new MergedStyle() as Style);
     for (const subStyles of styles) { // shallow iterating array
         const subStyleValue: OptionalOrFalse<Style> = (
             Array.isArray(subStyles)
@@ -274,7 +280,7 @@ export const mergeStyles     = (styles: StyleCollection): Style|null => {
         
         
         // merge current style to single big style (string props + symbol props):
-        mergeStyle(mergedStyles, subStyleValue);
+        mergeStyle(mergedStyles as any, subStyleValue as any);
     } // for
     
     
@@ -294,7 +300,7 @@ const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
     groupSelectors  : true,
     combinator      : '',
 };
-export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): PropList => {
+export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): NestedProps => {
     const {
         groupSelectors = defaultNestedRuleOptions.groupSelectors,
         combinator     = defaultNestedRuleOptions.combinator,
@@ -324,7 +330,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             nestedSelectors
             .map((nestedSelector) => [
                 Symbol(nestedSelector),
-                (mergedStyles as JssValue)
+                mergedStyles
             ])
         );
     } // if
@@ -423,7 +429,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
                 grouped[0]
                 :
                 `:is(${grouped.join(',')})`
-            )] : (mergedStyles as JssValue)
+            )] : mergedStyles
         } : {}),
     };
 };
@@ -469,7 +475,7 @@ export const layout = (style: Style): Style => style;
  * Defines component's variable(s).
  * @returns A `Style` represents the component's variable(s).
  */
-export const vars   = (items: { [name: string]: JssValue }): Style => items;
+export const vars   = (items: { [key: string]: CssValue }): Style => items;
 
 
 
@@ -479,7 +485,7 @@ export interface CombinatorOptions extends NestedRuleOptions {
 const defaultCombinatorOptions : Required<CombinatorOptions> = {
     ...defaultNestedRuleOptions,
 };
-export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): PropList => {
+export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): NestedProps => {
     const combiSelectors : NestedSelector[] = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
@@ -684,7 +690,7 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
             
             return [nestedSelectors, styles];
         })
-        .map(([nestedSelectors, styles]): Style => nestedRule(nestedSelectors, styles, options)),
+        .map(([nestedSelectors, styles]) => nestedRule(nestedSelectors, styles, options)),
     );
 };
 // shortcut rules:
@@ -818,7 +824,7 @@ const flat = <T,>(collection: SingleOrDeepArray<T>): T[] => {
     
     return collection.flat(Infinity);
 };
-export const iif = <T extends PropList|Style>(condition: boolean, content: T): T => {
+export const iif = <T extends PropList|NestedProps|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);
 };
 /**
