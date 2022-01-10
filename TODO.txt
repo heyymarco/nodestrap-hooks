@@ -9,6 +9,7 @@ tweak useMemo in Element
 move Check::onChange, Range::onChange to EditableControl::onChange
 fix Button press={props.press ?? active} => press={props.press ?? (active || undefined)}
 remove nude variant on Check, Label, Popup, & Range
+replace substr to substring or slice
 
 
 
