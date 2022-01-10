@@ -66,10 +66,10 @@ export type KnownCssProps                      = { [PropName in keyof CssPropert
 export type BasicCssValue                      = (string & {}) | (number & {}) | PropEx.Keyframes
 export type CssValue                           = undefined | null | BasicCssValue | BasicCssValue[] | (BasicCssValue|BasicCssValue[]|'!important')[]
 
-export type CustomCssProps                     = { [key: Exclude<string, KnownCssPropName>] : CssValue }
+export type CustomCssProps                     = { [PropName: Exclude<string, KnownCssPropName>] : CssValue }
 
 export type CssProps                           = KnownCssProps & CustomCssProps
-export type NestedProps                        = { [key: symbol] : StyleCollection }
+export type NestedProps                        = { [PropName: symbol] : StyleCollection }
 
 export type Style                              = CssProps & NestedProps
 export type StyleCollection                    = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
