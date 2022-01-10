@@ -200,7 +200,7 @@ export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: Pro
             we convert empty `className` to `'@global'`
          */
         .map(([className, styles]): Style => ({ [className || '@global'] : mergeStyles(styles) })) // convert each `[className, styles]` to `{ className : mergeStyles(styles) | null }`
-    ) ?? {}) as Styles<TClassName>;
+    ) ?? emptyMergedStyle) as Styles<TClassName>;
 }
 
 
@@ -212,7 +212,10 @@ class MergedStyle {
     constructor(style?: Style) {
         if (style) Object.assign(this, style);
     }
-}
+};
+const emptyMergedStyle = new MergedStyle();
+Object.seal(emptyMergedStyle);
+
 /**
  * Merges the (sub) component's composition to single `Style`.
  * @returns A `Style` represents the merged (sub) component's composition  
@@ -248,12 +251,14 @@ export const mergeStyles     = (styles: StyleCollection): Style|null => {
     
     
     const mergedStyles: Style = new MergedStyle();
-    for (const subStyles of styles) {
+    for (const subStyles of styles) { // shallow iterating array
         const subStyleValue: OptionalOrFalse<Style> = (
             Array.isArray(subStyles)
             ?
+            // deep iterating array
             mergeStyles(subStyles) // an array => ProductOrFactoryDeepArray<OptionalOrFalse<Style>> => recursively `mergeStyles()`
             :
+            // final element => might be a function or a product
             (
                 // not an array => ProductOrFactory<OptionalOrFalse<Style>>
                 
@@ -268,9 +273,16 @@ export const mergeStyles     = (styles: StyleCollection): Style|null => {
         
         
         
+        // merge current style to single big style (string props + symbol props):
         mergeStyle(mergedStyles, subStyleValue);
     } // for
+    
+    
+    
+    // do not return an empty style, instead return null:
     if ((Object.keys(mergedStyles).length === 0) && (Object.getOwnPropertySymbols(mergedStyles).length === 0)) return null; // an empty object => return `null`
+    
+    // return non empty style:
     return mergedStyles;
 }
 
@@ -804,20 +816,7 @@ const flat = <T,>(collection: SingleOrDeepArray<T>): T[] => {
     
     
     
-    const merged: T[] = [];
-    for (const item of collection) {
-        if (Array.isArray(item)) {
-            // an array => DeepArray<T> => recursively `flat()`
-            
-            merged.push(...flat(item));
-        }
-        else {
-            // not an array => T
-            
-            merged.push(item);
-        } // if
-    } // for
-    return merged;
+    return collection.flat(Infinity);
 };
 export const iif = <T extends PropList|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);

@@ -71,8 +71,8 @@ class GlobalStyleRule {
         
         for (const [propName, propValue] of Object.entries(style)) { // no need to iterate Symbol(s), because [prop: Symbol] is for storing nested rule
             // exceptions:
-            if (propName.includes('&')) continue; // do not process nested rule
-            if (propName === 'extend')  continue; // do not process `extend` prop
+            if (propName.includes('&')) continue; // do not process nested rule // TODO : drop support for skipping nested
+            if (propName === 'extend')  continue; // do not process `extend` prop // TODO : drop support for skipping extend
             if (!isStyle(propValue))    continue; // invalid value => can't be processed
             
             

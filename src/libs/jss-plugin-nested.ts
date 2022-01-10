@@ -114,7 +114,7 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
     
     let optionsCache = null;
     for (const [nestedSelector, nestedStyle] of [
-        ...Object.entries(style),
+        ...Object.entries(style), // TODO : drop support for string entries
         ...Object.getOwnPropertySymbols(style).map((sym): [string, ValueOf<typeof style>] => [sym.description ?? '', (style as any)[sym] as any]),
     ]) {
         const isNestedConditional = ((nestedSelector[0] === '@') && !['@global', '@font-face', '@keyframes'].includes(nestedSelector));
