@@ -1,3 +1,11 @@
+urgent priority:
+sync cssfn
+sync jss-plugin-** (6)
+sync css-config
+sync VisuallyHidden
+sync Basic
+
+
 top priority:
 fix accordion on the last (bottom)
 fix indicator togglerActiveReducer
