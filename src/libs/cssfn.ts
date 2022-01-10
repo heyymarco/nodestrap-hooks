@@ -60,10 +60,10 @@ export type StandardCssValue                                     = (string & {})
 export type CustomCssValue                                       = undefined | null | StandardCssValue[] | (StandardCssValue|StandardCssValue[]|'!important')[]
 export type CssValue                                             = StandardCssValue | CustomCssValue
 export type JssProps                                             = { [key: string]: CssValue }
-export type PropList                                             = { [key in keyof StandardCssProps]: (StandardCssProps[key] | [[StandardCssProps[key]], '!important'] | CustomCssValue) } & JssProps
+export type CssProps                                             = { [key in keyof StandardCssProps]: (StandardCssProps[key] | [[StandardCssProps[key]], '!important'] | CustomCssValue) } & JssProps
 export type NestedProps                                          = { [key: symbol]: StyleCollection }
 
-export type Style                                                = (PropList | NestedProps) & { fallbacks ?: SingleOrArray<Style> }
+export type Style                                                = (CssProps | NestedProps) & { fallbacks ?: SingleOrArray<Style> }
 export type StyleCollection                                      = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
 export type ClassName                                            = string        // not a really string: [A-Z_a-z-]+
@@ -824,7 +824,7 @@ const flat = <T,>(collection: SingleOrDeepArray<T>): T[] => {
     
     return collection.flat(Infinity);
 };
-export const iif = <T extends PropList|NestedProps|Style>(condition: boolean, content: T): T => {
+export const iif = <T extends CssProps|NestedProps|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);
 };
 /**
