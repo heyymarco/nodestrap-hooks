@@ -274,12 +274,31 @@ export const mergeStyles     = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
-export const groupSelectors = (selectors: SelectorCollection, styles: StyleCollection, withCombinator?: string) => {
-    const selectorArr = flat(selectors).filter((selector): selector is Selector => !!selector);
+export interface NestedRuleOptions {
+    groupSelectors ?: boolean
+    combinator     ?: string
+}
+const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
+    groupSelectors  : true,
+    combinator      : '',
+};
+export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): PropList => {
+    const {
+        groupSelectors = defaultNestedRuleOptions.groupSelectors,
+        combinator     = defaultNestedRuleOptions.combinator,
+    } = options;
     
     
     
-    if (!selectorArr.length) return {}; // no selector => return empty
+    const nestedSelectors : NestedSelector[] = (
+        flat(selectors)
+        .filter((selector): selector is Selector => !!selector)
+        .map((selector) => selector.includes('&') ? selector : `&${selector}`)
+    );
+    
+    
+    
+    if (!nestedSelectors.length) return {}; // no nestedSelector => return empty
     
     
     
@@ -288,37 +307,42 @@ export const groupSelectors = (selectors: SelectorCollection, styles: StyleColle
     
     
     
-    if (selectorArr.length === 1) return {
-        [Symbol(
-            selectorArr[0]
-        )]: (mergedStyles as JssValue),
-    };
+    if (!groupSelectors || (nestedSelectors.length === 1)) {
+        return Object.fromEntries(
+            nestedSelectors
+            .map((nestedSelector) => [
+                Symbol(nestedSelector),
+                (mergedStyles as JssValue)
+            ])
+        );
+    } // if
     
     
     
-    const selectorsGroups = selectorArr.map((selector) => {
-        const withCombi    = !!withCombinator && selector.startsWith(withCombinator);
-        if (withCombi)    return { withCombi: selector };
+    const withCombinator = combinator ? `&${combinator}` : null;
+    const selectorsGroups = nestedSelectors.map((nestedSelector) => {
+        const withCombi    = !!withCombinator && nestedSelector.startsWith(withCombinator);
+        if (withCombi)    return { withCombi: nestedSelector };
         
-        const onlyAmp      = (selector === '&');
-        if (onlyAmp)      return { amp: selector };
+        const onlyAmp      = (nestedSelector === '&');
+        if (onlyAmp)      return { amp: nestedSelector };
         
-        const onlyBeginAmp = !onlyAmp && (selector.lastIndexOf('&') === 0);
-        if (onlyBeginAmp) return { begAmp: selector };
+        const onlyBeginAmp = !onlyAmp && (nestedSelector.lastIndexOf('&') === 0);
+        if (onlyBeginAmp) return { begAmp: nestedSelector };
         
-        const onlyEndAmp   = !onlyAmp && (selector.indexOf('&') === (selector.length - 1));
-        if (onlyEndAmp)   return { endAmp: selector };
+        const onlyEndAmp   = !onlyAmp && (nestedSelector.indexOf('&') === (nestedSelector.length - 1));
+        if (onlyEndAmp)   return { endAmp: nestedSelector };
         
-        return { other: selector };
+        return { other: nestedSelector };
     });
     
     
     
-    const withCombiSelectors = selectorsGroups.map((group) => group.withCombi).filter((selector): selector is string => !!selector);
-    const ampSelectors       = selectorsGroups.map((group) => group.amp      ).filter((selector): selector is string => !!selector);
-    const begAmpSelectors    = selectorsGroups.map((group) => group.begAmp   ).filter((selector): selector is string => !!selector);
-    const endAmpSelectors    = selectorsGroups.map((group) => group.endAmp   ).filter((selector): selector is string => !!selector);
-    const rndAmpSelectors    = selectorsGroups.map((group) => group.other    ).filter((selector): selector is string => !!selector);
+    const withCombiSelectors = selectorsGroups.map((group) => group.withCombi).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
+    const ampSelectors       = selectorsGroups.map((group) => group.amp      ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
+    const begAmpSelectors    = selectorsGroups.map((group) => group.begAmp   ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
+    const endAmpSelectors    = selectorsGroups.map((group) => group.endAmp   ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
+    const rndAmpSelectors    = selectorsGroups.map((group) => group.other    ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
     
     
     
@@ -339,7 +363,7 @@ export const groupSelectors = (selectors: SelectorCollection, styles: StyleColle
             ?
             begAmpSelectors[0]
             :
-            `&:is(${begAmpSelectors.map((selector) => selector.slice(1)).join(',')})`
+            `&:is(${begAmpSelectors.map((nestedSelector) => nestedSelector.slice(1)).join(',')})`
         ) : null),
         
         
@@ -352,7 +376,7 @@ export const groupSelectors = (selectors: SelectorCollection, styles: StyleColle
             ?
             endAmpSelectors[0]
             :
-            `:is(${endAmpSelectors.map((selector) => selector.slice(0, -1)).join(',')})&`
+            `:is(${endAmpSelectors.map((nestedSelector) => nestedSelector.slice(0, -1)).join(',')})&`
         ) : null),
         
         
@@ -373,7 +397,7 @@ export const groupSelectors = (selectors: SelectorCollection, styles: StyleColle
             ?
             withCombiSelectors[0]
             :
-            `${withCombinator}:is(${withCombiSelectors.map((selector) => selector.slice(withCombinator.length)).join(',')})`
+            `${withCombinator}:is(${withCombiSelectors.map((nestedSelector) => nestedSelector.slice(withCombinator.length)).join(',')})`
         ) : null),
     ].filter((grp): grp is string => !!grp);
     
@@ -438,21 +462,13 @@ export const vars   = (items: { [name: string]: JssValue }): Style => items;
 
 
 //combinators:
-export interface CombinatorOptions {
-    groupSelectors? : boolean
+export interface CombinatorOptions extends NestedRuleOptions {
 }
 const defaultCombinatorOptions : Required<CombinatorOptions> = {
-    groupSelectors  : true,
+    ...defaultNestedRuleOptions,
 };
 export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): PropList => {
-    const {
-        groupSelectors : doGroupSelectors = defaultCombinatorOptions.groupSelectors,
-    } = options;
-    
-    
-    
-    const withCombinator = `&${combinator}`;
-    const combiSelectors = flat(selectors).map((selector) => {
+    const combiSelectors : NestedSelector[] = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
         // if (selector === '&') return selector; // no children => the parent itself
@@ -460,26 +476,13 @@ export const combinators  = (combinator: string, selectors: SelectorCollection, 
         
         if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
         
-        return `${withCombinator}${selector}`;
+        return `&${combinator}${selector}`;
     });
     if (!combiSelectors.length) return {}; // no selector => return empty
     
     
     
-    const mergedStyles = mergeStyles(styles); // merge the `styles` to single `Style`, for making JSS understand
-    if (!mergedStyles) return {}; // no style => return empty
-    
-    
-    
-    if (doGroupSelectors) {
-        return groupSelectors(combiSelectors, mergedStyles, withCombinator);
-    }
-    else {
-        return Object.fromEntries(
-            combiSelectors
-            .map((combiSelector) => [combiSelector, (mergedStyles as JssValue)])
-        );
-    } // if
+    return nestedRule(combiSelectors, styles, { ...options, combinator });
 };
 export const descendants  = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
 export const children     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
@@ -489,10 +492,11 @@ export const nextSiblings = (selectors: SelectorCollection, styles: StyleCollect
 
 
 // rules:
-export interface RuleOptions {
+export interface RuleOptions extends NestedRuleOptions {
     minSpecificityWeight? : number
 }
 const defaultRuleOptions : Required<RuleOptions> = {
+    ...defaultNestedRuleOptions,
     minSpecificityWeight  : 0,
 };
 export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): StyleCollection => {
@@ -668,7 +672,7 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
             
             return [nestedSelectors, styles];
         })
-        .map(([nestedSelectors, styles]): Style => groupSelectors(nestedSelectors, styles)),
+        .map(([nestedSelectors, styles]): Style => nestedRule(nestedSelectors, styles, options)),
     );
 };
 // shortcut rules:
