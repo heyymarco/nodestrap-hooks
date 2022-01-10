@@ -63,7 +63,7 @@ export type KnownCssPropValue
 // comment docs preserves in TypeScript:
 export type KnownCssProps                      = { [PropName in keyof CssProperties<string|number>] ?: (KnownCssPropValue<PropName>|[[KnownCssPropValue<PropName>], '!important']) }
 
-export type BasicCssValue                      = (string & {}) | (number & {})
+export type BasicCssValue                      = (string & {}) | (number & {}) | PropEx.Keyframes
 export type CssValue                           = undefined | null | BasicCssValue | BasicCssValue[] | (BasicCssValue|BasicCssValue[]|'!important')[]
 
 export type CustomCssProps                     = { [key: Exclude<string, KnownCssPropName>] : CssValue }
