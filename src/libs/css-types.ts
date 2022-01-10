@@ -20,8 +20,8 @@ export namespace Cust {
     export type RefOne       = `var(${Decl})`
     export type Ref          = RefOne|`var(${Decl},${RefOne})`|`var(${Decl},${string})`
     export type KeyframesRef = string
-    export type General      = string|number
-    export type Expr         = General|Ref | (General|Ref)[] | (General|Ref)[][]
+    export type General      = (string & {}) | (number & {})
+    export type Expr         = General|Ref | (General|Ref)[] | ((General|Ref)|(General|Ref)[]|'!important')[]
 }
 
 
