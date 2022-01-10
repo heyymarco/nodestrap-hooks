@@ -59,9 +59,9 @@ export type KnownCssPropName                   = keyof CssProperties<string|numb
 export type KnownCssPropValue
     <PropName extends KnownCssPropName>        = Exclude<CssProperties<string|number>[PropName], (undefined|null)>
 // comment docs disappears in TypeScript:
-// export type KnownCssProps                   = { [PropName in KnownCssPropName] ?: (KnownCssPropValue<PropName>|[[KnownCssPropValue<PropName>], '!important']) }
+// export type KnownCssProps                   = { [PropName in KnownCssPropName] ?: (KnownCssPropValue<PropName>|[[KnownCssPropValue<PropName>], '!important']|CssValue) }
 // comment docs preserves in TypeScript:
-export type KnownCssProps                      = { [PropName in keyof CssProperties<string|number>] ?: (KnownCssPropValue<PropName>|[[KnownCssPropValue<PropName>], '!important']) }
+export type KnownCssProps                      = { [PropName in keyof CssProperties<string|number>] ?: (KnownCssPropValue<PropName>|[[KnownCssPropValue<PropName>], '!important']|CssValue) }
 
 export type BasicCssValue                      = (string & {}) | (number & {}) | PropEx.Keyframes
 export type CssValue                           = undefined | null | BasicCssValue | BasicCssValue[] | (BasicCssValue|BasicCssValue[]|'!important')[]
