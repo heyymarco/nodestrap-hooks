@@ -66,7 +66,7 @@ export type KnownCssProps                      = { [PropName in keyof CssPropert
 export type BasicCssValue                      = (string & {}) | (number & {})
 export type CssValue                           = undefined | null | BasicCssValue | BasicCssValue[] | (BasicCssValue|BasicCssValue[]|'!important')[]
 
-export type CustomCssProps                     = { [key: (Exclude<string, KnownCssPropName> & {})] : CssValue }
+export type CustomCssProps                     = { [key: Exclude<string, KnownCssPropName>] : CssValue }
 
 export type CssProps                           = KnownCssProps & CustomCssProps
 export type NestedProps                        = { [key: symbol] : StyleCollection }
