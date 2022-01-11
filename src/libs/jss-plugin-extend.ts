@@ -143,30 +143,6 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
 
 
 
-    //#region handle `@keyframes`
-    if (sheet) {
-        for (const [propName, propValue] of [
-            ...Object.entries(style),
-            ...Object.getOwnPropertySymbols(style).map((sym): [symbol, ValueOf<typeof style>] => [sym, (style as any)[sym] as any]),
-        ]) {
-            const propNameStr : string = (typeof(propName) === 'symbol') ? (propName.description ?? '') : propName;
-            if (propNameStr.startsWith('@keyframes ')) {
-                // move `@keyframes` to StyleSheet:
-                sheet.addRule(propNameStr, propValue as Style, {
-                    generateId : ruleGenerateId,
-                });
-
-
-                
-                // delete `@keyframes` prop, so another plugins won't see this:
-                delete (style as any)[propName as string];
-            } // if
-        } // for
-    } // if
-    //#endregion handle `@keyframes`
-
-
-
     return style;
 };
 
