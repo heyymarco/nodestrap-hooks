@@ -27,7 +27,7 @@ import {
 
     // rules:
     rule,
-    noRule,
+    keyframes,
 }                           from './cssfn'       // cssfn core
 
 // others libs:
@@ -403,7 +403,7 @@ const createCssConfig = <TProps extends CssConfigProps>(initialProps: ProductOrF
                     const keyframesReference = keyframesRef(keyframesName); // `@keyframes`' name is always created even if the content is the same as the another `@keyframes`
 
                     // store the new `@keyframes`:
-                    genKeyframes[`@keyframes ${keyframesReference}`] = srcKeyframesValue;
+                    genKeyframes[keyframesReference] = srcKeyframesValue;
 
                     
                     
@@ -559,7 +559,7 @@ const createCssConfig = <TProps extends CssConfigProps>(initialProps: ProductOrF
         genStyleSheet = createSheet([
             globalDef([
                 rule(settings.rule, genProps),
-                noRule(genKeyframes),
+                Object.entries(genKeyframes).map(([name, value]) => keyframes(name, value)),
             ]),
         ])
         .attach();
