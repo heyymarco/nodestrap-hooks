@@ -2,7 +2,7 @@
 import type {
     Plugin,
     JssStyle as Style,
-
+    
     Rule,
     StyleSheet,
 }                           from 'jss'           // base technology of our cssfn components
@@ -20,7 +20,10 @@ import {
 
 
 
-const getOptions = (rule: Rule, container: any, optionsCache: any) => {
+// utilities:
+
+const ruleGenerateId    = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
+const getOptions = (rule: Rule, parentRule: Rule|StyleSheet|undefined, optionsCache: any) => {
     if (optionsCache) return {...optionsCache, index: optionsCache.index + 1}; // increase the index from cache
     
     
@@ -32,7 +35,9 @@ const getOptions = (rule: Rule, container: any, optionsCache: any) => {
         ...rule.options,
         
         nestingLevel,
-        index: container.indexOf(rule) + 1,
+        index: ((parentRule as any)?.indexOf?.(rule) ?? 0) + 1,
+        
+        generateId : ruleGenerateId, // do not auto-generate id for @keyframes
     };
     delete (options as any).name;
     return options;
@@ -107,56 +112,87 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
     
     
     
-    const styleRule = rule;
-    const container = styleRule.options.parent;
+    const styleRule  = rule;
+    const parentRule = styleRule.options.parent;
     
     
     
     let optionsCache = null;
-    for (const [nestedSelector, nestedStyle] of [
-        ...Object.entries(style), // TODO : drop support for string entries
-        ...Object.getOwnPropertySymbols(style).map((sym): [string, ValueOf<typeof style>] => [sym.description ?? '', (style as any)[sym] as any]),
-    ]) {
-        const isNestedConditional = ((nestedSelector[0] === '@') && !['@global', '@font-face', '@keyframes'].includes(nestedSelector));
-        const isNested            = !isNestedConditional && nestedSelector.includes('&');
-        if (!isNestedConditional && !isNested) continue;
+    for (const [nestedSelector, nestedStyle] of
+        Object.getOwnPropertySymbols(style).map((sym): [symbol, ValueOf<typeof style>] => [sym, (style as any)[sym] as any])
+    ) {
+        const nestedSelectorStr : string = nestedSelector.description ?? '';
         
         
         
-        const parentSelector : string = (styleRule as any).selector ?? '';
+        optionsCache = getOptions(styleRule, parentRule, optionsCache);
         
         
         
-        optionsCache = getOptions(styleRule, container, optionsCache);
-        if (isNestedConditional) {
+        if (['@media', '@supports', '@document'].some((at) => nestedSelectorStr.startsWith(at))) { // conditional rules
+            const parentSelector : string = (styleRule as any).selector ?? '';
+            
+            /*
+                from:
+                .fooClass {                         // parentRule
+                    fontSize: 'small'
+                    @media (min-width: 1024px) {    // nested conditional
+                        fontSize: 'large'           // the nestedStyle
+                    }
+                }
+                
+                to:
+                .fooClass {
+                    fontSize: 'small'
+                }
+                @media (min-width: 1024px) {        // move up the nestedSelectorStr
+                    .fooClass {                     // duplicate the parentRule selector
+                        fontSize: 'large'           // move the nestedStyle
+                    }
+                }
+            */
+            
             // place conditional right after the parent rule to ensure right ordering:
-            (container as any)
-            .addRule(
-                nestedSelector,
-                { /* empty style */ },
+            
+            const conditionalRule = (parentRule as any).addRule(  // move up the nestedSelectorStr
+                nestedSelectorStr,
+                { /* empty style */ } as Style,
                 optionsCache
-            )
-            .addRule(
-                styleRule.key,
-                nestedStyle,
-                { selector: parentSelector }
             );
-        } // if isNestedConditional
-        else if (isNested) {
-            const selector = combineSelector(parentSelector, nestedSelector);
+            
+            conditionalRule.addRule(                              // duplicate the parentRule selector
+                styleRule.key,
+                nestedStyle as Style,                                     // move the nestedStyle
+                { ...optionsCache, selector: parentSelector }
+            );
+        }
+        else if (nestedSelectorStr.includes('&')) { // nested rules
+            const parentSelector : string = (styleRule as any).selector ?? '';
+            
+            const selector = combineSelector(parentSelector, nestedSelectorStr);
             if (selector) {
-                (container as any)
-                .addRule(
+                (parentRule as any).addRule(
                     selector,
-                    nestedStyle,
+                    nestedStyle as Style,
                     { ...optionsCache, selector }
                 );
             } // if
-        } // if isNested
+        }
+        else if (nestedSelectorStr[0] === '@') {
+            // move `@something` to StyleSheet:
+            sheet?.addRule(
+                nestedSelectorStr,
+                nestedStyle as Style,
+                optionsCache
+            );
+        }
+        else {
+            continue; // unknown expression, skip to execute the code after switch
+        } // if
         
         
         
-        // nested style has been flattened => delete the nested:
+        // nested style has been processed => delete the nested:
         delete (style as any)[nestedSelector];
     } // for
     
