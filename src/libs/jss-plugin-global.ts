@@ -1,27 +1,16 @@
 // jss:
 import {
     Plugin,
-
+    
     Rule,
     RuleList,
-    StyleSheet,
 }                           from 'jss'           // base technology of our cssfn components
-// custom jss-plugins:
-import type {
-    Style,
-}                           from './jss-plugin-extend'
 
 
 
-// utilities:
-type LiteralObject      = { [key: string]: any }
-const isLiteralObject   = (object: any): object is LiteralObject => object && (typeof(object) === 'object') && !Array.isArray(object);
-
-const isStyle           = (object: any): object is Style => isLiteralObject(object);
+type Style = { [PropName: (string|symbol)]: any }
 
 
-
-const ruleGenerateId = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
 
 class GlobalStyleRule {
     // unrecognized syntax on lower version of javascript
@@ -62,35 +51,6 @@ class GlobalStyleRule {
         // StyleRule:
         (this as any).style    = style; // the `style` needs to be attached to `GlobalStyleRule` for satisfying `onProcessStyle()`
         (this as any).selector = '';    // for satisfying `jss-plugin-nested`
-        
-        const plugins : any = options?.jss?.plugins;
-        const onProcessStyle : ((style: Style|null, rule: Rule, sheet?: StyleSheet) => Style) | undefined | null = plugins?.onProcessStyle;
-        onProcessStyle?.call(plugins, ((this as any).style as Style), this as unknown as Rule, options?.sheet as (StyleSheet|undefined));
-        
-        
-        
-        for (const [propName, propValue] of Object.entries(style)) { // no need to iterate Symbol(s), because [prop: Symbol] is for storing nested rule
-            // exceptions:
-            if (propName.includes('&')) continue; // do not process nested rule // TODO : drop support for skipping nested
-            if (propName === 'extend')  continue; // do not process `extend` prop // TODO : drop support for skipping extend
-            if (!isStyle(propValue))    continue; // invalid value => can't be processed
-            
-            
-            
-            // because we're in `@global`, all prop names (with some exceptions above) will be recognized as selector expressions
-            const selectors = propName;
-            ((this as any).rules as RuleList).add(selectors, propValue, {
-                ...options,
-                generateId : ruleGenerateId,
-                
-                selector   : selectors,
-            });
-        } // for
-        
-        
-        
-        // let's another plugins take care:
-        ((this as any).rules as RuleList).process();
     }
     
     
@@ -106,54 +66,15 @@ class GlobalStyleRule {
 
 
 const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) => {
-    switch (key) {
-        case '':
-        case '@global':
-            return new GlobalStyleRule(key, style ?? {}, options);
-        
-        default:
-            return null;
-    } // switch
-};
-const onProcessRule = (rule: Rule, sheet?: StyleSheet): void => {
-    if (!sheet)                return;
-    if (rule.type !== 'style') return;
-    
-    const style = (rule as any).style as (Style|null|undefined);
-    if (!style)                return;
-    
-    const globalStyle = (style as any)['@global'];
-    if (!isStyle(globalStyle)) return;
+    if ((key === '') || (key === '@global') || key.startsWith('@global-') || key.startsWith('@global_')) {
+        return new GlobalStyleRule(key, style ?? {}, options);
+    } // if
+
     
     
-    
-    const { options } = rule;
-    
-    
-    
-    for (const [nestedSelector, nestedStyle] of Object.entries(globalStyle)) {
-        if (!isStyle(nestedStyle)) continue; // invalid value => can't be processed
-        
-        
-        
-        // place the nested rule to root:
-        sheet.addRule(
-            nestedSelector,
-            nestedStyle,
-            {
-                ...options,
-                selector: nestedSelector,
-            }
-        );
-    } // for
-    
-    
-    
-    // the `@global` operation has been completed => remove unused `@global` prop:
-    delete (style as any)['@global'];
+    return null;
 };
 
 export default function pluginGlobal(): Plugin { return {
     onCreateRule,
-    onProcessRule,
 }}
