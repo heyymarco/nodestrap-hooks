@@ -12,10 +12,6 @@ import {
 }                           from 'jss'           // base technology of our cssfn components
 // custom jss-plugins:
 import jssPluginGlobal      from './jss-plugin-global'
-import {
-    default as jssPluginExtend,
-    mergeStyle,
-}                           from './jss-plugin-extend'
 import jssPluginNested      from './jss-plugin-nested'
 import jssPluginShort       from './jss-plugin-short'
 import jssPluginCamelCase   from './jss-plugin-camel-case'
@@ -174,7 +170,6 @@ const createGenerateId : CreateGenerateId = (options = {}) => {
 };
 const customJss = createJss().setup({createGenerateId, plugins:[
     jssPluginGlobal(),    // requires to be placed before all other plugins
-    jssPluginExtend(),
     jssPluginNested(),
     jssPluginShort(),     // requires to be placed before `camelCase`
     jssPluginCamelCase(),
@@ -222,6 +217,42 @@ export const usesCssfn = <TClassName extends ClassName = ClassName>(classes: Pro
 
 
 // processors:
+
+const isStyle      = (object: any): object is Style => object && (typeof(object) === 'object') && !Array.isArray(object);
+const mergeLiteral = (style: Style, newStyle: Style): void => {
+    for (const [propName, newPropValue] of [
+        ...Object.entries(newStyle),
+        ...Object.getOwnPropertySymbols(newStyle).map((sym): [symbol, ValueOf<typeof newStyle>] => [sym, (newStyle as any)[sym] as any]),
+    ]) { // loop through `newStyle`'s props
+        
+        
+        
+        if (!isStyle(newPropValue)) {
+            // `newPropValue` is not a `Style` => unmergeable => add/overwrite `newPropValue` into `style`:
+            delete style[propName]; // delete the old prop (if any), so the new prop always placed at the end of LiteralObject
+            style[propName] = newPropValue as any; // add/overwrite
+        }
+        else {
+            // `newPropValue` is a `Style` => possibility to merge with `currentPropValue`
+            
+            const currentPropValue = style[propName];
+            if (!isStyle(currentPropValue)) {
+                // `currentPropValue` is not a `Style` => unmergeable => add/overwrite `newPropValue` into `style`:
+                delete style[propName]; // delete the old prop (if any), so the new prop always placed at the end of LiteralObject
+                style[propName] = newPropValue as any; // add/overwrite
+            }
+            else {
+                // both `newPropValue` & `currentPropValue` are `Style` => merge them recursively (deeply):
+                
+                const currentValueClone = {...currentPropValue} as Style; // clone the `currentPropValue` to avoid side effect, because the `currentPropValue` is not **the primary object** we're working on
+                mergeLiteral(currentValueClone, newPropValue);
+                
+                // merging style prop no need to rearrange the prop position
+                style[propName] = currentValueClone as any; // set the mutated `currentValueClone` back to `style`
+            } // if
+        } // if
+    } // for
+}
 
 // prevents JSS to clone the CSSFN Style (because the symbol props are not copied)
 class MergedStyle {
@@ -290,7 +321,7 @@ export const mergeStyles     = (styles: StyleCollection): Style|null => {
         
         
         // merge current style to single big style (string props + symbol props):
-        mergeStyle(mergedStyles as any, subStyleValue as any);
+        mergeLiteral(mergedStyles, subStyleValue);
     } // for
     
     
@@ -321,7 +352,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     const nestedSelectors : NestedSelector[] = (
         flat(selectors)
         .filter((selector): selector is Selector => !!selector)
-        .map((selector) => selector.includes('&') ? selector : `&${selector}`)
     );
     
     
@@ -724,15 +754,12 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
  */
 export const rule = (selectors: SelectorCollection, styles: StyleCollection): RuleEntry => [selectors, styles];
 // shortcut rule items:
+export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
+export const fontFace          = (styles: StyleCollection) => rule('@font-face'         , styles);
+export const keyframes         = (name: string, items: PropEx.Keyframes) => rule(`@keyframes ${name}` , items as Style);
 export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
 export const emptyRule         = ()                        => rule(null                 , null  );
 export const atRoot            = (styles: StyleCollection) => rule(':root'              , styles);
-export const atGlobal          = (styles: StyleCollection) => rule('@global'            , styles);
-export const fontFace          = (styles: StyleCollection) => atGlobal(
-    rules([
-        rule('@font-face', styles),
-    ]),
-);
 export const isFirstChild      = (styles: StyleCollection) => rule(     ':first-child'  , styles);
 export const isNotFirstChild   = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
 export const isLastChild       = (styles: StyleCollection) => rule(     ':last-child'   , styles);
