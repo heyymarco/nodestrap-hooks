@@ -1,14 +1,11 @@
 // jss:
 import {
     Plugin,
+    JssStyle as Style,
     
     Rule,
     RuleList,
 }                           from 'jss'           // base technology of our cssfn components
-
-
-
-type Style = { [PropName: (string|symbol)]: any }
 
 
 
