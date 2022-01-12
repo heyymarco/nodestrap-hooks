@@ -756,10 +756,9 @@ export const rule = (selectors: SelectorCollection, styles: StyleCollection): Ru
 // shortcut rule items:
 export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
 export const fontFace          = (styles: StyleCollection) => rule('@font-face'         , styles);
-export const keyframes         = (name: string, items: PropEx.Keyframes) => rule(`@keyframes ${name}`, rules([
-    Object.entries(items).map(([name, value]) => rule(name, value as Style)),
-    Object.getOwnPropertySymbols(items).map((sym) => rule(sym.description ?? '', items[sym as any] as Style)),
-]));
+export const keyframes         = (name: string, items: PropEx.Keyframes) => rule(`@keyframes ${name}`, layout(Object.fromEntries(
+    Object.entries(items).map(([key, frame]) => [Symbol(key), frame])
+) as Style));
 export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
 export const emptyRule         = ()                        => rule(null                 , null  );
 export const atRoot            = (styles: StyleCollection) => rule(':root'              , styles);
