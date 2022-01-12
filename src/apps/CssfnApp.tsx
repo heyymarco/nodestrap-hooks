@@ -21,6 +21,7 @@ import {
     vars,
     rules,
     rule,
+    nestedRule,
     atGlobal,
     fontFace,
     keyframes,
@@ -68,142 +69,35 @@ const keyframesFadeOut = {
 // ]);
 
 createSheet(() => [
-    // globalDef([
-    //     rule(':root', [
-    //         layout({
-    //             background: 'white',
-    //         }),
-    //     ]),
-    // ]),
     mainComposition([
-        // imports([
-        //     composition([
-        //         layout({
-        //             ...children('span', [
-        //                 layout({
-        //                     border: 'pink',
-        //                 }),
-        //             ]),
-        //         }),
-        //     ]),
-        // ]),
-        // layout({
-        //     ...children('span', [
-        //         layout({
-        //             color: 'red',
-        //         }),
-        //     ]),
-        //     color: 'black',
-        //     // ...testChildren,
-        //     ...children(['.boo', '.foo'], [
-        //         layout({
-        //             background: 'pink',
-        //         }),
-        //     ]),
-        //     ...children(['&', 'span', 'aside'], [
-        //         layout({
-        //             textAlign: 'center',
-        //         }),
-        //     ]),
-        //     ...children(['hello', 'world'], [
-        //         layout({
-        //             say: 'hello',
-        //         }),
-        //     ]),
-        //     ...children(['hello', 'world'], [
-        //         layout({
-        //             bye: 'world',
-        //         }),
-        //     ]),
-        // }),
         rules([
-            // rule('.rr1', [
-            //     layout({
-            //         test: 'rule 1',
-            //     }),
-            // ]),
-            // rule(['.rr1', ':rr2', ':disabled'], [
-            //     layout({
-            //         test: 'rule 2',
-            //     }),
-            // ]),
-            // rule(['.rr5', ':rr6', '&'], [
-            //     layout({
-            //         test: 'rule 3',
-            //     }),
-            // ]),
             atGlobal([
-                rule('.btn-glob', [
+                rule('.btn', [
                     layout({
-                        content: '"im in nested global"'
+                        background: 'gray',
+                        // ...nestedRule('foo', [
+                        //     layout({
+                        //     }),
+                        // ]),
                     }),
                 ]),
-                atRoot([
-                    vars({
-                        '--my-var-1': '"im should in nested global"'
-                    }),
-                    variants([
-                        isScreenWidthAtLeast('xxl', [
-                            layout({
-                                fontSize: 'xx-large',
-                            }),
-                        ]),
-                    ]),
-                ]),
-                fontFace({
-                    fontFamily: 'lucida console',
-                }),
             ]),
-            fontFace({
-                fontFamily: 'consolas',
-            }),
         ]),
     ]),
     globalDef([
-        rule('.btn-cool', [
-            layout({
-                content: '"im in main global"',
-
-                ...children('.child-1', [
-                    layout({
-                        ...children('.child-2', [
-                            rules([
-                                isScreenWidthAtLeast('xxl', [
-                                    layout({
-                                        fontSize: 'xxx-large',
-                                    }),
-                                ]),
-                            ]),
-                        ]),
-                    }),
-                ]),
-            }),
-            variants([
-                isScreenWidthAtLeast('lg', [
-                    layout({
-                        content: '"im very cool"',
-                    }),
-                ]),
-            ]),
-        ]),
-        atRoot([
-            vars({
-                '--my-var-2': '"im should in main global"'
-            }),
-            variants([
-                isScreenWidthAtLeast('lg', [
-                    layout({
-                        fontSize: 'x-large',
-                    }),
-                ]),
-            ]),
-        ]),
-        fontFace({
-            fontFamily: 'arial narrow',
-        }),
         keyframes('fade-out', {
             from: {
                 background: 'red',
+                filter: [[
+                    'opacity(0.5)',
+                    'brightness(85%)',
+                    'contrast(50%)',
+                ]],
+                boxShadow: [
+                    'aaa',
+                    'bbb',
+                    'ccc',
+                ],
             },
             to: {
                 background: 'blue',

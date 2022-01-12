@@ -13,7 +13,7 @@ import {
 import jssPluginNested       from '../libs/jss-plugin-nested'
 
 const customJss = createJss().setup({plugins:[
-    jssPluginNested(),
+	jssPluginNested((styles) => styles as any),
 ]});
 
 

@@ -172,7 +172,7 @@ const createGenerateId : CreateGenerateId = (options = {}) => {
 const customJss = createJss().setup({createGenerateId, plugins:[
     jssPluginGlobal(),    // requires to be placed before all other plugins
     jssPluginKeyframes(),
-    jssPluginNested(),
+    jssPluginNested((styles) => mergeStyles(styles as StyleCollection) as {}),
     jssPluginShort(),     // requires to be placed before `camelCase`
     jssPluginCamelCase(),
     jssPluginVendor(),
@@ -271,7 +271,7 @@ Object.seal(emptyMergedStyle);
  * -or-  
  * `null` represents an empty `Style`.
  */
-export const mergeStyles     = (styles: StyleCollection): Style|null => {
+export const mergeStyles = (styles: StyleCollection): Style|null => {
     /*
         StyleCollection = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
         StyleCollection = ProductOrFactory<OptionalOrFalse<Style>> | ProductOrFactoryDeepArray<OptionalOrFalse<Style>>
@@ -362,17 +362,12 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const mergedStyles = mergeStyles(styles); // merge the `styles` to single `Style`, for making JSS understand
-    if (!mergedStyles) return {}; // no style => return empty
-    
-    
-    
     if (!groupSelectors || (nestedSelectors.length === 1)) {
         return Object.fromEntries(
             nestedSelectors
             .map((nestedSelector) => [
                 Symbol(nestedSelector),
-                mergedStyles
+                styles
             ])
         );
     } // if
@@ -484,7 +479,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
                     // ungroupable selectors:
                     ...ungroupSelectors
                 ].join(',') // join groupableSelector(s), ungroupableSelector, ungroupableSelector, ...
-            )] : mergedStyles
+            )] : styles
         } : {}),
     };
 };

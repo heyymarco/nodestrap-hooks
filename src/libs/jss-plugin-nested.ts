@@ -9,7 +9,8 @@ import type {
 
 // cssfn:
 import type {
-    ValueOf,
+    OptionalOrFalse,
+    ProductOrFactoryOrDeepArray,
 }                           from './types'       // cssfn's types
 import {
     SelectorList,
@@ -101,9 +102,20 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
     return selectorsToString(combinedSelectors);
 };
 
+// prevents JSS to clone the CSSFN Style
+class EmptyStyle {
+    constructor(style?: Style) {
+        if (style) Object.assign(this, style);
+    }
+};
+const emptyStyle : Style = new EmptyStyle();
+Object.seal(emptyStyle);
 
 
-const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Style => {
+
+export type StyleCollection = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
+export type MergeStylesCallback = (styles: StyleCollection) => Style|null
+const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style|null, rule: Rule, sheet?: StyleSheet): Style => {
     if (!style) return {};
     
     
@@ -118,8 +130,8 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
     
     
     let optionsCache = null;
-    for (const [nestedSelector, nestedStyle] of
-        Object.getOwnPropertySymbols(style).map((sym): [symbol, ValueOf<typeof style>] => [sym, (style as any)[sym] as any])
+    for (const [nestedSelector, nestedStyles] of
+        Object.getOwnPropertySymbols(style).map((sym): [symbol, StyleCollection] => [sym, (style as any)[sym] as StyleCollection])
     ) {
         const nestedSelectorStr : string = nestedSelector.description ?? '';
         
@@ -137,7 +149,7 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
                 .fooClass {                         // parentRule
                     fontSize: 'small'
                     @media (min-width: 1024px) {    // nested conditional
-                        fontSize: 'large'           // the nestedStyle
+                        fontSize: 'large'           // the nestedStyles
                     }
                 }
                 
@@ -147,7 +159,7 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
                 }
                 @media (min-width: 1024px) {        // move up the nestedSelectorStr
                     .fooClass {                     // duplicate the parentRule selector
-                        fontSize: 'large'           // move the nestedStyle
+                        fontSize: 'large'           // move the nestedStyles
                     }
                 }
             */
@@ -156,13 +168,13 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
             
             const conditionalRule = (parentRule as any).addRule(  // move up the nestedSelectorStr
                 nestedSelectorStr,
-                { /* empty style */ } as Style,
+                emptyStyle as Style,
                 optionsCache
             ); // causes trigger of all plugins
             
             conditionalRule.addRule(                              // duplicate the parentRule selector
                 styleRule.key,
-                (nestedStyle as Style),                                     // move the nestedStyle
+                mergeStyles(nestedStyles) ?? emptyStyle,          // move the nestedStyles
                 { ...optionsCache, selector: parentSelector }
             ); // causes trigger of all plugins
         }
@@ -173,7 +185,7 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
             if (selector) {
                 (parentRule as any).addRule(
                     selector,
-                    (nestedStyle as Style),
+                    mergeStyles(nestedStyles) ?? emptyStyle,
                     { ...optionsCache, selector }
                 ); // causes trigger of all plugins
             } // if
@@ -182,12 +194,12 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
             // move `@something` to StyleSheet:
             sheet?.addRule(
                 nestedSelectorStr,
-                (nestedStyle as Style),
+                mergeStyles(nestedStyles) ?? emptyStyle,
                 optionsCache
             ); // causes trigger of all plugins
         }
         else {
-            (style as any)[nestedSelectorStr] = (nestedStyle as Style);
+            (style as any)[nestedSelectorStr] = mergeStyles(nestedStyles) ?? emptyStyle;
         } // if
         
         
@@ -202,6 +214,6 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
     return style;
 };
 
-export default function pluginNested(): Plugin { return {
-    onProcessStyle,
+export default function pluginNested(mergeStyles: MergeStylesCallback): Plugin { return {
+    onProcessStyle: createOnProcessStyle(mergeStyles),
 }}
