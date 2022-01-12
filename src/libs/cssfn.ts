@@ -224,7 +224,7 @@ const isStyle      = (object: any): object is Style => object && (typeof(object)
 const mergeLiteral = (style: Style, newStyle: Style): void => {
     for (const [propName, newPropValue] of [
         ...Object.entries(newStyle),
-        ...Object.getOwnPropertySymbols(newStyle).map((sym): [symbol, ValueOf<typeof newStyle>] => [sym, (newStyle as any)[sym] as any]),
+        ...Object.getOwnPropertySymbols(newStyle).map((sym) => [sym, newStyle[sym]] as const),
     ]) { // loop through `newStyle`'s props
         
         
