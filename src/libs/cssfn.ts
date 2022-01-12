@@ -12,6 +12,7 @@ import {
 }                           from 'jss'           // base technology of our cssfn components
 // custom jss-plugins:
 import jssPluginGlobal      from './jss-plugin-global'
+import jssPluginKeyframes   from './jss-plugin-keyframes'
 import jssPluginNested      from './jss-plugin-nested'
 import jssPluginShort       from './jss-plugin-short'
 import jssPluginCamelCase   from './jss-plugin-camel-case'
@@ -170,6 +171,7 @@ const createGenerateId : CreateGenerateId = (options = {}) => {
 };
 const customJss = createJss().setup({createGenerateId, plugins:[
     jssPluginGlobal(),    // requires to be placed before all other plugins
+    jssPluginKeyframes(),
     jssPluginNested(),
     jssPluginShort(),     // requires to be placed before `camelCase`
     jssPluginCamelCase(),
