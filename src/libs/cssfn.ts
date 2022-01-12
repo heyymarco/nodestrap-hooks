@@ -381,6 +381,9 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     const withCombinator = combinator ? `&${combinator}` : null;
     const selectorsGroups = nestedSelectors.map((nestedSelector) => {
+        const ungroupable  = (/::[\w0-9-_]+$/gi).test(nestedSelector); // ::pseudo-elements are ungroupable by :is(...)
+        if (ungroupable)  return { ungroup: nestedSelector };
+        
         const withCombi    = !!withCombinator && nestedSelector.startsWith(withCombinator);
         if (withCombi)    return { withCombi: nestedSelector };
         
@@ -398,11 +401,13 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const withCombiSelectors = selectorsGroups.map((group) => group.withCombi).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
-    const ampSelectors       = selectorsGroups.map((group) => group.amp      ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
-    const begAmpSelectors    = selectorsGroups.map((group) => group.begAmp   ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
-    const endAmpSelectors    = selectorsGroups.map((group) => group.endAmp   ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
-    const rndAmpSelectors    = selectorsGroups.map((group) => group.other    ).filter((nestedSelector): nestedSelector is string => !!nestedSelector);
+    const isExist            = (nestedSelector: NestedSelector|undefined): nestedSelector is string => !!nestedSelector
+    const ungroupSelectors   = selectorsGroups.map((group) => group.ungroup  ).filter(isExist);
+    const withCombiSelectors = selectorsGroups.map((group) => group.withCombi).filter(isExist);
+    const ampSelectors       = selectorsGroups.map((group) => group.amp      ).filter(isExist);
+    const begAmpSelectors    = selectorsGroups.map((group) => group.begAmp   ).filter(isExist);
+    const endAmpSelectors    = selectorsGroups.map((group) => group.endAmp   ).filter(isExist);
+    const rndAmpSelectors    = selectorsGroups.map((group) => group.other    ).filter(isExist);
     
     
     
@@ -466,11 +471,19 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     return {
         ...(grouped.length ? {
             [Symbol(
-                (grouped.length === 1)
-                ?
-                grouped[0]
-                :
-                `:is(${grouped.join(',')})`
+                [
+                    // groupable selectors:
+                    (
+                        (grouped.length === 1)
+                        ?
+                        grouped[0]
+                        :
+                        `:is(${grouped.join(',')})`
+                    ),
+                    
+                    // ungroupable selectors:
+                    ...ungroupSelectors
+                ].join(',') // join groupableSelector(s), ungroupableSelector, ungroupableSelector, ...
             )] : mergedStyles
         } : {}),
     };
