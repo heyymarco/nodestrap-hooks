@@ -63,7 +63,7 @@ class KeyframesStyleRule {
             } // for
             (this as any).rules = rules;
             
-            // rules.process(); // no need to process(), already been processed when sheet.addRule('@keyframes foo', ...)
+            rules.process(); // plugin-nested was already performed but another plugin such as plugin-camel-case might not been performed => re-run the plugins
         } // if
         
         
