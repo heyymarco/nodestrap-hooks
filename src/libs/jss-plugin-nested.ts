@@ -158,13 +158,13 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
                 nestedSelectorStr,
                 { /* empty style */ } as Style,
                 optionsCache
-            );
+            ); // causes trigger of all plugins
             
             conditionalRule.addRule(                              // duplicate the parentRule selector
                 styleRule.key,
-                nestedStyle as Style,                                     // move the nestedStyle
+                (nestedStyle as Style),                                     // move the nestedStyle
                 { ...optionsCache, selector: parentSelector }
-            );
+            ); // causes trigger of all plugins
         }
         else if (nestedSelectorStr.includes('&')) { // nested rules
             const parentSelector : string = (styleRule as any).selector ?? '';
@@ -173,21 +173,21 @@ const onProcessStyle = (style: Style|null, rule: Rule, sheet?: StyleSheet): Styl
             if (selector) {
                 (parentRule as any).addRule(
                     selector,
-                    nestedStyle as Style,
+                    (nestedStyle as Style),
                     { ...optionsCache, selector }
-                );
+                ); // causes trigger of all plugins
             } // if
         }
         else if (nestedSelectorStr[0] === '@') {
             // move `@something` to StyleSheet:
             sheet?.addRule(
                 nestedSelectorStr,
-                nestedStyle as Style,
+                (nestedStyle as Style),
                 optionsCache
-            );
+            ); // causes trigger of all plugins
         }
         else {
-            continue; // unknown expression, skip to execute the code after switch
+            (style as any)[nestedSelectorStr] = (nestedStyle as Style);
         } // if
         
         
