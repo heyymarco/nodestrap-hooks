@@ -4,7 +4,6 @@ import {
     JssStyle as Style,
     
     Rule,
-    RuleList,
 }                           from 'jss'           // base technology of our cssfn components
 
 
@@ -35,15 +34,14 @@ class GlobalStyleRule {
         (this as any).type        = 'style'; // for satisfying `jss-plugin-nested`
         (this as any).key         = key;
         (this as any).isProcessed = false;   // required to avoid double processed
-        (this as any).options     = options;
+        (this as any).options     = {
+            ...options,
+            parent: options?.sheet, // places the nested style on the styleSheet
+        };
         (this as any).renderable  = null;
         
         // ContainerRule:
         (this as any).at    = '@global';
-        (this as any).rules = new RuleList({
-            ...options,
-            parent: this,
-        });
         
         // StyleRule:
         (this as any).style    = style; // the `style` needs to be attached to `GlobalStyleRule` for satisfying `onProcessStyle()`
@@ -56,7 +54,7 @@ class GlobalStyleRule {
      * Generates a CSS string.
      */
     toString(options?: any) {
-        return ((this as any).rules as RuleList).toString(options);
+        return ''; // the nested style was placed to styleSheet, so there is nothing to render
     }
 }
 
@@ -66,7 +64,7 @@ const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) 
     if ((key === '') || (key === '@global') || key.startsWith('@global-') || key.startsWith('@global_')) {
         return new GlobalStyleRule(key, style ?? {}, options);
     } // if
-
+    
     
     
     return null;
