@@ -372,7 +372,7 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     
     
     // do not return an empty style, instead return null:
-    if ((Object.keys(mergedStyles).length === 0) && (Object.getOwnPropertySymbols(mergedStyles).length === 0)) return null; // an empty object => return `null`
+    if ((!Object.keys(mergedStyles).length) && (!Object.getOwnPropertySymbols(mergedStyles).length)) return null; // an empty object => return `null`
     
     // return non empty style:
     return mergedStyles;
@@ -507,17 +507,19 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     return {
-        ...(grouped.length ? {
+        ...((grouped.length || ungroupSelectors.length) ? {
             [Symbol(
                 [
                     // groupable selectors:
-                    (
-                        (grouped.length === 1)
-                        ?
-                        grouped[0]
-                        :
-                        `:is(${grouped.join(',')})`
-                    ),
+                    ...(grouped.length ? [
+                        (
+                            (grouped.length === 1)
+                            ?
+                            grouped[0]
+                            :
+                            `:is(${grouped.join(',')})`
+                        ),
+                    ] : []),
                     
                     // ungroupable selectors:
                     ...ungroupSelectors

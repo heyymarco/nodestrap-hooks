@@ -86,6 +86,11 @@ const setSomeSome = () => composition([
 
 createSheet(() => [
     mainComposition([
+        layout({
+            ...children(['::before', '::after'], {
+                color: 'red',
+            })
+        })
         // imports([
         //     layout({
         //         color: 'red',
@@ -94,25 +99,25 @@ createSheet(() => [
         //         color: null,
         //     }),
         // ]),
-        rules([
-            isHover([
-                layout({
-                    opacity: 0.5,
-                    color: 'red',
-                }),
-            ]),
-            isHover([
-                layout({
-                    color: 'blue',
-                    display: 'grid',
-                }),
-            ]),
-            rule(':focus', [
-                layout({
-                    background: 'pink',
-                }),
-            ]),
-        ])
+        // rules([
+        //     isHover([
+        //         layout({
+        //             opacity: 0.5,
+        //             color: 'red',
+        //         }),
+        //     ]),
+        //     isHover([
+        //         layout({
+        //             color: 'blue',
+        //             display: 'grid',
+        //         }),
+        //     ]),
+        //     rule(':focus', [
+        //         layout({
+        //             background: 'pink',
+        //         }),
+        //     ]),
+        // ])
         // rules([
         //     atGlobal([
         //         rule('.btn', [
