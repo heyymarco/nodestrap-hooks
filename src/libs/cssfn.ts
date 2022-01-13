@@ -100,10 +100,9 @@ export type NestedSelector                     = | '&'
                                                  | (`&${Selector}` & {})
                                                  | (`${Selector}&` & {})
 
-export type RuleEntry                          = readonly [SelectorCollection, StyleCollection]
-export type RuleEntrySource                    = ProductOrFactory<OptionalOrFalse<RuleEntry>>
-export type RuleList                           = RuleEntrySource[]
-export type RuleCollection                     = SingleOrArray<RuleEntrySource|RuleList>
+export type RuleSource                         = ProductOrFactory<OptionalOrFalse<NestedRules>>
+export type RuleList                           = RuleSource[]
+export type RuleCollection                     = SingleOrArray<RuleSource|RuleList>
 
 
 
@@ -621,121 +620,13 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
     
     return (
         (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
-        .flatMap((ruleEntrySourceList: RuleEntrySource|RuleList): OptionalOrFalse<RuleEntry>[] => { // convert: Factory<RuleEntry>|RuleEntry|RuleList => [RuleEntry]|[RuleEntry]|[...RuleList] => [RuleEntry]
-            const isOptionalString                = (value: any): value is OptionalString => {
-                if (value === null)      return true; // optional `null`
-                if (value === undefined) return true; // optional `undefined`
-                if (value === false)     return true; // optional `false`
-                
-                
-                
-                return ((typeof value) === 'string');
-            };
-            const isOptionalStringDeepArr         = (value: any): value is OptionalString[] => {
-                if (!Array.isArray(value)) return false;
-                
-                
-                
-                const nonOptionalStringItems = value.filter((v) => !isOptionalString(v));
-                if (nonOptionalStringItems.length === 0) return true;
-                
-                
-                
-                for (const nonOptionalStringItem of nonOptionalStringItems) {
-                    if (!isOptionalStringDeepArr(nonOptionalStringItem)) return false;
-                } // for
-                
-                
-                
-                return true;
-            };
-            
-            const isOptionalSelector              = (value: any): value is OptionalOrFalse<Selector>   => isOptionalString(value);
-            const isOptionalSelectorDeepArr       = (value: any): value is OptionalOrFalse<Selector>[] => isOptionalStringDeepArr(value);
-            
-            const isOptionalStyleOrFactory        = (value: any): value is ProductOrFactory<Style> => {
-                if (value === null)      return true; // optional `null`
-                if (value === undefined) return true; // optional `undefined`
-                
-                
-                
-                return (
-                    value
-                    &&
-                    (
-                        ((typeof(value) === 'object') && !Array.isArray(value)) // literal object => `Style`
-                        ||
-                        (typeof(value) === 'function') // function => `Factory<Style>`
-                    )
-                );
-            };
-            const isOptionalStyleOrFactoryDeepArr = (value: any): value is Style[] => {
-                if (!Array.isArray(value)) return false;
-                
-                
-                
-                const nonStyleOrFactoryItems = value.filter((v) => !isOptionalStyleOrFactory(v));
-                if (nonStyleOrFactoryItems.length === 0) return true;
-                
-                
-                
-                for (const nonStyleOrFactoryItem of nonStyleOrFactoryItems) {
-                    if (!isOptionalStyleOrFactoryDeepArr(nonStyleOrFactoryItem)) return false;
-                } // for
-                
-                
-                
-                return true;
-            };
-            
-            const isOptionalRuleEntry             = (value: any): value is OptionalOrFalse<RuleEntry> => {
-                if (value === null)      return true; // optional `null`
-                if (value === undefined) return true; // optional `undefined`
-                if (value === false)     return true; // optional `false`
-                
-                
-                
-                if (value.length !== 2)  return false; // not a tuple => not a `RuleEntry`
-                
-                
-                
-                const [first, second] = value;
-                
-                /*
-                    the first element must be `SelectorCollection`:
-                    * `OptionalOrFalse<Selector>`
-                    * DeepArrayOf< `OptionalOrFalse<Selector>` >
-                    * empty array
-                */
-                // and
-                /*
-                    the second element must be `StyleCollection`:
-                    * `OptionalOrFalse<Style>` | `Factory<OptionalOrFalse<Style>>`
-                    * DeepArrayOf< `OptionalOrFalse<Style> | Factory<OptionalOrFalse<Style>>` >
-                    * empty array
-                */
-                return (
-                    (
-                        isOptionalSelector(first)
-                        ||
-                        isOptionalSelectorDeepArr(first)
-                    )
-                    &&
-                    (
-                        isOptionalStyleOrFactory(second)
-                        ||
-                        isOptionalStyleOrFactoryDeepArr(second)
-                    )
-                );
-            };
-            
-            
-            
-            if (typeof(ruleEntrySourceList) === 'function') return [ruleEntrySourceList()];
-            if (isOptionalRuleEntry(ruleEntrySourceList))   return [ruleEntrySourceList];
-            return ruleEntrySourceList.map((ruleEntrySource) => (typeof(ruleEntrySource) === 'function') ? ruleEntrySource() : ruleEntrySource);
+        .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<NestedRules>[] => { // convert: Factory<NestedRules>|NestedRules|RuleList => [NestedRules]|[NestedRules]|[...RuleList] => [NestedRules]
+            if (typeof(ruleSourceList) === 'function') return [ruleSourceList()];
+            if (Array.isArray(ruleSourceList)) return ruleSourceList.map((ruleSource) => (typeof(ruleSource) === 'function') ? ruleSource() : ruleSource);
+            return [ruleSourceList];
         })
-        .filter((optionalRuleEntry): optionalRuleEntry is RuleEntry => !!optionalRuleEntry)
+        .filter((optionalRule): optionalRule is NestedRules => !!optionalRule)
+        .flatMap((rule) => Object.getOwnPropertySymbols(rule).map((sym) => [sym.description ?? '', rule[sym]] as const))
         .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
             let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
                 if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
@@ -805,9 +696,9 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 // rule items:
 /**
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
- * @returns A `RuleEntry` represents the component's rule.
+ * @returns A `NestedRules` represents the component's rule.
  */
-export const rule = (selectors: SelectorCollection, styles: StyleCollection): RuleEntry => [selectors, styles];
+export const rule = (selectors: SelectorCollection, styles: StyleCollection): NestedRules => nestedRule(selectors, styles);
 // shortcut rule items:
 export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
 export const fontFace          = (styles: StyleCollection) => rule('@font-face'         , styles);
@@ -821,7 +712,7 @@ export const isFirstChild      = (styles: StyleCollection) => rule(     ':first-
 export const isNotFirstChild   = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
 export const isLastChild       = (styles: StyleCollection) => rule(     ':last-child'   , styles);
 export const isNotLastChild    = (styles: StyleCollection) => rule(':not(:last-child)'  , styles);
-export const isNthChild        = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+export const isNthChild        = (step: number, offset: number, styles: StyleCollection): NestedRules => {
     if (step === 0) { // no step
         if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
@@ -836,7 +727,7 @@ export const isNthChild        = (step: number, offset: number, styles: StyleCol
         return rule(`:nth-child(${step}n+${offset})`, styles);
     } // if
 };
-export const isNotNthChild     = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+export const isNotNthChild     = (step: number, offset: number, styles: StyleCollection): NestedRules => {
     if (step === 0) { // no step
         // if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
@@ -851,7 +742,7 @@ export const isNotNthChild     = (step: number, offset: number, styles: StyleCol
         return rule(`:not(:nth-child(${step}n+${offset}))`, styles);
     } // if
 };
-export const isNthLastChild    = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+export const isNthLastChild    = (step: number, offset: number, styles: StyleCollection): NestedRules => {
     if (step === 0) { // no step
         if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
@@ -866,7 +757,7 @@ export const isNthLastChild    = (step: number, offset: number, styles: StyleCol
         return rule(`:nth-last-child(${step}n+${offset})`, styles);
     } // if
 };
-export const isNotNthLastChild = (step: number, offset: number, styles: StyleCollection): RuleEntry => {
+export const isNotNthLastChild = (step: number, offset: number, styles: StyleCollection): NestedRules => {
     if (step === 0) { // no step
         // if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
