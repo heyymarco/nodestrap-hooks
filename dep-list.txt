@@ -7,6 +7,7 @@
 @cssfn/jss-plugin-vendor
 @cssfn/css-types
 @cssfn/css-var
+@cssfn/css-selector
 @cssfn/cssfn
 @cssfn/css-config
 @cssfn/react-cssfn
