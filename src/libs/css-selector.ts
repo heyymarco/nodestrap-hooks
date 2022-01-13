@@ -598,3 +598,107 @@ export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelecto
         )
     );
 };
+
+
+
+export type Specificity = [number, number, number];
+export const calculateSpecificity = (selector: Selector): Specificity[] => {
+    return (
+        selector
+        .filter(isSimpleSelector)
+        .reduce((accums, simpleSelector, index, array): Specificity[] => {
+            const [
+                /*
+                    selector types:
+                    '&'  = parent         selector
+                    '*'  = universal      selector
+                    '['  = attribute      selector
+                    ''   = element        selector
+                    '#'  = ID             selector
+                    '.'  = class          selector
+                    ':'  = pseudo class   selector
+                    '::' = pseudo element selector
+                */
+                selectorType,
+                
+                /*
+                    selector name:
+                    string = the name of [element, ID, class, pseudo class, pseudo element] selector
+                */
+                selectorName,
+                
+                /*
+                    selector parameter(s):
+                    string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
+                    array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
+                    SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
+                */
+                selectorParams,
+            ] = simpleSelector;
+            
+            
+            
+            if (selectorType === ':') {
+                switch (selectorName) {
+                    case 'is':
+                    case 'not':
+                    case 'has': {
+                        if (!selectorParams || !isSelectors(selectorParams)) return accums; // no changes
+                        const moreSpecificities   = selectorParams.flatMap((selectorParam) => calculateSpecificity(selectorParam));
+                        const uniqueSpecificities = moreSpecificities.filter((specificity, index) =>
+                            (moreSpecificities.findIndex((test) =>
+                                (specificity[0] === test[0])
+                                &&
+                                (specificity[1] === test[1])
+                                &&
+                                (specificity[2] === test[2])
+                            ) === index)
+                        );
+                        return accums.flatMap((accum) => uniqueSpecificities.map((unique): Specificity => [
+                            accum[0] + unique[0],
+                            accum[1] + unique[1],
+                            accum[2] + unique[2]
+                        ]));
+                    }
+                    
+                    case 'where':
+                        return accums; // no changes
+                } // switch
+            } // if
+            
+            
+            
+            switch(selectorType) {
+                case '#' : // ID selector
+                    array.splice(1); // eject early by mutating iterated copy
+                    return accums.map((accum): Specificity => [
+                        accum[0] + 1,
+                        accum[1],
+                        accum[2]
+                    ]);
+                
+                case '.' : // class selector
+                case '[' : // attribute selector
+                case ':' : // pseudo class selector
+                    return accums.map((accum): Specificity => [
+                        accum[0],
+                        accum[1] + 1,
+                        accum[2]
+                    ]);
+                
+                case ''  : // element selector
+                case '::': // pseudo element selector
+                    return accums.map((accum): Specificity => [
+                        accum[0],
+                        accum[1],
+                        accum[2] + 1
+                    ]);
+                
+                case '&' : // parent selector
+                case '*' : // universal selector
+                default:
+                    return accums; // no changes
+            } // switch
+        }, [([0,0,0] as Specificity)])
+    );
+}
