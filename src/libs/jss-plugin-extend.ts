@@ -33,10 +33,6 @@ const isStyle           = (object: any): object is Style => isLiteralObject(obje
 
 
 
-const ruleGenerateId    = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
-
-
-
 const mergeExtend       = (style: Style, rule?: Rule, sheet?: StyleSheet): void => {
     const extend = style.extend;
     if (!extend) return; // nothing to extend
