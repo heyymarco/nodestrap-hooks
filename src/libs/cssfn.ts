@@ -35,6 +35,20 @@ import type {
     PropEx,
     Cust,
 }                           from './css-types'   // ts defs support for cssfn
+import {
+    // types:
+    SimpleSelector as SimpleSelectorModel,
+    Selector       as SelectorModel,
+    SelectorList   as SelectorModelList,
+    
+    
+    
+    // utilities:
+    parseSelectors,
+    selectorsToString,
+    
+    calculateSpecificity,
+}                           from './css-selector'
 
 // others libs:
 import {
@@ -82,23 +96,8 @@ export type ClassList
 
 export type OptionalString                     = OptionalOrFalse<string>
 
-export type UniversalSelector                  = ('*'           & {})
-export type RealElementSelector                = (string        & {}) // not a really string: [A-Z_a-z-]+
-export type PseudoElementSelector              = (`::${string}` & {}) // not a really string: [A-Z_a-z-]+
-export type ElementSelector                    = RealElementSelector|PseudoElementSelector
-export type ClassSelector                      = (Class  & {})
-export type IdSelector                         = (`#${string}`  & {})
-export type SingleSelector                     = UniversalSelector|ElementSelector|ClassSelector|IdSelector
-export type Selector                           = | SingleSelector
-                                                 | (`${SingleSelector}${SingleSelector}`                                                    & {})
-                                                 | (`${SingleSelector}${SingleSelector}${SingleSelector}`                                   & {})
-                                                 | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}`                  & {})
-                                                 | (`${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}${SingleSelector}` & {})
+export type Selector                           = (string & {})
 export type SelectorCollection                 = SingleOrDeepArray<OptionalOrFalse<Selector>>
-
-export type NestedSelector                     = | '&'
-                                                 | (`&${Selector}` & {})
-                                                 | (`${Selector}&` & {})
 
 export type RuleSource                         = ProductOrFactory<OptionalOrFalse<Rule>>
 export type RuleList                           = RuleSource[]
@@ -377,25 +376,135 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
+const increaseSpecificitySelectorModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
 export interface NestedRuleOptions {
     groupSelectors ?: boolean
     combinator     ?: string
+    
+    specificityWeight    ?: number|null
+    minSpecificityWeight ?: number|null
+    maxSpecificityWeight ?: number|null
 }
 const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
     groupSelectors  : true,
     combinator      : '',
+    
+    specificityWeight    : null,
+    minSpecificityWeight : null,
+    maxSpecificityWeight : null,
 };
 export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): Rule => {
     const {
         groupSelectors = defaultNestedRuleOptions.groupSelectors,
         combinator     = defaultNestedRuleOptions.combinator,
+        
+        specificityWeight,
     } = options;
+    const minSpecificityWeight = specificityWeight ?? options.minSpecificityWeight ?? null;
+    const maxSpecificityWeight = specificityWeight ?? options.maxSpecificityWeight ?? null;
+    const hasSpecificityWeight = !!minSpecificityWeight || !!maxSpecificityWeight;
+    const isSelectorModelExist = (selectorModel: SelectorModel|undefined): selectorModel is SelectorModel => !!selectorModel
+    const adjustSpecificityWeight = (selector: Selector): Selector => {
+        if (selector === '&')      return selector; // only parent selector => no change
+        if (!hasSpecificityWeight) return selector; // nothing to adjust
+        
+        
+        
+        // convert string to parsed_object_tree:
+        const selectorList = parseSelectors(selector);
+        if (!selectorList) return selector; // parse error => no change
+        
+        
+        
+        const selectorGroup = selectorList.map((selectorModel: SelectorModel) => {
+            const specificityWeights = calculateSpecificity(selectorModel).map((specificity) => specificity[1]);
+            
+            
+            
+            if ((maxSpecificityWeight === 0) || (maxSpecificityWeight && (specificityWeights.some((specificityWeight) => (specificityWeight > maxSpecificityWeight))))) {
+                return {
+                    tooBig: selectorModel
+                }
+            } // if
+            
+            
+            
+            if (minSpecificityWeight && (specificityWeights.some((specificityWeight) => (specificityWeight < minSpecificityWeight)))) {
+                return {
+                    tooSmall: selectorModel,
+                    specificityWeight : (specificityWeights.length === 1) ? specificityWeights[0] : undefined
+                }
+            } // if
+            
+            
+            
+            return {
+                fit: selectorModel
+            };
+        });
+        
+        
+        
+        const fitSelectorModels      = selectorGroup.map((group) => group.fit   ).filter(isSelectorModelExist);
+        const tooBigSelectorModels   = selectorGroup.map((group) => group.tooBig).filter(isSelectorModelExist);
+        const tooSmallSelectorModels = selectorGroup.map((group) => [group.tooSmall, group.specificityWeight] as const).filter((item): item is [SelectorModel, number|undefined] => isSelectorModelExist(item[0]));
+        const tooSmallSingleSelectorModels = tooSmallSelectorModels.filter((item): item is [SelectorModel, number   ] => !!item[1]);
+        const tooSmallSomeSelectorModels   = tooSmallSelectorModels.filter((item): item is [SelectorModel, undefined] =>  !item[1]).map((item) => item[0]);
+        
+        
+        const adjustedSelectorList : SelectorModelList = [
+            ...fitSelectorModels,
+            
+            ...(tooBigSelectorModels.length ? ([
+                [
+                    [
+                        ':',                 // PseudoClassSelector
+                        'where',             // SelectorName
+                        tooBigSelectorModels // SelectorModelList
+                    ] as SimpleSelectorModel,
+                    
+                    ...(new Array<SimpleSelectorModel>(minSpecificityWeight ?? 1)).fill(increaseSpecificitySelectorModel)
+                ] as SelectorModel
+            ] as SelectorModelList) : []),
+            
+            ...(tooSmallSomeSelectorModels.length ? ([
+                [
+                    [
+                        ':',                       // PseudoClassSelector
+                        'where',                   // SelectorName
+                        tooSmallSomeSelectorModels // SelectorModelList
+                    ] as SimpleSelectorModel,
+                    
+                    ...(new Array<SimpleSelectorModel>(minSpecificityWeight ?? 1)).fill(increaseSpecificitySelectorModel)
+                ] as SelectorModel
+            ] as SelectorModelList) : []),
+            
+            ...tooSmallSingleSelectorModels.map((item) => ([
+                ...item[0], // SelectorEntry...SelectorEntry...SelectorEntry
+                ...(new Array<SimpleSelectorModel>((minSpecificityWeight ?? 1) - item[1])).fill(increaseSpecificitySelectorModel)
+            ] as SelectorModel)),
+        ];
+        
+        
+        
+        // convert back the parsed_object_tree to string:
+        return selectorsToString(adjustedSelectorList);
+    };
     
     
     
-    const nestedSelectors : NestedSelector[] = (
+    const nestedSelectors : Selector[] = (
         flat(selectors)
         .filter((selector): selector is Selector => !!selector)
+        .map((selector): Selector => {
+            if (selector.startsWith('@')) return selector; // for `@media`
+            if (selector.startsWith(' ')) return selector.slice(1); // for `from`, `to`, `25%`
+            
+            if (selector.includes('&'))   return selector; // &.foo   .boo&   .foo&.boo            
+            
+            return `&${selector}`;
+        })
+        .map(adjustSpecificityWeight)
     );
     
     
@@ -438,7 +547,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const isExist            = (nestedSelector: NestedSelector|undefined): nestedSelector is string => !!nestedSelector
+    const isExist            = (nestedSelector: Selector|undefined): nestedSelector is string => !!nestedSelector
     const ungroupSelectors   = selectorsGroups.map((group) => group.ungroup  ).filter(isExist);
     const withCombiSelectors = selectorsGroups.map((group) => group.withCombi).filter(isExist);
     const ampSelectors       = selectorsGroups.map((group) => group.amp      ).filter(isExist);
@@ -580,7 +689,7 @@ const defaultCombinatorOptions : Required<CombinatorOptions> = {
     ...defaultNestedRuleOptions,
 };
 export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): Rule => {
-    const combiSelectors : NestedSelector[] = flat(selectors).map((selector) => {
+    const combiSelectors : Selector[] = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
         // if (selector === '&') return selector; // no children => the parent itself
@@ -604,21 +713,8 @@ export const nextSiblings = (selectors: SelectorCollection, styles: StyleCollect
 
 
 // rules:
-export interface RuleOptions extends NestedRuleOptions {
-    minSpecificityWeight? : number
-}
-const defaultRuleOptions : Required<RuleOptions> = {
-    ...defaultNestedRuleOptions,
-    minSpecificityWeight  : 0,
-};
-export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): Rule[] => {
-    const {
-        minSpecificityWeight = defaultRuleOptions.minSpecificityWeight,
-    } = options;
-    
-    
-    
-    return (
+export const rules = (ruleCollection: RuleCollection, options?: NestedRuleOptions): Rule[] => {
+    const result = (
         (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
         .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<Rule>[] => { // convert: Factory<Rule>|Rule|RuleList => [Rule]|[Rule]|[...RuleList] => [Rule]
             if (typeof(ruleSourceList) === 'function') return [ruleSourceList()];
@@ -626,57 +722,66 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
             return [ruleSourceList];
         })
         .filter((optionalRule): optionalRule is Rule => !!optionalRule)
+        // .flatMap((rule) => Object.getOwnPropertySymbols(rule).map((sym) => [sym.description ?? '', rule[sym]] as const))
+        // .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
+        //     let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
+        //         if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
+                
+        //         if (selector.includes('&')) return (selector as NestedSelector); // &.foo   .boo&   .foo&.boo
+                
+        //         // if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
+                
+        //         return `&${selector}`;
+        //     });
+        //     if (minSpecificityWeight >= 2) {
+        //         nestedSelectors = nestedSelectors.map((nestedSelector: NestedSelector): NestedSelector => {
+        //             if (nestedSelector === '&') return nestedSelector; // zero specificity => no change
+                    
+        //             // one/more specificities found => increase the specificity weight until reaches `minSpecificityWeight`
+                    
+                    
+                    
+        //             // calculate the specificity weight:
+        //             // `.realClassName` or `:pseudoClassName` (without parameters):
+        //             const classes               = nestedSelector.match(/(\.|:(?!(is|not)(?![\w-])))[\w-]+/gmi); // count the `.RealClass` and `:PseudoClass` but not `:is` or `:not`
+        //             const specificityWeight     = classes?.length ?? 0;
+        //             const missSpecificityWeight = minSpecificityWeight - specificityWeight;
+                    
+                    
+                    
+        //             // the specificity weight was meet the minimum specificity required => no change:
+        //             if (missSpecificityWeight <= 0) return nestedSelector;
+                    
+        //             // the specificity weight is less than the minimum specificity required => increase the specificity:
+        //             return `${nestedSelector}${(new Array(missSpecificityWeight)).fill(((): Selector => {
+        //                 const lastClass = classes?.[classes.length - 1];
+        //                 if (lastClass) {
+        //                     // the last word (without parameters):
+        //                     if (nestedSelector.length === (nestedSelector.lastIndexOf(lastClass) + lastClass.length)) return (lastClass as Selector); // `.RealClass` or `:PseudoClass` without parameters
+        //                 } // if
+                        
+                        
+                        
+        //                 // use a **hacky class name** to increase the specificity:
+        //                 return ':not(._)';
+        //             })()).join('')}` as NestedSelector;
+        //         });
+        //     } // if
+            
+            
+            
+        //     return [nestedSelectors, styles];
+        // })
+        // .map(([nestedSelectors, styles]) => nestedRule(nestedSelectors, styles, options))
+    );
+    if (!options) return result;
+    
+    
+    
+    return (
+        result
         .flatMap((rule) => Object.getOwnPropertySymbols(rule).map((sym) => [sym.description ?? '', rule[sym]] as const))
-        .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
-            let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
-                if (selector.startsWith('@')) return (selector as NestedSelector); // for `@media`
-                
-                if (selector.includes('&')) return (selector as NestedSelector); // &.foo   .boo&   .foo&.boo
-                
-                // if (selector.startsWith('.') || selector.startsWith(':') || selector.startsWith('#') || (selector === '*')) return `&${selector}`;
-                
-                return `&${selector}`;
-            });
-            if (minSpecificityWeight >= 2) {
-                nestedSelectors = nestedSelectors.map((nestedSelector: NestedSelector): NestedSelector => {
-                    if (nestedSelector === '&') return nestedSelector; // zero specificity => no change
-                    
-                    // one/more specificities found => increase the specificity weight until reaches `minSpecificityWeight`
-                    
-                    
-                    
-                    // calculate the specificity weight:
-                    // `.realClassName` or `:pseudoClassName` (without parameters):
-                    const classes               = nestedSelector.match(/(\.|:(?!(is|not)(?![\w-])))[\w-]+/gmi); // count the `.RealClass` and `:PseudoClass` but not `:is` or `:not`
-                    const specificityWeight     = classes?.length ?? 0;
-                    const missSpecificityWeight = minSpecificityWeight - specificityWeight;
-                    
-                    
-                    
-                    // the specificity weight was meet the minimum specificity required => no change:
-                    if (missSpecificityWeight <= 0) return nestedSelector;
-                    
-                    // the specificity weight is less than the minimum specificity required => increase the specificity:
-                    return `${nestedSelector}${(new Array(missSpecificityWeight)).fill(((): Selector => {
-                        const lastClass = classes?.[classes.length - 1];
-                        if (lastClass) {
-                            // the last word (without parameters):
-                            if (nestedSelector.length === (nestedSelector.lastIndexOf(lastClass) + lastClass.length)) return (lastClass as Selector); // `.RealClass` or `:PseudoClass` without parameters
-                        } // if
-                        
-                        
-                        
-                        // use a **hacky class name** to increase the specificity:
-                        return ':not(._)';
-                    })()).join('')}` as NestedSelector;
-                });
-            } // if
-            
-            
-            
-            return [nestedSelectors, styles];
-        })
-        .map(([nestedSelectors, styles]) => nestedRule(nestedSelectors, styles, options))
+        .map(([selectors, styles]) => nestedRule(selectors, styles, options))
     );
 };
 // shortcut rules:
@@ -684,13 +789,13 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
  * Defines component's variants.
  * @returns A `StyleCollection` represents the component's variants.
  */
-export const variants = (variants: RuleCollection, options: RuleOptions = defaultRuleOptions): StyleCollection => rules(variants, options);
+export const variants = (variants: RuleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): StyleCollection => rules(variants, options);
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
  * @returns A `StyleCollection` represents the component's states.
  */
-export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: RuleOptions = { ...defaultRuleOptions, minSpecificityWeight: 3 }): StyleCollection => {
+export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: NestedRuleOptions = { ...defaultNestedRuleOptions, minSpecificityWeight: 3 }): StyleCollection => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, options);
 }
 // rule items:
