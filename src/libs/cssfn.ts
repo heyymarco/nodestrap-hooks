@@ -258,7 +258,6 @@ const mergeLiteral = (style: Style, newStyle: Style): void => {
 const mergeNested  = (style: Style): Style => {
     const groupByNested = (
         Object.getOwnPropertySymbols(style)
-        // .map((sym) => [sym, sym.description ?? ''] as const)
         .reduce((accum, sym) => {
             const nestedSelector = sym.description ?? '';
             if (
