@@ -26,6 +26,7 @@ import {
     fontFace,
     keyframes,
     // Styles,
+    isHover,
 }                           from '../libs/cssfn'           // cssfn core
 import {
     breakpoints,
@@ -67,43 +68,85 @@ const keyframesFadeOut = {
 //         background: 'pink',
 //     }),
 // ]);
+const setColor = (col: string) => composition([
+    layout({
+        color: col,
+    })
+]);
+const setSome = () => composition([
+    imports([
+        setColor('red'),
+    ]),
+]);
+const setSomeSome = () => composition([
+    imports([
+        setSome(),
+    ]),
+]);
 
 createSheet(() => [
     mainComposition([
+        // imports([
+        //     layout({
+        //         color: 'red',
+        //     }),
+        //     layout({
+        //         color: null,
+        //     }),
+        // ]),
         rules([
-            atGlobal([
-                rule('.btn', [
-                    layout({
-                        background: 'gray',
-                        // ...nestedRule('foo', [
-                        //     layout({
-                        //     }),
-                        // ]),
-                    }),
-                ]),
+            isHover([
+                layout({
+                    opacity: 0.5,
+                    color: 'red',
+                }),
             ]),
-        ]),
+            isHover([
+                layout({
+                    color: 'blue',
+                    display: 'grid',
+                }),
+            ]),
+            rule(':focus', [
+                layout({
+                    background: 'pink',
+                }),
+            ]),
+        ])
+        // rules([
+        //     atGlobal([
+        //         rule('.btn', [
+        //             layout({
+        //                 background: 'gray',
+        //                 // ...nestedRule('foo', [
+        //                 //     layout({
+        //                 //     }),
+        //                 // ]),
+        //             }),
+        //         ]),
+        //     ]),
+        // ]),
     ]),
-    globalDef([
-        keyframes('fade-out', {
-            from: {
-                background: 'red',
-                filter: [[
-                    'opacity(0.5)',
-                    'brightness(85%)',
-                    'contrast(50%)',
-                ]],
-                boxShadow: [
-                    'aaa',
-                    'bbb',
-                    'ccc',
-                ],
-            },
-            to: {
-                background: 'blue',
-            },
-        })
-    ]),
+    // globalDef([
+    //     keyframes('fade-out', {
+    //         from: {
+    //             background: 'red',
+    //             filter: [[
+    //                 'opacity(0.5)',
+    //                 'brightness(85%)',
+    //                 'contrast(50%)',
+    //             ]],
+    //             boxShadow: [
+    //                 'aaa',
+    //                 'bbb',
+    //                 'ccc',
+    //             ],
+    //         },
+    //         to: {
+    //             background: 'blue',
+    //         },
+    //     })
+    // ]),
 ])
 .attach();
 

@@ -255,6 +255,47 @@ const mergeLiteral = (style: Style, newStyle: Style): void => {
         } // if
     } // for
 }
+const mergeNested  = (style: Style): Style => {
+    const groupByNested = (
+        Object.getOwnPropertySymbols(style)
+        // .map((sym) => [sym, sym.description ?? ''] as const)
+        .reduce((accum, sym) => {
+            const nestedSelector = sym.description ?? '';
+            if (
+                // nested rules:
+                nestedSelector.includes('&')
+                ||
+                // conditional rules & globals:
+                ['@media', '@supports', '@document', '@global'].some((at) => nestedSelector.startsWith(at))
+            ) {
+                let group = accum.get(nestedSelector);
+                if (!group) accum.set(nestedSelector, group = []);
+                group.push(sym);
+            } // if
+            return accum;
+    }, new Map<string, symbol[]>()));
+    
+    
+    
+    for (const group of Array.from(groupByNested.values())) {
+        if (group.length <= 1) continue; // filter out groups with single/no member
+        
+        
+        
+        const mergedStyles = mergeStyles(
+            group.map((sym) => style[sym])
+        );
+        
+        
+        
+        style[group[group.length - 1]] = mergedStyles; // merge all member's style to the last member
+        for (const sym of group.slice(0, -1)) delete style[sym]; // delete first member to second last member
+    } // for
+    
+    
+    
+    return style;
+}
 
 // prevents JSS to clone the CSSFN Style (because the symbol props are not copied)
 class MergedStyle {
@@ -294,7 +335,9 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
         
         
         
-        return (new MergedStyle(styleValue) as Style);
+        const mergedStyles: Style = (new MergedStyle(styleValue) as Style);
+        mergeNested(mergedStyles);
+        return mergedStyles;
     } // if
     
     
@@ -325,6 +368,7 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
         // merge current style to single big style (string props + symbol props):
         mergeLiteral(mergedStyles, subStyleValue);
     } // for
+    mergeNested(mergedStyles);
     
     
     

@@ -1,6 +1,7 @@
 urgent priority:
-sync cssfn
+add jss-plugin-keyframes
 sync jss-plugin-** (6)
+sync cssfn
 sync css-config
 sync VisuallyHidden
 sync Basic
