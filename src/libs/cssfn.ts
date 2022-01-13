@@ -66,9 +66,9 @@ export type CssValue                           = undefined | null | BasicCssValu
 export type CustomCssProps                     = { [PropName: Exclude<string, KnownCssPropName>] : CssValue }
 
 export type CssProps                           = KnownCssProps & CustomCssProps
-export type NestedRules                        = { [PropName: symbol] : StyleCollection }
+export type Rule                               = { [PropName: symbol] : StyleCollection }
 
-export type Style                              = CssProps & NestedRules
+export type Style                              = CssProps & Rule
 export type StyleCollection                    = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
 export type ClassName                          = string        // not a really string: [A-Z_a-z-]+
@@ -100,7 +100,7 @@ export type NestedSelector                     = | '&'
                                                  | (`&${Selector}` & {})
                                                  | (`${Selector}&` & {})
 
-export type RuleSource                         = ProductOrFactory<OptionalOrFalse<NestedRules>>
+export type RuleSource                         = ProductOrFactory<OptionalOrFalse<Rule>>
 export type RuleList                           = RuleSource[]
 export type RuleCollection                     = SingleOrArray<RuleSource|RuleList>
 
@@ -385,7 +385,7 @@ const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
     groupSelectors  : true,
     combinator      : '',
 };
-export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): NestedRules => {
+export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): Rule => {
     const {
         groupSelectors = defaultNestedRuleOptions.groupSelectors,
         combinator     = defaultNestedRuleOptions.combinator,
@@ -579,7 +579,7 @@ export interface CombinatorOptions extends NestedRuleOptions {
 const defaultCombinatorOptions : Required<CombinatorOptions> = {
     ...defaultNestedRuleOptions,
 };
-export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): NestedRules => {
+export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): Rule => {
     const combiSelectors : NestedSelector[] = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
@@ -611,7 +611,7 @@ const defaultRuleOptions : Required<RuleOptions> = {
     ...defaultNestedRuleOptions,
     minSpecificityWeight  : 0,
 };
-export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): NestedRules[] => {
+export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): Rule[] => {
     const {
         minSpecificityWeight = defaultRuleOptions.minSpecificityWeight,
     } = options;
@@ -620,12 +620,12 @@ export const rules = (ruleCollection: RuleCollection, options: RuleOptions = def
     
     return (
         (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
-        .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<NestedRules>[] => { // convert: Factory<NestedRules>|NestedRules|RuleList => [NestedRules]|[NestedRules]|[...RuleList] => [NestedRules]
+        .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<Rule>[] => { // convert: Factory<Rule>|Rule|RuleList => [Rule]|[Rule]|[...RuleList] => [Rule]
             if (typeof(ruleSourceList) === 'function') return [ruleSourceList()];
             if (Array.isArray(ruleSourceList)) return ruleSourceList.map((ruleSource) => (typeof(ruleSource) === 'function') ? ruleSource() : ruleSource);
             return [ruleSourceList];
         })
-        .filter((optionalRule): optionalRule is NestedRules => !!optionalRule)
+        .filter((optionalRule): optionalRule is Rule => !!optionalRule)
         .flatMap((rule) => Object.getOwnPropertySymbols(rule).map((sym) => [sym.description ?? '', rule[sym]] as const))
         .map(([selectors, styles]): readonly [NestedSelector[], StyleCollection] => {
             let nestedSelectors = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector): NestedSelector => {
@@ -696,9 +696,9 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 // rule items:
 /**
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
- * @returns A `NestedRules` represents the component's rule.
+ * @returns A `Rule` represents the component's rule.
  */
-export const rule = (selectors: SelectorCollection, styles: StyleCollection): NestedRules => nestedRule(selectors, styles);
+export const rule = (selectors: SelectorCollection, styles: StyleCollection): Rule => nestedRule(selectors, styles);
 // shortcut rule items:
 export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
 export const fontFace          = (styles: StyleCollection) => rule('@font-face'         , styles);
@@ -712,7 +712,7 @@ export const isFirstChild      = (styles: StyleCollection) => rule(     ':first-
 export const isNotFirstChild   = (styles: StyleCollection) => rule(':not(:first-child)' , styles);
 export const isLastChild       = (styles: StyleCollection) => rule(     ':last-child'   , styles);
 export const isNotLastChild    = (styles: StyleCollection) => rule(':not(:last-child)'  , styles);
-export const isNthChild        = (step: number, offset: number, styles: StyleCollection): NestedRules => {
+export const isNthChild        = (step: number, offset: number, styles: StyleCollection): Rule => {
     if (step === 0) { // no step
         if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
@@ -727,7 +727,7 @@ export const isNthChild        = (step: number, offset: number, styles: StyleCol
         return rule(`:nth-child(${step}n+${offset})`, styles);
     } // if
 };
-export const isNotNthChild     = (step: number, offset: number, styles: StyleCollection): NestedRules => {
+export const isNotNthChild     = (step: number, offset: number, styles: StyleCollection): Rule => {
     if (step === 0) { // no step
         // if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
@@ -742,7 +742,7 @@ export const isNotNthChild     = (step: number, offset: number, styles: StyleCol
         return rule(`:not(:nth-child(${step}n+${offset}))`, styles);
     } // if
 };
-export const isNthLastChild    = (step: number, offset: number, styles: StyleCollection): NestedRules => {
+export const isNthLastChild    = (step: number, offset: number, styles: StyleCollection): Rule => {
     if (step === 0) { // no step
         if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
@@ -757,7 +757,7 @@ export const isNthLastChild    = (step: number, offset: number, styles: StyleCol
         return rule(`:nth-last-child(${step}n+${offset})`, styles);
     } // if
 };
-export const isNotNthLastChild = (step: number, offset: number, styles: StyleCollection): NestedRules => {
+export const isNotNthLastChild = (step: number, offset: number, styles: StyleCollection): Rule => {
     if (step === 0) { // no step
         // if (offset === 0) return emptyRule(); // element indices are starting from 1 => never match => return empty style
         
@@ -809,7 +809,7 @@ const flat = <T,>(collection: SingleOrDeepArray<T>): T[] => {
     
     return collection.flat(Infinity);
 };
-export const iif = <T extends CssProps|NestedRules|Style>(condition: boolean, content: T): T => {
+export const iif = <T extends CssProps|Rule|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);
 };
 /**
