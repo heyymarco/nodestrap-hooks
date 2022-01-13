@@ -66,9 +66,9 @@ export type CssValue                           = undefined | null | BasicCssValu
 export type CustomCssProps                     = { [PropName: Exclude<string, KnownCssPropName>] : CssValue }
 
 export type CssProps                           = KnownCssProps & CustomCssProps
-export type NestedProps                        = { [PropName: symbol] : StyleCollection }
+export type NestedRules                        = { [PropName: symbol] : StyleCollection }
 
-export type Style                              = CssProps & NestedProps
+export type Style                              = CssProps & NestedRules
 export type StyleCollection                    = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
 export type ClassName                          = string        // not a really string: [A-Z_a-z-]+
@@ -386,7 +386,7 @@ const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
     groupSelectors  : true,
     combinator      : '',
 };
-export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): NestedProps => {
+export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): NestedRules => {
     const {
         groupSelectors = defaultNestedRuleOptions.groupSelectors,
         combinator     = defaultNestedRuleOptions.combinator,
@@ -580,7 +580,7 @@ export interface CombinatorOptions extends NestedRuleOptions {
 const defaultCombinatorOptions : Required<CombinatorOptions> = {
     ...defaultNestedRuleOptions,
 };
-export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): NestedProps => {
+export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): NestedRules => {
     const combiSelectors : NestedSelector[] = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
@@ -612,7 +612,7 @@ const defaultRuleOptions : Required<RuleOptions> = {
     ...defaultNestedRuleOptions,
     minSpecificityWeight  : 0,
 };
-export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): NestedProps[] => {
+export const rules = (ruleCollection: RuleCollection, options: RuleOptions = defaultRuleOptions): NestedRules[] => {
     const {
         minSpecificityWeight = defaultRuleOptions.minSpecificityWeight,
     } = options;
@@ -918,7 +918,7 @@ const flat = <T,>(collection: SingleOrDeepArray<T>): T[] => {
     
     return collection.flat(Infinity);
 };
-export const iif = <T extends CssProps|NestedProps|Style>(condition: boolean, content: T): T => {
+export const iif = <T extends CssProps|NestedRules|Style>(condition: boolean, content: T): T => {
     return condition ? content : ({} as T);
 };
 /**
