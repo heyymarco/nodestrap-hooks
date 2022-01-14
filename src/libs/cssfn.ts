@@ -584,7 +584,7 @@ const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: numbe
                 nthChildNModel // or use `nth-child(n)`
             )
         ] as SelectorModel)),
-    ];
+    ].filter((selectorModel) => !!selectorModel.length);
     
     
     
