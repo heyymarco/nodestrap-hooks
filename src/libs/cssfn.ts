@@ -381,8 +381,12 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
 
 const nthChildNModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
 const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): Selector => {
-    if (selector === '&')                               return selector; // only parent selector => no change
-    if (!minSpecificityWeight && !maxSpecificityWeight) return selector; // nothing to adjust
+    if (selector === '&') return selector; // only parent selector => no change
+    if (
+        (minSpecificityWeight == null)
+        &&
+        (maxSpecificityWeight == null)
+    ) return selector; // nothing to adjust
     
     
     
@@ -403,7 +407,7 @@ const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: numbe
         
         
         
-        if (maxSpecificityWeight && (specificityWeight > maxSpecificityWeight)) {
+        if ((maxSpecificityWeight !== null) && (specificityWeight > maxSpecificityWeight)) {
             return {
                 cond: GroupCond.TooBig,
                 selectorModel,
@@ -413,7 +417,7 @@ const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: numbe
         
         
         
-        if (minSpecificityWeight && (specificityWeight < minSpecificityWeight)) {
+        if ((minSpecificityWeight !== null) && (specificityWeight < minSpecificityWeight)) {
             return {
                 cond: GroupCond.TooSmall,
                 selectorModel,
