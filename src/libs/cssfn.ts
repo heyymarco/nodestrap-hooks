@@ -696,7 +696,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const ungroupSelectors         = selectorsGroups.filter((group) => (group.cond === GroupCond.Ungroupable    )).map((group) => group.selectorModel);
+    const ungroupableSelectors     = selectorsGroups.filter((group) => (group.cond === GroupCond.Ungroupable    )).map((group) => group.selectorModel);
     const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selectorModel);
     const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selectorModel);
     const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selectorModel);
@@ -706,7 +706,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     const grouped = [
-        // only amp
+        // only parent
         // &
         (onlyParentSelectors.length ? (
             '&'
@@ -714,7 +714,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         
         
-        // amp at beginning
+        // parent at beginning
         // &aaa
         // &:is(aaa, bbb, ccc)
         (onlyBeginParentSelectors.length ? (
@@ -727,7 +727,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         
         
-        // amp at end
+        // parent at end
         // aaa&
         // :is(aaa, bbb, ccc)&
         (onlyEndParentSelectors.length ? (
@@ -740,7 +740,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         
         
-        // amp at random
+        // parent at random
         // a&aa, bb&b, c&c&c
         (randomParentSelectors.length ? (
             randomParentSelectors.join(',')
@@ -748,7 +748,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         
         
-        // amp with combinator
+        // parent with combinator
         // &>aaa
         // &>:is(aaa, bbb, ccc)
         ((!!withCombinator && withCombiSelectors.length) ? (
@@ -763,7 +763,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     return {
-        ...((grouped.length || ungroupSelectors.length) ? {
+        ...((grouped.length || ungroupableSelectors.length) ? {
             [Symbol(
                 [
                     // groupable selectors:
@@ -778,7 +778,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
                     ] : []),
                     
                     // ungroupable selectors:
-                    ...ungroupSelectors
+                    ...ungroupableSelectors
                 ].join(',') // join groupableSelector(s), ungroupableSelector, ungroupableSelector, ...
             )] : styles
         } : {}),
