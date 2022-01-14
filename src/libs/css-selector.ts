@@ -713,20 +713,103 @@ export interface GroupSelectorOptions {
 const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
     selectorName  : 'is',
 };
-export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOptions = defaultGroupSelectorOptions): SimpleSelector => {
+export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOptions = defaultGroupSelectorOptions): SelectorList => {
     const {
         selectorName : targetSelectorName = defaultGroupSelectorOptions.selectorName,
     } = options;
     
     
     
+    const selectorsWithoutPseudoElm = selectors.map((selector) => selector.filter((selectorEntry) => {
+        if (isSimpleSelector(selectorEntry)) {
+            const [
+                /*
+                    selector types:
+                    '&'  = parent         selector
+                    '*'  = universal      selector
+                    '['  = attribute      selector
+                    ''   = element        selector
+                    '#'  = ID             selector
+                    '.'  = class          selector
+                    ':'  = pseudo class   selector
+                    '::' = pseudo element selector
+                */
+                selectorType,
+                
+                /*
+                    selector name:
+                    string = the name of [element, ID, class, pseudo class, pseudo element] selector
+                */
+                // selectorName,
+                
+                /*
+                    selector parameter(s):
+                    string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
+                    array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
+                    SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
+                */
+                // selectorParams,
+            ] = selectorEntry;
+            if (selectorType === '::') return false;
+        } // if
+        
+        
+        
+        return true;
+    }) as Selector) as SelectorList;
+    const selectorsOnlyPseudoElm    = selectors.map((selector) => selector.filter((selectorEntry) => {
+        if (isSimpleSelector(selectorEntry)) {
+            const [
+                /*
+                    selector types:
+                    '&'  = parent         selector
+                    '*'  = universal      selector
+                    '['  = attribute      selector
+                    ''   = element        selector
+                    '#'  = ID             selector
+                    '.'  = class          selector
+                    ':'  = pseudo class   selector
+                    '::' = pseudo element selector
+                */
+                selectorType,
+                
+                /*
+                    selector name:
+                    string = the name of [element, ID, class, pseudo class, pseudo element] selector
+                */
+                // selectorName,
+                
+                /*
+                    selector parameter(s):
+                    string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
+                    array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
+                    SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
+                */
+                // selectorParams,
+            ] = selectorEntry;
+            if (selectorType === '::') return true;
+        } // if
+        
+        
+        
+        return false;
+    }) as Selector) as SelectorList;
+    
+    
+    
     return [
-        ':',
-        targetSelectorName,
-        selectors,
-    ] as SimpleSelector;
+        [
+            [
+                ':',
+                targetSelectorName,
+                selectorsWithoutPseudoElm,
+            ] as SimpleSelector,
+        ] as Selector,
+        
+        ...selectorsOnlyPseudoElm,
+    ] as SelectorList;
 }
-export const groupSelector = (selector: Selector, options: GroupSelectorOptions = defaultGroupSelectorOptions): SimpleSelector => {
+export const groupSelector = (selector: Selector, options: GroupSelectorOptions = defaultGroupSelectorOptions): SelectorList => {
     return groupSelectors([selector], options);
 }
 

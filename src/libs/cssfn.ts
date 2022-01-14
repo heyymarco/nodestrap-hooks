@@ -441,7 +441,7 @@ const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: numbe
     const adjustedSelectorList : SelectorModelList = [
         ...fitSelectorModels.map((group) => group.selectorModel),
         
-        ...tooBigSelectorModels.map((group) => {
+        ...tooBigSelectorModels.flatMap((group) => {
             const reversedSelectorModel = group.selectorModel.reverse(); // reverse & mutate the current `group.selectorModel` array
             
             const { reducedSelectorModel: reversedReducedSelectorModel, remaining: remainingSpecificityWeight } : SelectorAccum = (
@@ -516,17 +516,22 @@ const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: numbe
             
             
             
-            return [
+            const [whereSelectorModel, ...pseudoElmSelectorModels] = groupSelector(
+                reversedReducedSelectorModel.reverse(),
+                { selectorName: 'where' }
+            );
+            whereSelectorModel.unshift(
                 ...reversedSelectorModel.slice(reversedReducedSelectorModel.length).reverse(),
-                groupSelector(
-                    reversedReducedSelectorModel.reverse(),
-                    { selectorName: 'where' }
-                ),
-                
+            );
+            whereSelectorModel.push(
                 ...(new Array<SimpleSelectorModel>((remainingSpecificityWeight < 0) ? -remainingSpecificityWeight : 0)).fill(
                     nthChildNModel // or use `nth-child(n)`
-                )
-            ] as SelectorModel;
+                ),
+            );
+            return [
+                whereSelectorModel,
+                ...pseudoElmSelectorModels,
+            ] as SelectorModelList;
         }),
         
         ...tooSmallSelectorModels.map((group) => ([
