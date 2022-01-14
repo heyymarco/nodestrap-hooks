@@ -38,6 +38,7 @@ import type {
 import {
     // types:
     SimpleSelector as SimpleSelectorModel,
+    SelectorEntry  as SelectorModelEntry,
     Selector       as SelectorModel,
     SelectorList   as SelectorModelList,
     
@@ -47,7 +48,9 @@ import {
     parseSelectors,
     selectorsToString,
     
+    isSimpleSelector,
     calculateSpecificity,
+    simplifySelector,
 }                           from './css-selector'
 
 // others libs:
@@ -376,7 +379,7 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
-const increaseSpecificitySelectorModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
+const nthChildNModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
 export interface NestedRuleOptions {
     groupSelectors ?: boolean
     combinator     ?: string
@@ -403,7 +406,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     const minSpecificityWeight = specificityWeight ?? options.minSpecificityWeight ?? null;
     const maxSpecificityWeight = specificityWeight ?? options.maxSpecificityWeight ?? null;
     const hasSpecificityWeight = !!minSpecificityWeight || !!maxSpecificityWeight;
-    const isSelectorModelExist = (selectorModel: SelectorModel|undefined): selectorModel is SelectorModel => !!selectorModel
     const adjustSpecificityWeight = (selector: Selector): Selector => {
         if (selector === '&')      return selector; // only parent selector => no change
         if (!hasSpecificityWeight) return selector; // nothing to adjust
@@ -416,72 +418,196 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         
         
-        const selectorGroup = selectorList.map((selectorModel: SelectorModel) => {
-            const specificityWeights = calculateSpecificity(selectorModel).map((specificity) => specificity[1]);
+        enum GroupCond {
+            Fit      = 0,
+            TooBig   = 1,
+            TooSmall = 2,
+        }
+        type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel, specificityWeight: number }
+        const selectorGroups = selectorList.flatMap(simplifySelector).map((selectorModel: SelectorModel): SelectorGroup => {
+            const specificityWeight = calculateSpecificity(selectorModel)[1];
             
             
             
-            if ((maxSpecificityWeight === 0) || (maxSpecificityWeight && (specificityWeights.some((specificityWeight) => (specificityWeight > maxSpecificityWeight))))) {
+            if (maxSpecificityWeight && (specificityWeight > maxSpecificityWeight)) {
                 return {
-                    tooBig: selectorModel
-                }
+                    cond: GroupCond.TooBig,
+                    selectorModel,
+                    specificityWeight,
+                };
             } // if
             
             
             
-            if (minSpecificityWeight && (specificityWeights.some((specificityWeight) => (specificityWeight < minSpecificityWeight)))) {
+            if (minSpecificityWeight && (specificityWeight < minSpecificityWeight)) {
                 return {
-                    tooSmall: selectorModel,
-                    specificityWeight : (specificityWeights.length === 1) ? specificityWeights[0] : undefined
-                }
+                    cond: GroupCond.TooSmall,
+                    selectorModel,
+                    specificityWeight,
+                };
             } // if
             
             
             
             return {
-                fit: selectorModel
+                cond: GroupCond.Fit,
+                selectorModel,
+                specificityWeight,
             };
         });
         
         
         
-        const fitSelectorModels      = selectorGroup.map((group) => group.fit   ).filter(isSelectorModelExist);
-        const tooBigSelectorModels   = selectorGroup.map((group) => group.tooBig).filter(isSelectorModelExist);
-        const tooSmallSelectorModels = selectorGroup.map((group) => [group.tooSmall, group.specificityWeight] as const).filter((item): item is [SelectorModel, number|undefined] => isSelectorModelExist(item[0]));
-        const tooSmallSingleSelectorModels = tooSmallSelectorModels.filter((item): item is [SelectorModel, number   ] => !!item[1]);
-        const tooSmallSomeSelectorModels   = tooSmallSelectorModels.filter((item): item is [SelectorModel, undefined] =>  !item[1]).map((item) => item[0]);
+        const fitSelectorModels      = selectorGroups.filter((group) => (group.cond === GroupCond.Fit     ));
+        const tooBigSelectorModels   = selectorGroups.filter((group) => (group.cond === GroupCond.TooBig  ));
+        const tooSmallSelectorModels = selectorGroups.filter((group) => (group.cond === GroupCond.TooSmall));
         
         
+        
+        type SelectorAccum = { remaining: number, reducedSelectorModel: SelectorModel }
         const adjustedSelectorList : SelectorModelList = [
-            ...fitSelectorModels,
+            ...fitSelectorModels.map((group) => group.selectorModel),
             
-            ...(tooBigSelectorModels.length ? ([
-                [
+            ...tooBigSelectorModels.map((group) => {
+                const reversedSelectorModel = group.selectorModel.reverse(); // reverse & mutate the current `group.selectorModel` array
+                
+                const { reducedSelectorModel: reversedReducedSelectorModel, remaining: remainingSpecificityWeight } : SelectorAccum = (
+                    reversedSelectorModel.slice(0) // clone the `reversedSelectorModel` because the `reduce()` uses `splice()` to break the iteration
+                    .reduce((accum, selectorEntry, index, array): SelectorAccum => {
+                        if (accum.remaining <= 0) {
+                            array.splice(1); // eject early by mutating iterated copy - it's okay to **mutate** the `array` because it already cloned at `slice(0)`
+                            return accum;
+                        } // if
+                        
+                        
+                        
+                        if (isSimpleSelector(selectorEntry)) {
+                            const [
+                                /*
+                                    selector types:
+                                    '&'  = parent         selector
+                                    '*'  = universal      selector
+                                    '['  = attribute      selector
+                                    ''   = element        selector
+                                    '#'  = ID             selector
+                                    '.'  = class          selector
+                                    ':'  = pseudo class   selector
+                                    '::' = pseudo element selector
+                                */
+                                selectorType,
+                                
+                                /*
+                                    selector name:
+                                    string = the name of [element, ID, class, pseudo class, pseudo element] selector
+                                */
+                                selectorName,
+                                
+                                /*
+                                    selector parameter(s):
+                                    string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
+                                    array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
+                                    SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
+                                */
+                                // selectorParams,
+                            ] = selectorEntry;
+                            if (selectorType === ':') {
+                                switch (selectorName) {
+                                    case 'is':
+                                    case 'not':
+                                    case 'has':
+                                        const specificityWeight = calculateSpecificity([selectorEntry])[1];
+                                        accum.remaining -= specificityWeight; // reduce the counter
+                                        break;
+                                    
+                                    case 'where':
+                                        break; // don't reduce the counter
+                                    
+                                    default:
+                                        accum.remaining--; // reduce the counter
+                                } // switch
+                            }
+                            else if (['.', '[',].includes(selectorType)) {
+                                accum.remaining--; // reduce the counter
+                            } // if
+                        } // if
+                        
+                        
+                        
+                        accum.reducedSelectorModel.push(selectorEntry);
+                        return accum;
+                    }, ({
+                        remaining            : (group.specificityWeight - (maxSpecificityWeight ?? group.specificityWeight)),
+                        reducedSelectorModel : [],
+                    } as SelectorAccum))
+                );
+                
+                
+                
+                return [
+                    ...reversedSelectorModel.slice(reversedReducedSelectorModel.length).reverse(),
                     [
-                        ':',                 // PseudoClassSelector
-                        'where',             // SelectorName
-                        tooBigSelectorModels // SelectorModelList
+                        ':',
+                        'where',
+                        [
+                            reversedReducedSelectorModel.reverse(),
+                        ] as SelectorModelList
                     ] as SimpleSelectorModel,
                     
-                    ...(new Array<SimpleSelectorModel>(minSpecificityWeight ?? 1)).fill(increaseSpecificitySelectorModel)
-                ] as SelectorModel
-            ] as SelectorModelList) : []),
+                    ...(new Array<SimpleSelectorModel>((remainingSpecificityWeight < 0) ? -remainingSpecificityWeight : 0)).fill(
+                        nthChildNModel // or use `nth-child(n)`
+                    )
+                ] as SelectorModel;
+            }),
             
-            ...(tooSmallSomeSelectorModels.length ? ([
-                [
-                    [
-                        ':',                       // PseudoClassSelector
-                        'where',                   // SelectorName
-                        tooSmallSomeSelectorModels // SelectorModelList
-                    ] as SimpleSelectorModel,
-                    
-                    ...(new Array<SimpleSelectorModel>(minSpecificityWeight ?? 1)).fill(increaseSpecificitySelectorModel)
-                ] as SelectorModel
-            ] as SelectorModelList) : []),
-            
-            ...tooSmallSingleSelectorModels.map((item) => ([
-                ...item[0], // SelectorEntry...SelectorEntry...SelectorEntry
-                ...(new Array<SimpleSelectorModel>((minSpecificityWeight ?? 1) - item[1])).fill(increaseSpecificitySelectorModel)
+            ...tooSmallSelectorModels.map((group) => ([
+                ...group.selectorModel,
+                ...(new Array<SimpleSelectorModel>((minSpecificityWeight ?? 1) - group.specificityWeight)).fill(
+                    group.selectorModel
+                    .filter(isSimpleSelector)
+                    .filter((simpleSelector) => { // only interested to class selector -or- pseudo class selector without parameters
+                        const [
+                            /*
+                                selector types:
+                                '&'  = parent         selector
+                                '*'  = universal      selector
+                                '['  = attribute      selector
+                                ''   = element        selector
+                                '#'  = ID             selector
+                                '.'  = class          selector
+                                ':'  = pseudo class   selector
+                                '::' = pseudo element selector
+                            */
+                            selectorType,
+                            
+                            /*
+                                selector name:
+                                string = the name of [element, ID, class, pseudo class, pseudo element] selector
+                            */
+                            // selectorName,
+                            
+                            /*
+                                selector parameter(s):
+                                string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
+                                array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
+                                SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
+                            */
+                            selectorParams,
+                        ] = simpleSelector;
+                        
+                        return (
+                            (selectorType === '.')
+                            ||
+                            (
+                                (selectorType === ':')
+                                &&
+                                (selectorParams === undefined)
+                            )
+                        );
+                    })
+                    .pop()         // repeats the last selector until minSpecificityWeight satisfied
+                    ??
+                    nthChildNModel // or use `nth-child(n)`
+                )
             ] as SelectorModel)),
         ];
         
