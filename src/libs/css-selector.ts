@@ -602,11 +602,11 @@ export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelecto
 
 
 export type Specificity = [number, number, number];
-export const calculateSpecificity = (selector: Selector): Specificity[] => {
+export const calculateSpecificity = (selector: Selector): Specificity => {
     return (
         selector
         .filter(isSimpleSelector)
-        .reduce((accums, simpleSelector, index, array): Specificity[] => {
+        .reduce((accum, simpleSelector, index, array): Specificity => {
             const [
                 /*
                     selector types:
@@ -643,26 +643,28 @@ export const calculateSpecificity = (selector: Selector): Specificity[] => {
                     case 'is':
                     case 'not':
                     case 'has': {
-                        if (!selectorParams || !isSelectors(selectorParams)) return accums; // no changes
-                        const moreSpecificities   = selectorParams.flatMap((selectorParam) => calculateSpecificity(selectorParam));
-                        const uniqueSpecificities = moreSpecificities.filter((specificity, index) =>
-                            (moreSpecificities.findIndex((test) =>
-                                (specificity[0] === test[0])
-                                &&
-                                (specificity[1] === test[1])
-                                &&
-                                (specificity[2] === test[2])
-                            ) === index)
-                        );
-                        return accums.flatMap((accum) => uniqueSpecificities.map((unique): Specificity => [
-                            accum[0] + unique[0],
-                            accum[1] + unique[1],
-                            accum[2] + unique[2]
-                        ]));
+                        if (!selectorParams || !isSelectors(selectorParams)) return accum; // no changes
+                        const moreSpecificities = selectorParams.map((selectorParam) => calculateSpecificity(selectorParam));
+                        const maxSpecificity    = moreSpecificities.reduce((accum, current): Specificity => {
+                            if (
+                                (current[0] > accum[0])
+                                ||
+                                (current[1] > accum[1])
+                                ||
+                                (current[2] > accum[2])
+                            ) return current;
+                            
+                            return accum;
+                        }, ([0,0,0] as Specificity));
+                        return [
+                            accum[0] + maxSpecificity[0],
+                            accum[1] + maxSpecificity[1],
+                            accum[2] + maxSpecificity[2]
+                        ] as Specificity;
                     }
                     
                     case 'where':
-                        return accums; // no changes
+                        return accum; // no changes
                 } // switch
             } // if
             
@@ -670,35 +672,89 @@ export const calculateSpecificity = (selector: Selector): Specificity[] => {
             
             switch(selectorType) {
                 case '#' : // ID selector
-                    array.splice(1); // eject early by mutating iterated copy
-                    return accums.map((accum): Specificity => [
+                    array.splice(1); // eject early by mutating iterated copy - it's okay to **mutate** the `array` because it already cloned at `filter(isSimpleSelector)`
+                    return [
                         accum[0] + 1,
                         accum[1],
                         accum[2]
-                    ]);
+                    ] as Specificity;
                 
                 case '.' : // class selector
                 case '[' : // attribute selector
                 case ':' : // pseudo class selector
-                    return accums.map((accum): Specificity => [
+                    return [
                         accum[0],
                         accum[1] + 1,
                         accum[2]
-                    ]);
+                    ] as Specificity;
                 
                 case ''  : // element selector
                 case '::': // pseudo element selector
-                    return accums.map((accum): Specificity => [
+                    return  [
                         accum[0],
                         accum[1],
                         accum[2] + 1
-                    ]);
+                    ] as Specificity;
                 
                 case '&' : // parent selector
                 case '*' : // universal selector
                 default:
-                    return accums; // no changes
+                    return accum; // no changes
             } // switch
-        }, [([0,0,0] as Specificity)])
+        }, ([0,0,0] as Specificity))
     );
+}
+
+
+
+export const simplifySelector = (selector: Selector): SelectorList => {
+    if (selector.length === 1) {
+        const selectorEntry = selector[0];
+        if (isSimpleSelector(selectorEntry)) {
+            const [
+                /*
+                    selector types:
+                    '&'  = parent         selector
+                    '*'  = universal      selector
+                    '['  = attribute      selector
+                    ''   = element        selector
+                    '#'  = ID             selector
+                    '.'  = class          selector
+                    ':'  = pseudo class   selector
+                    '::' = pseudo element selector
+                */
+                selectorType,
+                
+                /*
+                    selector name:
+                    string = the name of [element, ID, class, pseudo class, pseudo element] selector
+                */
+                selectorName,
+                
+                /*
+                    selector parameter(s):
+                    string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
+                    array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
+                    SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
+                */
+                selectorParams,
+            ] = selectorEntry;
+            if (
+                (selectorType === ':')
+                &&
+                selectorName && ['is', 'where'].includes(selectorName)
+                &&
+                selectorParams && isSelectors(selectorParams)
+            ) {
+                return simplifySelectors(selectorParams); // recursively simplify sub-selectors
+            } // if
+        } // if
+    } // if
+    
+    
+    
+    return [selector]; // no changes
+}
+export const simplifySelectors = (selectors: SelectorList): SelectorList => {
+    return selectors.flatMap(simplifySelector);
 }
