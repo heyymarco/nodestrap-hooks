@@ -379,6 +379,7 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
+const nthChildNModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
 const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): Selector => {
     if (selector === '&')                               return selector; // only parent selector => no change
     if (!minSpecificityWeight && !maxSpecificityWeight) return selector; // nothing to adjust
@@ -592,7 +593,6 @@ const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: numbe
     return selectorsToString(adjustedSelectorList);
 };
 
-const nthChildNModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
 export interface NestedRuleOptions {
     groupSelectors ?: boolean
     combinator     ?: string
@@ -659,42 +659,52 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const withCombinator = combinator ? `&${combinator}` : null;
-    const selectorsGroups = nestedSelectors.map((nestedSelector) => {
-        const ungroupable  = (/::[\w0-9-_]+$/gi).test(nestedSelector); // ::pseudo-elements are ungroupable by :is(...)
-        if (ungroupable)  return { ungroup: nestedSelector };
+    enum GroupCond {
+        Ungroupable     = 0,
         
-        const withCombi    = !!withCombinator && nestedSelector.startsWith(withCombinator);
-        if (withCombi)    return { withCombi: nestedSelector };
+        WithCombinator  = 1,
         
-        const onlyAmp      = (nestedSelector === '&');
-        if (onlyAmp)      return { amp: nestedSelector };
+        OnlyParent      = 2,
+        OnlyBeginParent = 3,
+        OnlyEndParent   = 4,
+        RandomParent    = 5,
+    }
+    type SelectorGroup = { cond: GroupCond, selectorModel: Selector }
+    const withCombinator  = combinator ? `&${combinator}` : null;
+    const selectorsGroups = nestedSelectors.map((nestedSelector): SelectorGroup => {
+        const ungroupable     = (/::[\w0-9-_]+$/gi).test(nestedSelector); // ::pseudo-elements are ungroupable by :is(...)
+        if (ungroupable)      return { cond: GroupCond.Ungroupable    , selectorModel: nestedSelector };
         
-        const onlyBeginAmp = !onlyAmp && (nestedSelector.lastIndexOf('&') === 0);
-        if (onlyBeginAmp) return { begAmp: nestedSelector };
+        const withCombi       = !!withCombinator && nestedSelector.startsWith(withCombinator);
+        if (withCombi)        return { cond: GroupCond.WithCombinator , selectorModel: nestedSelector };
         
-        const onlyEndAmp   = !onlyAmp && (nestedSelector.indexOf('&') === (nestedSelector.length - 1));
-        if (onlyEndAmp)   return { endAmp: nestedSelector };
+        const onlyParent      = (nestedSelector === '&');
+        if (onlyParent)       return { cond: GroupCond.OnlyParent     , selectorModel: nestedSelector };
         
-        return { other: nestedSelector };
+        const onlyBeginParent = !onlyParent && (nestedSelector.lastIndexOf('&') === 0);
+        if (onlyBeginParent)  return { cond: GroupCond.OnlyBeginParent, selectorModel: nestedSelector };
+        
+        const onlyEndParent   = !onlyParent && (nestedSelector.indexOf('&') === (nestedSelector.length - 1));
+        if (onlyEndParent)    return { cond: GroupCond.OnlyEndParent  , selectorModel: nestedSelector };
+        
+        /* ............... */ return { cond: GroupCond.RandomParent   , selectorModel: nestedSelector };
     });
     
     
     
-    const isExist            = (nestedSelector: Selector|undefined): nestedSelector is string => !!nestedSelector
-    const ungroupSelectors   = selectorsGroups.map((group) => group.ungroup  ).filter(isExist);
-    const withCombiSelectors = selectorsGroups.map((group) => group.withCombi).filter(isExist);
-    const ampSelectors       = selectorsGroups.map((group) => group.amp      ).filter(isExist);
-    const begAmpSelectors    = selectorsGroups.map((group) => group.begAmp   ).filter(isExist);
-    const endAmpSelectors    = selectorsGroups.map((group) => group.endAmp   ).filter(isExist);
-    const rndAmpSelectors    = selectorsGroups.map((group) => group.other    ).filter(isExist);
+    const ungroupSelectors         = selectorsGroups.filter((group) => (group.cond === GroupCond.Ungroupable    )).map((group) => group.selectorModel);
+    const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selectorModel);
+    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selectorModel);
+    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selectorModel);
+    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selectorModel);
+    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selectorModel);
     
     
     
     const grouped = [
         // only amp
         // &
-        (ampSelectors.length ? (
+        (onlyParentSelectors.length ? (
             '&'
         ) : null),
         
@@ -703,12 +713,12 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // amp at beginning
         // &aaa
         // &:is(aaa, bbb, ccc)
-        (begAmpSelectors.length ? (
-            (begAmpSelectors.length === 1)
+        (onlyBeginParentSelectors.length ? (
+            (onlyBeginParentSelectors.length === 1)
             ?
-            begAmpSelectors[0]
+            onlyBeginParentSelectors[0]
             :
-            `&:is(${begAmpSelectors.map((nestedSelector) => nestedSelector.slice(1)).join(',')})`
+            `&:is(${onlyBeginParentSelectors.map((nestedSelector) => nestedSelector.slice(1)).join(',')})`
         ) : null),
         
         
@@ -716,20 +726,20 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // amp at end
         // aaa&
         // :is(aaa, bbb, ccc)&
-        (endAmpSelectors.length ? (
-            (endAmpSelectors.length === 1)
+        (onlyEndParentSelectors.length ? (
+            (onlyEndParentSelectors.length === 1)
             ?
-            endAmpSelectors[0]
+            onlyEndParentSelectors[0]
             :
-            `:is(${endAmpSelectors.map((nestedSelector) => nestedSelector.slice(0, -1)).join(',')})&`
+            `:is(${onlyEndParentSelectors.map((nestedSelector) => nestedSelector.slice(0, -1)).join(',')})&`
         ) : null),
         
         
         
         // amp at random
         // a&aa, bb&b, c&c&c
-        (rndAmpSelectors.length ? (
-            rndAmpSelectors.join(',')
+        (randomParentSelectors.length ? (
+            randomParentSelectors.join(',')
         ) : null),
         
         
