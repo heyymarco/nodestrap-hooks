@@ -535,6 +535,7 @@ export const selectorToString = (selector: Selector): string => {
 export const selectorsToString = (selectors: SelectorList): string => {
     return (
         selectors
+        .filter((selector) => selector.length) // remove empty selector(s)
         .map(selectorToString)
         .join(', ')
     );
