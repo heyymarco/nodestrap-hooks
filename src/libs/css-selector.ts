@@ -707,7 +707,43 @@ export const calculateSpecificity = (selector: Selector): Specificity => {
 
 
 
-export const simplifySelector = (selector: Selector): SelectorList => {
+export interface GroupSelectorOptions {
+    selectorName ?: SelectorName | ('is'|'not'|'has'|'where'),
+}
+const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
+    selectorName  : 'is',
+};
+export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOptions = defaultGroupSelectorOptions): SimpleSelector => {
+    const {
+        selectorName : targetSelectorName = defaultGroupSelectorOptions.selectorName,
+    } = options;
+    
+    
+    
+    return [
+        ':',
+        targetSelectorName,
+        selectors,
+    ] as SimpleSelector;
+}
+export const groupSelector = (selector: Selector, options: GroupSelectorOptions = defaultGroupSelectorOptions): SimpleSelector => {
+    return groupSelectors([selector], options);
+}
+
+
+export interface UngroupSelectorOptions {
+    selectorName ?: SelectorName[] & ('is'|'not'|'has'|'where')[],
+}
+const defaultUngroupSelectorOptions : Required<UngroupSelectorOptions> = {
+    selectorName  : ['is', 'where'],
+};
+export const ungroupSelector = (selector: Selector, options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
+    const {
+        selectorName : targetSelectorName = defaultUngroupSelectorOptions.selectorName,
+    } = options;
+    
+    
+    
     if (selector.length === 1) {
         const selectorEntry = selector[0];
         if (isSimpleSelector(selectorEntry)) {
@@ -742,11 +778,11 @@ export const simplifySelector = (selector: Selector): SelectorList => {
             if (
                 (selectorType === ':')
                 &&
-                selectorName && ['is', 'where'].includes(selectorName)
+                selectorName && targetSelectorName.includes(selectorName)
                 &&
                 selectorParams && isSelectors(selectorParams)
             ) {
-                return simplifySelectors(selectorParams); // recursively simplify sub-selectors
+                return ungroupSelectors(selectorParams); // recursively ungroup sub-selectors
             } // if
         } // if
     } // if
@@ -755,6 +791,6 @@ export const simplifySelector = (selector: Selector): SelectorList => {
     
     return [selector]; // no changes
 }
-export const simplifySelectors = (selectors: SelectorList): SelectorList => {
-    return selectors.flatMap(simplifySelector);
+export const ungroupSelectors = (selectors: SelectorList, options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
+    return selectors.flatMap((selector) => ungroupSelector(selector, options));
 }
