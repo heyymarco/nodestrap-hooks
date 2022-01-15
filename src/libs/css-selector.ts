@@ -5,45 +5,45 @@ import type {
 
 
 
-export type ParentSelector        = '&'
-export type UniversalSelector     = '*'
-export type UnnamedSelector       = ParentSelector | UniversalSelector
+export type ParentSelectorToken        = '&'
+export type UniversalSelectorToken     = '*'
+export type UnnamedSelectorToken       = ParentSelectorToken | UniversalSelectorToken
 
-export type AttrSelector          = '['
+export type AttrSelectorToken          = '['
 
-export type ElementSelector       = ''
-export type IdSelector            = '#'
-export type ClassSelector         = '.'
-export type PseudoClassSelector   = ':'
-export type PseudoElementSelector = '::'
-export type NamedSelector         = ElementSelector | IdSelector | ClassSelector | PseudoClassSelector | PseudoElementSelector
+export type ElementSelectorToken       = ''
+export type IdSelectorToken            = '#'
+export type ClassSelectorToken         = '.'
+export type PseudoClassSelectorToken   = ':'
+export type PseudoElementSelectorToken = '::'
+export type NamedSelectorToken         = ElementSelectorToken | IdSelectorToken | ClassSelectorToken | PseudoClassSelectorToken | PseudoElementSelectorToken
 
-export type SelectorToken         = UnnamedSelector | AttrSelector | NamedSelector
-export type SelectorName          = string & {}
+export type SelectorToken              = UnnamedSelectorToken | AttrSelectorToken | NamedSelectorToken
+export type SelectorName               = string & {}
 
-export type AttrSelectorName      = string & {}
-export type AttrSelectorOperator  = '=' | '~=' | '|=' | '^=' | '$=' | '*='
-export type AttrSelectorValue     = string & {}
-export type AttrSelectorOptions   = 'i' | 'I' | 's' | 'S'
-export type AttrSelectorParams    = | readonly [AttrSelectorName                                                              ]
-                                    | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue                     ]
-                                    | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions]
+export type AttrSelectorName           = string & {}
+export type AttrSelectorOperator       = '=' | '~=' | '|=' | '^=' | '$=' | '*='
+export type AttrSelectorValue          = string & {}
+export type AttrSelectorOptions        = 'i' | 'I' | 's' | 'S'
+export type AttrSelectorParams         = | readonly [AttrSelectorName                                                              ]
+                                         | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue                     ]
+                                         | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions]
 
-export type SelectorParams        = AttrSelectorParams | SelectorList | string
-export type SimpleSelector        = | readonly [UnnamedSelector            /* no_name */  /* no_param */                             ]
-                                    | readonly [AttrSelector        , null /* no_name */, AttrSelectorParams                         ]
-                                    | readonly [NamedSelector       , SelectorName        /* no_param */                             ]
-                                    | readonly [PseudoClassSelector , SelectorName      , Exclude<SelectorParams, AttrSelectorParams>]
+export type SelectorParams             = AttrSelectorParams | SelectorList | string
+export type SimpleSelector             = | readonly [UnnamedSelectorToken            /* no_name */  /* no_param */                             ]
+                                         | readonly [AttrSelectorToken        , null /* no_name */, AttrSelectorParams                         ]
+                                         | readonly [NamedSelectorToken       , SelectorName        /* no_param */                             ]
+                                         | readonly [PseudoClassSelectorToken , SelectorName      , Exclude<SelectorParams, AttrSelectorParams>]
 
-export type DescendantCombinator  = ' '
-export type ChildCombinator       = '>'
-export type SiblingCombinator     = '~'
-export type NextSiblingCombinator = '+'
-export type Combinator            = DescendantCombinator | ChildCombinator | SiblingCombinator | NextSiblingCombinator
+export type DescendantCombinator       = ' '
+export type ChildCombinator            = '>'
+export type SiblingCombinator          = '~'
+export type NextSiblingCombinator      = '+'
+export type Combinator                 = DescendantCombinator | ChildCombinator | SiblingCombinator | NextSiblingCombinator
 
-export type SelectorEntry         = SimpleSelector | Combinator
-export type Selector              = SelectorEntry[]
-export type SelectorList          = Selector[]
+export type SelectorEntry              = SimpleSelector | Combinator
+export type Selector                   = SelectorEntry[]
+export type SelectorList               = Selector[]
 
 
 
@@ -68,20 +68,20 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const parseSelectorToken = (): SelectorToken|null => {
         const char = expression[pos];
         switch (char) {
-            case '&': // ParentSelector
-            case '*': // UniversalSelector
-            case '[': // AttrSelector
-            case '#': // IdSelector
-            case '.': // ClassSelector
+            case '&': // ParentSelectorToken
+            case '*': // UniversalSelectorToken
+            case '[': // AttrSelectorToken
+            case '#': // IdSelectorToken
+            case '.': // ClassSelectorToken
                 pos++; return char;
             
             case ':':
                 pos++;
-                if (expression[pos] === ':') { pos++; return '::'; } // PseudoElementSelector
-                return ':'; // PseudoClassSelector
+                if (expression[pos] === ':') { pos++; return '::'; } // PseudoElementSelectorToken
+                return ':'; // PseudoClassSelectorToken
             
             default:
-                if (isValidIdentifierChar()) return ''; // ElementSelector
+                if (isValidIdentifierChar()) return ''; // ElementSelectorToken
                 return null; // unknown expression => return null
         } // switch
     };
@@ -117,12 +117,12 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         const token = parseSelectorToken();
         if (token === null) return null; // syntax error: missing token => no changes made & return null
         
-        if ((token === '&') || (token === '*')) { // UnnamedSelector
+        if ((token === '&') || (token === '*')) { // UnnamedSelectorToken
             return [
                 token,
             ];
         }
-        else if (token === '[') { // AttrSelector
+        else if (token === '[') { // AttrSelectorToken
             const attrSelectorParams = parseAttrSelectorParams();
             if (!attrSelectorParams) { pos = originPos; return null; } // syntax error: missing attrSelectorParams => revert changes & return null
             
@@ -132,7 +132,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
                 attrSelectorParams,
             ];
         }
-        else { // NamedSelector
+        else { // NamedSelectorToken
             const name = parseIdentifierName();
             if (!name) { pos = originPos; return null; } // syntax error: missing name => revert changes & return null
             
@@ -142,7 +142,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
                     name,
                 ];
             }
-            else { // PseudoClassSelector
+            else { // PseudoClassSelectorToken
                 if (specialPseudoClassList.includes(name)) {
                     const selectorParams = parseSelectorParams();
                     if (!selectorParams) { pos = originPos; return null; } // syntax error: missing selectorParams => revert changes & return null
@@ -529,7 +529,7 @@ export const selectorToString  = (selector: Selector): string => {
                 selectorParams,
             ] = selectorEntry; // isSimpleSelector(selectorEntry)
             
-            if (selectorToken === '[') { // AttrSelector
+            if (selectorToken === '[') { // AttrSelectorToken
                 return selectorParamsToString(selectorParams);
             }
             else {
