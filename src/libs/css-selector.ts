@@ -677,6 +677,10 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
     
     
     
+    if (!selectors.length) return []; // empty selectors => nothing to group => return empty SelectorList
+    
+    
+    
     const selectorsWithoutPseudoElm = selectors.map((selector) => selector.filter(isNotPseudoElementSelector));
     const selectorsOnlyPseudoElm    = selectors.map((selector) => selector.filter(isPseudoElementSelector));
     
