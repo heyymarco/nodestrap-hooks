@@ -476,7 +476,7 @@ export const isSelectors          = (selectorParams: SelectorParams): selectorPa
         (typeof(selectorParams[0]) !== 'string') // SelectorList : the first element (Selector) must be a NON-string or undefined
     );
 };
-const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): string => {
+const selectorParamsToString      = (selectorParams: SelectorParams|null|undefined): string => {
     if ((selectorParams === null) || (selectorParams === undefined)) return '';
     
     if (isWildParams(selectorParams)) {
@@ -511,13 +511,13 @@ const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): 
 
 
 
-export const isCombinator     = (selectorEntry: SelectorEntry): selectorEntry is Combinator => {
+export const isCombinator      = (selectorEntry: SelectorEntry): selectorEntry is Combinator => {
     return (typeof(selectorEntry) === 'string');
 };
-export const isSimpleSelector = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => {
+export const isSimpleSelector  = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => {
     return (typeof(selectorEntry) !== 'string');
 };
-export const selectorToString = (selector: Selector): string => {
+export const selectorToString  = (selector: Selector): string => {
     return (
         selector
         .map((selectorEntry): string => {
@@ -613,7 +613,7 @@ export type Specificity = [number, number, number];
 export const calculateSpecificity = (selector: Selector): Specificity => {
     return (
         selector
-        .filter(isSimpleSelector)
+        .filter(isSimpleSelector) // filter out Combinator(s)
         .reduce((accum, simpleSelector, index, array): Specificity => {
             const [
                 /*
@@ -728,80 +728,8 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
     
     
     
-    const selectorsWithoutPseudoElm = selectors.map((selector) => selector.filter((selectorEntry) => {
-        if (isSimpleSelector(selectorEntry)) {
-            const [
-                /*
-                    selector types:
-                    '&'  = parent         selector
-                    '*'  = universal      selector
-                    '['  = attribute      selector
-                    ''   = element        selector
-                    '#'  = ID             selector
-                    '.'  = class          selector
-                    ':'  = pseudo class   selector
-                    '::' = pseudo element selector
-                */
-                selectorType,
-                
-                /*
-                    selector name:
-                    string = the name of [element, ID, class, pseudo class, pseudo element] selector
-                */
-                // selectorName,
-                
-                /*
-                    selector parameter(s):
-                    string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
-                    array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
-                    SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
-                */
-                // selectorParams,
-            ] = selectorEntry;
-            if (selectorType === '::') return false;
-        } // if
-        
-        
-        
-        return true;
-    }) as Selector) as SelectorList;
-    const selectorsOnlyPseudoElm    = selectors.map((selector) => selector.filter((selectorEntry) => {
-        if (isSimpleSelector(selectorEntry)) {
-            const [
-                /*
-                    selector types:
-                    '&'  = parent         selector
-                    '*'  = universal      selector
-                    '['  = attribute      selector
-                    ''   = element        selector
-                    '#'  = ID             selector
-                    '.'  = class          selector
-                    ':'  = pseudo class   selector
-                    '::' = pseudo element selector
-                */
-                selectorType,
-                
-                /*
-                    selector name:
-                    string = the name of [element, ID, class, pseudo class, pseudo element] selector
-                */
-                // selectorName,
-                
-                /*
-                    selector parameter(s):
-                    string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
-                    array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
-                    SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
-                */
-                // selectorParams,
-            ] = selectorEntry;
-            if (selectorType === '::') return true;
-        } // if
-        
-        
-        
-        return false;
-    }) as Selector) as SelectorList;
+    const selectorsWithoutPseudoElm = selectors.map((selector) => selector.filter(isNotPseudoElementSelector));
+    const selectorsOnlyPseudoElm    = selectors.map((selector) => selector.filter(isPseudoElementSelector));
     
     
     
@@ -836,7 +764,7 @@ export const ungroupSelector = (selector: Selector, options: UngroupSelectorOpti
     
     if (selector.length === 1) {
         const selectorEntry = selector[0];
-        if (isSimpleSelector(selectorEntry)) {
+        if (isPseudoClassSelector(selectorEntry)) {
             const [
                 /*
                     selector types:
@@ -849,7 +777,8 @@ export const ungroupSelector = (selector: Selector, options: UngroupSelectorOpti
                     ':'  = pseudo class   selector
                     '::' = pseudo element selector
                 */
-                selectorType,
+                // selectorType
+                ,
                 
                 /*
                     selector name:
@@ -866,13 +795,11 @@ export const ungroupSelector = (selector: Selector, options: UngroupSelectorOpti
                 selectorParams,
             ] = selectorEntry;
             if (
-                (selectorType === ':')
-                &&
                 selectorName && targetSelectorName.includes(selectorName)
                 &&
                 selectorParams && isSelectors(selectorParams)
             ) {
-                return ungroupSelectors(selectorParams); // recursively ungroup sub-selectors
+                return ungroupSelectors(selectorParams, options); // recursively ungroup sub-selectors
             } // if
         } // if
     } // if
@@ -911,3 +838,15 @@ export const isPseudoElementSelectorOf          = (selectorEntry: SelectorEntry,
 export const isElementOrPseudoElementSelectorOf = (selectorEntry: SelectorEntry, elmName   : SingleOrArray<string>)     : boolean => isElementOrPseudoElementSelector(selectorEntry) && [elmName   ].flat().includes(selectorEntry?.[0]);
 
 export const isCombinatorOf                     = (selectorEntry: SelectorEntry, combinator: SingleOrArray<Combinator>) : boolean => isCombinator(selectorEntry)                     && [combinator].flat().includes(selectorEntry);
+
+
+export const isNotParentSelector                   = (selectorEntry: SelectorEntry) => !isParentSelector(selectorEntry);
+export const isNotUniversalSelector                = (selectorEntry: SelectorEntry) => !isUniversalSelector(selectorEntry);
+export const isNotAttrSelector                     = (selectorEntry: SelectorEntry) => !isAttrSelector(selectorEntry);
+export const isNotElementSelector                  = (selectorEntry: SelectorEntry) => !isElementSelector(selectorEntry);
+export const isNotIdSelector                       = (selectorEntry: SelectorEntry) => !isIdSelector(selectorEntry);
+export const isNotClassSelector                    = (selectorEntry: SelectorEntry) => !isClassSelector(selectorEntry);
+export const isNotPseudoClassSelector              = (selectorEntry: SelectorEntry) => !isPseudoClassSelector(selectorEntry);
+export const isNotClassOrPseudoClassSelector       = (selectorEntry: SelectorEntry) => !isClassOrPseudoClassSelector(selectorEntry);
+export const isNotPseudoElementSelector            = (selectorEntry: SelectorEntry) => !isPseudoElementSelector(selectorEntry);
+export const isNotElementOrPseudoElementSelector   = (selectorEntry: SelectorEntry) => !isElementOrPseudoElementSelector(selectorEntry);
