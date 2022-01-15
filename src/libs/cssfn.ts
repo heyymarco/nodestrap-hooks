@@ -417,10 +417,10 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
     
     
     
-    enum GroupCond {
-        Fit      = 0,
-        TooBig   = 1,
-        TooSmall = 2,
+    const enum GroupCond {
+        Fit,
+        TooBig,
+        TooSmall,
     }
     type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel, specificityWeight: number }
     const selectorGroups = selectorList.flatMap((selector) => ungroupSelector(selector)).map((selectorModel: SelectorModel): SelectorGroup => {
@@ -690,15 +690,15 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    enum GroupCond {
-        Ungroupable     = 0,
+    const enum GroupCond {
+        Ungroupable,
         
-        WithCombinator  = 1,
+        WithCombinator,
         
-        OnlyParent      = 2,
-        OnlyBeginParent = 3,
-        OnlyEndParent   = 4,
-        RandomParent    = 5,
+        OnlyParent,
+        OnlyBeginParent,
+        OnlyEndParent,
+        RandomParent,
     }
     type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel }
     const withCombinator  = combinator ? `&${combinator}` : null;
