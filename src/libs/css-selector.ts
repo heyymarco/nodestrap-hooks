@@ -814,7 +814,6 @@ export const groupSelector = (selector: Selector, options: GroupSelectorOptions 
     return groupSelectors([selector], options);
 }
 
-
 export interface UngroupSelectorOptions {
     selectorName ?: SelectorName[] & ('is'|'not'|'has'|'where')[],
 }
@@ -877,4 +876,42 @@ export const ungroupSelector = (selector: Selector, options: UngroupSelectorOpti
 }
 export const ungroupSelectors = (selectors: SelectorList, options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
     return selectors.flatMap((selector) => ungroupSelector(selector, options));
+}
+
+
+
+// shortcuts:
+export const isParentSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '&');
+}
+export const isUniversalSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '*');
+}
+export const isAttrSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '[');
+}
+export const isElementSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '');
+}
+export const isIdSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '#');
+}
+export const isClassSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '.');
+}
+export const isPseudoClassSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ':');
+}
+export const isClassOrPseudoClassSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && ['.', ':'].includes(selectorEntry?.[0]);
+}
+export const isPseudoElementSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '::');
+}
+export const isElementOrPseudoElementSelector = (selectorEntry: SelectorEntry): boolean => {
+    return isSimpleSelector(selectorEntry) && ['', '::'].includes(selectorEntry?.[0]);
+}
+
+export const isCombinatorOf = (selectorEntry: SelectorEntry, combinator: Combinator) => {
+    return isCombinator(selectorEntry) && (selectorEntry === combinator);
 }
