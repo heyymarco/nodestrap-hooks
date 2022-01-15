@@ -32,10 +32,26 @@ export type AttrSelectorParams         = | readonly [AttrSelectorName           
                                          | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions]
 
 export type SelectorParams             = AttrSelectorParams | SelectorList | string
-export type SimpleSelector             = | readonly [UnnamedSelectorToken            /* no_name */  /* no_param */                             ]
-                                         | readonly [AttrSelectorToken        , null /* no_name */, AttrSelectorParams                         ]
-                                         | readonly [NamedSelectorToken       , SelectorName        /* no_param */                             ]
-                                         | readonly [PseudoClassSelectorToken , SelectorName      , Exclude<SelectorParams, AttrSelectorParams>]
+
+
+export type ParentSelector             =   readonly [ParentSelectorToken               /* no_name */  /* no_param */                             ]
+export type UniversalSelector          =   readonly [UniversalSelectorToken            /* no_name */  /* no_param */                             ]
+export type UnnamedSelector            =   ParentSelector | UniversalSelector
+
+export type AttrSelector               =   readonly [AttrSelectorToken          , null /* no_name */, AttrSelectorParams                         ]
+
+export type ElementSelector            =   readonly [ElementSelectorToken       , SelectorName        /* no_param */                             ]
+export type IdSelector                 =   readonly [IdSelectorToken            , SelectorName        /* no_param */                             ]
+export type ClassSelector              =   readonly [ClassSelectorToken         , SelectorName        /* no_param */                             ]
+export type PseudoClassSelector        = | readonly [PseudoClassSelectorToken   , SelectorName        /* no_param */                             ]
+                                         | readonly [PseudoClassSelectorToken   , SelectorName      , Exclude<SelectorParams, AttrSelectorParams>]
+export type PseudoElementSelector      =   readonly [PseudoElementSelectorToken , SelectorName        /* no_param */                             ]
+export type NamedSelector              =   ElementSelector | IdSelector | ClassSelector | PseudoClassSelector | PseudoElementSelector
+
+export type SimpleSelector             = | UnnamedSelector
+                                         | AttrSelector
+                                         | NamedSelector
+
 
 export type DescendantCombinator       = ' '
 export type ChildCombinator            = '>'
