@@ -881,15 +881,15 @@ export const ungroupSelectors = (selectors: SelectorList, options: UngroupSelect
 
 
 // shortcuts:
-export const isParentSelector                 = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '&');
-export const isUniversalSelector              = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '*');
-export const isAttrSelector                   = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '[');
-export const isElementSelector                = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '');
-export const isIdSelector                     = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '#');
-export const isClassSelector                  = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '.');
-export const isPseudoClassSelector            = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ':');
+export const isParentSelector                 = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '&' );
+export const isUniversalSelector              = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '*' );
+export const isAttrSelector                   = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '[' );
+export const isElementSelector                = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ''  );
+export const isIdSelector                     = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '#' );
+export const isClassSelector                  = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '.' );
+export const isPseudoClassSelector            = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ':' );
 export const isClassOrPseudoClassSelector     = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && ['.', ':'].includes(selectorEntry?.[0]);
 export const isPseudoElementSelector          = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '::');
 export const isElementOrPseudoElementSelector = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && ['', '::'].includes(selectorEntry?.[0]);
 
-export const isCombinatorOf                   = (selectorEntry: SelectorEntry, combinator: Combinator)          => isCombinator(selectorEntry) && (selectorEntry === combinator);
+export const isCombinatorOf                   = (selectorEntry: SelectorEntry, combinator: Combinator): boolean => isCombinator(selectorEntry)     && (selectorEntry === combinator);
