@@ -543,6 +543,8 @@ export const isSelector = (test: SimpleSelector|Selector): test is Selector => {
     */
     return (typeof(test[0]) !== 'string'); // Selector : the first element (SimpleSelector) must be a NON-string, the Combinator is guaranteed NEVER be the first element
 };
+export const isNotEmptySelector  = (selector  : Selector    ) => !!selector.length;
+export const isNotEmptySelectors = (selectors : SelectorList) => !!selectors.length;
 
 
 
@@ -572,11 +574,7 @@ export const selectorParamsToString = (selectorParams: SelectorParams|null|undef
         } // if
     }
     else { // if (isSelectors(selectorParams)) {
-        return `(${
-            selectorParams
-            .map((selector): string => selectorToString(selector))
-            .join(', ')
-        })`;
+        return `(${selectorsToString(selectorParams)})`;
     } // if
 };
 export const selectorToString       = (selector: Selector): string => {
@@ -604,7 +602,7 @@ export const selectorToString       = (selector: Selector): string => {
 export const selectorsToString      = (selectors: SelectorList): string => {
     return (
         selectors
-        .filter((selector) => !!selector.length) // remove empty selector(s)
+        .filter(isNotEmptySelector) // remove empty selector(s), we don't want to join some rendered empty string '' => `.boo , , #foo`
         .map(selectorToString)
         .join(', ')
     );
@@ -677,15 +675,16 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
     
     
     
-    if (!selectors.length) return []; // empty selectors => nothing to group => return empty SelectorList
+    if (isNotEmptySelectors(selectors)) return []; // empty selectors => nothing to group => return empty SelectorList
     
     
     
-    const selectorsWithoutPseudoElm = selectors.map((selector) => selector.filter(isNotPseudoElementSelector));
-    const selectorsOnlyPseudoElm    = selectors.map((selector) => selector.filter(isPseudoElementSelector));
+    const selectorsWithoutPseudoElm : SelectorList = selectors.map((selector): Selector => selector.filter(isNotPseudoElementSelector)).filter(isNotEmptySelector); // remove empty selector(s)
+    const selectorsOnlyPseudoElm    : SelectorList = selectors.map((selector): Selector => selector.filter(isPseudoElementSelector)).filter(isNotEmptySelector); // remove empty selector(s)
     
     
     
+    if (isNotEmptySelectors(selectorsWithoutPseudoElm)) return selectorsOnlyPseudoElm; // empty selectors => nothing to group => return selectorsOnlyPseudoElm (might be an empty too)
     return [
         [
             [
