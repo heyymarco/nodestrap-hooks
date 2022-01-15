@@ -609,6 +609,7 @@ export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelecto
 
 
 
+// measurings:
 export type Specificity = [number, number, number];
 export const calculateSpecificity = (selector: Selector): Specificity => {
     return (
@@ -715,6 +716,9 @@ export const calculateSpecificity = (selector: Selector): Specificity => {
 
 
 
+// groupings:
+
+// groups:
 export interface GroupSelectorOptions {
     selectorName ?: SelectorName | ('is'|'not'|'has'|'where'),
 }
@@ -745,17 +749,18 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
         ...selectorsOnlyPseudoElm,
     ] as SelectorList;
 }
-export const groupSelector = (selector: Selector, options: GroupSelectorOptions = defaultGroupSelectorOptions): SelectorList => {
+export const groupSelector  = (selector: Selector     , options: GroupSelectorOptions = defaultGroupSelectorOptions): SelectorList => {
     return groupSelectors([selector], options);
 }
 
+// ungroups:
 export interface UngroupSelectorOptions {
     selectorName ?: SelectorName[] & ('is'|'not'|'has'|'where')[],
 }
 const defaultUngroupSelectorOptions : Required<UngroupSelectorOptions> = {
     selectorName  : ['is', 'where'],
 };
-export const ungroupSelector = (selector: Selector, options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
+export const ungroupSelector  = (selector: Selector     , options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
     const {
         selectorName : targetSelectorName = defaultUngroupSelectorOptions.selectorName,
     } = options;
