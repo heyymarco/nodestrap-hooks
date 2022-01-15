@@ -1,3 +1,10 @@
+// cssfn:
+import type {
+    SingleOrArray,
+}                           from './types'       // cssfn's types
+
+
+
 export type ParentSelector        = '&'
 export type UniversalSelector     = '*'
 export type UnnamedSelector       = ParentSelector | UniversalSelector
@@ -881,15 +888,26 @@ export const ungroupSelectors = (selectors: SelectorList, options: UngroupSelect
 
 
 // shortcuts:
-export const isParentSelector                 = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '&' );
-export const isUniversalSelector              = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '*' );
-export const isAttrSelector                   = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '[' );
-export const isElementSelector                = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ''  );
-export const isIdSelector                     = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '#' );
-export const isClassSelector                  = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '.' );
-export const isPseudoClassSelector            = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ':' );
-export const isClassOrPseudoClassSelector     = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && ['.', ':'].includes(selectorEntry?.[0]);
-export const isPseudoElementSelector          = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '::');
-export const isElementOrPseudoElementSelector = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && ['', '::'].includes(selectorEntry?.[0]);
 
-export const isCombinatorOf                   = (selectorEntry: SelectorEntry, combinator: Combinator): boolean => isCombinator(selectorEntry)     && (selectorEntry === combinator);
+// selector entries:
+export const isParentSelector                   = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '&' );
+export const isUniversalSelector                = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '*' );
+export const isAttrSelector                     = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '[' );
+export const isElementSelector                  = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ''  );
+export const isIdSelector                       = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '#' );
+export const isClassSelector                    = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '.' );
+export const isPseudoClassSelector              = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === ':' );
+export const isClassOrPseudoClassSelector       = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && ['.', ':'].includes(selectorEntry?.[0]);
+export const isPseudoElementSelector            = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '::');
+export const isElementOrPseudoElementSelector   = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector => isSimpleSelector(selectorEntry) && ['', '::'].includes(selectorEntry?.[0]);
+
+export const isAttrSelectorOf                   = (selectorEntry: SelectorEntry, attrName  : SingleOrArray<string>)     : boolean => isAttrSelector(selectorEntry)                   && [attrName  ].flat().includes(selectorEntry?.[0]);
+export const isElementSelectorOf                = (selectorEntry: SelectorEntry, elmName   : SingleOrArray<string>)     : boolean => isElementSelector(selectorEntry)                && [elmName   ].flat().includes(selectorEntry?.[0]);
+export const isIdSelectorOf                     = (selectorEntry: SelectorEntry, id        : SingleOrArray<string>)     : boolean => isIdSelector(selectorEntry)                     && [id        ].flat().includes(selectorEntry?.[0]);
+export const isClassSelectorOf                  = (selectorEntry: SelectorEntry, className : SingleOrArray<string>)     : boolean => isClassSelector(selectorEntry)                  && [className ].flat().includes(selectorEntry?.[0]);
+export const isPseudoClassSelectorOf            = (selectorEntry: SelectorEntry, className : SingleOrArray<string>)     : boolean => isPseudoClassSelector(selectorEntry)            && [className ].flat().includes(selectorEntry?.[0]);
+export const isClassOrPseudoClassSelectorOf     = (selectorEntry: SelectorEntry, className : SingleOrArray<string>)     : boolean => isClassOrPseudoClassSelector(selectorEntry)     && [className ].flat().includes(selectorEntry?.[0]);
+export const isPseudoElementSelectorOf          = (selectorEntry: SelectorEntry, elmName   : SingleOrArray<string>)     : boolean => isPseudoElementSelector(selectorEntry)          && [elmName   ].flat().includes(selectorEntry?.[0]);
+export const isElementOrPseudoElementSelectorOf = (selectorEntry: SelectorEntry, elmName   : SingleOrArray<string>)     : boolean => isElementOrPseudoElementSelector(selectorEntry) && [elmName   ].flat().includes(selectorEntry?.[0]);
+
+export const isCombinatorOf                     = (selectorEntry: SelectorEntry, combinator: SingleOrArray<Combinator>) : boolean => isCombinator(selectorEntry)                     && [combinator].flat().includes(selectorEntry);
