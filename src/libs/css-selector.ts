@@ -18,7 +18,7 @@ export type PseudoClassSelector   = ':'
 export type PseudoElementSelector = '::'
 export type NamedSelector         = ElementSelector | IdSelector | ClassSelector | PseudoClassSelector | PseudoElementSelector
 
-export type SelectorType          = UnnamedSelector | AttrSelector | NamedSelector
+export type SelectorToken         = UnnamedSelector | AttrSelector | NamedSelector
 export type SelectorName          = string & {}
 
 export type AttrSelectorName      = string & {}
@@ -65,7 +65,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
         while (!isEof() && whitespaceList.includes(expression[pos])) pos++;
     };
     
-    const parseSelectorType = (): SelectorType|null => {
+    const parseSelectorToken = (): SelectorToken|null => {
         const char = expression[pos];
         switch (char) {
             case '&': // ParentSelector
@@ -114,20 +114,20 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const parseSimpleSelector = (): SimpleSelector|null => {
         const originPos = pos;
         
-        const type = parseSelectorType();
-        if (type === null) return null; // syntax error: missing type => no changes made & return null
+        const token = parseSelectorToken();
+        if (token === null) return null; // syntax error: missing token => no changes made & return null
         
-        if ((type === '&') || (type === '*')) { // UnnamedSelector
+        if ((token === '&') || (token === '*')) { // UnnamedSelector
             return [
-                type,
+                token,
             ];
         }
-        else if (type === '[') { // AttrSelector
+        else if (token === '[') { // AttrSelector
             const attrSelectorParams = parseAttrSelectorParams();
             if (!attrSelectorParams) { pos = originPos; return null; } // syntax error: missing attrSelectorParams => revert changes & return null
             
             return [
-                type,
+                token,
                 null,
                 attrSelectorParams,
             ];
@@ -136,9 +136,9 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             const name = parseIdentifierName();
             if (!name) { pos = originPos; return null; } // syntax error: missing name => revert changes & return null
             
-            if (type !== ':') { // NonParamSelector
+            if (token !== ':') { // NonParamSelector
                 return [
-                    type,
+                    token,
                     name,
                 ];
             }
@@ -147,7 +147,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
                     const selectorParams = parseSelectorParams();
                     if (!selectorParams) { pos = originPos; return null; } // syntax error: missing selectorParams => revert changes & return null
                     return [
-                        type,
+                        token,
                         name,
                         selectorParams,
                     ];
@@ -156,13 +156,13 @@ export const parseSelectors = (expression: string): SelectorList|null => {
                     const wildParams = parseWildParams();
                     if (wildParams === null) {
                         return [
-                            type,
+                            token,
                             name,
                         ];
                     }
                     else {
                         return [
-                            type,
+                            token,
                             name,
                             wildParams,
                         ];
@@ -185,9 +185,9 @@ export const parseSelectors = (expression: string): SelectorList|null => {
             
             default:
             if (pos > originPos) { // previously had whitespace
-                const currentPos = pos;           // 1. backup
-                const test = parseSelectorType(); // 2. destructive test
-                pos = currentPos;                 // 3. restore
+                const currentPos = pos;            // 1. backup
+                const test = parseSelectorToken(); // 2. destructive test
+                pos = currentPos;                  // 3. restore
                 
                 if (test !== null) return ' '; // DescendantCombinator
             } // if
@@ -390,7 +390,7 @@ export const parseSelectors = (expression: string): SelectorList|null => {
     const parseAttrSelectorParams = (): AttrSelectorParams|null => {
         const originPos = pos;
         
-        // if (!eatOpeningSquareBracket()) return null; // already eaten by `parseSelectorType()`
+        // if (!eatOpeningSquareBracket()) return null; // already eaten by `parseSelectorToken()`
         
         skipWhitespace();
         
@@ -524,16 +524,16 @@ export const selectorToString  = (selector: Selector): string => {
             if (isCombinator(selectorEntry)) return selectorEntry;
             
             const [
-                selectorType,
+                selectorToken,
                 selectorName,
                 selectorParams,
             ] = selectorEntry; // isSimpleSelector(selectorEntry)
             
-            if (selectorType === '[') { // AttrSelector
+            if (selectorToken === '[') { // AttrSelector
                 return selectorParamsToString(selectorParams);
             }
             else {
-                return `${selectorType}${selectorName ?? ''}${selectorParamsToString(selectorParams)}`;
+                return `${selectorToken}${selectorName ?? ''}${selectorParamsToString(selectorParams)}`;
             } // if
         })
         .join('')
@@ -552,7 +552,7 @@ export const selectorsToString = (selectors: SelectorList): string => {
 
 export const isSelector = (test: SimpleSelector|Selector): test is Selector => {
     /*
-        SimpleSelector : [ SelectorType, SelectorName, SelectorParams ]
+        SimpleSelector : [ SelectorToken, SelectorName, SelectorParams ]
         Selector       : [ SimpleSelector...(SimpleSelector|Combinator)... ]
     */
     return (typeof(test[0]) !== 'string'); // Selector : the first element (SimpleSelector) must be a NON-string, the Combinator is guaranteed NEVER be the first element
@@ -583,7 +583,7 @@ export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelecto
                 
                 if (replacement === selectorEntry) { // if has not been replaced by `callbackFn` (same by reference)
                     const [
-                        , // skip: selectorType,
+                        , // skip: selectorToken,
                         , // skip: selectorName,
                         selectorParams,
                     ] = selectorEntry; // isSimpleSelector(selectorEntry)
@@ -593,7 +593,7 @@ export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelecto
                         const newSelectors : SelectorList = flatMapSelectors(oldSelectors, callbackFn); // recursively map the `oldSelectors`
                         
                         replacement = [
-                            ...selectorEntry.slice(0, 2),  // take the `selectorType` & `selectorName`
+                            ...selectorEntry.slice(0, 2),  // take the `selectorToken` & `selectorName`
                             newSelectors as SelectorParams // replace the `oldSelectors` to `newSelectors`
                         ] as unknown as SimpleSelector;    // don't worry TypeScript! I know what I'm doing
                     } // if
@@ -618,7 +618,7 @@ export const calculateSpecificity = (selector: Selector): Specificity => {
         .reduce((accum, simpleSelector, index, array): Specificity => {
             const [
                 /*
-                    selector types:
+                    selector tokens:
                     '&'  = parent         selector
                     '*'  = universal      selector
                     '['  = attribute      selector
@@ -628,7 +628,7 @@ export const calculateSpecificity = (selector: Selector): Specificity => {
                     ':'  = pseudo class   selector
                     '::' = pseudo element selector
                 */
-                selectorType,
+                selectorToken,
                 
                 /*
                     selector name:
@@ -647,7 +647,7 @@ export const calculateSpecificity = (selector: Selector): Specificity => {
             
             
             
-            if (selectorType === ':') {
+            if (selectorToken === ':') {
                 switch (selectorName) {
                     case 'is':
                     case 'not':
@@ -679,7 +679,7 @@ export const calculateSpecificity = (selector: Selector): Specificity => {
             
             
             
-            switch(selectorType) {
+            switch(selectorToken) {
                 case '#' : // ID selector
                     array.splice(1); // eject early by mutating iterated copy - it's okay to **mutate** the `array` because it already cloned at `filter(isSimpleSelector)`
                     return [
@@ -772,7 +772,7 @@ export const ungroupSelector  = (selector: Selector     , options: UngroupSelect
         if (isPseudoClassSelector(selectorEntry)) {
             const [
                 /*
-                    selector types:
+                    selector tokens:
                     '&'  = parent         selector
                     '*'  = universal      selector
                     '['  = attribute      selector
@@ -782,7 +782,7 @@ export const ungroupSelector  = (selector: Selector     , options: UngroupSelect
                     ':'  = pseudo class   selector
                     '::' = pseudo element selector
                 */
-                // selectorType
+                // selectorToken
                 ,
                 
                 /*

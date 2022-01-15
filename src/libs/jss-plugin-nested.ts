@@ -17,6 +17,7 @@ import {
     parseSelectors,
     flatMapSelectors,
     selectorsToString,
+    isParentSelector,
 }                           from './css-selector'
 
 
@@ -56,41 +57,8 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
         parentSelectors
         .flatMap((parentSelector) =>
             flatMapSelectors(nestedSelectors, (selector) => {
-                const [
-                    /*
-                        selector types:
-                        '&'  = parent         selector
-                        '*'  = universal      selector
-                        '['  = attribute      selector
-                        ''   = element        selector
-                        '#'  = ID             selector
-                        '.'  = class          selector
-                        ':'  = pseudo class   selector
-                        '::' = pseudo element selector
-                    */
-                    selectorType,
-                    
-                    /*
-                        selector name:
-                        string = the name of [element, ID, class, pseudo class, pseudo element] selector
-                    */
-                    // selectorName,
-                    
-                    /*
-                        selector parameter(s):
-                        string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
-                        array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
-                        SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
-                    */
-                    // selectorParams,
-                ] = selector;
-                
-                
-                
-                // we're only interested of selector type '&'
-                
-                // replace selector type of `&` with `parentSelector`:
-                if (selectorType === '&') return parentSelector;
+                // we're only interested of ParentSelector
+                if (isParentSelector(selector)) return parentSelector;
                 
                 // preserve the another selector types:
                 return selector;

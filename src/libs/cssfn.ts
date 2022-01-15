@@ -54,6 +54,8 @@ import {
     groupSelector,
     ungroupSelector,
     isParentSelector,
+    isClassOrPseudoClassSelector,
+    isPseudoElementSelector,
     isCombinatorOf,
 }                           from './css-selector'
 
@@ -466,7 +468,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                     if (isSimpleSelector(selectorEntry)) {
                         const [
                             /*
-                                selector types:
+                                selector tokens:
                                 '&'  = parent         selector
                                 '*'  = universal      selector
                                 '['  = attribute      selector
@@ -476,7 +478,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                                 ':'  = pseudo class   selector
                                 '::' = pseudo element selector
                             */
-                            selectorType,
+                            selectorToken,
                             
                             /*
                                 selector name:
@@ -492,7 +494,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                             */
                             // selectorParams,
                         ] = selectorEntry;
-                        if (selectorType === ':') {
+                        if (selectorToken === ':') {
                             switch (selectorName) {
                                 case 'is':
                                 case 'not':
@@ -508,7 +510,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                                     accum.remaining--; // reduce the counter
                             } // switch
                         }
-                        else if (['.', '[',].includes(selectorType)) {
+                        else if (['.', '[',].includes(selectorToken)) {
                             accum.remaining--; // reduce the counter
                         } // if
                     } // if
@@ -547,11 +549,11 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
             ...group.selectorModel,
             ...(new Array<SimpleSelectorModel>((minSpecificityWeight ?? 1) - group.specificityWeight)).fill(
                 group.selectorModel
-                .filter(isSimpleSelector)
-                .filter((simpleSelector) => { // only interested to class selector -or- pseudo class selector without parameters
+                .filter(isClassOrPseudoClassSelector) // only interested to class selector -or- pseudo class selector
+                .filter((simpleSelector) => {         // pseudo class selector without parameters
                     const [
                         /*
-                            selector types:
+                            selector tokens:
                             '&'  = parent         selector
                             '*'  = universal      selector
                             '['  = attribute      selector
@@ -561,13 +563,15 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                             ':'  = pseudo class   selector
                             '::' = pseudo element selector
                         */
-                        selectorType,
+                        // selectorToken
+                        ,
                         
                         /*
                             selector name:
                             string = the name of [element, ID, class, pseudo class, pseudo element] selector
                         */
-                        // selectorName,
+                        // selectorName
+                        ,
                         
                         /*
                             selector parameter(s):
@@ -578,15 +582,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                         selectorParams,
                     ] = simpleSelector;
                     
-                    return (
-                        (selectorType === '.')
-                        ||
-                        (
-                            (selectorType === ':')
-                            &&
-                            (selectorParams === undefined)
-                        )
-                    );
+                    return (selectorParams === undefined);
                 })
                 .pop()         // repeats the last selector until minSpecificityWeight satisfied
                 ??
@@ -692,41 +688,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel }
     const withCombinator  = combinator ? `&${combinator}` : null;
     const selectorsGroups = nestedSelectors.map((nestedSelector): SelectorGroup => {
-        const ungroupable     = nestedSelector.some((selectorEntry) => {
-            if (isSimpleSelector(selectorEntry)) {
-                const [
-                    /*
-                        selector types:
-                        '&'  = parent         selector
-                        '*'  = universal      selector
-                        '['  = attribute      selector
-                        ''   = element        selector
-                        '#'  = ID             selector
-                        '.'  = class          selector
-                        ':'  = pseudo class   selector
-                        '::' = pseudo element selector
-                    */
-                    selectorType,
-                    
-                    /*
-                        selector name:
-                        string = the name of [element, ID, class, pseudo class, pseudo element] selector
-                    */
-                    // selectorName,
-                    
-                    /*
-                        selector parameter(s):
-                        string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
-                        array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
-                        SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
-                    */
-                    // selectorParams,
-                ] = selectorEntry;
-                if (selectorType === '::') return true; // found pseudo element
-            } // if
-            
-            return false; // not found pseudo element
-        });
+        const ungroupable     = nestedSelector.some(isPseudoElementSelector);
         if (ungroupable)      return { cond: GroupCond.Ungroupable    , selectorModel: nestedSelector };
         
         
