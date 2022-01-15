@@ -38,6 +38,7 @@ import type {
 import {
     // types:
     SimpleSelector as SimpleSelectorModel,
+    Combinator,
     Selector       as SelectorModel,
     SelectorList   as SelectorModelList,
     
@@ -45,12 +46,15 @@ import {
     
     // utilities:
     parseSelectors,
+    selectorToString,
     selectorsToString,
     
     isSimpleSelector,
     calculateSpecificity,
     groupSelector,
     ungroupSelector,
+    isParentSelector,
+    isCombinatorOf,
 }                           from './css-selector'
 
 // others libs:
@@ -380,19 +384,19 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
 }
 
 const nthChildNModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
-const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): Selector => {
-    if (selector === '&') return selector; // only parent selector => no change
+const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): SelectorModelList => {
+    // if (selector === '&') return selector; // only parent selector => no change
     if (
         (minSpecificityWeight == null)
         &&
         (maxSpecificityWeight == null)
-    ) return selector; // nothing to adjust
+    ) return selectorList; // nothing to adjust
     
     
     
     // convert string to parsed_object_tree:
-    const selectorList = parseSelectors(selector);
-    if (!selectorList) return selector; // parse error => no change
+    // const selectorList = parseSelectors(selector);
+    // if (!selectorList) return selector; // parse error => no change
     
     
     
@@ -593,13 +597,14 @@ const adjustSpecificityWeight = (selector: Selector, minSpecificityWeight: numbe
     
     
     
-    // convert back the parsed_object_tree to string:
-    return selectorsToString(adjustedSelectorList);
+    // // convert back the parsed_object_tree to string:
+    // return selectorsToString(adjustedSelectorList);
+    return adjustedSelectorList;
 };
 
 export interface NestedRuleOptions {
     groupSelectors ?: boolean
-    combinator     ?: string
+    combinator     ?: Combinator|null
     
     specificityWeight    ?: number|null
     minSpecificityWeight ?: number|null
@@ -607,7 +612,7 @@ export interface NestedRuleOptions {
 }
 const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
     groupSelectors  : true,
-    combinator      : '',
+    combinator      : null,
     
     specificityWeight    : null,
     minSpecificityWeight : null,
@@ -625,7 +630,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const nestedSelectors : Selector[] = (
+    const nestedSelectors : SelectorModelList = adjustSpecificityWeight(
         flat(selectors)
         .filter((selector): selector is Selector => !!selector)
         .map((selector): Selector => {
@@ -636,13 +641,22 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             
             return `&${selector}`;
         })
-        .map((selector) =>
-            adjustSpecificityWeight(
-                selector,
-                minSpecificityWeight,
-                maxSpecificityWeight
-            )
-        )
+        .flatMap((selector) => {
+            const selectorList = parseSelectors(selector);
+            if (!selectorList) throw Error(`parse selector error: ${selector}`);
+            return selectorList;
+        })
+        ,
+        minSpecificityWeight,
+        maxSpecificityWeight
+        
+        // .map((selector) =>
+        //     adjustSpecificityWeight(
+        //         selector,
+        //         minSpecificityWeight,
+        //         maxSpecificityWeight
+        //     )
+        // )
     );
     
     
@@ -655,7 +669,9 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         return Object.fromEntries(
             nestedSelectors
             .map((nestedSelector) => [
-                Symbol(nestedSelector),
+                Symbol(
+                    selectorToString(nestedSelector)
+                ),
                 styles
             ])
         );
@@ -673,22 +689,92 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         OnlyEndParent   = 4,
         RandomParent    = 5,
     }
-    type SelectorGroup = { cond: GroupCond, selectorModel: Selector }
+    type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel }
     const withCombinator  = combinator ? `&${combinator}` : null;
     const selectorsGroups = nestedSelectors.map((nestedSelector): SelectorGroup => {
-        const ungroupable     = (/::[\w0-9-_]+$/gi).test(nestedSelector); // ::pseudo-elements are ungroupable by :is(...)
+        const ungroupable     = nestedSelector.some((selectorEntry) => {
+            if (isSimpleSelector(selectorEntry)) {
+                const [
+                    /*
+                        selector types:
+                        '&'  = parent         selector
+                        '*'  = universal      selector
+                        '['  = attribute      selector
+                        ''   = element        selector
+                        '#'  = ID             selector
+                        '.'  = class          selector
+                        ':'  = pseudo class   selector
+                        '::' = pseudo element selector
+                    */
+                    selectorType,
+                    
+                    /*
+                        selector name:
+                        string = the name of [element, ID, class, pseudo class, pseudo element] selector
+                    */
+                    // selectorName,
+                    
+                    /*
+                        selector parameter(s):
+                        string       = the parameter of pseudo class selector, eg: nth-child(2n+3) => '2n+3'
+                        array        = [name, operator, value, options] of attribute selector, eg: [data-msg*="you & me" i] => ['data-msg', '*=', 'you & me', 'i']
+                        SelectorList = nested selector(s) of pseudo class [:is(...), :where(...), :not(...)]
+                    */
+                    // selectorParams,
+                ] = selectorEntry;
+                if (selectorType === '::') return true; // found pseudo element
+            } // if
+            
+            return false; // not found pseudo element
+        });
         if (ungroupable)      return { cond: GroupCond.Ungroupable    , selectorModel: nestedSelector };
         
-        const withCombi       = !!withCombinator && nestedSelector.startsWith(withCombinator);
+        
+        
+        const hasFirstParent = ((): boolean => {
+            if (nestedSelector.length < 1) return false;                 // at least 1 entry must exist, for the parent
+            
+            const firstSelectorEntry = nestedSelector[0];                // take the first entry
+            return isParentSelector(firstSelectorEntry);                 // the entry must be ParentSelector
+        })();
+        const followedByCombi  = ((): boolean => {
+            if (!combinator)               return false;                 // the combinator must be defined
+            if (nestedSelector.length < 2) return false;                 // at least 2 entry must exist, for the parent followed by combinator
+            
+            const secondSelectorEntry = nestedSelector[1];               // take the second entry
+            return isCombinatorOf(secondSelectorEntry, combinator)       // the entry must be the same as combinator
+        })();
+        
+        const withCombi       = hasFirstParent && followedByCombi;
         if (withCombi)        return { cond: GroupCond.WithCombinator , selectorModel: nestedSelector };
         
-        const onlyParent      = (nestedSelector === '&');
+        const onlyParent      = hasFirstParent && (nestedSelector.length === 1);
         if (onlyParent)       return { cond: GroupCond.OnlyParent     , selectorModel: nestedSelector };
         
-        const onlyBeginParent = !onlyParent && (nestedSelector.lastIndexOf('&') === 0);
+        
+        
+        const hasMiddleParent = ((): boolean => {
+            if (nestedSelector.length < 3) return false;                 // at least 3 entry must exist, the middle one is the middle parent
+            
+            for (let index = 1, maxIndex = (nestedSelector.length - 2); index <= maxIndex; index++) {
+                const currentSelectorEntry = nestedSelector[index];      // take the 2nd_first_entry until the 2nd_last_entry
+                if (isParentSelector(currentSelectorEntry)) return true; // the entry must be ParentSelector, otherwise skip to next
+            } // for
+            
+            return false; // ran out of iterator => not found
+        })();
+        const hasLastParent = ((): boolean => {
+            const length = nestedSelector.length;
+            if (length < 3) return false;                                // at least 3 entry must exist, the last one is the last parent
+            
+            const lastSelectorEntry = nestedSelector[length - 1];        // take the last entry
+            return isParentSelector(lastSelectorEntry);                  // the entry must be ParentSelector
+        })();
+        
+        const onlyBeginParent = hasFirstParent && !hasMiddleParent && !hasLastParent;
         if (onlyBeginParent)  return { cond: GroupCond.OnlyBeginParent, selectorModel: nestedSelector };
         
-        const onlyEndParent   = !onlyParent && (nestedSelector.indexOf('&') === (nestedSelector.length - 1));
+        const onlyEndParent   = !hasFirstParent && (hasMiddleParent || hasLastParent);
         if (onlyEndParent)    return { cond: GroupCond.OnlyEndParent  , selectorModel: nestedSelector };
         
         /* ............... */ return { cond: GroupCond.RandomParent   , selectorModel: nestedSelector };
@@ -836,7 +922,7 @@ export interface CombinatorOptions extends NestedRuleOptions {
 const defaultCombinatorOptions : Required<CombinatorOptions> = {
     ...defaultNestedRuleOptions,
 };
-export const combinators  = (combinator: string, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): Rule => {
+export const combinators  = (combinator: Combinator, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): Rule => {
     const combiSelectors : Selector[] = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
