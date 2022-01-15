@@ -709,17 +709,17 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         
         const hasFirstParent = ((): boolean => {
-            if (nestedSelector.length < 1) return false;                 // at least 1 entry must exist, for the parent
+            if (nestedSelector.length < 1) return false;                // at least 1 entry must exist, for the first_parent
             
-            const firstSelectorEntry = nestedSelector[0];                // take the first entry
-            return isParentSelector(firstSelectorEntry);                 // the entry must be ParentSelector
+            const firstSelectorEntry = nestedSelector[0];               // take the first entry
+            return isParentSelector(firstSelectorEntry);                // the entry must be ParentSelector
         })();
         const followedByCombi  = ((): boolean => {
-            if (!combinator)               return false;                 // the combinator must be defined
-            if (nestedSelector.length < 2) return false;                 // at least 2 entry must exist, for the parent followed by combinator
+            if (!combinator)               return false;                // the combinator must be defined
+            if (nestedSelector.length < 2) return false;                // at least 2 entry must exist, for the first_parent followed by combinator
             
-            const secondSelectorEntry = nestedSelector[1];               // take the second entry
-            return isCombinatorOf(secondSelectorEntry, combinator)       // the entry must be the same as combinator
+            const secondSelectorEntry = nestedSelector[1];              // take the second entry
+            return isCombinatorOf(secondSelectorEntry, combinator)      // the entry must be the same as combinator
         })();
         
         const withCombi       = hasFirstParent && followedByCombi;
@@ -731,27 +731,27 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         
         const hasMiddleParent = ((): boolean => {
-            if (nestedSelector.length < 3) return false;                 // at least 3 entry must exist, the middle one is the middle parent
+            if (nestedSelector.length < 3) return false;                // at least 3 entry must exist, the first & last are already reserved, the middle one is the middle_parent
             
             for (let index = 1, maxIndex = (nestedSelector.length - 2); index <= maxIndex; index++) {
-                const currentSelectorEntry = nestedSelector[index];      // take the 2nd_first_entry until the 2nd_last_entry
-                if (isParentSelector(currentSelectorEntry)) return true; // the entry must be ParentSelector, otherwise skip to next
+                const middleSelectorEntry = nestedSelector[index];      // take the 2nd_first_entry until the 2nd_last_entry
+                if (isParentSelector(middleSelectorEntry)) return true; // the entry must be ParentSelector, otherwise skip to next
             } // for
             
             return false; // ran out of iterator => not found
         })();
         const hasLastParent = ((): boolean => {
             const length = nestedSelector.length;
-            if (length < 3) return false;                                // at least 3 entry must exist, the last one is the last parent
+            if (length < 2) return false;                               // at least 2 entry must exist, the first is already reserved, the last one is the last_parent
             
-            const lastSelectorEntry = nestedSelector[length - 1];        // take the last entry
-            return isParentSelector(lastSelectorEntry);                  // the entry must be ParentSelector
+            const lastSelectorEntry = nestedSelector[length - 1];       // take the last entry
+            return isParentSelector(lastSelectorEntry);                 // the entry must be ParentSelector
         })();
         
         const onlyBeginParent = hasFirstParent && !hasMiddleParent && !hasLastParent;
         if (onlyBeginParent)  return { cond: GroupCond.OnlyBeginParent, selectorModel: nestedSelector };
         
-        const onlyEndParent   = !hasFirstParent && (hasMiddleParent || hasLastParent);
+        const onlyEndParent   = !hasFirstParent && !hasMiddleParent && hasLastParent;
         if (onlyEndParent)    return { cond: GroupCond.OnlyEndParent  , selectorModel: nestedSelector };
         
         /* ............... */ return { cond: GroupCond.RandomParent   , selectorModel: nestedSelector };
