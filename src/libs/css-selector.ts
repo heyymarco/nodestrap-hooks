@@ -5,6 +5,8 @@ import type {
 
 
 
+// types:
+
 export type ParentSelectorToken        = '&'
 export type UniversalSelectorToken     = '*'
 export type UnnamedSelectorToken       = ParentSelectorToken | UniversalSelectorToken
