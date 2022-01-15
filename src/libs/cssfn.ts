@@ -44,19 +44,34 @@ import {
     
     
     
-    // utilities:
+    // parses:
     parseSelectors,
-    selectorToString,
-    selectorsToString,
     
+    
+    
+    // tests:
     isSimpleSelector,
-    calculateSpecificity,
-    groupSelector,
-    ungroupSelector,
     isParentSelector,
     isClassOrPseudoClassSelector,
     isPseudoElementSelector,
     isCombinatorOf,
+    
+    
+    
+    // renders:
+    selectorToString,
+    selectorsToString,
+    
+    
+    
+    // transforms:
+    groupSelector,
+    ungroupSelector,
+    
+    
+    
+    // measures:
+    calculateSpecificity,
 }                           from './css-selector'
 
 // others libs:

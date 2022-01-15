@@ -13,11 +13,28 @@ import type {
     ProductOrFactoryOrDeepArray,
 }                           from './types'       // cssfn's types
 import {
+    // types:
     SelectorList,
+    
+    
+    
+    // parses:
     parseSelectors,
-    flatMapSelectors,
-    selectorsToString,
+    
+    
+    
+    // tests:
     isParentSelector,
+    
+    
+    
+    // renders:
+    selectorsToString,
+    
+    
+    
+    // transforms:
+    flatMapSelectors,
 }                           from './css-selector'
 
 
