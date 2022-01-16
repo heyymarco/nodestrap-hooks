@@ -567,6 +567,27 @@ export const pseudoClassSelector                 = (className : SelectorName, pa
     } // if
 };
 export const pseudoElementSelector               = (elmName   : SelectorName): PseudoElementSelector => requiredName(elmName  ) && [ '::' , elmName        /* no_param */ ];
+//#region aliases
+export const [
+    createParentSelector,
+    createUniversalSelector,
+    createAttrSelector,
+    createElementSelector,
+    createIdSelector,
+    createClassSelector,
+    createPseudoClassSelector,
+    createPseudoElementSelector,
+] = [
+    parentSelector,
+    universalSelector,
+    attrSelector,
+    elementSelector,
+    idSelector,
+    classSelector,
+    pseudoClassSelector,
+    pseudoElementSelector,
+];
+//#endregion aliases
 
 export const isSimpleSelector                    = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector                          => (typeof(selectorEntry) !== 'string');
 export const isParentSelector                    = (selectorEntry: SelectorEntry): selectorEntry is ParentSelector                          => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '&' );
@@ -601,11 +622,30 @@ export const isPseudoElementSelectorOf           = (selectorEntry: SelectorEntry
 export const isElementOrPseudoElementSelectorOf  = (selectorEntry: SelectorEntry, elmName   : SingleOrArray<string>)     : boolean => isElementOrPseudoElementSelector(selectorEntry) && [elmName   ].flat().includes(selectorEntry?.[0]);
 
 export const combinator = (combinator: Combinator): Combinator => combinator;
+//#region aliases
+export const [
+    createCombinator,
+] = [
+    combinator,
+];
+//#endregion aliases
 
 export const isCombinator                        = (selectorEntry: SelectorEntry): selectorEntry is Combinator => (typeof(selectorEntry) === 'string');
 export const isCombinatorOf                      = (selectorEntry: SelectorEntry, combinator: SingleOrArray<Combinator>) : boolean => isCombinator(selectorEntry)                     && [combinator].flat().includes(selectorEntry);
 
-// SimpleSelector & Selector tests:
+// SimpleSelector & Selector creates & tests:
+export const selector     = (...selectorEntries : SelectorEntry[]): Selector     => selectorEntries;
+export const selectorList = (...selectors       : Selector[]     ): SelectorList => selectors;
+//#region aliases
+export const [
+    createSelector,
+    createSelectorList,
+] = [
+    selector,
+    selectorList,
+];
+//#endregion aliases
+
 export const isSelector = (test: SimpleSelector|Selector): test is Selector => {
     /*
         SimpleSelector : [ SelectorToken, SelectorName, SelectorParams ]
@@ -651,20 +691,24 @@ export const selectorToString       = (selector: Selector): string => {
     return (
         selector
         .map((selectorEntry): string => {
-            if (isCombinator(selectorEntry)) return selectorEntry;
+            if (isSimpleSelector(selectorEntry)) {
+                const [
+                    selectorToken,
+                    selectorName,
+                    selectorParams,
+                ] = selectorEntry;
+                
+                if (selectorToken === '[') { // AttrSelectorToken
+                    return selectorParamsToString(selectorParams);
+                }
+                else {
+                    return `${selectorToken}${selectorName ?? ''}${selectorParamsToString(selectorParams)}`;
+                } // if
+            } // if SimpleSelector
             
-            const [
-                selectorToken,
-                selectorName,
-                selectorParams,
-            ] = selectorEntry; // isSimpleSelector(selectorEntry)
             
-            if (selectorToken === '[') { // AttrSelectorToken
-                return selectorParamsToString(selectorParams);
-            }
-            else {
-                return `${selectorToken}${selectorName ?? ''}${selectorParamsToString(selectorParams)}`;
-            } // if
+            
+            return selectorEntry;
         })
         .join('')
     );
@@ -697,35 +741,38 @@ export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelecto
         .map((selector: Selector): Selector => // mutates a `Selector` to another `Selector`
             selector
             .flatMap((selectorEntry: SelectorEntry): Selector => { // mutates a (SimpleSelector|Combinator) to ([SimpleSelector]|Selector)
-                if (isCombinator(selectorEntry)) return [selectorEntry];
-                
-                
-                
-                let replacement = callbackFn(selectorEntry) ?? selectorEntry; // isSimpleSelector(selectorEntry)
-                
-                
-                
-                if (replacement === selectorEntry) { // if has not been replaced by `callbackFn` (same by reference)
-                    const [
-                        , // skip: selectorToken,
-                        , // skip: selectorName,
-                        selectorParams,
-                    ] = selectorEntry; // isSimpleSelector(selectorEntry)
+                if (isSimpleSelector(selectorEntry)) {
+                    let replacement = callbackFn(selectorEntry) ?? selectorEntry;
                     
-                    if (selectorParams && isSelectors(selectorParams)) {
-                        const oldSelectors : SelectorList = selectorParams;
-                        const newSelectors : SelectorList = flatMapSelectors(oldSelectors, callbackFn); // recursively map the `oldSelectors`
+                    
+                    
+                    if (replacement === selectorEntry) { // if has not been replaced by `callbackFn` (same by reference)
+                        const [
+                            selectorToken,
+                            selectorName,
+                            selectorParams,
+                        ] = selectorEntry;
                         
-                        replacement = [
-                            ...selectorEntry.slice(0, 2),  // take the `selectorToken` & `selectorName`
-                            newSelectors as SelectorParams // replace the `oldSelectors` to `newSelectors`
-                        ] as unknown as SimpleSelector;    // don't worry TypeScript! I know what I'm doing
+                        if (selectorParams && isSelectors(selectorParams)) {
+                            const oldSelectors = selectorParams;
+                            const newSelectors = flatMapSelectors(oldSelectors, callbackFn); // recursively map the `oldSelectors`
+                            
+                            replacement = [
+                                selectorToken,
+                                selectorName,
+                                newSelectors,
+                            ] as SimpleSelector;
+                        } // if
                     } // if
-                } // if
+                    
+                    
+                    
+                    return isSelector(replacement) ? replacement /* as Selector */ : createSelector(replacement) /* createSelector(as SimpleSelector) as Selector */;
+                } // if SimpleSelector
                 
                 
                 
-                return isSelector(replacement) ? replacement /* as Selector */ : [replacement] /* [as SimpleSelector] as Selector */;
+                return createSelector(selectorEntry);
             })
         )
     );
@@ -746,7 +793,7 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
     
     
     
-    if (isNotEmptySelectors(selectors)) return []; // empty selectors => nothing to group => return empty SelectorList
+    if (isNotEmptySelectors(selectors)) return selectorList(...[]); // empty selectors => nothing to group => return empty SelectorList
     
     
     
@@ -757,16 +804,16 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
     
     
     if (isNotEmptySelectors(selectorsWithoutPseudoElm)) return selectorsOnlyPseudoElm; // empty selectors => nothing to group => return selectorsOnlyPseudoElm (might be an empty too)
-    return [
-        [
+    return selectorList(
+        selector(
             pseudoClassSelector(targetSelectorName, selectorsWithoutPseudoElm),
-        ] as Selector,
+        ),
         
         ...selectorsOnlyPseudoElm,
-    ] as SelectorList;
+    );
 }
 export const groupSelector  = (selector: Selector     , options: GroupSelectorOptions = defaultGroupSelectorOptions): SelectorList => {
-    return groupSelectors([selector], options);
+    return groupSelectors(selectorList(selector), options);
 }
 
 // ungroups:
@@ -784,7 +831,7 @@ export const ungroupSelector  = (selector: Selector     , options: UngroupSelect
     
     
     if (selector.length === 1) {
-        const selectorEntry = selector[0];
+        const selectorEntry = selector[0]; // get the only one SelectorEntry
         if (isPseudoClassSelector(selectorEntry)) {
             const [
                 /*
@@ -826,8 +873,9 @@ export const ungroupSelector  = (selector: Selector     , options: UngroupSelect
     } // if
     
     
-    
-    return [selector]; // no changes
+    return selectorList(
+        selector, // no changes
+    );
 }
 export const ungroupSelectors = (selectors: SelectorList, options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
     return selectors.flatMap((selector) => ungroupSelector(selector, options));
