@@ -600,6 +600,8 @@ export const isClassOrPseudoClassSelectorOf      = (selectorEntry: SelectorEntry
 export const isPseudoElementSelectorOf           = (selectorEntry: SelectorEntry, elmName   : SingleOrArray<string>)     : boolean => isPseudoElementSelector(selectorEntry)          && [elmName   ].flat().includes(selectorEntry?.[0]);
 export const isElementOrPseudoElementSelectorOf  = (selectorEntry: SelectorEntry, elmName   : SingleOrArray<string>)     : boolean => isElementOrPseudoElementSelector(selectorEntry) && [elmName   ].flat().includes(selectorEntry?.[0]);
 
+export const combinator = (combinator: Combinator): Combinator => combinator;
+
 export const isCombinator                        = (selectorEntry: SelectorEntry): selectorEntry is Combinator => (typeof(selectorEntry) === 'string');
 export const isCombinatorOf                      = (selectorEntry: SelectorEntry, combinator: SingleOrArray<Combinator>) : boolean => isCombinator(selectorEntry)                     && [combinator].flat().includes(selectorEntry);
 
