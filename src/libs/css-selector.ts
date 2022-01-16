@@ -672,7 +672,7 @@ export const selectorToString       = (selector: Selector): string => {
 export const selectorsToString      = (selectors: SelectorList): string => {
     return (
         selectors
-        .filter(isNotEmptySelector) // remove empty selector(s), we don't want to join some rendered empty string '' => `.boo , , #foo`
+        .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList, we don't want to join some rendered empty string '' => `.boo , , #foo`
         .map(selectorToString)
         .join(', ')
     );
@@ -730,6 +730,7 @@ export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelecto
         )
     );
 };
+export { flatMapSelectors as mutateSelectors }
 
 // groups:
 export interface GroupSelectorOptions {
@@ -749,19 +750,16 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
     
     
     
-    const selectorsWithoutPseudoElm : SelectorList = selectors.map((selector): Selector => selector.filter(isNotPseudoElementSelector)).filter(isNotEmptySelector); // remove empty selector(s)
-    const selectorsOnlyPseudoElm    : SelectorList = selectors.map((selector): Selector => selector.filter(isPseudoElementSelector)).filter(isNotEmptySelector); // remove empty selector(s)
+    selectors = selectors.filter(isNotEmptySelector); // remove empty Selector(s) in SelectorList
+    const selectorsWithoutPseudoElm : SelectorList = selectors.filter((selector) => selector.every(isNotPseudoElementSelector)); // not contain ::pseudo-element
+    const selectorsOnlyPseudoElm    : SelectorList = selectors.filter((selector) => selector.some(isPseudoElementSelector));     // do  contain ::pseudo-element
     
     
     
     if (isNotEmptySelectors(selectorsWithoutPseudoElm)) return selectorsOnlyPseudoElm; // empty selectors => nothing to group => return selectorsOnlyPseudoElm (might be an empty too)
     return [
         [
-            [
-                ':',
-                targetSelectorName,
-                selectorsWithoutPseudoElm,
-            ] as SimpleSelector,
+            pseudoClassSelector(targetSelectorName, selectorsWithoutPseudoElm),
         ] as Selector,
         
         ...selectorsOnlyPseudoElm,
@@ -818,7 +816,7 @@ export const ungroupSelector  = (selector: Selector     , options: UngroupSelect
                 selectorParams,
             ] = selectorEntry;
             if (
-                selectorName && targetSelectorName.includes(selectorName)
+                targetSelectorName.includes(selectorName)
                 &&
                 selectorParams && isSelectors(selectorParams)
             ) {
