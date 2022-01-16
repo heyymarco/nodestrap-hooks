@@ -32,20 +32,21 @@ export type AttrSelectorParams         = | readonly [AttrSelectorName           
                                          | readonly [AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions]
 
 export type SelectorParams             = AttrSelectorParams | SelectorList | string
+export type PseudoClassSelectorParams  = Exclude<SelectorParams, AttrSelectorParams>
 
 
-export type ParentSelector             =   readonly [ParentSelectorToken               /* no_name */  /* no_param */                             ]
-export type UniversalSelector          =   readonly [UniversalSelectorToken            /* no_name */  /* no_param */                             ]
+export type ParentSelector             =   readonly [ ParentSelectorToken               /* no_name */  /* no_param */            ]
+export type UniversalSelector          =   readonly [ UniversalSelectorToken            /* no_name */  /* no_param */            ]
 export type UnnamedSelector            =   ParentSelector | UniversalSelector
 
-export type AttrSelector               =   readonly [AttrSelectorToken          , null /* no_name */, AttrSelectorParams                         ]
+export type AttrSelector               =   readonly [ AttrSelectorToken          , null /* no_name */, AttrSelectorParams        ]
 
-export type ElementSelector            =   readonly [ElementSelectorToken       , SelectorName        /* no_param */                             ]
-export type IdSelector                 =   readonly [IdSelectorToken            , SelectorName        /* no_param */                             ]
-export type ClassSelector              =   readonly [ClassSelectorToken         , SelectorName        /* no_param */                             ]
-export type PseudoClassSelector        = | readonly [PseudoClassSelectorToken   , SelectorName        /* no_param */                             ]
-                                         | readonly [PseudoClassSelectorToken   , SelectorName      , Exclude<SelectorParams, AttrSelectorParams>]
-export type PseudoElementSelector      =   readonly [PseudoElementSelectorToken , SelectorName        /* no_param */                             ]
+export type ElementSelector            =   readonly [ ElementSelectorToken       , SelectorName        /* no_param */            ]
+export type IdSelector                 =   readonly [ IdSelectorToken            , SelectorName        /* no_param */            ]
+export type ClassSelector              =   readonly [ ClassSelectorToken         , SelectorName        /* no_param */            ]
+export type PseudoClassSelector        = | readonly [ PseudoClassSelectorToken   , SelectorName        /* no_param */            ]
+                                         | readonly [ PseudoClassSelectorToken   , SelectorName      , PseudoClassSelectorParams ]
+export type PseudoElementSelector      =   readonly [ PseudoElementSelectorToken , SelectorName        /* no_param */            ]
 export type NamedSelector              =   ElementSelector | IdSelector | ClassSelector | PseudoClassSelector | PseudoElementSelector
 
 export type SimpleSelector             = | UnnamedSelector
@@ -499,7 +500,74 @@ export const isSelectors          = (selectorParams: SelectorParams): selectorPa
     );
 };
 
-// SelectorEntry tests:
+// SelectorEntry creates & tests:
+export const parentSelector                      = (): ParentSelector                                => [ '&'    /* no_name */  /* no_param */ ];
+export const universalSelector                   = (): UniversalSelector                             => [ '*'    /* no_name */  /* no_param */ ];
+const requiredName = (name: AttrSelectorName|SelectorName): true => { if (!name) throw Error('The `name` cannot be empty.'); return true; };
+export const attrSelector                        = (name: AttrSelectorName, operator?: AttrSelectorOperator, value?: AttrSelectorValue, options?: AttrSelectorOptions): AttrSelector => {
+    requiredName(name);
+    
+    if (operator) {
+        if (value !== undefined) { // value might be an empty string '', so `undefined` is used for comparison
+            if (options) {
+                return [
+                    '[',          // AttrSelectorToken
+                    null,         // no_SelectorName
+                    [             // AttrSelectorParams
+                        name,     // AttrSelectorName
+                        operator, // AttrSelectorOperator
+                        value,    // AttrSelectorValue
+                        options,  // AttrSelectorOptions
+                    ],
+                ];
+            }
+            else {
+                return [
+                    '[',          // AttrSelectorToken
+                    null,         // no_SelectorName
+                    [             // AttrSelectorParams
+                        name,     // AttrSelectorName
+                        operator, // AttrSelectorOperator
+                        value,    // AttrSelectorValue
+                    ],
+                ];
+            } // options
+        } // if
+        
+        throw Error('The `value` must be provided if the `operator` defined.');
+    }
+    else {
+        return [
+            '[',      // AttrSelectorToken
+            null,     // no_SelectorName
+            [         // AttrSelectorParams
+                name, // AttrSelectorName
+            ],
+        ];
+    } // if operator
+};
+export const elementSelector                     = (elmName   : SelectorName): ElementSelector       => requiredName(elmName  ) && [ ''   , elmName        /* no_param */ ];
+export const idSelector                          = (id        : SelectorName): IdSelector            => requiredName(id       ) && [ '#'  , id             /* no_param */ ];
+export const classSelector                       = (className : SelectorName): ClassSelector         => requiredName(className) && [ '.'  , className      /* no_param */ ];
+export const pseudoClassSelector                 = (className : SelectorName, params?: PseudoClassSelectorParams): PseudoClassSelector => {
+    requiredName(className);
+    
+    if (params !== undefined) { // value might be an empty string '', so `undefined` is used for comparison
+        return [
+            ':',       // PseudoClassSelectorToken
+            className, // SelectorName
+            params,    // PseudoClassSelectorParams
+        ];
+    }
+    else {
+        return [
+            ':',       // PseudoClassSelectorToken
+            className, // SelectorName
+        ];
+    } // if
+};
+export const pseudoElementSelector               = (elmName   : SelectorName): PseudoElementSelector => requiredName(elmName  ) && [ '::' , elmName        /* no_param */ ];
+
 export const isSimpleSelector                    = (selectorEntry: SelectorEntry): selectorEntry is SimpleSelector                          => (typeof(selectorEntry) !== 'string');
 export const isParentSelector                    = (selectorEntry: SelectorEntry): selectorEntry is ParentSelector                          => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '&' );
 export const isUniversalSelector                 = (selectorEntry: SelectorEntry): selectorEntry is UniversalSelector                       => isSimpleSelector(selectorEntry) && (selectorEntry?.[0] === '*' );
