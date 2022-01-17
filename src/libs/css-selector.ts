@@ -816,24 +816,26 @@ export interface GroupSelectorOptions {
 const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
     selectorName  : 'is',
 };
-export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
+export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
+    if (!isNotEmptySelectors(selectors)) return pureSelectorList(...[]); // nothing to group => return an empty SelectorList
+    
+    
+    
+    const selectorsWithoutPseudoElm : PureSelectorList = selectors.filter((selector) => selector.every(isNotPseudoElementSelector)); // not contain ::pseudo-element
+    const selectorsOnlyPseudoElm    : PureSelectorList = selectors.filter((selector) => selector.some(isPseudoElementSelector));     // do  contain ::pseudo-element
+    
+    
+    
+    if (!isNotEmptySelectors(selectorsWithoutPseudoElm)) return selectorsOnlyPseudoElm; // empty selectors => nothing to group => return selectorsOnlyPseudoElm (might be an empty too)
+    
+    
+    
     const {
         selectorName : targetSelectorName = defaultGroupSelectorOptions.selectorName,
     } = options;
     
     
     
-    if (isNotEmptySelectors(selectors)) return pureSelectorList(...[]); // empty selectors => nothing to group => return empty SelectorList
-    
-    
-    
-    const filteredSelectors         : PureSelectorList = selectors.filter(isNotEmptySelector); // remove empty Selector(s) in SelectorList
-    const selectorsWithoutPseudoElm : PureSelectorList = filteredSelectors.filter((selector) => selector.every(isNotPseudoElementSelector)); // not contain ::pseudo-element
-    const selectorsOnlyPseudoElm    : PureSelectorList = filteredSelectors.filter((selector) => selector.some(isPseudoElementSelector));     // do  contain ::pseudo-element
-    
-    
-    
-    if (isNotEmptySelectors(selectorsWithoutPseudoElm)) return selectorsOnlyPseudoElm; // empty selectors => nothing to group => return selectorsOnlyPseudoElm (might be an empty too)
     return pureSelectorList(
         selector(
             pseudoClassSelector(targetSelectorName, selectorsWithoutPseudoElm),
@@ -842,7 +844,7 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
         ...selectorsOnlyPseudoElm,
     );
 }
-export const groupSelector  = (selector: Selector     , options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
+export const groupSelector  = (selector: OptionalOrFalse<Selector>     , options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
     return groupSelectors(selectorList(selector), options);
 }
 
@@ -853,10 +855,8 @@ export interface UngroupSelectorOptions {
 const defaultUngroupSelectorOptions : Required<UngroupSelectorOptions> = {
     selectorName  : ['is', 'where'],
 };
-export const ungroupSelector  = (selector: Selector     , options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
-    const {
-        selectorName : targetSelectorName = defaultUngroupSelectorOptions.selectorName,
-    } = options;
+export const ungroupSelector  = (selector: OptionalOrFalse<Selector>     , options: UngroupSelectorOptions = defaultUngroupSelectorOptions): PureSelectorList => {
+    if (!selector) return pureSelectorList(...[]); // nothing to ungroup => return an empty SelectorList
     
     
     
@@ -864,6 +864,12 @@ export const ungroupSelector  = (selector: Selector     , options: UngroupSelect
     if (filteredSelector.length === 1) {
         const selectorEntry = filteredSelector[0]; // get the only one SelectorEntry
         if (isPseudoClassSelector(selectorEntry)) {
+            const {
+                selectorName : targetSelectorName = defaultUngroupSelectorOptions.selectorName,
+            } = options;
+            
+            
+            
             const [
                 /*
                     selector tokens:
@@ -905,11 +911,15 @@ export const ungroupSelector  = (selector: Selector     , options: UngroupSelect
     
     
     
-    return selectorList(
+    return pureSelectorList(
         filteredSelector, // no changes - just cleaned up
     );
 }
-export const ungroupSelectors = (selectors: SelectorList, options: UngroupSelectorOptions = defaultUngroupSelectorOptions): SelectorList => {
+export const ungroupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: UngroupSelectorOptions = defaultUngroupSelectorOptions): PureSelectorList => {
+    if (!selectors) return pureSelectorList(...[]); // nothing to ungroup => return an empty SelectorList
+    
+    
+    
     return selectors.filter(isNotEmptySelector).flatMap((selector) => ungroupSelector(selector, options));
 }
 
