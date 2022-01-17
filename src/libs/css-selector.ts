@@ -816,7 +816,7 @@ export interface GroupSelectorOptions {
 const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
     selectorName  : 'is',
 };
-export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList & { 0: PureSelector } => {
+export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList & { 0: Selector } => {
     if (!isNotEmptySelectors(selectors)) return pureSelectorList(
         selector(
             ...[] // an empty Selector
@@ -852,7 +852,7 @@ export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options
         ...selectorsOnlyPseudoElm,
     );
 }
-export const groupSelector  = (selector: OptionalOrFalse<Selector>     , options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList & { 0: PureSelector } => {
+export const groupSelector  = (selector: OptionalOrFalse<Selector>     , options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList & { 0: Selector } => {
     return groupSelectors(selectorList(selector), options);
 }
 
