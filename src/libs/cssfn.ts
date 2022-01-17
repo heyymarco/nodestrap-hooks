@@ -51,6 +51,7 @@ import {
     
     // creates & tests:
     parentSelector,
+    pseudoClassSelector,
     isSimpleSelector,
     isParentSelector,
     isClassOrPseudoClassSelector,
@@ -58,6 +59,7 @@ import {
     isCombinatorOf,
     createSelector,
     createSelectorList,
+    isNotEmptySelector,
     isNotEmptySelectors,
     
     
@@ -405,7 +407,7 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
-const nthChildNModel : SimpleSelectorModel = [ ':', 'nth-child', 'n' ];
+const nthChildNModel = pseudoClassSelector('nth-child', 'n');
 const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): SelectorModelList => {
     // if (selector === '&') return selector; // only parent selector => no change
     if (
@@ -565,7 +567,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
             );
         }),
         
-        ...tooSmallSelectorModels.map((group) => ([
+        ...tooSmallSelectorModels.map((group) => createSelector(
             ...group.selectorModel,
             ...(new Array<SimpleSelectorModel>((minSpecificityWeight ?? 1) - group.specificityWeight)).fill(
                 group.selectorModel
@@ -608,7 +610,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                 ??
                 nthChildNModel // or use `nth-child(n)`
             )
-        ] as SelectorModel)),
+        )),
     );
     
     
@@ -757,96 +759,110 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const withCombiSelectors       : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selectorModel);
-    const onlyParentSelectors      : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selectorModel);
-    const onlyBeginParentSelectors : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selectorModel);
-    const onlyEndParentSelectors   : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selectorModel);
-    const randomParentSelectors    : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selectorModel);
+    const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selectorModel);
+    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selectorModel);
+    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selectorModel);
+    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selectorModel);
+    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selectorModel);
     
     
     
-    const [whereSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
-        onlyBeginParentSelectors,
-        { selectorName: 'where' }
-    );
     const grouped = createSelectorList(
-        // only parent
+        // only ParentSelector
         // &
-        (onlyParentSelectors.length ? (
+        !!onlyParentSelectors.length && (
             onlyParentSelectors[0] // just take the first one, the rest are guaranteed to be the same
-        ) : []),
+        ),
         
         
         
-        // parent at beginning
+        // ParentSelector at beginning
         // &aaa
         // &:is(aaa, bbb, ccc)
-        ...groupSelectors(
-            onlyBeginParentSelectors
-        ),
-        (onlyBeginParentSelectors.length ? (
-            (onlyBeginParentSelectors.length === 1)
-            ?
-            onlyBeginParentSelectors[0]
-            :
-            `&:is(${onlyBeginParentSelectors.map((nestedSelector) => nestedSelector.slice(1)).join(',')})`
-        ) : null),
+        ...(() => {
+            if (onlyBeginParentSelectors.length === 1) return onlyBeginParentSelectors; // only contain 1 item, no need to group
+            
+            
+            
+            const [isSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
+                onlyBeginParentSelectors
+                .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
+                .map((selectorModel) => selectorModel.slice(1)), // remove the first selector sequence - that is ParentSelector
+                { selectorName: 'is' }
+            );
+            return createSelectorList(
+                createSelector(
+                    parentSelector(),   // add a ParentSelector before :is(...)
+                    ...isSelectorModel, // :is(...)
+                ),
+                ...pseudoElmSelectorModels,
+            );
+        })(),
         
         
         
-        // parent at end
+        // ParentSelector at end
         // aaa&
         // :is(aaa, bbb, ccc)&
-        (onlyEndParentSelectors.length ? (
-            (onlyEndParentSelectors.length === 1)
-            ?
-            onlyEndParentSelectors[0]
-            :
-            `:is(${onlyEndParentSelectors.map((nestedSelector) => nestedSelector.slice(0, -1)).join(',')})&`
-        ) : null),
+        ...(() => {
+            if (onlyEndParentSelectors.length === 1) return onlyEndParentSelectors; // only contain 1 item, no need to group
+            
+            
+            
+            const [isSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
+                onlyEndParentSelectors
+                .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
+                .map((selectorModel) => selectorModel.slice(0, -1)), // remove the last selector sequence - that is ParentSelector
+                { selectorName: 'is' }
+            );
+            return createSelectorList(
+                createSelector(
+                    ...isSelectorModel, // :is(...)
+                    parentSelector(),   // add a ParentSelector after :is(...)
+                ),
+                ...pseudoElmSelectorModels,
+            );
+        })(),
         
         
         
         // parent at random
         // a&aa, bb&b, c&c&c
-        (randomParentSelectors.length ? (
-            randomParentSelectors.join(',')
-        ) : null),
+        ...randomParentSelectors,
         
         
         
         // parent with combinator
         // &>aaa
         // &>:is(aaa, bbb, ccc)
-        ((!!withCombinator && withCombiSelectors.length) ? (
-            (withCombiSelectors.length === 1)
-            ?
-            withCombiSelectors[0]
-            :
-            `${withCombinator}:is(${withCombiSelectors.map((nestedSelector) => nestedSelector.slice(withCombinator.length)).join(',')})`
-        ) : null),
+        ...(() => {
+            if (withCombiSelectors.length === 1) return withCombiSelectors; // only contain 1 item, no need to group
+            
+            
+            
+            const [isSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
+                withCombiSelectors
+                .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
+                .map((selectorModel) => selectorModel.slice(2)), // remove the first & second selector sequence - that is ParentSelector + Combinator
+                { selectorName: 'is' }
+            );
+            return createSelectorList(
+                createSelector(
+                    parentSelector(),   // add a ParentSelector before :is(...)
+                    combinator,         // add a Combinator before :is(...)
+                    ...isSelectorModel, // :is(...)
+                ),
+                ...pseudoElmSelectorModels,
+            );
+        })(),
     );
     
     
     
     return {
-        ...((grouped.length || ungroupableSelectors.length) ? {
+        ...(isNotEmptySelectors(grouped) ? {
             [Symbol(
-                [
-                    // groupable selectors:
-                    ...(grouped.length ? [
-                        (
-                            (grouped.length === 1)
-                            ?
-                            grouped[0]
-                            :
-                            `:is(${grouped.join(',')})`
-                        ),
-                    ] : []),
-                    
-                    // ungroupable selectors:
-                    ...ungroupableSelectors
-                ].join(',') // join groupableSelector(s), ungroupableSelector, ungroupableSelector, ...
+                selectorsToString(grouped)
             )] : styles
         } : {}),
     };
