@@ -484,8 +484,8 @@ export const isAttrSelectorParams = (selectorParams: SelectorParams): selectorPa
         !isWildParams(selectorParams)
         &&
         /*
-            AttrSelectorParams : [ AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions ]
-            SelectorList       : [ undefined|null|false...Selector...Selector...[undefined|null|false...SimpleSelector|Combinator]... ]
+            AttrSelectorParams : readonly array : [ AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions ]
+            SelectorList       : mutable  array : [ undefined|null|false...Selector...Selector...[undefined|null|false...SimpleSelector|Combinator]... ]
             
             [0]                : AttrSelectorName | undefined|null|false | Selector
             [0]                : -----string----- | -------others------- | -array--
@@ -498,8 +498,8 @@ export const isSelectors          = (selectorParams: SelectorParams): selectorPa
         !isWildParams(selectorParams)
         &&
         /*
-            AttrSelectorParams : [ AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions ]
-            SelectorList       : [ undefined|null|false...Selector...Selector...[undefined|null|false...SimpleSelector|Combinator]... ]
+            AttrSelectorParams : readonly array : [ AttrSelectorName, AttrSelectorOperator, AttrSelectorValue, AttrSelectorOptions ]
+            SelectorList       : mutable  array : [ undefined|null|false...Selector...Selector...[undefined|null|false...SimpleSelector|Combinator]... ]
             
             [0]                : AttrSelectorName | undefined|null|false | Selector
             [0]                : -----string----- | -------others------- | -array--
@@ -682,8 +682,9 @@ export const isNotEmptySelectors = (selectors : OptionalOrFalse<SelectorList>): 
 
 
 // renders:
-export const selectorParamsToString = (selectorParams: SelectorParams|null|undefined): string => {
-    if ((selectorParams === null) || (selectorParams === undefined)) return '';
+export const selectorParamsToString = (selectorParams: OptionalOrFalse<SelectorParams>): string => {
+    if ((!selectorParams) && (selectorParams !== '')) return ''; // filter out undefined|null|false
+    // note: an empty string (selectorParams === '') is considered a valid WildParams
     
     if (isWildParams(selectorParams)) {
         return `(${selectorParams})`;
@@ -713,6 +714,7 @@ export const selectorParamsToString = (selectorParams: SelectorParams|null|undef
 export const selectorToString       = (selector: Selector): string => {
     return (
         selector
+        .filter(isNotEmptySelectorEntry) // remove empty SelectorEntry(es) in Selector
         .map((selectorEntry): string => {
             if (isSimpleSelector(selectorEntry)) {
                 const [
