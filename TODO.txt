@@ -1,3 +1,18 @@
+check:
+SelectorList [DONE]
+SelectorParams
+Selector
+SelectorEntry
+
+
+
+rename ??:
+isNotEmptySelector  => isSelectorExist
+isNotEmptySelectors => isSelectorListExist
+
+
+
+
 urgent priority:
 sync breakpoints
 add jss-plugin-keyframes
