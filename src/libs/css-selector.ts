@@ -817,7 +817,7 @@ const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
     selectorName  : 'is',
 };
 export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
-    if (!isNotEmptySelectors(selectors)) return pureSelectorList(...[]); // nothing to group => return an empty SelectorList
+    if (!isNotEmptySelectors(selectors)) return pureSelectorList(...[]); // empty selectors => nothing to group => return an empty SelectorList
     
     
     
