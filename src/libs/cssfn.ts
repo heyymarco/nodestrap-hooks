@@ -758,7 +758,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // &aaa
         // &:is(aaa, bbb, ccc)
         ...(() => {
-            if (onlyBeginParentSelectors.length === 1) return onlyBeginParentSelectors; // only contain 1 item, no need to group
+            if (onlyBeginParentSelectors.length <= 1) return onlyBeginParentSelectors; // only contain one/no SelectorModel, no need to group
             
             
             
@@ -783,7 +783,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // aaa&
         // :is(aaa, bbb, ccc)&
         ...(() => {
-            if (onlyEndParentSelectors.length === 1) return onlyEndParentSelectors; // only contain 1 item, no need to group
+            if (onlyEndParentSelectors.length <= 1) return onlyEndParentSelectors; // only contain one/no SelectorModel, no need to group
             
             
             
@@ -814,7 +814,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // &>aaa
         // &>:is(aaa, bbb, ccc)
         ...(() => {
-            if (withCombiSelectors.length === 1) return withCombiSelectors; // only contain 1 item, no need to group
+            if (withCombiSelectors.length <= 1) return withCombiSelectors; // only contain one/no SelectorModel, no need to group
             
             
             
