@@ -49,12 +49,16 @@ import {
     
     
     
-    // tests:
+    // creates & tests:
+    parentSelector,
     isSimpleSelector,
     isParentSelector,
     isClassOrPseudoClassSelector,
     isPseudoElementSelector,
     isCombinatorOf,
+    createSelector,
+    createSelectorList,
+    isNotEmptySelectors,
     
     
     
@@ -65,6 +69,7 @@ import {
     
     
     // transforms:
+    groupSelectors,
     groupSelector,
     ungroupSelector,
     
@@ -464,7 +469,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
     
     
     type SelectorAccum = { remaining: number, reducedSelectorModel: SelectorModel }
-    const adjustedSelectorList : SelectorModelList = [
+    const adjustedSelectorList = createSelectorList(
         ...fitSelectorModels.map((group) => group.selectorModel),
         
         ...tooBigSelectorModels.flatMap((group) => {
@@ -554,10 +559,10 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                     nthChildNModel // or use `nth-child(n)`
                 ),
             );
-            return [
+            return createSelectorList(
                 whereSelectorModel,
                 ...pseudoElmSelectorModels,
-            ] as SelectorModelList;
+            );
         }),
         
         ...tooSmallSelectorModels.map((group) => ([
@@ -604,7 +609,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                 nthChildNModel // or use `nth-child(n)`
             )
         ] as SelectorModel)),
-    ].filter((selectorModel) => !!selectorModel.length);
+    );
     
     
     
@@ -631,8 +636,8 @@ const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
 };
 export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): Rule => {
     const {
-        groupSelectors = defaultNestedRuleOptions.groupSelectors,
-        combinator     = defaultNestedRuleOptions.combinator,
+        groupSelectors : doGroupSelectors = defaultNestedRuleOptions.groupSelectors,
+        combinator                        = defaultNestedRuleOptions.combinator,
         
         specificityWeight,
     } = options;
@@ -641,7 +646,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const nestedSelectors : SelectorModelList = adjustSpecificityWeight(
+    const nestedSelectors = adjustSpecificityWeight(
         flat(selectors)
         .filter((selector): selector is Selector => !!selector)
         .map((selector): Selector => {
@@ -672,11 +677,11 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    if (!nestedSelectors.length) return {}; // no nestedSelector => return empty
+    if (!isNotEmptySelectors(nestedSelectors)) return {}; // no nestedSelector => return empty Rule
     
     
     
-    if (!groupSelectors || (nestedSelectors.length === 1)) {
+    if (!doGroupSelectors || (nestedSelectors.length === 1)) {
         return Object.fromEntries(
             nestedSelectors
             .map((nestedSelector) => [
@@ -691,8 +696,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     const enum GroupCond {
-        Ungroupable,
-        
         WithCombinator,
         
         OnlyParent,
@@ -703,11 +706,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel }
     const withCombinator  = combinator ? `&${combinator}` : null;
     const selectorsGroups = nestedSelectors.map((nestedSelector): SelectorGroup => {
-        const ungroupable     = nestedSelector.some(isPseudoElementSelector);
-        if (ungroupable)      return { cond: GroupCond.Ungroupable    , selectorModel: nestedSelector };
-        
-        
-        
         const hasFirstParent = ((): boolean => {
             if (nestedSelector.length < 1) return false;                // at least 1 entry must exist, for the first_parent
             
@@ -759,27 +757,33 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const ungroupableSelectors     = selectorsGroups.filter((group) => (group.cond === GroupCond.Ungroupable    )).map((group) => group.selectorModel);
-    const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selectorModel);
-    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selectorModel);
-    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selectorModel);
-    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selectorModel);
-    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selectorModel);
+    const withCombiSelectors       : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selectorModel);
+    const onlyParentSelectors      : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selectorModel);
+    const onlyBeginParentSelectors : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selectorModel);
+    const onlyEndParentSelectors   : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selectorModel);
+    const randomParentSelectors    : SelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selectorModel);
     
     
     
-    const grouped = [
+    const [whereSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
+        onlyBeginParentSelectors,
+        { selectorName: 'where' }
+    );
+    const grouped = createSelectorList(
         // only parent
         // &
         (onlyParentSelectors.length ? (
-            '&'
-        ) : null),
+            onlyParentSelectors[0] // just take the first one, the rest are guaranteed to be the same
+        ) : []),
         
         
         
         // parent at beginning
         // &aaa
         // &:is(aaa, bbb, ccc)
+        ...groupSelectors(
+            onlyBeginParentSelectors
+        ),
         (onlyBeginParentSelectors.length ? (
             (onlyBeginParentSelectors.length === 1)
             ?
@@ -821,7 +825,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             :
             `${withCombinator}:is(${withCombiSelectors.map((nestedSelector) => nestedSelector.slice(withCombinator.length)).join(',')})`
         ) : null),
-    ].filter((grp): grp is string => !!grp);
+    );
     
     
     
