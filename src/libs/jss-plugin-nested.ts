@@ -23,7 +23,7 @@ import {
     
     
     
-    // tests:
+    // creates & tests:
     isParentSelector,
     createSelector,
     createSelectorList,
