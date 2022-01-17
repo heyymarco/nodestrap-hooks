@@ -817,7 +817,11 @@ const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
     selectorName  : 'is',
 };
 export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
-    if (!isNotEmptySelectors(selectors)) return pureSelectorList(...[]); // empty selectors => nothing to group => return an empty SelectorList
+    if (!isNotEmptySelectors(selectors)) return pureSelectorList(
+        selector(
+            ...[] // an empty Selector
+        ),
+    ); // empty selectors => nothing to group => return a SelectorList with an empty Selector
     
     
     
@@ -826,7 +830,11 @@ export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options
     
     
     
-    if (!isNotEmptySelectors(selectorsWithoutPseudoElm)) return selectorsOnlyPseudoElm; // empty selectors => nothing to group => return selectorsOnlyPseudoElm (might be an empty too)
+    if (!isNotEmptySelectors(selectorsWithoutPseudoElm)) return pureSelectorList(
+        selector(
+            ...[] // an empty Selector
+        ),
+    ); // empty selectors => nothing to group => return a SelectorList with an empty Selector
     
     
     
