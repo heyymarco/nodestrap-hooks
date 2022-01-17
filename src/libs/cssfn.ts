@@ -55,7 +55,6 @@ import {
     isSimpleSelector,
     isParentSelector,
     isClassOrPseudoClassSelector,
-    isPseudoElementSelector,
     isCombinatorOf,
     createSelector,
     createSelectorList,
@@ -418,12 +417,6 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
     
     
     
-    // convert string to parsed_object_tree:
-    // const selectorList = parseSelectors(selector);
-    // if (!selectorList) return selector; // parse error => no change
-    
-    
-    
     const enum GroupCond {
         Fit,
         TooBig,
@@ -470,13 +463,13 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
     
     
     
-    type SelectorAccum = { remaining: number, reducedSelectorModel: SelectorModel }
-    const adjustedSelectorList = createSelectorList(
+    return createSelectorList(
         ...fitSelectorModels.map((group) => group.selectorModel),
         
         ...tooBigSelectorModels.flatMap((group) => {
             const reversedSelectorModel = group.selectorModel.reverse(); // reverse & mutate the current `group.selectorModel` array
             
+            type SelectorAccum = { remaining: number, reducedSelectorModel: SelectorModel }
             const { reducedSelectorModel: reversedReducedSelectorModel, remaining: remainingSpecificityWeight } : SelectorAccum = (
                 reversedSelectorModel.slice(0) // clone the `reversedSelectorModel` because the `reduce()` uses `splice()` to break the iteration
                 .reduce((accum, selectorEntry, index, array): SelectorAccum => {
@@ -612,12 +605,6 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
             )
         )),
     );
-    
-    
-    
-    // // convert back the parsed_object_tree to string:
-    // return selectorsToString(adjustedSelectorList);
-    return adjustedSelectorList;
 };
 
 export interface NestedRuleOptions {
@@ -667,14 +654,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         ,
         minSpecificityWeight,
         maxSpecificityWeight
-        
-        // .map((selector) =>
-        //     adjustSpecificityWeight(
-        //         selector,
-        //         minSpecificityWeight,
-        //         maxSpecificityWeight
-        //     )
-        // )
     );
     
     
@@ -706,7 +685,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         RandomParent,
     }
     type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel }
-    const withCombinator  = combinator ? `&${combinator}` : null;
     const selectorsGroups = nestedSelectors.map((nestedSelector): SelectorGroup => {
         const hasFirstParent = ((): boolean => {
             if (nestedSelector.length < 1) return false;                // at least 1 entry must exist, for the first_parent
