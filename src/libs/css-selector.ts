@@ -679,8 +679,8 @@ export const isSelector = (test: OptionalOrFalse<SimpleSelector|Selector>): test
     */
     return !!test && (typeof(test[0]) !== 'string'); // Selector : the first element (SelectorEntry) must be a NON-string, the Combinator is guaranteed NEVER be the first element
 };
-export const isNotEmptySelector  = (selector  : OptionalOrFalse<Selector    >):  selector is PureSelector     => !!selector  &&  !!selector.filter((optSelectorEntry) => !!optSelectorEntry /* remove undefined|null|false */).length;
-export const isNotEmptySelectors = (selectors : OptionalOrFalse<SelectorList>): selectors is PureSelectorList => !!selectors && !!selectors.filter((optSelector)      => !!optSelector      /* remove undefined|null|false */).length;
+export const isNotEmptySelector  = (selector  : OptionalOrFalse<Selector    >):  selector is PureSelector     => !!selector  &&  !!selector.filter((optSelectorEntry) => !!optSelectorEntry /* filter out undefined|null|false */).length;
+export const isNotEmptySelectors = (selectors : OptionalOrFalse<SelectorList>): selectors is PureSelectorList => !!selectors && !!selectors.filter((optSelector)      => !!optSelector      /* filter out undefined|null|false */).length;
 
 
 
@@ -766,10 +766,10 @@ export type MapSelectorsCallback = (selector: SimpleSelector) => OptionalOrFalse
 export const flatMapSelectors = (selectors: SelectorList, callbackFn: MapSelectorsCallback): SelectorList => {
     return (
         selectors
-        .filter(isNotEmptySelector) // filter out undefined|null|false
+        .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
         .map((selector: Selector): Selector => // mutates a `Selector` to another `Selector`
             selector
-            .filter(isNotEmptySelectorEntry) // filter out undefined|null|false
+            .filter(isNotEmptySelectorEntry) // remove empty SelectorEntry(es) in Selector
             .flatMap((selectorEntry: SelectorEntry): Selector => { // mutates a (SimpleSelector|Combinator) to ([SimpleSelector]|Selector)
                 if (isSimpleSelector(selectorEntry)) {
                     let replacement : SimpleSelector|Selector = callbackFn(selectorEntry) || selectorEntry;
