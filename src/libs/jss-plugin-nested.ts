@@ -25,6 +25,9 @@ import {
     
     // tests:
     isParentSelector,
+    createSelector,
+    createSelectorList,
+    isNotEmptySelector,
     
     
     
@@ -62,7 +65,15 @@ const getOptions = (rule: Rule, parentRule: Rule|StyleSheet|undefined, optionsCa
     return options;
 };
 const combineSelector = (parentSelector: string, nestedSelector: string): string|null => {
-    const parentSelectors : SelectorList|null = parentSelector ? parseSelectors(parentSelector) : [[]];
+    const parentSelectors : SelectorList|null = (
+        parentSelector
+        ?
+        parseSelectors(parentSelector)
+        :
+        createSelectorList(
+            createSelector(...[]) // empty parent selector
+        )
+    );
     if (!parentSelectors) return null; // parsing error => invalid selector
     
     const nestedSelectors : SelectorList|null = parseSelectors(nestedSelector);
@@ -72,6 +83,7 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
     
     const combinedSelectors : SelectorList = (
         parentSelectors
+        .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
         .flatMap((parentSelector) =>
             flatMapSelectors(nestedSelectors, (selector) => {
                 // we're only interested of ParentSelector
