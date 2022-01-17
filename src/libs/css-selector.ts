@@ -956,7 +956,11 @@ export const calculateSpecificity = (selector: Selector): Specificity => {
                     case 'not':
                     case 'has': {
                         if (!selectorParams || !isSelectors(selectorParams)) return accum; // no changes
-                        const moreSpecificities = selectorParams.map((selectorParam) => calculateSpecificity(selectorParam));
+                        const moreSpecificities = (
+                            selectorParams
+                            .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
+                            .map((selectorParam) => calculateSpecificity(selectorParam))
+                        );
                         const maxSpecificity    = moreSpecificities.reduce((accum, current): Specificity => {
                             if (
                                 (current[0] > accum[0])
