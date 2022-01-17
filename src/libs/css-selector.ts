@@ -66,6 +66,9 @@ export type SelectorEntry              = SimpleSelector | Combinator
 export type Selector                   = OptionalOrFalse<SelectorEntry>[]
 export type SelectorList               = OptionalOrFalse<Selector>[]
 
+export type PureSelector               = SelectorEntry[]
+export type PureSelectorList           = Selector[]
+
 
 
 const whitespaceList              = [' ', '\n', '\r', '\t', '\f', '\v'];
@@ -642,10 +645,10 @@ export const isCombinator                        = (selectorEntry: OptionalOrFal
 export const isCombinatorOf                      = (selectorEntry: OptionalOrFalse<SelectorEntry>, combinator: SingleOrArray<Combinator>) : boolean => isCombinator(selectorEntry)                     && [combinator].flat().includes(selectorEntry);
 
 // SimpleSelector & Selector creates & tests:
-export const selector         = (...selectorEntries : Selector        ): Selector        => selectorEntries;
-export const pureSelector     = (...selectorEntries : SelectorEntry[] ): SelectorEntry[] => selectorEntries;
-export const selectorList     = (...selectors       : SelectorList    ): SelectorList    => selectors;
-export const pureSelectorList = (...selectors       : Selector[]      ): Selector[]      => selectors;
+export const selector         = (...selectorEntries : Selector        ): Selector         => selectorEntries;
+export const pureSelector     = (...selectorEntries : PureSelector    ): PureSelector     => selectorEntries;
+export const selectorList     = (...selectors       : SelectorList    ): SelectorList     => selectors;
+export const pureSelectorList = (...selectors       : PureSelectorList): PureSelectorList => selectors;
 //#region aliases
 export const [
     createSelector,
@@ -676,8 +679,8 @@ export const isSelector = (test: OptionalOrFalse<SimpleSelector|Selector>): test
     */
     return !!test && (typeof(test[0]) !== 'string'); // Selector : the first element (SelectorEntry) must be a NON-string, the Combinator is guaranteed NEVER be the first element
 };
-export const isNotEmptySelector  = (selector  : OptionalOrFalse<Selector    >):  selector is SelectorEntry[] => !!selector  &&  !!selector.filter((optSelectorEntry) => !!optSelectorEntry /* remove undefined|null|false */).length;
-export const isNotEmptySelectors = (selectors : OptionalOrFalse<SelectorList>): selectors is Selector[]      => !!selectors && !!selectors.filter((optSelector)      => !!optSelector      /* remove undefined|null|false */).length;
+export const isNotEmptySelector  = (selector  : OptionalOrFalse<Selector    >):  selector is PureSelector     => !!selector  &&  !!selector.filter((optSelectorEntry) => !!optSelectorEntry /* remove undefined|null|false */).length;
+export const isNotEmptySelectors = (selectors : OptionalOrFalse<SelectorList>): selectors is PureSelectorList => !!selectors && !!selectors.filter((optSelector)      => !!optSelector      /* remove undefined|null|false */).length;
 
 
 
@@ -813,7 +816,7 @@ export interface GroupSelectorOptions {
 const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
     selectorName  : 'is',
 };
-export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOptions = defaultGroupSelectorOptions): Selector[] => {
+export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
     const {
         selectorName : targetSelectorName = defaultGroupSelectorOptions.selectorName,
     } = options;
@@ -824,9 +827,9 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
     
     
     
-    const filteredSelectors         : Selector[] = selectors.filter(isNotEmptySelector); // remove empty Selector(s) in SelectorList
-    const selectorsWithoutPseudoElm : Selector[] = filteredSelectors.filter((selector) => selector.every(isNotPseudoElementSelector)); // not contain ::pseudo-element
-    const selectorsOnlyPseudoElm    : Selector[] = filteredSelectors.filter((selector) => selector.some(isPseudoElementSelector));     // do  contain ::pseudo-element
+    const filteredSelectors         : PureSelectorList = selectors.filter(isNotEmptySelector); // remove empty Selector(s) in SelectorList
+    const selectorsWithoutPseudoElm : PureSelectorList = filteredSelectors.filter((selector) => selector.every(isNotPseudoElementSelector)); // not contain ::pseudo-element
+    const selectorsOnlyPseudoElm    : PureSelectorList = filteredSelectors.filter((selector) => selector.some(isPseudoElementSelector));     // do  contain ::pseudo-element
     
     
     
@@ -839,7 +842,7 @@ export const groupSelectors = (selectors: SelectorList, options: GroupSelectorOp
         ...selectorsOnlyPseudoElm,
     );
 }
-export const groupSelector  = (selector: Selector     , options: GroupSelectorOptions = defaultGroupSelectorOptions): Selector[] => {
+export const groupSelector  = (selector: Selector     , options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
     return groupSelectors(selectorList(selector), options);
 }
 
