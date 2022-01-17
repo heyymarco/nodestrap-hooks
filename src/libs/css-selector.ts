@@ -674,7 +674,7 @@ export const isSelector = (test: OptionalOrFalse<SimpleSelector|Selector>): test
         SimpleSelector : [ SelectorToken, SelectorName, SelectorParams ]
         Selector       : [ SimpleSelector...(SimpleSelector|Combinator)... ]
     */
-    return !!test && (typeof(test[0]) !== 'string'); // Selector : the first element (SimpleSelector) must be a NON-string, the Combinator is guaranteed NEVER be the first element
+    return !!test && (typeof(test[0]) !== 'string'); // Selector : the first element (SelectorEntry) must be a NON-string, the Combinator is guaranteed NEVER be the first element
 };
 export const isNotEmptySelector  = (selector  : OptionalOrFalse<Selector    >):  selector is SelectorEntry[] => !!selector  &&  !!selector.filter((optSelectorEntry) => !!optSelectorEntry /* remove undefined|null|false */).length;
 export const isNotEmptySelectors = (selectors : OptionalOrFalse<SelectorList>): selectors is Selector[]      => !!selectors && !!selectors.filter((optSelector)      => !!optSelector      /* remove undefined|null|false */).length;
