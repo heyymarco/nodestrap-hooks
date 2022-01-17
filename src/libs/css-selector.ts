@@ -645,10 +645,10 @@ export const isCombinator                        = (selectorEntry: OptionalOrFal
 export const isCombinatorOf                      = (selectorEntry: OptionalOrFalse<SelectorEntry>, combinator: SingleOrArray<Combinator>) : boolean => isCombinator(selectorEntry)                     && [combinator].flat().includes(selectorEntry);
 
 // SimpleSelector & Selector creates & tests:
-export const selector         = (...selectorEntries : Selector        ): Selector         => selectorEntries;
-export const pureSelector     = (...selectorEntries : PureSelector    ): PureSelector     => selectorEntries;
-export const selectorList     = (...selectors       : SelectorList    ): SelectorList     => selectors;
-export const pureSelectorList = (...selectors       : PureSelectorList): PureSelectorList => selectors;
+export const selector         = <TSelector         extends Selector         = Selector        >(...selectorEntries : TSelector        ): TSelector         => selectorEntries;
+export const pureSelector     = <TPureSelector     extends PureSelector     = PureSelector    >(...selectorEntries : TPureSelector    ): TPureSelector     => selectorEntries;
+export const selectorList     = <TSelectorList     extends SelectorList     = SelectorList    >(...selectors       : TSelectorList    ): TSelectorList     => selectors;
+export const pureSelectorList = <TPureSelectorList extends PureSelectorList = PureSelectorList>(...selectors       : TPureSelectorList): TPureSelectorList => selectors;
 //#region aliases
 export const [
     createSelector,
@@ -816,7 +816,7 @@ export interface GroupSelectorOptions {
 const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
     selectorName  : 'is',
 };
-export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
+export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList & { 0: PureSelector } => {
     if (!isNotEmptySelectors(selectors)) return pureSelectorList(
         selector(
             ...[] // an empty Selector
@@ -852,7 +852,7 @@ export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options
         ...selectorsOnlyPseudoElm,
     );
 }
-export const groupSelector  = (selector: OptionalOrFalse<Selector>     , options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList => {
+export const groupSelector  = (selector: OptionalOrFalse<Selector>     , options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList & { 0: PureSelector } => {
     return groupSelectors(selectorList(selector), options);
 }
 
