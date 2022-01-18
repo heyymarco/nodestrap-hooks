@@ -665,12 +665,12 @@ export const [
 ];
 //#endregion aliases
 
-export const isNotEmptySelectorEntry = (test: OptionalOrFalse<SelectorEntry>): test is SelectorEntry => {
+export const isNotEmptySelectorEntry = (selectorEntry: OptionalOrFalse<SelectorEntry>): selectorEntry is SelectorEntry => {
     /*
         SimpleSelector : [ SelectorToken, SelectorName, SelectorParams ]
         Combinator     : string
     */
-   return !!test && (Array.isArray(test) || (typeof(test) === 'string'));
+   return !!selectorEntry && (Array.isArray(selectorEntry) || (typeof(selectorEntry) === 'string'));
 }
 export const isSelector = (test: OptionalOrFalse<SimpleSelector|Selector>): test is Selector => {
     /*
