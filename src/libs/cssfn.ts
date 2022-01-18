@@ -670,7 +670,7 @@ const defaultRuleOptions : Required<RuleOptions> = {
  * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
  * @returns A `Rule` represents the component's rule.
  */
-export const rule = (selectors: SelectorCollection, styles: StyleCollection, options: RuleOptions = defaultRuleOptions): Rule => {
+export const rule = (rules: SelectorCollection, styles: StyleCollection, options: RuleOptions = defaultRuleOptions): Rule => {
     const {
         groupSelectors : doGroupSelectors = defaultRuleOptions.groupSelectors,
         
@@ -681,17 +681,48 @@ export const rule = (selectors: SelectorCollection, styles: StyleCollection, opt
     
     
     
+    const rulesString = (
+        flat(rules)
+        .filter((rule): rule is Selector => !!rule)
+    );
+    const enum RuleType {
+        SelectorRule, // &.foo   .boo&   .foo&.boo
+        AtRule,       // for `@media`
+        PropRule,     // for `from`, `to`, `25%`
+    }
+    type GroupByRuleTypes = Map<RuleType, Selector[]>
+    const rulesByTypes = rulesString.reduce(
+        (accum, rule): GroupByRuleTypes => {
+            let ruleType = ((): RuleType|null => {
+                if (rule.startsWith('@')) return RuleType.AtRule;
+                if (rule.startsWith(' ')) return RuleType.PropRule;
+                if (rule.includes('&'))   return RuleType.SelectorRule;
+                return null;
+            })();
+            switch (ruleType) {
+                case RuleType.PropRule:
+                    rule = rule.slice(1);
+                    break;
+                
+                case null:
+                    ruleType = RuleType.SelectorRule;
+                    rule = `&${rule}`;
+                    break;
+            } // switch
+            
+            
+            
+            if (!accum.has(ruleType)) accum.set(ruleType, []);
+            accum.get(ruleType)?.push(rule);
+            return accum;
+        },
+        new Map<RuleType, Selector[]>()
+    );
+    
+    
+    
     const selectorList = adjustSpecificityWeight(
-        flat(selectors)
-        .filter((selector): selector is Selector => !!selector)
-        .map((selector): Selector => {
-            if (selector.startsWith('@')) return selector; // for `@media`
-            if (selector.startsWith(' ')) return selector.slice(1); // for `from`, `to`, `25%`
-            
-            if (selector.includes('&'))   return selector; // &.foo   .boo&   .foo&.boo            
-            
-            return `&${selector}`;
-        })
+        (rulesByTypes.get(RuleType.SelectorRule) ?? [])
         .flatMap((selector) => {
             const selectorList = parseSelectors(selector);
             if (!selectorList) throw Error(`parse selector error: ${selector}`);
@@ -706,20 +737,25 @@ export const rule = (selectors: SelectorCollection, styles: StyleCollection, opt
     
     
     
-    if (!isNotEmptySelectors(selectorList)) return {}; // no nestedSelector => return empty Rule
-    
-    
-    
-    if (!doGroupSelectors || (selectorList.length === 1)) {
-        return Object.fromEntries(
-            selectorList
-            .map((nestedSelector) => [
+    if (!doGroupSelectors || (selectorList.length <= 1)) {
+        return Object.fromEntries([
+            ...selectorList.map((nestedSelector) => [
                 Symbol(
                     selectorToString(nestedSelector)
                 ),
                 styles
-            ])
-        );
+            ]),
+            
+            ...[
+                ...(rulesByTypes.get(RuleType.AtRule   ) ?? []),
+                ...(rulesByTypes.get(RuleType.PropRule ) ?? []),
+            ].map((rule) => [
+                Symbol(
+                    rule
+                ),
+                styles
+            ]),
+        ]);
     } // if
     
     
@@ -924,6 +960,18 @@ export const rule = (selectors: SelectorCollection, styles: StyleCollection, opt
                 selectorsToString(outputSelectorList)
             )] : styles
         } : {}),
+        
+        ...Object.fromEntries(
+            [
+                ...(rulesByTypes.get(RuleType.AtRule   ) ?? []),
+                ...(rulesByTypes.get(RuleType.PropRule ) ?? []),
+            ].map((rule) => [
+                Symbol(
+                    rule
+                ),
+                styles
+            ]),
+        ),
     };
 };
 
