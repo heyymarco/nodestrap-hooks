@@ -409,6 +409,52 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
+
+
+// compositions:
+/**
+ * Defines the (sub) component's composition.
+ * @returns A `StyleCollection` represents the (sub) component's composition.
+ */
+export const composition     = (styles: StyleCollection[]): StyleCollection => styles;
+/**
+ * Defines the additional component's composition.
+ * @returns A `ClassEntry` represents the component's composition.
+ */
+export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
+    className,
+    styles
+];
+// shortcut compositions:
+/**
+ * Defines the main component's composition.
+ * @returns A `ClassEntry` represents the component's composition.
+ */
+export const mainComposition = (styles: StyleCollection[])      => compositionOf('main' , styles);
+/**
+ * Defines the global style applied to a whole document.
+ * @returns A `ClassEntry` represents the global style.
+ */
+export const globalDef       = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
+export const imports         = (styles: StyleCollection[])      => composition(styles);
+
+
+
+// layouts:
+/**
+ * Defines component's layout.
+ * @returns A `Style` represents the component's layout.
+ */
+export const layout = (style: Style): Style => style;
+/**
+ * Defines component's variable(s).
+ * @returns A `Style` represents the component's variable(s).
+ */
+export const vars   = (items: { [key: string]: CssValue }): Style => items;
+
+
+
+// rules:
 const nthChildNSelector = pseudoClassSelector('nth-child', 'n');
 const adjustSpecificityWeight = (selectorList: PureSelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): PureSelectorModelList => {
     // if (selector === '&') return selector; // only parent selector => no change
@@ -606,23 +652,27 @@ const adjustSpecificityWeight = (selectorList: PureSelectorModelList, minSpecifi
     );
 };
 
-export interface NestedRuleOptions {
+export interface RuleOptions {
     groupSelectors ?: boolean
     
     specificityWeight    ?: number|null
     minSpecificityWeight ?: number|null
     maxSpecificityWeight ?: number|null
 }
-const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
+const defaultRuleOptions : Required<RuleOptions> = {
     groupSelectors  : true,
     
     specificityWeight    : null,
     minSpecificityWeight : null,
     maxSpecificityWeight : null,
 };
-export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): Rule => {
+/**
+ * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
+ * @returns A `Rule` represents the component's rule.
+ */
+export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: RuleOptions = defaultRuleOptions): Rule => {
     const {
-        groupSelectors : doGroupSelectors = defaultNestedRuleOptions.groupSelectors,
+        groupSelectors : doGroupSelectors = defaultRuleOptions.groupSelectors,
         
         specificityWeight,
     } = options;
@@ -877,83 +927,8 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     };
 };
 
-
-
-// compositions:
-/**
- * Defines the (sub) component's composition.
- * @returns A `StyleCollection` represents the (sub) component's composition.
- */
-export const composition     = (styles: StyleCollection[]): StyleCollection => styles;
-/**
- * Defines the additional component's composition.
- * @returns A `ClassEntry` represents the component's composition.
- */
-export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
-    className,
-    styles
-];
-// shortcut compositions:
-/**
- * Defines the main component's composition.
- * @returns A `ClassEntry` represents the component's composition.
- */
-export const mainComposition = (styles: StyleCollection[])      => compositionOf('main' , styles);
-/**
- * Defines the global style applied to a whole document.
- * @returns A `ClassEntry` represents the global style.
- */
-export const globalDef       = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
-export const imports         = (styles: StyleCollection[])      => composition(styles);
-
-
-
-// layouts:
-/**
- * Defines component's layout.
- * @returns A `Style` represents the component's layout.
- */
-export const layout = (style: Style): Style => style;
-/**
- * Defines component's variable(s).
- * @returns A `Style` represents the component's variable(s).
- */
-export const vars   = (items: { [key: string]: CssValue }): Style => items;
-
-
-
-//combinators:
-export interface CombinatorOptions extends NestedRuleOptions {
-}
-const defaultCombinatorOptions : Required<CombinatorOptions> = {
-    ...defaultNestedRuleOptions,
-};
-export const combinators  = (combinator: Combinator, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): Rule => {
-    const combiSelectors : Selector[] = flat(selectors).map((selector) => {
-        if (!selector) selector = '*'; // empty selector => match any element
-        
-        // if (selector === '&') return selector; // no children => the parent itself
-        if (selector.includes('&')) return selector; // custom combinator
-        
-        if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
-        
-        return `&${combinator}${selector}`;
-    });
-    if (!combiSelectors.length) return {}; // no selector => return empty
-    
-    
-    
-    return nestedRule(combiSelectors, styles, options);
-};
-export const descendants  = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
-export const children     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
-export const siblings     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('~', selectors, styles, options);
-export const nextSiblings = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('+', selectors, styles, options);
-
-
-
-// rules:
-export const rules = (ruleCollection: RuleCollection, options?: NestedRuleOptions): Rule[] => {
+// rule groups:
+export const rules = (ruleCollection: RuleCollection, options?: RuleOptions): Rule[] => {
     const result = (
         (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
         .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<Rule>[] => { // convert: Factory<Rule>|Rule|RuleList => [Rule]|[Rule]|[...RuleList] => [Rule]
@@ -1024,25 +999,21 @@ export const rules = (ruleCollection: RuleCollection, options?: NestedRuleOption
         .map(([selectors, styles]) => nestedRule(selectors, styles, options))
     );
 };
-// shortcut rules:
 /**
  * Defines component's variants.
  * @returns A `StyleCollection` represents the component's variants.
  */
-export const variants = (variants: RuleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): StyleCollection => rules(variants, options);
+export const variants = (variants: RuleCollection, options: RuleOptions = defaultRuleOptions): StyleCollection => rules(variants, options);
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
  * @returns A `StyleCollection` represents the component's states.
  */
-export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: NestedRuleOptions = { ...defaultNestedRuleOptions, minSpecificityWeight: 3 }): StyleCollection => {
+export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: RuleOptions = { ...defaultRuleOptions, minSpecificityWeight: 3 }): StyleCollection => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, options);
 }
+
 // rule items:
-/**
- * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
- * @returns A `Rule` represents the component's rule.
- */
 export const rule = (selectors: SelectorCollection, styles: StyleCollection): Rule => nestedRule(selectors, styles);
 // shortcut rule items:
 export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
@@ -1127,6 +1098,36 @@ export const isHover           = (styles: StyleCollection) => rule(     ':hover'
 export const isNotHover        = (styles: StyleCollection) => rule(':not(:hover)'        , styles);
 export const isEmpty           = (styles: StyleCollection) => rule(     ':empty'         , styles);
 export const isNotEmpty        = (styles: StyleCollection) => rule(':not(:empty)'        , styles);
+
+
+
+//combinators:
+export interface CombinatorOptions extends RuleOptions {
+}
+const defaultCombinatorOptions : Required<CombinatorOptions> = {
+    ...defaultRuleOptions,
+};
+export const combinators  = (combinator: Combinator, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): Rule => {
+    const combiSelectors : Selector[] = flat(selectors).map((selector) => {
+        if (!selector) selector = '*'; // empty selector => match any element
+        
+        // if (selector === '&') return selector; // no children => the parent itself
+        if (selector.includes('&')) return selector; // custom combinator
+        
+        if (((combinator === ' ') || (combinator === '>')) && selector.startsWith('::')) return `&${selector}`; // pseudo element => attach the parent itself (for descendants & children)
+        
+        return `&${combinator}${selector}`;
+    });
+    if (!combiSelectors.length) return {}; // no selector => return empty
+    
+    
+    
+    return nestedRule(combiSelectors, styles, options);
+};
+export const descendants  = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
+export const children     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
+export const siblings     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('~', selectors, styles, options);
+export const nextSiblings = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('+', selectors, styles, options);
 
 
 
