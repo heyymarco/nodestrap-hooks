@@ -58,6 +58,7 @@ import {
     isParentSelector,
     isClassOrPseudoClassSelector,
     isPseudoElementSelector,
+    isNotPseudoElementSelector,
     isCombinator,
     createSelector,
     createSelectorList,
@@ -866,6 +867,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
             //#endregion group selectors by combinator
             return Array.from(selectorListByCombinator.entries()).flatMap(([combinator, selectors]) => {
                 if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
+                if (selectors.filter((selector) => selector.every(isNotPseudoElementSelector)).length <= 1) return selectors;  // only contain one/no Selector without ::pseudo-element, no need to group
                 
                 
                 
@@ -881,7 +883,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
                             1 // remove the first_parent
                         )
                         +
-                        (selector.some(isPseudoElementSelector) ? -1 : 0) // exception for ::pseudo-element: do not remove the first_parent
+                        (selector.some(isPseudoElementSelector) ? -1 : 0) // exception for ::pseudo-element => do not remove the first_parent
                     )),
                     { selectorName: 'is' }
                 );
@@ -924,6 +926,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
             //#endregion group selectors by combinator
             return Array.from(selectorListByCombinator.entries()).flatMap(([combinator, selectors]) => {
                 if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
+                if (selectors.filter((selector) => selector.every(isNotPseudoElementSelector)).length <= 1) return selectors;  // only contain one/no Selector without ::pseudo-element, no need to group
                 
                 
                 
@@ -939,7 +942,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
                             -1 // remove the last_parent
                         )
                         +
-                        (selector.some(isPseudoElementSelector) ? 1 : 0) // exception for ::pseudo-element: do not remove the last_parent
+                        (selector.some(isPseudoElementSelector) ? 1 : 0) // exception for ::pseudo-element => do not remove the last_parent
                     )),
                     { selectorName: 'is' }
                 );
