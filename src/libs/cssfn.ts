@@ -725,13 +725,20 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     });
     //#endregion group selectors by parent position
     
-    const onlyParentSelectors      : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selector);
-    const onlyBeginParentSelectors : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selector);
-    const onlyEndParentSelectors   : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selector);
-    const randomParentSelectors    : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selector);
+    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selector);
+    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selector);
+    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selector);
+    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selector);
     
     
     
+    type GroupByCombinator = Map<Combinator|null, PureSelectorModelList>
+    const createGroupByCombinator = (fetch: (selector: PureSelectorModel) => Combinator|null) => (accum: GroupByCombinator, selector: PureSelectorModel) => {
+        const combinator = fetch(selector);
+        if (!accum.has(combinator)) accum.set(combinator, []);
+        accum.get(combinator)?.push(selector);
+        return accum;
+    };
     const selectorList = createSelectorList(
         // only ParentSelector
         // &
@@ -750,23 +757,19 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             
             
             //#region group selectors by combinator
-            const selectorsGroups = onlyBeginParentSelectors.reduce((accum, selector) => {
-                if (selector.length >= 2) {                           // at least 2 entry must exist, for the first_parent followed by combinator
-                    const secondSelectorEntry = selector[1];          // take the first_second entry
-                    if (isCombinator(secondSelectorEntry)) {          // the entry must be the same as combinator
-                        const combinator = secondSelectorEntry;
-                        if (!accum.has(combinator)) accum.set(combinator, []);
-                        accum.get(combinator)?.push(selector);
-                        return accum;
+            const selectorsGroups = onlyBeginParentSelectors.reduce(
+                createGroupByCombinator((selector) => {
+                    if (selector.length >= 2) {                           // at least 2 entry must exist, for the first_parent followed by combinator
+                        const secondSelectorEntry = selector[1];          // take the first_second entry
+                        if (isCombinator(secondSelectorEntry)) {          // the entry must be the same as combinator
+                            return secondSelectorEntry;
+                        } // if
                     } // if
-                } // if
-                
-                
-                
-                if (!accum.has(null)) accum.set(null, []);
-                accum.get(null)?.push(selector);
-                return accum;
-            }, new Map<Combinator|null, PureSelectorModelList>());
+                    
+                    return null; // ungroupable
+                }),
+                new Map<Combinator|null, PureSelectorModelList>()
+            );
             //#endregion group selectors by combinator
             return Array.from(selectorsGroups.entries()).flatMap(([combinator, selectors]) => {
                 if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
@@ -807,24 +810,20 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             
             
             //#region group selectors by combinator
-            const selectorsGroups = onlyEndParentSelectors.reduce((accum, selector) => {
-                const length = selector.length;
-                if (length >= 2) {                                    // at least 2 entry must exist, for the combinator followed by last_parent
-                    const secondSelectorEntry = selector[length - 2]; // take the last_second entry
-                    if (isCombinator(secondSelectorEntry)) {          // the entry must be the same as combinator
-                        const combinator = secondSelectorEntry;
-                        if (!accum.has(combinator)) accum.set(combinator, []);
-                        accum.get(combinator)?.push(selector);
-                        return accum;
+            const selectorsGroups = onlyEndParentSelectors.reduce(
+                createGroupByCombinator((selector) => {
+                    const length = selector.length;
+                    if (length >= 2) {                                    // at least 2 entry must exist, for the combinator followed by last_parent
+                        const secondSelectorEntry = selector[length - 2]; // take the last_second entry
+                        if (isCombinator(secondSelectorEntry)) {          // the entry must be the same as combinator
+                            return secondSelectorEntry;
+                        } // if
                     } // if
-                } // if
-                
-                
-                
-                if (!accum.has(null)) accum.set(null, []);
-                accum.get(null)?.push(selector);
-                return accum;
-            }, new Map<Combinator|null, PureSelectorModelList>());
+                    
+                    return null; // ungroupable
+                }),
+                new Map<Combinator|null, PureSelectorModelList>()
+            );
             //#endregion group selectors by combinator
             return Array.from(selectorsGroups.entries()).flatMap(([combinator, selectors]) => {
                 if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
