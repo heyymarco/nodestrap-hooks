@@ -677,63 +677,71 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     //#region group selectors by parent position
-    const enum GroupCond {
+    const enum ParentPosition {
         OnlyParent,
         OnlyBeginParent,
         OnlyEndParent,
         RandomParent,
     }
-    type SelectorGroup = { cond: GroupCond, selector: PureSelectorModel }
-    const selectorsGroups = nestedSelectors.map((nestedSelector) => nestedSelector.filter(isNotEmptySelectorEntry)).map((nestedSelector): SelectorGroup => {
-        const hasFirstParent = ((): boolean => {
-            if (nestedSelector.length < 1) return false;                // at least 1 entry must exist, for the first_parent
-            
-            const firstSelectorEntry = nestedSelector[0];               // take the first entry
-            return isParentSelector(firstSelectorEntry);                // the entry must be ParentSelector
-        })();
-        
-        const onlyParent      = hasFirstParent && (nestedSelector.length === 1);
-        if (onlyParent)       return { cond: GroupCond.OnlyParent     , selector: nestedSelector };
-        
-        
-        
-        const hasMiddleParent = ((): boolean => {
-            if (nestedSelector.length < 3) return false;                // at least 3 entry must exist, the first & last are already reserved, the middle one is the middle_parent
-            
-            for (let index = 1, maxIndex = (nestedSelector.length - 2); index <= maxIndex; index++) {
-                const middleSelectorEntry = nestedSelector[index];      // take the 2nd_first_entry until the 2nd_last_entry
-                if (isParentSelector(middleSelectorEntry)) return true; // the entry must be ParentSelector, otherwise skip to next
-            } // for
-            
-            return false; // ran out of iterator => not found
-        })();
-        const hasLastParent = ((): boolean => {
-            const length = nestedSelector.length;
-            if (length < 2) return false;                               // at least 2 entry must exist, the first is already reserved, the last one is the last_parent
-            
-            const lastSelectorEntry = nestedSelector[length - 1];       // take the last entry
-            return isParentSelector(lastSelectorEntry);                 // the entry must be ParentSelector
-        })();
-        
-        const onlyBeginParent = hasFirstParent && !hasMiddleParent && !hasLastParent;
-        if (onlyBeginParent)  return { cond: GroupCond.OnlyBeginParent, selector: nestedSelector };
-        
-        const onlyEndParent   = !hasFirstParent && !hasMiddleParent && hasLastParent;
-        if (onlyEndParent)    return { cond: GroupCond.OnlyEndParent  , selector: nestedSelector };
-        
-        /* ............... */ return { cond: GroupCond.RandomParent   , selector: nestedSelector };
-    });
+    type GroupByParentPosition = Map<ParentPosition, PureSelectorModel[]>
+    const selectorListByParentPosition = nestedSelectors.map((selector) => selector.filter(isNotEmptySelectorEntry)).reduce(
+        (accum, selector): GroupByParentPosition => {
+            const position = ((): ParentPosition => {
+                const hasFirstParent = ((): boolean => {
+                    if (selector.length < 1) return false;                      // at least 1 entry must exist, for the first_parent
+                    
+                    const firstSelectorEntry = selector[0];                     // take the first entry
+                    return isParentSelector(firstSelectorEntry);                // the entry must be ParentSelector
+                })();
+                
+                const onlyParent      = hasFirstParent && (selector.length === 1);
+                if (onlyParent) return ParentPosition.OnlyParent;
+                
+                
+                
+                const hasMiddleParent = ((): boolean => {
+                    if (selector.length < 3) return false;                      // at least 3 entry must exist, the first & last are already reserved, the middle one is the middle_parent
+                    
+                    for (let index = 1, maxIndex = (selector.length - 2); index <= maxIndex; index++) {
+                        const middleSelectorEntry = selector[index];            // take the 2nd_first_entry until the 2nd_last_entry
+                        if (isParentSelector(middleSelectorEntry)) return true; // the entry must be ParentSelector, otherwise skip to next
+                    } // for
+                    
+                    return false; // ran out of iterator => not found
+                })();
+                const hasLastParent = ((): boolean => {
+                    const length = selector.length;
+                    if (length < 2) return false;                               // at least 2 entry must exist, the first is already reserved, the last one is the last_parent
+                    
+                    const lastSelectorEntry = selector[length - 1];             // take the last entry
+                    return isParentSelector(lastSelectorEntry);                 // the entry must be ParentSelector
+                })();
+                
+                const onlyBeginParent = hasFirstParent && !hasMiddleParent && !hasLastParent;
+                if (onlyBeginParent) return ParentPosition.OnlyBeginParent;
+                
+                const onlyEndParent   = !hasFirstParent && !hasMiddleParent && hasLastParent;
+                if (onlyEndParent) return ParentPosition.OnlyEndParent;
+                
+                return ParentPosition.RandomParent;
+            })();
+            if (!accum.has(position)) accum.set(position, []);
+            accum.get(position)?.push(selector);
+            return accum;
+        },
+        new Map<ParentPosition, PureSelectorModel[]>()
+    );
     //#endregion group selectors by parent position
     
-    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selector);
-    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selector);
-    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selector);
-    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selector);
+    const onlyParentSelectorList      = selectorListByParentPosition.get(ParentPosition.OnlyParent      ) ?? [];
+    const onlyBeginParentSelectorList = selectorListByParentPosition.get(ParentPosition.OnlyBeginParent ) ?? [];
+    const onlyEndParentSelectorList   = selectorListByParentPosition.get(ParentPosition.OnlyEndParent   ) ?? [];
+    const randomParentSelectorList    = selectorListByParentPosition.get(ParentPosition.RandomParent    ) ?? [];
     
     
     
     type GroupByCombinator = Map<Combinator|null, PureSelectorModelList>
-    const createGroupByCombinator = (fetch: (selector: PureSelectorModel) => Combinator|null) => (accum: GroupByCombinator, selector: PureSelectorModel) => {
+    const createGroupByCombinator = (fetch: (selector: PureSelectorModel) => Combinator|null) => (accum: GroupByCombinator, selector: PureSelectorModel): GroupByCombinator => {
         const combinator = fetch(selector);
         if (!accum.has(combinator)) accum.set(combinator, []);
         accum.get(combinator)?.push(selector);
@@ -742,8 +750,8 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     const selectorList = createSelectorList(
         // only ParentSelector
         // &
-        !!onlyParentSelectors.length && (
-            onlyParentSelectors[0] // just take the first one, the rest are guaranteed to be the same
+        !!onlyParentSelectorList.length && (
+            onlyParentSelectorList[0] // just take the first one, the rest are guaranteed to be the same
         ),
         
         
@@ -751,13 +759,13 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // ParentSelector at beginning
         // &aaa
         // &:is(aaa, bbb, ccc)
-        ...(() => {
-            if (onlyBeginParentSelectors.length <= 1) return onlyBeginParentSelectors; // only contain one/no Selector, no need to group
+        ...((): SelectorModelList => {
+            if (onlyBeginParentSelectorList.length <= 1) return onlyBeginParentSelectorList; // only contain one/no Selector, no need to group
             
             
             
             //#region group selectors by combinator
-            const selectorsGroups = onlyBeginParentSelectors.reduce(
+            const selectorListByCombinator = onlyBeginParentSelectorList.reduce(
                 createGroupByCombinator((selector) => {
                     if (selector.length >= 2) {                           // at least 2 entry must exist, for the first_parent followed by combinator
                         const secondSelectorEntry = selector[1];          // take the first_second entry
@@ -771,7 +779,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
                 new Map<Combinator|null, PureSelectorModelList>()
             );
             //#endregion group selectors by combinator
-            return Array.from(selectorsGroups.entries()).flatMap(([combinator, selectors]) => {
+            return Array.from(selectorListByCombinator.entries()).flatMap(([combinator, selectors]) => {
                 if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
                 
                 
@@ -804,13 +812,13 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // ParentSelector at end
         // aaa&
         // :is(aaa, bbb, ccc)&
-        ...(() => {
-            if (onlyEndParentSelectors.length <= 1) return onlyEndParentSelectors; // only contain one/no Selector, no need to group
+        ...((): SelectorModelList => {
+            if (onlyEndParentSelectorList.length <= 1) return onlyEndParentSelectorList; // only contain one/no Selector, no need to group
             
             
             
             //#region group selectors by combinator
-            const selectorsGroups = onlyEndParentSelectors.reduce(
+            const selectorListByCombinator = onlyEndParentSelectorList.reduce(
                 createGroupByCombinator((selector) => {
                     const length = selector.length;
                     if (length >= 2) {                                    // at least 2 entry must exist, for the combinator followed by last_parent
@@ -825,7 +833,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
                 new Map<Combinator|null, PureSelectorModelList>()
             );
             //#endregion group selectors by combinator
-            return Array.from(selectorsGroups.entries()).flatMap(([combinator, selectors]) => {
+            return Array.from(selectorListByCombinator.entries()).flatMap(([combinator, selectors]) => {
                 if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
                 
                 
@@ -857,7 +865,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         
         // parent at random
         // a&aa, bb&b, c&c&c
-        ...randomParentSelectors,
+        ...randomParentSelectorList,
     );
     
     
