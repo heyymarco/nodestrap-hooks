@@ -411,52 +411,6 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
-
-
-// compositions:
-/**
- * Defines the (sub) component's composition.
- * @returns A `StyleCollection` represents the (sub) component's composition.
- */
-export const composition     = (styles: StyleCollection[]): StyleCollection => styles;
-/**
- * Defines the additional component's composition.
- * @returns A `ClassEntry` represents the component's composition.
- */
-export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
-    className,
-    styles
-];
-// shortcut compositions:
-/**
- * Defines the main component's composition.
- * @returns A `ClassEntry` represents the component's composition.
- */
-export const mainComposition = (styles: StyleCollection[])      => compositionOf('main' , styles);
-/**
- * Defines the global style applied to a whole document.
- * @returns A `ClassEntry` represents the global style.
- */
-export const globalDef       = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
-export const imports         = (styles: StyleCollection[])      => composition(styles);
-
-
-
-// layouts:
-/**
- * Defines component's layout.
- * @returns A `Style` represents the component's layout.
- */
-export const layout = (style: Style): Style => style;
-/**
- * Defines component's variable(s).
- * @returns A `Style` represents the component's variable(s).
- */
-export const vars   = (items: { [key: string]: CssValue }): Style => items;
-
-
-
-// rules:
 const nthChildNSelector = pseudoClassSelector('nth-child', 'n');
 const adjustSpecificityWeight = (selectorList: PureSelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): PureSelectorModelList => {
     // if (selector === '&') return selector; // only parent selector => no change
@@ -654,27 +608,23 @@ const adjustSpecificityWeight = (selectorList: PureSelectorModelList, minSpecifi
     );
 };
 
-export interface RuleOptions {
+export interface SelectorOptions {
     groupSelectors ?: boolean
     
     specificityWeight    ?: number|null
     minSpecificityWeight ?: number|null
     maxSpecificityWeight ?: number|null
 }
-const defaultRuleOptions : Required<RuleOptions> = {
+const defaultSelectorOptions : Required<SelectorOptions> = {
     groupSelectors  : true,
     
     specificityWeight    : null,
     minSpecificityWeight : null,
     maxSpecificityWeight : null,
 };
-/**
- * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
- * @returns A `Rule` represents the component's rule.
- */
-export const rule = (rules: SelectorCollection, styles: StyleCollection, options: RuleOptions = defaultRuleOptions): Rule => {
+export const mergeSelectors = (selectorList: SelectorModelList, options: SelectorOptions = defaultSelectorOptions): SelectorModelList => {
     const {
-        groupSelectors : doGroupSelectors = defaultRuleOptions.groupSelectors,
+        groupSelectors : doGroupSelectors = defaultSelectorOptions.groupSelectors,
         
         specificityWeight,
     } = options;
@@ -683,82 +633,25 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
     
     
     
-    const rulesString = (
-        flat(rules)
-        .filter((rule): rule is Selector => !!rule)
-    );
-    const enum RuleType {
-        SelectorRule, // &.foo   .boo&   .foo&.boo
-        AtRule,       // for `@media`
-        PropRule,     // for `from`, `to`, `25%`
-    }
-    type GroupByRuleTypes = Map<RuleType, Selector[]>
-    const rulesByTypes = rulesString.reduce(
-        (accum, rule): GroupByRuleTypes => {
-            let ruleType = ((): RuleType|null => {
-                if (rule.startsWith('@')) return RuleType.AtRule;
-                if (rule.startsWith(' ')) return RuleType.PropRule;
-                if (rule.includes('&'))   return RuleType.SelectorRule;
-                return null;
-            })();
-            switch (ruleType) {
-                case RuleType.PropRule:
-                    rule = rule.slice(1);
-                    break;
-                
-                case null:
-                    ruleType = RuleType.SelectorRule;
-                    rule = `&${rule}`;
-                    break;
-            } // switch
-            
-            
-            
-            if (!accum.has(ruleType)) accum.set(ruleType, []);
-            accum.get(ruleType)?.push(rule);
-            return accum;
-        },
-        new Map<RuleType, Selector[]>()
-    );
+    if (!doGroupSelectors) return selectorList;
     
     
     
-    const selectorList = adjustSpecificityWeight(
-        (rulesByTypes.get(RuleType.SelectorRule) ?? [])
-        .flatMap((selector) => {
-            const selectorList = parseSelectors(selector);
-            if (!selectorList) throw Error(`parse selector error: ${selector}`);
-            return selectorList;
-        })
+    const normalizedSelectorList = (
+        selectorList
         .flatMap((selector) => ungroupSelector(selector))
         .filter(isNotEmptySelector)
+    );
+    if (normalizedSelectorList.length <= 1) return normalizedSelectorList;
+    
+    
+    
+    const adjustedSelectorList = adjustSpecificityWeight(
+        normalizedSelectorList
         ,
         minSpecificityWeight,
         maxSpecificityWeight
     );
-    
-    
-    
-    if (!doGroupSelectors || (selectorList.length <= 1)) {
-        return Object.fromEntries([
-            ...selectorList.map((nestedSelector) => [
-                Symbol(
-                    selectorToString(nestedSelector)
-                ),
-                styles
-            ]),
-            
-            ...[
-                ...(rulesByTypes.get(RuleType.AtRule   ) ?? []),
-                ...(rulesByTypes.get(RuleType.PropRule ) ?? []),
-            ].map((rule) => [
-                Symbol(
-                    rule
-                ),
-                styles
-            ]),
-        ]);
-    } // if
     
     
     
@@ -770,7 +663,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
         RandomParent,
     }
     type GroupByParentPosition = Map<ParentPosition, PureSelectorModel[]>
-    const selectorListByParentPosition = selectorList.map((selector) => selector.filter(isNotEmptySelectorEntry) as PureSelectorModel).reduce(
+    const selectorListByParentPosition = adjustedSelectorList.map((selector) => selector.filter(isNotEmptySelectorEntry) as PureSelectorModel).reduce(
         (accum, selector): GroupByParentPosition => {
             const position = ((): ParentPosition => {
                 const hasFirstParent = ((): boolean => {
@@ -966,10 +859,117 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
     
     
     
+    return outputSelectorList;
+}
+
+
+
+// compositions:
+/**
+ * Defines the (sub) component's composition.
+ * @returns A `StyleCollection` represents the (sub) component's composition.
+ */
+export const composition     = (styles: StyleCollection[]): StyleCollection => styles;
+/**
+ * Defines the additional component's composition.
+ * @returns A `ClassEntry` represents the component's composition.
+ */
+export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
+    className,
+    styles
+];
+// shortcut compositions:
+/**
+ * Defines the main component's composition.
+ * @returns A `ClassEntry` represents the component's composition.
+ */
+export const mainComposition = (styles: StyleCollection[])      => compositionOf('main' , styles);
+/**
+ * Defines the global style applied to a whole document.
+ * @returns A `ClassEntry` represents the global style.
+ */
+export const globalDef       = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
+export const imports         = (styles: StyleCollection[])      => composition(styles);
+
+
+
+// layouts:
+/**
+ * Defines component's layout.
+ * @returns A `Style` represents the component's layout.
+ */
+export const layout = (style: Style): Style => style;
+/**
+ * Defines component's variable(s).
+ * @returns A `Style` represents the component's variable(s).
+ */
+export const vars   = (items: { [key: string]: CssValue }): Style => items;
+
+
+
+// rules:
+/**
+ * Defines component's `style(s)` that is applied when the specified `selector(s)` meet the conditions.
+ * @returns A `Rule` represents the component's rule.
+ */
+export const rule = (rules: SelectorCollection, styles: StyleCollection, options: SelectorOptions = defaultSelectorOptions): Rule => {
+    const rulesString = (
+        flat(rules)
+        .filter((rule): rule is Selector => !!rule)
+    );
+    const enum RuleType {
+        SelectorRule, // &.foo   .boo&   .foo&.boo
+        AtRule,       // for `@media`
+        PropRule,     // for `from`, `to`, `25%`
+    }
+    type GroupByRuleTypes = Map<RuleType, Selector[]>
+    const rulesByTypes = rulesString.reduce(
+        (accum, rule): GroupByRuleTypes => {
+            let ruleType = ((): RuleType|null => {
+                if (rule.startsWith('@')) return RuleType.AtRule;
+                if (rule.startsWith(' ')) return RuleType.PropRule;
+                if (rule.includes('&'))   return RuleType.SelectorRule;
+                return null;
+            })();
+            switch (ruleType) {
+                case RuleType.PropRule:
+                    rule = rule.slice(1);
+                    break;
+                
+                case null:
+                    ruleType = RuleType.SelectorRule;
+                    rule = `&${rule}`;
+                    break;
+            } // switch
+            
+            
+            
+            if (!accum.has(ruleType)) accum.set(ruleType, []);
+            accum.get(ruleType)?.push(rule);
+            return accum;
+        },
+        new Map<RuleType, Selector[]>()
+    );
+    
+    
+    
+    const selectorList = (
+        (rulesByTypes.get(RuleType.SelectorRule) ?? [])
+        .flatMap((selector) => {
+            const selectorList = parseSelectors(selector);
+            if (!selectorList) throw Error(`parse selector error: ${selector}`);
+            return selectorList;
+        })
+        .filter(isNotEmptySelector)
+    );
+    const mergedSelectorList = mergeSelectors(selectorList, options);
+    
+    
+    
     return {
-        ...(isNotEmptySelectors(outputSelectorList) ? {
+        ...(isNotEmptySelectors(mergedSelectorList) ? {
             [Symbol(
-                selectorsToString(outputSelectorList)
+                selectorsToString(mergedSelectorList)
             )] : styles
         } : {}),
         
@@ -988,7 +988,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
 };
 
 // rule groups:
-export const rules = (ruleCollection: RuleCollection, options?: RuleOptions): Rule[] => {
+export const rules = (ruleCollection: RuleCollection, options?: SelectorOptions): Rule[] => {
     const result = (
         (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
         .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<Rule>[] => { // convert: Factory<Rule>|Rule|RuleList => [Rule]|[Rule]|[...RuleList] => [Rule]
@@ -1012,13 +1012,13 @@ export const rules = (ruleCollection: RuleCollection, options?: RuleOptions): Ru
  * Defines component's variants.
  * @returns A `StyleCollection` represents the component's variants.
  */
-export const variants = (variants: RuleCollection, options: RuleOptions = defaultRuleOptions): StyleCollection => rules(variants, options);
+export const variants = (variants: RuleCollection, options: SelectorOptions = defaultSelectorOptions): StyleCollection => rules(variants, options);
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
  * @returns A `StyleCollection` represents the component's states.
  */
-export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: RuleOptions = { ...defaultRuleOptions, minSpecificityWeight: 3 }): StyleCollection => {
+export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: SelectorOptions = { ...defaultSelectorOptions, minSpecificityWeight: 3 }): StyleCollection => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, options);
 }
 
@@ -1109,12 +1109,7 @@ export const isNotEmpty        = (styles: StyleCollection) => rule(':not(:empty)
 
 
 //combinators:
-export interface CombinatorOptions extends RuleOptions {
-}
-const defaultCombinatorOptions : Required<CombinatorOptions> = {
-    ...defaultRuleOptions,
-};
-export const combinators  = (combinator: Combinator, selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions): Rule => {
+export const combinators  = (combinator: Combinator, selectors: SelectorCollection, styles: StyleCollection, options: SelectorOptions = defaultSelectorOptions): Rule => {
     const combiSelectors : Selector[] = flat(selectors).map((selector) => {
         if (!selector) selector = '*'; // empty selector => match any element
         
@@ -1131,10 +1126,10 @@ export const combinators  = (combinator: Combinator, selectors: SelectorCollecti
     
     return rule(combiSelectors, styles, options);
 };
-export const descendants  = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
-export const children     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
-export const siblings     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('~', selectors, styles, options);
-export const nextSiblings = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('+', selectors, styles, options);
+export const descendants  = (selectors: SelectorCollection, styles: StyleCollection, options: SelectorOptions = defaultSelectorOptions) => combinators(' ', selectors, styles, options);
+export const children     = (selectors: SelectorCollection, styles: StyleCollection, options: SelectorOptions = defaultSelectorOptions) => combinators('>', selectors, styles, options);
+export const siblings     = (selectors: SelectorCollection, styles: StyleCollection, options: SelectorOptions = defaultSelectorOptions) => combinators('~', selectors, styles, options);
+export const nextSiblings = (selectors: SelectorCollection, styles: StyleCollection, options: SelectorOptions = defaultSelectorOptions) => combinators('+', selectors, styles, options);
 
 
 
