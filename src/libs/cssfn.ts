@@ -57,6 +57,7 @@ import {
     isSimpleSelector,
     isParentSelector,
     isClassOrPseudoClassSelector,
+    isPseudoElementSelector,
     isCombinator,
     createSelector,
     createSelectorList,
@@ -872,16 +873,20 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
                     selectors
                     .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
                     .map((selector) => selector.slice(
-                        combinator
-                        ?
-                        2 // remove the first_parent & combinator
-                        :
-                        1 // remove the first_parent
+                        (
+                            combinator
+                            ?
+                            2 // remove the first_parent & combinator
+                            :
+                            1 // remove the first_parent
+                        )
+                        +
+                        (selector.some(isPseudoElementSelector) ? -1 : 0) // exception for ::pseudo-element: do not remove the first_parent
                     )),
                     { selectorName: 'is' }
                 );
                 return createSelectorList(
-                    createSelector(
+                    isNotEmptySelector(isSelector) && createSelector(
                         parentSelector(), // add a ParentSelector      before :is(...)
                         combinator,       // add a Combinator (if any) before :is(...)
                         ...isSelector,    // :is(...)
@@ -926,16 +931,20 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
                     selectors
                     .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
                     .map((selector) => selector.slice(0,
-                        combinator
-                        ?
-                        -2 // remove the combinator & last_parent
-                        :
-                        -1 // remove the last_parent
+                        (
+                            combinator
+                            ?
+                            -2 // remove the combinator & last_parent
+                            :
+                            -1 // remove the last_parent
+                        )
+                        +
+                        (selector.some(isPseudoElementSelector) ? 1 : 0) // exception for ::pseudo-element: do not remove the last_parent
                     )),
                     { selectorName: 'is' }
                 );
                 return createSelectorList(
-                    createSelector(
+                    isNotEmptySelector(isSelector) && createSelector(
                         ...isSelector,    // :is(...)
                         combinator,       // add a Combinator (if any) after :is(...)
                         parentSelector(), // add a ParentSelector      after :is(...)
