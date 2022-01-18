@@ -406,7 +406,7 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
     return mergedStyles;
 }
 
-const nthChildNModel = pseudoClassSelector('nth-child', 'n');
+const nthChildNSelector = pseudoClassSelector('nth-child', 'n');
 const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): SelectorModelList => {
     // if (selector === '&') return selector; // only parent selector => no change
     if (
@@ -422,16 +422,16 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
         TooBig,
         TooSmall,
     }
-    type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel, specificityWeight: number }
-    const selectorGroups = selectorList.flatMap((selector) => ungroupSelector(selector)).map((selectorModel: SelectorModel): SelectorGroup => {
-        const specificityWeight = calculateSpecificity(selectorModel)[1];
+    type SelectorGroup = { cond: GroupCond, selector: SelectorModel, specificityWeight: number }
+    const selectorGroups = selectorList.flatMap((selector) => ungroupSelector(selector)).map((selector): SelectorGroup => {
+        const specificityWeight = calculateSpecificity(selector)[1];
         
         
         
         if ((maxSpecificityWeight !== null) && (specificityWeight > maxSpecificityWeight)) {
             return {
                 cond: GroupCond.TooBig,
-                selectorModel,
+                selector,
                 specificityWeight,
             };
         } // if
@@ -441,7 +441,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
         if ((minSpecificityWeight !== null) && (specificityWeight < minSpecificityWeight)) {
             return {
                 cond: GroupCond.TooSmall,
-                selectorModel,
+                selector,
                 specificityWeight,
             };
         } // if
@@ -450,28 +450,28 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
         
         return {
             cond: GroupCond.Fit,
-            selectorModel,
+            selector,
             specificityWeight,
         };
     });
     
     
     
-    const fitSelectorModels      = selectorGroups.filter((group) => (group.cond === GroupCond.Fit     ));
-    const tooBigSelectorModels   = selectorGroups.filter((group) => (group.cond === GroupCond.TooBig  ));
-    const tooSmallSelectorModels = selectorGroups.filter((group) => (group.cond === GroupCond.TooSmall));
+    const fitSelectors      = selectorGroups.filter((group) => (group.cond === GroupCond.Fit     ));
+    const tooBigSelectors   = selectorGroups.filter((group) => (group.cond === GroupCond.TooBig  ));
+    const tooSmallSelectors = selectorGroups.filter((group) => (group.cond === GroupCond.TooSmall));
     
     
     
     return createSelectorList(
-        ...fitSelectorModels.map((group) => group.selectorModel),
+        ...fitSelectors.map((group) => group.selector),
         
-        ...tooBigSelectorModels.flatMap((group) => {
-            const reversedSelectorModel = group.selectorModel.reverse(); // reverse & mutate the current `group.selectorModel` array
+        ...tooBigSelectors.flatMap((group) => {
+            const reversedSelector = group.selector.reverse(); // reverse & mutate the current `group.selector` array
             
-            type SelectorAccum = { remaining: number, reducedSelectorModel: SelectorModel }
-            const { reducedSelectorModel: reversedReducedSelectorModel, remaining: remainingSpecificityWeight } : SelectorAccum = (
-                reversedSelectorModel.slice(0) // clone the `reversedSelectorModel` because the `reduce()` uses `splice()` to break the iteration
+            type SelectorAccum = { remaining: number, reducedSelector: SelectorModel }
+            const { reducedSelector: reversedReducedSelector, remaining: remainingSpecificityWeight } : SelectorAccum = (
+                reversedSelector.slice(0) // clone the `reversedSelector` because the `reduce()` uses `splice()` to break the iteration
                 .reduce((accum, selectorEntry, index, array): SelectorAccum => {
                     if (accum.remaining <= 0) {
                         array.splice(1); // eject early by mutating iterated copy - it's okay to **mutate** the `array` because it already cloned at `slice(0)`
@@ -532,38 +532,38 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                     
                     
                     
-                    accum.reducedSelectorModel.push(selectorEntry);
+                    accum.reducedSelector.push(selectorEntry);
                     return accum;
                 }, ({
-                    remaining            : (group.specificityWeight - (maxSpecificityWeight ?? group.specificityWeight)),
-                    reducedSelectorModel : [],
+                    remaining       : (group.specificityWeight - (maxSpecificityWeight ?? group.specificityWeight)),
+                    reducedSelector : [],
                 } as SelectorAccum))
             );
             
             
             
-            const [whereSelectorModel, ...pseudoElmSelectorModels] = groupSelector(
-                reversedReducedSelectorModel.reverse(),
+            const [whereSelector, ...pseudoElmSelectors] = groupSelector(
+                reversedReducedSelector.reverse(),
                 { selectorName: 'where' }
             );
-            whereSelectorModel.unshift(
-                ...reversedSelectorModel.slice(reversedReducedSelectorModel.length).reverse(),
+            whereSelector.unshift(
+                ...reversedSelector.slice(reversedReducedSelector.length).reverse(),
             );
-            whereSelectorModel.push(
+            whereSelector.push(
                 ...(new Array<SimpleSelectorModel>((remainingSpecificityWeight < 0) ? -remainingSpecificityWeight : 0)).fill(
-                    nthChildNModel // or use `nth-child(n)`
+                    nthChildNSelector // or use `nth-child(n)`
                 ),
             );
             return createSelectorList(
-                whereSelectorModel,
-                ...pseudoElmSelectorModels,
+                whereSelector,
+                ...pseudoElmSelectors,
             );
         }),
         
-        ...tooSmallSelectorModels.map((group) => createSelector(
-            ...group.selectorModel,
+        ...tooSmallSelectors.map((group) => createSelector(
+            ...group.selector,
             ...(new Array<SimpleSelectorModel>((minSpecificityWeight ?? 1) - group.specificityWeight)).fill(
-                group.selectorModel
+                group.selector
                 .filter(isClassOrPseudoClassSelector) // only interested to class selector -or- pseudo class selector
                 .filter((simpleSelector) => {         // pseudo class selector without parameters
                     const [
@@ -599,9 +599,9 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
                     
                     return (selectorParams === undefined);
                 })
-                .pop()         // repeats the last selector until minSpecificityWeight satisfied
+                .pop()            // repeats the last selector until minSpecificityWeight satisfied
                 ??
-                nthChildNModel // or use `nth-child(n)`
+                nthChildNSelector // or use `nth-child(n)`
             )
         )),
     );
@@ -676,6 +676,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
+    //#region group selectors by parent position
     const enum GroupCond {
         WithCombinator,
         
@@ -684,7 +685,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         OnlyEndParent,
         RandomParent,
     }
-    type SelectorGroup = { cond: GroupCond, selectorModel: SelectorModel }
+    type SelectorGroup = { cond: GroupCond, selector: SelectorModel }
     const selectorsGroups = nestedSelectors.map((nestedSelector): SelectorGroup => {
         const hasFirstParent = ((): boolean => {
             if (nestedSelector.length < 1) return false;                // at least 1 entry must exist, for the first_parent
@@ -701,10 +702,10 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         })();
         
         const withCombi       = hasFirstParent && followedByCombi;
-        if (withCombi)        return { cond: GroupCond.WithCombinator , selectorModel: nestedSelector };
+        if (withCombi)        return { cond: GroupCond.WithCombinator , selector: nestedSelector };
         
         const onlyParent      = hasFirstParent && (nestedSelector.length === 1);
-        if (onlyParent)       return { cond: GroupCond.OnlyParent     , selectorModel: nestedSelector };
+        if (onlyParent)       return { cond: GroupCond.OnlyParent     , selector: nestedSelector };
         
         
         
@@ -727,25 +728,26 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         })();
         
         const onlyBeginParent = hasFirstParent && !hasMiddleParent && !hasLastParent;
-        if (onlyBeginParent)  return { cond: GroupCond.OnlyBeginParent, selectorModel: nestedSelector };
+        if (onlyBeginParent)  return { cond: GroupCond.OnlyBeginParent, selector: nestedSelector };
         
         const onlyEndParent   = !hasFirstParent && !hasMiddleParent && hasLastParent;
-        if (onlyEndParent)    return { cond: GroupCond.OnlyEndParent  , selectorModel: nestedSelector };
+        if (onlyEndParent)    return { cond: GroupCond.OnlyEndParent  , selector: nestedSelector };
         
-        /* ............... */ return { cond: GroupCond.RandomParent   , selectorModel: nestedSelector };
+        /* ............... */ return { cond: GroupCond.RandomParent   , selector: nestedSelector };
     });
+    //#endregion group selectors by parent position
     
     
     
-    const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selectorModel);
-    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selectorModel);
-    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selectorModel);
-    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selectorModel);
-    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selectorModel);
+    const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selector);
+    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selector);
+    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selector);
+    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selector);
+    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selector);
     
     
     
-    const grouped = createSelectorList(
+    const selectorList = createSelectorList(
         // only ParentSelector
         // &
         !!onlyParentSelectors.length && (
@@ -758,22 +760,22 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // &aaa
         // &:is(aaa, bbb, ccc)
         ...(() => {
-            if (onlyBeginParentSelectors.length <= 1) return onlyBeginParentSelectors; // only contain one/no SelectorModel, no need to group
+            if (onlyBeginParentSelectors.length <= 1) return onlyBeginParentSelectors; // only contain one/no Selector, no need to group
             
             
             
-            const [isSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
+            const [isSelector, ...pseudoElmSelectors] = groupSelectors(
                 onlyBeginParentSelectors
                 .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
-                .map((selectorModel) => selectorModel.slice(1)), // remove the first selector sequence - that is ParentSelector
+                .map((selector) => selector.slice(1)), // remove the first selector sequence - that is ParentSelector
                 { selectorName: 'is' }
             );
             return createSelectorList(
                 createSelector(
-                    parentSelector(),   // add a ParentSelector before :is(...)
-                    ...isSelectorModel, // :is(...)
+                    parentSelector(), // add a ParentSelector before :is(...)
+                    ...isSelector,    // :is(...)
                 ),
-                ...pseudoElmSelectorModels,
+                ...pseudoElmSelectors,
             );
         })(),
         
@@ -783,22 +785,22 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // aaa&
         // :is(aaa, bbb, ccc)&
         ...(() => {
-            if (onlyEndParentSelectors.length <= 1) return onlyEndParentSelectors; // only contain one/no SelectorModel, no need to group
+            if (onlyEndParentSelectors.length <= 1) return onlyEndParentSelectors; // only contain one/no Selector, no need to group
             
             
             
-            const [isSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
+            const [isSelector, ...pseudoElmSelectors] = groupSelectors(
                 onlyEndParentSelectors
                 .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
-                .map((selectorModel) => selectorModel.slice(0, -1)), // remove the last selector sequence - that is ParentSelector
+                .map((selector) => selector.slice(0, -1)), // remove the last selector sequence - that is ParentSelector
                 { selectorName: 'is' }
             );
             return createSelectorList(
                 createSelector(
-                    ...isSelectorModel, // :is(...)
-                    parentSelector(),   // add a ParentSelector after :is(...)
+                    ...isSelector,    // :is(...)
+                    parentSelector(), // add a ParentSelector after :is(...)
                 ),
-                ...pseudoElmSelectorModels,
+                ...pseudoElmSelectors,
             );
         })(),
         
@@ -814,23 +816,23 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // &>aaa
         // &>:is(aaa, bbb, ccc)
         ...(() => {
-            if (withCombiSelectors.length <= 1) return withCombiSelectors; // only contain one/no SelectorModel, no need to group
+            if (withCombiSelectors.length <= 1) return withCombiSelectors; // only contain one/no Selector, no need to group
             
             
             
-            const [isSelectorModel, ...pseudoElmSelectorModels] = groupSelectors(
+            const [isSelector, ...pseudoElmSelectors] = groupSelectors(
                 withCombiSelectors
                 .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
-                .map((selectorModel) => selectorModel.slice(2)), // remove the first & second selector sequence - that is ParentSelector + Combinator
+                .map((selector) => selector.slice(2)), // remove the first & second selector sequence - that is ParentSelector + Combinator
                 { selectorName: 'is' }
             );
             return createSelectorList(
                 createSelector(
-                    parentSelector(),   // add a ParentSelector before :is(...)
-                    combinator,         // add a Combinator before :is(...)
-                    ...isSelectorModel, // :is(...)
+                    parentSelector(), // add a ParentSelector before :is(...)
+                    combinator,       // add a Combinator before :is(...)
+                    ...isSelector,    // :is(...)
                 ),
-                ...pseudoElmSelectorModels,
+                ...pseudoElmSelectors,
             );
         })(),
     );
@@ -838,9 +840,9 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     return {
-        ...(isNotEmptySelectors(grouped) ? {
+        ...(isNotEmptySelectors(selectorList) ? {
             [Symbol(
-                selectorsToString(grouped)
+                selectorsToString(selectorList)
             )] : styles
         } : {}),
     };
