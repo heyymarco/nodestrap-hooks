@@ -27,7 +27,6 @@ import {
     isParentSelector,
     createSelector,
     createSelectorList,
-    isNotEmptySelector,
     
     
     
@@ -83,7 +82,6 @@ const combineSelector = (parentSelector: string, nestedSelector: string): string
     
     const combinedSelectors : SelectorList = (
         parentSelectors
-        .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
         .flatMap((parentSelector) =>
             flatMapSelectors(nestedSelectors, (selector) => {
                 // we're only interested of ParentSelector
