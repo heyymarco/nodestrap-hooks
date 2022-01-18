@@ -37,10 +37,12 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // types:
-    SimpleSelector as SimpleSelectorModel,
+    SimpleSelector   as SimpleSelectorModel,
     Combinator,
-    Selector       as SelectorModel,
-    SelectorList   as SelectorModelList,
+    Selector         as SelectorModel,
+    SelectorList     as SelectorModelList,
+    PureSelector     as PureSelectorModel,
+    PureSelectorList as PureSelectorModelList,
     
     
     
@@ -55,9 +57,10 @@ import {
     isSimpleSelector,
     isParentSelector,
     isClassOrPseudoClassSelector,
-    isCombinatorOf,
+    isCombinator,
     createSelector,
     createSelectorList,
+    isNotEmptySelectorEntry,
     isNotEmptySelector,
     isNotEmptySelectors,
     
@@ -609,7 +612,6 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
 
 export interface NestedRuleOptions {
     groupSelectors ?: boolean
-    combinator     ?: Combinator|null
     
     specificityWeight    ?: number|null
     minSpecificityWeight ?: number|null
@@ -617,7 +619,6 @@ export interface NestedRuleOptions {
 }
 const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
     groupSelectors  : true,
-    combinator      : null,
     
     specificityWeight    : null,
     minSpecificityWeight : null,
@@ -626,7 +627,6 @@ const defaultNestedRuleOptions : Required<NestedRuleOptions> = {
 export const nestedRule = (selectors: SelectorCollection, styles: StyleCollection, options: NestedRuleOptions = defaultNestedRuleOptions): Rule => {
     const {
         groupSelectors : doGroupSelectors = defaultNestedRuleOptions.groupSelectors,
-        combinator                        = defaultNestedRuleOptions.combinator,
         
         specificityWeight,
     } = options;
@@ -678,31 +678,19 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     //#region group selectors by parent position
     const enum GroupCond {
-        WithCombinator,
-        
         OnlyParent,
         OnlyBeginParent,
         OnlyEndParent,
         RandomParent,
     }
-    type SelectorGroup = { cond: GroupCond, selector: SelectorModel }
-    const selectorsGroups = nestedSelectors.map((nestedSelector): SelectorGroup => {
+    type SelectorGroup = { cond: GroupCond, selector: PureSelectorModel }
+    const selectorsGroups = nestedSelectors.map((nestedSelector) => nestedSelector.filter(isNotEmptySelectorEntry)).map((nestedSelector): SelectorGroup => {
         const hasFirstParent = ((): boolean => {
             if (nestedSelector.length < 1) return false;                // at least 1 entry must exist, for the first_parent
             
             const firstSelectorEntry = nestedSelector[0];               // take the first entry
             return isParentSelector(firstSelectorEntry);                // the entry must be ParentSelector
         })();
-        const followedByCombi  = ((): boolean => {
-            if (!combinator)               return false;                // the combinator must be defined
-            if (nestedSelector.length < 2) return false;                // at least 2 entry must exist, for the first_parent followed by combinator
-            
-            const secondSelectorEntry = nestedSelector[1];              // take the second entry
-            return isCombinatorOf(secondSelectorEntry, combinator)      // the entry must be the same as combinator
-        })();
-        
-        const withCombi       = hasFirstParent && followedByCombi;
-        if (withCombi)        return { cond: GroupCond.WithCombinator , selector: nestedSelector };
         
         const onlyParent      = hasFirstParent && (nestedSelector.length === 1);
         if (onlyParent)       return { cond: GroupCond.OnlyParent     , selector: nestedSelector };
@@ -737,11 +725,10 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     });
     //#endregion group selectors by parent position
     
-    const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selector);
-    const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selector);
-    const onlyBeginParentSelectors = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selector);
-    const onlyEndParentSelectors   = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selector);
-    const randomParentSelectors    = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selector);
+    const onlyParentSelectors      : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selector);
+    const onlyBeginParentSelectors : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyBeginParent)).map((group) => group.selector);
+    const onlyEndParentSelectors   : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyEndParent  )).map((group) => group.selector);
+    const randomParentSelectors    : PureSelectorModelList = selectorsGroups.filter((group) => (group.cond === GroupCond.RandomParent   )).map((group) => group.selector);
     
     
     
@@ -762,19 +749,51 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             
             
             
-            const [isSelector, ...pseudoElmSelectors] = groupSelectors(
-                onlyBeginParentSelectors
-                .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
-                .map((selector) => selector.slice(1)), // remove the first selector sequence - that is ParentSelector
-                { selectorName: 'is' }
-            );
-            return createSelectorList(
-                createSelector(
-                    parentSelector(), // add a ParentSelector before :is(...)
-                    ...isSelector,    // :is(...)
-                ),
-                ...pseudoElmSelectors,
-            );
+            //#region group selectors by combinator
+            const selectorsGroups = onlyBeginParentSelectors.reduce((accum, selector) => {
+                if (selector.length >= 2) {                           // at least 2 entry must exist, for the first_parent followed by combinator
+                    const secondSelectorEntry = selector[1];          // take the first_second entry
+                    if (isCombinator(secondSelectorEntry)) {          // the entry must be the same as combinator
+                        const combinator = secondSelectorEntry;
+                        if (!accum.has(combinator)) accum.set(combinator, []);
+                        accum.get(combinator)?.push(selector);
+                        return accum;
+                    } // if
+                } // if
+                
+                
+                
+                if (!accum.has(null)) accum.set(null, []);
+                accum.get(null)?.push(selector);
+                return accum;
+            }, new Map<Combinator|null, PureSelectorModelList>());
+            //#endregion group selectors by combinator
+            return Array.from(selectorsGroups.entries()).flatMap(([combinator, selectors]) => {
+                if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
+                
+                
+                
+                const [isSelector, ...pseudoElmSelectors] = groupSelectors(
+                    selectors
+                    .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
+                    .map((selector) => selector.slice(
+                        combinator
+                        ?
+                        2 // remove the first_parent & combinator
+                        :
+                        1 // remove the first_parent
+                    )),
+                    { selectorName: 'is' }
+                );
+                return createSelectorList(
+                    createSelector(
+                        parentSelector(), // add a ParentSelector      before :is(...)
+                        combinator,       // add a Combinator (if any) before :is(...)
+                        ...isSelector,    // :is(...)
+                    ),
+                    ...pseudoElmSelectors,
+                );
+            });
         })(),
         
         
@@ -787,19 +806,52 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             
             
             
-            const [isSelector, ...pseudoElmSelectors] = groupSelectors(
-                onlyEndParentSelectors
-                .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
-                .map((selector) => selector.slice(0, -1)), // remove the last selector sequence - that is ParentSelector
-                { selectorName: 'is' }
-            );
-            return createSelectorList(
-                createSelector(
-                    ...isSelector,    // :is(...)
-                    parentSelector(), // add a ParentSelector after :is(...)
-                ),
-                ...pseudoElmSelectors,
-            );
+            //#region group selectors by combinator
+            const selectorsGroups = onlyEndParentSelectors.reduce((accum, selector) => {
+                const length = selector.length;
+                if (length >= 2) {                                    // at least 2 entry must exist, for the combinator followed by last_parent
+                    const secondSelectorEntry = selector[length - 2]; // take the last_second entry
+                    if (isCombinator(secondSelectorEntry)) {          // the entry must be the same as combinator
+                        const combinator = secondSelectorEntry;
+                        if (!accum.has(combinator)) accum.set(combinator, []);
+                        accum.get(combinator)?.push(selector);
+                        return accum;
+                    } // if
+                } // if
+                
+                
+                
+                if (!accum.has(null)) accum.set(null, []);
+                accum.get(null)?.push(selector);
+                return accum;
+            }, new Map<Combinator|null, PureSelectorModelList>());
+            //#endregion group selectors by combinator
+            return Array.from(selectorsGroups.entries()).flatMap(([combinator, selectors]) => {
+                if (selectors.length <= 1) return selectors;  // only contain one/no Selector, no need to group
+                
+                
+                
+                const [isSelector, ...pseudoElmSelectors] = groupSelectors(
+                    selectors
+                    .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
+                    .map((selector) => selector.slice(0,
+                        combinator
+                        ?
+                        -2 // remove the combinator & last_parent
+                        :
+                        -1 // remove the last_parent
+                    )),
+                    { selectorName: 'is' }
+                );
+                return createSelectorList(
+                    createSelector(
+                        ...isSelector,    // :is(...)
+                        combinator,       // add a Combinator (if any) after :is(...)
+                        parentSelector(), // add a ParentSelector      after :is(...)
+                    ),
+                    ...pseudoElmSelectors,
+                );
+            });
         })(),
         
         
@@ -807,32 +859,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         // parent at random
         // a&aa, bb&b, c&c&c
         ...randomParentSelectors,
-        
-        
-        
-        // parent with combinator
-        // &>aaa
-        // &>:is(aaa, bbb, ccc)
-        ...(() => {
-            if (withCombiSelectors.length <= 1) return withCombiSelectors; // only contain one/no Selector, no need to group
-            
-            
-            
-            const [isSelector, ...pseudoElmSelectors] = groupSelectors(
-                withCombiSelectors
-                .filter(isNotEmptySelector) // remove empty Selector(s) in SelectorList
-                .map((selector) => selector.slice(2)), // remove the first & second selector sequence - that is ParentSelector + Combinator
-                { selectorName: 'is' }
-            );
-            return createSelectorList(
-                createSelector(
-                    parentSelector(), // add a ParentSelector before :is(...)
-                    combinator,       // add a Combinator before :is(...)
-                    ...isSelector,    // :is(...)
-                ),
-                ...pseudoElmSelectors,
-            );
-        })(),
     );
     
     
@@ -912,7 +938,7 @@ export const combinators  = (combinator: Combinator, selectors: SelectorCollecti
     
     
     
-    return nestedRule(combiSelectors, styles, { ...options, combinator });
+    return nestedRule(combiSelectors, styles, options);
 };
 export const descendants  = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators(' ', selectors, styles, options);
 export const children     = (selectors: SelectorCollection, styles: StyleCollection, options: CombinatorOptions = defaultCombinatorOptions) => combinators('>', selectors, styles, options);
