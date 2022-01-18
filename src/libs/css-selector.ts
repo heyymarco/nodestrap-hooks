@@ -834,6 +834,8 @@ export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options
         selector(
             ...[] // an empty Selector
         ),
+        
+        ...selectorsOnlyPseudoElm,
     ); // empty selectors => nothing to group => return a SelectorList with an empty Selector
     
     
