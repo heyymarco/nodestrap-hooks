@@ -417,6 +417,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
     
     
     
+    //#region group selectors by specificity weight status
     const enum GroupCond {
         Fit,
         TooBig,
@@ -454,8 +455,7 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
             specificityWeight,
         };
     });
-    
-    
+    //#endregion group selectors by specificity weight status
     
     const fitSelectors      = selectorGroups.filter((group) => (group.cond === GroupCond.Fit     ));
     const tooBigSelectors   = selectorGroups.filter((group) => (group.cond === GroupCond.TooBig  ));
@@ -736,8 +736,6 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         /* ............... */ return { cond: GroupCond.RandomParent   , selector: nestedSelector };
     });
     //#endregion group selectors by parent position
-    
-    
     
     const withCombiSelectors       = selectorsGroups.filter((group) => (group.cond === GroupCond.WithCombinator )).map((group) => group.selector);
     const onlyParentSelectors      = selectorsGroups.filter((group) => (group.cond === GroupCond.OnlyParent     )).map((group) => group.selector);
