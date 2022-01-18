@@ -631,7 +631,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    const nestedSelectors = adjustSpecificityWeight(
+    const selectorList = adjustSpecificityWeight(
         flat(selectors)
         .filter((selector): selector is Selector => !!selector)
         .map((selector): Selector => {
@@ -656,13 +656,13 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     
-    if (!isNotEmptySelectors(nestedSelectors)) return {}; // no nestedSelector => return empty Rule
+    if (!isNotEmptySelectors(selectorList)) return {}; // no nestedSelector => return empty Rule
     
     
     
-    if (!doGroupSelectors || (nestedSelectors.length === 1)) {
+    if (!doGroupSelectors || (selectorList.length === 1)) {
         return Object.fromEntries(
-            nestedSelectors
+            selectorList
             .map((nestedSelector) => [
                 Symbol(
                     selectorToString(nestedSelector)
@@ -682,7 +682,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         RandomParent,
     }
     type GroupByParentPosition = Map<ParentPosition, PureSelectorModel[]>
-    const selectorListByParentPosition = nestedSelectors.map((selector) => selector.filter(isNotEmptySelectorEntry) as PureSelectorModel).reduce(
+    const selectorListByParentPosition = selectorList.map((selector) => selector.filter(isNotEmptySelectorEntry) as PureSelectorModel).reduce(
         (accum, selector): GroupByParentPosition => {
             const position = ((): ParentPosition => {
                 const hasFirstParent = ((): boolean => {
@@ -745,7 +745,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         accum.get(combinator)?.push(selector);
         return accum;
     };
-    const selectorList = createSelectorList(
+    const outputSelectorList = createSelectorList(
         // only ParentSelector
         // &
         !!onlyParentSelectorList.length && (
@@ -869,9 +869,9 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
     
     
     return {
-        ...(isNotEmptySelectors(selectorList) ? {
+        ...(isNotEmptySelectors(outputSelectorList) ? {
             [Symbol(
-                selectorsToString(selectorList)
+                selectorsToString(outputSelectorList)
             )] : styles
         } : {}),
     };
