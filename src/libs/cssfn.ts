@@ -410,7 +410,7 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
 }
 
 const nthChildNSelector = pseudoClassSelector('nth-child', 'n');
-const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): SelectorModelList => {
+const adjustSpecificityWeight = (selectorList: PureSelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): PureSelectorModelList => {
     // if (selector === '&') return selector; // only parent selector => no change
     if (
         (minSpecificityWeight == null)
@@ -421,48 +421,44 @@ const adjustSpecificityWeight = (selectorList: SelectorModelList, minSpecificity
     
     
     //#region group selectors by specificity weight status
-    const enum GroupCond {
+    const enum SpecificityWeightStatus {
         Fit,
         TooBig,
         TooSmall,
     }
-    type SelectorGroup = { cond: GroupCond, selector: SelectorModel, specificityWeight: number }
-    const selectorGroups = selectorList.flatMap((selector) => ungroupSelector(selector)).map((selector): SelectorGroup => {
-        const specificityWeight = calculateSpecificity(selector)[1];
-        
-        
-        
-        if ((maxSpecificityWeight !== null) && (specificityWeight > maxSpecificityWeight)) {
-            return {
-                cond: GroupCond.TooBig,
-                selector,
-                specificityWeight,
-            };
-        } // if
-        
-        
-        
-        if ((minSpecificityWeight !== null) && (specificityWeight < minSpecificityWeight)) {
-            return {
-                cond: GroupCond.TooSmall,
-                selector,
-                specificityWeight,
-            };
-        } // if
-        
-        
-        
-        return {
-            cond: GroupCond.Fit,
-            selector,
-            specificityWeight,
-        };
-    });
+    type GroupBySpecificityWeightStatus = Map<SpecificityWeightStatus, { selector: PureSelectorModel, specificityWeight: number }[]>
+    const selectorListBySpecificityWeightStatus = selectorList.map((selector) => selector.filter(isNotEmptySelectorEntry) as PureSelectorModel).reduce(
+        (accum, selector): GroupBySpecificityWeightStatus => {
+            const [specificityWeight, weightStatus] = ((): readonly [number, SpecificityWeightStatus] => {
+                const specificityWeight = calculateSpecificity(selector)[1];
+                
+                
+                
+                if ((maxSpecificityWeight !== null) && (specificityWeight > maxSpecificityWeight)) {
+                    return [specificityWeight, SpecificityWeightStatus.TooBig];
+                } // if
+                
+                
+                
+                if ((minSpecificityWeight !== null) && (specificityWeight < minSpecificityWeight)) {
+                    return [specificityWeight, SpecificityWeightStatus.TooSmall];
+                } // if
+                
+                
+                
+                return [specificityWeight, SpecificityWeightStatus.Fit];
+            })();
+            if (!accum.has(weightStatus)) accum.set(weightStatus, []);
+            accum.get(weightStatus)?.push({ selector, specificityWeight });
+            return accum;
+        },
+        new Map<SpecificityWeightStatus, { selector: PureSelectorModel, specificityWeight: number }[]>()
+    );
     //#endregion group selectors by specificity weight status
     
-    const fitSelectors      = selectorGroups.filter((group) => (group.cond === GroupCond.Fit     ));
-    const tooBigSelectors   = selectorGroups.filter((group) => (group.cond === GroupCond.TooBig  ));
-    const tooSmallSelectors = selectorGroups.filter((group) => (group.cond === GroupCond.TooSmall));
+    const fitSelectors      = selectorListBySpecificityWeightStatus.get(SpecificityWeightStatus.Fit      ) ?? [];
+    const tooBigSelectors   = selectorListBySpecificityWeightStatus.get(SpecificityWeightStatus.TooBig   ) ?? [];
+    const tooSmallSelectors = selectorListBySpecificityWeightStatus.get(SpecificityWeightStatus.TooSmall ) ?? [];
     
     
     
@@ -651,6 +647,8 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
             if (!selectorList) throw Error(`parse selector error: ${selector}`);
             return selectorList;
         })
+        .flatMap((selector) => ungroupSelector(selector))
+        .filter(isNotEmptySelector)
         ,
         minSpecificityWeight,
         maxSpecificityWeight
@@ -684,7 +682,7 @@ export const nestedRule = (selectors: SelectorCollection, styles: StyleCollectio
         RandomParent,
     }
     type GroupByParentPosition = Map<ParentPosition, PureSelectorModel[]>
-    const selectorListByParentPosition = nestedSelectors.map((selector) => selector.filter(isNotEmptySelectorEntry)).reduce(
+    const selectorListByParentPosition = nestedSelectors.map((selector) => selector.filter(isNotEmptySelectorEntry) as PureSelectorModel).reduce(
         (accum, selector): GroupByParentPosition => {
             const position = ((): ParentPosition => {
                 const hasFirstParent = ((): boolean => {
