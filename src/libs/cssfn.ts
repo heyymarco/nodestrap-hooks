@@ -886,12 +886,12 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
  * Defines the (sub) component's composition.
  * @returns A `StyleCollection` represents the (sub) component's composition.
  */
-export const composition     = (styles: StyleCollection[]): StyleCollection => styles;
+export const composition     = (styles: StyleCollection): StyleCollection => styles;
 /**
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection[]): ClassEntry<TClassName> => [
+export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection): ClassEntry<TClassName> => [
     className,
     styles
 ];
@@ -900,13 +900,13 @@ export const compositionOf   = <TClassName extends ClassName = ClassName>(classN
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const mainComposition = (styles: StyleCollection[])      => compositionOf('main' , styles);
+export const mainComposition = (styles: StyleCollection)        => compositionOf('main' , styles);
 /**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
  */
 export const globalDef       = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
-export const imports         = (styles: StyleCollection[])      => composition(styles);
+export const imports         = (styles: StyleCollection)        => composition(styles);
 
 
 
@@ -915,7 +915,7 @@ export const imports         = (styles: StyleCollection[])      => composition(s
  * Defines component's style.
  * @returns A `Style` represents the component's style.
  */
-export const style  = (style: Style): Style => style;
+export const style  = (style: Style) => noRule(style);
 /**
  * Defines component's layout.
  * @returns A `Style` represents the component's layout.
@@ -1045,12 +1045,12 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 }
 
 // rule shortcuts:
+export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
 export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
 export const fontFace          = (styles: StyleCollection) => rule('@font-face'         , styles);
 export const keyframes         = (name: string, items: PropEx.Keyframes) => rule(`@keyframes ${name}`, layout(Object.fromEntries(
     Object.entries(items).map(([key, frame]) => [Symbol(key), frame])
 ) as Style));
-export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
 export const emptyRule         = ()                        => rule(null                 , null  );
 export const atRoot            = (styles: StyleCollection) => rule(':root'              , styles);
 export const isFirstChild      = (styles: StyleCollection) => rule(     ':first-child'  , styles);
