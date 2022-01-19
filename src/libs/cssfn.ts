@@ -910,7 +910,12 @@ export const imports         = (styles: StyleCollection[])      => composition(s
 
 
 
-// layouts:
+// styles:
+/**
+ * Defines component's style.
+ * @returns A `Style` represents the component's style.
+ */
+export const style  = (style: Style): Style => style;
 /**
  * Defines component's layout.
  * @returns A `Style` represents the component's layout.
@@ -1005,7 +1010,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
 };
 
 // rule groups:
-export const rules = (ruleCollection: RuleCollection, options?: SelectorOptions): Rule[] => {
+export const rules = (ruleCollection: RuleCollection, options?: SelectorOptions): Rule => {
     const result = (
         (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
         .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<Rule>[] => { // convert: Factory<Rule>|Rule|RuleList => [Rule]|[Rule]|[...RuleList] => [Rule]
@@ -1015,12 +1020,12 @@ export const rules = (ruleCollection: RuleCollection, options?: SelectorOptions)
         })
         .filter((optionalRule): optionalRule is Rule => !!optionalRule)
     );
-    if (!options) return result;
+    if (!options) return Object.assign({}, ...result);
     
     
     
-    return (
-        result
+    return Object.assign({},
+        ...result
         .flatMap((rule) => Object.getOwnPropertySymbols(rule).map((sym) => [sym.description ?? '', rule[sym]] as const))
         .map(([selectors, styles]) => rule(selectors, styles, options))
     );
@@ -1029,13 +1034,13 @@ export const rules = (ruleCollection: RuleCollection, options?: SelectorOptions)
  * Defines component's variants.
  * @returns A `StyleCollection` represents the component's variants.
  */
-export const variants = (variants: RuleCollection, options: SelectorOptions = defaultSelectorOptions): StyleCollection => rules(variants, options);
+export const variants = (variants: RuleCollection, options: SelectorOptions = defaultSelectorOptions) => rules(variants, options);
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
  * @returns A `StyleCollection` represents the component's states.
  */
-export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: SelectorOptions = { ...defaultSelectorOptions, minSpecificityWeight: 3 }): StyleCollection => {
+export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: SelectorOptions = { ...defaultSelectorOptions, minSpecificityWeight: 3 }) => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, options);
 }
 
