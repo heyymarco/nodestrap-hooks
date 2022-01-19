@@ -413,7 +413,6 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
 
 const nthChildNSelector = pseudoClassSelector('nth-child', 'n');
 const adjustSpecificityWeight = (selectorList: PureSelectorModelList, minSpecificityWeight: number|null, maxSpecificityWeight: number|null): PureSelectorModelList => {
-    // if (selector === '&') return selector; // only parent selector => no change
     if (
         (minSpecificityWeight == null)
         &&
@@ -633,7 +632,11 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
     
     
     
-    if (!doGroupSelectors) return selectorList;
+    if (
+        !doGroupSelectors // do not perform grouping
+        &&
+        (minSpecificityWeight === null) && (maxSpecificityWeight === null) // do not perform transform
+    ) return selectorList; // nothing to do
     
     
     
@@ -642,16 +645,30 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
         .flatMap((selector) => ungroupSelector(selector))
         .filter(isNotEmptySelector)
     );
-    if (normalizedSelectorList.length <= 1) return normalizedSelectorList;
     
     
     
+    if (
+        (!doGroupSelectors || (normalizedSelectorList.length <= 1)) // do not perform grouping || only singular => nothing to group
+        &&
+        (minSpecificityWeight === null) && (maxSpecificityWeight === null) // do not perform transform
+    ) return normalizedSelectorList; // nothing to do
+    
+    
+    
+    // transform:
     const adjustedSelectorList = adjustSpecificityWeight(
         normalizedSelectorList
         ,
         minSpecificityWeight,
         maxSpecificityWeight
     );
+    
+    
+    
+    if (
+        (!doGroupSelectors || (adjustedSelectorList.length <= 1)) // do not perform grouping || only singular => nothing to group
+    ) return adjustedSelectorList; // nothing to do
     
     
     
@@ -726,7 +743,7 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
         accum.get(combinator)?.push(selector);
         return accum;
     };
-    const outputSelectorList = createSelectorList(
+    const groupedSelectorList = createSelectorList(
         // only ParentSelector
         // &
         !!onlyParentSelectorList.length && (
@@ -859,7 +876,7 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
     
     
     
-    return outputSelectorList;
+    return groupedSelectorList;
 }
 
 
