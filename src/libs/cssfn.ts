@@ -285,6 +285,7 @@ const mergeLiteral = (style: Style, newStyle: Style): void => {
     } // for
 }
 const mergeNested  = (style: Style): Style => {
+    //#region group (nested) Rule(s) by selector name
     const groupByNested = (
         Object.getOwnPropertySymbols(style)
         .reduce((accum, sym) => {
@@ -296,15 +297,17 @@ const mergeNested  = (style: Style): Style => {
                 // conditional rules & globals:
                 ['@media', '@supports', '@document', '@global'].some((at) => nestedSelector.startsWith(at))
             ) {
-                let group = accum.get(nestedSelector);
-                if (!group) accum.set(nestedSelector, group = []);
+                let group = accum.get(nestedSelector);             // get an existing collector
+                if (!group) accum.set(nestedSelector, group = []); // create a new collector
                 group.push(sym);
             } // if
             return accum;
     }, new Map<string, symbol[]>()));
+    //#endregion group (nested) Rule(s) by selector name
     
     
     
+    //#region merge duplicates (nested) Rule(s) to unique ones
     for (const group of Array.from(groupByNested.values())) {
         if (group.length <= 1) continue; // filter out groups with single/no member
         
@@ -316,9 +319,31 @@ const mergeNested  = (style: Style): Style => {
         
         
         
-        style[group[group.length - 1]] = mergedStyles; // merge all member's style to the last member
+        if (mergedStyles) {
+            // update last member
+            style[group[group.length - 1]] = mergedStyles; // merge all member's style to the last member
+        }
+        else {
+            // mergedStyles is empty => delete last member
+            delete style[group[group.length - 1]];
+        } // if
         for (const sym of group.slice(0, -1)) delete style[sym]; // delete first member to second last member
     } // for
+    //#endregion merge duplicates (nested) Rule to unique ones
+    
+    
+    
+    //#region merge only_parentSelector into current style
+    const parentSelector = groupByNested.get('&')?.pop(); // remove & get the last member in parentSelector group
+    if (parentSelector) {
+        const parentStyles       = style[parentSelector];
+        const mergedParentStyles = mergeStyles(parentStyles);
+        if (mergedParentStyles) {
+            mergeLiteral(style, mergedParentStyles); // merge into current style
+            delete style[parentSelector];            // merged => delete source
+        } // if
+    } // if
+    //#endregion merge only_parentSelector into current style
     
     
     
