@@ -891,12 +891,12 @@ export const compositionOf   = <TClassName extends ClassName = ClassName>(classN
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const mainComposition = (...styles : StyleCollection[]) => compositionOf('main' , ...styles);
+export const mainComposition = (...styles: StyleCollection[]) => compositionOf('main' , ...styles);
 /**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
  */
-export const globalDef       = (...rules  : RuleCollection[] ) => compositionOf(''     , ...rules);
+export const globalDef       = (...rules : RuleCollection[] ) => compositionOf(''     , ...rules );
 
 
 
@@ -907,7 +907,6 @@ export const globalDef       = (...rules  : RuleCollection[] ) => compositionOf(
  * @returns A `Rule` represents the (sub) component's composition.
  */
 export const composition     = (styles: StyleCollection)       => noRule(styles);
-// export const composition     = (styles: StyleCollection): StyleCollection => styles;
 /**
  * Defines component's style.
  * @returns A `Rule` represents the component's style.
