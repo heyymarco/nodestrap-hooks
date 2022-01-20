@@ -1044,7 +1044,7 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
 };
 
 // rule groups:
-export const rules    = (rules   : RuleCollection, options?: SelectorOptions): Rule => {
+export const rules    = (rules   : RuleCollection, options: SelectorOptions = defaultSelectorOptions): Rule => {
     const result = (
         flat(rules)
         .filter((rule): rule is ProductOrFactory<OptionalOrFalse<Rule>> => !!rule)
@@ -1069,12 +1069,27 @@ export const rules    = (rules   : RuleCollection, options?: SelectorOptions): R
  * @returns A `Rule` represents the component's variants.
  */
 export const variants = (variants: RuleCollection, options: SelectorOptions = defaultSelectorOptions) => rules(variants, options);
+export interface StateOptions extends SelectorOptions {
+    inherit ?: boolean
+}
+const defaultStateOptions : Required<StateOptions> = {
+    ...defaultSelectorOptions,
+    minSpecificityWeight: 3,
+    
+    inherit : false,
+};
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
  * @returns A `Rule` represents the component's states.
  */
-export const states   = (states  : RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: SelectorOptions = { ...defaultSelectorOptions, minSpecificityWeight: 3 }) => {
+export const states   = (states  : RuleCollection|((inherit: boolean) => RuleCollection), options: StateOptions = defaultStateOptions) => {
+    const {
+        inherit = defaultStateOptions.inherit,
+    } = options;
+    
+    
+    
     return rules((typeof(states) === 'function') ? states(inherit) : states, options);
 }
 
