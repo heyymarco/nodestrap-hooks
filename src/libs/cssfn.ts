@@ -885,7 +885,7 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, styles: StyleCollection): ClassEntry<TClassName> => [
+export const compositionOf   = <TClassName extends ClassName = ClassName>(className: TClassName, ...styles: StyleCollection[]): ClassEntry<TClassName> => [
     className,
     styles
 ];
@@ -894,7 +894,7 @@ export const compositionOf   = <TClassName extends ClassName = ClassName>(classN
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const mainComposition = (styles: StyleCollection)        => compositionOf('main' , styles);
+export const mainComposition = (...styles: StyleCollection[]) => compositionOf('main' , ...styles);
 /**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
