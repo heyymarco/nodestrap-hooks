@@ -365,6 +365,13 @@ export const mergeStyles = (styles: StyleCollection): Style|null => {
         
         const mergedStyles: Style = (new MergedStyle(styleValue) as Style);
         mergeNested(mergedStyles);
+        
+        
+        
+        // do not return an empty style, instead return null:
+        if ((!Object.keys(mergedStyles).length) && (!Object.getOwnPropertySymbols(mergedStyles).length)) return null; // an empty object => return `null`
+        
+        // return non empty style:
         return mergedStyles;
     } // if
     
