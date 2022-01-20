@@ -1146,9 +1146,7 @@ export const isNotEmpty        = (styles: StyleCollection) => rule(':not(:empty)
 
 //combinators:
 export const combinators  = (combinator: Combinator, selectors: SelectorCollection, styles: StyleCollection, options: SelectorOptions = defaultSelectorOptions): Rule => {
-    const combiSelectors : Selector[] = flat(selectors).map((selector) => {
-        if (!selector) selector = '*'; // empty selector => match any element
-        
+    const combiSelectors : Selector[] = flat(selectors).filter((selector): selector is Selector => !!selector).map((selector) => {
         // if (selector === '&') return selector; // no children => the parent itself
         if (selector.includes('&')) return selector; // custom combinator
         
