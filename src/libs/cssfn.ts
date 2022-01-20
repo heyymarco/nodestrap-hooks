@@ -477,8 +477,9 @@ const adjustSpecificityWeight = (selectorList: PureSelectorModelList, minSpecifi
                 
                 return [specificityWeight, SpecificityWeightStatus.Fit];
             })();
-            if (!accum.has(weightStatus)) accum.set(weightStatus, []);
-            accum.get(weightStatus)?.push({ selector, specificityWeight });
+            let group = accum.get(weightStatus);             // get an existing collector
+            if (!group) accum.set(weightStatus, group = []); // create a new collector
+            group.push({ selector, specificityWeight });
             return accum;
         },
         new Map<SpecificityWeightStatus, { selector: PureSelectorModel, specificityWeight: number }[]>()
@@ -749,8 +750,9 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
                 
                 return ParentPosition.RandomParent;
             })();
-            if (!accum.has(position)) accum.set(position, []);
-            accum.get(position)?.push(selector);
+            let group = accum.get(position);             // get an existing collector
+            if (!group) accum.set(position, group = []); // create a new collector
+            group.push(selector);
             return accum;
         },
         new Map<ParentPosition, PureSelectorModel[]>()
@@ -767,8 +769,9 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
     type GroupByCombinator = Map<Combinator|null, PureSelectorModelList>
     const createGroupByCombinator = (fetch: (selector: PureSelectorModel) => Combinator|null) => (accum: GroupByCombinator, selector: PureSelectorModel): GroupByCombinator => {
         const combinator = fetch(selector);
-        if (!accum.has(combinator)) accum.set(combinator, []);
-        accum.get(combinator)?.push(selector);
+        let group = accum.get(combinator);             // get an existing collector
+        if (!group) accum.set(combinator, group = []); // create a new collector
+        group.push(selector);
         return accum;
     };
     const groupedSelectorList = createSelectorList(
@@ -996,8 +999,9 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
             
             
             
-            if (!accum.has(ruleType)) accum.set(ruleType, []);
-            accum.get(ruleType)?.push(rule);
+            let group = accum.get(ruleType);             // get an existing collector
+            if (!group) accum.set(ruleType, group = []); // create a new collector
+            group.push(rule);
             return accum;
         },
         new Map<RuleType, Selector[]>()
