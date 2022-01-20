@@ -886,7 +886,7 @@ export const usesBorderStroke = () => {
     return [
         () => style({
             ...vars({
-                [borderStrokeDecls.border]      : cssProps.border,      // default => uses config's border
+                [borderStrokeDecls.border     ] : cssProps.border,      // default => uses config's border
                 [borderStrokeDecls.borderWidth] : cssProps.borderWidth, // default => uses config's border width
             }),
         }),
@@ -936,9 +936,9 @@ export const usesBorderRadius = () => {
         () => style({
             ...vars({
                 [borderRadiusDecls.borderStartStartRadius] : cssProps.borderRadius, // default => uses config's border radius
-                [borderRadiusDecls.borderStartEndRadius]   : cssProps.borderRadius, // default => uses config's border radius
-                [borderRadiusDecls.borderEndStartRadius]   : cssProps.borderRadius, // default => uses config's border radius
-                [borderRadiusDecls.borderEndEndRadius]     : cssProps.borderRadius, // default => uses config's border radius
+                [borderRadiusDecls.borderStartEndRadius  ] : cssProps.borderRadius, // default => uses config's border radius
+                [borderRadiusDecls.borderEndStartRadius  ] : cssProps.borderRadius, // default => uses config's border radius
+                [borderRadiusDecls.borderEndEndRadius    ] : cssProps.borderRadius, // default => uses config's border radius
             }),
         }),
         borderRadiusRefs,
@@ -990,7 +990,7 @@ export const usesPadding = () => {
         () => style({
             ...vars({
                 [paddingDecls.paddingInline] : cssProps.paddingInline, // default => uses config's padding inline
-                [paddingDecls.paddingBlock]  : cssProps.paddingBlock,  // default => uses config's padding block
+                [paddingDecls.paddingBlock ] : cssProps.paddingBlock,  // default => uses config's padding block
             }),
         }),
         paddingRefs,
@@ -1154,12 +1154,12 @@ export const usesExcitedState = () => {
     return [
         () => style({
             ...states([
-                isExcited([
+                isExcited(
                     vars({
                         [excitedDecls.filter] : cssProps.filterExcited,
                         [excitedDecls.anim  ] : cssProps.animExcited,
                     }),
-                ]),
+                ),
             ]),
         }),
         excitedRefs,
