@@ -69,7 +69,6 @@ import {
     
     
     // renders:
-    selectorToString,
     selectorsToString,
     
     
@@ -883,11 +882,6 @@ export const mergeSelectors = (selectorList: SelectorModelList, options: Selecto
 
 // compositions:
 /**
- * Defines the (sub) component's composition.
- * @returns A `StyleCollection` represents the (sub) component's composition.
- */
-export const composition     = (styles: StyleCollection): StyleCollection => styles;
-/**
  * Defines the additional component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
@@ -906,26 +900,34 @@ export const mainComposition = (styles: StyleCollection)        => compositionOf
  * @returns A `ClassEntry` represents the global style.
  */
 export const globalDef       = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
-export const imports         = (styles: StyleCollection)        => composition(styles);
 
 
 
 // styles:
 /**
- * Defines component's style.
- * @returns A `Style` represents the component's style.
+ * @deprecated move to `style()`
+ * Defines the (sub) component's composition.
+ * @returns A `Rule` represents the (sub) component's composition.
  */
-export const style  = (style: Style) => noRule(style);
+export const composition     = (styles: StyleCollection)       => noRule(styles);
+// export const composition     = (styles: StyleCollection): StyleCollection => styles;
 /**
- * Defines component's layout.
- * @returns A `Style` represents the component's layout.
+ * Defines component's style.
+ * @returns A `Rule` represents the component's style.
  */
-export const layout = (style: Style): Style => style;
+export const style   = (style: Style)                          => noRule(style);
+/**
+ * @deprecated move to `style()`
+ * Defines component's layout.
+ * @returns A `Rule` represents the component's layout.
+ */
+export const layout  = (style: Style)                          => noRule(style);
 /**
  * Defines component's variable(s).
- * @returns A `Style` represents the component's variable(s).
+ * @returns A `Rule` represents the component's variable(s).
  */
-export const vars   = (items: { [key: string]: CssValue }): Style => items;
+export const vars    = (items: { [key: Cust.Decl]: CssValue }) => noRule(items);
+export const imports = (styles: StyleCollection)               => noRule(styles);
 
 
 
@@ -1032,13 +1034,13 @@ export const rules = (ruleCollection: RuleCollection, options?: SelectorOptions)
 };
 /**
  * Defines component's variants.
- * @returns A `StyleCollection` represents the component's variants.
+ * @returns A `Rule` represents the component's variants.
  */
 export const variants = (variants: RuleCollection, options: SelectorOptions = defaultSelectorOptions) => rules(variants, options);
 /**
  * Defines component's states.
  * @param inherit `true` to inherit states from parent element -or- `false` to create independent states.
- * @returns A `StyleCollection` represents the component's states.
+ * @returns A `Rule` represents the component's states.
  */
 export const states   = (states: RuleCollection|((inherit: boolean) => RuleCollection), inherit = false, options: SelectorOptions = { ...defaultSelectorOptions, minSpecificityWeight: 3 }) => {
     return rules((typeof(states) === 'function') ? states(inherit) : states, options);
@@ -1048,7 +1050,7 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
 export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
 export const fontFace          = (styles: StyleCollection) => rule('@font-face'         , styles);
-export const keyframes         = (name: string, items: PropEx.Keyframes) => rule(`@keyframes ${name}`, layout(Object.fromEntries(
+export const keyframes         = (name: string, items: PropEx.Keyframes) => rule(`@keyframes ${name}`, (Object.fromEntries(
     Object.entries(items).map(([key, frame]) => [Symbol(key), frame])
 ) as Style));
 export const emptyRule         = ()                        => rule(null                 , null  );
