@@ -15,6 +15,17 @@ sync Input
 sync Navbar
 sync stripouts
 
+// layouts: => // styles:   from './cssfn'
+
+composition => style
+* @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` => * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]`
+* @returns A `Rule`
+
+mainComposition([        =>   mainComposition(
+compositionOf('foo', [   =>   compositionOf('foo',
+globalDef([              =>   globalDef(
+(?<!rule|fromEntries|imports|rules|variants|states|>)\(\[
+
 
 top priority:
 fix accordion on the last (bottom)
