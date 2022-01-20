@@ -21,7 +21,6 @@ import jssPluginVendor      from './jss-plugin-vendor'
 // cssfn:
 import type {
     OptionalOrFalse,
-    SingleOrArray,
     SingleOrDeepArray,
     ProductOrFactoryOrDeepArray,
     ProductOrFactory,
@@ -133,9 +132,7 @@ export type OptionalString                     = OptionalOrFalse<string>
 export type Selector                           = (string & {})
 export type SelectorCollection                 = SingleOrDeepArray<OptionalOrFalse<Selector>>
 
-export type RuleSource                         = ProductOrFactory<OptionalOrFalse<Rule>>
-export type RuleList                           = RuleSource[]
-export type RuleCollection                     = SingleOrArray<RuleSource|RuleList>
+export type RuleCollection                     = ProductOrFactoryOrDeepArray<OptionalOrFalse<Rule>>
 
 
 
@@ -894,12 +891,12 @@ export const compositionOf   = <TClassName extends ClassName = ClassName>(classN
  * Defines the main component's composition.
  * @returns A `ClassEntry` represents the component's composition.
  */
-export const mainComposition = (...styles: StyleCollection[]) => compositionOf('main' , ...styles);
+export const mainComposition = (...styles : StyleCollection[]) => compositionOf('main' , ...styles);
 /**
  * Defines the global style applied to a whole document.
  * @returns A `ClassEntry` represents the global style.
  */
-export const globalDef       = (ruleCollection: RuleCollection) => compositionOf(''     , [rules(ruleCollection)]);
+export const globalDef       = (...rules  : RuleCollection[] ) => compositionOf(''     , ...rules);
 
 
 
@@ -1012,13 +1009,13 @@ export const rule = (rules: SelectorCollection, styles: StyleCollection, options
 };
 
 // rule groups:
-export const rules = (ruleCollection: RuleCollection, options?: SelectorOptions): Rule => {
+export const rules = (rules: RuleCollection, options?: SelectorOptions): Rule => {
     const result = (
-        (Array.isArray(ruleCollection) ? ruleCollection : [ruleCollection])
-        .flatMap((ruleSourceList: RuleSource|RuleList): OptionalOrFalse<Rule>[] => { // convert: Factory<Rule>|Rule|RuleList => [Rule]|[Rule]|[...RuleList] => [Rule]
-            if (typeof(ruleSourceList) === 'function') return [ruleSourceList()];
-            if (Array.isArray(ruleSourceList)) return ruleSourceList.map((ruleSource) => (typeof(ruleSource) === 'function') ? ruleSource() : ruleSource);
-            return [ruleSourceList];
+        flat(rules)
+        .filter((rule): rule is ProductOrFactory<OptionalOrFalse<Rule>> => !!rule)
+        .flatMap((ruleProductOrFactory: ProductOrFactory<OptionalOrFalse<Rule>>): OptionalOrFalse<Rule>[] => {
+            if (typeof(ruleProductOrFactory) === 'function') return [ruleProductOrFactory()];
+            return [ruleProductOrFactory];
         })
         .filter((optionalRule): optionalRule is Rule => !!optionalRule)
     );
@@ -1048,7 +1045,7 @@ export const states   = (states: RuleCollection|((inherit: boolean) => RuleColle
 
 // rule shortcuts:
 export const noRule            = (styles: StyleCollection) => rule('&'                  , styles);
-export const atGlobal          = (ruleCollection: RuleCollection) => rule('@global'     , rules(ruleCollection));
+export const atGlobal          = (rules : RuleCollection ) => rule('@global'            , rules );
 export const fontFace          = (styles: StyleCollection) => rule('@font-face'         , styles);
 export const keyframes         = (name: string, items: PropEx.Keyframes) => rule(`@keyframes ${name}`, (Object.fromEntries(
     Object.entries(items).map(([key, frame]) => [Symbol(key), frame])
