@@ -1050,6 +1050,7 @@ export const noRule            = (...styles: StyleCollection[]) => rule('&'     
 export const emptyRule         = ()                             => rule(null                 , null  );
 export const atGlobal          = (...rules :  RuleCollection[]) => rule('@global'            , rules );
 export const fontFace          = (...styles: StyleCollection[]) => rule('@font-face'         , styles);
+
 export const atRoot            = (...styles: StyleCollection[]) => rule(':root'              , styles);
 export const isFirstChild      = (...styles: StyleCollection[]) => rule(     ':first-child'  , styles);
 export const isNotFirstChild   = (...styles: StyleCollection[]) => rule(':not(:first-child)' , styles);
