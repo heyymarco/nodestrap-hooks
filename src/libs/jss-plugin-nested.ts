@@ -181,19 +181,27 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
                 }
             */
             
-            // place conditional right after the parent rule to ensure right ordering:
+            
+            
+            const parentKey = styleRule.key ?? '';
+            const isGlobalParent = ((parentKey === '') || (parentKey === '@global') || parentKey.startsWith('@global-') || parentKey.startsWith('@global_'));
+            
+            
             
             const conditionalRule = (parentRule as any).addRule(  // move up the nestedSelectorStr
                 nestedSelectorStr,
-                emptyStyle as Style,
+                isGlobalParent ? (mergeStyles(nestedStyles) ?? emptyStyle) : (emptyStyle as Style),
                 optionsCache
             ); // causes trigger of all plugins
             
-            conditionalRule.addRule(                              // duplicate the parentRule selector
-                styleRule.key,
-                mergeStyles(nestedStyles) ?? emptyStyle,          // move the nestedStyles
-                { ...optionsCache, selector: parentSelector }
-            ); // causes trigger of all plugins
+            if (!isGlobalParent) {
+                // place conditional right after the parent rule to ensure right ordering:
+                conditionalRule.addRule(                              // duplicate the parentRule selector
+                    parentKey,
+                    mergeStyles(nestedStyles) ?? emptyStyle,          // move the nestedStyles
+                    { ...optionsCache, selector: parentSelector }
+                ); // causes trigger of all plugins
+            } // if
         }
         else if (nestedSelectorStr.includes('&')) { // nested rules
             const parentSelector : string = (styleRule as any).selector ?? '';
