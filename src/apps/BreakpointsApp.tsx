@@ -11,8 +11,12 @@ import {
     layout,
     variants,
     children,
+    atRoot,
+    rules,
+    keyframes,
 }                           from '../libs/cssfn'           // cssfn core
 import {
+    breakpoints,
     isScreenWidthAtLeast,
 } from '../libs/breakpoints';
 
@@ -20,24 +24,64 @@ import {
 
 createSheet(() => [
     globalDef([
-        rule('.btn', [
-            layout({
-                '--btn-name': '"this is btn"',
+        // rule('.btn', [
+        //     layout({
+        //         '--btn-name': '"this is btn"',
 
-                ...children('.icon', [
+        //         ...children('.icon', [
+        //             layout({
+        //                 '--icon-name': '"this is icon"',
+        //             }),
+        //             variants([
+        //                 isScreenWidthAtLeast('md', [
+        //                     layout({
+        //                         '--icon-sz': '"this medium icon"',
+        //                     }),
+        //                 ]),
+        //             ]),
+        //         ]),
+        //     }),
+        // ]),
+        keyframes('fadeIn', {
+            '50%': {
+                color: 'red',
+            }
+        }),
+        isScreenWidthAtLeast('xl', [ // @global parent
+            rules([
+                atRoot([
                     layout({
-                        '--icon-name': '"this is icon"',
+                        fontSize: 'x-large',
                     }),
-                    variants([
-                        isScreenWidthAtLeast('md', [
-                            layout({
-                                '--icon-sz': '"this medium icon"',
-                            }),
-                        ]),
-                    ]),
                 ]),
-            }),
+            ], { minSpecificityWeight: 2 }),
         ]),
+        isScreenWidthAtLeast('xl', {
+            ...rule('div', {
+                textDecoration: 'underline',
+            })
+        }),
+        rule('.button', {
+            background: 'pink',
+            ...isScreenWidthAtLeast('md', { // .button parent
+                background: 'red',
+            }),
+            ...isScreenWidthAtLeast('md', { // .button parent
+                color: 'black',
+            }),
+        }),
+        // Object.keys(breakpoints)
+        // .map((breakpointName) => isScreenWidthAtLeast(breakpointName, [
+        //     rules([
+        //         atRoot([
+        //             layout({
+        //                 '--test': '"oke"',
+        //                 // overwrites propName = propName{BreakpointName}:
+        //                 // ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
+        //             }),
+        //         ]),
+        //     ], { minSpecificityWeight: 2 }),
+        // ])),
     ]),
 ])
 .attach()
