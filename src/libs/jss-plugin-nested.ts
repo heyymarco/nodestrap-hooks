@@ -141,7 +141,7 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
             
             /*
                 from:
-                .fooClass {                              // parentRule
+                .parent {                                // parentRule
                     .awesome { fontSize: 'small' }
                     @media (min-width: 1024px) {         // nested conditional
                         .awesome { fontSize: 'large' }   // the nestedStyles
@@ -149,11 +149,11 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
                 }
                 
                 to:
-                .fooClass {
+                .parent {
                     .awesome { fontSize: 'small' }
                 }
                 @media (min-width: 1024px) {             // move up the nestedSelectorStr
-                    .fooClass {                          // duplicate the parentRule selector
+                    .parent {                            // duplicate the parentRule selector
                         .awesome { fontSize: 'large' }   // move the nestedStyles
                     }
                 }
