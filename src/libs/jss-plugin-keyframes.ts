@@ -55,22 +55,25 @@ class KeyframesStyleRule {
      * Generates a CSS string.
      */
     toString(options : any = {}) {
-        if (!(this as any).rules) {
+        /*
+            lazily add a RuleList after the (this as any).style has already processed by plugin(s)
+        */
+        if (!(this as any).rules) { // the RuleList was not set
             const rules = new RuleList((this as any).options);
             for (const [key, frame] of Object.entries((this as any).style)) {
                 const frameRule = rules.add(key, (frame as Style));
                 (frameRule as any).selector = key;
             } // for
-            (this as any).rules = rules;
+            (this as any).rules = rules; // set the RuleList
             
             rules.process(); // plugin-nested was already performed but another plugin such as plugin-camel-case might not been performed => re-run the plugins
         } // if
         
         
         
-        return `${(this as any).key} {${
+        return `${(this as any).key} {\n${
             ((this as any).rules as RuleList).toString(options)
-        }}`
+        }\n}`
     }
 }
 
