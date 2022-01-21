@@ -189,6 +189,14 @@ export default function Page() {
             //         opacity: 0.95,
             //     }),
             // }),
+            keyframes('fadeOut', {
+                from: {
+                    background: 'orange',
+                },
+                to : {
+                    background: 'red',
+                }
+            }),
             states([
                 rule([
                     ':wohaa',

@@ -45,6 +45,9 @@ createSheet(() => [
         keyframes('fadeIn', {
             '50%': {
                 color: 'red',
+            },
+            to: {
+                color: 'darkRed',
             }
         }),
         isScreenWidthAtLeast('xl', [ // @global parent

@@ -45,6 +45,7 @@ import {
 // utilities:
 
 const isConditionalRule = (selector: string) => (['@media', '@supports', '@document'].some((at) => selector.startsWith(at)));
+const isKeyframesRule   = (selector: string) => selector.startsWith('@keyframes ');
 const ruleGenerateId    = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
 const getOptions = (rule: Rule, parentRule: Rule|StyleSheet|undefined, optionsCache: any) => {
     if (optionsCache) return {...optionsCache, index: optionsCache.index + 1}; // increase the index from cache
@@ -110,7 +111,7 @@ Object.seal(emptyStyle);
 
 
 
-class ConditionalStyleRule {
+class NestedRule {
     // unrecognized syntax on lower version of javascript
     // // BaseRule:
     // type        : string  = 'style' // for satisfying `jss-plugin-nested`
@@ -147,7 +148,7 @@ class ConditionalStyleRule {
         (this as any).rules = new RuleList((this as any).options);
         
         // StyleRule:
-        (this as any).style    = style; // the `style` needs to be attached to `ConditionalStyleRule` for satisfying `onProcessStyle()`
+        (this as any).style    = style; // the `style` needs to be attached to `NestedRule` for satisfying `onProcessStyle()`
         (this as any).selector = '';    // for satisfying `jss-plugin-nested`
     }
     
@@ -209,8 +210,8 @@ class ConditionalStyleRule {
 
 
 const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) => {
-    if (isConditionalRule(key)) {
-        return new ConditionalStyleRule(key, style ?? {}, options);
+    if (isConditionalRule(key) || isKeyframesRule(key)) {
+        return new NestedRule(key, style ?? {}, options);
     } // if
     
     
@@ -336,7 +337,12 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
             ); // causes trigger of all plugins
         }
         else {
-            (style as any)[nestedSelectorStr] = mergeStyles(nestedStyles) ?? emptyStyle;
+            // convert `Symbol('fooClass'): Style` to `fooClass: MergedStyle`
+            (parentRule as any).addRule(
+                nestedSelectorStr,
+                mergeStyles(nestedStyles) ?? emptyStyle,
+                { ...optionsCache, selector: nestedSelectorStr }
+            ); // causes trigger of all plugins
         } // if
         
         
