@@ -12,6 +12,7 @@ import {
 
     layout,
 
+    rule,
     variants,
     states,
 
@@ -84,13 +85,13 @@ const useAwesomeButtonStyle = createUseSheet([
         }),
 
         variants([
-            [ '.big', {
+            rule( '.big', {
                 fontSize: 'x-large'
-            }],
+            }),
 
-            [ '.small', {
+            rule( '.small', {
                 fontSize: 'x-small'
-            }],
+            }),
 
             // usingGradient(),
 
@@ -101,21 +102,21 @@ const useAwesomeButtonStyle = createUseSheet([
         ]),
 
         states([
-            [ ':hover', { backg: 'pink' } ],
+            rule(':hover', { backg: 'pink' }),
 
-            [ null, { cursor: 'pointer' } ],
+            rule(null, { cursor: 'pointer' }),
         ]),
     ]),
     compositionOf('other', [
 
     ]),
     globalDef([
-        [ ':root', {
+        rule( ':root', {
             '--glob-var': '"hello global"',
-        }],
-        [ ':root', {
+        }),
+        rule( ':root', {
             '--glob-var-oth': '"hello global again"',
-        }],
+        }),
     ]),
 ]);
 
