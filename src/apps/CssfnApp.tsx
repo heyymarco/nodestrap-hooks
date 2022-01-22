@@ -28,6 +28,8 @@ import {
     // atGlobal,
     // fontFace,
     keyframes,
+    atGlobal,
+    fallbacks,
     // Styles,
     // isHover,
 }                           from '../libs/cssfn'           // cssfn core
@@ -189,102 +191,102 @@ export default function Page() {
             //         opacity: 0.95,
             //     }),
             // }),
-            keyframes('fadeOut', {
-                from: {
-                    background: 'orange',
-                },
-                to : {
-                    background: 'red',
-                }
-            }),
-            states([
-                rule([
-                    ':wohaa',
-                    ':weleh',
-                    '::before',
-                    '::after'
-                ], [
-                    layout({
-                        color: 'pink',
-                    }),
-                ]),
+            // keyframes('fadeOut', {
+            //     from: {
+            //         background: 'orange',
+            //     },
+            //     to : {
+            //         background: 'red',
+            //     }
+            // }),
+            // states([
+            //     rule([
+            //         ':wohaa',
+            //         ':weleh',
+            //         '::before',
+            //         '::after'
+            //     ], [
+            //         layout({
+            //             color: 'pink',
+            //         }),
+            //     ]),
 
-                // rule([
-                //     '&>.one',
-                // ], [
-                //     layout({
-                //         color: 'pink',
-                //     }),
-                // ]),
-                // rule([
-                //     ['&>.one', '&>.other', '::before'],
-                // ], [
-                //     layout({
-                //         color: 'pink',
-                //     }),
-                // ]),
-                // rule([
-                //     ['&>.one', '::before', '::after'],
-                // ], [
-                //     layout({
-                //         color: 'pink',
-                //     }),
-                // ]),
+            //     // rule([
+            //     //     '&>.one',
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'pink',
+            //     //     }),
+            //     // ]),
+            //     // rule([
+            //     //     ['&>.one', '&>.other', '::before'],
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'pink',
+            //     //     }),
+            //     // ]),
+            //     // rule([
+            //     //     ['&>.one', '::before', '::after'],
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'pink',
+            //     //     }),
+            //     // ]),
     
-                // rule([
-                //     '.one>&',
-                // ], [
-                //     layout({
-                //         color: 'red',
-                //     }),
-                // ]),
-                // rule([
-                //     ['.one>&', '.other>&', '::before'],
-                // ], [
-                //     layout({
-                //         color: 'red',
-                //     }),
-                // ]),
-                // rule([
-                //     ['.one>&', '::before', '::after'],
-                // ], [
-                //     layout({
-                //         color: 'red',
-                //     }),
-                // ]),
+            //     // rule([
+            //     //     '.one>&',
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'red',
+            //     //     }),
+            //     // ]),
+            //     // rule([
+            //     //     ['.one>&', '.other>&', '::before'],
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'red',
+            //     //     }),
+            //     // ]),
+            //     // rule([
+            //     //     ['.one>&', '::before', '::after'],
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'red',
+            //     //     }),
+            //     // ]),
                 
-                // rule([
-                //     '.one.two.three.four.five',
-                // ], [
-                //     layout({
-                //         color: 'pink',
-                //     }),
-                // ]),
-                // rule([
-                //     ['.one.two.three.four.five', '::before'],
-                // ], [
-                //     layout({
-                //         color: 'pink',
-                //     }),
-                // ]),
-                // rule([
-                //     ['.one.two.three.four.five', '::before', '::after:first-child'],
-                // ], [
-                //     layout({
-                //         color: 'pink',
-                //     }),
-                // ]),
+            //     // rule([
+            //     //     '.one.two.three.four.five',
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'pink',
+            //     //     }),
+            //     // ]),
+            //     // rule([
+            //     //     ['.one.two.three.four.five', '::before'],
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'pink',
+            //     //     }),
+            //     // ]),
+            //     // rule([
+            //     //     ['.one.two.three.four.five', '::before', '::after:first-child'],
+            //     // ], [
+            //     //     layout({
+            //     //         color: 'pink',
+            //     //     }),
+            //     // ]),
                 
-                // rule([
-                //     [':one:two.tree', ':ONE:TWO:THREEE:not(.FOUR)'],
-                // ], [
-                //     layout({
-                //         background: 'pink',
-                //     }),
-                // ]),
-            ]
-            // , { specificityWeight: 4 }
-            )
+            //     // rule([
+            //     //     [':one:two.tree', ':ONE:TWO:THREEE:not(.FOUR)'],
+            //     // ], [
+            //     //     layout({
+            //     //         background: 'pink',
+            //     //     }),
+            //     // ]),
+            // ]
+            // // , { specificityWeight: 4 }
+            // ),
             // rules([
             //     atGlobal([
             //         rule('.btn', [
@@ -299,7 +301,42 @@ export default function Page() {
             //         ]),
             //     ]),
             // ]),
+            atGlobal([
+                rule('.p', {
+                    display: 'grid',
+                    // ...fallbacks(
+                    //     {
+                    //         display: 'block',
+                    //     },
+                    // ),
+                    ...fallbacks([
+                        {
+                            display: 'last preferred',
+                        },
+                        {
+                            display: 'middle preferred',
+                        },
+                        {
+                            display: 'more preferred',
+                        },
+                    ]),
+                }),
+                keyframes('shake', {
+                    from: {
+                        width: '10px',
+                    },
+                    to : {
+                        width: '50vw',
+                    }
+                }),
+            ])
         ]),
+        // globalDef([
+        //     rule('.common-button', {
+        //         appearance: 'none',
+        //         display: 'inline-block',
+        //     }),
+        // ])
     ]);
 
     

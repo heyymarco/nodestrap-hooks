@@ -50,6 +50,8 @@ import {
 const isGlobalRule      = (selector: string) => (selector === '') || (selector === '@global') || selector.startsWith('@global-') || selector.startsWith('@global_');
 const isConditionalRule = (selector: string) => (['@media', '@supports', '@document'].some((at) => selector.startsWith(at)));
 const isKeyframesRule   = (selector: string) => selector.startsWith('@keyframes ');
+const isFontFace        = (selector: string) => selector.startsWith('@font-face');
+const isFallbacks       = (selector: string) => selector.startsWith('@fallbacks');
 const ruleGenerateId    = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
 const getOptions = (rule: Rule, parentRule: Rule|StyleSheet|undefined, optionsCache: any) => {
     if (optionsCache) return {...optionsCache, index: optionsCache.index + 1}; // increase the index from cache
@@ -226,24 +228,10 @@ class NestedRule {
 
 
 
-class StyleRule {
+class StyleRule extends NestedRule {
     constructor(key: string, style: Style, options: any) {
-        // BaseRule:
-        (this as any).type        = 'style'; // for satisfying `jss-plugin-nested`
-        (this as any).key         = key;
-        (this as any).isProcessed = false;   // required to avoid double processed
-        (this as any).options     = {
-            ...options,
-            parent: options?.sheet, // places the nested style on sheet
-        };
-        (this as any).renderable  = null;
-        
-        // ContainerRule:
-        // (this as any).at    = 'sheet';
-        // (this as any).rules = new RuleList((this as any).options);
-        
-        // StyleRule:
-        (this as any).style    = style; // the `style` needs to be attached to `NestedRule` for satisfying `onProcessStyle()`
+        super(key, style, options);
+        (this as any).options.parent = options.sheet; // StyleRule can't be a parent of any (nested) rules, except @fallbacks rule
         
         
         
@@ -255,7 +243,7 @@ class StyleRule {
             classes,
         } = options;
         
-        if (selector) {
+        if (selector || (selector === '')) {
             (this as any).selector = selector ?? null; // for satisfying `jss-plugin-nested`
         }
         else if (scoped !== false) {
@@ -272,8 +260,12 @@ class StyleRule {
      * Generates a CSS string.
      */
     toString(options : any = {}) {
+        const style = (this as any).style as Style;
+        
+        const fallbacks = ((this as any).rules as RuleList).toString(options);
+        
         const children = (
-            Object.entries((this as any).style as Style)
+            Object.entries(style)
             .filter(([, propValue]) => (propValue !== undefined) && (propValue !== null))
             .map(([propName, propValue]) =>
                 `${propName}:${toCssValue(propValue as JssValue, /*ignoreImportant:*/false)};`
@@ -286,6 +278,8 @@ class StyleRule {
         const selector = (this as any).selector;
         if (!selector) return children;
         return (`${selector} {\n${
+            fallbacks ? `${fallbacks}\n` : ''
+        }${
             children
         }\n}`);
     }
@@ -306,8 +300,9 @@ const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) 
     
     
     
-    if (key[0] !== '@') return new StyleRule(key, style ?? {}, options);
-    if (key === '@font-face') return new StyleRule(key, style ?? {}, { ...options, selector: '@font-face' });
+    if (key[0] !== '@')   return new StyleRule(key, style ?? {}, options);
+    if (isFontFace(key))  return new StyleRule(key, style ?? {}, { ...options, selector: '@font-face' });
+    if (isFallbacks(key)) return new StyleRule(key, style ?? {}, { ...options, selector: ''           });
     return null;
 };
 
@@ -389,7 +384,7 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
             
             
             const parentKey = styleRule.key ?? '';
-            const isGlobalParent = ((parentKey === '') || (parentKey === '@global') || parentKey.startsWith('@global-') || parentKey.startsWith('@global_'));
+            const isGlobalParent = isGlobalRule(parentKey);
             
             
             
@@ -420,12 +415,25 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
                 ); // causes trigger of all plugins
             } // if
         }
+        else if (nestedSelectorStr === '@fallbacks') {
+            // convert `Symbol('fooClass'): Style` to `fooClass: MergedStyle`
+            const fallbacks = (Array.isArray(nestedStyles) ? nestedStyles : [nestedStyles]);
+            for (let index = fallbacks.length - 1; index >= 0; index--) {
+                const nestedStyle = fallbacks[index];
+                
+                (styleRule as any).addRule(
+                    nestedSelectorStr,
+                    mergeStyles(nestedStyle) ?? emptyStyle,
+                    { ...optionsCache, selector: '' }
+                ); // causes trigger of all plugins
+            } // for
+        }
         else if (nestedSelectorStr[0] === '@') {
             // move `@something` to StyleSheet:
             sheet?.addRule(
                 nestedSelectorStr,
                 mergeStyles(nestedStyles) ?? emptyStyle,
-                { ...optionsCache, selector: null}
+                { ...optionsCache, selector: null }
             ); // causes trigger of all plugins
         }
         else {

@@ -1096,6 +1096,7 @@ export const keyframes         = (name: string, items: PropEx.Keyframes) => rule
 export const noRule            = (...styles: StyleCollection[]) => rule('&'                  , styles);
 export const emptyRule         = ()                             => rule(null                 , null  );
 export const atGlobal          = (...rules :  RuleCollection[]) => rule('@global'            , rules );
+export const fallbacks         = (   styles: StyleCollection  ) => rule('@fallbacks'         , styles); // no spread parameter to preserve the array & non_array styles - non_array: single fallback, array: multiple fallbacks
 export const fontFace          = (...styles: StyleCollection[]) => rule('@font-face'         , styles);
 
 export const atRoot            = (...styles: StyleCollection[]) => rule(':root'              , styles);
