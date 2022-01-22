@@ -47,6 +47,7 @@ import {
 
 // utilities:
 
+const isGlobalRule      = (selector: string) => (selector === '') || (selector === '@global') || selector.startsWith('@global-') || selector.startsWith('@global_');
 const isConditionalRule = (selector: string) => (['@media', '@supports', '@document'].some((at) => selector.startsWith(at)));
 const isKeyframesRule   = (selector: string) => selector.startsWith('@keyframes ');
 const ruleGenerateId    = (rule: Rule, sheet?: StyleSheet) => (rule as any).name ?? rule.key;
@@ -152,7 +153,13 @@ class NestedRule {
         
         // StyleRule:
         (this as any).style    = style; // the `style` needs to be attached to `NestedRule` for satisfying `onProcessStyle()`
-        (this as any).selector = null;  // for satisfying `jss-plugin-nested`
+        
+        
+        
+        const {
+            selector,
+        } = options;
+        (this as any).selector = selector ?? null;
     }
     
     
@@ -204,8 +211,12 @@ class NestedRule {
         
         
         
-        const selector = (this as any).selector ?? (this as any).at;
         const children = ((this as any).rules as RuleList).toString(options);
+        if (!children) return '';
+        
+        
+        
+        const selector = (this as any).selector ?? (this as any).at;
         if (!selector) return children;
         return (`${selector} {\n${
             children
@@ -233,7 +244,6 @@ class StyleRule {
         
         // StyleRule:
         (this as any).style    = style; // the `style` needs to be attached to `NestedRule` for satisfying `onProcessStyle()`
-        // (this as any).selector = null;  // for satisfying `jss-plugin-nested`
         
         
         
@@ -262,7 +272,6 @@ class StyleRule {
      * Generates a CSS string.
      */
     toString(options : any = {}) {
-        const selector = (this as any).selector;
         const children = (
             Object.entries((this as any).style as Style)
             .filter(([, propValue]) => (propValue !== undefined) && (propValue !== null))
@@ -270,6 +279,11 @@ class StyleRule {
                 `${propName}:${toCssValue(propValue as JssValue, /*ignoreImportant:*/false)};`
             ).join('\n')
         );
+        if (!children) return '';
+        
+        
+        
+        const selector = (this as any).selector;
         if (!selector) return children;
         return (`${selector} {\n${
             children
@@ -280,6 +294,12 @@ class StyleRule {
 
 
 const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) => {
+    if (isGlobalRule(key)) {
+        return new NestedRule(key, style ?? {}, { ...options, selector: '' });
+    } // if
+    
+    
+    
     if (isConditionalRule(key) || isKeyframesRule(key)) {
         return new NestedRule(key, style ?? {}, options);
     } // if
@@ -376,7 +396,7 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
             const conditionalRule = (parentRule as any).addRule(  // move up the nestedSelectorStr
                 nestedSelectorStr,
                 isGlobalParent ? (mergeStyles(nestedStyles) ?? emptyStyle) : (emptyStyle as Style),
-                optionsCache
+                { ...optionsCache, selector: null }
             ); // causes trigger of all plugins
             
             if (!isGlobalParent) {
@@ -405,7 +425,7 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
             sheet?.addRule(
                 nestedSelectorStr,
                 mergeStyles(nestedStyles) ?? emptyStyle,
-                optionsCache
+                { ...optionsCache, selector: null}
             ); // causes trigger of all plugins
         }
         else {
