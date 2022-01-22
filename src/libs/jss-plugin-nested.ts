@@ -417,7 +417,7 @@ const createOnProcessStyle = (mergeStyles: MergeStylesCallback) => (style: Style
         }
         else if (nestedSelectorStr === '@fallbacks') {
             // convert `Symbol('fooClass'): Style` to `fooClass: MergedStyle`
-            const fallbacks = (Array.isArray(nestedStyles) ? nestedStyles : [nestedStyles]);
+            const fallbacks = (Array.isArray(nestedStyles) ? nestedStyles : [nestedStyles]).flat();
             for (let index = fallbacks.length - 1; index >= 0; index--) {
                 const nestedStyle = fallbacks[index];
                 
