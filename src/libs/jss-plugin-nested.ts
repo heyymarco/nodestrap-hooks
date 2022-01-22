@@ -2,10 +2,13 @@
 import {
     Plugin,
     JssStyle as Style,
+    JssValue,
     
     Rule,
     RuleList,
     StyleSheet,
+    
+    toCssValue,
 }                           from 'jss'           // base technology of our cssfn components
 
 // cssfn:
@@ -209,6 +212,65 @@ class NestedRule {
 
 
 
+class StyleRule {
+    constructor(key: string, style: Style, options: any) {
+        // BaseRule:
+        (this as any).type        = 'style'; // for satisfying `jss-plugin-nested`
+        (this as any).key         = key;
+        (this as any).isProcessed = false;   // required to avoid double processed
+        (this as any).options     = {
+            ...options,
+            parent: options?.sheet, // places the nested style on sheet
+        };
+        (this as any).renderable  = null;
+        
+        // ContainerRule:
+        (this as any).at    = 'sheet';
+        // (this as any).rules = new RuleList((this as any).options);
+        
+        // StyleRule:
+        (this as any).style    = style; // the `style` needs to be attached to `NestedRule` for satisfying `onProcessStyle()`
+        // (this as any).selector = '';    // for satisfying `jss-plugin-nested`
+        
+        
+        
+        const {
+            selector,
+            scoped,
+            sheet,
+            generateId,
+            classes,
+        } = options;
+        
+        if (selector) {
+            (this as any).selector = selector ?? ''; // for satisfying `jss-plugin-nested`
+        }
+        else if (scoped !== false) {
+            const id = generateId(this, sheet);
+            (this as any).id = id;
+            (this as any).selector = `.${id}`; // for satisfying `jss-plugin-nested`
+            classes[key] = id;
+        } // if
+    }
+    
+    
+    
+    /**
+     * Generates a CSS string.
+     */
+    toString(options : any = {}) {
+        return `${(this as any).selector} {\n${
+            Object.entries((this as any).style as Style)
+            .filter(([, propValue]) => (propValue !== undefined) && (propValue !== null))
+            .map(([propName, propValue]) =>
+                `${propName}:${toCssValue(propValue as JssValue, /*ignoreImportant:*/false)};`
+            ).join('\n')
+        }\n}`
+    }
+}
+
+
+
 const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) => {
     if (isConditionalRule(key) || isKeyframesRule(key)) {
         return new NestedRule(key, style ?? {}, options);
@@ -216,6 +278,8 @@ const onCreateRule = (key: string, style: Style|null, options: any): (Rule|any) 
     
     
     
+    if (key[0] !== '@') return new StyleRule(key, style ?? {}, options);
+    if (key === '@font-face') return new StyleRule(key, style ?? {}, { ...options, selector: '@font-face' });
     return null;
 };
 
