@@ -117,9 +117,9 @@ Object.seal(emptyStyle);
 class NestedRule {
     // unrecognized syntax on lower version of javascript
     // // BaseRule:
-    // type        : string  = 'style' // for satisfying `jss-plugin-nested`
+    // type        : string  = 'style'    // for satisfying `jss-plugin-nested`
     // key         : string
-    // isProcessed : boolean = false   // required to avoid double processed
+    // isProcessed : boolean = false      // required to avoid double processed
     // options     : any
     // renderable? : Object|null|void
     
@@ -131,7 +131,7 @@ class NestedRule {
     // unrecognized syntax on lower version of javascript
     // // StyleRule:
     // style       : Style
-    // selector    : string  = ''      // for satisfying `jss-plugin-nested`
+    // selector    : string|null = null   // for satisfying `jss-plugin-nested`
     
     
     
@@ -152,7 +152,7 @@ class NestedRule {
         
         // StyleRule:
         (this as any).style    = style; // the `style` needs to be attached to `NestedRule` for satisfying `onProcessStyle()`
-        (this as any).selector = '';    // for satisfying `jss-plugin-nested`
+        (this as any).selector = null;  // for satisfying `jss-plugin-nested`
     }
     
     
@@ -204,9 +204,12 @@ class NestedRule {
         
         
         
-        return `${(this as any).at} {\n${
-            ((this as any).rules as RuleList).toString(options)
-        }\n}`
+        const selector = (this as any).selector ?? (this as any).at;
+        const children = ((this as any).rules as RuleList).toString(options);
+        if (!selector) return children;
+        return (`${selector} {\n${
+            children
+        }\n}`);
     }
 }
 
@@ -230,7 +233,7 @@ class StyleRule {
         
         // StyleRule:
         (this as any).style    = style; // the `style` needs to be attached to `NestedRule` for satisfying `onProcessStyle()`
-        // (this as any).selector = '';    // for satisfying `jss-plugin-nested`
+        // (this as any).selector = null;  // for satisfying `jss-plugin-nested`
         
         
         
@@ -243,12 +246,12 @@ class StyleRule {
         } = options;
         
         if (selector) {
-            (this as any).selector = selector ?? ''; // for satisfying `jss-plugin-nested`
+            (this as any).selector = selector ?? null; // for satisfying `jss-plugin-nested`
         }
         else if (scoped !== false) {
             const id = generateId(this, sheet);
             (this as any).id = id;
-            (this as any).selector = `.${id}`; // for satisfying `jss-plugin-nested`
+            (this as any).selector = `.${id}`;         // for satisfying `jss-plugin-nested`
             classes[key] = id;
         } // if
     }
@@ -259,13 +262,18 @@ class StyleRule {
      * Generates a CSS string.
      */
     toString(options : any = {}) {
-        return `${(this as any).selector} {\n${
+        const selector = (this as any).selector;
+        const children = (
             Object.entries((this as any).style as Style)
             .filter(([, propValue]) => (propValue !== undefined) && (propValue !== null))
             .map(([propName, propValue]) =>
                 `${propName}:${toCssValue(propValue as JssValue, /*ignoreImportant:*/false)};`
             ).join('\n')
-        }\n}`
+        );
+        if (!selector) return children;
+        return (`${selector} {\n${
+            children
+        }\n}`);
     }
 }
 
