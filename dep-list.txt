@@ -1,14 +1,13 @@
-@cssfn/types
-@cssfn/jss-plugin-short
-@cssfn/jss-plugin-extend
-@cssfn/jss-plugin-global
-@cssfn/jss-plugin-nested
-@cssfn/jss-plugin-camel-case
-@cssfn/jss-plugin-vendor
-@cssfn/css-types
-@cssfn/css-var
-@cssfn/css-selector
-@cssfn/cssfn
+up @cssfn/types
+up @cssfn/jss-plugin-extend
+up @cssfn/jss-plugin-short
+up @cssfn/jss-plugin-camel-case
+up @cssfn/jss-plugin-vendor
+up @cssfn/css-selector
+up @cssfn/jss-plugin-nested
+up @cssfn/css-types
+up @cssfn/css-var
+up @cssfn/cssfn
 @cssfn/css-config
 @cssfn/react-cssfn
 

@@ -1,8 +1,5 @@
 urgent priority:
 sync breakpoints
-sync jss-plugin-** (6)
-sync css-selector
-sync cssfn
 sync css-config
 sync VisuallyHidden
 sync Basic
