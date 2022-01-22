@@ -8,8 +8,8 @@ up @cssfn/jss-plugin-nested
 up @cssfn/css-types
 up @cssfn/css-var
 up @cssfn/cssfn
-@cssfn/css-config
-@cssfn/react-cssfn
+up @cssfn/css-config
+up @cssfn/react-cssfn
 
 @nodestrap/colors
 @nodestrap/borders

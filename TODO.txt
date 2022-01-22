@@ -1,6 +1,5 @@
 urgent priority:
 sync breakpoints
-sync css-config
 sync VisuallyHidden
 sync Basic
 
