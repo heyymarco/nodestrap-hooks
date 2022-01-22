@@ -309,7 +309,18 @@ export default function Page() {
                     //         display: 'block',
                     //     },
                     // ),
-                    ...fallbacks([
+                    // ...fallbacks([
+                    //     {
+                    //         display: 'last preferred',
+                    //     },
+                    //     {
+                    //         display: 'middle preferred',
+                    //     },
+                    //     {
+                    //         display: 'more preferred',
+                    //     },
+                    // ]),
+                    ...fallbacks(
                         {
                             display: 'last preferred',
                         },
@@ -319,7 +330,7 @@ export default function Page() {
                         {
                             display: 'more preferred',
                         },
-                    ]),
+                    ),
                 }),
                 keyframes('shake', {
                     from: {
