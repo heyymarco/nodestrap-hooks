@@ -18,4 +18,6 @@ function App() {
     );
 }
 
+(window as any).colors = colors;
+
 export default App;
