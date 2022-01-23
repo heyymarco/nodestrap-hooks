@@ -756,6 +756,7 @@ const createCssConfig = <TProps extends CssConfigProps>(initialProps: ProductOrF
         new Proxy<Dictionary</*getter: */          Cust.Ref | /*setter: */TValue>>(unusedObj, {
             get                      : (_unusedObj, propName: string)                   => getRef(propName),
             set                      : (_unusedObj, propName: string, newValue: TValue) => setDirect(propName, newValue),
+            deleteProperty           : (_unusedObj, propName: string)                   => setDirect(propName, null as any),
             
             ownKeys                  : (_unusedObj)                                     => getPropList(),
             getOwnPropertyDescriptor : (_unusedObj, propName: string)                   => getPropDescRef(propName),
@@ -764,6 +765,7 @@ const createCssConfig = <TProps extends CssConfigProps>(initialProps: ProductOrF
         new Proxy<Dictionary</*getter: */         Cust.Decl | /*setter: */TValue>>(unusedObj, {
             get                      : (_unusedObj, propName: string)                   => getDecl(propName),
             set                      : (_unusedObj, propName: string, newValue: TValue) => setDirect(propName, newValue),
+            deleteProperty           : (_unusedObj, propName: string)                   => setDirect(propName, null as any),
             
             ownKeys                  : (_unusedObj)                                     => getPropList(),
             getOwnPropertyDescriptor : (_unusedObj, propName: string)                   => getPropDescDecl(propName),
@@ -772,6 +774,7 @@ const createCssConfig = <TProps extends CssConfigProps>(initialProps: ProductOrF
         new Proxy<Dictionary</*getter: */TValue | Cust.Expr | /*setter: */TValue>>(unusedObj, {
             get                      : (_unusedObj, propName: string)                   => getVal(propName),
             set                      : (_unusedObj, propName: string, newValue: TValue) => setDirect(propName, newValue),
+            deleteProperty           : (_unusedObj, propName: string)                   => setDirect(propName, null as any),
             
             ownKeys                  : (_unusedObj)                                     => getPropList(),
             getOwnPropertyDescriptor : (_unusedObj, propName: string)                   => getPropDescVal(propName),
