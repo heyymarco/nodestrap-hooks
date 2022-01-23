@@ -143,23 +143,31 @@ const allColors = {
 
 
 
+const stringColorCache = new WeakMap<Color, string>();
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     type ColorList  = typeof allColors;
     type ColorProxy = { [key in keyof ColorList]: ColorType };
     return new Proxy(allColors as unknown as ColorProxy, {
-        get: (t, prop: string) => {
-            let color = (allColors as Dictionary<Color>)[prop];
+        get: (t, propName: string) => {
+            let color = (allColors as Dictionary<Color>)[propName];
             if (color === undefined) return undefined;
             
-            let strColor = (color as any).__strColor as string|undefined;
+            
+            
+            let strColor = stringColorCache.get(color);
             if (strColor) return strColor;
             
             strColor = stringColor(color);
-            // @ts-ignore
-            color = new ColorEx(color);
-            (color as any).__strColor = strColor;
-            (allColors as Dictionary<Color>)[prop] = color;
-            return strColor;
+            stringColorCache.set(color, strColor);
+        },
+        set : (t, propName: string, newValue: any): boolean => {
+            if (typeof(newValue) === 'string') newValue = Color(newValue);
+            if (!(newValue instanceof Color)) throw TypeError('The value must be a string or Color.');
+            
+            
+            
+            (allColors as Dictionary<Color>)[propName] = newValue;
+            return true;
         },
     });
 }, { prefix: 'col' });
@@ -173,7 +181,7 @@ export const configProxy = new Proxy(
     config,
     {
         set : (config, propName: string, newValue: any): boolean => {
-            if (!(propName in config)) return false; // the requested prop does not exist
+            if (!(propName in config)) return false; // the requested propName does not exist
             if ((typeof(newValue) !== 'number') || (newValue < 0) || (newValue > 1)) return false; // invalid value
             
             
@@ -206,18 +214,18 @@ export { configProxy as config }
 
 
 const createProxy = <TColorGroup extends { [key in keyof TColorGroup]: Color },>(colorGroup: TColorGroup) => new Proxy(colorGroup as unknown as { [key in keyof TColorGroup]: ValueOf<typeof colors> }, {
-    get: (cg, prop: string): (ValueOf<typeof colors>|undefined) => {
-        if (!(prop in colorGroup)) return undefined; // not found
-
-        return (colors as DictionaryOf<typeof colors>)[prop];
+    get: (cg, propName: string): (ValueOf<typeof colors>|undefined) => {
+        if (!(propName in colorGroup)) return undefined; // not found
+        
+        return (colors as DictionaryOf<typeof colors>)[propName];
     },
-    set: (cg, prop: string, newValue: ValueOf<typeof colors>) => {
+    set: (cg, propName: string, newValue: ValueOf<typeof colors>) => {
         const colorValue = Color(newValue);
         
-        (cssVals as DictionaryOf<typeof cssVals>)[prop] = colorValue as any;
+        (cssVals as DictionaryOf<typeof cssVals>)[propName] = colorValue as any;
         
-        if (prop in colorGroup) {
-            (colorGroup as Dictionary<Color>)[prop]         = colorValue;
+        if (propName in colorGroup) {
+            (colorGroup as Dictionary<Color>)[propName]     = colorValue;
         } // if
         
         
@@ -240,18 +248,25 @@ export {
 const stringColor = (color: Color) => (color.alpha() === 1) ? color.hex() : color.toString();
 
 export const defineBackg = (color: Color|string, autoDefineForeg = true) => {
+    if (!color) throw Error('You cannot delete the background color.');
     if (typeof(color) === 'string') color = Color(color);
+    if (!(color instanceof Color)) throw TypeError('The value must be a string or Color.');
     
+    
+    
+    // define sub-colors:
     const backg     = color            as any;
     const backgThin = thinColor(color) as any;
     const backgMild = mildColor(color) as any;
     const backgBold = boldColor(color) as any;
     
+    // update caches:
     page1.backg       = backg;
     page3.backgThin   = backgThin;
     page3.backgMild   = backgMild;
     page3.backgBold   = backgBold;
     
+    // update cssConfig:
     cssVals.backg     = backg;
     cssVals.backgThin = backgThin;
     cssVals.backgMild = backgMild;
@@ -262,18 +277,25 @@ export const defineBackg = (color: Color|string, autoDefineForeg = true) => {
     if (autoDefineForeg) defineForeg(textColor(color));
 };
 export const defineForeg = (color: Color|string) => {
+    if (!color) throw Error('You cannot delete the foreground color.');
     if (typeof(color) === 'string') color = Color(color);
+    if (!(color instanceof Color)) throw TypeError('The value must be a string or Color.');
     
+    
+    
+    // define sub-colors:
     const foreg     = color            as any;
     const foregThin = thinColor(color) as any;
     const foregMild = mildColor(color) as any;
     const foregBold = boldColor(color) as any;
     
+    // update caches:
     page2.foreg       = foreg;
     page3.foregThin   = foregThin;
     page3.foregMild   = foregMild;
     page3.foregBold   = foregBold;
     
+    // update cssConfig:
     cssVals.foreg     = foreg;
     cssVals.foregThin = foregThin;
     cssVals.foregMild = foregMild;
@@ -281,12 +303,14 @@ export const defineForeg = (color: Color|string) => {
 };
 export const defineTheme = (name: string, color: Optional<Color|string>) => {
     if (!color) {
+        // delete caches:
         delete (themes     as DictionaryOf<typeof themes>    )[   name      ];
         delete (themesText as DictionaryOf<typeof themesText>)[`${name}Text`];
         delete (themesThin as DictionaryOf<typeof themesThin>)[`${name}Thin`];
         delete (themesMild as DictionaryOf<typeof themesMild>)[`${name}Mild`];
         delete (themesBold as DictionaryOf<typeof themesBold>)[`${name}Bold`];
         
+        // delete cssConfig:
         (cssVals as DictionaryOf<typeof cssVals>)[   name      ] = undefined as any;
         (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`] = undefined as any;
         (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`] = undefined as any;
@@ -295,19 +319,25 @@ export const defineTheme = (name: string, color: Optional<Color|string>) => {
     }
     else {
         if (typeof(color) === 'string') color = Color(color);
+        if (!(color instanceof Color)) throw TypeError('The value must be a string or Color.');
         
+        
+        
+        // define sub-colors:
         const theme     = color            as any;
         const themeText = textColor(color) as any;
         const themeThin = thinColor(color) as any;
         const themeMild = mildColor(color) as any;
         const themeBold = boldColor(color) as any;
         
+        // update caches:
         (themes     as DictionaryOf<typeof themes>    )[   name      ] = theme;
         (themesText as DictionaryOf<typeof themesText>)[`${name}Text`] = themeText;
         (themesThin as DictionaryOf<typeof themesThin>)[`${name}Thin`] = themeThin;
         (themesMild as DictionaryOf<typeof themesMild>)[`${name}Mild`] = themeMild;
         (themesBold as DictionaryOf<typeof themesBold>)[`${name}Bold`] = themeBold;
         
+        // update cssConfig:
         (cssVals as DictionaryOf<typeof cssVals>)[   name      ]       = theme;
         (cssVals as DictionaryOf<typeof cssVals>)[`${name}Text`]       = themeText;
         (cssVals as DictionaryOf<typeof cssVals>)[`${name}Thin`]       = themeThin;
@@ -315,8 +345,3 @@ export const defineTheme = (name: string, color: Optional<Color|string>) => {
         (cssVals as DictionaryOf<typeof cssVals>)[`${name}Bold`]       = themeBold;
     } // if
 };
-
-function ColorEx(this: Color, color: Color) {
-    Object.assign(this, color);
-}
-ColorEx.prototype = Color.prototype;

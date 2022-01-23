@@ -27,7 +27,7 @@ fix accordion on the last (bottom)
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
-add setter colors as string to Color
+[done but not tested] add setter colors as string to Color
 tweak var(--some) for colors, boeders, spacers
 tweak useMemo in Element
 move Check::onChange, Range::onChange to EditableControl::onChange
