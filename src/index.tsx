@@ -10,7 +10,7 @@ import reportWebVitals from './reportWebVitals';
 // import CssConfigApp from './apps/CssConfigApp';
 // import CssfnApp from './apps/CssfnApp';
 // import ColorApp from './apps/ColorApp';
-// import TypoApp from './apps/TypoApp';
+import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 // import ResponsiveApp from './apps/ResponsiveApp';
 // import DimensionApp from './apps/DimensionApp';
@@ -55,7 +55,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import EditableTextControlApp       from './apps/EditableTextControlApp';    // div
 //                     import InputApp                 from './apps/InputApp';                  // span
 //                 import EditableActionControlApp     from './apps/EditableActionControlApp';  // div
-                        import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
+//                         import RangeApp             from './apps/RangeApp';                  // div      range (semantic)
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <RangeApp />
+    <TypoApp />
     ,
     document.getElementById('root')
 );

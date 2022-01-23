@@ -14,11 +14,6 @@ import {
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
     rule,
 }                           from '../cssfn'       // cssfn core
@@ -49,7 +44,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : codes.fontStyle      as Prop.FontStyle      | Cust.Ref,
         textDecoration    : codes.textDecoration as Prop.TextDecoration | Cust.Ref,
         lineHeight        : codes.lineHeight     as Prop.LineHeight     | Cust.Expr,
-    
+        
         foreg             : colors.white         as Prop.Color          | Cust.Ref,
         backg             : colors.grayDark      as Prop.Background     | Cust.Ref,
         
@@ -57,7 +52,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         border            : marks.border         as Prop.Border         | Cust.Expr,
         borderRadius      : marks.borderRadius   as Prop.BorderRadius   | Cust.Expr,
         //#endregion borders
-
+        
         //#region spacings
         paddingInline     : '0.4em'              as Prop.PaddingInline  | Cust.Expr,
         paddingBlock      : '0.2em'              as Prop.PaddingBlock   | Cust.Expr,
@@ -71,17 +66,15 @@ export default cssProps;
 // create a new styleSheet & attach:
 createSheet(() => [
     globalDef([
-        rule(['kbd', '.kbd'], [
-            layout({
-                // layouts:
-                display : 'inline',
-
-
-
-                // customize:
-                ...usesGeneralProps(cssProps),
-            }),
-        ]),
+        rule(['kbd', '.kbd'], {
+            // layouts:
+            display : 'inline',
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps),
+        }),
     ]),
 ])
 .attach();

@@ -41,14 +41,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : heads.fontStyle         as Prop.FontStyle                  | Cust.Ref,
         textDecoration    : heads.textDecoration    as Prop.TextDecoration             | Cust.Ref,
         lineHeight        : heads.lineHeight        as Prop.LineHeight                 | Cust.Expr,
-    
+        
         foreg             : heads.foreg             as Prop.Color                      | Cust.Ref,
         
         marginBlockStart  : heads.marginBlockStart  as Prop.MarginBlockStart           | Cust.Expr,
         marginBlockEnd    : heads.marginBlockEnd    as Prop.MarginBlockEnd             | Cust.Expr,
         marginInlineStart : heads.marginInlineStart as Prop.MarginInlineStart          | Cust.Expr,
         marginInlineEnd   : heads.marginInlineEnd   as Prop.MarginInlineEnd            | Cust.Expr,
-
+        
         subOpacity        : heads.subOpacity        as Prop.Opacity                    | Cust.Expr,
     };
 }, { prefix: 'd' });

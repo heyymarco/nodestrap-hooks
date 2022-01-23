@@ -14,13 +14,7 @@ import {
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
-    variants,
     rule,
     isFirstChild,
     isLastChild,
@@ -49,7 +43,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : pars.fontStyle         as Prop.FontStyle         | Cust.Ref,
         textDecoration    : pars.textDecoration    as Prop.TextDecoration    | Cust.Ref,
         lineHeight        : pars.lineHeight        as Prop.LineHeight        | Cust.Expr,
-    
+        
         foreg             : pars.foreg             as Prop.Color             | Cust.Ref,
         
         marginBlockStart  : pars.marginBlockStart  as Prop.MarginBlockStart  | Cust.Expr,
@@ -65,31 +59,25 @@ export default cssProps;
 // create a new styleSheet & attach:
 createSheet(() => [
     globalDef([
-        rule('.lead', [
-            layout({
-                // layouts:
-                display : 'block',
-
-
-
-                // customize:
-                ...usesGeneralProps(cssProps),
+        rule('.lead', {
+            // layouts:
+            display : 'block',
+            
+            
+            
+            // spacings:
+            ...isFirstChild({
+                marginBlockStart : 0, // kill the first marginBlockStart for the first element
             }),
-            variants([
-                isFirstChild([
-                    layout({
-                        // spacings:
-                        marginBlockStart : 0, // kill the first marginBlockStart for the first element
-                    }),
-                ]),
-                isLastChild([
-                    layout({
-                        // spacings:
-                        marginBlockEnd   : 0, // kill the last marginBlockEnd for the last element
-                    }),
-                ]),
-            ]),
-        ]),
+            ...isLastChild({
+                marginBlockEnd   : 0, // kill the last marginBlockEnd for the last element
+            }),
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps),
+        }),
     ]),
 ])
 .attach();

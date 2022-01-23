@@ -25,20 +25,20 @@ export {
     generals as default,
     general,
     secondary,
-
+    
     paragraph,
     lead,
-
+    
     heading,
     display,
-
+    
     blockquote,
-
+    
     markingMark,
     markingCode,
     markingKbd,
-
+    
     markingGeneral,
-
+    
     horizontalRule,
 };

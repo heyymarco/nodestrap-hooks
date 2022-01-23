@@ -22,18 +22,17 @@ import {
     
     
     
-    // layouts:
-    layout,
-    nextSiblings,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    rules,
     isFirstChild,
     isLastChild,
     isNotLastChild,
+    
+    
+    
+    //combinators:
+    nextSiblings,
 }                           from '../cssfn'       // cssfn core
 import {
     createCssConfig,
@@ -67,14 +66,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : 'inherit' as Prop.FontStyle                                 | Cust.Ref,
         textDecoration    : 'inherit' as Prop.TextDecoration                            | Cust.Ref,
         lineHeight        : 1.25      as Prop.LineHeight                                | Cust.Expr,
-    
+        
         foreg             : 'inherit' as Prop.Color                                     | Cust.Ref,
         
         marginBlockStart  : 0         as Prop.MarginBlockStart                          | Cust.Expr,
         marginBlockEnd    : '0.75em'  as Prop.MarginBlockEnd                            | Cust.Expr,
         marginInlineStart : 0         as Prop.MarginInlineStart                         | Cust.Expr,
         marginInlineEnd   : 0         as Prop.MarginInlineEnd                           | Cust.Expr,
-
+        
         subOpacity        : 0.8       as Prop.Opacity                                   | Cust.Expr,
     };
 }, { prefix: 'h' });
@@ -91,74 +90,63 @@ export const usesLevelingRule = <TCssProps extends typeof cssProps, TCssDecls ex
     
     
     
-    return [
+    return rules([
         // global rule for h1-h6:
-        rule(selectorsWithLevels, [
-            layout({
-                // layouts:
-                display : 'block',
-    
-    
-    
-                ...nextSiblings(selectorsWithLevels, [
-                    /*
-                     * treats subsequent headings as subtitles
-                     * make it closer to the main heading
-                     * make it further to the content
-                    */
-                    layout({
-                        // appearances:
-                        opacity: cssProps.subOpacity,
-        
-        
-        
-                        // spacings:
-                        // make subtitle closer to the main heading:
-                        marginBlockStart: `calc(0px - ${cssProps.marginBlockEnd})`, // cancel-out parent's marginBlockEnd with negative marginBlockStart
-                    }),
-                    variants([
-                        isNotLastChild([
-                            layout({
-                                // spacings:
-                                // make subtitle further to the content:
-                                marginBlockEnd: cssProps.marginBlockEnd,
-                            }),
-                        ]),
-                    ]),
-                ]),
-    
-    
-    
-                // customize:
-                ...usesGeneralProps(cssProps),
+        rule(selectorsWithLevels, {
+            // layouts:
+            display : 'block',
+            
+            
+            
+            // spacings:
+            ...isFirstChild({
+                marginBlockStart : 0, // kill the first marginBlockStart for the first element
             }),
-            variants([
-                isFirstChild([
-                    layout({
-                        // spacings:
-                        marginBlockStart : 0, // kill the first marginBlockStart for the first element
-                    }),
-                ]),
-                isLastChild([
-                    layout({
-                        // spacings:
-                        marginBlockEnd   : 0, // kill the last marginBlockEnd for the last element
-                    }),
-                ]),
-            ]),
-        ]),
-
+            ...isLastChild({
+                marginBlockEnd   : 0, // kill the last marginBlockEnd for the last element
+            }),
+            
+            
+            
+            ...nextSiblings(selectorsWithLevels, {
+                /*
+                 * treats subsequent headings as subtitles
+                 * make it closer to the main heading
+                 * make it further to the content
+                */
+                
+                
+                
+                // appearances:
+                opacity: cssProps.subOpacity,
+                
+                
+                
+                // spacings:
+                // make subtitle closer to the main heading:
+                marginBlockStart: `calc(0px - ${cssProps.marginBlockEnd})`, // cancel-out parent's marginBlockEnd with negative marginBlockStart
+                
+                ...isNotLastChild({
+                    // make subtitle further to the content:
+                    marginBlockEnd: cssProps.marginBlockEnd,
+                }),
+            }),
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps),
+        }),
+        
         
         
         // individual rule for each h1-h6:
-        ...levels
-        .map((level) => rule(selectors.map((selector) => `${selector}${level}`), [
-            layout({
-                // customize with propName{level}:
-                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, `${level}`)),
-            }),
-        ])),
-    ];
+        levels
+        .map((level) => rule(selectors.map((selector) => `${selector}${level}`), {
+            // customize with propName{level}:
+            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, `${level}`)),
+        })),
+    ]);
 };
 createSheet(() => [
     globalDef([

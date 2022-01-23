@@ -14,11 +14,6 @@ import {
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
     rule,
 }                           from '../cssfn'       // cssfn core
@@ -48,7 +43,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : 'inherit'            as Prop.FontStyle      | Cust.Ref,
         textDecoration    : 'inherit'            as Prop.TextDecoration | Cust.Ref,
         lineHeight        : 'inherit'            as Prop.LineHeight     | Cust.Expr,
-    
+        
         foreg             : 'inherit'            as Prop.Color          | Cust.Ref,
         backg             : colors.warningThin   as Prop.Background     | Cust.Ref,
         
@@ -56,7 +51,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         border            : borders.default      as Prop.Border         | Cust.Expr,
         borderRadius      : border.radiuses.sm   as Prop.BorderRadius   | Cust.Expr,
         //#endregion borders
-
+        
         //#region spacings
         paddingInline     : '0.2em'              as Prop.PaddingInline  | Cust.Expr,
         paddingBlock      : '0em'                as Prop.PaddingBlock   | Cust.Expr,
@@ -70,17 +65,15 @@ export default cssProps;
 // create a new styleSheet & attach:
 createSheet(() => [
     globalDef([
-        rule(['mark', '.mark'], [
-            layout({
-                // layouts:
-                display : 'inline',
-
-
-
-                // customize:
-                ...usesGeneralProps(cssProps),
-            }),
-        ]),
+        rule(['mark', '.mark'], {
+            // layouts:
+            display : 'inline',
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps),
+        }),
     ]),
 ])
 .attach();

@@ -14,11 +14,6 @@ import {
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
     rule,
 }                           from '../cssfn'       // cssfn core
@@ -42,7 +37,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         foreg             : 'inherit'       as Prop.Color             | Cust.Ref,
         opacity           : 0.25            as Prop.Opacity           | Cust.Ref,
-
+        
         width             : borders.hair    as Prop.Width             | Cust.Ref,
         
         marginBlockStart  : spacers.default as Prop.MarginBlockStart  | Cust.Expr,
@@ -58,35 +53,32 @@ export default cssProps;
 // create a new styleSheet & attach:
 createSheet(() => [
     globalDef([
-        rule(['hr'], [
-            layout({
-                // layouts:
-                display         : 'block',
-
-
-
-                // sizes:
-                blockSize       : cssProps.width,
-
-
-
-                // borders:
-                border          : 0,
-
-
-                
-                // backgrounds:
-                backgroundColor : 'currentColor',
-
-
-
-                // customize:
-                ...usesGeneralProps(cssProps),
-
-                // delete unnecessary props:
-                width : undefined as unknown as null, // delete from cssProps. width means blockSize (the height of the <hr>)
-            }),
-        ]),
+        rule('hr', {
+            // layouts:
+            display         : 'block',
+            
+            
+            
+            // sizes:
+            blockSize       : cssProps.width,
+            
+            
+            
+            // borders:
+            border          : 0,
+            
+            
+            
+            // backgrounds:
+            backgroundColor : 'currentColor',
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps),
+            // delete unnecessary props:
+            width : undefined as unknown as null, // delete from cssProps. width means blockSize (the height of the <hr>)
+        }),
     ]),
 ])
 .attach();

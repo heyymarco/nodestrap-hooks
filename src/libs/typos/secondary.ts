@@ -14,11 +14,6 @@ import {
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
     rule,
 }                           from '../cssfn'       // cssfn core
@@ -54,12 +49,10 @@ export default cssProps;
 // create a new styleSheet & attach:
 createSheet(() => [
     globalDef([
-        rule(['small', '.txt-sec'], [
-            layout({
-                // customize:
-                ...usesGeneralProps(cssProps),
-            }),
-        ]),
+        rule(['small', '.txt-sec'], {
+            // customize:
+            ...usesGeneralProps(cssProps),
+        }),
     ]),
 ])
 .attach();

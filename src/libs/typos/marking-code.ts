@@ -14,11 +14,6 @@ import {
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
     rule,
 }                           from '../cssfn'       // cssfn core
@@ -50,7 +45,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : 'none'                   as Prop.FontStyle      | Cust.Ref,
         textDecoration    : 'none'                   as Prop.TextDecoration | Cust.Ref,
         lineHeight        : 'inherit'                as Prop.LineHeight     | Cust.Expr,
-    
+        
         foreg             : colors.pink              as Prop.Color          | Cust.Ref,
         backg             : 'none'                   as Prop.Background     | Cust.Ref,
         
@@ -58,7 +53,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         border            : 'none'                   as Prop.Border         | Cust.Expr,
         borderRadius      : 0                        as Prop.BorderRadius   | Cust.Expr,
         //#endregion borders
-
+        
         //#region spacings
         paddingInline     : 0                        as Prop.PaddingInline  | Cust.Expr,
         paddingBlock      : 0                        as Prop.PaddingBlock   | Cust.Expr,
@@ -72,17 +67,15 @@ export default cssProps;
 // create a new styleSheet & attach:
 createSheet(() => [
     globalDef([
-        rule(['code', '.code', 'var', '.var', 'samp', '.samp'], [
-            layout({
-                // layouts:
-                display : 'inline',
-
-
-
-                // customize:
-                ...usesGeneralProps(cssProps),
-            }),
-        ]),
+        rule(['code', '.code', 'var', '.var', 'samp', '.samp'], {
+            // layouts:
+            display : 'inline',
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(cssProps),
+        }),
     ]),
 ])
 .attach();

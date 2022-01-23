@@ -14,11 +14,6 @@ import {
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
     atRoot,
 }                           from '../cssfn'       // cssfn core
@@ -112,12 +107,10 @@ export default cssProps;
 // create a new styleSheet & attach:
 createSheet(() => [
     globalDef([
-        atRoot([
-            layout({
-                // customize:
-                ...usesGeneralProps(cssProps),
-            }),
-        ]),
+        atRoot({
+            // customize:
+            ...usesGeneralProps(cssProps),
+        }),
     ]),
 ])
 .attach();
