@@ -14,9 +14,9 @@
 [published] @nodestrap/colors
 [published] @nodestrap/borders
 [published] @nodestrap/spacers
-@nodestrap/stripouts
-@nodestrap/breakpoints
-@nodestrap/layouts
+[published] @nodestrap/stripouts
+[published] @nodestrap/breakpoints
+[published] @nodestrap/layouts
 @nodestrap/typos
 
 @nodestrap/hooks
