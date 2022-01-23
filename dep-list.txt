@@ -11,9 +11,9 @@
 [published] @cssfn/css-config
 [published] @cssfn/react-cssfn
 
-[modified ] @nodestrap/colors
-[modified ] @nodestrap/borders
-[modified ] @nodestrap/spacers
+[published] @nodestrap/colors
+[published] @nodestrap/borders
+[published] @nodestrap/spacers
 @nodestrap/stripouts
 @nodestrap/breakpoints
 @nodestrap/layouts
