@@ -257,7 +257,7 @@ export {
 
 
 // utilities:
-const stringColor = (color: Color) => (color.alpha() === 1) ? color.hex() : color.toString();
+const stringColor = (color: Color) => ((color.alpha() === 1) ? color.hex() : color.toString()).toLowerCase();
 
 export const defineBackg = (color: Color|string, autoDefineForeg = true) => {
     if (!color) throw Error('You cannot delete the background color.');
