@@ -148,7 +148,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     type ColorList  = typeof allColors;
     type ColorProxy = { [key in keyof ColorList]: ColorType };
     return new Proxy(allColors as unknown as ColorProxy, {
-        get: (t, propName: string) => {
+        get: (t, propName: string): string|undefined => {
             let color = (allColors as Dictionary<Color>)[propName];
             if (color === undefined) return undefined;
             
@@ -159,6 +159,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             
             strColor = stringColor(color);
             stringColorCache.set(color, strColor);
+            
+            return strColor;
         },
         set : (t, propName: string, newValue: any): boolean => {
             if (typeof(newValue) === 'string') newValue = Color(newValue);
