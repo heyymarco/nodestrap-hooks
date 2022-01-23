@@ -36,3 +36,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     };
 }, { prefix: 'spc' });
 export { cssProps as spacers, cssProps as default }
+
+
+
+// setup css variables:
+cssProps.default = cssProps.md;
+cssProps.xxs     = [['calc(', cssProps.md, '/', 8  , ')']] as any;
+cssProps.xs      = [['calc(', cssProps.md, '/', 4  , ')']] as any;
+cssProps.sm      = [['calc(', cssProps.md, '/', 2  , ')']] as any;
+
+cssProps.lg      = [['calc(', cssProps.md, '*', 1.5, ')']] as any;
+cssProps.xl      = [['calc(', cssProps.md, '*', 3  , ')']] as any;

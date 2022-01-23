@@ -1,19 +1,19 @@
-up @cssfn/types
-up @cssfn/jss-plugin-extend
-up @cssfn/jss-plugin-short
-up @cssfn/jss-plugin-camel-case
-up @cssfn/jss-plugin-vendor
-up @cssfn/css-selector
-up @cssfn/jss-plugin-nested
-up @cssfn/css-types
-up @cssfn/css-var
-up @cssfn/cssfn
-up @cssfn/css-config
-up @cssfn/react-cssfn
+[published] @cssfn/types
+[published] @cssfn/jss-plugin-extend
+[published] @cssfn/jss-plugin-short
+[published] @cssfn/jss-plugin-camel-case
+[published] @cssfn/jss-plugin-vendor
+[published] @cssfn/css-selector
+[published] @cssfn/jss-plugin-nested
+[published] @cssfn/css-types
+[published] @cssfn/css-var
+[published] @cssfn/cssfn
+[published] @cssfn/css-config
+[published] @cssfn/react-cssfn
 
-@nodestrap/colors
-@nodestrap/borders
-@nodestrap/spacers
+[modified ] @nodestrap/colors
+[modified ] @nodestrap/borders
+[modified ] @nodestrap/spacers
 @nodestrap/stripouts
 @nodestrap/breakpoints
 @nodestrap/layouts

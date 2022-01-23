@@ -29,8 +29,8 @@ add Gatsby & Remix support on ActionControl
 add client side Form for Remix
 [done but not tested] add setter colors as string to Color
 [done but not tested] tweak var(--some) for colors
-tweak var(--some) for borders
-tweak var(--some) for spacers
+[done but not tested] tweak var(--some) for borders
+[done but not tested] tweak var(--some) for spacers
 tweak useMemo in Element
 move Check::onChange, Range::onChange to EditableControl::onChange
 fix Button press={props.press ?? active} => press={props.press ?? (active || undefined)}

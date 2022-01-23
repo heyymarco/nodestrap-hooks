@@ -50,3 +50,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     };
 }, { prefix: 'bd' });
 export { cssProps as borders, cssProps as default }
+
+
+
+// setup css variables:
+cssProps.defaultWidth = cssProps.hair;
+cssProps.default      = [[cssProps.style, cssProps.defaultWidth, cssProps.color]] as any;
