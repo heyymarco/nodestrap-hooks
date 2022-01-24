@@ -74,7 +74,7 @@ export const useSemantic     = (props: SemanticProps, options: SemanticOptions =
             isSemanticTag,
         ] as const;
         // eslint-disable-next-line
-    }, [tag, role, ...[semanticTag].flat(), ...[semanticRole].flat()]);
+    }, [tag, role, semanticTag, semanticRole].flat());
 };
 export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) => {
     const {
@@ -118,7 +118,8 @@ export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) 
             semanticTag,
             semanticRole,
         };
-    }, [props_semanticTag, props_semanticRole, options_semanticTag, options_semanticRole]);
+        // eslint-disable-next-line
+    }, [props_semanticTag, props_semanticRole, options_semanticTag, options_semanticRole].flat());
     
     
     
@@ -288,33 +289,51 @@ export interface ElementProps<TElement extends HTMLElement = HTMLElement>
     stateClasses?   : Optional<string>[]
 }
 export function Element<TElement extends HTMLElement = HTMLElement>(props: ElementProps<TElement>) {
-    // html props:
-    const htmlProps = useMemo(() => {
-        const htmlProps : {} = {
-            ref : (elm: HTMLElement) => {
-                setRef(props.outerRef, elm);
-                setRef(props.elmRef  , elm);
-            },
-        };
-        
-        for (const name in props) {
-            if (isHtmlProp(name)) {
-                (htmlProps as any)[name] = (props as any)[name];
-            } // if
-        } // for
-        
-        return htmlProps;
-    }, [props]);
-    
-    
-    
-    // className:
+    // rest props:
     const {
+        // semantics:
+        tag          : _tag,
+        role         : _role,
+        semanticTag,
+        semanticRole,
+        'aria-label' : ariaLabel,
+        
+        
+        // classes:
         mainClass,
         classes,
         variantClasses,
         stateClasses,
-    } = props;
+        
+        
+        // children:
+        children,
+        ...restProps} = props;
+    // html props:
+    
+    
+    
+    const htmlProps = useMemo(() => {
+        const htmlProps : {} = {
+            ref : (elm: HTMLElement) => {
+                setRef(restProps.outerRef, elm);
+                setRef(restProps.elmRef  , elm);
+            },
+        };
+        
+        for (const name in restProps) {
+            if (isHtmlProp(name)) {
+                (htmlProps as any)[name] = (restProps as any)[name];
+            } // if
+        } // for
+        
+        return htmlProps;
+        // eslint-disable-next-line
+    }, Object.keys(restProps));
+    
+    
+    
+    // className:
     const className = useMemo(() => {
         return (
             Array.from(new Set([
@@ -336,13 +355,14 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
             ||
             undefined
         );
-    }, [mainClass, classes, variantClasses, stateClasses]);
+        // eslint-disable-next-line
+    }, [mainClass, classes, variantClasses, stateClasses].flat());
     
     
     
     // fn props:
     const [tag, role] = useSemantic(props);
-    const Tag         = (tag || 'div');                   // ignores an empty string '' of tag
+    const Tag         = (tag || 'div');         // ignores an empty string '' of tag
     
     
     
@@ -354,14 +374,14 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
             
             
             // semantics:
-            role={role || undefined}                      // ignores an empty string '' of role
-            aria-label={props['aria-label'] || undefined} // ignores an empty string '' of aria-label
+            role={role || undefined}            // ignores an empty string '' of role
+            aria-label={ariaLabel || undefined} // ignores an empty string '' of aria-label
             
             
             // classes:
             className={className}
         >
-            { props.children }
+            { children }
         </Tag>
     );
 }
