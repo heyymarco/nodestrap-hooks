@@ -1,6 +1,5 @@
 urgent priority:
 sync VisuallyHidden
-sync Basic
 
 fallbacks:
 sync Container
