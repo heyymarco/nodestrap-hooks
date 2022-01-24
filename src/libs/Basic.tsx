@@ -21,20 +21,20 @@ import {
     
     // compositions:
     mainComposition,
-    imports,
     
     
     
     // styles:
     style,
     vars,
+    imports,
     
     
     
     // rules:
+    rule,
     variants,
     states,
-    rule,
     
     
     
