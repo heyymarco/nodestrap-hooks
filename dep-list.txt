@@ -17,7 +17,7 @@
 [published] @nodestrap/stripouts
 [published] @nodestrap/breakpoints
 [published] @nodestrap/layouts
-@nodestrap/typos
+[published] @nodestrap/typos
 
 @nodestrap/hooks
 @nodestrap/utilities

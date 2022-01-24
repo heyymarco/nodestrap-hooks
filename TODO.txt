@@ -23,7 +23,6 @@ globalDef([              =>   globalDef(
 
 
 top priority:
-fix accordion on the last (bottom)
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
