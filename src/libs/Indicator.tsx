@@ -16,21 +16,20 @@ import {
     
     
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    
-    
-    
     // rules:
-    states,
     rule,
+    states,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -137,31 +136,31 @@ export const isEnablingDisable = (styles: StyleCollection) => rule([selectorIsEn
 
 /**
  * Uses enable & disable states.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents enable & disable state definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents enable & disable state definitions.
  */
 export const usesEnableDisableState = () => {
     return [
-        () => composition([
-            states([
-                isEnabling([
-                    vars({
+        () => style({
+            ...states([
+                isEnabling({
+                    ...vars({
                         [enableDisableDecls.filter] : cssProps.filterDisable,
                         [enableDisableDecls.anim  ] : cssProps.animEnable,
                     }),
-                ]),
-                isDisabling([
-                    vars({
+                }),
+                isDisabling({
+                    ...vars({
                         [enableDisableDecls.filter] : cssProps.filterDisable,
                         [enableDisableDecls.anim  ] : cssProps.animDisable,
                     }),
-                ]),
-                isDisabled([
-                    vars({
+                }),
+                isDisabled({
+                    ...vars({
                         [enableDisableDecls.filter] : cssProps.filterDisable,
                     }),
-                ]),
+                }),
             ]),
-        ]),
+        }),
         enableDisableRefs,
         enableDisableDecls,
     ] as const;
@@ -285,48 +284,48 @@ export const isActivePassivating = (styles: StyleCollection) => rule([selectorIs
 
 /**
  * Uses active & passive states.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
  */
 export const usesActivePassiveState = () => {
     return [
-        () => composition([
-            states([
-                isActived([
-                    vars({
+        () => style({
+            ...states([
+                isActived({
+                    ...vars({
                         [activePassiveDecls.filter] : cssProps.filterActive,
                     }),
-                ]),
-                isActivating([
-                    vars({
+                }),
+                isActivating({
+                    ...vars({
                         [activePassiveDecls.filter] : cssProps.filterActive,
                         [activePassiveDecls.anim  ] : cssProps.animActive,
                     }),
-                ]),
-                isPassivating([
-                    vars({
+                }),
+                isPassivating({
+                    ...vars({
                         [activePassiveDecls.filter] : cssProps.filterActive,
                         [activePassiveDecls.anim  ] : cssProps.animPassive,
                     }),
-                ]),
+                }),
             ]),
-        ]),
+        }),
         activePassiveRefs,
         activePassiveDecls,
     ] as const;
 };
 
-export const markActive = () => composition([
-    imports([
+export const markActive = () => style({
+    ...imports([
         outlinedOf(false), // kill outlined variant
         mildOf(false),     // kill mild     variant
         
         usesThemeActive(), // switch to active theme
     ]),
-]);
+});
 /**
  * Creates a conditional color definitions at active state.
  * @param themeName The name of active theme.
- * @returns A `StyleCollection` represents the conditional color definitions at active state.
+ * @returns A `Rule` represents the conditional color definitions at active state.
  */
 export const usesThemeActive = (themeName: ThemeName|null = 'secondary') => usesThemeCond(themeName);
 
@@ -503,39 +502,37 @@ export const useTogglerActive = <TActiveChangeArg extends unknown = unknown>(pro
 
 // styles:
 export const usesIndicatorLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesBasicLayout(),
         ]),
-        layout({
+        ...style({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesIndicatorVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesBasicVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesIndicatorStates = () => {
     // dependencies:
@@ -546,24 +543,24 @@ export const usesIndicatorStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             enableDisable(),
             activePassive(),
         ]),
-        states([
-            isActive([
-                imports([
+        ...states([
+            isActive({
+                ...imports([
                     markActive(),
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 export const useIndicatorSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesIndicatorLayout(),
@@ -574,7 +571,7 @@ export const useIndicatorSheet = createUseSheet(() => [
             // states:
             usesIndicatorStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'9i8stbnt0e'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
