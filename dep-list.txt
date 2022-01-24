@@ -30,8 +30,8 @@
 [published] @nodestrap/react-router-link
 
 // abstracts:
-@nodestrap/element
-@nodestrap/basic
+[modified ] @nodestrap/element
+[modified ] @nodestrap/basic
 [modified ] @nodestrap/indicator
 @nodestrap/control
 @nodestrap/action-control
@@ -44,7 +44,7 @@
 @nodestrap/content
 
 // simple components:
-@nodestrap/visually-hidden
+[modified ] @nodestrap/visually-hidden
 @nodestrap/icon
 @nodestrap/label
 @nodestrap/masonry
