@@ -57,11 +57,11 @@ export const useSemantic     = (props: SemanticProps, options: SemanticOptions =
     } = options;
     
     return useMemo(() => {
-        const roleAbs       : Role|undefined = role ??                  (Array.isArray(semanticRole) ? (semanticRole?.[0] ?? undefined) : (semanticRole ?? undefined));
-        const isDesiredType : boolean        = !!roleAbs &&             (Array.isArray(semanticRole) ?  semanticRole.includes(roleAbs)  : (semanticRole === roleAbs ));
+        const roleAbs       : Role|undefined = role ??                  ([semanticRole].flat()?.[0] ?? undefined);
+        const isDesiredType : boolean        = !!roleAbs &&             ([semanticRole].flat().includes(roleAbs));
         
-        const tagFn         : Tag|undefined  = tag  ?? (isDesiredType ? (Array.isArray(semanticTag)  ? (semanticTag?.[0] ?? undefined)  : (semanticTag  ?? undefined)) : undefined);
-        const isSemanticTag : boolean        = !!tagFn   &&             (Array.isArray(semanticTag)  ?  semanticTag.includes(tagFn)     : (semanticTag  === tagFn   ));
+        const tagFn         : Tag|undefined  = tag  ?? (isDesiredType ? ([semanticTag ].flat()?.[0] ?? undefined) : undefined);
+        const isSemanticTag : boolean        = !!tagFn   &&             ([semanticTag ].flat().includes(tagFn  ));
         
         const roleFn        : Role|undefined = isDesiredType ? (isSemanticTag ? '' : roleAbs   ) : roleAbs; /* `''` => do not render role attribute, `undefined` => lets the BaseComponent decide the appropriate role */
         
