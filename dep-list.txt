@@ -32,7 +32,7 @@
 // abstracts:
 @nodestrap/element
 @nodestrap/basic
-@nodestrap/indicator
+[modified ] @nodestrap/indicator
 @nodestrap/control
 @nodestrap/action-control
 @nodestrap/editable-control
