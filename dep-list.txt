@@ -19,15 +19,15 @@
 [published] @nodestrap/layouts
 [published] @nodestrap/typos
 
-@nodestrap/hooks
-@nodestrap/utilities
-@nodestrap/accessibilities
-@nodestrap/validations
-@nodestrap/dimensions
-@nodestrap/responsive
+[published] @nodestrap/hooks
+[published] @nodestrap/utilities
+[published] @nodestrap/accessibilities
+[published] @nodestrap/validations
+[published] @nodestrap/dimensions
+[published] @nodestrap/responsive
 
 // supports:
-@nodestrap/react-router-link
+[published] @nodestrap/react-router-link
 
 // abstracts:
 @nodestrap/element
