@@ -33,8 +33,8 @@
 [published] @nodestrap/element
 [published] @nodestrap/basic
 [published] @nodestrap/indicator
-@nodestrap/control
-@nodestrap/action-control
+[modified ] @nodestrap/control
+[modified ] @nodestrap/action-control
 @nodestrap/editable-control
 @nodestrap/editable-text-control
 @nodestrap/editable-action-control
