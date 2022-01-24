@@ -74,7 +74,7 @@ export const useSemantic     = (props: SemanticProps, options: SemanticOptions =
             isSemanticTag,
         ] as const;
         // eslint-disable-next-line
-    }, [tag, role, ...(Array.isArray(semanticTag) ? semanticTag : [semanticTag]), ...(Array.isArray(semanticRole) ? semanticRole : [semanticRole])]);
+    }, [tag, role, ...[semanticTag].flat(), ...[semanticRole].flat()]);
 };
 export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) => {
     const {
