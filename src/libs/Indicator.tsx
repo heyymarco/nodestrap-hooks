@@ -217,15 +217,16 @@ export const useEnableDisableState = (props: IndicationProps & SemanticProps) =>
 
             // disabling:
             if (animating === false) {
-                if (isCtrlElm) {
-                    // a control_element uses pseudo :disabled for disabling
-                    // not needed using class .disable
-                    return null;
-                }
-                else {
-                    // a generic_element uses class .disable for disabling
-                    return 'disable';
-                } // if
+                // if (isCtrlElm) {
+                //     // a control_element uses pseudo :disabled for disabling
+                //     // not needed using class .disable
+                //     return null;
+                // }
+                // else {
+                //     // a generic_element uses class .disable for disabling
+                //     return 'disable';
+                // } // if
+                return 'disable';
             } // if
 
             // fully disabled:
@@ -368,15 +369,16 @@ export const useActivePassiveState = (props: IndicationProps & SemanticProps) =>
         class  : ((): string|null => {
             // activating:
             if (animating === true) {
-                if (isCheckbox) {
-                    // a checkbox uses pseudo :checked for activating
-                    // not needed using class .active
-                    return null;
-                }
-                else {
-                    // a generic_element uses class .active for activating
-                    return 'active';
-                } // if
+                // if (isCheckbox) {
+                //     // a checkbox uses pseudo :checked for activating
+                //     // not needed using class .active
+                //     return null;
+                // }
+                // else {
+                //     // a generic_element uses class .active for activating
+                //     return 'active';
+                // } // if
+                return 'active';
             } // if
 
             // passivating:
