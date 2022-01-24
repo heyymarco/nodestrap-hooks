@@ -178,7 +178,7 @@ export const useEnableDisableState = (props: IndicationProps & SemanticProps) =>
         'option',
         'textarea',
     ];
-    const isCtrlElm   = props.tag && htmlCtrls.includes(props.tag);
+    const isCtrlElm   = props.tag && htmlCtrls.includes(props.tag as string);
 
 
 
