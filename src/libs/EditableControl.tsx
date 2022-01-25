@@ -16,22 +16,21 @@ import {
     
     
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    
-    
-    
     // rules:
+    rule,
     variants,
     states,
-    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -177,7 +176,7 @@ export const isNoValidation   = (styles: StyleCollection) => rule(selectorIsNoVa
 
 /**
  * Uses valid & invalid states.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents valid & invalid state definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents valid & invalid state definitions.
  */
 export const usesValidInvalidState = () => {
     // dependencies:
@@ -188,85 +187,85 @@ export const usesValidInvalidState = () => {
     
     
     return [
-        () => composition([
-            states([
-                isValidating([
-                    vars({
+        () => style({
+            ...states([
+                isValidating({
+                    ...vars({
                         [validInvalidDecls.animValid]   : cssProps.animValid,
                     }),
-                ]),
-                isUnvalidating([
-                    vars({
+                }),
+                isUnvalidating({
+                    ...vars({
                         [validInvalidDecls.animValid]   : cssProps.animUnvalid,
                     }),
-                ]),
+                }),
                 
-                isInvalidating([
-                    vars({
+                isInvalidating({
+                    ...vars({
                         [validInvalidDecls.animInvalid] : cssProps.animInvalid,
                     }),
-                ]),
-                isUninvalidating([
-                    vars({
+                }),
+                isUninvalidating({
+                    ...vars({
                         [validInvalidDecls.animInvalid] : cssProps.animUninvalid,
                     }),
-                ]),
+                }),
             ]),
             
             
-            vars({
+            ...vars({
                 [validInvalidDecls.foregStart] : mildRefs.foregFn,
                 [validInvalidDecls.backgStart] : mildRefs.backgFn,
             }),
-            variants([
-                isOutlined([
-                    vars({
+            ...variants([
+                isOutlined({
+                    ...vars({
                         [validInvalidDecls.foregStart] : foregRefs.foregFn,
                         [validInvalidDecls.backgStart] : backgRefs.backgFn,
                     }),
-                ]),
-                isMild([
-                    vars({
+                }),
+                isMild({
+                    ...vars({
                         [validInvalidDecls.foregStart] : foregRefs.foregFn,
                         [validInvalidDecls.backgStart] : backgRefs.backgFn,
                     }),
-                ]),
+                }),
             ]),
-            states([
-                isActive([
-                    vars({
+            ...states([
+                isActive({
+                    ...vars({
                         [validInvalidDecls.foregStart] : mildRefs.foregFn,
                         [validInvalidDecls.backgStart] : mildRefs.backgFn,
                     }),
-                ]),
+                }),
             ]),
-        ]),
+        }),
         validInvalidRefs,
         validInvalidDecls,
     ] as const;
 };
 
-export const markValid = () => composition([
-    imports([
+export const markValid = () => style({
+    ...imports([
         usesThemeValid(), // switch to valid theme
     ]),
-]);
+});
 /**
  * Creates a conditional color definitions at valid state.
  * @param themeName The name of valid theme.
- * @returns A `StyleCollection` represents the conditional color definitions at valid state.
+ * @returns A `Rule` represents the conditional color definitions at valid state.
  */
 export const usesThemeValid = (themeName: ThemeName = 'success') => usesThemeImpt(themeName);
 
-export const markInvalid = () => composition([
-    imports([
+export const markInvalid = () => style({
+    ...imports([
         usesThemeInvalid(), // switch to invalid theme
     ]),
-]);
+});
 /**
  * Creates a conditional color definitions at invalid state.
  * @param themeName The name of invalid theme.
- * @returns A `StyleCollection` represents the conditional color definitions at invalid state.
+ * @returns A `Rule` represents the conditional color definitions at invalid state.
  */
 export const usesThemeInvalid = (themeName: ThemeName = 'danger') => usesThemeImpt(themeName);
 
@@ -521,39 +520,37 @@ export const useValidInvalidState  = (props: ValidationProps, validator?: Valida
 
 // styles:
 export const usesEditableControlLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesControlLayout(),
         ]),
-        layout({
+        ...style({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesEditableControlVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesControlVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesEditableControlStates = () => {
     // dependencies:
@@ -563,29 +560,29 @@ export const usesEditableControlStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesControlStates(),
             validInvalid(),
         ]),
-        states([
-            isValid([
-                imports([
+        ...states([
+            isValid({
+                ...imports([
                     markValid(),
                 ]),
-            ]),
-            isInvalid([
-                imports([
+            }),
+            isInvalid({
+                ...imports([
                     markInvalid(),
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 export const useEditableControlSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesEditableControlLayout(),
@@ -596,7 +593,7 @@ export const useEditableControlSheet = createUseSheet(() => [
             // states:
             usesEditableControlStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'rww4hy9rmx'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
