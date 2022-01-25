@@ -87,7 +87,7 @@ export const useTestSemantic = (props: SemanticProps, options: SemanticOptions) 
         semanticRole : options_semanticRole,
     } = options;
     
-    const newOptions = useMemo(() => {
+    const newOptions = useMemo((): SemanticOptions => {
         const semanticTag = ((): SemanticTag => {
             if (!props_semanticTag) return options_semanticTag;
             
@@ -333,7 +333,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
     
     
     // className:
-    const className = useMemo(() => {
+    const className = useMemo((): string|undefined => {
         return (
             Array.from(new Set([
                 // main:
