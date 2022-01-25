@@ -6,8 +6,12 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
 }                           from './cssfn'       // cssfn core
 import {
@@ -60,35 +64,35 @@ import {
 
 // styles:
 export const usesEditableActionControlLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesEditableControlLayout(),
             usesActionControlLayout(),
         ]),
-    ]);
+    });
 };
 export const usesEditableActionControlVariants = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesEditableControlVariants(),
             usesActionControlVariants(),
         ]),
-    ]);
+    });
 };
 export const usesEditableActionControlStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesEditableControlStates(),
             usesActionControlStates(),
         ]),
-    ]);
+    });
 };
 
 export const useEditableActionControlSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesEditableActionControlLayout(),
@@ -99,7 +103,7 @@ export const useEditableActionControlSheet = createUseSheet(() => [
             // states:
             usesEditableActionControlStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'viprxwh99g'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
