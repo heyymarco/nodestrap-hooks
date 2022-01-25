@@ -36,7 +36,7 @@
 [modified ] @nodestrap/control
 [modified ] @nodestrap/action-control
 [modified ] @nodestrap/editable-control
-@nodestrap/editable-text-control
+[modified ] @nodestrap/editable-text-control
 @nodestrap/editable-action-control
 
 // contents:
