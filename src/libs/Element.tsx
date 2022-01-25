@@ -313,7 +313,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
     
     
     
-    const htmlProps = useMemo(() => {
+    const htmlProps = (() => { // can't useMemo, too many propName=propValue pair, inefficient to memorize
         const htmlProps : {} = {
             ref : (elm: HTMLElement) => {
                 setRef(restProps.outerRef, elm);
@@ -328,8 +328,7 @@ export function Element<TElement extends HTMLElement = HTMLElement>(props: Eleme
         } // for
         
         return htmlProps;
-        // eslint-disable-next-line
-    }, Object.keys(restProps));
+    })();
     
     
     
