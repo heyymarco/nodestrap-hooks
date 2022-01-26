@@ -19,27 +19,29 @@ import {
     
     
     // compositions:
-    composition,
     mainComposition,
     globalDef,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
+    // rules:
+    rule,
+    rules,
+    fallbacks,
+    atRoot,
+    
+    
+    
+    //combinators:
     children,
     nextSiblings,
-    
-    
-    
-    // rules:
-    rules,
-    variants,
-    rule,
-    noRule,
-    atRoot,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -132,7 +134,7 @@ const [containerRefs, containerDecls] = createCssVar<ContainerVars>();
 
 /**
  * Uses container.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents container definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents container definitions.
  */
 export const usesContainer = () => {
     // dependencies:
@@ -147,8 +149,8 @@ export const usesContainer = () => {
     
     
     return [
-        () => composition([
-            vars({
+        () => style({
+            ...vars({
                 // borders:
                 [containerDecls.borderWidth           ] : borderStrokeRefs.borderWidth,
                 
@@ -163,7 +165,7 @@ export const usesContainer = () => {
                 [containerDecls.paddingInline]          : paddingRefs.paddingInline,
                 [containerDecls.paddingBlock ]          : paddingRefs.paddingBlock,
             }),
-        ]),
+        }),
         containerRefs,
         containerDecls,
     ] as const;
@@ -195,167 +197,157 @@ export const usesBorderAsContainer = (options?: BorderContainerOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             container(),
         ]),
-        // layout({
+        // ...style({
         //     // borders:
         //     overflow : 'hidden', // clip the children at the rounded corners // bad idea, causing child's focus boxShadow to be clipped off
         // }),
-        variants([
-            !!orientationBlockSelector  && rule(orientationBlockSelector,  [
-                layout({
-                    // children:
-                    ...children(itemsSelector, [
-                        variants([
-                            rule(selectorIsFirstVisibleChild, [
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on top:
-                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                            rule(selectorIsLastVisibleChild,  [
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on bottom:
-                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                        ]),
-                    ]),
+        ...(!!orientationBlockSelector  ? rule(orientationBlockSelector,  [
+            style({
+                // children:
+                ...children(itemsSelector, {
+                    ...rule(selectorIsFirstVisibleChild, {
+                        ...vars({
+                            /*
+                                if the_current_element is a_child_of_container and also a_separator,
+                                the deleted `containerDecls.borderWidth` in separator must be pointed to container,
+                                so we can calculate the correct inner_borderRadius.
+                                
+                                that's why we set `!important` to the `containerDecls.borderWidth`.
+                            */
+                            [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
+                            
+                            [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
+                            [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
+                        }),
+                        ...style({
+                            // borders:
+                            // add rounded corners on top:
+                            [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            
+                            /* recursive calculation of borderRadius is not supported yet */
+                        }),
+                    }),
+                    ...rule(selectorIsLastVisibleChild,  {
+                        ...vars({
+                            /*
+                                if the_current_element is a_child_of_container and also a_separator,
+                                the deleted `containerDecls.borderWidth` in separator must be pointed to container,
+                                so we can calculate the correct inner_borderRadius.
+                                
+                                that's why we set `!important` to the `containerDecls.borderWidth`.
+                            */
+                            [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
+                            
+                            [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
+                            [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
+                        }),
+                        ...style({
+                            // borders:
+                            // add rounded corners on bottom:
+                            [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            
+                            /* recursive calculation of borderRadius is not supported yet */
+                        }),
+                    }),
                 }),
-            ]),
-            !!orientationInlineSelector && rule(orientationInlineSelector, [
-                layout({
-                    // children:
-                    ...children(itemsSelector, [
-                        variants([
-                            rule(selectorIsFirstVisibleChild, [
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on left:
-                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                            rule(selectorIsLastVisibleChild,  [
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    // add rounded corners on right:
-                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                        ]),
-                    ]),
+            }),
+        ]) : style({})),
+        ...(!!orientationInlineSelector ? rule(orientationInlineSelector, [
+            style({
+                // children:
+                ...children(itemsSelector, {
+                    ...rule(selectorIsFirstVisibleChild, {
+                        ...vars({
+                            /*
+                                if the_current_element is a_child_of_container and also a_separator,
+                                the deleted `containerDecls.borderWidth` in separator must be pointed to container,
+                                so we can calculate the correct inner_borderRadius.
+                                
+                                that's why we set `!important` to the `containerDecls.borderWidth`.
+                            */
+                            [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
+                            
+                            [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
+                            [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
+                        }),
+                        ...style({
+                            // borders:
+                            // add rounded corners on left:
+                            [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            
+                            /* recursive calculation of borderRadius is not supported yet */
+                        }),
+                    }),
+                    ...rule(selectorIsLastVisibleChild,  {
+                        ...vars({
+                            /*
+                                if the_current_element is a_child_of_container and also a_separator,
+                                the deleted `containerDecls.borderWidth` in separator must be pointed to container,
+                                so we can calculate the correct inner_borderRadius.
+                                
+                                that's why we set `!important` to the `containerDecls.borderWidth`.
+                            */
+                            [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
+                            
+                            [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
+                            [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
+                        }),
+                        ...style({
+                            // borders:
+                            // add rounded corners on right:
+                            [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                            
+                            /* recursive calculation of borderRadius is not supported yet */
+                        }),
+                    }),
                 }),
-            ]),
-            (!orientationBlockSelector  && !orientationInlineSelector) && noRule([
-                layout({
-                    // children:
-                    ...children(itemsSelector, [
-                        variants([
-                            rule(selectorIsVisibleChild, [
-                                vars({
-                                    /*
-                                        if the_current_element is a_child_of_container and also a_separator,
-                                        the deleted `containerDecls.borderWidth` in separator must be pointed to container,
-                                        so we can calculate the correct inner_borderRadius.
-                                        
-                                        that's why we set `!important` to the `containerDecls.borderWidth`.
-                                    */
-                                    [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
-                                    
-                                    [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
-                                    [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
-                                }),
-                                layout({
-                                    // borders:
-                                    
-                                    // add rounded corners on top:
-                                    [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    // add rounded corners on bottom:
-                                    [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
-                                    
-                                    /* recursive calculation of borderRadius is not supported yet */
-                                }),
-                            ]),
-                        ]),
-                    ]),
+            }),
+        ]) : style({})),
+        ...((!orientationBlockSelector  && !orientationInlineSelector) ? style({
+            // children:
+            ...children(itemsSelector, {
+                ...rule(selectorIsVisibleChild, {
+                    ...vars({
+                        /*
+                            if the_current_element is a_child_of_container and also a_separator,
+                            the deleted `containerDecls.borderWidth` in separator must be pointed to container,
+                            so we can calculate the correct inner_borderRadius.
+                            
+                            that's why we set `!important` to the `containerDecls.borderWidth`.
+                        */
+                        [containerDecls.borderWidth           ] : 'inherit !important', // reads parent's prop
+                        
+                        [containerDecls.borderStartStartRadius] : 'inherit', // reads parent's prop
+                        [containerDecls.borderStartEndRadius  ] : 'inherit', // reads parent's prop
+                        [containerDecls.borderEndStartRadius  ] : 'inherit', // reads parent's prop
+                        [containerDecls.borderEndEndRadius    ] : 'inherit', // reads parent's prop
+                    }),
+                    ...style({
+                        // borders:
+                        
+                        // add rounded corners on top:
+                        [borderRadiusDecls.borderStartStartRadius] : `calc(${containerRefs.borderStartStartRadius} - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                        [borderRadiusDecls.borderStartEndRadius  ] : `calc(${containerRefs.borderStartEndRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                        
+                        // add rounded corners on bottom:
+                        [borderRadiusDecls.borderEndStartRadius  ] : `calc(${containerRefs.borderEndStartRadius  } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                        [borderRadiusDecls.borderEndEndRadius    ] : `calc(${containerRefs.borderEndEndRadius    } - ${containerRefs.borderWidth} - min(${containerRefs.borderWidth}, 0.5px))`,
+                        
+                        /* recursive calculation of borderRadius is not supported yet */
+                    }),
                 }),
-            ]),
-        ]),
-    ]);
+            }),
+        }) : style({})),
+    });
 };
 
 
@@ -382,8 +374,8 @@ const usesBorderAsSeparator = (block: boolean, options: BorderSeparatorOptions =
     
     
     
-    return composition([
-        vars({
+    return style({
+        ...vars({
             /*
                 if the_current_element is a container,
                 the `containerDecls.borderWidth` will be deleted (not follows `borderWidth`),
@@ -394,98 +386,85 @@ const usesBorderAsSeparator = (block: boolean, options: BorderSeparatorOptions =
             */
             [containerDecls.borderWidth] : '0px',
         }),
-        layout({
+        ...style({
             // shadows:
             boxShadow                    : undefined, // remove shadow
         }),
         
         // removes unecessary border stroke:
-        layout({
+        ...style({
             // borders:
-            [`border${block ? 'Inline' : 'Block'}Width`] : 0, // remove (left|right)-border
+            [`border${block ? 'Inline' : 'Block'}Width`         ] : 0, // remove (left|right)-border
+            
+            // remove top-border at the first-child, so that it wouldn't collide with the container's top-border
+            ...rule(selectorIsFirstVisibleChild, {
+                // borders:
+                [`border${block ? 'Block' : 'Inline'}StartWidth`] : 0, // remove top-border
+            }),
+            
+            // remove bottom-border at the last-child, so that it wouldn't collide with the container's bottom-border
+            // *note : `:first-child` => move the first separator to the second child
+            ...rule([selectorIsLastVisibleChild, (swapFirstItem && selectorIsFirstVisibleChild)],  {
+                // borders:
+                [`border${block ? 'Block' : 'Inline'}EndWidth`  ] : 0, // remove top-border
+            }),
             
             
             
             // children:
             // remove double border by removing top-border at the subsequent sibling(s)
-            ...nextSiblings(itemsSelector, [
-                variants([
-                    rule(selectorIsVisibleChild, [
-                        variants([
-                            rule((swapFirstItem ? selectorNotSecondVisibleChild : '&'), [ // *note : move the first separator to the second child
-                                layout({
-                                    // borders:
-                                    [`border${block ? 'Block' : 'Inline'}StartWidth`] : 0, // remove top-border
-                                }),
-                            ]),
-                        ]),
-                    ]),
-                ]),
-            ]),
+            ...nextSiblings(itemsSelector, {
+                ...rule(selectorIsVisibleChild, {
+                    ...rule((swapFirstItem ? selectorNotSecondVisibleChild : '&'), { // *note : move the first separator to the second child
+                        // borders:
+                        [`border${block ? 'Block' : 'Inline'}StartWidth`] : 0, // remove top-border
+                    }),
+                }),
+            }),
         }),
-        variants([
-            // remove top-border at the first-child, so that it wouldn't collide with the container's top-border
-            rule(selectorIsFirstVisibleChild, [
-                layout({
-                    // borders:
-                    [`border${block ? 'Block' : 'Inline'}StartWidth`] : 0, // remove top-border
-                }),
-            ]),
-            
-            // remove bottom-border at the last-child, so that it wouldn't collide with the container's bottom-border
-            // *note : `:first-child` => move the first separator to the second child
-            rule([selectorIsLastVisibleChild, (swapFirstItem && selectorIsFirstVisibleChild)],  [
-                layout({
-                    // borders:
-                    [`border${block ? 'Block' : 'Inline'}EndWidth`  ] : 0, // remove top-border
-                }),
-            ]),
-        ]),
         
         // removes unecessary border radius:
         // although the border stroke was/not removed, it *affects* the children's border radius
         // do not remove border radius at the parent's corners (:first-child & :last-child)
-        variants([
-            rule(selectorNotfirstVisibleChild, [
-                (
-                    block
-                    ?
-                    layout({
-                        // borders:
-                        // remove rounded corners on top:
-                        [borderRadiusDecls.borderStartStartRadius] : '0px',
-                        [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                    })
-                    :
-                    layout({
-                        // borders:
-                        // remove rounded corners on left:
-                        [borderRadiusDecls.borderStartStartRadius] : '0px',
-                        [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                    })
-                ),
-            ]),
-            rule(selectorNotLastVisibleChild,  [
-                (
-                    block
-                    ?
-                    layout({
-                        // borders:
-                        // remove rounded corners on bottom:
-                        [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                        [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                    })
-                    :
-                    layout({
-                        // borders:
-                        // remove rounded corners on right:
-                        [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                        [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                    })
-                ),
-            ]),
-        ]),
-    ]);
+        ...rule(selectorNotfirstVisibleChild, {
+            ...(
+                block
+                ?
+                style({
+                    // borders:
+                    // remove rounded corners on top:
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                })
+                :
+                style({
+                    // borders:
+                    // remove rounded corners on left:
+                    [borderRadiusDecls.borderStartStartRadius] : '0px',
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                })
+            ),
+        }),
+        ...rule(selectorNotLastVisibleChild,  {
+            ...(
+                block
+                ?
+                style({
+                    // borders:
+                    // remove rounded corners on bottom:
+                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                })
+                :
+                style({
+                    // borders:
+                    // remove rounded corners on right:
+                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                })
+            ),
+        }),
+    });
 };
 export const usesBorderAsSeparatorBlock  = (options: BorderSeparatorOptions = {}) => usesBorderAsSeparator(true, options);
 export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}) => usesBorderAsSeparator(false, options);
@@ -495,24 +474,22 @@ export const usesBorderAsSeparatorInline = (options: BorderSeparatorOptions = {}
 // styles:
 /**
  * Applies a responsive container layout.
- * @returns A `Style` represents a responsive container layout.
+ * @returns A `Rule` represents a responsive container layout.
  */
 export const usesResponsiveContainerLayout = () => {
-    return composition([
-        layout({
-            // borders:
-            ...expandBorderRadius(cssProps), // expand borderRadius css vars
-            
-            
-            
-            // spacings:
-            ...expandPadding(cssProps), // expand padding css vars
-        }),
-    ]);
+    return style({
+        // borders:
+        ...expandBorderRadius(cssProps), // expand borderRadius css vars
+        
+        
+        
+        // spacings:
+        ...expandPadding(cssProps), // expand padding css vars
+    });
 };
 /**
  * Applies a responsive container using grid layout.
- * @returns A `Style` represents a responsive container using grid layout.
+ * @returns A `Rule` represents a responsive container using grid layout.
  */
 export const usesResponsiveContainerGridLayout = () => {
     // dependencies:
@@ -522,33 +499,31 @@ export const usesResponsiveContainerGridLayout = () => {
     
     
     
-    return composition([
-        layout({
-            // layouts:
-            display             : 'grid', // use css grid for layouting
-            // define our logical paddings:
-            gridTemplateRows    : [[paddingRefs.paddingBlock,  'auto', paddingRefs.paddingBlock ]], // the height of each row
-            gridTemplateColumns : [[paddingRefs.paddingInline, 'auto', paddingRefs.paddingInline]], // the width of each column
-            gridTemplateAreas   : [[
-                '"........... blockStart ........."',
-                '"inlineStart  content   inlineEnd"',
-                '"...........  blockEnd  ........."',
-            ]],
-            
-            
-            
-            // borders:
-            ...expandBorderRadius(cssProps), // expand borderRadius css vars
-            
-            
-            
-            // spacings:
-            ...expandPadding(cssProps), // expand padding css vars
-            // since we use grid as paddings, so the css paddings are no longer needed:
-            paddingInline : undefined as unknown as null, // turn off physical padding, use logical padding we've set above
-            paddingBlock  : undefined as unknown as null, // turn off physical padding, use logical padding we've set above
-        }),
-    ]);
+    return style({
+        // layouts:
+        display             : 'grid', // use css grid for layouting
+        // define our logical paddings:
+        gridTemplateRows    : [[paddingRefs.paddingBlock,  'auto', paddingRefs.paddingBlock ]], // the height of each row
+        gridTemplateColumns : [[paddingRefs.paddingInline, 'auto', paddingRefs.paddingInline]], // the width of each column
+        gridTemplateAreas   : [[
+            '"........... blockStart ........."',
+            '"inlineStart  content   inlineEnd"',
+            '"...........  blockEnd  ........."',
+        ]],
+        
+        
+        
+        // borders:
+        ...expandBorderRadius(cssProps), // expand borderRadius css vars
+        
+        
+        
+        // spacings:
+        ...expandPadding(cssProps), // expand padding css vars
+        // since we use grid as paddings, so the css paddings are no longer needed:
+        paddingInline : null, // turn off physical padding, use logical padding we've set above
+        paddingBlock  : null, // turn off physical padding, use logical padding we've set above
+    });
 };
 
 export interface ContainerChildrenOptions {
@@ -576,82 +551,62 @@ export const usesContainerChildrenFill = (options: ContainerChildrenOptions = {}
     
     
     const fillSelectorAndSelf = [fillSelector, fillSelfSelector];
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // borders:
             usesBorderAsContainer({ itemsSelector: fillSelectorAndSelf }), // make a nicely rounded corners
         ]),
-        layout({
+        ...style({
             // children:
-            ...children(fillSelectorAndSelf, [
-                layout({
-                    // sizes:
-                    // span to maximum width including parent's paddings:
-                    boxSizing      : 'border-box', // the final size is including borders & paddings
-                    inlineSize     : 'fill-available',
-                    fallbacks      : {
-                        inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
-                    } as any,
-                    
-                    
-                    
-                    // spacings:
-                    marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
+            ...children(fillSelectorAndSelf, {
+                // sizes:
+                // span to maximum width including parent's paddings:
+                boxSizing      : 'border-box', // the final size is including borders & paddings
+                inlineSize     : 'fill-available',
+                ...fallbacks({
+                    inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
                 }),
-                variants([
-                    rule(selectorIsFirstVisibleChild, [
-                        layout({
-                            // spacings:
-                            marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
-                        }),
-                    ]),
-                    rule(selectorIsLastVisibleChild,  [
-                        layout({
-                            // spacings:
-                            marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
-                        }),
-                    ]),
-                ]),
-            ]),
-            ...children(fillSelfSelector, [
-                layout({
-                    // spacings:
-                    paddingInline : positivePaddingInline, // restore parent's padding with positive margin
+                
+                
+                
+                // spacings:
+                marginInline         : negativePaddingInline,  // cancel out parent's padding with negative margin
+                ...rule(selectorIsFirstVisibleChild, {
+                    marginBlockStart : negativePaddingBlock,   // cancel out parent's padding with negative margin
                 }),
-                variants([
-                    rule(selectorIsFirstVisibleChild, [
-                        layout({
-                            // spacings:
-                            paddingBlockStart : positivePaddingBlock, // restore parent's padding with positive margin
-                        }),
-                    ]),
-                    rule(selectorIsLastVisibleChild,  [
-                        layout({
-                            // spacings:
-                            paddingBlockEnd   : positivePaddingBlock, // restore parent's padding with positive margin
-                        }),
-                    ]),
-                ]),
-            ]),
+                ...rule(selectorIsLastVisibleChild,  {
+                    marginBlockEnd   : negativePaddingBlock,   // cancel out parent's padding with negative margin
+                }),
+            }),
+            ...children(fillSelfSelector, {
+                // spacings:
+                paddingInline         : positivePaddingInline, // restore parent's padding with positive margin
+                ...rule(selectorIsFirstVisibleChild, {
+                    paddingBlockStart : positivePaddingBlock,  // restore parent's padding with positive margin
+                }),
+                ...rule(selectorIsLastVisibleChild,  {
+                    paddingBlockEnd   : positivePaddingBlock,  // restore parent's padding with positive margin
+                }),
+            }),
         }),
-    ]);
+    });
 };
 export const usesContainerChildren = (options: ContainerChildrenOptions = {}) => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // spacings:
             usesContainerChildrenFill(options), // must be placed at the last
         ]),
-    ]);
+    });
 };
 
 export const usesContainerLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesBasicLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
             display: 'block',
             
@@ -660,23 +615,23 @@ export const usesContainerLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-        imports([
+        ...imports([
             // layouts:
             usesResponsiveContainerLayout(),
         ]),
-    ]);
+    });
 };
 export const usesContainerVariants = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesBasicVariants(),
         ]),
-    ]);
+    });
 };
 
 export const useContainerSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesContainerLayout(),
@@ -687,7 +642,7 @@ export const useContainerSheet = createUseSheet(() => [
             // children:
             usesContainerChildren(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'dmgepbofol'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
@@ -731,16 +686,14 @@ createSheet(() => [
     globalDef([
         // the container size is determined by screen width:
         Object.keys(breakpoints)
-        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, [
-            rules([
-                atRoot([
-                    layout({
-                        // overwrites propName = propName{BreakpointName}:
-                        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
-                    }),
-                ]),
+        .map((breakpointName) => isScreenWidthAtLeast(breakpointName, {
+            ...rules([
+                atRoot({
+                    // overwrites propName = propName{BreakpointName}:
+                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, breakpointName)),
+                }),
             ], { minSpecificityWeight: 2 }),
-        ])),
+        })),
     ]),
 ])
 .attach();

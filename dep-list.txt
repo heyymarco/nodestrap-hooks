@@ -40,7 +40,7 @@
 [published] @nodestrap/editable-action-control
 
 // contents:
-@nodestrap/container
+[modified ] @nodestrap/container
 @nodestrap/content
 
 // simple components:
