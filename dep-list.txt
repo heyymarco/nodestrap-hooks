@@ -36,8 +36,8 @@
 [published] @nodestrap/control
 [published] @nodestrap/action-control
 [published] @nodestrap/editable-control
-[modified ] @nodestrap/editable-text-control
-[modified ] @nodestrap/editable-action-control
+[published] @nodestrap/editable-text-control
+[published] @nodestrap/editable-action-control
 
 // contents:
 @nodestrap/container
@@ -45,7 +45,7 @@
 
 // simple components:
 [modified ] @nodestrap/visually-hidden
-[modified ] @nodestrap/icon
+[published] @nodestrap/icon
 @nodestrap/label
 @nodestrap/masonry
 @nodestrap/button
