@@ -45,7 +45,7 @@
 
 // simple components:
 [modified ] @nodestrap/visually-hidden
-@nodestrap/icon
+[modified ] @nodestrap/icon
 @nodestrap/label
 @nodestrap/masonry
 @nodestrap/button
