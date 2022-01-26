@@ -7,7 +7,7 @@
 [published] @cssfn/jss-plugin-nested
 [published] @cssfn/css-types
 [published] @cssfn/css-var
-[modified ] @cssfn/cssfn
+[published] @cssfn/cssfn
 [published] @cssfn/css-config
 [published] @cssfn/react-cssfn
 
@@ -30,12 +30,12 @@
 [published] @nodestrap/react-router-link
 
 // abstracts:
-[modified ] @nodestrap/element
+[published] @nodestrap/element
 [published] @nodestrap/basic
 [published] @nodestrap/indicator
-[modified ] @nodestrap/control
-[modified ] @nodestrap/action-control
-[modified ] @nodestrap/editable-control
+[published] @nodestrap/control
+[published] @nodestrap/action-control
+[published] @nodestrap/editable-control
 [modified ] @nodestrap/editable-text-control
 [modified ] @nodestrap/editable-action-control
 
