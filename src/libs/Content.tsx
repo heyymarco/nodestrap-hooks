@@ -12,22 +12,25 @@ import {
     
     
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
+    // rules:
+    rule,
+    fallbacks,
+    
+    
+    
+    //combinators:
     children,
     nextSiblings,
-    
-    
-    
-    // rules:
-    variants,
-    rule,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -115,57 +118,45 @@ export const usesContentChildrenFill = (options: ContentChildrenOptions = {}) =>
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // borders:
             usesBorderAsContainer({ itemsSelector: mediaSelector }), // make a nicely rounded corners
         ]),
-        layout({
+        ...style({
             // children:
-            ...children(mediaSelector, [
-                layout({
-                    // sizes:
-                    // span to maximum width including parent's paddings:
-                    boxSizing      : 'border-box', // the final size is including borders & paddings
-                    inlineSize     : 'fill-available',
-                    fallbacks      : {
-                        inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
-                    } as any,
-                    
-                    
-                    
-                    // spacings:
-                    marginInline   : negativePaddingInline, // cancel out parent's padding with negative margin
-                    marginBlockEnd : positivePaddingBlock,  // add a spacing to the next sibling
-                    
-                    
-                    
-                    // children:
-                    // make sibling <media> closer (cancel out prev sibling's spacing):
-                    ...nextSiblings(mediaSelector, [
-                        layout({
-                            // spacings:
-                            marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
-                        }),
-                    ]),
+            ...children(mediaSelector, {
+                // sizes:
+                // span to maximum width including parent's paddings:
+                boxSizing      : 'border-box', // the final size is including borders & paddings
+                inlineSize     : 'fill-available',
+                ...fallbacks({
+                    inlineSize : `calc(100% + (${positivePaddingInline} * 2))`,
                 }),
-                variants([
-                    rule(selectorIsFirstVisibleChild, [
-                        layout({
-                            // spacings:
-                            marginBlockStart : negativePaddingBlock, // cancel out parent's padding with negative margin
-                        }),
-                    ]),
-                    rule(selectorIsLastVisibleChild,  [
-                        layout({
-                            // spacings:
-                            marginBlockEnd   : negativePaddingBlock, // cancel out parent's padding with negative margin
-                        }),
-                    ]),
-                ]),
-            ]),
+                
+                
+                
+                // spacings:
+                marginInline         : negativePaddingInline, // cancel out parent's padding with negative margin
+                marginBlockEnd       : positivePaddingBlock,  // add a spacing to the next sibling
+                ...rule(selectorIsFirstVisibleChild, {
+                    marginBlockStart : negativePaddingBlock,  // cancel out parent's padding with negative margin
+                }),
+                ...rule(selectorIsLastVisibleChild,  {
+                    marginBlockEnd   : negativePaddingBlock,  // cancel out parent's padding with negative margin
+                }),
+                
+                
+                
+                // children:
+                // make sibling <media> closer (cancel out prev sibling's spacing):
+                ...nextSiblings(mediaSelector, {
+                    // spacings:
+                    marginBlockStart : negativePaddingBlock, // cancel out prev sibling's spacing with negative margin
+                }),
+            }),
         }),
-    ]);
+    });
 };
 export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) => {
     // options:
@@ -190,61 +181,59 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
     
     
     
-    return composition([
-        layout({
-            // children:
-            
-            // first: reset top_level <figure>
-            ...children(figureSelector, [
-                imports([
-                    stripoutFigure(), // clear browser's default styling on figure
-                ]),
-                layout({
-                    // layouts:
-                    display : 'block', // fills the entire parent's width
-                }),
+    return style({
+        // children:
+        
+        // first: reset top_level <figure>
+        ...children(figureSelector, {
+            ...imports([
+                stripoutFigure(), // clear browser's default styling on figure
             ]),
-            
-            // then: styling top_level <figure>, top_level <media> & nested <media>:
-            ...children([
-                nonFigureSelector,
-                nonFigureSelector.map((m) => `figure>${m}`),
-            ], [
-                imports([
-                    stripoutImage(), // clear browser's default styling on image
-                ]),
-                layout({
-                    // layouts:
-                    display : 'block', // fills the entire parent's width
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'media')), // apply general cssProps starting with img***
-                }),
+            ...style({
+                // layouts:
+                display : 'block', // fills the entire parent's width
+            }),
+        }),
+        
+        // then: styling top_level <figure>, top_level <media> & nested <media>:
+        ...children([
+            nonFigureSelector,
+            nonFigureSelector.map((m) => `figure>${m}`),
+        ], {
+            ...imports([
+                stripoutImage(), // clear browser's default styling on image
             ]),
-            
-            // finally: styling top_level <figure> & top_level <media> as separator:
-            ...children(allMediaSelector, [
-                layout({
-                    // borders:
-                    // let's Nodestrap system to manage borderStroke & borderRadius:
-                    ...expandBorderStroke(), // expand borderStroke css vars
-                    ...expandBorderRadius(), // expand borderRadius css vars
-                    // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : '0px',
-                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                    // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                }),
-                imports([
-                    // borders:
-                    usesBorderAsSeparatorBlock({ itemsSelector: allMediaSelector }), // must be placed at the last
-                ]),
+            ...style({
+                // layouts:
+                display : 'block', // fills the entire parent's width
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'media')), // apply general cssProps starting with img***
+            }),
+        }),
+        
+        // finally: styling top_level <figure> & top_level <media> as separator:
+        ...children(allMediaSelector, {
+            ...style({
+                // borders:
+                // let's Nodestrap system to manage borderStroke & borderRadius:
+                ...expandBorderStroke(), // expand borderStroke css vars
+                ...expandBorderRadius(), // expand borderRadius css vars
+                // remove rounded corners on top:
+                [borderRadiusDecls.borderStartStartRadius] : '0px',
+                [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                // remove rounded corners on bottom:
+                [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+            }),
+            ...imports([
+                // borders:
+                usesBorderAsSeparatorBlock({ itemsSelector: allMediaSelector }), // must be placed at the last
             ]),
         }),
-    ]);
+    });
 };
 export interface ContentChildrenLinksOptions {
     linkSelector ?: SelectorCollection
@@ -257,33 +246,27 @@ export const usesContentChildrenLinks = (options: ContentChildrenLinksOptions = 
     
     
     
-    return composition([
-        layout({
+    return style({
+        // children:
+        ...children(linkSelector, {
             // children:
-            ...children(linkSelector, [
-                layout({
-                    // children:
-                    // make a gap to sibling <a>:
-                    ...nextSiblings(linkSelector, [
-                        layout({
-                            // spacings:
-                            // add a space between links:
-                            marginInlineStart: cssProps.linkSpacing,
-                        }),
-                    ]),
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
-                }),
-            ]),
+            // make a gap to sibling <a>:
+            ...nextSiblings(linkSelector, {
+                // spacings:
+                // add a space between links:
+                marginInlineStart: cssProps.linkSpacing,
+            }),
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
         }),
-    ]);
+    });
 };
 export const usesContentChildren = (options: (ContentChildrenOptions & ContentChildrenLinksOptions) = {}) => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // media:
             usesContentChildrenMedia(options),
             
@@ -293,65 +276,61 @@ export const usesContentChildren = (options: (ContentChildrenOptions & ContentCh
             // spacings:
             usesContentChildrenFill(options), // must be placed at the last
         ]),
-    ]);
+    });
 };
 
 export const usesContentBasicLayout = () => {
-    return composition([
-        layout({
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-            
-            
-            
-            // spacings:
-            ...expandPadding(cssProps), // expand padding css vars
-        }),
-    ]);
+    return style({
+        // customize:
+        ...usesGeneralProps(cssProps), // apply general cssProps
+        
+        
+        
+        // spacings:
+        ...expandPadding(cssProps), // expand padding css vars
+    });
 };
 export const usesContentLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesBasicLayout(),
             usesContentBasicLayout(),
         ]),
-    ]);
+    });
 };
 export const usesContentBasicVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesContentVariants = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesBasicVariants(),
             
             // layouts:
             usesContentBasicVariants(),
         ]),
-    ]);
+    });
 };
 
 export const useContentSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesContentLayout(),
@@ -362,7 +341,7 @@ export const useContentSheet = createUseSheet(() => [
             // children:
             usesContentChildren(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'2h0i4lc78z'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
