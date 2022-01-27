@@ -322,8 +322,6 @@ export const usesContentVariants = () => {
         ...imports([
             // variants:
             usesBasicVariants(),
-            
-            // layouts:
             usesContentBasicVariants(),
         ]),
     });
