@@ -46,12 +46,12 @@
 // simple components:
 [published] @nodestrap/visually-hidden
 [published] @nodestrap/icon
-[modified ] @nodestrap/label
-[modified ] @nodestrap/masonry
-[modified ] @nodestrap/button
-[modified ] @nodestrap/nav-button
-[modified ] @nodestrap/button-icon
-[unchanged] @nodestrap/close-button
+[published] @nodestrap/label
+[published] @nodestrap/masonry
+[published] @nodestrap/button
+[published] @nodestrap/nav-button
+[published] @nodestrap/button-icon
+[published] @nodestrap/close-button
 @nodestrap/form
 @nodestrap/input
 @nodestrap/range
