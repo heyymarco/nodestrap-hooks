@@ -1,5 +1,4 @@
 urgent priority:
-sync VisuallyHidden
 
 fallbacks:
 sync Input

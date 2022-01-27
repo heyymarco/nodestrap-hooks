@@ -40,11 +40,11 @@
 [published] @nodestrap/editable-action-control
 
 // contents:
-[modified ] @nodestrap/container
-[modified ] @nodestrap/content
+[published] @nodestrap/container
+[published] @nodestrap/content
 
 // simple components:
-[modified ] @nodestrap/visually-hidden
+[published] @nodestrap/visually-hidden
 [published] @nodestrap/icon
 @nodestrap/label
 @nodestrap/masonry
