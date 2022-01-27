@@ -13,22 +13,25 @@ import type {
 }                           from './types'       // cssfn's types
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    children,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    variants,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -164,7 +167,7 @@ const [rangeVarRefs, rangeVarDecls] = createCssVar<RangeVars>({ minify: false })
 
 /**
  * Uses Range variables.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents Range variables definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents Range variables definitions.
  */
 export const usesRangeVars = () => {
     // dependencies:
@@ -173,11 +176,11 @@ export const usesRangeVars = () => {
     
     
     return [
-        () => composition([
-            vars({
+        () => style({
+            ...vars({
                 [rangeVarDecls.backg] : backgRefs.backg,
             }),
-        ]),
+        }),
         rangeVarRefs,
         rangeVarDecls,
     ] as const;
@@ -211,26 +214,32 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesEditableControlLayout(),
             
             // range vars:
             rangeVars(),
         ]),
-        layout({
+        ...style({
             // layouts:
-         // display        : 'flex',   // customizable orientation // already defined in variant `.block`/`.inline`
-         // flexDirection  : 'row',    // customizable orientation // already defined in variant `.block`/`.inline`
-            justifyContent : 'start',  // if range is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the range's first part should be visible first
-            alignItems     : 'center', // default center items vertically
-            flexWrap       : 'nowrap', // prevents the range to wrap to the next row
+            ...rule(orientationBlockSelector,  { // block
+                display       : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+                flexDirection : 'column',      // items are stacked vertically
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                display       : 'flex',        // use block flexbox, so it takes the entire parent's width
+                flexDirection : 'row',         // items are stacked horizontally
+            }),
+            justifyContent    : 'start',  // if range is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the range's first part should be visible first
+            alignItems        : 'center', // default center items vertically
+            flexWrap          : 'nowrap', // prevents the range to wrap to the next row
             
             
             
             // positions:
-            verticalAlign  : 'baseline', // range's text should be aligned with sibling text, so the range behave like <span> wrapper
+            verticalAlign     : 'baseline', // range's text should be aligned with sibling text, so the range behave like <span> wrapper
             
             
             
@@ -240,23 +249,35 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
             
             
             // children:
-            ...children(inputElm, [
-                layout({
-                    // layouts:
-                    display: 'none', // hide the input
+            ...rule(orientationBlockSelector,  { // block
+                ...children('::before', {
+                    ...imports([
+                        fillTextLineWidthLayout(),
+                    ]),
                 }),
-            ]),
-            ...children(trackElm, [
-                imports([
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                ...children('::before', {
+                    ...imports([
+                        fillTextLineHeightLayout(),
+                    ]),
+                }),
+            }),
+            ...children(inputElm, {
+                // layouts:
+                display: 'none', // hide the input
+            }),
+            ...children(trackElm, {
+                ...imports([
                     usesBorderAsContainer({ // make a nicely rounded corners
                         orientationBlockSelector  : parentOrientationBlockSelector,
                         orientationInlineSelector : parentOrientationInlineSelector,
                     }),
                 ]),
-                layout({
+                ...style({
                     // layouts:
                     display        : 'flex',    // use block flexbox, so it takes the entire Range's width
-                 // flexDirection  : 'row',     // customizable orientation // already defined in variant `.block`/`.inline`
+                    flexDirection  : 'inherit', // customizable orientation // inherit to parent flexbox
                     justifyContent : 'start',   // if thumb is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the thumb's first part should be visible first
                     alignItems     : 'center',  // center thumb vertically
                     flexWrap       : 'nowrap',  // no wrapping
@@ -275,87 +296,77 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
                     
                     
                     // children:
-                    ...children([trackLowerElm, trackUpperElm], [
-                        layout({
-                            // layouts:
-                            display   : 'inline-block', // use inline-block, so it takes the width & height as we set
-                            
-                            
-                            
-                            // backgrounds:
-                            backg : rangeVarRefs.backg,
-                            
-                            
-                            
-                            // borders:
-                            ...expandBorderRadius(), // expand borderRadius css vars
-                            // remove rounded corners on top:
-                            [borderRadiusDecls.borderStartStartRadius] : '0px',
-                            [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                            // remove rounded corners on bottom:
-                            [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                            [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                            
-                            
-                            
-                            // sizes:
-                            alignSelf : 'stretch',      // follows parent's height
-                        }),
-                    ]),
-                    ...children(trackLowerElm, [
-                        layout({
-                            // sizes:
-                            flex : [[rangeVarRefs.valueRatio, rangeVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `valueRatio` for the grow/shrink ratio
-                            
-                            
-                            
-                            // customize:
-                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'tracklower')), // apply general cssProps starting with tracklower***
-                        }),
-                    ]),
-                    ...children(trackUpperElm, [
-                        layout({
-                            // sizes:
-                            flex : [[`calc(1 - ${rangeVarRefs.valueRatio})`, `calc(1 - ${rangeVarRefs.valueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - valueRatio` for the grow/shrink ratio
-                            
-                            
-                            
-                            // customize:
-                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackupper')), // apply general cssProps starting with trackupper***
-                        }),
-                    ]),
+                    ...children([trackLowerElm, trackUpperElm], {
+                        // layouts:
+                        display   : 'inline-block', // use inline-block, so it takes the width & height as we set
+                        
+                        
+                        
+                        // backgrounds:
+                        backg : rangeVarRefs.backg,
+                        
+                        
+                        
+                        // borders:
+                        ...expandBorderRadius(), // expand borderRadius css vars
+                        // remove rounded corners on top:
+                        [borderRadiusDecls.borderStartStartRadius] : '0px',
+                        [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                        // remove rounded corners on bottom:
+                        [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                        [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                        
+                        
+                        
+                        // sizes:
+                        alignSelf : 'stretch',      // follows parent's height
+                    }),
+                    ...children(trackLowerElm, {
+                        // sizes:
+                        flex : [[rangeVarRefs.valueRatio, rangeVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `valueRatio` for the grow/shrink ratio
+                        
+                        
+                        
+                        // customize:
+                        ...usesGeneralProps(usesPrefixedProps(cssProps, 'tracklower')), // apply general cssProps starting with tracklower***
+                    }),
+                    ...children(trackUpperElm, {
+                        // sizes:
+                        flex : [[`calc(1 - ${rangeVarRefs.valueRatio})`, `calc(1 - ${rangeVarRefs.valueRatio})`, 0]], // growable, shrinkable, initial from 0 width; using `1 - valueRatio` for the grow/shrink ratio
+                        
+                        
+                        
+                        // customize:
+                        ...usesGeneralProps(usesPrefixedProps(cssProps, 'trackupper')), // apply general cssProps starting with trackupper***
+                    }),
                     
-                    ...children(['&', thumbElm], [
-                        layout({
-                            cursor: 'inherit',
-                        }),
-                    ]),
-                    ...children(thumbElm, [
-                        layout({
-                            // layouts:
-                            display   : 'inline-block', // use inline-block, so it takes the width & height as we set
-                            
-                            
-                            
-                            // sizes:
-                            boxSizing : 'border-box', // the final size is including borders & paddings
-                            
-                            
-                            
-                            // customize:
-                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'thumb')), // apply general cssProps starting with thumb***
-                            
-                            
-                            
-                            // borders:
-                            ...expandBorderRadius({ borderRadius: cssProps.thumbBorderRadius }), // expand borderRadius css vars
-                            
-                            
-                            
-                            // spacings:
-                            ...expandPadding({ paddingInline: cssProps.thumbPaddingInline, paddingBlock: cssProps.thumbPaddingBlock }), // expand padding css vars
-                        }),
-                    ]),
+                    ...children(['&', thumbElm], {
+                        cursor: 'inherit',
+                    }),
+                    ...children(thumbElm, {
+                        // layouts:
+                        display   : 'inline-block', // use inline-block, so it takes the width & height as we set
+                        
+                        
+                        
+                        // sizes:
+                        boxSizing : 'border-box', // the final size is including borders & paddings
+                        
+                        
+                        
+                        // customize:
+                        ...usesGeneralProps(usesPrefixedProps(cssProps, 'thumb')), // apply general cssProps starting with thumb***
+                        
+                        
+                        
+                        // borders:
+                        ...expandBorderRadius({ borderRadius: cssProps.thumbBorderRadius }), // expand borderRadius css vars
+                        
+                        
+                        
+                        // spacings:
+                        ...expandPadding({ paddingInline: cssProps.thumbPaddingInline, paddingBlock: cssProps.thumbPaddingBlock }), // expand padding css vars
+                    }),
                     
                     
                     
@@ -372,82 +383,31 @@ export const usesRangeLayout = (options?: OrientationRuleOptions) => {
                     // spacings:
                     ...expandPadding({ paddingInline: cssProps.trackPaddingInline, paddingBlock: cssProps.trackPaddingBlock }), // expand padding css vars
                 }),
-            ]),
+            }),
             
             
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            ...rule(orientationBlockSelector,  { // block
+                // overwrites propName = propName{Block}:
+                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                // overwrites propName = propName{Inline}:
+                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
+            }),
         }),
-        variants([
-            /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockSelector,  [ // block
-                layout({
-                    // layouts:
-                    display        : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
-                    flexDirection  : 'column',      // items are stacked vertically
-                    
-                    
-                    
-                    // children:
-                    ...children('::before', [
-                        imports([
-                            fillTextLineWidthLayout(),
-                        ]),
-                    ]),
-                    ...children(trackElm, [
-                        layout({
-                            // layouts:
-                            flexDirection : 'column', // items are stacked vertically
-                        }),
-                    ]),
-                    
-                    
-                    
-                    // overwrites propName = propName{Block}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
-                }),
-            ]),
-            rule(orientationInlineSelector, [ // inline
-                layout({
-                    // layouts:
-                    display        : 'flex',        // use block flexbox, so it takes the entire parent's width
-                    flexDirection  : 'row',         // items are stacked horizontally
-                    
-                    
-                    
-                    // children:
-                    ...children('::before', [
-                        imports([
-                            fillTextLineHeightLayout(),
-                        ]),
-                    ]),
-                    ...children(trackElm, [
-                        layout({
-                            // layouts:
-                            flexDirection : 'row',    // items are stacked horizontally
-                        }),
-                    ]),
-                    
-                    
-                    
-                    // overwrites propName = propName{Inline}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
-                }),
-            ]),
-        ]),
-    ]);
+    });
 };
 export const usesRangeVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     // colors:
     const [, mildRefs           ] = usesMildVariant();
@@ -457,8 +417,8 @@ export const usesRangeVariants = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesEditableControlVariants(),
             
@@ -466,42 +426,40 @@ export const usesRangeVariants = () => {
             sizes(),
             usesNudeVariant(),
         ]),
-        variants([
-            isNude([
-                layout({
-                    // foregrounds:
-                    foreg     : [[mildRefs.foregFn], '!important'], // no valid/invalid animation
-                    
-                    
-                    
-                    // borders:
-                    // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : '0px',
-                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                    // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                    
-                    
-                    
-                    // animations:
-                    boxShadow : 'initial !important', // no focus animation
-                }),
-            ]),
+        ...variants([
+            isNude({
+                // foregrounds:
+                foreg     : [[mildRefs.foregFn], '!important'], // no valid/invalid animation
+                
+                
+                
+                // borders:
+                // remove rounded corners on top:
+                [borderRadiusDecls.borderStartStartRadius] : '0px',
+                [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                // remove rounded corners on bottom:
+                [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                
+                
+                
+                // animations:
+                boxShadow : 'initial !important', // no focus animation
+            }),
         ]),
-    ]);
+    });
 };
 export const usesRangeStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesEditableControlStates(),
         ]),
-    ]);
+    });
 };
 
 export const useRangeSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesRangeLayout(),
@@ -512,7 +470,7 @@ export const useRangeSheet = createUseSheet(() => [
             // states:
             usesRangeStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'jue5zxlqsc'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 

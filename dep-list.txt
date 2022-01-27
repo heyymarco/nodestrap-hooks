@@ -54,7 +54,7 @@
 [published] @nodestrap/close-button
 [modified ] @nodestrap/form
 [modified ] @nodestrap/input
-@nodestrap/range
+[modified ] @nodestrap/range
 @nodestrap/check
 @nodestrap/radio
 @nodestrap/toggler-menu-button
