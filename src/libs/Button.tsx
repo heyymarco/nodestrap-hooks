@@ -6,22 +6,21 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    
-    
-    
     // rules:
+    rule,
     variants,
     states,
-    rule,
     isNotHover,
 }                           from './cssfn'       // cssfn core
 import {
@@ -134,41 +133,41 @@ export const noBackground = () => {
     
     
     
-    return composition([
-        variants([
-            notOutlined([
-                imports([
+    return style({
+        ...variants([
+            notOutlined({
+                ...imports([
                     outlinedOf(true), // keeps outlined variant
                 ]),
-                layout({
+                ...style({
                     // borders:
-                    [borderStrokeDecls.borderWidth]  : '0px', // noBorder if not explicitly `.outlined`
+                    [borderStrokeDecls.borderWidth]: '0px', // noBorder if not explicitly `.outlined`
                 }),
-            ]),
+            }),
         ]),
-        states([
-            isActive([
-                imports([
+        ...states([
+            isActive({
+                ...imports([
                     outlinedOf(true), // keeps outlined variant
                 ]),
-            ]),
-            isFocus([
-                imports([
+            }),
+            isFocus({
+                ...imports([
                     outlinedOf(true), // keeps outlined variant
                 ]),
-            ]),
-            isArrive([
-                imports([
+            }),
+            isArrive({
+                ...imports([
                     outlinedOf(true), // keeps outlined variant
                 ]),
-            ]),
-            isPress([
-                imports([
+            }),
+            isPress({
+                ...imports([
                     outlinedOf(true), // keeps outlined variant
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 export const usesButtonLayout = (options?: OrientationRuleOptions) => {
@@ -178,61 +177,49 @@ export const usesButtonLayout = (options?: OrientationRuleOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesActionControlLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
-            display        : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
-         // flexDirection  : 'row',         // customizable orientation // already defined in variant `.block`/`.inline`
-            justifyContent : 'center',      // center items (text, icon, etc) horizontally
-            alignItems     : 'center',      // center items (text, icon, etc) vertically
-            flexWrap       : 'wrap',        // allows the items (text, icon, etc) to wrap to the next row if no sufficient width available
+            display           : 'inline-flex', // use inline flexbox, so it takes the width & height as we set
+            ...rule(orientationBlockSelector,  { // block
+                flexDirection : 'column',      // items are stacked vertically
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                flexDirection : 'row',         // items are stacked horizontally
+            }),
+            justifyContent    : 'center',      // center items (text, icon, etc) horizontally
+            alignItems        : 'center',      // center items (text, icon, etc) vertically
+            flexWrap          : 'wrap',        // allows the items (text, icon, etc) to wrap to the next row if no sufficient width available
             
             
             
             // positions:
-            verticalAlign  : 'baseline',    // button's text should be aligned with sibling text, so the button behave like <span> wrapper
+            verticalAlign     : 'baseline',    // button's text should be aligned with sibling text, so the button behave like <span> wrapper
             
             
             
             // typos:
-            textAlign      : 'center',
+            textAlign         : 'center',
             
             
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-        variants([
-            /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockSelector,  [ // block
-                layout({
-                    // layouts:
-                    flexDirection  : 'column', // items are stacked vertically
-                }),
-            ]),
-            rule(orientationInlineSelector, [ // inline
-                layout({
-                    // layouts:
-                    flexDirection  : 'row',    // items are stacked horizontally
-                }),
-            ]),
-        ]),
-    ]);
+    });
 };
 export const usesButtonVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     // colors:
     const [, outlinedRefs            ] = usesOutlinedVariant();
@@ -247,26 +234,26 @@ export const usesButtonVariants = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesActionControlVariants(),
             
             // layouts:
             sizes(),
         ]),
-        variants([
-            rule(['.link', '.icon', '.ghost'], [
-                imports([
+        ...variants([
+            rule(['.link', '.icon', '.ghost'], {
+                ...imports([
                     noBackground(),
                 ]),
-            ]),
-            rule(['.link', '.icon'], [
-                imports([
+            }),
+            rule(['.link', '.icon'], {
+                ...imports([
                     // colors:
                     usesThemeActive(), // set the active theme as the default theme
                 ]),
-                layout({
+                ...style({
                     // borders:
                     // small rounded corners on top:
                     [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.sm,
@@ -292,19 +279,19 @@ export const usesButtonVariants = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
                 }),
-                variants([
-                    notOutlined([ // fully link style without `.outlined`:
-                        imports([
+                ...variants([
+                    notOutlined({ // fully link style without `.outlined`:
+                        ...imports([
                             // backgrounds:
                             gradientOf(false), // gradient is not supported if not `.outlined`
                         ]),
-                    ]),
+                    }),
                 ]),
-            ]),
-            rule('.icon', [
-                variants([
-                    notOutlined([
-                        vars({
+            }),
+            rule('.icon', {
+                ...variants([
+                    notOutlined({
+                        ...vars({
                             /*
                                 `noBackground()` is causing `.outlined` actived
                                 => currentColor = theme color
@@ -313,16 +300,16 @@ export const usesButtonVariants = () => {
                             */
                             [foregDecls.foreg] : mildRefs.foregFn,
                         }),
-                    ]),
-                    isOutlined([
-                        vars({
+                    }),
+                    isOutlined({
+                        ...vars({
                             [foregDecls.foreg] : outlinedRefs.foregFn,
                         }),
-                    ]),
+                    }),
                 ]),
-            ]),
-            rule('.ghost', [
-                layout({
+            }),
+            rule('.ghost', {
+                ...style({
                     // borders:
                     boxShadow : 'none !important', // no focus animation
                     
@@ -331,35 +318,33 @@ export const usesButtonVariants = () => {
                     // customize:
                     ...usesGeneralProps(usesPrefixedProps(cssProps, 'ghost')), // apply general cssProps starting with ghost***
                 }),
-                states([
-                    isNotHover([
-                        imports([
+                ...states([
+                    isNotHover({
+                        ...imports([
                             // backgrounds:
                             gradientOf(false), // hides the gradient to increase invisibility
                         ]),
-                    ]),
-                    isArrive([
-                        layout({
-                            // appearances:
-                            opacity: cssProps.ghostOpacityArrive, // increase the opacity to increase visibility
-                        }),
-                    ]),
+                    }),
+                    isArrive({
+                        // appearances:
+                        opacity: cssProps.ghostOpacityArrive, // increase the opacity to increase visibility
+                    }),
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 export const usesButtonStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesActionControlStates(),
         ]),
-    ]);
+    });
 };
 
 export const useButtonSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesButtonLayout(),
@@ -370,7 +355,7 @@ export const useButtonSheet = createUseSheet(() => [
             // states:
             usesButtonStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'7rehb2h20q'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
