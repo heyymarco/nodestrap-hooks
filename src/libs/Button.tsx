@@ -463,7 +463,7 @@ export function Button(props: ButtonProps) {
             
             // accessibilities:
             enabled={props.enabled ?? !(props.disabled ?? false)}
-            press={props.press ?? active}
+            press={props.press ?? (active || undefined)}
             
             
             // variants:
