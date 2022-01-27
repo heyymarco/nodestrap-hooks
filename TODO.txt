@@ -20,7 +20,6 @@ top priority:
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
-tweak useMemo in Element
 move Check::onChange, Range::onChange to EditableControl::onChange
 remove nude variant on Check, Label, Popup, & Range
 replace substr to substring or slice
