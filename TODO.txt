@@ -1,7 +1,6 @@
 urgent priority:
 
 fallbacks:
-sync Input
 sync Navbar
 
 // layouts: => // styles:   from './cssfn'

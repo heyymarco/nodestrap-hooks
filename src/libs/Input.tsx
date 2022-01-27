@@ -6,15 +6,23 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
+    // rules:
+    fallbacks,
+    
+    
+    
+    //combinators:
     children,
 }                           from './cssfn'       // cssfn core
 import {
@@ -74,12 +82,12 @@ export const usesInputLayout = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesEditableTextControlLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
             display        : 'flex',   // use block flexbox, so it takes the entire parent's width
             flexDirection  : 'row',    // flow to the document's writing flow
@@ -95,11 +103,11 @@ export const usesInputLayout = () => {
             
             
             // children:
-            ...children(inputElm, [
-                imports([
+            ...children(inputElm, {
+                ...imports([
                     stripoutTextbox(), // clear browser's default styles
                 ]),
-                layout({
+                ...style({
                     // layouts:
                     display        : 'block', // fills the entire parent's width
                     
@@ -112,9 +120,9 @@ export const usesInputLayout = () => {
                     // span to maximum width including parent's paddings:
                     boxSizing      : 'border-box', // the final size is including borders & paddings
                     inlineSize     : 'fill-available',
-                    fallbacks      : {
+                    ...fallbacks({
                         inlineSize : `calc(100% + (${paddingRefs.paddingInline} * 2))`,
-                    } as any,
+                    }),
                     
                     
                     
@@ -127,38 +135,36 @@ export const usesInputLayout = () => {
                     paddingInline  : paddingRefs.paddingInline,
                     paddingBlock   : paddingRefs.paddingBlock,
                 }),
-            ]),
+            }),
             
             
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesInputVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     // colors:
-    const [gradient, , gradientDecls] = usesGradientVariant((toggle) => composition([
-        vars({
+    const [gradient, , gradientDecls] = usesGradientVariant((toggle) => style({
+        ...vars({
             // *toggle on/off* the background gradient prop:
             [gradientDecls.backgGradTg] : toggle ? cssProps.backgGrad : ((toggle !== null) ? 'initial' : null),
         }),
-    ]));
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesEditableTextControlVariants(),
             
@@ -168,19 +174,19 @@ export const usesInputVariants = () => {
             // colors:
             gradient(),
         ]),
-    ]);
+    });
 };
 export const usesInputStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesEditableTextControlStates(),
         ]),
-    ]);
+    });
 };
 
 export const useInputSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesInputLayout(),
@@ -191,7 +197,7 @@ export const useInputSheet = createUseSheet(() => [
             // states:
             usesInputStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'b75oz4h9pp'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 

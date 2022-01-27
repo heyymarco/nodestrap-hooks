@@ -53,7 +53,7 @@
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
 [modified ] @nodestrap/form
-@nodestrap/input
+[modified ] @nodestrap/input
 @nodestrap/range
 @nodestrap/check
 @nodestrap/radio
