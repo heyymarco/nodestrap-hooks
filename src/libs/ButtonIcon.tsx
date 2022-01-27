@@ -11,15 +11,14 @@ import {
     
     
     // compositions:
-    composition,
     mainComposition,
-    imports,
     
     
     
-    // layouts:
-    layout,
+    // styles:
+    style,
     vars,
+    imports,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -117,20 +116,18 @@ export const isSize = (sizeName: SizeName, styles: StyleCollection) => basicIsSi
  * For example: `sm`, `lg`.
  * @param factory Customize the callback to create sizing definitions for each size in `options`.
  * @param options Customize the size options.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents sizing definitions for each size in `options`.
  */
-export const usesSizeVariant = (factory = sizeOf, options = sizeOptions()) => basicUsesSizeVariant(factory, options);
+export const usesSizeVariant = (factory : ((sizeName: SizeName) => StyleCollection) = sizeOf, options = sizeOptions()) => basicUsesSizeVariant(factory, options);
 /**
  * Creates sizing definitions for the given `sizeName`.
  * @param sizeName The given size name written in camel case.
- * @returns A `StyleCollection` represents sizing definitions for the given `sizeName`.
+ * @returns A `Rule` represents sizing definitions for the given `sizeName`.
  */
-export const sizeOf = (sizeName: SizeName) => composition([
-    layout({
-        // overwrites propName = propName{SizeName}:
-        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-    }),
-]);
+export const sizeOf = (sizeName: SizeName) => style({
+    // overwrites propName = propName{SizeName}:
+    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+});
 /**
  * Gets the all available size options.
  * @returns A `SizeName[]` represents the all available size options.
@@ -152,12 +149,12 @@ export const usesButtonIconLayout = (options?: OrientationRuleOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesButtonLayout(options),
         ]),
-        layout({
+        ...style({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
             
@@ -171,7 +168,7 @@ export const usesButtonIconLayout = (options?: OrientationRuleOptions) => {
             // spacings:
             ...expandPadding(cssProps), // expand padding css vars
         }),
-        vars({
+        ...vars({
             //#region Icon
             // fills the entire parent text's height:
             [icssDecls.size]  : `calc(1em * var(${bcssDecls.lineHeight},${typos.lineHeight}))`,
@@ -188,7 +185,7 @@ export const usesButtonIconLayout = (options?: OrientationRuleOptions) => {
             ],
             //#endregion Icon
         }),
-    ]);
+    });
 };
 export const usesButtonIconVariants = () => {
     // dependencies:
@@ -198,27 +195,27 @@ export const usesButtonIconVariants = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesButtonVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesButtonIconStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesButtonStates(),
         ]),
-    ]);
+    });
 };
 
 export const useButtonIconSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesButtonIconLayout(),
@@ -229,7 +226,7 @@ export const useButtonIconSheet = createUseSheet(() => [
             // states:
             usesButtonIconStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'x6fgydkqor'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 

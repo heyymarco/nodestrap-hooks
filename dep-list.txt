@@ -50,7 +50,7 @@
 [modified ] @nodestrap/masonry
 [modified ] @nodestrap/button
 [modified ] @nodestrap/nav-button
-@nodestrap/button-icon
+[modified ] @nodestrap/button-icon
 @nodestrap/close-button
 @nodestrap/form
 @nodestrap/input
