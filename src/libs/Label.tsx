@@ -6,20 +6,19 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    variants,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -86,17 +85,21 @@ export const useLabelVariant = (props: LabelVariant) => {
 
 // styles:
 export const usesLabelLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesBasicLayout(),
             
             // colors:
             usesThemeDefault(),
         ]),
-        layout({
+        ...style({
             // layouts:
-            display        : 'inline-block', // use inline block, so it takes the width & height as we set
+            display        : 'inline-flex',  // use inline flexbox, so it takes the width & height as we set
+            flexDirection  : 'row',          // items are stacked horizontally
+            justifyContent : 'center',       // center items (text, icon, etc) horizontally
+            alignItems     : 'center',       // center items (text, icon, etc) vertically
+            flexWrap       : 'wrap',         // allows the items (text, icon, etc) to wrap to the next row if no sufficient width available
             
             
             
@@ -113,23 +116,21 @@ export const usesLabelLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps),   // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesLabelVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesBasicVariants(),
             
@@ -137,22 +138,22 @@ export const usesLabelVariants = () => {
             sizes(),
             usesNudeVariant(),
         ]),
-        variants([
-            rule('.content', [ // content
-                imports([
+        ...variants([
+            rule('.content', { // content
+                ...imports([
                     // layouts:
                     usesContentBasicLayout(),
                     
                     // variants:
                     usesContentBasicVariants(),
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 export const useLabelSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesLabelLayout(),
@@ -160,7 +161,7 @@ export const useLabelSheet = createUseSheet(() => [
             // variants:
             usesLabelVariants(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'si01upz9vr'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
