@@ -2,8 +2,6 @@ urgent priority:
 sync VisuallyHidden
 
 fallbacks:
-sync Container
-sync Content
 sync Input
 sync Navbar
 
