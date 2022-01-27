@@ -51,7 +51,7 @@
 [modified ] @nodestrap/button
 [modified ] @nodestrap/nav-button
 [modified ] @nodestrap/button-icon
-@nodestrap/close-button
+[unchanged] @nodestrap/close-button
 @nodestrap/form
 @nodestrap/input
 @nodestrap/range
