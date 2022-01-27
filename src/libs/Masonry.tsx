@@ -7,21 +7,23 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    children,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -91,128 +93,118 @@ export const usesMasonryLayout = (options?: OrientationRuleOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesContentLayout(),
         ]),
-        layout({
+        ...style({
+            ...rule(orientationBlockSelector,  { // block
+                // layouts:
+                display             : 'grid', // use css block grid for layouting, the core of our Masonry layout
+                gridAutoFlow        : 'row', // items direction is to inline & masonry's direction is to block
+                gridAutoRows        : cssProps.itemsRaiseSize,
+                gridTemplateColumns : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
+                
+                // child default sizes:
+                justifyItems        : 'stretch', // each item fills the entire Masonry's column width
+             // alignItems          : 'stretch', // distorting the item's height a bit for consistent multiplies of `itemsRaiseSize` // causing the ResizeObserver doesn't work
+                alignItems          : 'start',   // let's the item to resize so the esizeObserver will work
+                
+                
+                
+                // spacings:
+                rowGap              : [[0], '!important'], // strip out the `rowGap` because it will conflict with masonry's direction
+                
+                
+                
+                // children:
+                ...children('*', {
+                    gridColumnEnd : [['unset'], '!important'], // clear from residual effect from inlineStyle (if was)
+                    
+                    
+                    
+                    // spacings:
+                    ...rule(':not(.firstRow)', {
+                        /*
+                        * we use `marginBlockStart` as the replacement of the stripped out `rowGap`
+                        * we use `marginBlockStart` instead of `marginBlockEnd`
+                        * because finding grid's items at the first row is much easier than at the last row
+                        * (we don't need to count the number of grid's item)
+                        */
+                        marginBlockStart : cssProps.rowGap,
+                    }),
+                }),
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                // layouts:
+                display             : 'inline-grid', // use css inline grid for layouting, the core of our Masonry layout
+                gridAutoFlow        : 'column', // items direction is to block & masonry's direction is to inline
+                gridAutoColumns     : cssProps.itemsRaiseSize,
+                gridTemplateRows    : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
+                
+                // child default sizes:
+                alignItems          : 'stretch', // each item fills the entire Masonry's column height
+             // justifyItems        : 'stretch', // distorting the item's width a bit for consistent multiplies of `itemsRaiseSize` // causing the ResizeObserver doesn't work
+                justifyItems        : 'start',   // let's the item to resize so the esizeObserver will work
+                
+                
+                
+                // spacings:
+                columnGap           : [[0], '!important'], // strip out the `columnGap` because it will conflict with masonry's direction
+                
+                
+                
+                // children:
+                ...children('*', {
+                    gridRowEnd : [['unset'], '!important'], // clear from residual effect from blockStyle (if was)
+                    
+                    
+                    
+                    // spacings:
+                    ...rule(':not(.firstRow)', {
+                        /*
+                        * we use `marginInlineStart` as the replacement of the stripped out `columnGap`
+                        * we use `marginInlineStart` instead of `marginInlineEnd`
+                        * because finding grid's items at the first row is much easier than at the last row
+                        * (we don't need to count the number of grid's item)
+                        */
+                        marginInlineStart : cssProps.rowGap,
+                    }),
+                }),
+            }),
+            
+            
+            
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-        variants([
-            /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockSelector,  [ // block
-                layout({
-                    // layouts:
-                    display             : 'grid', // use css block grid for layouting, the core of our Masonry layout
-                    gridAutoFlow        : 'row', // items direction is to inline & masonry's direction is to block
-                    gridAutoRows        : cssProps.itemsRaiseSize,
-                    gridTemplateColumns : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
-                    
-                    // child default sizes:
-                    justifyItems        : 'stretch', // each item fills the entire Masonry's column width
-                 // alignItems          : 'stretch', // distorting the item's height a bit for consistent multiplies of `itemsRaiseSize` // causing the ResizeObserver doesn't work
-                    alignItems          : 'start',   // let's the item to resize so the esizeObserver will work
-                    
-                    
-                    
-                    // spacings:
-                    rowGap              : [[0], '!important'], // strip out the `rowGap` because it will conflict with masonry's direction
-                    
-                    
-                    
-                    // children:
-                    ...children('*', [
-                        layout({
-                            gridColumnEnd : [['unset'], '!important'], // clear from residual effect from inlineStyle (if was)
-                        }),
-                        variants([
-                            rule(':not(.firstRow)', [
-                                layout({
-                                    /*
-                                    * we use `marginBlockStart` as the replacement of the stripped out `rowGap`
-                                    * we use `marginBlockStart` instead of `marginBlockEnd`
-                                    * because finding grid's items at the first row is much easier than at the last row
-                                    * (we don't need to count the number of grid's item)
-                                    */
-                                    marginBlockStart : cssProps.rowGap,
-                                }),
-                            ]),
-                        ]),
-                    ]),
-                }),
-            ]),
-            rule(orientationInlineSelector, [ // inline
-                layout({
-                    // layouts:
-                    display             : 'inline-grid', // use css inline grid for layouting, the core of our Masonry layout
-                    gridAutoFlow        : 'column', // items direction is to block & masonry's direction is to inline
-                    gridAutoColumns     : cssProps.itemsRaiseSize,
-                    gridTemplateRows    : `repeat(auto-fill, minmax(${cssProps.itemsMinColumnSize}, 1fr))`,
-                    
-                    // child default sizes:
-                    alignItems          : 'stretch', // each item fills the entire Masonry's column height
-                 // justifyItems        : 'stretch', // distorting the item's width a bit for consistent multiplies of `itemsRaiseSize` // causing the ResizeObserver doesn't work
-                    justifyItems        : 'start',   // let's the item to resize so the esizeObserver will work
-                    
-                    
-                    
-                    // spacings:
-                    columnGap           : [[0], '!important'], // strip out the `columnGap` because it will conflict with masonry's direction
-                    
-                    
-                    
-                    // children:
-                    ...children('*', [
-                        layout({
-                            gridRowEnd : [['unset'], '!important'], // clear from residual effect from blockStyle (if was)
-                        }),
-                        variants([
-                            rule(':not(.firstRow)', [
-                                layout({
-                                    /*
-                                    * we use `marginInlineStart` as the replacement of the stripped out `columnGap`
-                                    * we use `marginInlineStart` instead of `marginInlineEnd`
-                                    * because finding grid's items at the first row is much easier than at the last row
-                                    * (we don't need to count the number of grid's item)
-                                    */
-                                    marginInlineStart : cssProps.rowGap,
-                                }),
-                            ]),
-                        ]),
-                    ]),
-                }),
-            ]),
-        ]),
-    ]);
+    });
 };
 export const usesMasonryVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesContentVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 
 export const useMasonrySheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesMasonryLayout(),
@@ -220,7 +212,7 @@ export const useMasonrySheet = createUseSheet(() => [
             // variants:
             usesMasonryVariants(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'fiuyy1jxpx'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
