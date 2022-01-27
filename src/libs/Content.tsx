@@ -167,7 +167,7 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
     const allMediaSelector = (
         [mediaSelector]
         .flat(Infinity)
-        .filter((m): m is Selector => !!m)
+        .filter((m): m is Selector => !!m) // filter out undefined|null|false|''
     );
     const figureSelector    = allMediaSelector.some((m)   => (m === 'figure')) && 'figure';
     const nonFigureSelector = allMediaSelector.filter((m) => (m !== 'figure'));
