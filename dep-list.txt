@@ -52,7 +52,7 @@
 [published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
-@nodestrap/form
+[modified ] @nodestrap/form
 @nodestrap/input
 @nodestrap/range
 @nodestrap/check

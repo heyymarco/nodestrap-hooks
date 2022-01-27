@@ -7,14 +7,13 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
-    
-    
-    
-    // layouts:
-    layout,
     
     
     
@@ -153,39 +152,37 @@ export const useFormValidator      = (customValidator?: CustomValidatorHandler) 
 
 // styles:
 export const usesFormLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesContentLayout(),
         ]),
-        layout({
+        ...style({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesFormVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesContentVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesFormStates = () => {
     // dependencies:
@@ -195,28 +192,28 @@ export const usesFormStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             validInvalid(),
         ]),
-        states([
-            isValid([
-                imports([
+        ...states([
+            isValid({
+                ...imports([
                     markValid(),
                 ]),
-            ]),
-            isInvalid([
-                imports([
+            }),
+            isInvalid({
+                ...imports([
                     markInvalid(),
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 export const useFormSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesFormLayout(),
@@ -227,7 +224,7 @@ export const useFormSheet = createUseSheet(() => [
             // states:
             usesFormStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'eqakn9c0py'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
