@@ -35,9 +35,9 @@
 [published] @nodestrap/indicator
 [published] @nodestrap/control
 [published] @nodestrap/action-control
-[published] @nodestrap/editable-control
-[published] @nodestrap/editable-text-control
-[published] @nodestrap/editable-action-control
+[modified ] @nodestrap/editable-control
+[modified ] @nodestrap/editable-text-control
+[modified ] @nodestrap/editable-action-control
 
 // contents:
 [modified ] @nodestrap/container
@@ -52,9 +52,9 @@
 [published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
-[modified ] @nodestrap/form
-[modified ] @nodestrap/input
-[modified ] @nodestrap/range
+[modifiedV] @nodestrap/form
+[modifiedV] @nodestrap/input
+[modifiedV] @nodestrap/range
 [modified ] @nodestrap/check
 [modified ] @nodestrap/radio
 [modified ] @nodestrap/toggler-menu-button

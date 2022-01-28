@@ -19,8 +19,8 @@ top priority:
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
-move Check::onChange, Range::onChange to EditableControl::onChange
-remove nude variant on Check, Label, Popup, & Range
+move Check::onChange to EditableControl::onChange
+remove nude variant on Check, Label, Popup
 replace substr to substring or slice
 
 
