@@ -641,6 +641,7 @@ export const usesCheckStates = () => {
             // children:
             ...children(inputElm, {
                 ...vars({
+                    // copy focus effect from parent:
                     [focusBlurDecls.boxShadow] : 'inherit',
                     [focusBlurDecls.anim     ] : 'inherit',
                 }),
