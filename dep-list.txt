@@ -55,7 +55,7 @@
 [modified ] @nodestrap/form
 [modified ] @nodestrap/input
 [modified ] @nodestrap/range
-@nodestrap/check
+[modified ] @nodestrap/check
 @nodestrap/radio
 @nodestrap/toggler-menu-button
 
