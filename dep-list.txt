@@ -55,9 +55,9 @@
 [modifiedV] @nodestrap/form
 [modifiedV] @nodestrap/input
 [modifiedV] @nodestrap/range
-[modified ] @nodestrap/check
-[modified ] @nodestrap/radio
-[modified ] @nodestrap/toggler-menu-button
+[modifiedV] @nodestrap/check
+[modifiedV] @nodestrap/radio
+[modifiedV] @nodestrap/toggler-menu-button
 
 // layouts:
 @nodestrap/list
