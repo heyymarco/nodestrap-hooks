@@ -810,10 +810,6 @@ export interface CheckProps
     label?          : string
     
     
-    // events:
-    onChange?       : React.ChangeEventHandler<HTMLInputElement>
-    
-    
     // children:
     children?       : React.ReactNode
 }
