@@ -664,6 +664,7 @@ export interface EditableControlProps<TElement extends EditableControlElement = 
     // values:
     defaultValue?    : string | number | ReadonlyArray<string>
     value?           : string | number | ReadonlyArray<string>
+    onChange?        : React.ChangeEventHandler<TElement>
     
 
     // validations:
@@ -715,7 +716,7 @@ export function EditableControl<TElement extends EditableControlElement = Editab
                 } // if
             }}
             onChange={(e) => { // watch change event from current element or bubbling from children
-                props.onChange?.(e);
+                props.onChange?.(e as React.ChangeEvent<TElement>);
                 
                 
                 
