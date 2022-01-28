@@ -384,6 +384,10 @@ export const usesCheckLayout = () => {
                     // spacings:
                     [paddingDecls.paddingInline] : '0px', // discard padding
                     [paddingDecls.paddingBlock ] : '0px', // discard padding
+                    ...isNotLastChild({
+                        // spacing between input & label:
+                        marginInlineEnd : cssProps.spacing,
+                    }),
                     
                     
                     
@@ -437,12 +441,6 @@ export const usesCheckLayout = () => {
                     // customize:
                     ...usesGeneralProps(cssProps), // apply general cssProps
                 }),
-                ...variants([
-                    isNotLastChild({
-                        // spacing between input & label:
-                        marginInlineEnd : cssProps.spacing,
-                    }),
-                ]),
             }),
             ...children(labelElm, {
                 // layouts:
