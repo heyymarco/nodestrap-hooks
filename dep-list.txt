@@ -57,7 +57,7 @@
 [modified ] @nodestrap/range
 [modified ] @nodestrap/check
 [modified ] @nodestrap/radio
-@nodestrap/toggler-menu-button
+[modified ] @nodestrap/toggler-menu-button
 
 // layouts:
 @nodestrap/list

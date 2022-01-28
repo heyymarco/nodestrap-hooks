@@ -9,23 +9,25 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    children,
-    
-    
-    
     // rules:
-    variants,
     states,
     isNthChild,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -112,15 +114,15 @@ import {
 // states:
 
 //#region activePassive
-export const markActive = () => composition([
-    imports([
+export const markActive = () => style({
+    ...imports([
         controlMarkActive(),
         
         mildOf(null), // keeps mild variant
         
         usesThemeActive(), // switch to active theme
     ]),
-]);
+});
 
 // change default parameter from 'secondary' to `null`:
 export const usesThemeDefault = (themeName: ThemeName|null = null) => controlUsesThemeDefault(themeName);
@@ -220,43 +222,43 @@ export const usesSvgAnim = () => {
     
     
     return [
-        () => composition([
-            imports([
+        () => style({
+            ...imports([
                 // animations:
                 anim(),
                 
                 transfNoneVars(),
                 animNoneVars(),
             ]),
-            states([
-                isActived([
-                    imports([
+            ...states([
+                isActived({
+                    ...imports([
                         transfInVars(),
                     ]),
-                ]),
-                isActivating([
-                    imports([
+                }),
+                isActivating({
+                    ...imports([
                         transfInVars(),
                         transfOutVars(),
                         
                         animInVars(),
                     ]),
-                ]),
-                isPassivating([
-                    imports([
+                }),
+                isPassivating({
+                    ...imports([
                         transfInVars(),
                         transfOutVars(),
                         
                         animOutVars(),
                     ]),
-                ]),
-                isPassived([
-                    imports([
+                }),
+                isPassived({
+                    ...imports([
                         transfOutVars(),
                     ]),
-                ]),
+                }),
             ]),
-            vars({
+            ...vars({
                 [svgAnimDecls.topTransf] : [[ // double array => makes the JSS treat as space separated values
                     svgAnimRefs.topTransfIn,
                     svgAnimRefs.topTransfOut,
@@ -270,7 +272,7 @@ export const usesSvgAnim = () => {
                     svgAnimRefs.btmTransfOut,
                 ]],
             }),
-        ]),
+        }),
         svgAnimRefs,
         svgAnimDecls,
     ] as const;
@@ -289,111 +291,92 @@ export const usesSvgLayout = () => {
     
     
     
-    return composition([
-        layout({
-            // sizes:
-            // fills the entire parent text's height:
-            blockSize  : `calc(1em * var(${bcssDecls.lineHeight},${typos.lineHeight}))`,
-            inlineSize : 'auto', // calculates the width by [height * aspect-ratio]
+    return style({
+        // sizes:
+        // fills the entire parent text's height:
+        blockSize  : `calc(1em * var(${bcssDecls.lineHeight},${typos.lineHeight}))`,
+        inlineSize : 'auto', // calculates the width by [height * aspect-ratio]
+        
+        
+        
+        // children:
+        overflow: 'visible', // allows graphics to overflow the canvas
+        ...children('*', {
+            // appearances:
+            stroke        : 'currentColor', // set menu color as parent's font color
+            strokeWidth   : 4,              // set menu thickness, 4 of 24 might enough
+            strokeLinecap : 'square',       // set menu edges square
             
             
             
-            // children:
-            overflow: 'visible', // allows graphics to overflow the canvas
-            ...children('*', [
-                layout({
-                    // appearances:
-                    stroke        : 'currentColor', // set menu color as parent's font color
-                    strokeWidth   : 4,              // set menu thickness, 4 of 24 might enough
-                    strokeLinecap : 'square',       // set menu edges square
-                    
-                    
-                    
-                    // animations:
-                    transformOrigin : '50% 50%',
-                }),
-                variants([
-                    isNthChild(0, 1, [
-                        layout({
-                            // animations:
-                            transf : svgAnimRefs.topTransf,
-                            anim   : svgAnimRefs.topAnim,
-                        }),
-                    ]),
-                    isNthChild(0, 2, [
-                        layout({
-                            // animations:
-                            transf : svgAnimRefs.midTransf,
-                            anim   : svgAnimRefs.midAnim,
-                        }),
-                    ]),
-                    isNthChild(0, 3, [
-                        layout({
-                            // animations:
-                            transf : svgAnimRefs.btmTransf,
-                            anim   : svgAnimRefs.btmAnim,
-                        }),
-                    ]),
-                ]),
-            ]),
+            // animations:
+            transformOrigin : '50% 50%',
+            ...isNthChild(0, 1, {
+                transf : svgAnimRefs.topTransf,
+                anim   : svgAnimRefs.topAnim,
+            }),
+            ...isNthChild(0, 2, {
+                transf : svgAnimRefs.midTransf,
+                anim   : svgAnimRefs.midAnim,
+            }),
+            ...isNthChild(0, 3, {
+                transf : svgAnimRefs.btmTransf,
+                anim   : svgAnimRefs.btmAnim,
+            }),
         }),
-    ]);
+    });
 };
 export const usesTogglerMenuButtonLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesCheckLayout(),
             
             // colors:
             usesThemeDefault(),
         ]),
-        layout({
+        ...style({
             // children:
-            ...children(labelElm, [
-                layout({
-                    // children:
-                    ...children(svgElm, [
-                        imports([
-                            usesSvgLayout(),
-                        ]),
+            ...children(labelElm, {
+                // children:
+                ...children(svgElm, {
+                    ...imports([
+                        usesSvgLayout(),
                     ]),
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(cssProps), // apply general cssProps
                 }),
-            ]),
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(cssProps), // apply general cssProps
+            }),
         }),
-        vars({
+        ...vars({
             [icssDecls.animActive ] : cssProps.animActive,
             [icssDecls.animPassive] : cssProps.animPassive,
         }),
-    ]);
+    });
 };
 export const usesTogglerMenuButtonVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesCheckVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesTogglerMenuButtonStates = () => {
     // dependencies:
@@ -403,41 +386,41 @@ export const usesTogglerMenuButtonStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesCheckStates(),
             
             // animations:
             svgAnim(),
         ]),
-        states([
-            isActive([
-                imports([
+        ...states([
+            isActive({
+                ...imports([
                     markActive(),
                 ]),
-            ]),
-            isFocus([
-                imports([
+            }),
+            isFocus({
+                ...imports([
                     markActive(),
                 ]),
-            ]),
-            isArrive([
-                imports([
+            }),
+            isArrive({
+                ...imports([
                     markActive(),
                 ]),
-            ]),
-            isPress([
-                imports([
+            }),
+            isPress({
+                ...imports([
                     markActive(),
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 export const useTogglerMenuButtonSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesTogglerMenuButtonLayout(),
@@ -448,7 +431,7 @@ export const useTogglerMenuButtonSheet = createUseSheet(() => [
             // states:
             usesTogglerMenuButtonStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'5sj70x1zsf'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
