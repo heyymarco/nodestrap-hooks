@@ -115,7 +115,7 @@ export type { EditableControlElement }
 export interface EditableActionControlProps<TElement extends EditableControlElement = EditableControlElement>
     extends
         EditableControlProps<TElement>,
-        ActionControlProps<TElement>
+        Omit<ActionControlProps<TElement>, 'onChange'>
 {
 }
 export function EditableActionControl<TElement extends EditableControlElement = EditableControlElement>(props: EditableActionControlProps<TElement>) {
