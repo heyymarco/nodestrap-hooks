@@ -102,9 +102,6 @@ import {
     useOrientationVariant,
     
     isNude,
-    usesNudeVariant,
-    NudeVariant,
-    useNudeVariant,
     usesMildVariant,
     usesBackg,
     usesBorderRadius,
@@ -424,27 +421,11 @@ export const usesRangeVariants = () => {
             
             // layouts:
             sizes(),
-            usesNudeVariant(),
         ]),
         ...variants([
             isNude({
-                // foregrounds:
-                foreg     : [[mildRefs.foregFn], '!important'], // no valid/invalid animation
-                
-                
-                
-                // borders:
-                // remove rounded corners on top:
-                [borderRadiusDecls.borderStartStartRadius] : '0px',
-                [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                // remove rounded corners on bottom:
-                [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                
-                
-                
                 // animations:
-                boxShadow : 'initial !important', // no focus animation
+                boxShadow : 'initial !important', // no focus animation on slider, but has one in thumb
             }),
         ]),
     });
@@ -525,8 +506,7 @@ export interface RangeProps
         Pick<React.InputHTMLAttributes<HTMLInputElement>, 'disabled'>,
         
         // layouts:
-        OrientationVariant,
-        NudeVariant
+        OrientationVariant
 {
     // essentials:
     trackStyle?               : React.CSSProperties
@@ -590,10 +570,6 @@ export interface RangeProps
     min?      : string | number
     max?      : string | number
     step?     : string | number
-    
-    
-    // events:
-    onChange? : React.ChangeEventHandler<HTMLInputElement>
 }
 export function Range(props: RangeProps) {
     // styles:
@@ -699,7 +675,6 @@ export function Range(props: RangeProps) {
     // variants:
     const orientationVariant  = useOrientationVariant(props);
     const orientationVertical = (orientationVariant.class === 'block');
-    const nudeVariant         = useNudeVariant({ nude });
     
     
     
@@ -999,6 +974,7 @@ export function Range(props: RangeProps) {
             
             
             // variants:
+            nude={nude}
             theme={theme}
             mild={mild}
             
@@ -1007,7 +983,6 @@ export function Range(props: RangeProps) {
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
                 orientationVariant.class,
-                nudeVariant.class,
             ]}
             stateClasses={[...(props.stateClasses ?? []),
                 focusBlurState.class,
