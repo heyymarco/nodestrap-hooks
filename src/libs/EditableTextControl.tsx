@@ -341,10 +341,6 @@ export interface EditableTextControlProps<TElement extends EditableTextControlEl
     // validations:
     minLength? : number
     maxLength? : number
-    
-    
-    // events:
-    onChange?  : React.ChangeEventHandler<TElement>
 }
 export function EditableTextControl<TElement extends EditableTextControlElement = EditableTextControlElement>(props: EditableTextControlProps<TElement>) {
     // styles:
