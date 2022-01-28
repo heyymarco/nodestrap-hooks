@@ -102,7 +102,6 @@ import {
     useOrientationVariant,
     
     isNude,
-    usesMildVariant,
     usesBackg,
     usesBorderRadius,
     expandBorderRadius,
@@ -405,12 +404,6 @@ export const usesRangeVariants = () => {
         // overwrites propName = propName{SizeName}:
         ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
     }));
-    
-    // colors:
-    const [, mildRefs           ] = usesMildVariant();
-    
-    // borders:
-    const [, , borderRadiusDecls] = usesBorderRadius();
     
     
     
