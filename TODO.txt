@@ -19,7 +19,7 @@ top priority:
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
-remove nude variant on Check, Label, Popup
+remove nude variant on Label, Popup
 replace substr to substring or slice
 
 

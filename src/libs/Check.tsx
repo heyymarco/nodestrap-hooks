@@ -82,13 +82,9 @@ import {
     usesSizeVariant,
     notNude,
     isNude,
-    usesNudeVariant,
-    NudeVariant,
-    useNudeVariant,
     usesMildVariant,
     usesForeg,
     usesBorder,
-    usesBorderStroke,
     usesBorderRadius,
     usesPadding,
     convertRefToDecl,
@@ -402,7 +398,7 @@ export const usesCheckLayout = () => {
                     
                     
                     // animations:
-                    filter        : 'initial !important', // uses parent filter
+                    filter        : [['initial'], '!important'], // uses parent filter
                     
                     
                     
@@ -478,11 +474,7 @@ export const usesCheckVariants = () => {
     
     // borders:
     const [, , borderDecls      ] = usesBorder();
-    const [, , borderStrokeDecls] = usesBorderStroke();
     const [, , borderRadiusDecls] = usesBorderRadius();
-    
-    // spacings:
-    const [, , paddingDecls     ] = usesPadding();
     
     
     
@@ -493,7 +485,6 @@ export const usesCheckVariants = () => {
             
             // layouts:
             sizes(),
-            usesNudeVariant(),
         ]),
         ...variants([
             rule(['.btn', '.togglerBtn'], {
@@ -583,7 +574,7 @@ export const usesCheckVariants = () => {
                 // children:
                 ...children(inputElm, {
                     // borders:
-                    [borderDecls.borderCol] : 'currentColor', // make a contrast border between indicator & filler
+                    [borderDecls.borderCol] : 'currentColor',   // make a contrast border between indicator & filler
                 }),
             }),
             isNude({
@@ -592,30 +583,8 @@ export const usesCheckVariants = () => {
                 
                 
                 
-                // backgrounds:
-                backg     : 'none !important', // discard background, no valid/invalid animation
-                
-                
-                
-                // borders:
-                [borderStrokeDecls.borderWidth           ] : '0px', // discard border
-                // remove rounded corners on top:
-                [borderRadiusDecls.borderStartStartRadius] : '0px',
-                [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                // remove rounded corners on bottom:
-                [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                
-                
-                
-                // spacings:
-                [paddingDecls.paddingInline] : '0px', // discard padding
-                [paddingDecls.paddingBlock ] : '0px', // discard padding
-                
-                
-                
                 // animations:
-                boxShadow : 'initial !important', // no focus animation
+                boxShadow : [['initial'], '!important'],        // no focus animation
             }),
         ], { specificityWeight: 2 }),
     });
@@ -791,9 +760,6 @@ export interface CheckProps
         EditableActionControlProps<HTMLInputElement>,
         TogglerActiveProps,
         
-        // layouts:
-        NudeVariant,
-        
         // appearances:
         CheckVariant
 {
@@ -820,7 +786,6 @@ export function Check(props: CheckProps) {
     
     
     // variants:
-    const nudeVariant  = useNudeVariant({ nude: (props.nude ?? true) });
     const checkVariant = useCheckVariant(props);
     
     
@@ -926,7 +891,6 @@ export function Check(props: CheckProps) {
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                nudeVariant.class,
                 checkVariant.class,
             ]}
             
