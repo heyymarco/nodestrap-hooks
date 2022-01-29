@@ -885,6 +885,7 @@ export function Check(props: CheckProps) {
             
             
             // variants:
+            nude={props.nude ?? true}
             mild={props.mild ?? false}
             
             
