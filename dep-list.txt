@@ -7,7 +7,7 @@
 [published] @cssfn/jss-plugin-nested
 [published] @cssfn/css-types
 [published] @cssfn/css-var
-[modified ] @cssfn/cssfn
+[published] @cssfn/cssfn
 [published] @cssfn/css-config
 [published] @cssfn/react-cssfn
 
@@ -35,12 +35,12 @@
 [published] @nodestrap/indicator
 [published] @nodestrap/control
 [published] @nodestrap/action-control
-[modified ] @nodestrap/editable-control
-[modified ] @nodestrap/editable-text-control
-[modified ] @nodestrap/editable-action-control
+[published] @nodestrap/editable-control
+[published] @nodestrap/editable-text-control
+[published] @nodestrap/editable-action-control
 
 // contents:
-[modified ] @nodestrap/container
+[published] @nodestrap/container
 [published] @nodestrap/content
 
 // simple components:
@@ -52,12 +52,12 @@
 [published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
-[modifiedV] @nodestrap/form
-[modifiedV] @nodestrap/input
-[modifiedV] @nodestrap/range
-[modifiedV] @nodestrap/check
-[modifiedV] @nodestrap/radio
-[modifiedV] @nodestrap/toggler-menu-button
+[published] @nodestrap/form
+[published] @nodestrap/input
+[published] @nodestrap/range
+[published] @nodestrap/check
+[published] @nodestrap/radio
+[published] @nodestrap/toggler-menu-button
 
 // layouts:
 @nodestrap/list
