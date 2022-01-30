@@ -847,7 +847,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
             usesListBasicVariants({
                 additionRemoveBorderSelector    : ['.btn', '.tab', '.breadcrumb', '.bullet'],
                 additionRemoveSeparatorSelector : ['.btn', '.tab', '.breadcrumb', '.bullet'],
-                // specificityWeight            : 2, // not needed
+                // specificityWeight            : 1, // not needed
             }),
         ]),
         ...variants([ 
