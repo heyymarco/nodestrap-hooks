@@ -998,6 +998,11 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                 
                                 
                                 
+                                // sizes:
+                                flex       : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+                                
+                                
+                                
                                 // customize:
                                 ...usesGeneralProps(usesPrefixedProps(cssProps, 'breadcrumbSeparator')), // apply general cssProps starting with breadcrumbSeparator***
                             }),
