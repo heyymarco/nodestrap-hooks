@@ -616,6 +616,24 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                     borderStroke(), // dedicated border stroke for each list & wrapper
                 ]),
             }),
+            ...rule(orientationBlockSelector,  { // block
+                // children:
+                ...children(wrapperElm, {
+                    ...imports([
+                        // borders:
+                        usesBorderAsSeparatorBlock(), // must be placed at the last
+                    ]),
+                }),
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                // children:
+                ...children(wrapperElm, {
+                    ...imports([
+                        // borders:
+                        usesBorderAsSeparatorInline(), // must be placed at the last
+                    ]),
+                }),
+            }),
             
             
             
@@ -635,83 +653,71 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             ...rule(orientationBlockSelector,  { // block
                 // children:
                 ...children(wrapperElm, {
-                    ...style({
-                        // layouts:
-                        flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
-                        
-                        
-                        
-                        // children:
-                        /*
-                            a hack with :not(_)
-                            the total selector combined with parent is something like this: `.list:not(.inline)>*>:not(_):where(:first-child)`, the specificity weight = 2.1
-                            the specificity of 2.1 is a bit higher than:
-                            * `.list.content`             , the specificity weight = 2
-                            * `.someComponent.togglerBtn` , the specificity weight = 2
-                            but can be easily overriden by specificity weight >= 3, like:
-                            * `.list.btn.btn`             , the specificity weight = 3
-                            * `.someComponent.boo.foo`    , the specificity weight = 3
-                        */
-                        ...children(':not(_)', {
-                            ...rule(selectorIsFirstVisibleChild, {
-                                // borders:
-                                // add rounded corners on top:
-                                [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
-                                [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
-                            }),
-                            ...rule(selectorIsLastVisibleChild,  {
-                                // borders:
-                                // add rounded corners on bottom:
-                                [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
-                                [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
-                            }),
+                    // layouts:
+                    flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
+                    
+                    
+                    
+                    // children:
+                    /*
+                        a hack with :not(_)
+                        the total selector combined with parent is something like this: `.list:not(.inline)>*>:not(_):where(:first-child)`, the specificity weight = 2.1
+                        the specificity of 2.1 is a bit higher than:
+                        * `.list.content`             , the specificity weight = 2
+                        * `.someComponent.togglerBtn` , the specificity weight = 2
+                        but can be easily overriden by specificity weight >= 3, like:
+                        * `.list.btn.btn`             , the specificity weight = 3
+                        * `.someComponent.boo.foo`    , the specificity weight = 3
+                    */
+                    ...children(':not(_)', {
+                        ...rule(selectorIsFirstVisibleChild, {
+                            // borders:
+                            // add rounded corners on top:
+                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
+                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
+                        }),
+                        ...rule(selectorIsLastVisibleChild,  {
+                            // borders:
+                            // add rounded corners on bottom:
+                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
+                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
                         }),
                     }),
-                    ...imports([
-                        // borders:
-                        usesBorderAsSeparatorBlock(), // must be placed at the last
-                    ]),
                 }),
             }),
             ...rule(orientationInlineSelector, { // inline
                 // children:
                 ...children(wrapperElm, {
-                    ...style({
-                        // layouts:
-                        flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
-                        
-                        
-                        
-                        // children:
-                        /*
-                            a hack with :not(_)
-                            the total selector combined with parent is something like this: `.list:not(.inline)>*>:not(_):where(:first-child)`, the specificity weight = 2.1
-                            the specificity of 2.1 is a bit higher than:
-                            * `.list.content`             , the specificity weight = 2
-                            * `.someComponent.togglerBtn` , the specificity weight = 2
-                            but can be easily overriden by specificity weight >= 3, like:
-                            * `.list.btn.btn`             , the specificity weight = 3
-                            * `.someComponent.boo.foo`    , the specificity weight = 3
-                        */
-                        ...children(':not(_)', {
-                            ...rule(selectorIsFirstVisibleChild, {
-                                // borders:
-                                // add rounded corners on left:
-                                [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
-                                [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
-                            }),
-                            ...rule(selectorIsLastVisibleChild,  {
-                                // borders:
-                                // add rounded corners on right:
-                                [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
-                                [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
-                            }),
+                    // layouts:
+                    flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
+                    
+                    
+                    
+                    // children:
+                    /*
+                        a hack with :not(_)
+                        the total selector combined with parent is something like this: `.list:not(.inline)>*>:not(_):where(:first-child)`, the specificity weight = 2.1
+                        the specificity of 2.1 is a bit higher than:
+                        * `.list.content`             , the specificity weight = 2
+                        * `.someComponent.togglerBtn` , the specificity weight = 2
+                        but can be easily overriden by specificity weight >= 3, like:
+                        * `.list.btn.btn`             , the specificity weight = 3
+                        * `.someComponent.boo.foo`    , the specificity weight = 3
+                    */
+                    ...children(':not(_)', {
+                        ...rule(selectorIsFirstVisibleChild, {
+                            // borders:
+                            // add rounded corners on left:
+                            [borderRadiusDecls.borderStartStartRadius      ] : 'inherit', // copy wrapper's borderRadius
+                            [borderRadiusDecls.borderEndStartRadius        ] : 'inherit', // copy wrapper's borderRadius
+                        }),
+                        ...rule(selectorIsLastVisibleChild,  {
+                            // borders:
+                            // add rounded corners on right:
+                            [borderRadiusDecls.borderStartEndRadius        ] : 'inherit', // copy wrapper's borderRadius
+                            [borderRadiusDecls.borderEndEndRadius          ] : 'inherit', // copy wrapper's borderRadius
                         }),
                     }),
-                    ...imports([
-                        // borders:
-                        usesBorderAsSeparatorInline(), // must be placed at the last
-                    ]),
                 }),
             }),
             
