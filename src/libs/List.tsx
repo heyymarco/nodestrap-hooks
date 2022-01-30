@@ -1081,7 +1081,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                 ...children(wrapperElm, {
                     // children:
                     ...children(listItemElm, {
-                        ...rule(':not(.void)', {
+                        ...rule(':not(.void)', { // skip separator
                             // children:
                             ...children('::before', {
                                 // counters:
