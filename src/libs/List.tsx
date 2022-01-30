@@ -825,19 +825,17 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                     // variants:
                     usesContentBasicVariants(),
                 ]),
-                ...style({
+                // children:
+                ...children(wrapperElm, {
                     // children:
-                    ...children(wrapperElm, {
-                        // children:
-                        ...children('*', {
-                            ...imports([
-                                // layouts:
-                                usesContentBasicLayout(),
-                                
-                                // children:
-                                usesContentChildren(),
-                            ]),
-                        }),
+                    ...children('*', {
+                        ...imports([
+                            // layouts:
+                            usesContentBasicLayout(),
+                            
+                            // children:
+                            usesContentChildren(),
+                        ]),
                     }),
                 }),
             }),
