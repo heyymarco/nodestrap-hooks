@@ -277,7 +277,7 @@ export const stripoutCommonBasicLayout = () => {
 export const usesListItemInheritMildVariant = () => {
     return style({
         ...variants([
-            rule('.mild>*>&', { // .mild>*>.listItem => specificity weight excluding parent = 1
+            rule('.mild>*>&', { // .mild>*>.listItem => the specificity weight including parent = 2
                 ...imports([
                     mildOf(true),
                 ]),
