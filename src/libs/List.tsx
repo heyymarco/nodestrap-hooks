@@ -732,8 +732,8 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             ...children(['&', wrapperElm], {
                 // borders:
                 ...expandBorderStroke(), // expand borderStroke css vars
-                ...expandBorderRadius(), // expand borderRadius css vars
             }),
+            ...expandBorderRadius(),     // expand borderRadius css vars
         }),
     });
 };
