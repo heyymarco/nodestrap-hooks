@@ -336,7 +336,7 @@ export const usesListItemLayout = (options?: OrientationRuleOptions) => {
             stripoutCommonBasicLayout(),
             
             // layouts:
-            usesListItemBaseLayout(options),
+            usesListItemBaseLayout(options), // must be placed at the last
         ]),
         ...style({
             // layouts:
