@@ -28,7 +28,6 @@ import {
     rule,
     variants,
     states,
-    isNotFirstChild,
     
     
     
@@ -161,6 +160,7 @@ import {
     // selectors:
     selectorIsFirstVisibleChild,
     selectorIsLastVisibleChild,
+    selectorNotfirstVisibleChild,
     
     
     
@@ -983,7 +983,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                 // children:
                 ...children(wrapperElm, {
                     // children:
-                    ...isNotFirstChild({
+                    ...rule(selectorNotfirstVisibleChild, {
                         ...imports([
                             // colors:
                             iconColor(), // do not import `iconColor()` on pseudo `::before`
