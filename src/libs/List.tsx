@@ -475,13 +475,11 @@ export const usesListSeparatorItemLayout = () => {
 
 export const useListSeparatorItemSheet = createUseSheet(() => [
     mainComposition(
-        style({
-            ...rule('&&', { // makes `.ListSeparatorItem` is more specific than `.ListSeparator`
-                ...imports([
-                    // layouts:
-                    usesListSeparatorItemLayout(),
-                ]),
-            }),
+        rule('&&', { // makes `.ListSeparatorItem` is more specific than `.ListSeparator`
+            ...imports([
+                // layouts:
+                usesListSeparatorItemLayout(),
+            ]),
         }),
     ),
 ], /*sheetId :*/'n8qnfmo0ja'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
