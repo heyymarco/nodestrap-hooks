@@ -475,7 +475,7 @@ export const usesListSeparatorItemLayout = () => {
 
 export const useListSeparatorItemSheet = createUseSheet(() => [
     mainComposition(
-        rule('&&', { // makes `.ListSeparatorItem` is more specific than `.ListSeparator`
+        rule('&&', { // makes `.ListSeparatorItem` is more specific than `.ListItem`
             ...imports([
                 // layouts:
                 usesListSeparatorItemLayout(),
