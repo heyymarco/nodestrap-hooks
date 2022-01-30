@@ -828,7 +828,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                 // children:
                 ...children(wrapperElm, {
                     // children:
-                    ...children('*', {
+                    ...children('*', { // Accordion support, both for `listItemElm` and secondListItemElm
                         ...imports([
                             // layouts:
                             usesContentBasicLayout(),
