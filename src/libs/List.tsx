@@ -426,10 +426,10 @@ export const usesListSeparatorItemLayout = () => {
     return style({
         // layouts:
         display        : 'flex',    // use block flexbox, so it takes the entire wrapper's width
-        ...rule(parentOrientationBlockSelector, {
+        ...rule(parentOrientationBlockSelector, { // block
             flexDirection     : 'row',    // items are stacked horizontally
         }),
-        ...rule(parentOrientationInlineSelector, {
+        ...rule(parentOrientationInlineSelector, { // inline
             flexDirection     : 'column', // items are stacked vertically
         }),
         justifyContent : 'center',  // center items (text, icon, etc) horizontally
@@ -465,7 +465,7 @@ export const usesListSeparatorItemLayout = () => {
             marginBlockStart : `calc(${horizontalRule.cssProps.marginBlockStart} / 2)`,
             marginBlockEnd   : `calc(${horizontalRule.cssProps.marginBlockEnd  } / 2)`,
         }),
-        ...rule(parentOrientationInlineSelector, {
+        ...rule(parentOrientationInlineSelector, { // inline
             // children:
             ...children('hr', {
                 // appearances:
