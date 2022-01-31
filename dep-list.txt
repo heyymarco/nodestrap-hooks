@@ -64,7 +64,7 @@
 [published] @nodestrap/card
 
 // statuses:
-@nodestrap/popup
+[modified ] @nodestrap/popup
 @nodestrap/badge
 @nodestrap/busy
 
