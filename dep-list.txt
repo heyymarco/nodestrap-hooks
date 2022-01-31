@@ -41,7 +41,7 @@
 
 // contents:
 [published] @nodestrap/container
-[modified ] @nodestrap/content
+[published] @nodestrap/content
 
 // simple components:
 [published] @nodestrap/visually-hidden
@@ -60,8 +60,8 @@
 [published] @nodestrap/toggler-menu-button
 
 // layouts:
-[modifiedV] @nodestrap/list
-[modifiedV] @nodestrap/card
+[published] @nodestrap/list
+[published] @nodestrap/card
 
 // statuses:
 @nodestrap/popup
