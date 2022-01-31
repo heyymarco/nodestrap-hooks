@@ -191,7 +191,11 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
             ]),
             ...style({
                 // layouts:
-                display : 'block', // fills the entire parent's width
+                display        : 'flex',    // use block flexbox, so it takes the entire parent's width
+                flexDirection  : 'column',  // items are stacked vertically
+                justifyContent : 'start',   // if items are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first item should be visible first
+                alignItems     : 'stretch', // items width are 100% of the parent
+                flexWrap       : 'nowrap',  // prevents the items to wrap to the next column
             }),
         }),
         
