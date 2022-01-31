@@ -649,9 +649,10 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             ...children(wrapperElm, {
                 // layouts:
                 display        : 'flex',    // use block flexbox, so it takes the entire List's width
-                justifyContent : 'start',   // if listItems are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first listItem should be visible first
-                alignItems     : 'stretch', // listItems width are 100% of the wrapper (for variant `.block`) or height (for variant `.inline`)
-                flexWrap       : 'nowrap',  // no wrapping
+                flexDirection  : 'inherit', // copy ListItem's stack direction
+                justifyContent : 'inherit', // copy ListItem's justifyContent
+                alignItems     : 'inherit', // copy ListItem's justifyContent
+                flexWrap       : 'inherit', // copy ListItem's flexWrap
                 
                 
                 
@@ -661,11 +662,6 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             ...rule(orientationBlockSelector,  { // block
                 // children:
                 ...children(wrapperElm, {
-                    // layouts:
-                    flexDirection : 'column', // listItem's items are stacked vertically (supports for the Accordion at blockStyle)
-                    
-                    
-                    
                     // children:
                     /*
                         a hack with :not(_)
@@ -696,11 +692,6 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
             ...rule(orientationInlineSelector, { // inline
                 // children:
                 ...children(wrapperElm, {
-                    // layouts:
-                    flexDirection : 'row', // listItem's items are stacked horizontally (supports for the Accordion at inlineStyle)
-                    
-                    
-                    
                     // children:
                     /*
                         a hack with :not(_)
