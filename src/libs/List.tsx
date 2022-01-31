@@ -309,6 +309,9 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
     
     return style({
         // borders:
+        /*
+            exploits the borders as a horizontal/vertical separator depending on the List's orientation.
+        */
         ...rule(parentOrientationBlockSelector,  { // block
             ...imports([
                 usesBorderAsSeparatorBlock(),      // must be placed at the last
