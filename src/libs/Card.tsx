@@ -337,8 +337,6 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
             ...expandBorderStroke(), // expand borderStroke css vars
             ...expandBorderRadius(), // expand borderRadius css vars
         }),
-        ...variants([
-        ]),
     });
 };
 export const usesCardVariants = () => {
