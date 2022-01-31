@@ -63,9 +63,6 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesNudeVariant,
-    NudeVariant,
-    useNudeVariant,
 }                           from './Basic'
 import {
     // hooks:
@@ -178,7 +175,6 @@ export const usesPopupVariants = () => {
             
             // layouts:
             sizes(),
-            usesNudeVariant(),
         ]),
     });
 };
@@ -266,10 +262,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     extends
-        IndicatorProps<TElement>,
-        
-        // layouts:
-        NudeVariant
+        IndicatorProps<TElement>
 {
     // popups:
     targetRef?      : React.RefObject<HTMLElement>|HTMLElement|null // getter ref
@@ -281,11 +274,6 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
 export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) {
     // styles:
     const sheet              = usePopupSheet();
-    
-    
-    
-    // variants:
-    const nudeVariant        = useNudeVariant(props);
     
     
     
@@ -369,9 +357,6 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
-            variantClasses={[...(props.variantClasses ?? []),
-                nudeVariant.class,
-            ]}
             
             
             // events:
