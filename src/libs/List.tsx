@@ -789,6 +789,8 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
     // options:
     options = normalizeOrientationRule(options, defaultOrientationRuleOptions);
     const [orientationBlockSelector, orientationInlineSelector] = usesOrientationRule(options);
+    const parentOrientationBlockSelector  = `${orientationBlockSelector}&`;
+    const parentOrientationInlineSelector = `${orientationInlineSelector}&`;
     
     
     
@@ -943,13 +945,13 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                         }),
                         ...states([
                             isPassive({
-                                ...rule(`${orientationBlockSelector}&`,  { // block
+                                ...rule(parentOrientationBlockSelector,  { // block
                                     // borders:
                                     // show parent border right:
                                     borderBlockWidth       : '0px',
                                     borderInlineStartColor : 'transparent',
                                 }),
-                                ...rule(`${orientationInlineSelector}&`, { // inline
+                                ...rule(parentOrientationInlineSelector, { // inline
                                     // borders:
                                     // show parent border bottom:
                                     borderInlineWidth      : '0px',
@@ -957,7 +959,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                 }),
                             }),
                             isActive({
-                                ...rule(`${orientationBlockSelector}&`,  { // block
+                                ...rule(parentOrientationBlockSelector,  { // block
                                     // borders:
                                     // hide parent border right:
                                     borderInlineEndWidth   : '0px',
@@ -965,7 +967,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                                     [borderRadiusDecls.borderStartStartRadius] : cssProps.tabBorderRadius,
                                     [borderRadiusDecls.borderEndStartRadius  ] : cssProps.tabBorderRadius,
                                 }),
-                                ...rule(`${orientationInlineSelector}&`, { // inline
+                                ...rule(parentOrientationInlineSelector, { // inline
                                     // borders:
                                     // hide parent border bottom:
                                     borderBlockEndWidth    : '0px',
