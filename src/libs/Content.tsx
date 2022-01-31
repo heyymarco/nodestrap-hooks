@@ -188,6 +188,9 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
         ...children(figureSelector, {
             ...imports([
                 stripoutFigure(), // clear browser's default styling on figure
+                
+                // borders:
+                usesBorderAsContainer(), // make a nicely rounded corners
             ]),
             ...style({
                 // layouts:
@@ -196,6 +199,13 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
                 justifyContent : 'start',   // if items are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first item should be visible first
                 alignItems     : 'stretch', // items width are 100% of the parent
                 flexWrap       : 'nowrap',  // prevents the items to wrap to the next column
+                
+                
+                
+                // children:
+                ...children('*', {
+                    ...expandBorderRadius(), // expand borderRadius css vars
+                }),
             }),
         }),
         
