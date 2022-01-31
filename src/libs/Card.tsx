@@ -144,6 +144,9 @@ export const usesCardItemLayout = () => {
             // layouts:
             usesIndicatorLayout(),
             usesContentLayout(),
+            
+            // children:
+            usesContentChildren(),
         ]),
         ...style({
             // layouts:
@@ -296,9 +299,6 @@ export const usesCardLayout = (options?: OrientationRuleOptions) => {
                 ...imports([
                     // layouts:
                     usesCardItemLayout(),
-                    
-                    // children:
-                    usesContentChildren(),
                 ]),
             }),
             ...children([headerElm, footerElm], {
