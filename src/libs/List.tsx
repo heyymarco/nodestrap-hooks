@@ -310,7 +310,8 @@ export const usesListItemBaseLayout = (options?: OrientationRuleOptions) => {
     return style({
         // borders:
         /*
-            exploits the borders as a horizontal/vertical separator depending on the List's orientation.
+            Accordion supports: a separator between Accordion's header & body.
+            Exploits the borders as a horizontal/vertical separator depending on the List's orientation.
         */
         ...rule(parentOrientationBlockSelector,  { // block
             ...imports([
@@ -619,6 +620,10 @@ export const usesListLayout = (options?: OrientationRuleOptions) => {
                     borderStroke(), // dedicated border stroke for each list & wrapper
                 ]),
             }),
+            /*
+                A separator between ListItems.
+                Exploits the borders as a horizontal/vertical separator depending on the List's orientation.
+            */
             ...rule(orientationBlockSelector,  { // block
                 // children:
                 ...children(wrapperElm, {
