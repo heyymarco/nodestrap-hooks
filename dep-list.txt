@@ -61,7 +61,7 @@
 
 // layouts:
 [modifiedV] @nodestrap/list
-@nodestrap/card
+[modified ] @nodestrap/card
 
 // statuses:
 @nodestrap/popup
