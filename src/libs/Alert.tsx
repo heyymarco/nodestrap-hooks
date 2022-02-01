@@ -37,15 +37,11 @@ import {
 
 // nodestrap utilities:
 import spacers              from './spacers'     // configurable spaces defs
-import {
-    // utilities:
-    isTypeOf,
-}                           from './utilities'
 
 // nodestrap components:
-import {
+import type {
     // react components:
-    Element,
+    ElementProps,
 }                           from './Element'
 import {
     // hooks:
@@ -304,18 +300,12 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
         
         
         // nodestrap's component:
-        if (isTypeOf(icon, Element)) return (
-            <icon.type
-                // other props:
-                {...icon.props}
-                
-                
-                // classes:
-                classes={[...(icon.props.classes ?? []),
-                    'icon', // inject icon class
-                ]}
-            />
-        );
+        if (React.isValidElement<ElementProps>(icon)) return React.cloneElement(icon, ({
+            // classes:
+            classes: [...(icon.props.classes ?? []),
+                'icon', // inject icon class
+            ],
+        } as ElementProps));
         
         
         
@@ -373,28 +363,22 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
         
         
         // nodestrap's component:
-        if (isTypeOf(control, Element)) return (
-            <control.type
-                // other props:
-                {...control.props}
+        if (React.isValidElement<ElementProps>(control)) return React.cloneElement(control, ({
+            // classes:
+            classes: [...(control.props.classes ?? []),
+                'control', // inject control class
+            ],
+            
+            
+            // actions:
+            onClick: (e) => {
+                control.props.onClick?.(e);
                 
                 
-                // classes:
-                classes={[...(control.props.classes ?? []),
-                    'control', // inject control class
-                ]}
                 
-                
-                // actions:
-                onClick={(e) => {
-                    control.props.onClick?.(e);
-                    
-                    
-                    
-                    handleClose?.(e);
-                }}
-            />
-        );
+                handleClose?.(e);
+            },
+        } as ElementProps));
         
         
         
