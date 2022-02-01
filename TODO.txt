@@ -16,6 +16,7 @@ globalDef([              =>   globalDef(
 
 
 top priority:
+<control.type => React.cloneElement(
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
