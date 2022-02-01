@@ -6,22 +6,25 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    children,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    variants,
     isEmpty,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -106,14 +109,17 @@ export const usesBadgeLayout = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesPopupLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
             display       : 'inline-block', // use inline block, so it takes the width & height as needed
+            ...isEmpty({
+                display   : 'inline-grid',  // required for filling the width & height using `::before` & `::after`
+            }),
             
             
             
@@ -128,10 +134,47 @@ export const usesBadgeLayout = () => {
             
             
             
+            // spacings:
+            ...isEmpty({
+                /*
+                    Make the width and height equal, by making paddingInline === paddingBlock.
+                */
+                
+                // spacings:
+                [paddingDecls.paddingInline] : paddingRefs.paddingBlock,
+            }),
+            
+            
+            
             // typos:
             lineHeight    : 1,
             textAlign     : 'center',
             whiteSpace    : 'nowrap',
+            
+            
+            
+            // children:
+            ...isEmpty({
+                /*
+                    Make the width and height equal, by filling width === height === lineHeight.
+                */
+                
+                // // sizes:
+                // width   : '1em', // not working, (font-width  !== 1em) if the font-size is fractional number
+                // height  : '1em', // not working, (font-height !== 1em) if the font-size is fractional number
+                
+                // children:
+                ...children('::before', {
+                    ...imports([
+                        fillTextLineHeightLayout(),
+                    ]),
+                }),
+                ...children('::after', {
+                    ...imports([
+                        fillTextLineWidthLayout(),
+                    ]),
+                }),
+            }),
             
             
             
@@ -143,49 +186,16 @@ export const usesBadgeLayout = () => {
             // spacings:
             ...expandPadding(cssProps), // expand padding css vars
         }),
-        variants([
-            isEmpty([
-                layout({
-                    // layouts:
-                    display       : 'inline-grid', // required for filling the width & height using `::before` & `::after`
-                    
-                    
-                    
-                    // // sizes:
-                    // width   : '1em', // not working, (font-width  !== 1em) if the font-size is fractional number
-                    // height  : '1em', // not working, (font-height !== 1em) if the font-size is fractional number
-                    
-                    // children:
-                    ...children('::before', [
-                        imports([
-                            fillTextLineHeightLayout(),
-                        ]),
-                    ]),
-                    ...children('::after', [
-                        imports([
-                            fillTextLineWidthLayout(),
-                        ]),
-                    ]),
-                    
-                    
-                    
-                    // spacings:
-                    [paddingDecls.paddingInline] : paddingRefs.paddingBlock, // set paddingInline = paddingBlock
-                }),
-            ]),
-        ]),
-    ]);
+    });
 };
 export const usesBadgeVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     // borders:
     const [, , borderRadiusDecls]       = usesBorderRadius();
@@ -195,68 +205,56 @@ export const usesBadgeVariants = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesPopupVariants(),
             
             // layouts:
             sizes(),
         ]),
-        variants([
-            rule(['.pill', '.circle'], [
-                layout({
-                    // borders:
-                    // big rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.pill,
-                    [borderRadiusDecls.borderStartEndRadius]   : borderRadiuses.pill,
-                    // big rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius]   : borderRadiuses.pill,
-                    [borderRadiusDecls.borderEndEndRadius]     : borderRadiuses.pill,
+        ...variants([
+            rule(['.pill', '.circle'], {
+                // borders:
+                // big rounded corners on top:
+                [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.pill,
+                [borderRadiusDecls.borderStartEndRadius]   : borderRadiuses.pill,
+                // big rounded corners on bottom:
+                [borderRadiusDecls.borderEndStartRadius]   : borderRadiuses.pill,
+                [borderRadiusDecls.borderEndEndRadius]     : borderRadiuses.pill,
+            }),
+            rule(['.square', '.circle'], {
+                ...notNude({
+                    // spacings:
+                    [paddingDecls.paddingInline] : paddingRefs.paddingBlock, // set paddingInline = paddingBlock
                 }),
-            ]),
-            rule(['.square', '.circle'], [
-                variants([
-                    notNude([
-                        layout({
-                            // spacings:
-                            [paddingDecls.paddingInline] : paddingRefs.paddingBlock, // set paddingInline = paddingBlock
-                        }),
-                    ]),
-                ]),
-            ]),
-            rule('.pill', [
-                layout({
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'pill')), // apply general cssProps starting with pill***
-                }),
-            ]),
-            rule('.square', [
-                layout({
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'square')), // apply general cssProps starting with square***
-                }),
-            ]),
-            rule('.circle', [
-                layout({
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'circle')), // apply general cssProps starting with circle***
-                }),
-            ]),
+            }),
+            rule('.pill', {
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'pill')), // apply general cssProps starting with pill***
+            }),
+            rule('.square', {
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'square')), // apply general cssProps starting with square***
+            }),
+            rule('.circle', {
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'circle')), // apply general cssProps starting with circle***
+            }),
         ]),
-    ]);
+    });
 };
 export const usesBadgeStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesPopupStates(),
         ]),
-    ]);
+    });
 };
 
 export const useBadgeSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesBadgeLayout(),
@@ -267,7 +265,7 @@ export const useBadgeSheet = createUseSheet(() => [
             // states:
             usesBadgeStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'a7wkthow0k'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 

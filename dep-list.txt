@@ -65,7 +65,7 @@
 
 // statuses:
 [modified ] @nodestrap/popup
-@nodestrap/badge
+[modified ] @nodestrap/badge
 @nodestrap/busy
 
 notifications:
