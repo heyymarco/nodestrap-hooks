@@ -6,14 +6,13 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
-    
-    
-    
-    // layouts:
-    layout,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -67,51 +66,49 @@ import {
 
 // styles:
 export const usesBusyLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesBadgeLayout(),
         ]),
-        layout({
+        ...style({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesBusyVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesBadgeVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesBusyStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesBadgeStates(),
         ]),
-    ]);
+    });
 };
 
 export const useBusySheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesBusyLayout(),
@@ -122,7 +119,7 @@ export const useBusySheet = createUseSheet(() => [
             // states:
             usesBusyStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'y6oksyrdiq'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
