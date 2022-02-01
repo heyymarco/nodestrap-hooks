@@ -64,13 +64,13 @@
 [published] @nodestrap/card
 
 // statuses:
-[modifiedV] @nodestrap/popup
-[modifiedV] @nodestrap/badge
-[modifiedV] @nodestrap/busy
+[published] @nodestrap/popup
+[published] @nodestrap/badge
+[published] @nodestrap/busy
 
 notifications:
-[modifiedV] @nodestrap/alert
-[modifiedV] @nodestrap/tooltip
+[published] @nodestrap/alert
+[published] @nodestrap/tooltip
 
 // menus:
 @nodestrap/collapse
