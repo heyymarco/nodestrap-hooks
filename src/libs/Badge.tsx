@@ -225,8 +225,12 @@ export const usesBadgeVariants = () => {
             }),
             rule(['.square', '.circle'], {
                 ...notNude({
+                    /*
+                        Make the width and height equal, by making paddingInline === paddingBlock.
+                    */
+                    
                     // spacings:
-                    [paddingDecls.paddingInline] : paddingRefs.paddingBlock, // set paddingInline = paddingBlock
+                    [paddingDecls.paddingInline] : paddingRefs.paddingBlock,
                 }),
             }),
             rule('.pill', {
