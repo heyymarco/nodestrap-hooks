@@ -6,19 +6,17 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
-    variants,
     rule,
 }                           from './cssfn'       // cssfn core
 import {
@@ -95,29 +93,27 @@ import {
 
 // styles:
 export const usesDropdownListElementLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesDropdownElementLayout(),
         ]),
-        layout({
+        ...style({
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'items')), // apply general cssProps starting with items***
         }),
-    ]);
+    });
 };
 
 export const useDropdownListElementSheet = createUseSheet(() => [
-    mainComposition([
-        variants([
-            rule('&&', [ // makes `.DropdownListElement` is more specific than `.List`
-                imports([
-                    // layouts:
-                    usesDropdownListElementLayout(),
-                ]),
+    mainComposition(
+        rule('&&', { // makes `.DropdownListElement` is more specific than `.DropdownElement`
+            ...imports([
+                // layouts:
+                usesDropdownListElementLayout(),
             ]),
-        ]),
-    ]),
+        }),
+    ),
 ], /*sheetId :*/'ib5nas167b'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 

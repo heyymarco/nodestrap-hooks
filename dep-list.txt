@@ -75,7 +75,7 @@ notifications:
 // menus:
 [modified ] @nodestrap/collapse
 [modified ] @nodestrap/dropdown
-@nodestrap/dropdown-list
+[modified ] @nodestrap/dropdown-list
 @nodestrap/dropdown-button
 @nodestrap/dropdown-list-button
 
