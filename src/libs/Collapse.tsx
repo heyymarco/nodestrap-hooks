@@ -9,22 +9,20 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    
-    
-    
     // rules:
-    variants,
-    states,
     rule,
+    states,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -107,7 +105,7 @@ export const defaultOrientationRuleOptions = defaultBlockOrientationRuleOptions;
 //#region activePassive
 /**
  * Uses active & passive states.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents active & passive state definitions.
  */
 export const usesActivePassiveState = () => {
     // dependencies:
@@ -116,30 +114,30 @@ export const usesActivePassiveState = () => {
     
     
     return [
-        () => composition([
-            imports([
+        () => style({
+            ...imports([
                 activePassive(),
             ]),
-            states([
-                isActived([
-                    vars({
+            ...states([
+                isActived({
+                    ...vars({
                         [activePassiveDecls.filter] : cssProps.filterActive,
                     }),
-                ]),
-                isActivating([
-                    vars({
+                }),
+                isActivating({
+                    ...vars({
                         [activePassiveDecls.filter] : cssProps.filterActive,
                         [activePassiveDecls.anim  ] : cssProps.animActive,
                     }),
-                ]),
-                isPassivating([
-                    vars({
+                }),
+                isPassivating({
+                    ...vars({
                         [activePassiveDecls.filter] : cssProps.filterActive,
                         [activePassiveDecls.anim  ] : cssProps.animPassive,
                     }),
-                ]),
+                }),
             ]),
-        ]),
+        }),
         activePassiveRefs,
         activePassiveDecls,
         ...restActivePassive,
@@ -157,54 +155,45 @@ export const usesCollapseLayout = (options?: OrientationRuleOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesPopupLayout(),
         ]),
-        layout({
+        ...style({
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            ...rule(orientationBlockSelector,  { // block
+                // overwrites propName = propName{Block}:
+                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                // overwrites propName = propName{Inline}:
+                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
+            }),
         }),
-        variants([
-            /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockSelector,  [ // block
-                layout({
-                    // overwrites propName = propName{Block}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
-                }),
-            ]),
-            rule(orientationInlineSelector, [ // inline
-                layout({
-                    // overwrites propName = propName{Inline}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
-                }),
-            ]),
-        ]),
-    ]);
+    });
 };
 export const usesCollapseVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesPopupVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesCollapseStates = () => {
     // dependencies:
@@ -214,17 +203,17 @@ export const usesCollapseStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesPopupStates(),
             activePassive(),
         ]),
-    ]);
+    });
 };
 
 export const useCollapseSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesCollapseLayout(),
@@ -235,7 +224,7 @@ export const useCollapseSheet = createUseSheet(() => [
             // states:
             usesCollapseStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'gh2oi6zjs0'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 

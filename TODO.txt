@@ -16,6 +16,7 @@ globalDef([              =>   globalDef(
 
 
 top priority:
+/* the orientation variants are part of the layout, because without these variants the layout is broken */
 <control.type => React.cloneElement(
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
