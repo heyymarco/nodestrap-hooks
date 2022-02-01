@@ -8,21 +8,24 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    children,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    rules,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -99,48 +102,64 @@ export const usesTooltipLayout = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesPopupLayout(),
         ]),
-        layout({
+        ...style({
             // children:
-            ...children(arrowWrapperElm, [
-                layout({
-                    // children:
-                    ...children(arrowElm, [
-                        imports([
-                            // colors:
-                            border(),
-                            
-                            // borders:
-                            borderStroke(),
-                        ]),
-                        layout({
-                            // layouts:
-                            display : 'block',
-                            content : '""',
-                            
-                            
-                            
-                            // backgrounds:
-                            backg   : backgRefs.backg,
-                            
-                            
-                            
-                            // borders:
-                            ...expandBorderStroke(), // expand borderStroke css vars
-                            borderInlineStartColor : 'transparent',
-                            borderBlockStartColor  : 'transparent',
-                            
-                            
-                            
-                            // customize:
-                            ...usesGeneralProps(usesPrefixedProps(cssProps, 'arrow')), // apply general cssProps starting with arrow***
-                        }),
+            ...children(arrowWrapperElm, {
+                // children:
+                ...children(arrowElm, {
+                    ...imports([
+                        // colors:
+                        border(),
+                        
+                        // borders:
+                        borderStroke(),
                     ]),
+                    ...style({
+                        // layouts:
+                        display : 'block',
+                        content : '""',
+                        
+                        
+                        
+                        // backgrounds:
+                        backg   : backgRefs.backg,
+                        
+                        
+                        
+                        // borders:
+                        ...expandBorderStroke(), // expand borderStroke css vars
+                        borderInlineStartColor : 'transparent',
+                        borderBlockStartColor  : 'transparent',
+                        
+                        
+                        
+                        // customize:
+                        ...usesGeneralProps(usesPrefixedProps(cssProps, 'arrow')), // apply general cssProps starting with arrow***
+                    }),
                 }),
+            }),
+            ...rules([
+                ...['top', 'bottom', 'left', 'right'].map((tooltipPos) =>
+                    rule(`[data-popper-placement^="${tooltipPos}"]>&`, {
+                        // children:
+                        ...children(arrowWrapperElm, {
+                            [tooltipPos] : 'calc(100% - 0.7px)',
+                            
+                            
+                            
+                            // children:
+                            ...children(arrowElm, {
+                                // customize:
+                                ...usesGeneralProps(usesPrefixedProps(usesPrefixedProps(cssProps, 'arrow'), tooltipPos)), // apply general cssProps starting with arrow*** and then starting with ***${tooltipPos}
+                            }),
+                        }),
+                    }),
+                ),
             ]),
             
             
@@ -148,66 +167,40 @@ export const usesTooltipLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-        variants([
-            ...['top', 'bottom', 'left', 'right'].map((tooltipPos) =>
-                rule(`[data-popper-placement^="${tooltipPos}"]>&`, [
-                    layout({
-                        // children:
-                        ...children(arrowWrapperElm, [
-                            layout({
-                                [tooltipPos] : 'calc(100% - 0.7px)',
-                                
-                                
-                                
-                                // children:
-                                ...children(arrowElm, [
-                                    layout({
-                                        // customize:
-                                        ...usesGeneralProps(usesPrefixedProps(usesPrefixedProps(cssProps, 'arrow'), tooltipPos)), // apply general cssProps starting with arrow*** and then starting with ***${tooltipPos}
-                                    }),
-                                ]),
-                            }),
-                        ]),
-                    }),
-                ]),
-            ),
-        ]),
-    ]);
+    });
 };
 export const usesTooltipVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesPopupVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesTooltipStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesPopupStates(),
         ]),
-    ]);
+    });
 };
 
 export const useTooltipSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesTooltipLayout(),
@@ -218,7 +211,7 @@ export const useTooltipSheet = createUseSheet(() => [
             // states:
             usesTooltipStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'3h41koviqh'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
