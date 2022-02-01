@@ -6,14 +6,17 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
+    //combinators:
     children,
 }                           from './cssfn'       // cssfn core
 import {
@@ -83,13 +86,13 @@ const bodyElm    = '.body';
 const controlElm = '.control';
 
 export const usesAlertLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesPopupLayout(),
             usesContentLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
             display             : 'grid', // use css grid for layouting, so we can customize the desired area later.
             
@@ -117,74 +120,66 @@ export const usesAlertLayout = () => {
             
             
             // children:
-            ...children(iconElm, [
-                layout({
-                    // layouts:
-                    gridArea    : '1 / -3', // the first row / the third column starting from the last
-                    
-                    
-                    
-                    // sizes:
-                    justifySelf : 'center', // align horizontally to center
-                    alignSelf   : 'start',  // align vertically   to top
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'icon')), // apply general cssProps starting with icon***
-                }),
-            ]),
-            ...children(bodyElm, [
-                layout({
-                    // layouts:
-                    gridArea : 'body',
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'body')), // apply general cssProps starting with body***
-                }),
-            ]),
-            ...children(controlElm, [
-                layout({
-                    // layouts:
-                    gridArea    : '1 / 2',  // the first row / the second column
-                    
-                    
-                    
-                    // sizes:
-                    justifySelf : 'center', // align horizontally to center
-                    alignSelf   : 'start',  // align vertically   to top
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'control')), // apply general cssProps starting with control***
-                }),
-            ]),
+            ...children(iconElm, {
+                // layouts:
+                gridArea    : '1 / -3', // the first row / the third column starting from the last
+                
+                
+                
+                // sizes:
+                justifySelf : 'center', // align horizontally to center
+                alignSelf   : 'start',  // align vertically   to top
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'icon')), // apply general cssProps starting with icon***
+            }),
+            ...children(bodyElm, {
+                // layouts:
+                gridArea : 'body',
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'body')), // apply general cssProps starting with body***
+            }),
+            ...children(controlElm, {
+                // layouts:
+                gridArea    : '1 / 2',  // the first row / the second column
+                
+                
+                
+                // sizes:
+                justifySelf : 'center', // align horizontally to center
+                alignSelf   : 'start',  // align vertically   to top
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'control')), // apply general cssProps starting with control***
+            }),
             
             
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesAlertVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesPopupVariants(),
             usesContentVariants(),
@@ -192,19 +187,19 @@ export const usesAlertVariants = () => {
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 export const usesAlertStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesPopupStates(),
         ]),
-    ]);
+    });
 };
 
 export const useAlertSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesAlertLayout(),
@@ -215,7 +210,7 @@ export const useAlertSheet = createUseSheet(() => [
             // states:
             usesAlertStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'a5qyy5nbby'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
