@@ -73,9 +73,9 @@ notifications:
 [published] @nodestrap/tooltip
 
 // menus:
-[modified ] @nodestrap/collapse
-[modified ] @nodestrap/dropdown
-[modified ] @nodestrap/dropdown-list
+[modifiedV] @nodestrap/collapse
+[modifiedV] @nodestrap/dropdown
+[modifiedV] @nodestrap/dropdown-list
 [noChanges] @nodestrap/dropdown-button
 [noChanges] @nodestrap/dropdown-list-button
 
