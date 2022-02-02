@@ -73,11 +73,11 @@ notifications:
 [published] @nodestrap/tooltip
 
 // menus:
-[modifiedV] @nodestrap/collapse
-[modifiedV] @nodestrap/dropdown
-[modifiedV] @nodestrap/dropdown-list
-[noChanges] @nodestrap/dropdown-button
-[noChanges] @nodestrap/dropdown-list-button
+[published] @nodestrap/collapse
+[published] @nodestrap/dropdown
+[published] @nodestrap/dropdown-list
+[published] @nodestrap/dropdown-button
+[published] @nodestrap/dropdown-list-button
 
 // composite components:
 @nodestrap/progress
