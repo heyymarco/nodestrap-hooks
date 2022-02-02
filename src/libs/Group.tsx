@@ -6,19 +6,17 @@ import {
 // cssfn:
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    
-    
-    
     // rules:
-    variants,
     rule,
 }                           from './cssfn'       // cssfn core
 import {
@@ -111,11 +109,11 @@ export const usesGroupItemLayout = (options?: OrientationRuleOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             usesListItemBaseLayout(options),
         ]),
-        layout({
+        ...style({
             // no layout modification needed.
             // the layout is belong to the Button/Radio/Check itself.
             
@@ -130,43 +128,39 @@ export const usesGroupItemLayout = (options?: OrientationRuleOptions) => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-    ]);
+    });
 };
 export const usesGroupItemVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 
 export const useGroupItemSheet = createUseSheet(() => [
-    mainComposition([
-        variants([
-            rule('&&', [ // makes `.GroupItem` is more specific than `.FooButton.FooVariant`
-                imports([
-                    // layouts:
-                    usesGroupItemLayout(),
-                    
-                    // variants:
-                    usesGroupItemVariants(),
-                ]),
+    mainComposition(
+        rule('&&', { // makes `.GroupItem` is more specific than `.FooButton.FooVariant`
+            ...imports([
+                // layouts:
+                usesGroupItemLayout(),
+                
+                // variants:
+                usesGroupItemVariants(),
             ]),
-        ]),
-    ]),
+        }),
+    ),
 ], /*sheetId :*/'d2scsx4yqe'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
