@@ -11,21 +11,23 @@ import type {
 }                           from './types'       // cssfn's types
 import {
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    children,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -149,13 +151,13 @@ export const usesCarouselItemsLayout = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // resets:
             stripoutList(),      // clear browser's default styles
             stripoutScrollbar(), // hides browser's scrollbar
         ]),
-        layout({
+        ...style({
             // layouts:
             gridArea       : '1 / 1 / -1 / -1', // fills the entire grid areas, from the first row/column to the last row/column
             display        : 'flex',            // use block flexbox, so it takes the entire parent's width
@@ -187,140 +189,129 @@ export const usesCarouselItemsLayout = () => {
             
             
             // children:
-            ...children(itemElm, [
-                imports([
+            ...children(itemElm, {
+                ...imports([
                     usesCarouselItemLayout(),
                 ]),
-            ]),
+            }),
             
             
             
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'items')), // apply general cssProps starting with items***
         }),
-    ]);
+    });
 };
 export const usesCarouselItemLayout = () => {
-    return composition([
-        layout({
-            // layouts:
-            display         : 'flex',   // use block flexbox, so it takes the entire parent's width
-            flexDirection   : 'row',    // the flex direction to horz, so we can adjust the content's height
-            justifyContent  : 'center', // center items horizontally
-            alignItems      : 'center', // if the content's height is shorter than the section, place it at the center vertically
-            flexWrap        : 'nowrap', // no wrapping
-            
-            
-            
-            // sizes:
-            flex            : [[0, 0, '100%']], // ungrowable, unshrinkable, initial 100% parent's width
-            // (important) force the media follow the <li> width, so it doesn't break the flex width:
-            boxSizing       : 'border-box',     // the final size is including borders & paddings
-            inlineSize      : '100%',           // fills the entire parent's width
-            
-            
-            
-            // scrolls:
-            scrollSnapAlign : 'center', // put a magnet at the center
-            scrollSnapStop  : 'normal', // scrolls one by one or multiple at once
-            
-            
-            
-            // children:
-            ...children(mediaElm, [
-                imports([
-                    usesCarouselMediaLayout(),
-                ]),
+    return style({
+        // layouts:
+        display         : 'flex',   // use block flexbox, so it takes the entire parent's width
+        flexDirection   : 'row',    // the flex direction to horz, so we can adjust the content's height
+        justifyContent  : 'center', // center items horizontally
+        alignItems      : 'center', // if the content's height is shorter than the section, place it at the center vertically
+        flexWrap        : 'nowrap', // no wrapping
+        
+        
+        
+        // sizes:
+        flex            : [[0, 0, '100%']], // ungrowable, unshrinkable, initial 100% parent's width
+        // (important) force the media follow the <li> width, so it doesn't break the flex width:
+        boxSizing       : 'border-box',     // the final size is including borders & paddings
+        inlineSize      : '100%',           // fills the entire parent's width
+        
+        
+        
+        // scrolls:
+        scrollSnapAlign : 'center', // put a magnet at the center
+        scrollSnapStop  : 'normal', // scrolls one by one or multiple at once
+        
+        
+        
+        // children:
+        ...children(mediaElm, {
+            ...imports([
+                usesCarouselMediaLayout(),
             ]),
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
         }),
-    ]);
+        
+        
+        
+        // customize:
+        ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
+    });
 };
 export const usesCarouselMediaLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             stripoutImage(), // removes browser's default styling on image
         ]),
-        layout({
+        ...style({
+            // layouts:
+            ...rule(':first-child:last-child', { // only one child
+                display : 'block', // fills the entire parent's width
+            }),
+            
+            
+            
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'media')), // apply general cssProps starting with media***
         }),
-        variants([
-            rule(':first-child:last-child', [ // only one child
-                layout({
-                    // layouts:
-                    display : 'block', // fills the entire parent's width
-                }),
-            ]),
-        ]),
-    ]);
+    });
 };
 
 export const usesNavBtnLayout = () => {
-    return composition([
-        layout({
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'navBtn')), // apply general cssProps starting with navBtn***
-        }),
-    ]);
+    return style({
+        // customize:
+        ...usesGeneralProps(usesPrefixedProps(cssProps, 'navBtn')), // apply general cssProps starting with navBtn***
+    });
 };
 export const usesPrevBtnLayout = () => {
-    return composition([
-        layout({
-            // layouts:
-            gridArea : 'prevBtn',
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'prevBtn')), // apply general cssProps starting with prevBtn***
-        }),
-    ]);
+    return style({
+        // layouts:
+        gridArea : 'prevBtn',
+        
+        
+        
+        // customize:
+        ...usesGeneralProps(usesPrefixedProps(cssProps, 'prevBtn')), // apply general cssProps starting with prevBtn***
+    });
 };
 export const usesNextBtnLayout = () => {
-    return composition([
-        layout({
-            // layouts:
-            gridArea : 'nextBtn',
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'nextBtn')), // apply general cssProps starting with nextBtn***
-        }),
-    ]);
+    return style({
+        // layouts:
+        gridArea : 'nextBtn',
+        
+        
+        
+        // customize:
+        ...usesGeneralProps(usesPrefixedProps(cssProps, 'nextBtn')), // apply general cssProps starting with nextBtn***
+    });
 };
 
 export const usesNavLayout = () => {
-    return composition([
-        layout({
-            // layouts:
-            gridArea    : 'nav',
-            
-            
-            
-            // sizes:
-            justifySelf : 'center', // do not stretch the nav, just place it at the center horizontally
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'nav')), // apply general cssProps starting with nav***
-        }),
-    ]);
+    return style({
+        // layouts:
+        gridArea    : 'nav',
+        
+        
+        
+        // sizes:
+        justifySelf : 'center', // do not stretch the nav, just place it at the center horizontally
+        
+        
+        
+        // customize:
+        ...usesGeneralProps(usesPrefixedProps(cssProps, 'nav')), // apply general cssProps starting with nav***
+    });
 };
 
 export const usesCarouselLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesContentLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
             display             : 'grid', // use css grid for layouting, so we can customize the desired area later.
             
@@ -347,41 +338,39 @@ export const usesCarouselLayout = () => {
             
             
             // children:
-            ...children(itemsElm, [
-                imports([
+            ...children(itemsElm, {
+                ...imports([
                     usesCarouselItemsLayout(),
                 ]),
-            ]),
-            ...children(dummyElm, [
-                layout({
-                    // appearances:
-                 // visibility : 'hidden', // causing onScroll doesn't work in Firefox
-                    opacity    : 0,
-                    zIndex     : -1,
-                }),
-            ]),
+            }),
+            ...children(dummyElm, {
+                // appearances:
+             // visibility : 'hidden', // causing onScroll doesn't work in Firefox
+                opacity    : 0,
+                zIndex     : -1,
+            }),
             
-            ...children([prevBtnElm, nextBtnElm], [
-                imports([
+            ...children([prevBtnElm, nextBtnElm], {
+                ...imports([
                     usesNavBtnLayout(),
                 ]),
-            ]),
-            ...children(prevBtnElm, [
-                imports([
+            }),
+            ...children(prevBtnElm, {
+                ...imports([
                     usesPrevBtnLayout(),
                 ]),
-            ]),
-            ...children(nextBtnElm, [
-                imports([
+            }),
+            ...children(nextBtnElm, {
+                ...imports([
                     usesNextBtnLayout(),
                 ]),
-            ]),
+            }),
             
-            ...children(navElm, [
-                imports([
+            ...children(navElm, {
+                ...imports([
                     usesNavLayout(),
                 ]),
-            ]),
+            }),
             
             
             
@@ -393,34 +382,32 @@ export const usesCarouselLayout = () => {
             // spacings:
             ...expandPadding(cssProps), // expand padding css vars
         }),
-    ]);
+    });
 };
 export const usesCarouselVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesContentVariants(),
             
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 
 export const useCarouselSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesCarouselLayout(),
@@ -428,7 +415,7 @@ export const useCarouselSheet = createUseSheet(() => [
             // variants:
             usesCarouselVariants(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'v35mas3qt6'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
