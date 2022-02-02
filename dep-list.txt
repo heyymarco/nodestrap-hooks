@@ -80,7 +80,7 @@ notifications:
 [published] @nodestrap/dropdown-list-button
 
 // composite components:
-@nodestrap/progress
+[modified ] @nodestrap/progress
 @nodestrap/nav
 @nodestrap/navscroll
 @nodestrap/accordion

@@ -17,23 +17,26 @@ import {
     
     
     // compositions:
-    composition,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    children,
-    
-    
-    
     // rules:
+    rule,
     variants,
     states,
-    rule,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -80,6 +83,8 @@ import {
     OrientationVariant,
     useOrientationVariant,
     
+    ThemeName,
+    usesThemeDefault as basicUsesThemeDefault,
     notOutlined,
     notMild,
     usesMildVariant,
@@ -130,6 +135,9 @@ export const defaultOrientationRuleOptions = defaultInlineOrientationRuleOptions
 
 // colors:
 
+// change default parameter from `null` to 'primary':
+export const usesThemeDefault = (themeName: ThemeName|null = 'primary') => basicUsesThemeDefault(themeName);
+
 //#region alternate backg
 export interface AltBackgVars {
     /**
@@ -149,7 +157,7 @@ const [altBackgRefs, altBackgDecls] = createCssVar<AltBackgVars>();
 
 /**
  * Uses alternate background layer(s).
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents alternate background layer(s) definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents alternate background layer(s) definitions.
  */
 export const usesAltBackg = () => {
     // dependencies:
@@ -158,8 +166,8 @@ export const usesAltBackg = () => {
     
     
     return [
-        () => composition([
-            vars({
+        () => style({
+            ...vars({
                 [altBackgDecls.backgFn ] : mildRefs.backgFn,
                 [altBackgDecls.backgCol] : 'transparent',
                 [altBackgDecls.backg   ] : [ // single array => makes the JSS treat as comma separated values
@@ -169,21 +177,21 @@ export const usesAltBackg = () => {
                     altBackgRefs.backgCol,
                 ],
             }),
-            variants([
-                notOutlined([
-                    vars({
+            ...variants([
+                notOutlined({
+                    ...vars({
                         [altBackgDecls.backgCol] : colors.backg,
                     }),
-                    variants([
-                        notMild([
-                            vars({
+                    ...variants([
+                        notMild({
+                            ...vars({
                                 [altBackgDecls.backgCol] : altBackgRefs.backgFn,
                             }),
-                        ]),
+                        }),
                     ]),
-                ]),
+                }),
             ]),
-        ]),
+        }),
         altBackgRefs,
         altBackgDecls,
     ] as const;
@@ -203,12 +211,13 @@ const [progressBarVarRefs, progressBarVarDecls] = createCssVar<ProgressBarVars>(
 
 /**
  * Uses ProgressBar variables.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents ProgressBar variables definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents ProgressBar variables definitions.
  */
 export const usesProgressBarVars = () => {
     return [
-        () => composition([
-        ]),
+        () => style({
+            // no style yet
+        }),
         progressBarVarRefs,
         progressBarVarDecls,
     ] as const;
@@ -234,24 +243,24 @@ export const notRunning = (styles: StyleCollection) => rule(selectorNotRunning, 
 
 /**
  * Uses running states.
- * @returns A `[Factory<StyleCollection>, ReadonlyRefs, ReadonlyDecls]` represents running state definitions.
+ * @returns A `[Factory<Rule>, ReadonlyRefs, ReadonlyDecls]` represents running state definitions.
  */
 export const usesRunningState = () => {
     return [
-        () => composition([
-            states([
-                notRunning([
-                    vars({
+        () => style({
+            ...states([
+                notRunning({
+                    ...vars({
                         [runningDecls.anim] : 'initial',
                     }),
-                ]),
-                isRunning([
-                    vars({
+                }),
+                isRunning({
+                    ...vars({
                         [runningDecls.anim] : cssProps.itemAnimRunning,
                     }),
-                ]),
+                }),
             ]),
-        ]),
+        }),
         runningRefs,
         runningDecls,
     ] as const;
@@ -299,17 +308,24 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // colors:
+            usesThemeDefault(),
             altBackg(),
             
             // layouts:
             usesListLayout(options),
         ]),
-        layout({
+        ...style({
             // layouts:
-            justifyContent : 'start',   // if wrappers are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first wrapper should be visible first
+            ...rule(orientationBlockSelector,  { // block
+                display    : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                display    : 'flex',        // use block flexbox, so it takes the entire parent's width
+            }),
+            justifyContent : 'start',       // if wrappers are not growable, the excess space (if any) placed at the end, and if no sufficient space available => the first wrapper should be visible first
             
             
             
@@ -320,49 +336,30 @@ export const usesProgressLayout = (options?: OrientationRuleOptions) => {
             
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
+            ...rule(orientationBlockSelector,  { // block
+                // overwrites propName = propName{Block}:
+                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
+            }),
+            ...rule(orientationInlineSelector, { // inline
+                // overwrites propName = propName{Inline}:
+                ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
+            }),
         }),
-        variants([
-            /* the orientation variants are part of the layout, because without these variants the layout is broken */
-            rule(orientationBlockSelector,  [ // block
-                layout({
-                    // layouts:
-                    display : 'inline-flex', // use inline flexbox, so it takes the width & height as needed
-                    
-                    
-                    
-                    // overwrites propName = propName{Block}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'block')),
-                }),
-            ]),
-            rule(orientationInlineSelector, [ // inline
-                layout({
-                    // layouts:
-                    display : 'flex',        // use block flexbox, so it takes the entire parent's width
-                    
-                    
-                    
-                    // overwrites propName = propName{Inline}:
-                    ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, 'inline')),
-                }),
-            ]),
-        ]),
-    ]);
+    });
 };
 export const usesProgressVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesBasicVariants(),
             usesListBasicVariants(),
@@ -370,11 +367,11 @@ export const usesProgressVariants = () => {
             // layouts:
             sizes(),
         ]),
-    ]);
+    });
 };
 
 export const useProgressSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesProgressLayout(),
@@ -382,21 +379,21 @@ export const useProgressSheet = createUseSheet(() => [
             // variants:
             usesProgressVariants(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'vcm24axqvn'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
 export const usesProgressBarInheritMildVariant = () => {
-    return composition([
-        variants([
-            rule('.mild>&', [ // .mild>.progress => specificity weight excluding parent = 1
-                imports([
+    return style({
+        ...variants([
+            rule('.mild>&', { // .mild>.progress => the specificity weight including parent = 2
+                ...imports([
                     mildOf(true),
                 ]),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 
@@ -413,56 +410,54 @@ export const usesProgressBarLayout = () => {
     
     
     
-    return composition([
-        layout({
-            // sizes:
-            flex     : [[progressBarVarRefs.valueRatio, progressBarVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `valueRatio` for the grow/shrink ratio
-            overflow : 'hidden',
-            
-            
-            
-            // children:
-            ...children(listItemElm, [
-                imports([
-                    // layouts:
-                    usesBasicLayout(),
-                    
-                    // progressBar vars:
-                    progressBarVars(),
-                ]),
-                layout({
-                    // layouts:
-                    display        : 'flex',   // fills the entire wrapper's width
-                    justifyContent : 'center', // center items (text, icon, etc) horizontally
-                    alignItems     : 'center', // center items (text, icon, etc) vertically
-                    
-                    
-                    
-                    // borders:
-                    [borderStrokeDecls.borderWidth           ] : '0px', // discard border
-                    // remove rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : '0px',
-                    [borderRadiusDecls.borderStartEndRadius  ] : '0px',
-                    // remove rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius  ] : '0px',
-                    [borderRadiusDecls.borderEndEndRadius    ] : '0px',
-                    
-                    
-                    
-                    // sizes:
-                    flex : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
-                }),
-                vars({
-                    [bcssDecls.backgGrad] : cssProps.backgGrad,
-                }),
+    return style({
+        // sizes:
+        flex     : [[progressBarVarRefs.valueRatio, progressBarVarRefs.valueRatio, 0]], // growable, shrinkable, initial from 0 width; using `valueRatio` for the grow/shrink ratio
+        overflow : 'hidden',
+        
+        
+        
+        // children:
+        ...children(listItemElm, {
+            ...imports([
+                // layouts:
+                usesBasicLayout(),
+                
+                // progressBar vars:
+                progressBarVars(),
             ]),
+            ...style({
+                // layouts:
+                display        : 'flex',   // fills the entire wrapper's width
+                justifyContent : 'center', // center items (text, icon, etc) horizontally
+                alignItems     : 'center', // center items (text, icon, etc) vertically
+                
+                
+                
+                // borders:
+                [borderStrokeDecls.borderWidth           ] : '0px', // discard border
+                // remove rounded corners on top:
+                [borderRadiusDecls.borderStartStartRadius] : '0px',
+                [borderRadiusDecls.borderStartEndRadius  ] : '0px',
+                // remove rounded corners on bottom:
+                [borderRadiusDecls.borderEndStartRadius  ] : '0px',
+                [borderRadiusDecls.borderEndEndRadius    ] : '0px',
+                
+                
+                
+                // sizes:
+                flex : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height (for variant `.block`) or width (for variant `.inline`)
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'item')), // apply general cssProps starting with item***
+            }),
+            ...vars({
+                [bcssDecls.backgGrad] : cssProps.backgGrad,
+            }),
         }),
-    ]);
+    });
 };
 export const usesProgressBarVariants = () => {
     // dependencies:
@@ -474,74 +469,64 @@ export const usesProgressBarVariants = () => {
     const [running, runningRefs] = usesRunningState();
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        layout({
-            // children:
-            ...children(listItemElm, [
-                imports([
-                    // variants:
-                    usesBasicVariants(),
-                    usesProgressBarInheritMildVariant(),
-                    
-                    // layouts:
-                    sizes(),
-                ]),
+    return style({
+        // children:
+        ...children(listItemElm, {
+            ...imports([
+                // variants:
+                usesBasicVariants(),
+                usesProgressBarInheritMildVariant(),
+                
+                // layouts:
+                sizes(),
             ]),
         }),
-        variants([
-            rule('.striped', [
-                imports([
+        ...variants([
+            rule('.striped', {
+                ...imports([
                     // states:
                     running(),
                 ]),
-                layout({
-                    // children:
-                    ...children(listItemElm, [
-                        layout({
-                            // backgrounds:
-                            backg : [ // single array => makes the JSS treat as comma separated values
-                                // top layer:
-                                `${cssProps.itemBackgOverlayImg} left/${cssProps.itemBackgOverlaySize} ${cssProps.itemBackgOverlaySize}`,
-                                
-                                // bottom layer:
-                                backgRefs.backg,
-                            ],
-                            
-                            
-                            
-                            // animations:
-                            anim  : runningRefs.anim,
-                        }),
-                    ]),
+                // children:
+                ...children(listItemElm, {
+                    // backgrounds:
+                    backg : [ // single array => makes the JSS treat as comma separated values
+                        // top layer:
+                        `${cssProps.itemBackgOverlayImg} left/${cssProps.itemBackgOverlaySize} ${cssProps.itemBackgOverlaySize}`,
+                        
+                        // bottom layer:
+                        backgRefs.backg,
+                    ],
+                    
+                    
+                    
+                    // animations:
+                    anim  : runningRefs.anim,
                 }),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 
 export const useProgressBarSheet = createUseSheet(() => [
-    mainComposition([
-        variants([
-            rule('&&', [ // makes `.ProgressBar` is more specific than `wrapperElm`
-                imports([
-                    // layouts:
-                    usesProgressBarLayout(),
-                    
-                    // variants:
-                    usesProgressBarVariants(),
-                ]),
+    mainComposition(
+        rule('&&', { // makes `.ProgressBar` is more specific than `.ListItem`
+            ...imports([
+                // layouts:
+                usesProgressBarLayout(),
+                
+                // variants:
+                usesProgressBarVariants(),
             ]),
-        ]),
-    ]),
+        }),
+    ),
 ], /*sheetId :*/'ymt3ybn64g'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
