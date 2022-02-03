@@ -516,9 +516,11 @@ export const usesResponsiveContainerGridLayout = () => {
         
         // spacings:
         ...expandPadding(cssProps), // expand padding css vars
-        // since we use grid as paddings, so the css paddings are no longer needed:
-        paddingInline : null, // turn off physical padding, use logical padding we've set above
-        paddingBlock  : null, // turn off physical padding, use logical padding we've set above
+        ...style({
+            // since we use grid as paddings, so the css paddings are no longer needed:
+            paddingInline : null, // turn off physical padding, use logical padding we've set above
+            paddingBlock  : null, // turn off physical padding, use logical padding we've set above
+        }),
     });
 };
 
