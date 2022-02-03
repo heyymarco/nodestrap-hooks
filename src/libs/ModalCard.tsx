@@ -9,22 +9,25 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
-    composition,
     compositionOf,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
     imports,
     
     
     
-    // layouts:
-    layout,
-    children,
-    
-    
-    
     // rules:
-    variants,
     rule,
+    variants,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -124,12 +127,12 @@ export const useModalCardVariant = (props: ModalCardVariant) => {
 
 // styles:
 export const usesModalCardElementLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesModalElementLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
             display        : 'flex',
             flexDirection  : 'column',
@@ -140,56 +143,48 @@ export const usesModalCardElementLayout = () => {
             
             
             // children:
-            ...children('*', [ // Card
-                layout({
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'card')), // apply general cssProps starting with card***
-                }),
-            ]),
+            ...children('*', { // Card
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'card')), // apply general cssProps starting with card***
+            }),
         }),
-    ]);
+    });
 };
 export const usesModalCardElementVariants = () => {
-    return composition([
-        variants([
-            rule(':not(.scrollable)>&', [
-                layout({
-                    // sizes:
-                    flex          : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height
-                    
-                    boxSizing     : 'content-box',    // the final size is excluding borders & paddings
-                    inlineSize    : 'max-content',    // forcing the Card's width follows the Card's items width
-                    blockSize     : 'max-content',    // forcing the Card's height follows the Card's items height
+    return style({
+        ...variants([
+            rule(':not(.scrollable)>&', {
+                // sizes:
+                flex          : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height
+                
+                boxSizing     : 'content-box',    // the final size is excluding borders & paddings
+                inlineSize    : 'max-content',    // forcing the Card's width follows the Card's items width
+                blockSize     : 'max-content',    // forcing the Card's height follows the Card's items height
+            }),
+            rule('.scrollable>&', {
+                // sizes:
+                flex          : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height
+                
+                boxSizing     : 'border-box',     // the final size is including borders & paddings
+                inlineSize    : 'auto',           // follows the content's width, but
+                maxInlineSize : '100%',           // up to the maximum available parent's width
+                blockSize     : 'auto',           // follows the content's height, but
+                maxBlockSize  : '100%',           // up to the maximum available parent's height
+                overflow      : 'hidden',         // force the Card to scroll
+                
+                
+                
+                // children:
+                ...children('*', { // Card
+                    boxSizing     : 'inherit',
+                    inlineSize    : 'inherit',
+                    maxInlineSize : 'inherit',
+                    blockSize     : 'inherit',
+                    maxBlockSize  : 'inherit',
                 }),
-            ]),
-            rule('.scrollable>&', [
-                layout({
-                    // sizes:
-                    flex          : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height
-                    
-                    boxSizing     : 'border-box',     // the final size is including borders & paddings
-                    inlineSize    : 'auto',           // follows the content's width, but
-                    maxInlineSize : '100%',           // up to the maximum available parent's width
-                    blockSize     : 'auto',           // follows the content's height, but
-                    maxBlockSize  : '100%',           // up to the maximum available parent's height
-                    overflow      : 'hidden',         // force the Card to scroll
-                    
-                    
-                    
-                    // children:
-                    ...children('*', [ // Card
-                        layout({
-                            boxSizing     : 'inherit',
-                            inlineSize    : 'inherit',
-                            maxInlineSize : 'inherit',
-                            blockSize     : 'inherit',
-                            maxBlockSize  : 'inherit',
-                        }),
-                    ]),
-                }),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 export const usesModalCardElementStates = () => {
     // dependencies:
@@ -199,74 +194,66 @@ export const usesModalCardElementStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             excited(),
         ]),
-    ]);
+    });
 };
 
 export const usesActionBarLayout = () => {
-    return composition([
-        layout({
-            // layouts:
-            display        : 'flex',          // use block flexbox, so it takes the entire parent's width
-            flexDirection  : 'row',           // items are stacked horizontally
-            justifyContent : 'space-between', // items are separated horizontally as far as possible
-            alignItems     : 'center',        // items are centered vertically
-            flexWrap       : 'nowrap',        // no wrapping
-            
-            
-            
-            // children:
-            ...children('*', [
-                variants([
-                    // only one child:
-                    rule(':first-child:last-child', [
-                        layout({
-                            marginInlineStart: 'auto',
-                        }),
-                    ]),
-                ]),
-            ]),
+    return style({
+        // layouts:
+        display        : 'flex',          // use block flexbox, so it takes the entire parent's width
+        flexDirection  : 'row',           // items are stacked horizontally
+        justifyContent : 'space-between', // items are separated horizontally as far as possible
+        alignItems     : 'center',        // items are centered vertically
+        flexWrap       : 'nowrap',        // no wrapping
+        
+        
+        
+        // children:
+        ...children('*', {
+            // only one child:
+            ...rule(':first-child:last-child', {
+                marginInlineStart: 'auto',
+            }),
         }),
-    ]);
+    });
 };
 
 export const useModalCardElementSheet = createUseSheet(() => [
-    mainComposition([
-        variants([
-            rule('&&', [ // makes `.ModalCardElement` is more specific than `.Popup`
-                imports([
-                    // layouts:
-                    usesModalCardElementLayout(),
-                    
-                    // variants:
-                    usesModalCardElementVariants(),
-                    
-                    // states:
-                    usesModalCardElementStates(),
-                ]),
+    mainComposition(
+        rule('&&', { // makes `.ModalCardElement` is more specific than `.Popup`
+            ...imports([
+                // layouts:
+                usesModalCardElementLayout(),
+                
+                // variants:
+                usesModalCardElementVariants(),
+                
+                // states:
+                usesModalCardElementStates(),
             ]),
-        ]),
-    ]),
-    compositionOf('actionBar', [
+        }),
+    ),
+    compositionOf('actionBar',
         imports([
             usesActionBarLayout(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'ifh5e9blw5'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
 
 export const usesModalCardLayout = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             usesModalLayout(),
         ]),
-        layout({
+        ...style({
             // layouts:
          // display      : 'grid',             // already defined in `usesResponsiveContainerGridLayout()`. We use a grid for the layout, so we can align the Card both horizontally & vertically
             
@@ -277,45 +264,37 @@ export const usesModalCardLayout = () => {
             
             
             // children:
-            ...children('*', [
-                layout({
-                    // layouts:
-                    gridArea : 'content',
-                }),
-            ]),
+            ...children('*', {
+                // layouts:
+                gridArea : 'content',
+            }),
             
             //#region psedudo elm for filling the end of horz & vert scroll
-            ...children(['::before', '::after'], [
-                layout({
-                    // layouts:
-                    content     : '""',
-                    display     : 'block',
-                    
-                    
-                    
-                    // sizes:
-                    // fills the entire grid area:
-                    justifySelf : 'stretch',
-                    alignSelf   : 'stretch',
-                    
-                    
-                    
-                    // appearances:
-                    visibility  : 'hidden',
-                }),
-            ]),
-            ...children('::before', [
-                layout({
-                    // layouts:
-                    gridArea    : 'inlineEnd',
-                }),
-            ]),
-            ...children('::after', [
-                layout({
-                    // layouts:
-                    gridArea    : 'blockEnd',
-                }),
-            ]),
+            ...children(['::before', '::after'], {
+                // layouts:
+                content     : '""',
+                display     : 'block',
+                
+                
+                
+                // sizes:
+                // fills the entire grid area:
+                justifySelf : 'stretch',
+                alignSelf   : 'stretch',
+                
+                
+                
+                // appearances:
+                visibility  : 'hidden',
+            }),
+            ...children('::before', {
+                // layouts:
+                gridArea    : 'inlineEnd',
+            }),
+            ...children('::after', {
+                // layouts:
+                gridArea    : 'blockEnd',
+            }),
             //#endregion psedudo elm for filling the end of horz & vert scroll
             
             
@@ -323,55 +302,51 @@ export const usesModalCardLayout = () => {
             // customize:
             ...usesGeneralProps(cssProps), // apply general cssProps
         }),
-        imports([
+        ...imports([
             // layouts:
             usesResponsiveContainerGridLayout(), // applies responsive container functionality using css grid
         ]),
-    ]);
+    });
 };
 export const usesModalCardVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // variants:
             usesModalVariants(),
             
             // layouts:
             sizes(),
         ]),
-        variants([
-            rule(':not(.scrollable)', [
-                layout({
-                    // scrolls:
-                    // scroller at ModalCard's layer
-                    overflow : 'auto', // enable horz & vert scrolling
-                }),
-            ]),
+        ...variants([
+            rule(':not(.scrollable)', {
+                // scrolls:
+                // scroller at ModalCard's layer
+                overflow : 'auto', // enable horz & vert scrolling
+            }),
         ]),
-    ]);
+    });
 };
 export const usesModalCardStates = () => {
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             usesModalStates(),
         ]),
-    ]);
+    });
 };
 
 export const useModalCardSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesModalCardLayout(),
@@ -382,7 +357,7 @@ export const useModalCardSheet = createUseSheet(() => [
             // states:
             usesModalCardStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'j3ol5k9hzm'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
