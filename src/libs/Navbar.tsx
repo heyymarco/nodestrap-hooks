@@ -163,15 +163,15 @@ export const markActive = () => style({
     ...imports([
         controlMarkActive(),
         
-        mildOf(null), // keeps mild variant
+        mildOf(null),          // keeps mild variant
         
-        usesThemeActive(), // switch to active theme
+        usesThemeActive(),     // switch to active theme
     ]),
 });
 export const dontMarkActive = () => style({
     ...imports([
-        outlinedOf(null), // keeps outlined variant
-        mildOf(null),     // keeps mild     variant
+        outlinedOf(null),      // keeps outlined variant
+        mildOf(null),          // keeps mild     variant
         
         usesThemeActive(null), // keeps current theme
     ]),
