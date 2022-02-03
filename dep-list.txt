@@ -91,4 +91,4 @@ notifications:
 // dialogs:
 [modified ] @nodestrap/modal
 [modified ] @nodestrap/modal-card
-@nodestrap/modal-side
+[modified ] @nodestrap/modal-side
