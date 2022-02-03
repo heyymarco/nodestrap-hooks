@@ -165,22 +165,16 @@ export const usesModalCardElementVariants = () => {
                 // sizes:
                 flex          : [[1, 1, 'auto']], // growable, shrinkable, initial from it's height
                 
-                boxSizing     : 'border-box',     // the final size is including borders & paddings
-                inlineSize    : 'auto',           // follows the content's width, but
-                maxInlineSize : '100%',           // up to the maximum available parent's width
-                blockSize     : 'auto',           // follows the content's height, but
-                maxBlockSize  : '100%',           // up to the maximum available parent's height
-                overflow      : 'hidden',         // force the Card to scroll
-                
                 
                 
                 // children:
-                ...children('*', { // Card
-                    boxSizing     : 'inherit',
-                    inlineSize    : 'inherit',
-                    maxInlineSize : 'inherit',
-                    blockSize     : 'inherit',
-                    maxBlockSize  : 'inherit',
+                ...children(['&', '*'], { // Popup & Card
+                    boxSizing     : 'border-box',     // the final size is including borders & paddings
+                    inlineSize    : 'auto',           // follows the content's width, but
+                    maxInlineSize : '100%',           // up to the maximum available parent's width
+                    blockSize     : 'auto',           // follows the content's height, but
+                    maxBlockSize  : '100%',           // up to the maximum available parent's height
+                    overflow      : 'hidden',         // force the Card to scroll
                 }),
             }),
         ]),
@@ -331,7 +325,7 @@ export const usesModalCardVariants = () => {
             rule(':not(.scrollable)', {
                 // scrolls:
                 // scroller at ModalCard's layer
-                overflow : 'auto', // enable horz & vert scrolling
+                overflow : 'auto', // enable horz & vert scrolling on Modal (backdrop)
             }),
         ]),
     });
