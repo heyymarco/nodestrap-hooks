@@ -39,9 +39,6 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesNudeVariant,
-    NudeVariant,
-    useNudeVariant,
     
     
     
@@ -136,7 +133,6 @@ export const usesLabelVariants = () => {
             
             // layouts:
             sizes(),
-            usesNudeVariant(),
         ]),
         ...variants([
             rule('.content', { // content
@@ -181,9 +177,6 @@ export interface LabelProps<TElement extends HTMLElement = HTMLElement>
     extends
         BasicProps<TElement>,
         
-        // layouts:
-        NudeVariant,
-        
         // appearances:
         LabelVariant
 {
@@ -197,7 +190,6 @@ export function Label<TElement extends HTMLElement = HTMLElement>(props: LabelPr
     
     
     // variants:
-    const nudeVariant  = useNudeVariant(props);
     const labelVariant = useLabelVariant(props);
 
     
@@ -220,7 +212,6 @@ export function Label<TElement extends HTMLElement = HTMLElement>(props: LabelPr
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                nudeVariant.class,
                 labelVariant.class,
             ]}
         />
