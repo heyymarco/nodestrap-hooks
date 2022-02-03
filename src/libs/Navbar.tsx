@@ -101,7 +101,6 @@ import {
 }                           from './Indicator'
 import {
     // hooks:
-    markActive       as controlMarkActive,
     usesThemeDefault as controlUsesThemeDefault,
     usesThemeActive  as controlUsesThemeActive,
     isFocus,
@@ -161,9 +160,8 @@ export { useCurrentActive }
 //#region activePassive
 export const markActive = () => style({
     ...imports([
-        controlMarkActive(),
-        
-        mildOf(null),          // keeps mild variant
+        outlinedOf(null),      // keeps outlined variant
+        mildOf(null),          // keeps mild     variant
         
         usesThemeActive(),     // switch to active theme
     ]),
