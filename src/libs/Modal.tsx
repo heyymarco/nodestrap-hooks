@@ -12,24 +12,27 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
-    composition,
     compositionOf,
     mainComposition,
+    
+    
+    
+    // styles:
+    style,
+    vars,
     imports,
     
     
     
-    // layouts:
-    layout,
-    vars,
-    children,
-    
-    
-    
     // rules:
+    rule,
     variants,
     states,
-    rule,
+    
+    
+    
+    //combinators:
+    children,
 }                           from './cssfn'       // cssfn core
 import {
     // hooks:
@@ -115,27 +118,27 @@ export const usesModalAnim = () => {
     
     
     return [
-        () => composition([
-            imports([
+        () => style({
+            ...imports([
                 // animations:
                 anim(),
             ]),
-            vars({
+            ...vars({
                 [modalAnimDecls.anim] : animRefs.animNone,
             }),
-            states([
-                isActivating([
-                    vars({
+            ...states([
+                isActivating({
+                    ...vars({
                         [modalAnimDecls.anim] : cssProps.animActive,
                     }),
-                ]),
-                isPassivating([
-                    vars({
+                }),
+                isPassivating({
+                    ...vars({
                         [modalAnimDecls.anim] : cssProps.animPassive,
                     }),
-                ]),
+                }),
             ]),
-        ]),
+        }),
         modalAnimRefs,
         modalAnimDecls,
     ] as const;
@@ -166,15 +169,15 @@ export const usesModalElementLayout = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // resets:
             stripoutFocusableElement(), // clear browser's default styles
             
             // animations:
             anim(),
         ]),
-        layout({
+        ...style({
             // layouts:
             display : 'inline-block',
             
@@ -190,7 +193,7 @@ export const usesModalElementLayout = () => {
             // customize:
             ...usesGeneralProps(usesPrefixedProps(cssProps, 'element')), // apply general cssProps starting with element***
         }),
-    ]);
+    });
 };
 export const usesModalElementStates = () => {
     // dependencies:
@@ -200,16 +203,16 @@ export const usesModalElementStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // states:
             excited(),
         ]),
-    ]);
+    });
 };
 
 export const useModalElementSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesModalElementLayout(),
@@ -217,7 +220,7 @@ export const useModalElementSheet = createUseSheet(() => [
             // states:
             usesModalElementStates(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'u4teynvq1y'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
@@ -230,77 +233,67 @@ export const usesModalLayout = () => {
     
     
     
-    return composition([
-        layout({
-            // layouts:
-            display      : 'block',
-            
-            
-            
-            // sizes:
-            // fills the entire screen:
-            boxSizing    : 'border-box', // the final size is including borders & paddings
-            position     : 'fixed',
-            inset        : 0,
-            width        : '100vw',
-            height       : '100vh',
-         // maxWidth     : 'fill-available', // hack to excluding scrollbar // not needed since all html pages are virtually full width
-         // maxHeight    : 'fill-available', // hack to excluding scrollbar // will be handle by javascript soon
-            
-            
-            
-            // animations:
-            anim         : modalAnimRefs.anim,
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(cssProps), // apply general cssProps
-        }),
-    ]);
+    return style({
+        // layouts:
+        display      : 'block',
+        
+        
+        
+        // sizes:
+        // fills the entire screen:
+        boxSizing    : 'border-box', // the final size is including borders & paddings
+        position     : 'fixed',
+        inset        : 0,
+        width        : '100vw',
+        height       : '100vh',
+     // maxWidth     : 'fill-available', // hack to excluding scrollbar // not needed since all html pages are virtually full width
+     // maxHeight    : 'fill-available', // hack to excluding scrollbar // will be handle by javascript soon
+        
+        
+        
+        // animations:
+        anim         : modalAnimRefs.anim,
+        
+        
+        
+        // customize:
+        ...usesGeneralProps(cssProps), // apply general cssProps
+    });
 };
 export const usesModalVariants = () => {
     // dependencies:
     
     // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => composition([
-        layout({
-            // overwrites propName = propName{SizeName}:
-            ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-        }),
-    ]));
+    const [sizes] = usesSizeVariant((sizeName) => style({
+        // overwrites propName = propName{SizeName}:
+        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
+    }));
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // layouts:
             sizes(),
         ]),
-        variants([
-            rule('.hidden', [
-                layout({
-                    background    : 'none',
-                }),
-            ]),
-            rule(['.hidden', '.interactive'], [
-                layout({
+        ...variants([
+            rule('.hidden', {
+                background    : 'none',
+            }),
+            rule(['.hidden', '.interactive'], {
+                // accessibilities:
+                pointerEvents : 'none',
+                
+                
+                
+                // children:
+                ...children('*', { // ModalElement
                     // accessibilities:
-                    pointerEvents : 'none',
-                    
-                    
-                    
-                    // children:
-                    ...children('*', [ // ModalElement
-                        layout({
-                            // accessibilities:
-                            pointerEvents : 'initial',
-                        }),
-                    ]),
+                    pointerEvents : 'initial',
                 }),
-            ]),
+            }),
         ]),
-    ]);
+    });
 };
 export const usesModalStates = () => {
     // dependencies:
@@ -310,33 +303,29 @@ export const usesModalStates = () => {
     
     
     
-    return composition([
-        imports([
+    return style({
+        ...imports([
             // animations:
             modalAnim(),
         ]),
-        states([
-            isPassived([
-                layout({
-                    // appearances:
-                    display: 'none', // hide the modal
-                }),
-            ]),
+        ...states([
+            isPassived({
+                // appearances:
+                display: 'none', // hide the modal
+            }),
         ]),
-    ]);
+    });
 };
 
 export const usesDocumentBodyLayout = () => {
-    return composition([
-        layout({
-            // kill the scroll on the body:
-            overflow: 'hidden',
-        }),
-    ]);
+    return style({
+        // kill the scroll on the body:
+        overflow: 'hidden',
+    });
 };
 
 export const useModalSheet = createUseSheet(() => [
-    mainComposition([
+    mainComposition(
         imports([
             // layouts:
             usesModalLayout(),
@@ -347,12 +336,12 @@ export const useModalSheet = createUseSheet(() => [
             // states:
             usesModalStates(),
         ]),
-    ]),
-    compositionOf('body', [
+    ),
+    compositionOf('body',
         imports([
             usesDocumentBodyLayout(),
         ]),
-    ]),
+    ),
 ], /*sheetId :*/'z26pqrin5i'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
 
 
