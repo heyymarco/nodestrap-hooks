@@ -1,8 +1,5 @@
 urgent priority:
 
-fallbacks:
-sync Navbar
-
 // layouts: => // styles:   from './cssfn'
 
 composition => style
