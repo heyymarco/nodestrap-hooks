@@ -519,7 +519,7 @@ export const usesProgressBarVariants = () => {
 
 export const useProgressBarSheet = createUseSheet(() => [
     mainComposition(
-        rule('&&', { // makes `.ProgressBar` is more specific than `.ListItem`
+        rule('&&', { // makes `.ProgressBar` is more specific than `.Wrapper`
             ...imports([
                 // layouts:
                 usesProgressBarLayout(),
