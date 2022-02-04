@@ -429,8 +429,10 @@ export const usesProgressBarLayout = () => {
             ...style({
                 // layouts:
                 display        : 'flex',   // fills the entire wrapper's width
+                flexDirection  : 'row',    // items are stacked horizontally
                 justifyContent : 'center', // center items (text, icon, etc) horizontally
                 alignItems     : 'center', // center items (text, icon, etc) vertically
+                flexWrap       : 'nowrap', // no wrapping
                 
                 
                 
