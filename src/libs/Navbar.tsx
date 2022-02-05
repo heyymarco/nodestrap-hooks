@@ -802,13 +802,15 @@ export const usesNavbarStates = () => {
                         ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menus'), 'compact')), // apply general cssProps starting with menus*** and ending with ***Compact
                     }),
                 }),
-                ...isPassived({
-                    // children:
-                    ...children(menusElm, { // menus section
-                        // layouts:
-                        display: 'none', // hide the menus when on compact mode
+                ...states([
+                    isPassived({
+                        // children:
+                        ...children(menusElm, { // menus section
+                            // layouts:
+                            display: 'none', // hide the menus when on compact mode
+                        }),
                     }),
-                }),
+                ]),
                 
                 
                 
