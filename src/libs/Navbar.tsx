@@ -500,7 +500,7 @@ export const usesMenusLayout = () => {
                 // variants:
                 usesMenuVariants(),
                 
-                // children:
+                // states:
                 usesMenuStates(),
             ]),
         }),
