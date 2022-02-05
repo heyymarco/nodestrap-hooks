@@ -494,8 +494,13 @@ export const usesMenusLayout = () => {
         // children:
         ...children('*', { // menu section
             ...imports([
+                // layouts:
                 usesMenuLayout(),
+                
+                // variants:
                 usesMenuVariants(),
+                
+                // children:
                 usesMenuStates(),
             ]),
         }),
