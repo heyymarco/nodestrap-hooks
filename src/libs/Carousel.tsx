@@ -347,6 +347,7 @@ export const usesCarouselLayout = () => {
                 // appearances:
              // visibility : 'hidden', // causing onScroll doesn't work in Firefox
                 opacity    : 0,
+                position   : 'relative',
                 zIndex     : -1,
             }),
             
