@@ -80,13 +80,13 @@ notifications:
 [published] @nodestrap/dropdown-list-button
 
 // composite components:
-[modifiedV] @nodestrap/progress
-[noChange ] @nodestrap/nav
-[noChange ] @nodestrap/navscroll
-[modifiedV] @nodestrap/accordion
-[modifiedV] @nodestrap/group
-[modifiedV] @nodestrap/carousel
-[modifiedV] @nodestrap/navbar
+[published] @nodestrap/progress
+[published] @nodestrap/nav
+[published] @nodestrap/navscroll
+[published] @nodestrap/accordion
+[published] @nodestrap/group
+[published] @nodestrap/carousel
+[published] @nodestrap/navbar
 
 // dialogs:
 [modified ] @nodestrap/modal
