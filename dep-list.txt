@@ -89,6 +89,6 @@ notifications:
 [published] @nodestrap/navbar
 
 // dialogs:
-[modifiedV] @nodestrap/modal
-[modifiedV] @nodestrap/modal-card
-[modifiedV] @nodestrap/modal-side
+[published] @nodestrap/modal
+[published] @nodestrap/modal-card
+[published] @nodestrap/modal-side
