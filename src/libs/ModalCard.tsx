@@ -49,7 +49,6 @@ import {
 import {
     // hooks:
     usesSizeVariant,
-    usesExcitedState,
     useExcitedState,
     TogglerExcitedProps,
 }                           from './Basic'
@@ -83,6 +82,7 @@ import {
     
     // styles:
     usesModalElementLayout,
+    usesModalElementStates,
     
     usesModalLayout,
     usesModalVariants,
@@ -182,17 +182,10 @@ export const usesModalCardElementVariants = () => {
     });
 };
 export const usesModalCardElementStates = () => {
-    // dependencies:
-    
-    // states:
-    const [excited]   = usesExcitedState();
-    
-    
-    
     return style({
         ...imports([
             // states:
-            excited(),
+            usesModalElementStates(),
         ]),
     });
 };
@@ -411,7 +404,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
         
         // actions:
         onActiveChange,
-        onExcitedChange, // not implemented
+        onExcitedChange,
         
         
         // children:

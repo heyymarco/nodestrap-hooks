@@ -47,7 +47,6 @@ import {
     // hooks:
     usesSizeVariant,
     usesBorderRadius,
-    usesExcitedState,
     useExcitedState,
     TogglerExcitedProps,
 }                           from './Basic'
@@ -76,6 +75,7 @@ import {
     
     // styles:
     usesModalElementLayout,
+    usesModalElementStates,
     
     usesModalLayout,
     usesModalVariants,
@@ -211,17 +211,10 @@ export const usesModalSideElementVariants = () => {
     });
 };
 export const usesModalSideElementStates = () => {
-    // dependencies:
-    
-    // states:
-    const [excited]   = usesExcitedState();
-    
-    
-    
     return style({
         ...imports([
             // states:
-            excited(),
+            usesModalElementStates(),
         ]),
     });
 };
@@ -400,7 +393,7 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
         
         // actions:
         onActiveChange,
-        onExcitedChange, // not implemented
+        onExcitedChange,
         
         
         // children:
