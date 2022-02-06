@@ -135,13 +135,16 @@ export const usesModalSideElementLayout = () => {
             
             
             
-            // sizes:
-            boxSizing     : 'border-box', // the final size is including borders & paddings
-            inlineSize    : 'auto',       // follows the content's width, but
-            maxInlineSize : '100%',       // up to the maximum available parent's width
-            blockSize     : 'auto',       // follows the content's height, but
-            maxBlockSize  : '100%',       // up to the maximum available parent's height
-            overflow      : 'hidden',     // force the Card to scroll
+            // children:
+            ...children(['&', '*'], { // Popup & Card
+                // sizes:
+                boxSizing     : 'border-box',     // the final size is including borders & paddings
+                inlineSize    : 'auto',           // follows the content's width, but
+                maxInlineSize : '100%',           // up to the maximum available parent's width
+                blockSize     : 'auto',           // follows the content's height, but
+                maxBlockSize  : '100%',           // up to the maximum available parent's height
+                overflow      : 'hidden',         // force the Card to scroll
+            }),
             
             
             
@@ -149,12 +152,6 @@ export const usesModalSideElementLayout = () => {
             ...children('*', { // Card
                 // sizes:
                 flex          : [[1, 1, '100%']], // growable, shrinkable, initial from parent's height
-                
-                boxSizing     : 'inherit',
-                inlineSize    : 'inherit',
-                maxInlineSize : 'inherit',
-                blockSize     : 'inherit',
-                maxBlockSize  : 'inherit',
                 
                 
                 
