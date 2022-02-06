@@ -169,6 +169,7 @@ export const usesModalCardElementVariants = () => {
                 
                 // children:
                 ...children(['&', '*'], { // Popup & Card
+                    // sizes:
                     boxSizing     : 'border-box',     // the final size is including borders & paddings
                     inlineSize    : 'auto',           // follows the content's width, but
                     maxInlineSize : '100%',           // up to the maximum available parent's width
