@@ -219,7 +219,9 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
             ]),
             ...style({
                 // layouts:
-                display : 'block', // fills the entire parent's width
+                ...rule(':not(.media)', {
+                    display : 'block', // fills the entire parent's width
+                }),
                 
                 
                 
