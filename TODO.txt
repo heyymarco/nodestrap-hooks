@@ -1,5 +1,6 @@
 top priority:
 add .not-media and .not-link to Content
+style link on Content as btnStyle='link'
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
