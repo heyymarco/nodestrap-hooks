@@ -670,9 +670,9 @@ export const [
 export const isNotEmptySelectorEntry = (selectorEntry: OptionalOrFalse<SelectorEntry>): selectorEntry is SelectorEntry => {
     /*
         SimpleSelector : [ SelectorToken, SelectorName, SelectorParams ]
-        Combinator     : string
+        Combinator     : non_empty string
     */
-   return !!selectorEntry && (Array.isArray(selectorEntry) || (typeof(selectorEntry) === 'string'));
+   return !!selectorEntry;
 }
 export const isSelector = (test: OptionalOrFalse<SimpleSelector|Selector>): test is Selector => {
     /*
@@ -681,9 +681,10 @@ export const isSelector = (test: OptionalOrFalse<SimpleSelector|Selector>): test
     */
     return !!test && (typeof(test[0]) !== 'string'); // Selector : the first element (SelectorEntry) must be a NON-string, the Combinator is guaranteed NEVER be the first element
 };
-export const isNotEmptySelector  = (selector  : OptionalOrFalse<Selector    >):  selector is PureSelector     =>  !!selector  &&  !!selector.filter((optSelectorEntry) => !!optSelectorEntry /* filter out undefined|null|false */).length;
-export const isNotEmptySelectors = (selectors : OptionalOrFalse<SelectorList>): selectors is PureSelectorList =>  !!selectors && !!selectors.filter((optSelector)      => !!optSelector      /* filter out undefined|null|false */).length;
-export const countSelectors      = (selectors : OptionalOrFalse<SelectorList>): number                        => (!!selectors &&   selectors.filter(isNotEmptySelector).length) || 0;
+export const isNotEmptySelector   = (selector  : OptionalOrFalse<Selector    >): selector  is PureSelector     =>  !!selector  &&  selector.some(  isNotEmptySelectorEntry);
+export const isNotEmptySelectors  = (selectors : OptionalOrFalse<SelectorList>): selectors is PureSelectorList =>  !!selectors && selectors.some(  isNotEmptySelector     );
+export const countSelectorEntries = (selector  : OptionalOrFalse<Selector    >): number                        => (!!selector  &&  selector.filter(isNotEmptySelectorEntry).length) || 0;
+export const countSelectors       = (selectors : OptionalOrFalse<SelectorList>): number                        => (!!selectors && selectors.filter(isNotEmptySelector     ).length) || 0;
 
 
 
@@ -830,8 +831,8 @@ export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options
     
     
     
-    const selectorsWithoutPseudoElm : PureSelectorList = selectors.filter((selector) => selector.every(isNotPseudoElementSelector)); // not contain ::pseudo-element
-    const selectorsOnlyPseudoElm    : PureSelectorList = selectors.filter((selector) => selector.some(isPseudoElementSelector));     // do  contain ::pseudo-element
+    const selectorsWithoutPseudoElm : PureSelector[] = selectors.filter(isNotEmptySelector).filter((selector) => selector.every(isNotPseudoElementSelector)); // not contain ::pseudo-element
+    const selectorsOnlyPseudoElm    : PureSelector[] = selectors.filter(isNotEmptySelector).filter((selector) => selector.some(isPseudoElementSelector));     // do  contain ::pseudo-element
     
     
     
