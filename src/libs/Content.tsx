@@ -114,7 +114,7 @@ import {
 
 
 // styles:
-const mediaElm    = ['figure', 'img', 'svg', 'video', '.media'];
+const mediaElm    = ['figure', 'img', 'svg', 'video', 'picture', 'embed', 'object', '.media'];
 const notMediaElm = '.not-media';
 const linksElm    = ['a', '.link'];
 const notLinksElm = '.not-link';
@@ -152,6 +152,7 @@ export const usesContentChildrenOptions = (options: ContentChildrenOptions = {})
     };
 };
 export const usesContentChildrenFill = (options: ContentChildrenOptions = {}) => {
+    // options:
     const { mediaSelectorWithExcept } = usesContentChildrenOptions(options);
     
     
@@ -208,6 +209,7 @@ export const usesContentChildrenFill = (options: ContentChildrenOptions = {}) =>
     });
 };
 export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) => {
+    // options:
     const { mediaSelectorWithExcept, mediaSelector, notNotMediaSelector } = usesContentChildrenOptions(options);
     const figureSelector               = mediaSelector     && mediaSelector.find((m)   =>  m && m.some((e)  =>  isElementSelectorOf(e, 'figure')));
     const nonFigureSelector            = mediaSelector     && mediaSelector.filter((m) => !m || m.every((e) => !isElementSelectorOf(e, 'figure')));
@@ -319,22 +321,49 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
     });
 };
 export interface ContentChildrenLinksOptions {
-    linkSelector ?: SelectorCollection
+    linkSelector    ?: SelectorCollection
+    notLinkSelector ?: SelectorCollection
 }
-export const usesContentChildrenLinks = (options: ContentChildrenLinksOptions = {}) => {
+export const usesContentChildrenLinksOptions = (options: ContentChildrenLinksOptions = {}) => {
     // options:
     const {
-        linkSelector = linksElm,
+        linkSelector    : linkSelectorStr    = linksElm,
+        notLinkSelector : notLinkSelectorStr = notLinksElm,
     } = options;
+    
+    const linkSelector                 = parseSelectors(linkSelectorStr);
+    const notLinkSelector              = parseSelectors(notLinkSelectorStr);
+    const notNotLinkSelector           = notLinkSelector && createPseudoClassSelector( // create pseudo_class `:not()`
+        'not',
+        groupSelectors(notLinkSelector, { cancelGroupIfSingular: true }),  // group multiple selectors with `:is()`, if needed, because `:not()` cannot have multiple selectors
+    );
+    
+    const linkSelectorWithExcept       = linkSelector && selectorsToString(
+        groupSelectors(linkSelector, { cancelGroupIfSingular: true })      // group multiple selectors with `:is()`, if needed
+        .map((linkSelectorGroup) => createSelector(
+            ...linkSelectorGroup,
+            notNotLinkSelector,                                            // :not(:is(...notLinkSelector))
+        ))
+    );
+    
+    return {
+        linkSelectorWithExcept,
+        linkSelector,
+        notNotLinkSelector,
+    };
+};
+export const usesContentChildrenLinks = (options: ContentChildrenLinksOptions = {}) => {
+    // options:
+    const { linkSelectorWithExcept } = usesContentChildrenLinksOptions(options);
     
     
     
     return style({
         // children:
-        ...children(linkSelector, {
+        ...children(linkSelectorWithExcept, {
             // children:
             // make a gap to sibling <a>:
-            ...nextSiblings(linkSelector, {
+            ...nextSiblings(linkSelectorWithExcept, {
                 // spacings:
                 // add a space between links:
                 marginInlineStart: cssProps.linkSpacing,
