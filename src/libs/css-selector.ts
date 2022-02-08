@@ -814,10 +814,12 @@ export { flatMapSelectors as mutateSelectors }
 
 // groups:
 export interface GroupSelectorOptions {
-    selectorName ?: SelectorName | ('is'|'not'|'has'|'where'),
+    selectorName          ?: SelectorName | ('is'|'not'|'has'|'where'),
+    cancelGroupIfSingular ?: boolean
 }
 const defaultGroupSelectorOptions : Required<GroupSelectorOptions> = {
-    selectorName  : 'is',
+    selectorName           : 'is',
+    cancelGroupIfSingular  : false
 };
 export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options: GroupSelectorOptions = defaultGroupSelectorOptions): PureSelectorList & { 0: Selector } => {
     if (!isNotEmptySelectors(selectors)) return pureSelectorList(
@@ -844,14 +846,21 @@ export const groupSelectors = (selectors: OptionalOrFalse<SelectorList>, options
     
     
     const {
-        selectorName : targetSelectorName = defaultGroupSelectorOptions.selectorName,
+        selectorName          : targetSelectorName = defaultGroupSelectorOptions.selectorName,
+        cancelGroupIfSingular                      = defaultGroupSelectorOptions.cancelGroupIfSingular,
     } = options;
     
     
     
     return pureSelectorList(
-        selector(
-            pseudoClassSelector(targetSelectorName, selectorsWithoutPseudoElm),
+        (
+            (cancelGroupIfSingular && (selectorsWithoutPseudoElm.length < 2))
+            ?
+            selectorsWithoutPseudoElm?.[0]
+            :
+            selector(
+                pseudoClassSelector(targetSelectorName, selectorsWithoutPseudoElm),
+            )
         ),
         
         ...selectorsOnlyPseudoElm,
