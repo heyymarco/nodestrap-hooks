@@ -3,7 +3,7 @@
 [published] @cssfn/jss-plugin-short
 [published] @cssfn/jss-plugin-camel-case
 [published] @cssfn/jss-plugin-vendor
-[published] @cssfn/css-selector
+[modified ] @cssfn/css-selector
 [published] @cssfn/jss-plugin-nested
 [published] @cssfn/css-types
 [published] @cssfn/css-var
