@@ -136,9 +136,6 @@ export const noBackground = () => {
     return style({
         ...variants([
             notOutlined({
-                ...imports([
-                    outlinedOf(true), // keeps outlined variant
-                ]),
                 ...style({
                     // borders:
                     [borderStrokeDecls.borderWidth]: '0px', // noBorder if not explicitly `.outlined`
@@ -167,6 +164,13 @@ export const noBackground = () => {
                 ]),
             }),
         ]),
+        ...variants([
+            notOutlined({
+                ...imports([
+                    outlinedOf(true), // keeps outlined variant
+                ]),
+            }),
+        ], { minSpecificityWeight: 4 }), // force to win with states' specificity weight
     });
 };
 
@@ -212,6 +216,61 @@ export const usesButtonLayout = (options?: OrientationRuleOptions) => {
         }),
     });
 };
+export const usesButtonLinkVariant = () => {
+    // dependencies:
+    
+    // borders:
+    const [, , borderRadiusDecls] = usesBorderRadius();
+    
+    // spacings:
+    const [, , paddingDecls]      = usesPadding();
+    
+    
+    
+    return style({
+        ...imports([
+            // backgrounds:
+            noBackground(),
+            
+            // colors:
+            usesThemeActive(), // set the active theme as the default theme
+        ]),
+        ...style({
+            // borders:
+            // small rounded corners on top:
+            [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.sm,
+            [borderRadiusDecls.borderStartEndRadius  ] : borderRadiuses.sm,
+            // small rounded corners on bottom:
+            [borderRadiusDecls.borderEndStartRadius  ] : borderRadiuses.sm,
+            [borderRadiusDecls.borderEndEndRadius    ] : borderRadiuses.sm,
+            
+            
+            
+            // spacings:
+            [paddingDecls.paddingInline] : spacers.xs,
+            [paddingDecls.paddingBlock ] : spacers.xs,
+            
+            
+            
+            // typos:
+            textDecoration : 'underline',
+            lineHeight     : 1,
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
+        }),
+        ...variants([
+            notOutlined({ // fully link style without `.outlined`:
+                ...imports([
+                    // backgrounds:
+                    gradientOf(false), // gradient is not supported if not `.outlined`
+                ]),
+            }),
+        ]),
+    });
+};
 export const usesButtonVariants = () => {
     // dependencies:
     
@@ -225,12 +284,6 @@ export const usesButtonVariants = () => {
     const [, outlinedRefs            ] = usesOutlinedVariant();
     const [, mildRefs                ] = usesMildVariant();
     const [,             , foregDecls] = usesForeg();
-    
-    // borders:
-    const [, , borderRadiusDecls]      = usesBorderRadius();
-    
-    // spacings:
-    const [, , paddingDecls]           = usesPadding();
     
     
     
@@ -250,42 +303,7 @@ export const usesButtonVariants = () => {
             }),
             rule(['.link', '.icon'], {
                 ...imports([
-                    // colors:
-                    usesThemeActive(), // set the active theme as the default theme
-                ]),
-                ...style({
-                    // borders:
-                    // small rounded corners on top:
-                    [borderRadiusDecls.borderStartStartRadius] : borderRadiuses.sm,
-                    [borderRadiusDecls.borderStartEndRadius  ] : borderRadiuses.sm,
-                    // small rounded corners on bottom:
-                    [borderRadiusDecls.borderEndStartRadius  ] : borderRadiuses.sm,
-                    [borderRadiusDecls.borderEndEndRadius    ] : borderRadiuses.sm,
-                    
-                    
-                    
-                    // spacings:
-                    [paddingDecls.paddingInline] : spacers.xs,
-                    [paddingDecls.paddingBlock ] : spacers.xs,
-                    
-                    
-                    
-                    // typos:
-                    textDecoration : 'underline',
-                    lineHeight     : 1,
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
-                }),
-                ...variants([
-                    notOutlined({ // fully link style without `.outlined`:
-                        ...imports([
-                            // backgrounds:
-                            gradientOf(false), // gradient is not supported if not `.outlined`
-                        ]),
-                    }),
+                    usesButtonLinkVariant(),
                 ]),
             }),
             rule('.icon', {
