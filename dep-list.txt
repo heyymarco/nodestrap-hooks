@@ -3,11 +3,11 @@
 [published] @cssfn/jss-plugin-short
 [published] @cssfn/jss-plugin-camel-case
 [published] @cssfn/jss-plugin-vendor
-[modified ] @cssfn/css-selector
+[published] @cssfn/css-selector
 [published] @cssfn/jss-plugin-nested
 [published] @cssfn/css-types
 [published] @cssfn/css-var
-[modified ] @cssfn/cssfn
+[published] @cssfn/cssfn
 [published] @cssfn/css-config
 [published] @cssfn/react-cssfn
 
@@ -35,20 +35,20 @@
 [published] @nodestrap/indicator
 [published] @nodestrap/control
 [published] @nodestrap/action-control
-[published] @nodestrap/editable-control
+[published] @nodestrap/editable-control   *icon
 [published] @nodestrap/editable-text-control
 [published] @nodestrap/editable-action-control
 
 // contents:
 [published] @nodestrap/container
-[modified ] @nodestrap/content
+[published] @nodestrap/content   *button
 
 // simple components:
 [published] @nodestrap/visually-hidden
 [published] @nodestrap/icon
 [published] @nodestrap/label
 [published] @nodestrap/masonry
-[modified ] @nodestrap/button
+[published] @nodestrap/button
 [published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
