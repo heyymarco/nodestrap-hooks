@@ -79,6 +79,7 @@ function App() {
 					<a href='http://google.com'>Native link</a>
 					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
 					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
+					<a href='http://google.com' className='custom not-link'>unmodified link</a>
                 </Content>
 				<Content
 					theme={theme} size={size} gradient={enableGrad}

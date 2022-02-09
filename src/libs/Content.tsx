@@ -112,6 +112,7 @@ import {
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
 }                           from './Container'
+import Button               from './Button'
 
 
 
@@ -501,6 +502,14 @@ export interface ContentProps<TElement extends HTMLElement = HTMLElement>
 export function Content<TElement extends HTMLElement = HTMLElement>(props: ContentProps<TElement>) {
     // styles:
     const sheet = useContentSheet();
+    
+    
+    
+    // rest props:
+    const {
+        // children:
+        children,
+    ...restProps} = props;
 
     
     
@@ -508,7 +517,7 @@ export function Content<TElement extends HTMLElement = HTMLElement>(props: Conte
     return (
         <Basic<TElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             // variants:
@@ -517,7 +526,41 @@ export function Content<TElement extends HTMLElement = HTMLElement>(props: Conte
 
             // classes:
             mainClass={props.mainClass ?? sheet.main}
-        />
+        >
+            {React.Children.map(children, (child) => {
+                // link:
+                if (
+                    React.isValidElement<React.AnchorHTMLAttributes<HTMLButtonElement>>(child)
+                    &&
+                    (child.type === 'a')
+                    &&
+                    !(child.props.className ?? '').split(' ').some((className) => (className === 'not-link'))
+                ) {
+                    // rest props:
+                    const {
+                        type, // discard
+                    ...btnProps} = child.props;
+                    
+                    
+                    
+                    return (
+                        <Button
+                            // variants:
+                            btnStyle='link'
+                            
+                            
+                            // other props:
+                            {...btnProps}
+                        />
+                    );
+                } // if
+                
+                
+                
+                // other component:
+                return child;
+            })}
+        </Basic>
     );
 }
 export { Content as default }
