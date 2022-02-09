@@ -56,17 +56,19 @@ import {
     createPseudoClassSelector,
     isElementSelectorOf,
     createSelector,
+    createSelectorList,
+    isNotEmptySelectors,
     
     
     
     // renders:
-    selectorToString,
     selectorsToString,
     
     
     
     // transforms:
     groupSelectors,
+    groupSelector,
 }                           from './css-selector'
 
 // nodestrap utilities:
@@ -220,17 +222,21 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
     const figureSelector               = mediaSelector     && mediaSelector.find((m)   =>  m && m.some((e)  =>  isElementSelectorOf(e, 'figure')));
     const nonFigureSelector            = mediaSelector     && mediaSelector.filter((m) => !m || m.every((e) => !isElementSelectorOf(e, 'figure')));
     
-    const figureSelectorWithExcept     = figureSelector    && selectorToString(
-        createSelector(
-            ...figureSelector,
-            notNotMediaSelector,
-        )
+    const figureSelectorWithExceptMod  = figureSelector    && (
+        groupSelector(figureSelector, { selectorName: 'where' }) // group multiple selectors with `:where()`, to suppress the specificity weight
+        .map((figureSelectorGroup) => createSelector(
+            ...figureSelectorGroup,
+            notNotMediaSelector,                                 // :not(:where(...notMediaSelector))
+        ))
     );
-    const figureSelectorWithCombinator = figureSelector    && (
-        createSelector(
-            ...figureSelector,
-            notNotMediaSelector,
-            '>',
+    const figureSelectorWithExcept     = figureSelectorWithExceptMod && selectorsToString(figureSelectorWithExceptMod);
+    const figureSelectorWithCombinator = figureSelectorWithExceptMod && (
+        figureSelectorWithExceptMod
+        .map((figureSelectorGroup) =>
+            createSelector(
+                ...figureSelectorGroup,
+                '>',
+            )
         )
     );
     const nonFigureSelectorWithExcept  = nonFigureSelector && selectorsToString(
@@ -240,13 +246,13 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
                 ...nonFigureSelectorGroup,
                 notNotMediaSelector,                                 // :not(:where(...notMediaSelector))
             );
-            return [
+            return createSelectorList(
                 nonFigureSelectorWithExcept,
-                figureSelectorWithCombinator && createSelector(
-                    ...figureSelectorWithCombinator,
+                ...(!isNotEmptySelectors(figureSelectorWithCombinator) ? [] : figureSelectorWithCombinator.map((selectorCombi) => createSelector(
+                    ...selectorCombi,
                     ...nonFigureSelectorWithExcept,
-                ),
-            ];
+                ))),
+            );
         })
     );
     
