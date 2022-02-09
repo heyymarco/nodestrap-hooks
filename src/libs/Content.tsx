@@ -110,6 +110,12 @@ import {
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
 }                           from './Container'
+import {
+    // styles:
+    usesButtonLayout,
+    usesButtonLinkVariant,
+    usesButtonStates,
+}                           from './Button'
 
 
 
@@ -134,14 +140,14 @@ export const usesContentChildrenOptions = (options: ContentChildrenOptions = {})
     const notMediaSelector             = parseSelectors(notMediaSelectorStr);
     const notNotMediaSelector          = notMediaSelector && createPseudoClassSelector( // create pseudo_class `:not()`
         'not',
-        groupSelectors(notMediaSelector, { cancelGroupIfSingular: true }), // group multiple selectors with `:is()`, if needed, because `:not()` cannot have multiple selectors
+        groupSelectors(notMediaSelector, { selectorName: 'where' }), // group multiple selectors with `:where()`, to suppress the specificity weight
     );
     
     const mediaSelectorWithExcept      = mediaSelector && selectorsToString(
-        groupSelectors(mediaSelector, { cancelGroupIfSingular: true })     // group multiple selectors with `:is()`, if needed
+        groupSelectors(mediaSelector, { selectorName: 'where' })     // group multiple selectors with `:where()`, to suppress the specificity weight
         .map((mediaSelectorGroup) => createSelector(
             ...mediaSelectorGroup,
-            notNotMediaSelector,                                           // :not(:is(...notMediaSelector))
+            notNotMediaSelector,                                     // :not(:where(...notMediaSelector))
         ))
     );
     
@@ -228,11 +234,11 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
         )
     );
     const nonFigureSelectorWithExcept  = nonFigureSelector && selectorsToString(
-        groupSelectors(nonFigureSelector, { cancelGroupIfSingular: true })     // group multiple selectors with `:is()`, if needed
+        groupSelectors(nonFigureSelector, { selectorName: 'where' }) // group multiple selectors with `:where()`, to suppress the specificity weight
         .flatMap((nonFigureSelectorGroup) => {
             const nonFigureSelectorWithExcept = createSelector(
                 ...nonFigureSelectorGroup,
-                notNotMediaSelector,                                           // :not(:is(...notMediaSelector))
+                notNotMediaSelector,                                 // :not(:where(...notMediaSelector))
             );
             return [
                 nonFigureSelectorWithExcept,
@@ -335,14 +341,14 @@ export const usesContentChildrenLinksOptions = (options: ContentChildrenLinksOpt
     const notLinkSelector              = parseSelectors(notLinkSelectorStr);
     const notNotLinkSelector           = notLinkSelector && createPseudoClassSelector( // create pseudo_class `:not()`
         'not',
-        groupSelectors(notLinkSelector, { cancelGroupIfSingular: true }),  // group multiple selectors with `:is()`, if needed, because `:not()` cannot have multiple selectors
+        groupSelectors(notLinkSelector, { selectorName: 'where' }), // group multiple selectors with `:where()`, to suppress the specificity weight
     );
     
     const linkSelectorWithExcept       = linkSelector && selectorsToString(
-        groupSelectors(linkSelector, { cancelGroupIfSingular: true })      // group multiple selectors with `:is()`, if needed
+        groupSelectors(linkSelector, { selectorName: 'where' })     // group multiple selectors with `:where()`, to suppress the specificity weight
         .map((linkSelectorGroup) => createSelector(
             ...linkSelectorGroup,
-            notNotLinkSelector,                                            // :not(:is(...notLinkSelector))
+            notNotLinkSelector,                                     // :not(:where(...notLinkSelector))
         ))
     );
     
@@ -361,18 +367,30 @@ export const usesContentChildrenLinks = (options: ContentChildrenLinksOptions = 
     return style({
         // children:
         ...children(linkSelectorWithExcept, {
-            // children:
-            // make a gap to sibling <a>:
-            ...nextSiblings(linkSelectorWithExcept, {
-                // spacings:
-                // add a space between links:
-                marginInlineStart: cssProps.linkSpacing,
+            ...imports([
+                // layouts:
+                usesButtonLayout(),
+                
+                // variants:
+                usesButtonLinkVariant(),
+                
+                // states:
+                usesButtonStates(),
+            ]),
+            ...style({
+                // children:
+                // make a gap to sibling <a>:
+                ...nextSiblings(linkSelectorWithExcept, {
+                    // spacings:
+                    // add a space between links:
+                    marginInlineStart: cssProps.linkSpacing,
+                }),
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
             }),
-            
-            
-            
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
         }),
     });
 };

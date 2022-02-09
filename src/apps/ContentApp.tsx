@@ -76,6 +76,7 @@ function App() {
 					outlined={outlined}
 				>
                     <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href='http://google.com'>Native link</a>
 					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
 					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
                 </Content>

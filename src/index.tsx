@@ -10,7 +10,7 @@ import reportWebVitals from './reportWebVitals';
 // import CssConfigApp from './apps/CssConfigApp';
 // import CssfnApp from './apps/CssfnApp';
 // import ColorApp from './apps/ColorApp';
-import TypoApp from './apps/TypoApp';
+// import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 // import ResponsiveApp from './apps/ResponsiveApp';
 // import DimensionApp from './apps/DimensionApp';
@@ -19,7 +19,7 @@ import TypoApp from './apps/TypoApp';
 // import VisuallyHidden                               from './apps/VisuallyHidden';            // span
 // import BasicApp                                     from './apps/BasicApp';                  // div
 //     import IconApp                                  from './apps/IconApp';                   // span
-//     import ContentApp                               from './apps/ContentApp';                // div      ???
+    import ContentApp                               from './apps/ContentApp';                // div      ???
 //     import LabelApp                                 from './apps/LabelApp';                  // div
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
 //         import CarouselApp                          from './apps/CarouselApp';               // div      ???
@@ -71,7 +71,7 @@ import TypoApp from './apps/TypoApp';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <TypoApp />
+    <ContentApp />
     ,
     document.getElementById('root')
 );
