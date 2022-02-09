@@ -62,7 +62,7 @@ import {
     
     
     // renders:
-    selectorsToString,
+    selectorToString,
     
     
     
@@ -112,12 +112,6 @@ import {
     usesBorderAsContainer,
     usesBorderAsSeparatorBlock,
 }                           from './Container'
-import {
-    // styles:
-    usesButtonLayout,
-    usesButtonLinkVariant,
-    usesButtonStates,
-}                           from './Button'
 
 
 
@@ -145,13 +139,14 @@ export const usesContentChildrenOptions = (options: ContentChildrenOptions = {})
         groupSelectors(notMediaSelector, { selectorName: 'where' }), // group multiple selectors with `:where()`, to suppress the specificity weight
     );
     
-    const mediaSelectorWithExcept      = mediaSelector && selectorsToString(
+    const mediaSelectorWithExcept      = mediaSelector && (
         groupSelectors(mediaSelector, { selectorName: 'where' })     // group multiple selectors with `:where()`, to suppress the specificity weight
         .map((mediaSelectorGroup) => createSelector(
             ...mediaSelectorGroup,
             notNotMediaSelector,                                     // :not(:where(...notMediaSelector))
         ))
-    );
+        .map((selector) => selectorToString(selector))
+    ) as SelectorCollection;
     
     return {
         mediaSelectorWithExcept,
@@ -229,7 +224,10 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
             notNotMediaSelector,                                 // :not(:where(...notMediaSelector))
         ))
     );
-    const figureSelectorWithExcept     = figureSelectorWithExceptMod && selectorsToString(figureSelectorWithExceptMod);
+    const figureSelectorWithExcept     = figureSelectorWithExceptMod && (
+        figureSelectorWithExceptMod
+        .map((selector) => selectorToString(selector))
+    ) as SelectorCollection;
     const figureSelectorWithCombinator = figureSelectorWithExceptMod && (
         figureSelectorWithExceptMod
         .map((figureSelectorGroup) =>
@@ -239,7 +237,7 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
             )
         )
     );
-    const nonFigureSelectorWithExcept  = nonFigureSelector && selectorsToString(
+    const nonFigureSelectorWithExcept  = nonFigureSelector && (
         groupSelectors(nonFigureSelector, { selectorName: 'where' }) // group multiple selectors with `:where()`, to suppress the specificity weight
         .flatMap((nonFigureSelectorGroup) => {
             const nonFigureSelectorWithExcept = createSelector(
@@ -254,7 +252,8 @@ export const usesContentChildrenMedia = (options: ContentChildrenOptions = {}) =
                 ))),
             );
         })
-    );
+        .map((selector) => selectorToString(selector))
+    ) as SelectorCollection;
     
     
     
@@ -350,13 +349,14 @@ export const usesContentChildrenLinksOptions = (options: ContentChildrenLinksOpt
         groupSelectors(notLinkSelector, { selectorName: 'where' }), // group multiple selectors with `:where()`, to suppress the specificity weight
     );
     
-    const linkSelectorWithExcept       = linkSelector && selectorsToString(
+    const linkSelectorWithExcept       = linkSelector && (
         groupSelectors(linkSelector, { selectorName: 'where' })     // group multiple selectors with `:where()`, to suppress the specificity weight
         .map((linkSelectorGroup) => createSelector(
             ...linkSelectorGroup,
             notNotLinkSelector,                                     // :not(:where(...notLinkSelector))
         ))
-    );
+        .map((selector) => selectorToString(selector))
+    ) as SelectorCollection;
     
     return {
         linkSelectorWithExcept,
@@ -373,30 +373,18 @@ export const usesContentChildrenLinks = (options: ContentChildrenLinksOptions = 
     return style({
         // children:
         ...children(linkSelectorWithExcept, {
-            ...imports([
-                // layouts:
-                usesButtonLayout(),
-                
-                // variants:
-                usesButtonLinkVariant(),
-                
-                // states:
-                usesButtonStates(),
-            ]),
-            ...style({
-                // children:
-                // make a gap to sibling <a>:
-                ...nextSiblings(linkSelectorWithExcept, {
-                    // spacings:
-                    // add a space between links:
-                    marginInlineStart: cssProps.linkSpacing,
-                }),
-                
-                
-                
-                // customize:
-                ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
+            // children:
+            // make a gap to sibling <a>:
+            ...nextSiblings(linkSelectorWithExcept, {
+                // spacings:
+                // add a space between links:
+                marginInlineStart: cssProps.linkSpacing,
             }),
+            
+            
+            
+            // customize:
+            ...usesGeneralProps(usesPrefixedProps(cssProps, 'link')), // apply general cssProps starting with link***
         }),
     });
 };
