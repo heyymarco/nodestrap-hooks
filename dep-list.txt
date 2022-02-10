@@ -41,7 +41,7 @@
 
 // contents:
 [published] @nodestrap/container
-[modified ] @nodestrap/content   *button
+[published] @nodestrap/content   *button
 
 // simple components:
 [published] @nodestrap/visually-hidden
