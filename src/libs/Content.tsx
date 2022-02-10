@@ -532,7 +532,15 @@ export function Content<TElement extends HTMLElement = HTMLElement>(props: Conte
                 if (
                     React.isValidElement<React.AnchorHTMLAttributes<HTMLButtonElement>>(child)
                     &&
-                    (child.type === 'a')
+                    (
+                        (child.type === 'a')
+                        ||
+                        (
+                            (typeof(child.type) === 'string')
+                            &&
+                            (child.props.className ?? '').split(' ').some((className) => (className === 'link'))
+                        )
+                    )
                     &&
                     !(child.props.className ?? '').split(' ').some((className) => (className === 'not-link'))
                 ) {
@@ -545,6 +553,10 @@ export function Content<TElement extends HTMLElement = HTMLElement>(props: Conte
                     
                     return (
                         <Button
+                            // semantics:
+                            tag={(child.type ?? 'a') as any}
+                            
+                            
                             // variants:
                             btnStyle='link'
                             

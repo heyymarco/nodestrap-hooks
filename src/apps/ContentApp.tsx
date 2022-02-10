@@ -77,8 +77,10 @@ function App() {
 				>
                     <p>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 					<a href='http://google.com'>Native link</a>
+					<span className='link'>Span link</span>
+					<div className='link'>Div link</div>
 					<Button tag='a' href='/' btnStyle='link'>Content link</Button>
-					<Button tag='a' href='/' btnStyle='link'>Another link</Button>
+					<Button btnStyle='link'>Another link</Button>
 					<a href='http://google.com' className='custom not-link'>unmodified link</a>
                 </Content>
 				<Content
