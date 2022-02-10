@@ -151,7 +151,7 @@ export const usesGroupItemVariants = () => {
 
 export const useGroupItemSheet = createUseSheet(() => [
     mainComposition(
-        rule('&&', { // makes `.GroupItem` is more specific than `.FooButton.FooVariant`
+        rule('&&:not(_)', { // makes `.GroupItem.GroupItem:not(_)` is **0.1 more specific** than `.FooCheck.FooButton`
             ...imports([
                 // layouts:
                 usesGroupItemLayout(),
