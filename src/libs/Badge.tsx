@@ -352,7 +352,7 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
     
     
     // fn props:
-    const activeFn = active ?? !!(props.children ?? false);
+    const activeFn = active ?? !!(props.children ?? false); // badge has a content
     
     
     
