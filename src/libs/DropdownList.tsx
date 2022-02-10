@@ -107,7 +107,7 @@ export const usesDropdownListElementLayout = () => {
 
 export const useDropdownListElementSheet = createUseSheet(() => [
     mainComposition(
-        rule('&&', { // makes `.DropdownListElement` is more specific than `.DropdownElement`
+        rule('&&', { // makes `.DropdownListElement` is more specific than `.List`
             ...imports([
                 // layouts:
                 usesDropdownListElementLayout(),
