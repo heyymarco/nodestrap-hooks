@@ -37,31 +37,31 @@ export const usesVisuallyHiddenLayout = () => {
         
         
         // positions:
-        position   : [['absolute'], '!important'],
+        position   : [['absolute'],      '!important'],
         
         
         
         // borders:
-        border     : '0 !important',
+        border     : [[0],               '!important'],
         
         
         
         // sizes:
-        width      : '1px !important',
-        height     : '1px !important',
-        overflow   : 'hidden !important',
-        clip       : 'rect(0,0,0,0) !important',
+        width      : [['1px'],           '!important'],
+        height     : [['1px'],           '!important'],
+        overflow   : [['hidden'],        '!important'],
+        clip       : [['rect(0,0,0,0)'], '!important'],
         
         
         
         // spacings:
-        padding    : '0 !important',
-        margin     : '-1px !important', // Fix for https://github.com/twbs/bootstrap/issues/25686
+        padding    : [[0],               '!important'],
+        margin     : [['-1px'],          '!important'], // Fix for https://github.com/twbs/bootstrap/issues/25686
         
         
         
         // typos:
-        whiteSpace : [['nowrap'], '!important'],
+        whiteSpace : [['nowrap'],        '!important'],
     });
 };
 
