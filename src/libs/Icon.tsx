@@ -492,14 +492,17 @@ export const usesIconFontLayout  = (img?: Cust.Ref) => {
                 whiteSpace    : 'nowrap',
                 direction     : 'ltr',
                 
-                
-                
                 //#region turn on available browser features
                 '-webkit-font-smoothing'  : 'antialiased',        // support for all WebKit browsers
                 'textRendering'           : 'optimizeLegibility', // support for Safari and Chrome
                 '-moz-osx-font-smoothing' : 'grayscale',          // support for Firefox
                 fontFeatureSettings       : 'liga',               // support for IE
                 //#endregion turn on available browser features
+                
+                
+                
+                // transition:
+                transition : 'inherit', // inherit transition for smooth sizing changes
             }),
         }),
     });
