@@ -4,6 +4,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    SingleOrArray,
+}                           from './types'       // cssfn's types
 import {
     // compositions:
     mainComposition,
@@ -151,6 +154,15 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
+// utilities:
+const isText = (children: React.ReactNode): children is SingleOrArray<(string|number)> => {
+    if (['string', 'number'].includes(typeof(children))) return true;
+    if (Array.isArray(children) && children.every((child) => ['string', 'number'].includes(typeof(child)))) return true;
+    return false;
+}
+
+
+
 // react components:
 
 export interface BusyProps<TElement extends HTMLElement = HTMLElement>
@@ -164,15 +176,35 @@ export function Busy<TElement extends HTMLElement = HTMLElement>(props: BusyProp
     
     
     
+    // rest props:
+    let {
+        // accessibilities:
+        label,
+        
+        
+        
+        // children:
+        children,
+    ...restProps}  = props;
+    
+    
+    
+    if ((!label) && isText(children)) {
+        label    = [children].flat().join('');
+        children = undefined;
+    } // if
+    
+    
+    
     // jsx:
     return (
         <Badge<TElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             // accessibilities:
-            label={props.label ?? 'Loading...'}
+            label={label ?? 'Loading...'}
             
             
             // appearances:
@@ -185,8 +217,8 @@ export function Busy<TElement extends HTMLElement = HTMLElement>(props: BusyProp
             mainClass={props.mainClass ?? sheet.main}
         >
             <Icon icon='busy' size='1em' />
-            { ((props.children ?? false) !== false) && <VisuallyHidden>
-                { props.children }
+            { children && <VisuallyHidden>
+                { children }
             </VisuallyHidden> }
         </Badge>
     );
