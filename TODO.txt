@@ -1,4 +1,5 @@
 top priority:
+add Detail component
 fix indicator togglerActiveReducer
 add Gatsby & Remix support on ActionControl
 add client side Form for Remix
