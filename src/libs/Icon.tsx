@@ -418,6 +418,11 @@ export const usesIconLayout      = () => {
             
             
             
+            // sizes:
+            blockSize  : cssProps.size, // set background_image's height
+            
+            
+            
             // children:
             ...children('::before', {
                 ...imports([
@@ -528,8 +533,8 @@ export const usesIconImageLayout = (img?: Cust.Ref) => {
             
             
             // sizes:
-            blockSize  : cssProps.size, // set icon's size
-            inlineSize : 'auto',        // calculates the width by [blockSize * aspect_ratio]
+            blockSize  : '100%', // set icon's height as tall as container
+            inlineSize : 'auto', // calculates the width by [blockSize * aspect_ratio]
             
             
             
