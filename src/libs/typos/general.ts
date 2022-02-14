@@ -35,7 +35,7 @@ import colors               from '../colors'      // configurable colors & themi
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     const basics = {
         fontSizeNm            : '1rem'       as Prop.FontSize       | Cust.Expr,
-
+        
         fontFamilySansSerief  : [
             'system-ui',
             '-apple-system',
@@ -59,20 +59,22 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
             '"Courier New"',
             'monospace',
         ]                                    as Prop.FontFamily[]   | Cust.Ref,
-
+        
         fontWeightLighter     : 'lighter'    as Prop.FontWeight     | Cust.Expr,
         fontWeightLight       : 300          as Prop.FontWeight     | Cust.Expr,
         fontWeightNormal      : 400          as Prop.FontWeight     | Cust.Expr,
         fontWeightBold        : 700          as Prop.FontWeight     | Cust.Expr,
         fontWeightBolder      : 'bolder'     as Prop.FontWeight     | Cust.Expr,
-
+        
         fontStyle             : 'normal'     as Prop.FontStyle      | Cust.Ref,
         textDecoration        : 'none'       as Prop.TextDecoration | Cust.Ref,
-
+        
         lineHeightSm          : 1.25         as Prop.LineHeight     | Cust.Expr,
         lineHeightNm          : 1.50         as Prop.LineHeight     | Cust.Expr,
         lineHeightLg          : 2.00         as Prop.LineHeight     | Cust.Expr,
-
+        
+        overflowWrap          : 'break-word' as Prop.OverflowWrap   | Cust.Expr,
+        
         foreg                 : colors.foreg as Prop.Color          | Cust.Ref,
         /**
          * Defaults is color's backg.

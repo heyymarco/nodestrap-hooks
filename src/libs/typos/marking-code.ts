@@ -45,6 +45,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : 'none'                   as Prop.FontStyle      | Cust.Ref,
         textDecoration    : 'none'                   as Prop.TextDecoration | Cust.Ref,
         lineHeight        : 'inherit'                as Prop.LineHeight     | Cust.Expr,
+        overflowWrap      : 'inherit'                as Prop.OverflowWrap   | Cust.Expr,
         
         foreg             : colors.pink              as Prop.Color          | Cust.Ref,
         backg             : 'none'                   as Prop.Background     | Cust.Ref,

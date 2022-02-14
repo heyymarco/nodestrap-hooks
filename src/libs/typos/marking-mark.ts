@@ -43,6 +43,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : 'inherit'            as Prop.FontStyle      | Cust.Ref,
         textDecoration    : 'inherit'            as Prop.TextDecoration | Cust.Ref,
         lineHeight        : 'inherit'            as Prop.LineHeight     | Cust.Expr,
+        overflowWrap      : 'inherit'            as Prop.OverflowWrap   | Cust.Expr,
         
         foreg             : 'inherit'            as Prop.Color          | Cust.Ref,
         backg             : colors.warningThin   as Prop.Background     | Cust.Ref,

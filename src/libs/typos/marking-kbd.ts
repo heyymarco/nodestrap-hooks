@@ -44,6 +44,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         fontStyle         : codes.fontStyle      as Prop.FontStyle      | Cust.Ref,
         textDecoration    : codes.textDecoration as Prop.TextDecoration | Cust.Ref,
         lineHeight        : codes.lineHeight     as Prop.LineHeight     | Cust.Expr,
+        overflowWrap      : codes.overflowWrap   as Prop.OverflowWrap   | Cust.Expr,
         
         foreg             : colors.white         as Prop.Color          | Cust.Ref,
         backg             : colors.grayDark      as Prop.Background     | Cust.Ref,
