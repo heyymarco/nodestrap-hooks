@@ -453,7 +453,7 @@ export function Button(props: ButtonProps) {
         // accessibilities:
         label,
         
-        active,
+        active : activeAsPress, // aliasing active to press
     ...restProps} = props;
     
     
@@ -481,7 +481,7 @@ export function Button(props: ButtonProps) {
             
             // accessibilities:
             enabled={props.enabled ?? !(props.disabled ?? false)}
-            press={props.press ?? (active || undefined)}
+            press={props.press ?? (activeAsPress || undefined)} // if (activeAsPress === false) => uncontrolled press
             
             
             // variants:
