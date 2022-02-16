@@ -234,16 +234,6 @@ export const useButtonIconSheet = createUseSheet(() => [
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
-        //#region typos
-        fontSize          : typos.fontSizeNm,
-        fontSizeXs        : typos.fontSizeSm,
-        fontSizeSm        : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
-        fontSizeLg        : typos.fontSizeMd,
-        fontSizeXl        : typos.fontSizeLg,
-        //#endregion typos
-        
-        
-        
         //#region foreg, backg, borders
         borderRadius      : bcssProps.borderRadius,
         borderRadiusXs    : bcssProps.borderRadiusSm,
@@ -279,6 +269,16 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         gapInlineXl       : btcssProps.gapInlineLg,
         gapBlockXl        : btcssProps.gapBlockLg,
         //#endregion spacings
+        
+        
+        
+        //#region typos
+        fontSize          : typos.fontSizeNm,
+        fontSizeXs        : typos.fontSizeSm,
+        fontSizeSm        : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
+        fontSizeLg        : typos.fontSizeMd,
+        fontSizeXl        : typos.fontSizeLg,
+        //#endregion typos
     };
 }, { prefix: 'btni' });
 
