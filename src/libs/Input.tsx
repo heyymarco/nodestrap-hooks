@@ -55,6 +55,7 @@ import {
     // hooks:
     usesSizeVariant,
     usesGradientVariant,
+    expandBorderRadius,
     usesPadding,
 }                           from './Basic'
 import {
@@ -123,6 +124,12 @@ export const usesInputLayout = () => {
                     ...fallbacks({
                         inlineSize : `calc(100% + (${paddingRefs.paddingInline} * 2))`,
                     }),
+                    
+                    
+                    
+                    // borders:
+                    // affects for :autofill
+                    ...expandBorderRadius(),     // expand borderRadius css vars
                     
                     
                     
