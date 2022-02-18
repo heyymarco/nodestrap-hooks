@@ -1,4 +1,5 @@
 top priority:
+set range minInlineSize
 protect Label theme from Form's valid/invalid state
 add Detail component
 add Pagination component
