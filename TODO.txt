@@ -1,4 +1,5 @@
 top priority:
+set Indicator = isCtrlElm ? disabled : aria-disabled=true
 set range minInlineSize
 fix Check with style btn & nude
 fix Radio bullet on true center
