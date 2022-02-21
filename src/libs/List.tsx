@@ -61,9 +61,6 @@ import {
 }                           from './borders'     // configurable borders & border radiuses defs
 import spacers              from './spacers'     // configurable spaces defs
 import {
-    horizontalRule,
-}                           from './typos/index'
-import {
     stripoutList,
     stripoutFocusableElement,
 }                           from './stripouts'
@@ -463,8 +460,7 @@ export const usesListSeparatorItemLayout = () => {
             
             
             // spacings:
-            marginBlockStart : `calc(${horizontalRule.cssProps.marginBlockStart} / 2)`,
-            marginBlockEnd   : `calc(${horizontalRule.cssProps.marginBlockEnd  } / 2)`,
+            margin           : 0,
         }),
         ...rule(parentOrientationInlineSelector, { // inline
             // children:
@@ -1171,7 +1167,16 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
-        numberedContent   : [['counters(ListNumber, ".")', '". "']],
+        /* a non_nested counter */
+        numberedContent   : [[
+            'counter(ListNumber)',
+            '". "'
+        ]],
+        /* a nested counter */
+        // numberedContent   : [[
+        //     'counters(ListNumber, ".")',
+        //     '". "'
+        // ]],
     };
 }, { prefix: 'lst' });
 
