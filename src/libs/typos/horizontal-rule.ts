@@ -38,8 +38,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         foreg             : 'inherit'       as Prop.Color             | Cust.Ref,
         opacity           : 0.25            as Prop.Opacity           | Cust.Ref,
         
-        width             : borders.hair    as Prop.Width             | Cust.Ref,
-        
         marginBlockStart  : spacers.default as Prop.MarginBlockStart  | Cust.Expr,
         marginBlockEnd    : spacers.default as Prop.MarginBlockEnd    | Cust.Expr,
         marginInlineStart : 0               as Prop.MarginInlineStart | Cust.Expr,
@@ -55,29 +53,19 @@ createSheet(() => [
     globalDef([
         rule('hr', {
             // layouts:
-            display         : 'block',
-            
-            
-            
-            // sizes:
-            blockSize       : cssProps.width,
+            display               : 'block',
             
             
             
             // borders:
-            border          : 0,
-            
-            
-            
-            // backgrounds:
-            backgroundColor : 'currentColor',
+            border                : 0,
+            borderBlockStart      : borders.default,
+            borderBlockStartColor : 'currentcolor',
             
             
             
             // customize:
             ...usesGeneralProps(cssProps),
-            // delete unnecessary props:
-            width : undefined as unknown as null, // delete from cssProps. width means blockSize (the height of the <hr>)
         }),
     ]),
 ])
