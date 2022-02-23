@@ -17,6 +17,7 @@ medium priority:
 fix Carousel fast clicking
 Media => for profile image, video, static images, gifs, svgs, etc
 Range => dial variant
+updated NavScroll with IntersectionObserver
 
 
 
