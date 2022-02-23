@@ -428,7 +428,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // typos:
-        wordWrap            : 'break-word',
+        overflowWrap        : 'break-word', // prevents a long word from breaking Card layout
     };
 }, { prefix: 'crd' });
 
