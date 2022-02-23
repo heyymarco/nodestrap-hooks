@@ -350,7 +350,7 @@ export const concatUrl = (base: string, target: string) => {
     const targetUrl = new URL(target, baseUrl);
 
     const result = targetUrl.href;
-    if (result.startsWith(dummyUrl.origin)) return result.substr(dummyUrl.origin.length);
+    if (result.startsWith(dummyUrl.origin)) return result.slice(dummyUrl.origin.length);
     return result;
 };
 
@@ -493,7 +493,7 @@ export const usesIconFontLayout  = (img?: Cust.Ref) => {
                 lineHeight    : 1,
                 textTransform : 'none',
                 letterSpacing : 'normal',
-                wordWrap      : 'normal',
+                overflowWrap  : 'normal',
                 whiteSpace    : 'nowrap',
                 direction     : 'ltr',
                 
