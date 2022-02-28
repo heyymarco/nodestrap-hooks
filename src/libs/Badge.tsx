@@ -363,12 +363,14 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
             {...restProps}
             
             
+            
             // semantics:
             tag={props.tag ?? 'span'}
             semanticTag ={props.semanticTag  ?? [null]  }
             semanticRole={props.semanticRole ?? 'status'}
             
             aria-label={props['aria-label'] ?? label}
+            
             
             
             // accessibilities:
@@ -378,10 +380,17 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
             }}
             
             
+            
             // popups:
             popupModifiers={[...defaultPopupModifiers,
                 ...(props.popupModifiers ?? []),
             ]}
+            
+            
+            
+            // variants:
+            mild={props.mild ?? false}
+            
             
             
             // classes:
