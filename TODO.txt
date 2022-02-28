@@ -1,4 +1,5 @@
 top priority:
+set default mild={false} for Badge
 set Indicator = isCtrlElm ? disabled : aria-disabled=true
 set range minInlineSize
 fix Check with style btn & nude
