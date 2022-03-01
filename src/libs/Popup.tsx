@@ -4,6 +4,7 @@ import {
     useRef,
     useCallback,
     useEffect,
+    useState,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -47,7 +48,7 @@ import {
 }                           from './hooks'
 
 // others libs:
-import {
+import type {
     // general types:
     Instance            as Popper,
     Placement           as PopupPlacement,
@@ -56,7 +57,7 @@ import {
     
     
     
-    createPopper,
+    // createPopper,
 }                           from '@popperjs/core'
 
 // nodestrap components:
@@ -284,43 +285,56 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     
     // dom effects:
-    const popupRef  = useRef<HTMLDivElement|null>(null);
-    const popperRef = useRef<Popper|null>(null);
+    const popupRef                      = useRef<HTMLDivElement|null>(null);
+    const [popperRef  , setPopperRef  ] = useState<Popper|null>(null); // useState() instead of useRef(), so it triggers re-render after popper is loaded
+    const popperLoad                    = useRef<boolean>(false);
+    
+    const [everVisible, setEverVisible] = useState<boolean>(isVisible); // at the first time visible, re-render (re-create) createPopperCb
+    if (isVisible && !everVisible) setEverVisible(true);
     
     const createPopperCb = useCallback(() => {
-        if (popperRef.current) return; // popper is already been created => nothing to do
-        
-        
-        
-        const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
-        const popup  = popupRef.current;
-        if (!target) return; // target was not specified => nothing to do
-        if (!popup)  return; // popup was unloaded       => nothing to do
-        
-        
-        
-        popperRef.current = createPopper(target, popup, {
-            ...(props.popupPlacement ? { placement : props.popupPlacement } : {}),
-            ...(props.popupModifiers ? { modifiers : props.popupModifiers } : {}),
-            ...(props.popupPosition  ? { strategy  : props.popupPosition  } : {}),
-        });
+        // create a new popper if the popper was not already created & Popup is ever visible
+        if (!popperRef && everVisible) {
+            if (popperLoad.current) return; // prevents race condition of useIsomorphicLayoutEffect() & useEffect()
+            popperLoad.current = true;
+            
+            
+            
+            const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
+            const popup  = popupRef.current;
+            if (!target) return; // target was not specified => nothing to do
+            if (!popup)  return; // popup was unloaded       => nothing to do
+            
+            
+            
+            // loading popper-lite:
+            (async () => {
+                const { createPopper } = await import(/* webpackChunkName: 'popper-lite' */'@popperjs/core/lib/popper-lite.js');
+                
+                // now popper is loaded then trigger re-render:
+                setPopperRef(createPopper(target, popup, {
+                    ...(props.popupPlacement ? { placement : props.popupPlacement } : {}),
+                    ...(props.popupModifiers ? { modifiers : props.popupModifiers } : {}),
+                    ...(props.popupPosition  ? { strategy  : props.popupPosition  } : {}),
+                }));
+            })();
+        } // if
         
         
         
         // cleanups:
         return () => {
-            popperRef.current?.destroy();
-            popperRef.current = null;
+            popperRef?.destroy(); // it's okay having race condition of useIsomorphicLayoutEffect() & useEffect()
         };
-    }, [props.targetRef, props.popupPlacement, props.popupModifiers, props.popupPosition]); // (re)create the function on every time the popup's properties changes
+    }, [props.targetRef, props.popupPlacement, props.popupModifiers, props.popupPosition, everVisible]); // (re)create the function on every time the popup's properties changes
     // (re)run the function on every time the function's reference changes:
     useIsomorphicLayoutEffect(createPopperCb, [createPopperCb]); // primary   chance (in case of `targetRef` is not the parent element)
-    useEffect(createPopperCb, [createPopperCb]);       // secondary chance (in case of `targetRef` is the parent element)
+    useEffect(                createPopperCb, [createPopperCb]); // secondary chance (in case of `targetRef` is the parent element)
     
     const visibleRef = useRef({ isVisible, wasVisible: null as (boolean|null) });
     visibleRef.current.isVisible = isVisible;
     const updatePopperOptions = () => {
-        if (!popperRef.current) return; // popper was not already created => nothing to do
+        if (!popperRef) return; // popper was not already created => nothing to do
         
         
         
@@ -330,7 +344,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         
         
         
-        popperRef.current.setOptions((options) => ({
+        popperRef.setOptions((options) => ({
             ...options,
             modifiers: [
                 ...(options.modifiers ?? []),
@@ -338,7 +352,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 { name: 'eventListeners', enabled: visible.isVisible },
             ],
         }));
-        popperRef.current.update();
+        popperRef.update();
     };
     // (re)run the function on every time the popup's visible changes:
     useIsomorphicLayoutEffect(updatePopperOptions, [isVisible]); // primary   chance (in case of `targetRef` is not the parent element)
@@ -353,6 +367,18 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         <Indicator<TElement>
             // other props:
             {...props}
+            
+            
+            // accessibilities:
+            active={
+                props.active
+                &&
+                (
+                    !props.targetRef // no `targetRef` specified => no `popper` needed
+                    ||
+                    !!popperRef      // wait until popper ready
+                )
+            }
             
             
             // classes:
