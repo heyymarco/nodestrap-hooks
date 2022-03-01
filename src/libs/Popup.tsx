@@ -300,10 +300,10 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         popupModifiers,
         popupPosition,
         
-        popupAutoFlip  = true,
-        popupAutoSlide = true,
-        popupMargin    = 10,
-        popupSlide     = 10,
+        popupAutoFlip  = false,
+        popupAutoSlide = false,
+        popupMargin    = 0,
+        popupSlide     = 0,
         
         
         // performances:
