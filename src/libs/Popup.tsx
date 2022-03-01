@@ -300,10 +300,10 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         popupModifiers,
         popupPosition,
         
-        popupAutoFlip  = false,
-        popupAutoSlide = false,
-        popupMargin    = 0,
-        popupSlide     = 0,
+        popupAutoFlip  = true,
+        popupAutoSlide = true,
+        popupMargin    = 10,
+        popupSlide     = 10,
         
         
         // performances:
@@ -341,16 +341,8 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // loading popper-lite:
             (async () => {
-                const popperLoad  =                                       import(/* webpackChunkName: 'popper-lite'   */ '@popperjs/core/lib/popper-lite.js');
-                const flipLoad    = !popupAutoFlip               ? null : import(/* webpackChunkName: 'popper-flip'   */ '@popperjs/core/lib/modifiers/flip.js');
-                const slideLoad   = !popupAutoSlide              ? null : import(/* webpackChunkName: 'popper-slide'  */ '@popperjs/core/lib/modifiers/preventOverflow.js');
-                const offsetLoad  = !(popupSlide || popupMargin) ? null : import(/* webpackChunkName: 'popper-offset' */ '@popperjs/core/lib/modifiers/offset.js');
-                
-                const [popperModule, flipModule, slideModule, offsetModule] = await Promise.all([popperLoad, flipLoad, slideLoad, offsetLoad]);
-                const createPopper = popperModule.createPopper;
-                const flip         = flipModule?.default;
-                const slide        = slideModule?.default;
-                const offset       = offsetModule?.default;
+                const popperLoad = await import(/* webpackChunkName: 'popper-lite' */ './Popup-popper');
+                const { createPopper, flip, slide, offset } = popperLoad;
                 
                 
                 
