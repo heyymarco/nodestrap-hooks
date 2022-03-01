@@ -341,7 +341,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // loading popper-lite:
             (async () => {
-                const popperLoad  = import(/* webpackChunkName: 'popper-lite' */'@popperjs/core/lib/popper-lite.js');
+                const popperLoad  =                                       import(/* webpackChunkName: 'popper-lite'   */ '@popperjs/core/lib/popper-lite.js');
                 const flipLoad    = !popupAutoFlip               ? null : import(/* webpackChunkName: 'popper-flip'   */ '@popperjs/core/lib/modifiers/flip.js');
                 const slideLoad   = !popupAutoSlide              ? null : import(/* webpackChunkName: 'popper-slide'  */ '@popperjs/core/lib/modifiers/preventOverflow.js');
                 const offsetLoad  = !(popupSlide || popupMargin) ? null : import(/* webpackChunkName: 'popper-offset' */ '@popperjs/core/lib/modifiers/offset.js');
