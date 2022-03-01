@@ -270,6 +270,14 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     popupPlacement? : PopupPlacement
     popupModifiers? : Partial<PopupModifier<string, any>>[]
     popupPosition?  : PopupPosition
+    
+    popupAutoFlip?  : boolean
+    popupAutoSlide? : boolean
+    popupMargin?    : number
+    popupSlide?     : number
+    
+    
+    // performances:
     lazy?           : boolean
 }
 export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) {
@@ -281,6 +289,30 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     // states:
     const activePassiveState = useActivePassiveState(props);
     const isVisible          = activePassiveState.active || (!!activePassiveState.class);
+    
+    
+    
+    // rest props:
+    const {
+        // popups:
+        targetRef,
+        popupPlacement,
+        popupModifiers,
+        popupPosition,
+        
+        popupAutoFlip,
+        popupAutoSlide,
+        popupMargin,
+        popupSlide,
+        
+        
+        // performances:
+        lazy = false,
+        
+        
+        // children:
+        children,
+    ...restProps} = props;
     
     
     
@@ -300,7 +332,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             
             
-            const target = (props.targetRef instanceof HTMLElement) ? props.targetRef : props.targetRef?.current;
+            const target = (targetRef instanceof HTMLElement) ? targetRef : targetRef?.current;
             const popup  = popupRef.current;
             if (!target) return; // target was not specified => nothing to do
             if (!popup)  return; // popup was unloaded       => nothing to do
@@ -313,9 +345,9 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 
                 // now popper is loaded then trigger re-render:
                 setPopperRef(createPopper(target, popup, {
-                    ...(props.popupPlacement ? { placement : props.popupPlacement } : {}),
-                    ...(props.popupModifiers ? { modifiers : props.popupModifiers } : {}),
-                    ...(props.popupPosition  ? { strategy  : props.popupPosition  } : {}),
+                    ...(popupPlacement ? { placement : popupPlacement } : {}),
+                    ...(popupModifiers ? { modifiers : popupModifiers } : {}),
+                    ...(popupPosition  ? { strategy  : popupPosition  } : {}),
                 }));
             })();
         } // if
@@ -326,7 +358,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         return () => {
             popperRef?.destroy(); // it's okay having race condition of useIsomorphicLayoutEffect() & useEffect()
         };
-    }, [props.targetRef, props.popupPlacement, props.popupModifiers, props.popupPosition, everVisible]); // (re)create the function on every time the popup's properties changes
+    }, [targetRef, popupPlacement, popupModifiers, popupPosition, everVisible]); // (re)create the function on every time the popup's properties changes
     // (re)run the function on every time the function's reference changes:
     useIsomorphicLayoutEffect(createPopperCb, [createPopperCb]); // primary   chance (in case of `targetRef` is not the parent element)
     useEffect(                createPopperCb, [createPopperCb]); // secondary chance (in case of `targetRef` is the parent element)
@@ -366,7 +398,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     const Popup = (
         <Indicator<TElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             // accessibilities:
@@ -374,7 +406,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 props.active
                 &&
                 (
-                    !props.targetRef // no `targetRef` specified => no `popper` needed
+                    !targetRef // no `targetRef` specified => no `popper` needed
                     ||
                     !!popperRef      // wait until popper ready
                 )
@@ -395,12 +427,12 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 activePassiveState.handleAnimationEnd(e);
             }}
         >
-            { (!(props.lazy ?? false) || isVisible) && props.children }
+            { (!lazy || isVisible) && children }
         </Indicator>
     );
     
     // no `targetRef` specified => no `popper` needed:
-    if (!props.targetRef) return Popup;
+    if (!targetRef) return Popup;
     
     // wrap with a `<div>` for positioning, so the `popper` (position engine) won't modify the `Popup`'s css:
     return (
