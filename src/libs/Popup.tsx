@@ -341,7 +341,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // loading popper-lite:
             (async () => {
-                const popperLoad = await import(/* webpackChunkName: 'popper-lite' */ './Popup-popper');
+                const popperLoad = await import(/* webpackChunkName: 'Popup-popper' */ './Popup-popper');
                 const { createPopper, flip, slide, offset } = popperLoad;
                 
                 
