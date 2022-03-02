@@ -254,6 +254,33 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
+// utilities:
+class FloatingInstance {
+    private cleanup   : () => void;
+    private destroyed : boolean;
+    
+    
+    
+    constructor(cleanup: () => void) {
+        this.cleanup   = cleanup;
+        this.destroyed = false; // mark as un-destroyed
+    }
+
+    
+    
+    public destroy() {
+        if (this.destroyed) return; // already destroyed => nothing to do
+        this.cleanup();             // performing destruction
+        this.destroyed = true;      // mark as destroyed
+    }
+    public get isExists(): boolean {
+        return !this.destroyed;
+    }
+}
+const isFloatingExists = (floatingInstance: FloatingInstance|null): floatingInstance is FloatingInstance => !!floatingInstance && floatingInstance.isExists;
+
+
+
 // react components:
 
 export interface PopupProps<TElement extends HTMLElement = HTMLElement>
@@ -321,17 +348,16 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     
     // dom effects:
-    const popupRef                      = useRef<TElement|null>(null);
-    const [floatingRef, setFloatingRef] = useState<{ cleanup: () => void, destroyed: boolean }|null>(null); // useState() instead of useRef(), so it triggers re-render after floating-ui is assigned
-    const floatingRace                  = useRef<boolean>(false);
-    const floatingExists                = !!floatingRef && !floatingRef.destroyed && floatingRef;
+    const popupRef                                = useRef<TElement|null>(null);
+    const [floatingInstance, setFloatingInstance] = useState<FloatingInstance|null>(null); // useState() instead of useRef(), so it triggers re-render after floating-ui is assigned
+    const floatingRace                            = useRef<boolean>(false);
     const createFloatingCb = useCallback(() => {
         if (!isVisible)  return; // <Popup> is fully hidden => no need to update
         
         
         
         // create a new floating-ui if not already assigned
-        if (!floatingExists) {
+        if (!isFloatingExists(floatingInstance)) {
             if (floatingRace.current) return; // prevents a race condition of useIsomorphicLayoutEffect() & useEffect()
             floatingRace.current = true;
             
@@ -388,7 +414,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 
                 
                 // now the floating-ui is loaded & fully functioning => then trigger to re-render the <Popup active={true}>:
-                setFloatingRef({ cleanup, destroyed: false });
+                setFloatingInstance(new FloatingInstance(cleanup));
             })();
         } // if
         
@@ -397,20 +423,19 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         // cleanups:
         return () => {
             // destroy the floating-ui if was assigned
-            if (floatingExists) {
+            if (isFloatingExists(floatingInstance)) {
                 if (!floatingRace.current) return; // prevents a race condition of useIsomorphicLayoutEffect() & useEffect()
                 floatingRace.current = false;
                 
                 
                 
-                floatingExists.cleanup(); // kill the live updater
-                floatingExists.destroyed = true;
+                floatingInstance.destroy(); // kill the live updater
             } // if
         };
     }, [
         // conditions:
         isVisible,
-        floatingExists,
+        floatingInstance,
         
         
         // popups:
@@ -450,9 +475,9 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 props.active
                 &&
                 (
-                    !targetRef       // no `targetRef` specified => no need for floating-ui
+                    !targetRef                         // no `targetRef` specified => no need for floating-ui
                     ||
-                    !!floatingExists // wait until floating-ui is ready (do not show if floating-ui is not ready, the appearance might look ugly)
+                    isFloatingExists(floatingInstance) // wait until floating-ui is ready (do not show if floating-ui is not ready, the appearance might look ugly)
                 )
             }
             
