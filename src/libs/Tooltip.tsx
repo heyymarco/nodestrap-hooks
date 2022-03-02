@@ -455,6 +455,8 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         const { middlewareData, placement } = computedPosition;
         const { x, y } = middlewareData.arrow ?? {};
         const basePlacement : PopupSide = placement.split('-')[0] as PopupSide;
+        const blockPlacement  = ['top' , 'bottom'].includes(basePlacement);
+        const inlinePlacement = ['left', 'right' ].includes(basePlacement);
         const invertBasePlacement : PopupSide = {
             top    : 'bottom',
             right  : 'left',
@@ -463,13 +465,13 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         }[basePlacement] as PopupSide;
         
         
-        
+        console.log('x, y = ', x, y);
         Object.assign(arrow.style, {
-            left                  : (x !== null) ? `${x}px` : '',
-            top                   : (y !== null) ? `${y}px` : '',
+            left                  : ((x ?? false) !== false) ? `${x}px` : '',
+            top                   : ((y ?? false) !== false) ? `${y}px` : '',
             right                 : '',
             bottom                : '',
-            // [invertBasePlacement] : '-20px',
+            [invertBasePlacement] : '-15px',
         });
     }, [onPopupUpdate]);
     
