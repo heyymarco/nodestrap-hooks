@@ -65,8 +65,8 @@ import {
 import {
     // general types:
     PopupPlacement,
-    PopupModifier,
-    PopupPosition,
+    PopupMiddleware,
+    PopupStrategy,
     
     
     
@@ -310,11 +310,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     };
 }, { prefix: 'bge' });
 
-const defaultPopupModifiers = [
-    { name: 'flip', enabled: false },
-    { name: 'preventOverflow', enabled: false },
-];
-
 
 
 // react components:
@@ -381,13 +376,6 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
             
             
             
-            // popups:
-            popupModifiers={[...defaultPopupModifiers,
-                ...(props.popupModifiers ?? []),
-            ]}
-            
-            
-            
             // variants:
             mild={props.mild ?? false}
             
@@ -405,4 +393,4 @@ export function Badge<TElement extends HTMLElement = HTMLElement>(props: BadgePr
 }
 export { Badge as default }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
+export type { PopupPlacement, PopupMiddleware, PopupStrategy }
