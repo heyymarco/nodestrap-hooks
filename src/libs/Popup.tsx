@@ -342,7 +342,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             // loading popper-lite:
             (async () => {
                 const popperLoad = await import(/* webpackChunkName: 'Popup-popper' */ './Popup-popper');
-                const { createPopper, flip, slide, offset } = popperLoad;
+                const { createPopper, flip, slide, offset, arrow } = popperLoad;
                 
                 
                 
@@ -352,7 +352,10 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                     ...{ modifiers : [
                         ...(flip  ? [flip ] : []),
                         ...(slide ? [slide] : []),
-                        { ...offset, options: { offset: [popupSlide, popupMargin] } },
+                        { ...offset, options: {
+                            offset  : [popupSlide, popupMargin],
+                        }},
+                        { ...arrow , enabled: false },
                         
                         ...(popupModifiers ?? []),
                     ]},
