@@ -103,7 +103,7 @@ function App() {
 					Click me <Badge
 						targetRef={targetButton1Ref}
 						popupPlacement='right-start'
-						style={{position: 'relative', left:'-10px', top:'-10px'}}
+						popupOffset={-10} popupShift={-10}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 						>
 							{counter && `${counter}`}
@@ -118,7 +118,7 @@ function App() {
 					Click me <Badge
 						targetRef={targetButton2Ref}
 						popupPlacement='right-start'
-						style={{position: 'relative', left:'-10px', top:'-10px'}}
+						popupOffset={-10} popupShift={-10}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 						badgeStyle='pill'
 						>
@@ -134,7 +134,7 @@ function App() {
 					Click me <Badge
 						targetRef={targetButton3Ref}
 						popupPlacement='right-start'
-						style={{position: 'relative', left:'-10px', top:'-10px'}}
+						popupOffset={-10} popupShift={-10}
 						theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 						badgeStyle='pill'
 						active={counter > 0}
