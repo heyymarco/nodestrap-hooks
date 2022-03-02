@@ -109,7 +109,7 @@ function App() {
 					Click me <Busy
 						targetRef={targetButton1Ref}
 						popupPlacement='right-start'
-						style={{position: 'relative', left:'-10px', top:'-10px'}}
+						popupOffset={-10} popupShift={-10}
 						nude={false} outlined={false} theme={theme} size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 						>
 							{counter && `${counter}`}
@@ -127,7 +127,7 @@ function App() {
 					Click me <Busy
 						targetRef={targetButton2Ref}
 						popupPlacement='right-start'
-						style={{position: 'relative', left:'-10px', top:'-10px'}}
+						popupOffset={-10} popupShift={-10}
 						nude={false} outlined={false} theme={theme} size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 						>
 							{counter && `${counter}`}
@@ -145,7 +145,7 @@ function App() {
 					Click me <Busy
 						targetRef={targetButton3Ref}
 						popupPlacement='right'
-						style={{position: 'relative', left:'1em'}}
+						popupOffset={16}
 						theme={theme} size={size} gradient={enableGrad} mild={mild} enabled={enabled}
 						active={counter > 0}
 						>

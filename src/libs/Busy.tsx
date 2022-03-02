@@ -48,8 +48,8 @@ import {
 import {
     // general types:
     PopupPlacement,
-    PopupModifier,
-    PopupPosition,
+    PopupMiddleware,
+    PopupStrategy,
     
     
     
@@ -203,14 +203,17 @@ export function Busy<TElement extends HTMLElement = HTMLElement>(props: BusyProp
             {...restProps}
             
             
+            
             // accessibilities:
             label={label ?? 'Loading...'}
+            
             
             
             // appearances:
             nude={props.nude ?? true}
             badgeStyle={props.badgeStyle ?? 'circle'}
             outlined={props.outlined ?? true}
+            
             
             
             // classes:
@@ -225,4 +228,4 @@ export function Busy<TElement extends HTMLElement = HTMLElement>(props: BusyProp
 }
 export { Busy as default }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
+export type { PopupPlacement, PopupMiddleware, PopupStrategy }
