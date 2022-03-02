@@ -346,7 +346,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             // loading floating-ui:
             (async () => {
-                const { computePosition, flip, shift, offset, arrow, autoUpdate } = await import(/* webpackChunkName: 'floating-ui' */ '@floating-ui/dom');
+                const { computePosition, flip, shift, offset, autoUpdate } = await import(/* webpackChunkName: 'floating-ui' */ '@floating-ui/dom');
                 
                 
                 
@@ -389,7 +389,6 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 
                 // now the floating-ui is loaded & fully functioning => then trigger to re-render the <Popup active={true}>:
                 setFloatingRef({ cleanup, destroyed: false });
-                console.log('initialized');
             })();
         } // if
         
@@ -406,7 +405,6 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 
                 floatingExists.cleanup(); // kill the live updater
                 floatingExists.destroyed = true;
-                console.log('destroyed');
             } // if
         };
     }, [
