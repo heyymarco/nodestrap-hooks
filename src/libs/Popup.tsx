@@ -358,15 +358,15 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         
         // create a new floating-ui if not already assigned
         if (!isFloatingExists(floatingInstance)) {
-            if (floatingRace.current) return; // prevents a race condition of useIsomorphicLayoutEffect() & useEffect()
-            floatingRace.current = true;
-            
-            
-            
             const target = (targetRef instanceof HTMLElement) ? targetRef : targetRef?.current;
             const popup  = popupRef.current;
             if (!target) return; // target was not specified => nothing to do
             if (!popup)  return; // popup was unloaded       => nothing to do
+            
+            
+            
+            if (floatingRace.current) return; // prevents a race condition of useIsomorphicLayoutEffect() & useEffect()
+            floatingRace.current = true;
             
             
             
