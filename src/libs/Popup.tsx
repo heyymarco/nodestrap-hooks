@@ -50,15 +50,10 @@ import {
 // others libs:
 import type {
     // general types:
-    Instance            as Popper,
-    Placement           as PopupPlacement,
-    Modifier            as PopupModifier,
-    PositioningStrategy as PopupPosition,
-    
-    
-    
-    // createPopper,
-}                           from '@popperjs/core'
+    Placement  as PopupPlacement,
+    Middleware as PopupMiddleware,
+    Strategy   as PopupStrategy,
+}                           from '@floating-ui/dom'
 
 // nodestrap components:
 import {
@@ -266,19 +261,28 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
         IndicatorProps<TElement>
 {
     // popups:
-    targetRef?      : React.RefObject<HTMLElement>|HTMLElement|null // getter ref
-    popupPlacement? : PopupPlacement
-    popupModifiers? : Partial<PopupModifier<string, any>>[]
-    popupPosition?  : PopupPosition
+    targetRef?       : React.RefObject<HTMLElement>|HTMLElement|null // getter ref
+    popupPlacement?  : PopupPlacement
+    popupMiddleware? : PopupMiddleware[] | ((defaultMiddleware: PopupMiddleware[]) => PopupMiddleware[])
+    popupStrategy?   : PopupStrategy
     
-    popupAutoFlip?  : boolean
-    popupAutoSlide? : boolean
-    popupMargin?    : number
-    popupSlide?     : number
+    popupAutoFlip?   : boolean
+    popupAutoShift?  : boolean
+    popupOffset?     : number
+    popupShift?      : number
+    
+    /**
+     * @deprecated
+     */
+    popupModifiers?  : PopupMiddleware[]
+    /**
+     * @deprecated
+     */
+    popupPosition?   : PopupStrategy
     
     
     // performances:
-    lazy?           : boolean
+    lazy?            : boolean
 }
 export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupProps<TElement>) {
     // styles:
@@ -288,7 +292,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     // states:
     const activePassiveState = useActivePassiveState(props);
-    const isVisible          = activePassiveState.active || (!!activePassiveState.class);
+    const isVisible          = activePassiveState.active || (!!activePassiveState.class); // visible = showing, shown, hidding ; !visible = hidden
     
     
     
@@ -296,14 +300,14 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     const {
         // popups:
         targetRef,
-        popupPlacement,
-        popupModifiers,
-        popupPosition,
+        popupPlacement = 'top',
+        popupMiddleware,
+        popupStrategy  = 'absolute',
         
         popupAutoFlip  = false,
-        popupAutoSlide = false,
-        popupMargin    = 0,
-        popupSlide     = 0,
+        popupAutoShift = false,
+        popupOffset    = 0,
+        popupShift     = 0,
         
         
         // performances:
@@ -317,18 +321,19 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     
     // dom effects:
-    const popupRef                      = useRef<HTMLDivElement|null>(null);
-    const [popperRef  , setPopperRef  ] = useState<Popper|null>(null); // useState() instead of useRef(), so it triggers re-render after popper is loaded
-    const popperLoad                    = useRef<boolean>(false);
-    
-    const [everVisible, setEverVisible] = useState<boolean>(isVisible); // at the first time visible, re-render (re-create) createPopperCb
-    if (isVisible && !everVisible) setEverVisible(true);
-    
-    const createPopperCb = useCallback(() => {
-        // create a new popper if the popper was not already created & Popup is ever visible
-        if (!popperRef && everVisible) {
-            if (popperLoad.current) return; // prevents race condition of useIsomorphicLayoutEffect() & useEffect()
-            popperLoad.current = true;
+    const popupRef                      = useRef<TElement|null>(null);
+    const [floatingRef, setFloatingRef] = useState<{ cleanup: () => void, destroyed: boolean }|null>(null); // useState() instead of useRef(), so it triggers re-render after floating-ui is assigned
+    const floatingRace                  = useRef<boolean>(false);
+    const floatingExists                = floatingRef && !floatingRef.destroyed && floatingRef;
+    const createFloatingCb = useCallback(() => {
+        if (!isVisible)  return; // <Popup> is fully hidden => no need to update
+        
+        
+        
+        // create a new floating-ui if not already assigned
+        if (!floatingExists) {
+            if (floatingRace.current) return; // prevents a race condition of useIsomorphicLayoutEffect() & useEffect()
+            floatingRace.current = true;
             
             
             
@@ -339,28 +344,52 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             
             
             
-            // loading popper-lite:
+            // loading floating-ui:
             (async () => {
-                const popperLoad = await import(/* webpackChunkName: 'Popup-popper' */ './Popup-popper');
-                const { createPopper, flip, slide, offset, arrow } = popperLoad;
+                const { computePosition, flip, shift, offset, arrow, autoUpdate } = await import(/* webpackChunkName: 'floating-ui' */ '@floating-ui/dom');
                 
                 
                 
-                // now popper is loaded then trigger re-render:
-                setPopperRef(createPopper(target, popup, {
-                    ...(popupPlacement ? { placement : popupPlacement } : {}),
-                    ...{ modifiers : [
-                        ...(flip  ? [flip ] : []),
-                        ...(slide ? [slide] : []),
-                        { ...offset, options: {
-                            offset  : [popupSlide, popupMargin],
-                        }},
-                        { ...arrow , enabled: false },
-                        
-                        ...(popupModifiers ?? []),
-                    ]},
-                    ...(popupPosition  ? { strategy  : popupPosition  } : {}),
-                }));
+                // the updater:
+                const handleUpdate = async () => {
+                    const {x, y, strategy} = await computePosition(target, popup, {
+                        strategy   : popupStrategy,
+                        placement  : popupPlacement,
+                        middleware : (() => {
+                            const defaultMiddleware: PopupMiddleware[] = [
+                                ...((popupOffset || popupShift) ? [offset({ // requires to be placed at the first order
+                                    mainAxis  : popupOffset,
+                                    crossAxis : popupShift,
+                                })] : []),
+                                
+                                ...(popupAutoFlip  ? [flip() ] : []),
+                                ...(popupAutoShift ? [shift()] : []),
+                            ];
+                            return popupMiddleware ? (Array.isArray(popupMiddleware) ? popupMiddleware : popupMiddleware(defaultMiddleware)) : defaultMiddleware;
+                        })(),
+                    });
+                    Object.assign(popup.style, {
+                        position : strategy,
+                        left     : `${x}px`,
+                        top      : `${y}px`,
+                    });
+                };
+                
+                
+                
+                // the first update:
+                await handleUpdate();
+                
+                
+                
+                // the live updater:
+                const cleanup = autoUpdate(target, popup, handleUpdate);
+                
+                
+                
+                // now the floating-ui is loaded & fully functioning => then trigger to re-render the <Popup active={true}>:
+                setFloatingRef({ cleanup, destroyed: false });
+                console.log('initialized');
             })();
         } // if
         
@@ -368,49 +397,51 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         
         // cleanups:
         return () => {
-            popperRef?.destroy(); // it's okay having race condition of useIsomorphicLayoutEffect() & useEffect()
-        };
-    }, [targetRef, popupPlacement, popupModifiers, popupPosition, everVisible]); // (re)create the function on every time the popup's properties changes
-    // (re)run the function on every time the function's reference changes:
-    useIsomorphicLayoutEffect(createPopperCb, [createPopperCb]); // primary   chance (in case of `targetRef` is not the parent element)
-    useEffect(                createPopperCb, [createPopperCb]); // secondary chance (in case of `targetRef` is the parent element)
-    
-    const visibleRef = useRef({ isVisible, wasVisible: null as (boolean|null) });
-    visibleRef.current.isVisible = isVisible;
-    const updatePopperOptions = () => {
-        if (!popperRef) return; // popper was not already created => nothing to do
-        
-        
-        
-        const visible = visibleRef.current;
-        if (visible.wasVisible === visible.isVisible) return; // `isVisible` was not changed => nothing to do
-        visible.wasVisible = visible.isVisible;
-        
-        
-        
-        popperRef.setOptions((options) => ({
-            ...options,
-            modifiers: [
-                ...(options.modifiers ?? []),
+            // destroy the floating-ui if was assigned
+            if (floatingExists) {
+                if (!floatingRace.current) return; // prevents a race condition of useIsomorphicLayoutEffect() & useEffect()
+                floatingRace.current = false;
                 
-                { name: 'eventListeners', enabled: visible.isVisible },
-            ],
-        }));
-        popperRef.update();
-    };
-    // (re)run the function on every time the popup's visible changes:
-    useIsomorphicLayoutEffect(updatePopperOptions, [isVisible]); // primary   chance (in case of `targetRef` is not the parent element)
-    useEffect(updatePopperOptions, [isVisible]);       // secondary chance (in case of `targetRef` is the parent element)
+                
+                
+                floatingExists.cleanup(); // kill the live updater
+                floatingExists.destroyed = true;
+                console.log('destroyed');
+            } // if
+        };
+    }, [
+        targetRef,
+        floatingExists,
+        popupPlacement,
+        popupMiddleware,
+        popupStrategy,
+        
+        popupAutoFlip,
+        popupAutoShift,
+        popupOffset,
+        popupShift,
+        
+        isVisible,
+    ]); // (re)create the function on every time the popup's properties changes
     
+    // (re)run the function on every time the function's reference changes:
+    // a race of useLayoutEffect() & useEffect()
+    // the first race  => if `targetRef` is already set => win
+    // the second race => it should win if `targetRef` is configured
+    useIsomorphicLayoutEffect(createFloatingCb, [createFloatingCb]); // the first  chance (best  , not flickering): in case of `targetRef` is not <Popup>'s parent
+    useEffect(                createFloatingCb, [createFloatingCb]); // the second chance (better,  do flickering): in case of `targetRef` is <Popup>'s parent
     
     
     
     // jsx:
-    // the `Popup` take care of the *popup animation*:
-    const Popup = (
+    return (
         <Indicator<TElement>
             // other props:
             {...restProps}
+            
+            
+            // essentials:
+            elmRef={popupRef}
             
             
             // accessibilities:
@@ -418,9 +449,9 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 props.active
                 &&
                 (
-                    !targetRef // no `targetRef` specified => no `popper` needed
+                    !targetRef       // no `targetRef` specified => no need for floating-ui
                     ||
-                    !!popperRef      // wait until popper ready
+                    !!floatingExists // wait until floating-ui is ready (do not show if floating-ui is not ready, the appearance might look ugly)
                 )
             }
             
@@ -442,21 +473,8 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             { (!lazy || isVisible) && children }
         </Indicator>
     );
-    
-    // no `targetRef` specified => no `popper` needed:
-    if (!targetRef) return Popup;
-    
-    // wrap with a `<div>` for positioning, so the `popper` (position engine) won't modify the `Popup`'s css:
-    return (
-        <div
-            ref={popupRef}
-            style={{ zIndex: 1080 }}
-            className='overlay'
-        >
-            { Popup }
-        </div>
-    );
 }
 export { Popup as default }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
+export type { PopupPlacement, PopupMiddleware, PopupStrategy }
+export type { PopupMiddleware as PopupModifier, PopupStrategy as PopupPosition }
