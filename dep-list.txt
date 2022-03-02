@@ -69,7 +69,7 @@
 [modified ] @nodestrap/busy
 
 notifications:
-[published] @nodestrap/alert
+[modified ] @nodestrap/alert
 [published] @nodestrap/tooltip
 
 // menus:

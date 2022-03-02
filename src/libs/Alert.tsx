@@ -57,8 +57,8 @@ import CloseButton          from './CloseButton'
 import {
     // general types:
     PopupPlacement,
-    PopupModifier,
-    PopupPosition,
+    PopupMiddleware,
+    PopupStrategy,
     
     
     
@@ -402,13 +402,16 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
             {...restProps}
             
             
+            
             // semantics:
             semanticTag ={props.semanticTag  ?? [null] }
             semanticRole={props.semanticRole ?? 'alert'}
             
             
+            
             // variants:
             mild={mildFn}
+            
             
             
             // classes:
@@ -424,4 +427,4 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
 }
 export { Alert as default }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
+export type { PopupPlacement, PopupMiddleware, PopupStrategy }
