@@ -53,6 +53,9 @@ import type {
     Placement  as PopupPlacement,
     Middleware as PopupMiddleware,
     Strategy   as PopupStrategy,
+    
+    ComputePositionReturn,
+    Side       as PopupSide,
 }                           from '@floating-ui/dom'
 
 // nodestrap components:
@@ -290,13 +293,15 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     // popups:
     targetRef?       : React.RefObject<HTMLElement>|HTMLElement|null // getter ref
     popupPlacement?  : PopupPlacement
-    popupMiddleware? : PopupMiddleware[] | ((defaultMiddleware: PopupMiddleware[]) => PopupMiddleware[])
+    popupMiddleware? : PopupMiddleware[] | ((defaultMiddleware: PopupMiddleware[]) => Promise<PopupMiddleware[]>)
     popupStrategy?   : PopupStrategy
     
     popupAutoFlip?   : boolean
     popupAutoShift?  : boolean
     popupOffset?     : number
     popupShift?      : number
+    
+    onPopupUpdate?   : (computedPosition: ComputePositionReturn) => Promise<void>
     
     /**
      * @deprecated
@@ -335,6 +340,8 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         popupAutoShift = false,
         popupOffset    = 0,
         popupShift     = 0,
+        
+        onPopupUpdate,
         
         
         // performances:
@@ -378,10 +385,10 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 
                 // the updater:
                 const handleUpdate = async () => {
-                    const {x, y, strategy} = await computePosition(target, popup, {
+                    const computedPosition = await computePosition(target, popup, {
                         strategy   : popupStrategy,
                         placement  : popupPlacement,
-                        middleware : (() => {
+                        middleware : await (async () => {
                             const defaultMiddleware: PopupMiddleware[] = [
                                 ...((popupOffset || popupShift) ? [offset({ // requires to be placed at the first order
                                     mainAxis  : popupOffset,
@@ -391,14 +398,31 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                                 ...(popupAutoFlip  ? [flip() ] : []),
                                 ...(popupAutoShift ? [shift()] : []),
                             ];
-                            return popupMiddleware ? (Array.isArray(popupMiddleware) ? popupMiddleware : popupMiddleware(defaultMiddleware)) : defaultMiddleware;
+                            return popupMiddleware ? (Array.isArray(popupMiddleware) ? popupMiddleware : (await popupMiddleware(defaultMiddleware))) : defaultMiddleware;
                         })(),
                     });
+                    
+                    
+                    
+                    const { x, y, strategy, placement } = computedPosition;
+                    const basePlacement : PopupSide = placement.split('-')[0] as PopupSide;
+                    
                     Object.assign(popup.style, {
                         position : strategy,
                         left     : `${x}px`,
                         top      : `${y}px`,
                     });
+                    
+                    popup.classList.remove(
+                        'top', 'bottom', 'left', 'right',
+                    );
+                    popup.classList.add(
+                        basePlacement,
+                    );
+                    
+                    
+                    
+                    await onPopupUpdate?.(computedPosition);
                 };
                 
                 
@@ -448,6 +472,8 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         popupAutoShift,
         popupOffset,
         popupShift,
+        
+        onPopupUpdate,
     ]); // (re)create the function on every time the popup's properties changes
     
     // (re)run the function on every time the function's reference changes:
