@@ -324,7 +324,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     const popupRef                      = useRef<TElement|null>(null);
     const [floatingRef, setFloatingRef] = useState<{ cleanup: () => void, destroyed: boolean }|null>(null); // useState() instead of useRef(), so it triggers re-render after floating-ui is assigned
     const floatingRace                  = useRef<boolean>(false);
-    const floatingExists                = floatingRef && !floatingRef.destroyed && floatingRef;
+    const floatingExists                = !!floatingRef && !floatingRef.destroyed && floatingRef;
     const createFloatingCb = useCallback(() => {
         if (!isVisible)  return; // <Popup> is fully hidden => no need to update
         
@@ -410,8 +410,13 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             } // if
         };
     }, [
-        targetRef,
+        // conditions:
+        isVisible,
         floatingExists,
+        
+        
+        // popups:
+        targetRef,
         popupPlacement,
         popupMiddleware,
         popupStrategy,
@@ -420,8 +425,6 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         popupAutoShift,
         popupOffset,
         popupShift,
-        
-        isVisible,
     ]); // (re)create the function on every time the popup's properties changes
     
     // (re)run the function on every time the function's reference changes:
