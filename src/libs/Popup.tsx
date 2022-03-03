@@ -26,6 +26,7 @@ import {
     
     
     // rules:
+    rule,
     states,
 }                           from './cssfn'       // cssfn core
 import {
@@ -148,6 +149,12 @@ export const usesPopupLayout = () => {
         ...style({
             // layouts:
             display: 'block',
+            
+            
+            // positions:
+            ...rule('.overlay', {
+                zIndex: 1080,
+            }),
             
             
             
@@ -536,8 +543,10 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             mainClass={props.mainClass ?? sheet.main}
             classes={[...(props.classes ?? []),
                 ((targetRef && popupPos) && popupPos.placement) || null,
+                (targetRef && 'overlay') || null,
             ]}
             style={{
+
                 position : (targetRef && popupStrategy) || undefined,
                 left     : (targetRef && popupPos) ? `${popupPos.x}px` : undefined,
                 top      : (targetRef && popupPos) ? `${popupPos.y}px` : undefined,
