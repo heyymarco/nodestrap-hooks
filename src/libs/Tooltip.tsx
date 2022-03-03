@@ -146,7 +146,11 @@ export const usesTooltipLayout = () => {
             }),
             ...rules([
                 ...['top', 'bottom', 'left', 'right'].map((tooltipPos) =>
-                    rule(`.${tooltipPos}`, {
+                    rule([
+                        `.${tooltipPos}`,
+                        `.${tooltipPos}-start`,
+                        `.${tooltipPos}-end`,
+                    ], {
                         // // children:
                         // ...children(arrowWrapperElm, {
                         //     [tooltipPos] : 'calc(100% - 0.7px)',
@@ -455,8 +459,6 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         const { middlewareData, placement } = computedPosition;
         const { x, y } = middlewareData.arrow ?? {};
         const basePlacement : PopupSide = placement.split('-')[0] as PopupSide;
-        const blockPlacement  = ['top' , 'bottom'].includes(basePlacement);
-        const inlinePlacement = ['left', 'right' ].includes(basePlacement);
         const invertBasePlacement : PopupSide = {
             top    : 'bottom',
             right  : 'left',
@@ -464,14 +466,12 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             left   : 'right',
         }[basePlacement] as PopupSide;
         
-        
-        console.log('x, y = ', x, y);
         Object.assign(arrow.style, {
             left                  : ((x ?? false) !== false) ? `${x}px` : '',
             top                   : ((y ?? false) !== false) ? `${y}px` : '',
             right                 : '',
             bottom                : '',
-            [invertBasePlacement] : '-15px',
+            [invertBasePlacement] : '-15px', // TODO fix with real number
         });
     }, [onPopupUpdate]);
     
