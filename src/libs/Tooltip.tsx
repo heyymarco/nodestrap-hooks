@@ -244,10 +244,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         arrowInlineSize      : '0.8rem',
         arrowBlockSize       : '0.8rem',
         arrowClipPath        : 'polygon(100% 0%,100% 100%,0 100%)',
-        arrowTopTransform    : [['scaleX(0.7)', 'translateY(-50%)', 'rotate(45deg)' ]],
-        arrowRightTransform  : [['scaleY(0.7)', 'translateX(50%)' , 'rotate(135deg)']],
-        arrowBottomTransform : [['scaleX(0.7)', 'translateY(50%)' , 'rotate(225deg)']],
-        arrowLeftTransform   : [['scaleY(0.7)', 'translateX(-50%)', 'rotate(315deg)']],
+        arrowTopTransform    : [['scaleX(0.7)', 'translateY(50%)' , 'rotate(45deg)' ]],
+        arrowRightTransform  : [['scaleY(0.7)', 'translateX(-50%)', 'rotate(135deg)']],
+        arrowBottomTransform : [['scaleX(0.7)', 'translateY(-50%)', 'rotate(225deg)']],
+        arrowLeftTransform   : [['scaleY(0.7)', 'translateX(50%)' , 'rotate(315deg)']],
     };
 }, { prefix: 'ttip' });
 
@@ -471,7 +471,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             top                   : ((y ?? false) !== false) ? `${y}px` : '',
             right                 : '',
             bottom                : '',
-            [invertBasePlacement] : '-15px', // TODO fix with real number
+            [invertBasePlacement] : '0',
         });
     }, [onPopupUpdate]);
     
