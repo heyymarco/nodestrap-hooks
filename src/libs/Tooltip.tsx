@@ -558,6 +558,10 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             // popups:
             popupPlacement={props.popupPlacement ?? 'top'}
             popupMiddleware={middlewareWithArrow}
+            
+            popupAutoFlip={props.popupAutoFlip ?? true}
+            popupAutoShift={props.popupAutoShift ?? true}
+            
             onPopupUpdate={handlePopupUpdate}
             
             
