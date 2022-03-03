@@ -546,7 +546,6 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 (targetRef && 'overlay') || null,
             ]}
             style={{
-
                 position : (targetRef && popupStrategy) || undefined,
                 left     : (targetRef && popupPos) ? `${popupPos.x}px` : undefined,
                 top      : (targetRef && popupPos) ? `${popupPos.y}px` : undefined,
