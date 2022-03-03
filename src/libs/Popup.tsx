@@ -282,7 +282,10 @@ class FloatingInstance {
 }
 const isFloatingExists = (floatingInstance: FloatingInstance|null): floatingInstance is FloatingInstance => !!floatingInstance && floatingInstance.isExists;
 
-type Coordinate = readonly [number, number]
+interface Coordinate {
+    x         : number
+    y         : number
+    placement : PopupPlacement}
 const coordinateReducer = (coordinate: Coordinate|null, newCoordinate: Coordinate|null): Coordinate|null => {
     if (
         (newCoordinate === coordinate)
@@ -292,9 +295,11 @@ const coordinateReducer = (coordinate: Coordinate|null, newCoordinate: Coordinat
             &&
             !!coordinate
             &&
-            (newCoordinate[0] === coordinate[0])
+            (newCoordinate.x === coordinate.x)
             &&
-            (newCoordinate[1] === coordinate[1])
+            (newCoordinate.y === coordinate.y)
+            &&
+            (newCoordinate.placement === coordinate.placement)
         )
     ) return coordinate;
     
@@ -381,7 +386,11 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         
         
         
-        setPopupPos([computedPosition.x, computedPosition.y]);
+        setPopupPos({
+            x         : computedPosition.x,
+            y         : computedPosition.y,
+            placement : computedPosition.placement,
+        });
     }, [onPopupUpdate]);
     
     
@@ -526,12 +535,12 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             classes={[...(props.classes ?? []),
-                targetRef && popupPlacement,
+                ((targetRef && popupPos) && popupPos.placement) || null,
             ]}
             style={{
                 position : (targetRef && popupStrategy) || undefined,
-                left     : (targetRef && popupPos) ? `${popupPos[0]}px` : undefined,
-                top      : (targetRef && popupPos) ? `${popupPos[1]}px` : undefined,
+                left     : (targetRef && popupPos) ? `${popupPos.x}px` : undefined,
+                top      : (targetRef && popupPos) ? `${popupPos.y}px` : undefined,
             }}
             
             
