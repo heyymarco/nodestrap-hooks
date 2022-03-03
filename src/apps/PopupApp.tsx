@@ -12,7 +12,7 @@ import {
 	SizeName,
 } 					from '../libs/Basic';
 import Button from '../libs/Button';
-import Popup from '../libs/Popup';
+import Popup, { PopupPlacement } from '../libs/Popup';
 
 
 
@@ -31,6 +31,9 @@ function App() {
 	const [active,      setActive   ] = useState(false);
 	const [active2,      setActive2   ] = useState(false);
 
+	const placements = [undefined,'auto','auto-start','auto-end','top','top-start','top-end','bottom','bottom-start','bottom-end','right','right-start','right-end','left','left-start','left-end'];
+    const [placement, setPlacement] = useState<PopupPlacement|undefined>('top');
+	
 	const targetButtonRef = useRef<HTMLButtonElement>(null);
 
 	
@@ -48,7 +51,7 @@ function App() {
 				<hr style={{flexBasis: '100%'}} />
 				
 				<Button elmRef={targetButtonRef} onClick={() => setActive2(!active2)}>Toggle popup at this button</Button>
-				<Popup targetRef={targetButtonRef} popupPlacement='right' theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
+				<Popup targetRef={targetButtonRef} popupPlacement={placement} theme={theme} size={size} gradient={enableGrad} outlined={outlined} mild={mild} enabled={enabled}
 				
 					active={active2}
 				>
@@ -129,6 +132,21 @@ function App() {
 						/>
 						active
 					</label>
+				</p>
+				<p>
+					Placement:
+					{
+						placements.map(pl =>
+							<label key={pl ?? ''}>
+								<input type='radio'
+									value={pl}
+									checked={placement===pl}
+									onChange={(e) => setPlacement(e.target.value as PopupPlacement || undefined)}
+								/>
+								{`${pl}`}
+							</label>
+						)
+					}
 				</p>
             </Container>
         </div>

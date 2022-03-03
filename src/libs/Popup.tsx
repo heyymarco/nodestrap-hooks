@@ -5,6 +5,7 @@ import {
     useCallback,
     useEffect,
     useState,
+    useReducer,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -55,7 +56,6 @@ import type {
     Strategy   as PopupStrategy,
     
     ComputePositionReturn,
-    Side       as PopupSide,
 }                           from '@floating-ui/dom'
 
 // nodestrap components:
@@ -282,6 +282,25 @@ class FloatingInstance {
 }
 const isFloatingExists = (floatingInstance: FloatingInstance|null): floatingInstance is FloatingInstance => !!floatingInstance && floatingInstance.isExists;
 
+type Coordinate = readonly [number, number]
+const coordinateReducer = (coordinate: Coordinate|null, newCoordinate: Coordinate|null): Coordinate|null => {
+    if (
+        (newCoordinate === coordinate)
+        ||
+        (
+            !!newCoordinate
+            &&
+            !!coordinate
+            &&
+            (newCoordinate[0] === coordinate[0])
+            &&
+            (newCoordinate[1] === coordinate[1])
+        )
+    ) return coordinate;
+    
+    return newCoordinate;
+};
+
 
 
 // react components:
@@ -326,6 +345,8 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     const activePassiveState = useActivePassiveState(props);
     const isVisible          = activePassiveState.active || (!!activePassiveState.class); // visible = showing, shown, hidding ; !visible = hidden
     
+    const [popupPos, setPopupPos] = useReducer(coordinateReducer, null);
+    
     
     
     // rest props:
@@ -351,6 +372,17 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         // children:
         children,
     ...restProps} = props;
+    
+    
+    
+    // callbacks:
+    const handlePopupUpdate = useCallback(async (computedPosition: ComputePositionReturn) => {
+        await onPopupUpdate?.(computedPosition);
+        
+        
+        
+        setPopupPos([computedPosition.x, computedPosition.y]);
+    }, [onPopupUpdate]);
     
     
     
@@ -404,25 +436,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                     
                     
                     
-                    const { x, y, strategy, placement } = computedPosition;
-                    const basePlacement : PopupSide = placement.split('-')[0] as PopupSide;
-                    
-                    Object.assign(popup.style, {
-                        position : strategy,
-                        left     : `${x}px`,
-                        top      : `${y}px`,
-                    });
-                    
-                    popup.classList.remove(
-                        'top', 'bottom', 'left', 'right',
-                    );
-                    popup.classList.add(
-                        basePlacement,
-                    );
-                    
-                    
-                    
-                    await onPopupUpdate?.(computedPosition);
+                    await handlePopupUpdate(computedPosition);
                 };
                 
                 
@@ -473,7 +487,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
         popupOffset,
         popupShift,
         
-        onPopupUpdate,
+        handlePopupUpdate,
     ]); // (re)create the function on every time the popup's properties changes
     
     // (re)run the function on every time the function's reference changes:
@@ -503,13 +517,22 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                 (
                     !targetRef                         // no `targetRef` specified => no need for floating-ui
                     ||
-                    isFloatingExists(floatingInstance) // wait until floating-ui is ready (do not show if floating-ui is not ready, the appearance might look ugly)
+                    !!floatingInstance                 // wait until floating-ui is ready or ever ready (do not show if floating-ui is not ready, the appearance might look ugly)
+                 // isFloatingExists(floatingInstance) // wait until floating-ui is ready (do not show if floating-ui is not ready, the appearance might look ugly)
                 )
             }
             
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            classes={[...(props.classes ?? []),
+                targetRef && popupPlacement,
+            ]}
+            style={{
+                position : (targetRef && popupStrategy) || undefined,
+                left     : (targetRef && popupPos) ? `${popupPos[0]}px` : undefined,
+                top      : (targetRef && popupPos) ? `${popupPos[1]}px` : undefined,
+            }}
             
             
             // events:
