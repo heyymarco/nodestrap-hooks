@@ -227,11 +227,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
-        // spacings:
-        // margin               : '0.6rem',
-        
-        
-        
         // typos:
         whiteSpace           : 'nowrap',
         fontSize             : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
@@ -244,10 +239,10 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         arrowInlineSize      : '0.8rem',
         arrowBlockSize       : '0.8rem',
         arrowClipPath        : 'polygon(100% 0%,100% 100%,0 100%)',
-        arrowTopTransform    : [['scaleX(0.7)', 'translateY(50%)' , 'rotate(45deg)' ]],
-        arrowRightTransform  : [['scaleY(0.7)', 'translateX(-50%)', 'rotate(135deg)']],
-        arrowBottomTransform : [['scaleX(0.7)', 'translateY(-50%)', 'rotate(225deg)']],
-        arrowLeftTransform   : [['scaleY(0.7)', 'translateX(50%)' , 'rotate(315deg)']],
+        arrowTopTransform    : [['scaleX(0.7)', 'translateY(calc((50% - 0.8px) *  1))', 'rotate(45deg)' ]],
+        arrowRightTransform  : [['scaleY(0.7)', 'translateX(calc((50% - 0.8px) * -1))', 'rotate(135deg)']],
+        arrowBottomTransform : [['scaleX(0.7)', 'translateY(calc((50% - 0.8px) * -1))', 'rotate(225deg)']],
+        arrowLeftTransform   : [['scaleY(0.7)', 'translateX(calc((50% - 0.8px) *  1))', 'rotate(315deg)']],
     };
 }, { prefix: 'ttip' });
 
@@ -261,6 +256,20 @@ const isEnabled = (target: HTMLElement|null|undefined) => {
 };
 
 
+export interface CalculateArrowSizeProps {
+    arrow     : HTMLElement
+    placement : PopupPlacement
+}
+export type CalculateArrowSize = (props: CalculateArrowSizeProps) => Promise<readonly [number, number]>
+const defaultCalculateArrowSize : CalculateArrowSize = async ({ arrow, placement }) => {
+    const { width, height, }   = arrow.getBoundingClientRect();
+    return [
+        width  / 2,
+        height / 2,
+    ];
+};
+
+
 
 // react components:
 
@@ -268,6 +277,10 @@ export interface TooltipProps<TElement extends HTMLElement = HTMLElement>
     extends
         PopupProps<TElement>
 {
+    // popups:
+    unsafe_calculateArrowSize? : CalculateArrowSize
+    
+    
     // debounces:
     activeDelay?  : number
     passiveDelay? : number
@@ -291,6 +304,11 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         // accessibilities:
         active,         // from accessibilities
         inheritActive,  // from accessibilities
+        
+        
+        
+        // popups:
+        unsafe_calculateArrowSize : calculateArrowSize = defaultCalculateArrowSize,
         
         
         
@@ -418,8 +436,45 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
     
     
     // callbacks:
+    const arrowOffsetMiddleware = useCallback((arrow: HTMLElement): PopupMiddleware => {
+        return {
+            name: 'arrowOffset',
+            async fn({ placement, x, y }) {
+                const parentStyle = arrow.parentElement?.style;
+                const { display, visibility, transition, animation } = parentStyle ?? {}
+                if (parentStyle) {
+                    parentStyle.display    = 'block';
+                    parentStyle.visibility = 'hidden';
+                    parentStyle.transition = 'none';
+                    parentStyle.animation  = 'none';
+                } // if
+                
+                const [width, height] = await calculateArrowSize({ arrow, placement });
+                
+                if (parentStyle) {
+                    parentStyle.display    = display    ?? '';
+                    parentStyle.visibility = visibility ?? '';
+                    parentStyle.transition = transition ?? '';
+                    parentStyle.animation  = animation  ?? '';
+                } // if
+                
+                
+                
+                const basePlacement = placement.split('-')[0];
+                const isTop    = (basePlacement === 'top'   );
+                const isBottom = (basePlacement === 'bottom');
+                const isLeft   = (basePlacement === 'left'  );
+                const isRight  = (basePlacement === 'right' );
+                return {
+                    x: x - (isLeft ? width  : 0) + (isRight  ? width  : 0),
+                    y: y - (isTop  ? height : 0) + (isBottom ? height : 0),
+                };
+            }
+        };
+    }, [calculateArrowSize]);
+    
     const arrowRef = useRef<HTMLDivElement>(null);
-    const middlewareWithArrow = useCallback(async (defaultMiddleware: PopupMiddleware[]) => {
+    const middlewareWithArrow   = useCallback(async (defaultMiddleware: PopupMiddleware[]) => {
         const arrow = arrowRef.current;
         if (!arrow) return defaultMiddleware;
         
@@ -445,11 +500,12 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
             arrowMiddleware({
                 element : arrow,
                 padding : maxBorderRadius ?? 0,
-            })
+            }),
+            arrowOffsetMiddleware(arrow),
         ];
-    }, []);
+    }, [arrowOffsetMiddleware]);
     
-    const handlePopupUpdate   = useCallback(async (computedPosition: ComputePositionReturn) => {
+    const handlePopupUpdate     = useCallback(async (computedPosition: ComputePositionReturn) => {
         await onPopupUpdate?.(computedPosition);
         
         
