@@ -236,8 +236,8 @@ export type CalculateArrowSize = (props: CalculateArrowSizeProps) => Promise<rea
 const defaultCalculateArrowSize : CalculateArrowSize = async ({ arrow, placement }) => {
     const { width, height, }   = arrow.getBoundingClientRect();
     return [
-        width  / 2,
-        height / 2,
+        (width  / 2) - 1,
+        (height / 2) - 1,
     ];
 };
 
@@ -467,13 +467,17 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
         
         
         
+        const offsetMiddlewareIndex      = defaultMiddleware.findIndex((middleware) => (middleware.name === 'offset'));
+        const arrowOffsetMiddlewareIndex = offsetMiddlewareIndex + 1;
         return [
-            ...defaultMiddleware,
+            ...defaultMiddleware.slice(0, arrowOffsetMiddlewareIndex),
+            arrowOffsetMiddleware(arrow),
+            ...defaultMiddleware.slice(arrowOffsetMiddlewareIndex),
+            
             arrowMiddleware({
                 element : arrow,
                 padding : maxBorderRadius ?? 0,
             }),
-            arrowOffsetMiddleware(arrow),
         ];
     }, [arrowOffsetMiddleware]);
     
