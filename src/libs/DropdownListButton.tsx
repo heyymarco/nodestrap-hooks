@@ -14,8 +14,8 @@ import type {
 import {
     // general types:
     PopupPlacement,
-    PopupModifier,
-    PopupPosition,
+    PopupMiddleware,
+    PopupStrategy,
     
     
     
@@ -152,6 +152,6 @@ export { DropdownListButton as default }
 
 export type { OrientationName, OrientationVariant }
 
-export type { PopupPlacement, PopupModifier, PopupPosition }
+export type { PopupPlacement, PopupMiddleware, PopupStrategy }
 
 export type { ListStyle, ListVariant }
