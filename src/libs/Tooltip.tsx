@@ -230,6 +230,14 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
+// setup css variables:
+cssProps.arrowInlineSizeSm    = [['calc((', cssProps.arrowInlineSize, ')*0.75)']] as any;
+cssProps.arrowBlockSizeSm     = [['calc((', cssProps.arrowBlockSize , ')*0.75)']] as any;
+cssProps.arrowInlineSizeLg    = [['calc((', cssProps.arrowInlineSize, ')*1.50)']] as any;
+cssProps.arrowBlockSizeLg     = [['calc((', cssProps.arrowBlockSize , ')*1.50)']] as any;
+
+
+
 // utilities:
 const isEnabled = (target: HTMLElement|null|undefined) => {
     if (!target) return false; // if no target => assumes target as disabled
