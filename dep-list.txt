@@ -70,7 +70,7 @@
 
 notifications:
 [published] @nodestrap/alert
-[published] @nodestrap/tooltip
+[modified ] @nodestrap/tooltip
 
 // menus:
 [published] @nodestrap/collapse

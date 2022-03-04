@@ -1,6 +1,5 @@
 // react:
 import {
-    default as React,
     useState,
     useEffect,
     useCallback,
@@ -58,10 +57,6 @@ import type {
 import {
     // hooks:
     usesSizeVariant,
-    usesBackg,
-    usesBorder,
-    usesBorderStroke,
-    expandBorderStroke,
 }                           from './Basic'
 import {
     // general types:
@@ -89,17 +84,6 @@ import {
 const arrowElm = '.arrow';
 
 export const usesTooltipLayout = () => {
-    // dependencies:
-    
-    // colors:
-    const [, backgRefs ] = usesBackg();
-    const [border      ] = usesBorder();
-    
-    // borders:
-    const [borderStroke] = usesBorderStroke();
-    
-    
-    
     return style({
         ...imports([
             // layouts:
@@ -109,34 +93,26 @@ export const usesTooltipLayout = () => {
             // children:
             ...children(arrowElm, {
                 // children:
-                ...imports([
-                    // colors:
-                    border(),
-                    
-                    // borders:
-                    borderStroke(),
-                ]),
                 ...style({
                     // layouts:
-                    display  : 'block',
-                    content  : '""',
+                    display   : 'block',
+                    content   : '""',
                     
                     
                     
                     // positions:
-                    position : 'absolute',
+                    position  : 'absolute',
                     
                     
                     
                     // backgrounds:
-                    backg    : backgRefs.backg,
+                    backg     : 'inherit',
                     
                     
                     
                     // borders:
-                    ...expandBorderStroke(), // expand borderStroke css vars
-                    borderInlineStartColor : 'transparent',
-                    borderBlockStartColor  : 'transparent',
+                    border    : 'inherit',
+                    boxShadow : 'inherit',
                     
                     
                     
@@ -151,11 +127,6 @@ export const usesTooltipLayout = () => {
                         `.${tooltipPos}-start`,
                         `.${tooltipPos}-end`,
                     ], {
-                        // // children:
-                        // ...children(arrowWrapperElm, {
-                        //     [tooltipPos] : 'calc(100% - 0.7px)',
-                        // }),
-                        
                         // children:
                         ...children(arrowElm, {
                             // customize:
@@ -238,7 +209,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         // sizes:
         arrowInlineSize      : '0.8rem',
         arrowBlockSize       : '0.8rem',
-        arrowClipPath        : 'polygon(100% 0%,100% 100%,0 100%)',
+     // arrowClipPath        : 'polygon(100% 0, 100% 100%, 0 100%)',
+        arrowClipPath        : 'polygon(200% -100%, 200% 200%, -100% 200%)', // compensates for boxShadow
         arrowTopTransform    : [['scaleX(0.7)', 'translateY(calc((50% - 0.8px) *  1))', 'rotate(45deg)' ]],
         arrowRightTransform  : [['scaleY(0.7)', 'translateX(calc((50% - 0.8px) * -1))', 'rotate(135deg)']],
         arrowBottomTransform : [['scaleX(0.7)', 'translateY(calc((50% - 0.8px) * -1))', 'rotate(225deg)']],
