@@ -92,49 +92,46 @@ export const usesTooltipLayout = () => {
         ...style({
             // children:
             ...children(arrowElm, {
-                // children:
-                ...style({
-                    // layouts:
-                    display   : 'block',
-                    content   : '""',
-                    
-                    
-                    
-                    // positions:
-                    position  : 'absolute',
-                    
-                    
-                    
-                    // backgrounds:
-                    backg     : 'inherit',
-                    
-                    
-                    
-                    // borders:
-                    border    : 'inherit',
-                    boxShadow : 'inherit',
-                    
-                    
-                    
-                    // customize:
-                    ...usesGeneralProps(usesPrefixedProps(cssProps, 'arrow')), // apply general cssProps starting with arrow***
+                // layouts:
+                content     : '""',
+                display     : 'block',
+                ...rule([':not(.overlay)&', '.nude&'], {
+                    display : 'none',
                 }),
-            }),
-            ...rules([
-                ...['top', 'bottom', 'left', 'right'].map((tooltipPos) =>
-                    rule([
-                        `.${tooltipPos}`,
-                        `.${tooltipPos}-start`,
-                        `.${tooltipPos}-end`,
-                    ], {
-                        // children:
-                        ...children(arrowElm, {
+                
+                
+                
+                // positions:
+                position    : 'absolute',
+                
+                
+                
+                // backgrounds:
+                backg       : 'inherit',
+                
+                
+                
+                // borders:
+                border      : 'inherit',
+                boxShadow   : 'inherit',
+                
+                
+                
+                // customize:
+                ...usesGeneralProps(usesPrefixedProps(cssProps, 'arrow')), // apply general cssProps starting with arrow***
+                ...rules([
+                    ...['top', 'bottom', 'left', 'right'].map((tooltipPos) =>
+                        rule([
+                            `.${tooltipPos}&`,
+                            `.${tooltipPos}-start&`,
+                            `.${tooltipPos}-end&`,
+                        ], {
                             // customize:
                             ...usesGeneralProps(usesPrefixedProps(usesPrefixedProps(cssProps, 'arrow'), tooltipPos)), // apply general cssProps starting with arrow*** and then starting with ***${tooltipPos}
                         }),
-                    }),
-                ),
-            ]),
+                    ),
+                ]),
+            }),
             
             
             
@@ -192,7 +189,7 @@ export const useTooltipSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    return {
+    const basics = {
         // backgrounds:
         boxShadow            : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
         
@@ -216,6 +213,18 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         arrowBottomTransform : [['scaleX(0.7)', 'translateY(calc((50% - 0.8px) * -1))', 'rotate(225deg)']],
         arrowLeftTransform   : [['scaleY(0.7)', 'translateX(calc((50% - 0.8px) *  1))', 'rotate(315deg)']],
     };
+    
+    return {
+        ...basics,
+        
+        
+        
+        // sizes:
+        arrowInlineSizeSm    : [['calc((', basics.arrowInlineSize, ')*0.75)']],
+        arrowBlockSizeSm     : [['calc((', basics.arrowBlockSize , ')*0.75)']],
+        arrowInlineSizeLg    : [['calc((', basics.arrowInlineSize, ')*1.50)']],
+        arrowBlockSizeLg     : [['calc((', basics.arrowBlockSize , ')*1.50)']],
+    }
 }, { prefix: 'ttip' });
 
 
