@@ -443,7 +443,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
                     
                     
                     
-                    await handlePopupUpdate(computedPosition);
+                    handlePopupUpdate(computedPosition);
                 };
                 
                 
