@@ -334,15 +334,6 @@ export interface PopupProps<TElement extends HTMLElement = HTMLElement>
     
     onPopupUpdate?   : (computedPosition: ComputePositionReturn) => Promise<void>
     
-    /**
-     * @deprecated
-     */
-    popupModifiers?  : PopupMiddleware[]
-    /**
-     * @deprecated
-     */
-    popupPosition?   : PopupStrategy
-    
     
     // performances:
     lazy?            : boolean
@@ -389,7 +380,7 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
     
     // callbacks:
     const handlePopupUpdate = useCallback(async (computedPosition: ComputePositionReturn) => {
-        await onPopupUpdate?.(computedPosition);
+        onPopupUpdate?.(computedPosition);
         
         
         
@@ -569,4 +560,3 @@ export function Popup<TElement extends HTMLElement = HTMLElement>(props: PopupPr
 export { Popup as default }
 
 export type { PopupPlacement, PopupMiddleware, PopupStrategy }
-export type { PopupMiddleware as PopupModifier, PopupStrategy as PopupPosition }
