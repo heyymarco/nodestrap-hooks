@@ -1,5 +1,6 @@
 // react:
 import {
+    default as React,
     useState,
     useEffect,
     useCallback,
