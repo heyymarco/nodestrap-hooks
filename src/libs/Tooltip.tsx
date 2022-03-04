@@ -506,7 +506,7 @@ export function Tooltip<TElement extends HTMLElement = HTMLElement>(props: Toolt
     }, [arrowOffsetMiddleware]);
     
     const handlePopupUpdate     = useCallback(async (computedPosition: ComputePositionReturn) => {
-        await onPopupUpdate?.(computedPosition);
+        onPopupUpdate?.(computedPosition);
         
         
         
