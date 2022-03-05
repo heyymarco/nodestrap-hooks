@@ -197,7 +197,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // typos:
-        whiteSpace           : 'nowrap',
+        whiteSpace           : 'normal',
         fontSize             : [['calc((', typos.fontSizeSm, '+', typos.fontSizeNm, ')/2)']],
         fontSizeSm           : typos.fontSizeSm,
         fontSizeLg           : typos.fontSizeNm,
