@@ -65,12 +65,12 @@
 
 // statuses:
 [published] @nodestrap/popup
-[minor chg] @nodestrap/badge
+[published] @nodestrap/badge
 [published] @nodestrap/busy
 
 notifications:
-[minor chg] @nodestrap/alert
-[minor chg] @nodestrap/tooltip
+[published] @nodestrap/alert
+[published] @nodestrap/tooltip
 
 // menus:
 [published] @nodestrap/collapse
