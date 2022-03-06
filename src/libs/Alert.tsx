@@ -259,7 +259,7 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
     
     
     // fn props:
-    const mildFn      = props.mild ?? false;
+    const mildFn      = props.mild ?? true;
     
     
     

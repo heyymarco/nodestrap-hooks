@@ -69,7 +69,7 @@
 [published] @nodestrap/busy
 
 notifications:
-[published] @nodestrap/alert
+[minor chg] @nodestrap/alert
 [minor chg] @nodestrap/tooltip
 
 // menus:
