@@ -52,7 +52,15 @@ import {
     usesContentLayout,
     usesContentVariants,
 }                           from './Content'
-import Icon                 from './Icon'
+import {
+    // general types:
+    IconList,
+    
+    
+    
+    // react components:
+    Icon,
+}                           from './Icon'
 import CloseButton          from './CloseButton'
 import {
     // general types:
@@ -234,7 +242,7 @@ export interface AlertProps<TElement extends HTMLElement = HTMLElement>
     
     
     // children:
-    icon?     : React.ReactChild | boolean | null | string
+    icon?     : React.ReactChild | boolean | null | IconList
     children? : React.ReactNode
     control?  : React.ReactChild | boolean | null
 }
@@ -286,8 +294,8 @@ export function Alert<TElement extends HTMLElement = HTMLElement>(props: AlertPr
                 
                 // variants:
                 size='md'
-                theme={props.theme}
-                mild={!mildFn}
+                theme={mildFn ? props.theme : undefined} // if not .mild => use currentColor
+             // mild={!mildFn} // if not .mild => do not flip the .mild => instead use currentColor
                 
                 
                 // classes:
