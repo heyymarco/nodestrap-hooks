@@ -5,6 +5,12 @@ const activeFn = active ?? !!(props.children ?? false); // badge has a content
 to
 const activeFn = active
 
+<Icon> & <Alert>:
+theme='light' & mild={true (default)} => the icon is invisible (blended to the white backg) => for dark/light it should use page's foreg color
+
+<CloseButton>:
+<Parent mild={false} theme='dark'> => the close button invisible => it should use currentColor on <Button btnStyle='icon'>
+
 set Indicator = isCtrlElm ? disabled : aria-disabled=true
 set range minInlineSize
 fix Check with style btn & nude
