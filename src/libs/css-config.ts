@@ -812,7 +812,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): CssProps => {
          * logoOpacity
          * subOpacity
          */
-        if ((/^(icon|img|media|arrow(Top|Right|Bottom|Left)?|separator|items|item|sub|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|card|caption|header|footer|body|tab|breadcrumb|numbered|element|track|tracklower|trackupper|thumb)($|[A-Z])/).test(propName)) continue; // exclude
+        if ((/^(icon|img|media|arrow(Top|Right|Bottom|Left)?|separator|items|item|sub|logo|toggler|menus|menu|label|control|btn|navBtn|prevBtn|nextBtn|nav|switch|link|bullet|ghost|overlay|card|caption|header|footer|body|tab|breadcrumb|numbered|element|component|track|tracklower|trackupper|thumb)($|[A-Z])/).test(propName)) continue; // exclude
 
         // suffixes:
         /**
