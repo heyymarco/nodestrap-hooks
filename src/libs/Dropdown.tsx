@@ -338,13 +338,17 @@ export function Dropdown<TElement extends HTMLElement = HTMLElement, TCloseType 
         
         
         // setups:
-        document.addEventListener('click', handleClick);
-        document.addEventListener('focus', handleFocus, { capture: true }); // force `focus` as bubbling
+        const timeoutHandler = setTimeout(() => { // wait until the triggering <Dropdown>.open() event is fully fired, so it won't immediately trigger <Dropdown>.close()
+            document.addEventListener('click', handleClick);
+            document.addEventListener('focus', handleFocus, { capture: true }); // force `focus` as bubbling
+        }, 0);
         
         
         
         // cleanups:
         return () => {
+            clearTimeout(timeoutHandler);
+            
             document.removeEventListener('click', handleClick);
             document.removeEventListener('focus', handleFocus, { capture: true });
         };
