@@ -75,15 +75,14 @@ import {
     
     
     // styles:
-    usesDropdownElementLayout,
+    usesDropdownComponentLayout,
     
     
     
     // react components:
     DropdownCloseType,
     
-    DropdownElementProps,
-    DropdownElement,
+    DropdownComponentProps,
     
     DropdownProps,
     Dropdown,
@@ -92,11 +91,11 @@ import {
 
 
 // styles:
-export const usesDropdownListElementLayout = () => {
+export const usesDropdownListComponentLayout = () => {
     return style({
         ...imports([
             // layouts:
-            usesDropdownElementLayout(),
+            usesDropdownComponentLayout(),
         ]),
         ...style({
             // customize:
@@ -105,12 +104,12 @@ export const usesDropdownListElementLayout = () => {
     });
 };
 
-export const useDropdownListElementSheet = createUseSheet(() => [
+export const useDropdownListComponentSheet = createUseSheet(() => [
     mainComposition(
-        rule('&&', { // makes `.DropdownListElement` is more specific than `.List`
+        rule('&&', { // makes `.DropdownListComponent` is more specific than `.List`
             ...imports([
                 // layouts:
-                usesDropdownListElementLayout(),
+                usesDropdownListComponentLayout(),
             ]),
         }),
     ),
@@ -167,24 +166,24 @@ export type DropdownListCloseType = number|DropdownCloseType
 
 
 
-export interface DropdownListElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
+export interface DropdownListComponentProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
     extends
-        DropdownElementProps<TElement, TCloseType>,
+        DropdownComponentProps<TElement, TCloseType>,
         ListProps<TElement>
 {
 }
-export function DropdownListElement<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListElementProps<TElement, TCloseType>) {
+export function DropdownListComponent<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListComponentProps<TElement, TCloseType>) {
     // styles:
-    const sheet = useDropdownListElementSheet();
+    const sheet = useDropdownListComponentSheet();
     
     
     
     // rest props:
     const {
         // accessibilities:
-        active,         // from accessibilities, removed
-        inheritActive,  // from accessibilities, removed
-        tabIndex = -1,  // from ModalElement   , moved to List
+        active,         // from accessibilities  , removed
+        inheritActive,  // from accessibilities  , removed
+        tabIndex = -1,  // from DropdownComponent, moved to List
         
         
         // behaviors:
@@ -240,7 +239,7 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
             
             // classes:
             classes={[
-                sheet.main, // inject DropdownListElement class
+                sheet.main, // inject DropdownListComponent class
             ]}
         >
             {
@@ -301,14 +300,13 @@ export function DropdownListElement<TElement extends HTMLElement = HTMLElement, 
         </List>
     );
 }
-DropdownListElement.prototype = DropdownElement.prototype; // mark as DropdownElement compatible
 
 
 
 export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>
     extends
         DropdownProps<TElement, TCloseType>,
-        DropdownListElementProps<TElement, TCloseType>
+        DropdownListComponentProps<TElement, TCloseType>
 {
 }
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
@@ -323,7 +321,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
             semanticTag ={props.semanticTag  ?? [null]                      }
             semanticRole={props.semanticRole ?? calculateSemanticRole(props)}
         >
-            <DropdownListElement<TElement, TCloseType>
+            <DropdownListComponent<TElement, TCloseType>
                 // other props:
                 {...props}
             />

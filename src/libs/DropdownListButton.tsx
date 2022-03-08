@@ -41,8 +41,8 @@ import {
     
     DropdownListSeparatorItem,
     
-    DropdownListElementProps,
-    DropdownListElement,
+    DropdownListComponentProps,
+    DropdownListComponent,
 }                           from './DropdownList'
 import {
     // react components:
@@ -71,7 +71,7 @@ export interface DropdownListButtonProps<TCloseType = DropdownListCloseType>
     extends
         DropdownButtonProps<TCloseType>,
         
-        DropdownListElementProps<HTMLButtonElement, TCloseType>
+        DropdownListComponentProps<HTMLButtonElement, TCloseType>
 {
     // semantics:
     listTag?          : Tag
@@ -131,7 +131,7 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
             dropdownSemanticTag={props.dropdownSemanticTag   ?? [null]                      }
             dropdownSemanticRole={props.dropdownSemanticRole ?? calculateSemanticRole(props)}
         >
-            <DropdownListElement<HTMLElement, TCloseType>
+            <DropdownListComponent<HTMLElement, TCloseType>
                 // other props:
                 {...restProps}
                 
@@ -143,7 +143,7 @@ export function DropdownListButton<TCloseType = DropdownListCloseType>(props: Dr
                 semanticRole={listSemanticRole}
             >
                 { children }
-            </DropdownListElement>
+            </DropdownListComponent>
         </DropdownButton>
     );
 }

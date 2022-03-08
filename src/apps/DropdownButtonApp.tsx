@@ -60,7 +60,6 @@ function App() {
 					buttonChildren='show menu'
 				>
 					<p>Hello world!</p>
-					<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
                 </DropdownButton>
 
 				<DropdownButton

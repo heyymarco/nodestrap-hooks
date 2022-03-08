@@ -67,7 +67,6 @@ function App() {
 					}}
 				>
 					<p>Hello world!</p>
-					<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
                 </Dropdown>
 
 				<Button elmRef={targetButton2Ref} onClick={(e) => {
