@@ -677,11 +677,9 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                         
                         onActiveChange?.(newActive, closeType);
                     }}
-                    
-                    
-                    // children:
-                    children={(!(props.lazy ?? false) || isVisible) && children.props.children}
-                />
+                >
+                    {(!(props.lazy ?? false) || isVisible) && children.props.children}
+                </children.type>
                 :
                 <ModalElement<TElement, TCloseType>
                     // essentials:
