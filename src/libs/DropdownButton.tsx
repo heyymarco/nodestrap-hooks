@@ -213,10 +213,6 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 }}
                 
                 
-                // children:
-                children={buttonChildren}
-                
-                
                 // classes:
                 classes={[...(props.classes ?? []),
                     'last-visible-child',
@@ -234,7 +230,9 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                         e.preventDefault();
                     } // if
                 }}
-            />
+            >
+                {buttonChildren}
+            </ButtonIcon>
             <Dropdown<HTMLElement, TCloseType>
                 // other props:
                 {...restDropdownProps}
