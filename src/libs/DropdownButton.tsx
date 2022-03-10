@@ -252,7 +252,7 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
                     } // if
                 }}
             >
-                {buttonChildren}
+                { buttonChildren }
             </ButtonIcon>
             <Dropdown<HTMLElement, TCloseType>
                 // other props:
