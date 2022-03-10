@@ -112,7 +112,7 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
         
         // layouts:
         orientation       = 'block',
-        buttonOrientation = (orientation === 'inline') ? 'block' : 'inline',
+        buttonOrientation = 'inline',
         
         
         // appearances:
