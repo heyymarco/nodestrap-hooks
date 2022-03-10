@@ -91,9 +91,11 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
         // accessibilities:
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
+        inheritActive,  // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
         
         label,
+        tabIndex,
         
         
         // layouts:
@@ -146,6 +148,7 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
     const {
         // layouts:
         size,
+        // orientation, // renamed buttonOrientation
         nude,
         
         
@@ -156,8 +159,13 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
         mild,
         
         
-        // states:
+        // <Indicator> states:
         enabled,
+        inheritEnabled,
+        readOnly,
+        inheritReadOnly,
+        // active,        // delete, already handled by `useTogglerActive`
+        // inheritActive, // delete, already handled by `useTogglerActive`
     } = restDropdownProps;
     
     
@@ -197,6 +205,7 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
                 
                 // accessibilities:
                 label={label}
+                tabIndex={tabIndex}
                 
                 
                 // appearances:
@@ -205,24 +214,24 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
                 
                 
                 // variants:
-                {...{
-                    // layouts:
-                    size,
-                    orientation: buttonOrientation,
-                    nude,
-                    
-                    
-                    // colors:
-                    theme,
-                    gradient,
-                    outlined,
-                    mild,
-                }}
+                // layouts:
+                size={size}
+                orientation={buttonOrientation}
+                nude={nude}
+                // colors:
+                theme={theme}
+                gradient={gradient}
+                outlined={outlined}
+                mild={mild}
                 
                 
-                // states:
+                // <Indicator> states:
                 enabled={enabled}
+                inheritEnabled={inheritEnabled}
+                readOnly={readOnly}
+                inheritReadOnly={inheritReadOnly}
                 active={isActive}
+                inheritActive={false}
                 
                 
                 // classes:
