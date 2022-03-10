@@ -56,7 +56,7 @@ import {
 
 
 // utilities:
-export const calculateSemanticRole = <TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) => {
+export const calculateSemanticRole = <TElement extends HTMLElement = HTMLElement>(props: React.PropsWithChildren<Omit<ListProps<TElement>, keyof React.DOMAttributes<TElement>>>) => {
     if (props.role) return null;
     
     
