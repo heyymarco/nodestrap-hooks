@@ -105,8 +105,6 @@ export function DropdownListComponent<TElement extends HTMLElement = HTMLElement
     // rest props:
     const {
         // accessibilities:
-        active,         // from accessibilities  , removed
-        inheritActive,  // from accessibilities  , removed
         tabIndex = -1,  // from DropdownComponent, moved to List
         
         
@@ -154,11 +152,6 @@ export function DropdownListComponent<TElement extends HTMLElement = HTMLElement
             
             // behaviors:
             actionCtrl={actionCtrl}
-            
-            
-            // variants:
-            theme={props.theme ?? 'secondary'}
-            listStyle={props.listStyle ?? 'joined'}
         >
             {
                 propEnabled
@@ -228,11 +221,49 @@ export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, T
 {
 }
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
+    // rest props:
+    const {
+        // children:
+        children,
+    ...restDropdownProps} = props;
+    const {
+        // layouts:
+        size,
+        orientation,
+        // nude,
+        
+        
+        // colors:
+        theme      = 'secondary', // set default to secondary
+        gradient,
+        outlined,
+        mild,
+        
+        
+        // variants:
+        listStyle  = 'joined', // set default to joined
+        
+        
+        // behaviors:
+        actionCtrl,
+        
+        
+        // <Indicator> states:
+        enabled,
+        inheritEnabled,
+        readOnly,
+        inheritReadOnly,
+        // active,
+        // inheritActive,
+    } = restDropdownProps;
+    
+    
+    
     // jsx:
     return (
         <Dropdown<TElement, TCloseType>
             // other props:
-            {...props}
+            {...restDropdownProps}
             
             
             // semantics:
@@ -240,9 +271,36 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
             semanticRole={props.semanticRole ?? calculateSemanticRole(props)}
         >
             <DropdownListComponent<TElement, TCloseType>
-                // other props:
-                {...props}
-            />
+                // variants:
+                // layouts:
+                size={size}
+                orientation={orientation}
+                nude={false}
+                // colors:
+                theme={theme}
+                gradient={gradient}
+                outlined={outlined}
+                mild={mild}
+                
+                
+                // variants:
+                listStyle={listStyle}
+                
+                
+                // behaviors:
+                actionCtrl={actionCtrl}
+                
+                
+                // <Indicator> states:
+                enabled={enabled}
+                inheritEnabled={inheritEnabled}
+                readOnly={readOnly}
+                inheritReadOnly={inheritReadOnly}
+                active={false}
+                inheritActive={false}
+            >
+                { children }
+            </DropdownListComponent>
         </Dropdown>
     );
 }
