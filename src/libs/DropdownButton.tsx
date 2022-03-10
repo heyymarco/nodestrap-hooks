@@ -11,13 +11,6 @@ import {
 }                           from './utilities'
 
 // nodestrap components:
-import type {
-    // general types:
-    Tag,
-    Role,
-    SemanticTag,
-    SemanticRole,
-}                           from './Element'
 import {
     // hooks:
     TogglerActiveProps,
@@ -57,33 +50,29 @@ export type { DropdownCloseType }
 
 
 
-export interface DropdownButtonProps<TCloseType = DropdownCloseType>
+export interface DropdownButtonProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>
     extends
-        Omit<ButtonIconProps, 'size'>,
+        Pick<ButtonIconProps, 'icon'|'iconPosition'|'onClick'>,
         TogglerActiveProps<TCloseType>,
         
-        DropdownProps<HTMLButtonElement, TCloseType>
+        Omit<DropdownProps<TElement, TCloseType>, 'onClick'>
 {
+    // essentials:
+    buttonRef?         : React.Ref<HTMLButtonElement> // setter ref
+    
+    
     // layouts:
     buttonOrientation? : OrientationName
     
     
     // accessibilities:
-    label?          : string
+    label?             : string
     
     
     // children:
-    buttonChildren? : React.ReactNode
-    
-    
-    
-    // semantics:
-    dropdownTag?          : Tag
-    dropdownRole?         : Role
-    dropdownSemanticTag?  : SemanticTag
-    dropdownSemanticRole? : SemanticRole
+    buttonChildren?    : React.ReactNode
 }
-export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownButtonProps<TCloseType>) {
+export function DropdownButton<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>(props: DropdownButtonProps<TElement, TCloseType>) {
     // states:
     const [isActive, setActive] = useTogglerActive(props);
     
@@ -92,14 +81,11 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
     // rest props:
     const {
         // essentials:
-        elmRef,
+        buttonRef,
         
         
         // semantics:
-        dropdownTag,
-        dropdownRole,
-        dropdownSemanticTag,
-        dropdownSemanticRole,
+        'aria-expanded' : ariaExpanded = isActive,
         
         
         // accessibilities:
@@ -130,20 +116,21 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
         iconPosition = 'end',   // from IconProps
         
         
+        // popups:
+        targetRef,
+        
+        
+        // events:
+        onClick,
+        
+        
         // children:
         children,
         buttonChildren,
-    ...restProps} = props;
+    ...restSharedProps} = props;
     const {
         // essentials:
         style,          // delete
-        
-        
-        // semantics:
-        tag,            // delete, replace with: dropdownTag
-        role,           // delete, replace with: dropdownRole
-        semanticTag,    // delete, replace with: dropdownSemanticTag
-        semanticRole,   // delete, replace with: dropdownSemanticRole
         
         
         // identifiers:
@@ -155,7 +142,19 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
         classes,        // delete
         variantClasses, // delete
         stateClasses,   // delete
-    ...restDropdownProps} = restProps;
+    ...restDropdownProps} = restSharedProps;
+    const {
+        // layouts:
+        size,
+        nude,
+        
+        
+        // colors:
+        theme,
+        gradient,
+        outlined,
+        mild,
+    } = restDropdownProps;
     
     
     
@@ -172,8 +171,8 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
     so if the DOM reference changed, it triggers a new render,
     and then pass the correct (newest) DOM reference to the Dropdown.
     */
-    // const buttonRef = useRef<HTMLButtonElement|null>(null);
-    const [buttonRef, setButtonRef] = useState<HTMLButtonElement|null>(null);
+    // const buttonRef2 = useRef<HTMLButtonElement|null>(null);
+    const [buttonRef2, setButtonRef2] = useState<HTMLButtonElement|null>(null);
     
     
     
@@ -181,47 +180,51 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
     return (
         <>
             <ButtonIcon
-                // other props:
-                {...restProps}
-                
-                
                 // essentials:
                 elmRef={(elm) => {
-                    setRef(elmRef, elm);
-                    setButtonRef(elm);
+                    setRef(buttonRef, elm);
+                    setButtonRef2(elm);
                 }}
                 
                 
                 // semantics:
-                aria-expanded={props['aria-expanded'] ?? isActive}
+                aria-expanded={ariaExpanded}
                 
                 
                 // accessibilities:
-                {...{
-                    label,
-                }}
-                
-                
-                // layouts:
-                orientation={buttonOrientation}
+                label={label}
                 
                 
                 // appearances:
+                icon={icon}
+                iconPosition={iconPosition}
+                
+                
+                // variants:
                 {...{
-                    icon,
-                    iconPosition,
+                    // layouts:
+                    size,
+                    orientation: buttonOrientation,
+                    nude,
+                    
+                    
+                    // colors:
+                    theme,
+                    gradient,
+                    outlined,
+                    mild,
                 }}
                 
                 
                 // classes:
-                classes={[...(props.classes ?? []),
+                classes={[
                     'last-visible-child',
                 ]}
                 
                 
                 // events:
                 onClick={(e) => {
-                    props.onClick?.(e);
+                    onClick?.(e);
                     
                     
                     
@@ -238,22 +241,15 @@ export function DropdownButton<TCloseType = DropdownCloseType>(props: DropdownBu
                 {...restDropdownProps}
                 
                 
-                // semantics:
-                tag ={dropdownTag }
-                role={dropdownRole}
-                semanticTag ={dropdownSemanticTag }
-                semanticRole={dropdownSemanticRole}
-                
-                
                 // popups:
-                targetRef={props.targetRef ?? buttonRef}
+                targetRef={targetRef ?? buttonRef2}
                 
                 
                 // accessibilities:
                 active={isActive}
                 onActiveChange={(newActive, closeType) => {
                     if (onActiveChange) { // controllable
-                        onActiveChange(newActive, closeType as unknown as TCloseType);
+                        onActiveChange(newActive, closeType);
                     }
                     else { // uncontrollable
                         setActive(newActive);
