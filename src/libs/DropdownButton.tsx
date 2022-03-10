@@ -154,6 +154,10 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
         gradient,
         outlined,
         mild,
+        
+        
+        // states:
+        enabled,
     } = restDropdownProps;
     
     
@@ -214,6 +218,11 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
                     outlined,
                     mild,
                 }}
+                
+                
+                // states:
+                enabled={enabled}
+                active={isActive}
                 
                 
                 // classes:
