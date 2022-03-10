@@ -3,36 +3,6 @@ import {
     default as React,
 }                           from 'react'         // base technology of our nodestrap components
 
-// cssfn:
-import {
-    // compositions:
-    mainComposition,
-    
-    
-    
-    // styles:
-    style,
-    imports,
-    
-    
-    
-    // rules:
-    rule,
-}                           from './cssfn'       // cssfn core
-import {
-    // hooks:
-    createUseSheet,
-}                           from './react-cssfn' // cssfn for react
-import {
-    createCssConfig,
-    
-    
-    
-    // utilities:
-    usesGeneralProps,
-    usesPrefixedProps,
-}                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
-
 // nodestrap utilities:
 import {
     // utilities:
@@ -74,11 +44,6 @@ import {
     
     
     
-    // styles:
-    usesDropdownComponentLayout,
-    
-    
-    
     // react components:
     DropdownCloseType,
     
@@ -87,42 +52,6 @@ import {
     DropdownProps,
     Dropdown,
 }                           from './Dropdown'
-
-
-
-// styles:
-export const usesDropdownListComponentLayout = () => {
-    return style({
-        ...imports([
-            // layouts:
-            usesDropdownComponentLayout(),
-        ]),
-        ...style({
-            // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'items')), // apply general cssProps starting with items***
-        }),
-    });
-};
-
-export const useDropdownListComponentSheet = createUseSheet(() => [
-    mainComposition(
-        rule('&&', { // makes `.DropdownListComponent` is more specific than `.List`
-            ...imports([
-                // layouts:
-                usesDropdownListComponentLayout(),
-            ]),
-        }),
-    ),
-], /*sheetId :*/'ib5nas167b'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
-
-
-
-// configs:
-export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    return {
-        /* no config props yet */
-    };
-}, { prefix: 'ddwnlst' });
 
 
 
@@ -173,11 +102,6 @@ export interface DropdownListComponentProps<TElement extends HTMLElement = HTMLE
 {
 }
 export function DropdownListComponent<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListComponentProps<TElement, TCloseType>) {
-    // styles:
-    const sheet = useDropdownListComponentSheet();
-    
-    
-    
     // rest props:
     const {
         // accessibilities:
@@ -235,12 +159,6 @@ export function DropdownListComponent<TElement extends HTMLElement = HTMLElement
             // variants:
             theme={props.theme ?? 'secondary'}
             listStyle={props.listStyle ?? 'joined'}
-            
-            
-            // classes:
-            classes={[
-                sheet.main, // inject DropdownListComponent class
-            ]}
         >
             {
                 propEnabled
