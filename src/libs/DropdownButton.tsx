@@ -50,9 +50,10 @@ export type { DropdownCloseType }
 
 
 
+export type BasicButtonIconProps = Pick<ButtonIconProps, 'icon'|'iconPosition'|'onClick'|'label'|'tabIndex'>
 export interface DropdownButtonProps<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownCloseType>
     extends
-        Pick<ButtonIconProps, 'icon'|'iconPosition'|'onClick'>,
+        BasicButtonIconProps,
         TogglerActiveProps<TCloseType>,
         
         Omit<DropdownProps<TElement, TCloseType>, 'onClick'>
@@ -65,8 +66,8 @@ export interface DropdownButtonProps<TElement extends HTMLElement = HTMLElement,
     buttonOrientation? : OrientationName
     
     
-    // accessibilities:
-    label?             : string
+    // components:
+    button?            : React.ReactComponentElement<any, Element>
     
     
     // children:
@@ -124,6 +125,10 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
         
         // events:
         onClick,
+        
+        
+        // components:
+        button = <ButtonIcon />,
         
         
         // children:
@@ -189,71 +194,71 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
     
     
     // jsx:
+    const defaultButtonProps : (BasicButtonIconProps & ButtonIconProps) = {
+        // essentials:
+        elmRef          : (elm) => {
+            setRef(buttonRef, elm);
+            setButtonRef2(elm);
+        },
+        
+        
+        // semantics:
+        'aria-expanded' : ariaExpanded,
+        
+        
+        // accessibilities:
+        label           : label,
+        tabIndex        : tabIndex,
+        
+        
+        // appearances:
+        icon            : icon,
+        iconPosition    : iconPosition,
+        
+        
+        // variants:
+        // layouts:
+        size            : size,
+        orientation     : buttonOrientation,
+        nude            : nude,
+        // colors:
+        theme           : theme,
+        gradient        : gradient,
+        outlined        : outlined,
+        mild            : mild,
+        
+        
+        // <Indicator> states:
+        enabled         : enabled,
+        inheritEnabled  : inheritEnabled,
+        readOnly        : readOnly,
+        inheritReadOnly : inheritReadOnly,
+        active          : isActive,
+        inheritActive   : false,
+        
+        
+        // classes:
+        classes         : [
+            'last-visible-child',
+        ],
+        
+        
+        // events:
+        onClick         : (e) => {
+            onClick?.(e);
+            
+            
+            
+            if (!e.defaultPrevented) {
+                handleToggleActive();
+                e.preventDefault();
+            } // if
+        },
+    };
     return (
         <>
-            <ButtonIcon
-                // essentials:
-                elmRef={(elm) => {
-                    setRef(buttonRef, elm);
-                    setButtonRef2(elm);
-                }}
-                
-                
-                // semantics:
-                aria-expanded={ariaExpanded}
-                
-                
-                // accessibilities:
-                label={label}
-                tabIndex={tabIndex}
-                
-                
-                // appearances:
-                icon={icon}
-                iconPosition={iconPosition}
-                
-                
-                // variants:
-                // layouts:
-                size={size}
-                orientation={buttonOrientation}
-                nude={nude}
-                // colors:
-                theme={theme}
-                gradient={gradient}
-                outlined={outlined}
-                mild={mild}
-                
-                
-                // <Indicator> states:
-                enabled={enabled}
-                inheritEnabled={inheritEnabled}
-                readOnly={readOnly}
-                inheritReadOnly={inheritReadOnly}
-                active={isActive}
-                inheritActive={false}
-                
-                
-                // classes:
-                classes={[
-                    'last-visible-child',
-                ]}
-                
-                
-                // events:
-                onClick={(e) => {
-                    onClick?.(e);
-                    
-                    
-                    
-                    if (!e.defaultPrevented) {
-                        handleToggleActive();
-                        e.preventDefault();
-                    } // if
-                }}
-            >
-                { buttonChildren }
-            </ButtonIcon>
+            { React.cloneElement(React.cloneElement(button, defaultButtonProps, buttonChildren), button.props) }
+            
             <Dropdown<HTMLElement, TCloseType>
                 // other props:
                 {...restDropdownProps}

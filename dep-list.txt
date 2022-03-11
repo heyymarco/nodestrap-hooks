@@ -75,9 +75,9 @@ notifications:
 // menus:
 [published] @nodestrap/collapse
 [published] @nodestrap/dropdown
-[published] @nodestrap/dropdown-list
+[modified ] @nodestrap/dropdown-list
 [modified ] @nodestrap/dropdown-button
-[published] @nodestrap/dropdown-list-button
+[modified ] @nodestrap/dropdown-list-button
 
 // composite components:
 [published] @nodestrap/progress
