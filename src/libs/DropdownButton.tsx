@@ -13,8 +13,8 @@ import {
 // nodestrap components:
 import type {
     // react components:
-    BasicProps,
-}                           from './Basic'
+    ElementProps,
+}                           from './Element'
 import {
     // hooks:
     TogglerActiveProps,
@@ -71,7 +71,7 @@ export interface DropdownButtonProps<TElement extends HTMLElement = HTMLElement,
     
     
     // components:
-    button?            : React.ReactComponentElement<any, BasicProps>
+    button?            : React.ReactComponentElement<any, ElementProps>
     
     
     // children:
