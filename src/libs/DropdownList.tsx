@@ -121,15 +121,12 @@ export function DropdownListComponent<TElement extends HTMLElement = HTMLElement
         
         
         // accessibilities:
+        onActiveChange,
         tabIndex   = -1,  // from DropdownComponent, moved to List
         
         
         // behaviors:
         actionCtrl = true, // set default to true
-        
-        
-        // actions:
-        onActiveChange,
         
         
         // components:
@@ -172,7 +169,7 @@ export function DropdownListComponent<TElement extends HTMLElement = HTMLElement
             
             // accessibilities:
             ...{
-                tabIndex,
+                tabIndex, // turns <List> to <ControlList>
             },
             
             
