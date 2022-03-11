@@ -70,6 +70,14 @@ export interface DropdownListButtonProps<TElement extends HTMLElement = HTMLElem
 export function DropdownListButton<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListButtonProps<TElement, TCloseType>) {
     // rest props:
     const {
+        // essentials:
+        listRef,
+        
+        
+        // components:
+        list,
+        
+        
         // children:
         children,
     ...restDropdownProps} = props;
@@ -118,6 +126,14 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
             semanticRole={props.semanticRole ?? calculateSemanticRole(props)}
         >
             <DropdownListComponent<TElement, TCloseType>
+                // essentials:
+                listRef={listRef}
+                
+                
+                // components:
+                list={list}
+                
+                
                 // variants:
                 // layouts:
                 size={size}
