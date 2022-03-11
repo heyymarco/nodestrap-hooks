@@ -198,7 +198,7 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
     
     
     // jsx:
-    const defaultButtonProps : (BasicButtonIconProps & ButtonIconProps) = {
+    const defaultButtonProps : ButtonIconProps = {
         // essentials:
         elmRef          : (elm) => {
             setRef(buttonRef, elm);
