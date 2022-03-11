@@ -7,6 +7,7 @@ import {
 import {
     // utilities:
     isTypeOf,
+    setRef,
 }                           from './utilities'
 import {
     // hooks:
@@ -14,6 +15,10 @@ import {
 }                           from './accessibilities'
 
 // nodestrap components:
+import type {
+    // react components:
+    ElementProps,
+}                           from './Element'
 import {
     // hooks:
     ListStyle,
@@ -100,12 +105,23 @@ export interface DropdownListComponentProps<TElement extends HTMLElement = HTMLE
         DropdownComponentProps<TElement, TCloseType>,
         ListProps<TElement>
 {
+    // essentials:
+    listRef? : React.Ref<HTMLElement> // setter ref
+    
+    
+    // components:
+    list?    : React.ReactComponentElement<any, ElementProps>
 }
 export function DropdownListComponent<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListComponentProps<TElement, TCloseType>) {
     // rest props:
     const {
+        // essentials:
+        elmRef,
+        listRef,
+        
+        
         // accessibilities:
-        tabIndex = -1,  // from DropdownComponent, moved to List
+        tabIndex   = -1,  // from DropdownComponent, moved to List
         
         
         // behaviors:
@@ -114,6 +130,10 @@ export function DropdownListComponent<TElement extends HTMLElement = HTMLElement
         
         // actions:
         onActiveChange,
+        
+        
+        // components:
+        list       = <List<TElement> />,
         
         
         // children:
@@ -138,78 +158,82 @@ export function DropdownListComponent<TElement extends HTMLElement = HTMLElement
     
     
     // jsx:
-    return (
-        <List<TElement>
+    const defaultListProps : ListProps = {
             // other props:
-            {...restProps}
+            ...restProps,
+            
+            
+            // essentials:
+            elmRef: (elm) => {
+                setRef(elmRef, elm);
+                setRef(listRef, elm);
+            },
             
             
             // accessibilities:
-            {...{
+            ...{
                 tabIndex,
-            }}
+            },
             
             
             // behaviors:
-            actionCtrl={actionCtrl}
-        >
-            {
-                propEnabled
+            actionCtrl,
+    };
+    return React.cloneElement(React.cloneElement(list, defaultListProps, (
+        propEnabled
+        ?
+        (
+            React.Children.map(children, (child, index) => (
+                isTypeOf(child, ListItem)
                 ?
                 (
-                    React.Children.map(children, (child, index) => (
-                        isTypeOf(child, ListItem)
-                        ?
-                        (
-                            ((child.props.enabled ?? true) && (child.props.actionCtrl ?? actionCtrl))
-                            ?
-                            <child.type
-                                // other props:
-                                {...child.props}
-                                
-                                
-                                // essentials:
-                                key={child.key ?? index}
-                                
-                                
-                                // events:
-                                onClick={(e) => {
-                                    child.props.onClick?.(e);
-                                    
-                                    
-                                    
-                                    handleClose?.(e, index);
-                                }}
-                            />
-                            :
-                            child
-                        )
-                        :
-                        (
-                            actionCtrl
-                            ?
-                            <ListItem
-                                // essentials:
-                                key={index}
-                                
-                                
-                                // events:
-                                onClick={(e) => {
-                                    handleClose?.(e, index);
-                                }}
-                            >
-                                { child }
-                            </ListItem>
-                            :
-                            child
-                        )
-                    ))
+                    ((child.props.enabled ?? true) && (child.props.actionCtrl ?? actionCtrl))
+                    ?
+                    <child.type
+                        // other props:
+                        {...child.props}
+                        
+                        
+                        // essentials:
+                        key={child.key ?? index}
+                        
+                        
+                        // events:
+                        onClick={(e) => {
+                            child.props.onClick?.(e);
+                            
+                            
+                            
+                            handleClose?.(e, index);
+                        }}
+                    />
+                    :
+                    child
                 )
                 :
-                children
-            }
-        </List>
-    );
+                (
+                    actionCtrl
+                    ?
+                    <ListItem
+                        // essentials:
+                        key={index}
+                        
+                        
+                        // events:
+                        onClick={(e) => {
+                            handleClose?.(e, index);
+                        }}
+                    >
+                        { child }
+                    </ListItem>
+                    :
+                    child
+                )
+            ))
+        )
+        :
+        children
+    )), list.props);
 }
 
 
@@ -223,6 +247,14 @@ export interface DropdownListProps<TElement extends HTMLElement = HTMLElement, T
 export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseType = DropdownListCloseType>(props: DropdownListProps<TElement, TCloseType>) {
     // rest props:
     const {
+        // essentials:
+        listRef,
+        
+        
+        // components:
+        list,
+        
+        
         // children:
         children,
     ...restDropdownProps} = props;
@@ -271,6 +303,14 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
             semanticRole={props.semanticRole ?? calculateSemanticRole(props)}
         >
             <DropdownListComponent<TElement, TCloseType>
+                // essentials:
+                listRef={listRef}
+                
+                
+                // components:
+                list={list}
+                
+                
                 // variants:
                 // layouts:
                 size={size}
