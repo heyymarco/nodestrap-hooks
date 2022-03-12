@@ -158,7 +158,7 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
         // layouts:
         size,
         // orientation, // renamed buttonOrientation
-        nude,
+        // nude,
         
         
         // colors:
@@ -224,7 +224,7 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
         // layouts:
         size            : size,
         orientation     : buttonOrientation,
-        nude            : nude,
+        // nude            : nude,
         // colors:
         theme           : theme,
         gradient        : gradient,
