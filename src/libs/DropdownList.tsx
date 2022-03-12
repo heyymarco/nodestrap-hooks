@@ -312,7 +312,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
                 // layouts:
                 size={size}
                 orientation={orientation}
-                nude={false}
+                // nude={nude}
                 // colors:
                 theme={theme}
                 gradient={gradient}
