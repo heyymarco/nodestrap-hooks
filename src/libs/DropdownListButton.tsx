@@ -29,10 +29,10 @@ import {
     // react components:
     DropdownListCloseType,
     
-    DropdownListItemProps,
-    DropdownListItem,
+    ListItemProps,
+    ListItem,
     
-    DropdownListSeparatorItem,
+    ListSeparatorItem,
     
     DropdownListComponentProps,
     DropdownListComponent,
@@ -47,12 +47,14 @@ import {
 
 // react components:
 
-export type { DropdownListItemProps, DropdownListItemProps as ItemProps }
-export { DropdownListItem, DropdownListItem as Item }
+// ListItem => DropdownListItem
+export type { ListItemProps, ListItemProps as DropdownListItemProps, ListItemProps as ItemProps }
+export { ListItem, ListItem as DropdownListItem, ListItem as Item }
 
 
 
-export { DropdownListSeparatorItem, DropdownListSeparatorItem as SeparatorItem }
+// ListSeparatorItem => DropdownListSeparatorItem
+export { ListSeparatorItem, ListSeparatorItem as DropdownListSeparatorItem, ListSeparatorItem as SeparatorItem }
 
 
 
