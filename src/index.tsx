@@ -43,7 +43,7 @@ import reportWebVitals from './reportWebVitals';
 //                 import DropdownApp                  from './apps/DropdownApp';               // div      dialog (semantic)
 //                     import DropdownButtonApp        from './apps/DropdownButtonApp';         // div      dialog (semantic)
 //                     import DropdownListApp          from './apps/DropdownListApp';           // div      dialog|menu (semantic)
-                    import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
+//                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
 //         import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
@@ -60,7 +60,7 @@ import reportWebVitals from './reportWebVitals';
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
 //     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
-//     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
+    import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 // import JssPluginGlobalApp from './apps/JssPluginGlobalApp';
 // import JssPluginNestedApp from './apps/JssPluginNestedApp';
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <DropdownListButtonApp />
+    <ProgressApp />
     ,
     document.getElementById('root')
 );

@@ -5,9 +5,6 @@ import {
 
 // cssfn:
 import type {
-    SingleOrArray,
-}                           from './types'      // cssfn's types
-import type {
     PropEx,
 }                           from './css-types'   // ts defs support for cssfn
 import {
@@ -224,6 +221,8 @@ export const usesProgressBarVars = () => {
 };
 
 
+// states:
+
 //#region running
 export interface RunningVars {
     anim : any
@@ -265,6 +264,16 @@ export const usesRunningState = () => {
         runningDecls,
     ] as const;
 };
+
+export interface RunningState {
+    // states:
+    running? : boolean
+}
+export const useRunningState = (props: RunningState) => {
+    return {
+        class : (props.running ?? false) ? 'running' : null,
+    };
+};
 //#endregion running
 
 
@@ -281,13 +290,13 @@ export const useProgressVariant = (props: ProgressVariant) => {
 };
 
 
-export type ProgressBarStyle = 'striped'|'running' // might be added more styles in the future
+export type ProgressBarStyle = 'striped' // might be added more styles in the future
 export interface ProgressBarVariant {
-    progressBarStyle?: SingleOrArray<ProgressBarStyle>
+    progressBarStyle?: ProgressBarStyle
 }
 export const useProgressBarVariant = (props: ProgressBarVariant) => {
     return {
-        class: props.progressBarStyle ? ((Array.isArray(props.progressBarStyle) ? props.progressBarStyle : [props.progressBarStyle]).filter((style) => !!style).join(' ') || null) : null,
+        class: props.progressBarStyle ? props.progressBarStyle : null,
     };
 };
 
@@ -467,9 +476,6 @@ export const usesProgressBarVariants = () => {
     // colors:
     const [, backgRefs] = usesBackg();
     
-    // animations:
-    const [running, runningRefs] = usesRunningState();
-    
     // layouts:
     const [sizes] = usesSizeVariant((sizeName) => style({
         // overwrites propName = propName{SizeName}:
@@ -492,10 +498,6 @@ export const usesProgressBarVariants = () => {
         }),
         ...variants([
             rule('.striped', {
-                ...imports([
-                    // states:
-                    running(),
-                ]),
                 // children:
                 ...children(listItemElm, {
                     // backgrounds:
@@ -506,14 +508,29 @@ export const usesProgressBarVariants = () => {
                         // bottom layer:
                         backgRefs.backg,
                     ],
-                    
-                    
-                    
-                    // animations:
-                    anim  : runningRefs.anim,
                 }),
             }),
         ]),
+    });
+};
+export const usesProgressBarStates = () => {
+    // dependencies:
+    
+    // states:
+    const [running, runningRefs] = usesRunningState();
+    
+    
+    
+    return style({
+        ...imports([
+            // states:
+            running(),
+        ]),
+        // children:
+        ...children(listItemElm, {
+            // animations:
+            anim  : runningRefs.anim,
+        }),
     });
 };
 
@@ -526,6 +543,9 @@ export const useProgressBarSheet = createUseSheet(() => [
                 
                 // variants:
                 usesProgressBarVariants(),
+                
+                // states:
+                usesProgressBarStates(),
             ]),
         }),
     ),
@@ -751,6 +771,9 @@ export interface ProgressBarProps<TElement extends HTMLElement = HTMLElement>
     extends
         BasicProps<TElement>,
         
+        // states:
+        RunningState,
+        
         // appearances:
         ProgressBarVariant
 {
@@ -767,6 +790,11 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
     
     // variants:
     const progressBarVariant = useProgressBarVariant(props);
+    
+    
+    
+    // states:
+    const runningState       = useRunningState(props);
     
     
     
@@ -801,6 +829,12 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
             
             // classes:
             mainClass={props.mainClass ?? sheet.main}
+            variantClasses={[...(props.variantClasses ?? []),
+                progressBarVariant.class,
+            ]}
+            stateClasses={[...(props.stateClasses ?? []),
+                runningState.class,
+            ]}
             
             
             // styles:
@@ -808,9 +842,6 @@ export function ProgressBar<TElement extends HTMLElement = HTMLElement>(props: P
                 // values:
                 [progressBarVarDecls.valueRatio]: valueRatio,
             }}
-            variantClasses={[...(props.variantClasses ?? []),
-                progressBarVariant.class,
-            ]}
         >
             <Basic<TElement>
                 // other props:

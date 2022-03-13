@@ -91,7 +91,8 @@ function App() {
 						// mild={mild}
 
 						value={30}
-						progressBarStyle={['striped', 'running']}
+						progressBarStyle={'striped'}
+						running={true}
 					/>
                 </Progress>
 
@@ -160,6 +161,7 @@ function App() {
 					orientation={orientation}
 					progressStyle={progressStyle}
 				>
+					<div></div>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
 						// outlined={outlined}
