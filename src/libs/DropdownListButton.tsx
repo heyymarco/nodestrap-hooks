@@ -76,6 +76,10 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
         listRef,
         
         
+        // layouts:
+        listOrientation,
+        
+        
         // components:
         list,
         
@@ -86,7 +90,7 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
     const {
         // layouts:
         size,
-        orientation,
+        // orientation, // renamed listOrientation
         // nude,
         
         
@@ -139,8 +143,8 @@ export function DropdownListButton<TElement extends HTMLElement = HTMLElement, T
                 // variants:
                 // layouts:
                 size={size}
-                orientation={orientation}
-                nude={false}
+                orientation={listOrientation}
+                // nude={nude}
                 // colors:
                 theme={theme}
                 gradient={gradient}

@@ -77,7 +77,7 @@ notifications:
 [published] @nodestrap/dropdown
 [published] @nodestrap/dropdown-button
 [modified ] @nodestrap/dropdown-list
-[published] @nodestrap/dropdown-list-button
+[modified ] @nodestrap/dropdown-list-button
 
 // composite components:
 [published] @nodestrap/progress
