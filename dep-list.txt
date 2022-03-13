@@ -76,7 +76,7 @@ notifications:
 [published] @nodestrap/collapse
 [published] @nodestrap/dropdown
 [published] @nodestrap/dropdown-button
-[published] @nodestrap/dropdown-list
+[modified ] @nodestrap/dropdown-list
 [published] @nodestrap/dropdown-list-button
 
 // composite components:

@@ -109,6 +109,10 @@ export interface DropdownListComponentProps<TElement extends HTMLElement = HTMLE
     listRef? : React.Ref<HTMLElement> // setter ref
     
     
+    // layouts:
+    listOrientation? : OrientationName
+    
+    
     // components:
     list?    : React.ReactComponentElement<any, ElementProps>
 }
@@ -248,6 +252,10 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
         listRef,
         
         
+        // layouts:
+        listOrientation,
+        
+        
         // components:
         list,
         
@@ -258,7 +266,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
     const {
         // layouts:
         size,
-        orientation,
+        // orientation, // renamed listOrientation
         // nude,
         
         
@@ -311,7 +319,7 @@ export function DropdownList<TElement extends HTMLElement = HTMLElement, TCloseT
                 // variants:
                 // layouts:
                 size={size}
-                orientation={orientation}
+                orientation={listOrientation}
                 // nude={nude}
                 // colors:
                 theme={theme}
