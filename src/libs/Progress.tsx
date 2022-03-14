@@ -476,12 +476,6 @@ export const usesProgressBarVariants = () => {
     // colors:
     const [, backgRefs] = usesBackg();
     
-    // layouts:
-    const [sizes] = usesSizeVariant((sizeName) => style({
-        // overwrites propName = propName{SizeName}:
-        ...overwriteProps(cssDecls, usesSuffixedProps(cssProps, sizeName)),
-    }));
-    
     
     
     return style({
@@ -489,11 +483,7 @@ export const usesProgressBarVariants = () => {
         ...children(listItemElm, {
             ...imports([
                 // variants:
-                usesBasicVariants(),
                 usesProgressBarInheritMildVariant(),
-                
-                // layouts:
-                sizes(),
             ]),
         }),
         ...variants([
