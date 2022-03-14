@@ -59,7 +59,6 @@ import colors               from './colors'      // configurable colors & themin
 import spacers              from './spacers'     // configurable spaces defs
 import {
     // utilities:
-    isTypeOf,
     parseNumber,
 }                           from './utilities'
 
@@ -692,7 +691,7 @@ export function Progress<TElement extends HTMLElement = HTMLElement>(props: Prog
     const remainingValueRatio = 1 - Math.min((
         React.Children.toArray(children).map((child) => {
             // <ProgressBar> component:
-            if (isTypeOf(child, ProgressBar)) {
+            if (React.isValidElement<ProgressBarProps>(child)) {
                 // fn props:
                 const { valueRatio } = calculateValues(child.props);
                 return valueRatio;

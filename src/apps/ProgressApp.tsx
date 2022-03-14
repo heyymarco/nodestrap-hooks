@@ -161,7 +161,6 @@ function App() {
 					orientation={orientation}
 					progressStyle={progressStyle}
 				>
-					<div></div>
                     <ProgressBar
 						// theme={theme} size={size} gradient={enableGrad}
 						// outlined={outlined}
