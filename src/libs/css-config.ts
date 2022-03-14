@@ -863,7 +863,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): CssProps => {
          * valid   => (icon)Valid   => valid
          * invalid => (icon)Invalid => invalid
          */
-        if ((/^(backgGrad(Inline|Block)?|backg(Overlay|Stripped)(Img|Size)?|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|transDuration|(top|bottom|left|right)Transform|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
+        if ((/^(backgGrad(Inline|Block)?|backg(Overlay|Striped)(Img|Size)?|orientation|align|horzAlign|vertAlign|spacing|img|size|valid|invalid|transDuration|(top|bottom|left|right)Transform|fontFamily\w+|fontSize[0-9]+)$/).test(propName)) continue; // exclude
 
         // props starting with `@`:
         /**
