@@ -18,6 +18,9 @@ import {
 }						from '../libs/Button';
 import type * as Buttons from '../libs/Button';
 
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Link from '../libs/ReactRouterLink'
+
 
 
 function App() {
@@ -176,6 +179,54 @@ function App() {
 				>
                     link button
                 </Button>
+				<hr style={{flexBasis: '100%'}} />
+				<BrowserRouter>
+					<Routes>
+						<Route path='/' element={<>
+							<Button
+								theme={theme} size={size} gradient={enableGrad}
+								outlined={outlined} mild={mild}
+
+								enabled={enabled} active={active}
+
+								arrive={arrive}
+								focus={focus}
+								
+								press={press}
+
+								orientation={orientation}
+								btnStyle={btnStyle}
+							>
+								<Link to='/about'>
+									client side link
+								</Link>
+							</Button>
+							<Button
+								theme={theme} size={size} gradient={enableGrad}
+								outlined={outlined} mild={mild}
+
+								enabled={enabled} active={active}
+
+								arrive={arrive}
+								focus={focus}
+								
+								press={press}
+
+								orientation={orientation}
+								btnStyle={btnStyle}
+
+								tag='button'
+							>
+								<Link to='/about'>
+									client side button
+								</Link>
+							</Button>
+						</>} />
+						<Route path='/about' element={<>
+							about .....
+						</>} />
+					</Routes>
+				</BrowserRouter>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

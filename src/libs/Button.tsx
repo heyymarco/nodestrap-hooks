@@ -89,6 +89,11 @@ import {
     
     
     
+    // utilities:
+    isClientSideLink,
+    
+    
+    
     // styles:
     usesActionControlLayout,
     usesActionControlVariants,
@@ -459,8 +464,10 @@ export function Button(props: ButtonProps) {
     
     
     // fn props:
-    const semanticTag  = props.semanticTag  ?? (props.href ? 'a'    : ['button', 'a']);
-    const semanticRole = props.semanticRole ?? (props.href ? 'link' : ['button', 'link']);
+    const isLink       = !!props.href;
+    const isClientLink = !isLink && isClientSideLink(props.children);
+    const semanticTag  = props.semanticTag  ?? (isLink ? 'a'    : (isClientLink ? ['a'   , 'button'] : ['button', 'a'   ]));
+    const semanticRole = props.semanticRole ?? (isLink ? 'link' : (isClientLink ? ['link', 'button'] : ['button', 'link']));
     const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
     
     
