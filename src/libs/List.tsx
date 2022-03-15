@@ -142,6 +142,11 @@ import {
     
     
     
+    // utilities:
+    isClientSideLink,
+    
+    
+    
     // styles:
     usesActionControlLayout,
     usesActionControlVariants,
@@ -1219,10 +1224,11 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
-    /* not using <button> for "button" because the children may contain any_html_elements */
     // fn props:
-    // const semanticTag  = props.semanticTag  ?? (props.href ? 'a'    : 'button');
-    // const semanticRole = props.semanticRole ?? (props.href ? 'link' : 'button');
+    const isLink       = !!props.href;
+    const isClientLink = !isLink && !!isClientSideLink(props.children);
+    const semanticTag  = props.semanticTag  ?? (isLink ? 'a'    : (isClientLink ? ['a'   , null    ] : [null    , 'a'   ]));
+    const semanticRole = props.semanticRole ?? (isLink ? 'link' : (isClientLink ? ['link', 'button'] : ['button', 'link']));
     // const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
     
     
@@ -1237,8 +1243,8 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             
             // semantics:
-            semanticTag ={props.semanticTag  ?? (props.href ? 'a'    : [null]  )} /* not using <button> for "button" because the children may contain any_html_elements */
-            semanticRole={props.semanticRole ?? (props.href ? 'link' : 'button')}
+            semanticTag ={semanticTag }
+            semanticRole={semanticRole}
             
             
             // accessibilities:

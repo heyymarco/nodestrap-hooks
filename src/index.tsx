@@ -28,7 +28,7 @@ import reportWebVitals from './reportWebVitals';
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
-//             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
+            import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
 //                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
 //         import CardApp                              from './apps/CardApp';                   // article  article (semantic)
 //         import PopupApp                             from './apps/PopupApp';                  // div
@@ -47,7 +47,7 @@ import reportWebVitals from './reportWebVitals';
 //         import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
 //                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
-                    import NavButton                from './apps/NavButtonApp';              //     button|a     button|link (semantic)
+//                     import NavButton                from './apps/NavButtonApp';              //     button|a     button|link (semantic)
 //                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
 //                         import CloseButtonApp       from './apps/CloseButtonApp';            //     button|a     button|link (semantic)
 //             import EditableControlApp               from './apps/EditableControlApp';        // div
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <NavButton />
+    <NavApp />
     ,
     document.getElementById('root')
 );

@@ -13,6 +13,9 @@ import {
 import Nav, {Item, NextItem, PrevItem} from '../libs/Nav';
 import type * as Navs from '../libs/Nav';
 
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import Link from '../libs/ReactRouterLink'
+
 
 
 function App() {
@@ -106,19 +109,46 @@ function App() {
 					<Item enabled={false}>Disabled</Item>
                 </Nav>
                 <hr style={{flexBasis: '100%'}} />
-				<Nav
-					theme={theme} size={size} gradient={enableGrad}
-					outlined={outlined} mild={mild}
+				<BrowserRouter>
+					<Routes>
+						<Route path='/' element={<>
+							<Nav
+								theme={theme} size={size} gradient={enableGrad}
+								outlined={outlined} mild={mild}
 
-					enabled={enabled} active={active} actionCtrl={actionCtrl}
-					orientation={orientation}
-					listStyle={listStyle ?? ['content', 'flush']}
-				>
-					<Item active={true}>Active</Item>
-					<Item href='http://www.google.com'>Link</Item>
-					<Item onClick={() => alert('hello world')}>Link</Item>
-					<Item enabled={false}>Disabled</Item>
-                </Nav>
+								enabled={enabled} active={active} actionCtrl={actionCtrl}
+								orientation={orientation}
+								listStyle={listStyle ?? ['content', 'flush']}
+							>
+								<Item tag='div'>
+									<Link to='/'>
+										(home) client side div
+									</Link>
+								</Item>
+								<Item>
+									<Link to='/about'>
+										(about) client side link
+									</Link>
+								</Item>
+								<Item onClick={() => alert('hello world')}>Link</Item>
+								<Item enabled={false}>Disabled</Item>
+							</Nav>
+
+							<Outlet />
+						</>}>
+							<Route path='/' element={<>
+								<p>
+									home .....
+								</p>
+							</>} />
+							<Route path='/about' element={<>
+								<p>
+									about .....
+								</p>
+							</>} />
+						</Route>
+					</Routes>
+				</BrowserRouter>
                 <hr style={{flexBasis: '100%'}} />
 				<Nav
 					theme={theme} size={size} gradient={enableGrad}
