@@ -549,8 +549,8 @@ export function ActionControl<TElement extends HTMLElement = HTMLElement>(props:
         />
     );
     
-    const semanticTag  : SemanticTag  = !props.semanticTag  ? 'a'    : (!Array.isArray(props.semanticTag)  ?  props.semanticTag  : (!props.semanticTag.includes('a')     ? props.semanticTag  : ['a'   , ...props.semanticTag ]));
-    const semanticRole : SemanticRole = !props.semanticRole ? 'link' : (!Array.isArray(props.semanticRole) ?  props.semanticRole : (!props.semanticRole.includes('link') ? props.semanticRole : ['link', ...props.semanticRole]));
+    const semanticTag  : SemanticTag  = !props.semanticTag  ? 'a'    : (!Array.isArray(props.semanticTag)  ?  props.semanticTag  : (props.semanticTag.includes('a')     ? props.semanticTag  : ['a'   , ...props.semanticTag ]));
+    const semanticRole : SemanticRole = !props.semanticRole ? 'link' : (!Array.isArray(props.semanticRole) ?  props.semanticRole : (props.semanticRole.includes('link') ? props.semanticRole : ['link', ...props.semanticRole]));
     const [, , , isSemanticLink] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'a', semanticRole: 'link' });
     
     const reactRouterLink = childrenArr.find((child) => isReactRouterLink(child));
