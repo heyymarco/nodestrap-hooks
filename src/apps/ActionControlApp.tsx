@@ -13,6 +13,9 @@ import {
 import Control 			from '../libs/Control';
 import ActionControl	from '../libs/ActionControl';
 
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Link from '../libs/ReactRouterLink'
+
 
 
 function App() {
@@ -188,6 +191,33 @@ function App() {
 				>
                     action control raw
                 </ActionControl>
+
+				<BrowserRouter>
+					<Routes>
+						<Route path='/' element={<>		
+							<ActionControl
+								theme={theme} size={size} gradient={enableGrad}
+								outlined={outlined} mild={mild}
+
+								enabled={enabled} active={active}
+
+								arrive={arrive}
+								focus={focus}
+
+								press={press}
+
+								onClick={() => console.log('test onClick')}
+							>
+								<Link to='/about'>
+									action control client side link
+								</Link>
+							</ActionControl>
+						</>} />
+						<Route path='/about' element={<>
+							about .....
+						</>} />
+					</Routes>
+				</BrowserRouter>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
