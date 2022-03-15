@@ -194,7 +194,7 @@ function App() {
 
 				<BrowserRouter>
 					<Routes>
-						<Route path='/' element={<>		
+						<Route path='/' element={<>
 							<ActionControl
 								theme={theme} size={size} gradient={enableGrad}
 								outlined={outlined} mild={mild}
@@ -205,11 +205,26 @@ function App() {
 								focus={focus}
 
 								press={press}
-
-								onClick={() => console.log('test onClick')}
 							>
 								<Link to='/about'>
 									action control client side link
+								</Link>
+							</ActionControl>
+							<ActionControl
+								theme={theme} size={size} gradient={enableGrad}
+								outlined={outlined} mild={mild}
+
+								enabled={enabled} active={active}
+
+								arrive={arrive}
+								focus={focus}
+
+								press={press}
+								
+								tag='button'
+							>
+								<Link to='/about'>
+									action control client side button
 								</Link>
 							</ActionControl>
 						</>} />
