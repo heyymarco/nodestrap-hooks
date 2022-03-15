@@ -16,6 +16,9 @@ import {
 }						from '../libs/NavButton';
 import type * as Buttons from '../libs/NavButton';
 
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import Link from '../libs/ReactRouterLink'
+
 
 
 function App() {
@@ -105,6 +108,107 @@ function App() {
 				>
                     link button
                 </NavButton>
+				<hr style={{flexBasis: '100%'}} />
+				<BrowserRouter>
+					<Routes>
+						<Route path='/' element={<>
+							<div>
+								<NavButton
+									theme={theme} size={size} gradient={enableGrad}
+									outlined={outlined} mild={mild}
+
+									enabled={enabled} active={active}
+
+									arrive={arrive}
+									focus={focus}
+									
+									press={press}
+
+									orientation={orientation}
+									btnStyle={btnStyle}
+								>
+									<Link to='/'>
+										(home) client side link
+									</Link>
+								</NavButton>
+								<NavButton
+									theme={theme} size={size} gradient={enableGrad}
+									outlined={outlined} mild={mild}
+
+									enabled={enabled} active={active}
+
+									arrive={arrive}
+									focus={focus}
+									
+									press={press}
+
+									orientation={orientation}
+									btnStyle={btnStyle}
+									
+									tag='button'
+								>
+									<Link to='/'>
+										(home) client side button
+									</Link>
+								</NavButton>
+							</div>
+
+							<div>
+								<NavButton
+									theme={theme} size={size} gradient={enableGrad}
+									outlined={outlined} mild={mild}
+
+									enabled={enabled} active={active}
+
+									arrive={arrive}
+									focus={focus}
+									
+									press={press}
+
+									orientation={orientation}
+									btnStyle={btnStyle}
+								>
+									<Link to='/about'>
+										(about) client side link
+									</Link>
+								</NavButton>
+								<NavButton
+									theme={theme} size={size} gradient={enableGrad}
+									outlined={outlined} mild={mild}
+
+									enabled={enabled} active={active}
+
+									arrive={arrive}
+									focus={focus}
+									
+									press={press}
+
+									orientation={orientation}
+									btnStyle={btnStyle}
+									
+									tag='button'
+								>
+									<Link to='/about'>
+										(about) client side button
+									</Link>
+								</NavButton>
+							</div>
+
+							<Outlet />
+						</>}>
+							<Route path='/' element={<>
+								<p>
+									home .....
+								</p>
+							</>} />
+							<Route path='/about' element={<>
+								<p>
+									about .....
+								</p>
+							</>} />
+						</Route>
+					</Routes>
+				</BrowserRouter>
 				<hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:

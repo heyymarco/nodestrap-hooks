@@ -49,7 +49,7 @@
 [published] @nodestrap/label
 [published] @nodestrap/masonry
 [modified ] @nodestrap/button
-[published] @nodestrap/nav-button
+[modified ] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
 [published] @nodestrap/form
