@@ -179,10 +179,6 @@ export function Nav<TElement extends HTMLElement = HTMLElement>(props: NavProps<
             semanticRole={props.semanticRole ?? 'navigation'}
             
             
-            // layouts:
-            orientation={props.orientation ?? 'inline'}
-            
-            
             // behaviors:
             actionCtrl={props.actionCtrl ?? true}
         >

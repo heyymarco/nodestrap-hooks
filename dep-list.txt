@@ -81,7 +81,7 @@ notifications:
 
 // composite components:
 [published] @nodestrap/progress
-[published] @nodestrap/nav
+[modified ] @nodestrap/nav
 [published] @nodestrap/navscroll
 [published] @nodestrap/accordion
 [published] @nodestrap/group
