@@ -221,6 +221,26 @@ function App() {
 									client side button
 								</Link>
 							</Button>
+							<Button
+								theme={theme} size={size} gradient={enableGrad}
+								outlined={outlined} mild={mild}
+
+								enabled={enabled} active={active}
+
+								arrive={arrive}
+								focus={focus}
+								
+								press={press}
+
+								orientation={orientation}
+								btnStyle={btnStyle}
+
+								tag='span'
+							>
+								<Link to='/about'>
+									client side span
+								</Link>
+							</Button>
 						</>} />
 						<Route path='/about' element={<>
 							about .....

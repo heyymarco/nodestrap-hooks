@@ -451,10 +451,6 @@ export function Button(props: ButtonProps) {
     
     // rest props:
     const {
-        // actions:
-        type,
-        
-        
         // accessibilities:
         label,
         
@@ -464,11 +460,13 @@ export function Button(props: ButtonProps) {
     
     
     // fn props:
-    const isLink       = !!props.href;
-    const isClientLink = !isLink && !!isClientSideLink(props.children);
-    const semanticTag  = props.semanticTag  ?? (isLink ? 'a'    : (isClientLink ? ['a'   , 'button'] : ['button', 'a'   ]));
-    const semanticRole = props.semanticRole ?? (isLink ? 'link' : (isClientLink ? ['link', 'button'] : ['button', 'link']));
+    const isNativeLink = !!props.href;
+    const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
+    const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
+    const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
+    const tag          = props.tag ?? (isClientLink ? 'a' : undefined);
     const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
+    const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
     
     
     
@@ -482,6 +480,7 @@ export function Button(props: ButtonProps) {
             // semantics:
             semanticTag ={semanticTag }
             semanticRole={semanticRole}
+            tag         ={tag         }
             
             aria-label={props['aria-label'] ?? label}
             
@@ -506,7 +505,7 @@ export function Button(props: ButtonProps) {
             // Button props:
             {...{
                 // actions:
-                type : props.type ?? (isSemanticBtn ? 'button' : undefined),
+                type,
             }}
         >
             { props.children }
