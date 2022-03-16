@@ -1225,11 +1225,13 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     // fn props:
-    const isLink       = !!props.href;
-    const isClientLink = !isLink && !!isClientSideLink(props.children);
-    const semanticTag  = props.semanticTag  ?? (isLink ? 'a'    : (isClientLink ? ['a'   , null    ] : [null    , 'a'   ]));
-    const semanticRole = props.semanticRole ?? (isLink ? 'link' : (isClientLink ? ['link', 'button'] : ['button', 'link']));
-    // const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
+    const isNativeLink = !!props.href;
+    const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
+    const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
+    const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
+    const tag          = props.tag ?? (isClientLink ? 'a' : undefined);
+    const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
+    const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
     
     
     
@@ -1245,6 +1247,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             // semantics:
             semanticTag ={semanticTag }
             semanticRole={semanticRole}
+            tag         ={tag         }
             
             
             // accessibilities:
@@ -1259,12 +1262,11 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             mainClass={props.mainClass ?? [sheet.main, sheetAction.main].join(' ')}
             
             
-            /* not using <button> for "button" because the children may contain any_html_elements */
-            // // Button props:
-            // {...{
-            //     // actions:
-            //     type : props.type ?? (isSemanticBtn ? 'button' : undefined),
-            // }}
+            // Button props:
+            {...{
+                // actions:
+                type,
+            }}
         />
         :
         <Indicator<TElement>

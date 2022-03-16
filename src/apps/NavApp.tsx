@@ -120,14 +120,24 @@ function App() {
 								orientation={orientation}
 								listStyle={listStyle ?? ['content', 'flush']}
 							>
-								<Item tag='div'>
+								<Item>
 									<Link to='/'>
-										(home) client side div
+										(home) client side link
 									</Link>
 								</Item>
-								<Item>
+								<Item tag='div'>
 									<Link to='/about'>
-										(about) client side link
+										(about) client side div
+									</Link>
+								</Item>
+								<Item tag='button'>
+									<Link to='/download'>
+										(download) client side button
+									</Link>
+								</Item>
+								<Item tag='span'>
+									<Link to='/terms'>
+										(terms) client side span
 									</Link>
 								</Item>
 								<Item onClick={() => alert('hello world')}>Link</Item>
@@ -144,6 +154,16 @@ function App() {
 							<Route path='/about' element={<>
 								<p>
 									about .....
+								</p>
+							</>} />
+							<Route path='/download' element={<>
+								<p>
+									download .....
+								</p>
+							</>} />
+							<Route path='/terms' element={<>
+								<p>
+									terms .....
 								</p>
 							</>} />
 						</Route>
