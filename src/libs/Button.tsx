@@ -464,8 +464,8 @@ export function Button(props: ButtonProps) {
     const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
     const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
     const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
-    const tag          = props.tag ?? (isClientLink ? 'a' : undefined);
-    const [, , , isSemanticBtn] = useTestSemantic({ tag: props.tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
+    const tag          = props.tag  ?? (isClientLink ? 'a' : undefined);
+    const [, , , isSemanticBtn] = useTestSemantic({ tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
     const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
     
     
