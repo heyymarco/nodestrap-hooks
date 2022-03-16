@@ -32,9 +32,9 @@
 // abstracts:
 [published] @nodestrap/element
 [published] @nodestrap/basic
-[modified ] @nodestrap/indicator
+[published] @nodestrap/indicator
 [published] @nodestrap/control
-[modified ] @nodestrap/action-control
+[published] @nodestrap/action-control
 [published] @nodestrap/editable-control   *icon
 [published] @nodestrap/editable-text-control
 [published] @nodestrap/editable-action-control
@@ -48,8 +48,8 @@
 [published] @nodestrap/icon
 [published] @nodestrap/label
 [published] @nodestrap/masonry
-[modified ] @nodestrap/button
-[modified ] @nodestrap/nav-button
+[published] @nodestrap/button
+[published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
 [published] @nodestrap/form
@@ -60,7 +60,7 @@
 [published] @nodestrap/toggler-menu-button
 
 // layouts:
-[modified ] @nodestrap/list
+[published] @nodestrap/list
 [published] @nodestrap/card
 
 // statuses:
@@ -81,7 +81,7 @@ notifications:
 
 // composite components:
 [published] @nodestrap/progress
-[modified ] @nodestrap/nav
+[published] @nodestrap/nav
 [published] @nodestrap/navscroll
 [published] @nodestrap/accordion
 [published] @nodestrap/group
