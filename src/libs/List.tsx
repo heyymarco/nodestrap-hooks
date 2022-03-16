@@ -156,7 +156,6 @@ import {
     
     // react components:
     ActionControlProps,
-    ActionControl,
 }                           from './ActionControl'
 import {
     // selectors:
@@ -193,6 +192,8 @@ import {
     
     // react components:
     ButtonType,
+    ButtonProps,
+    Button,
 }                           from './Button'
 
 
@@ -1224,14 +1225,20 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
-    // fn props:
+    // // fn props:
+    // const isNativeLink = !!props.href;
+    // const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
+    // const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
+    // const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
+    // const tag          = props.tag  ?? (isClientLink ? 'a' : (!isNativeLink ? '' : undefined));
+    // const [, , , isSemanticBtn] = useTestSemantic({ tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
+    // const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
+    
+    
+    
     const isNativeLink = !!props.href;
     const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
-    const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
-    const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
-    const tag          = props.tag  ?? (isClientLink ? 'a' : undefined);
-    const [, , , isSemanticBtn] = useTestSemantic({ tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
-    const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
+    const tag          = props.tag ?? ((!isNativeLink && !isClientLink) ? '' : undefined);
     
     
     
@@ -1239,15 +1246,13 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     return (
         props.actionCtrl
         ?
-        <ActionControl<TElement>
+        <Button
             // other props:
-            {...props}
+            {...(props as ButtonProps)}
             
             
             // semantics:
-            semanticTag ={semanticTag }
-            semanticRole={semanticRole}
-            tag         ={tag         }
+            tag={tag}
             
             
             // accessibilities:
@@ -1260,18 +1265,15 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             // classes:
             mainClass={props.mainClass ?? [sheet.main, sheetAction.main].join(' ')}
-            
-            
-            // Button props:
-            {...{
-                // actions:
-                type,
-            }}
         />
         :
         <Indicator<TElement>
             // other props:
             {...props}
+            
+            
+            // semantics:
+            tag={tag}
             
             
             // accessibilities:
