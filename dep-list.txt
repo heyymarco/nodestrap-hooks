@@ -32,7 +32,7 @@
 // abstracts:
 [published] @nodestrap/element
 [published] @nodestrap/basic
-[published] @nodestrap/indicator
+[modified ] @nodestrap/indicator
 [published] @nodestrap/control
 [modified ] @nodestrap/action-control
 [published] @nodestrap/editable-control   *icon
