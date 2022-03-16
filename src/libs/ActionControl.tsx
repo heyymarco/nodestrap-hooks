@@ -563,9 +563,6 @@ export function ActionControl<TElement extends HTMLElement = HTMLElement>(props:
             // semantics:
             semanticTag,
             semanticRole,
-            
-            // remove Button props:
-            ...(isSemanticLink ? { type: undefined } : {}),
         });
         
         if (reactRouterLink) return React.cloneElement(clientSideLink, ({ passHref: isSemanticLink, children: null, component:
