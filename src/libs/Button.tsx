@@ -410,15 +410,49 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 
 
-// react components:
+// hooks:
 
 export type ButtonType = 'button'|'submit'|'reset'
+export interface SemanticButtonProps<TElement extends HTMLElement = HTMLElement>
+    extends
+        ActionControlProps<TElement>,
+        Omit<React.ButtonHTMLAttributes<TElement>, 'type'>,
+        Omit<React.AnchorHTMLAttributes<TElement>, 'type'>
+{
+    // actions:
+    type? : ButtonType | (string & {})
+}
+export const useSemanticButton = <TElement extends HTMLElement = HTMLElement>(props: SemanticButtonProps<TElement>) => {
+    // fn props:
+    const isNativeLink = !!props.href;
+    const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
+    const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
+    const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
+    const tag          = props.tag  ?? (isClientLink ? 'a' : undefined);
+    const [, , , isSemanticBtn] = useTestSemantic({ tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
+    const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
+    
+    
+    
+    return {
+        isNativeLink,
+        isClientLink,
+        
+        semanticTag,
+        semanticRole,
+        
+        tag,
+        type,
+    };
+};
+
+
+
+// react components:
 
 export interface ButtonProps
     extends
-        ActionControlProps<HTMLButtonElement>,
-        React.ButtonHTMLAttributes<HTMLButtonElement>,
-        React.AnchorHTMLAttributes<HTMLButtonElement>,
+        SemanticButtonProps<HTMLButtonElement>,
         
         // layouts:
         OrientationVariant,
@@ -426,10 +460,6 @@ export interface ButtonProps
         // appearances:
         ButtonVariant
 {
-    // actions:
-    type?        : ButtonType
-    
-    
     // accessibilities:
     label?       : string
     
@@ -460,13 +490,13 @@ export function Button(props: ButtonProps) {
     
     
     // fn props:
-    const isNativeLink = !!props.href;
-    const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
-    const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
-    const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
-    const tag          = props.tag  ?? (isClientLink ? 'a' : undefined);
-    const [, , , isSemanticBtn] = useTestSemantic({ tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
-    const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
+    const {
+        semanticTag,
+        semanticRole,
+        
+        tag,
+        type,
+    } = useSemanticButton(props);
     
     
     
