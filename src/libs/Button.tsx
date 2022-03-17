@@ -440,6 +440,7 @@ export const useSemanticButton = <TElement extends HTMLElement = HTMLElement>(pr
         
         semanticTag,
         semanticRole,
+        isSemanticBtn,
         
         tag,
         type,
