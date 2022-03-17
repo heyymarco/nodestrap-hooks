@@ -142,11 +142,6 @@ import {
     
     
     
-    // utilities:
-    isClientSideLink,
-    
-    
-    
     // styles:
     usesActionControlLayout,
     usesActionControlVariants,
@@ -155,7 +150,7 @@ import {
     
     
     // react components:
-    ActionControlProps,
+    ActionControl,
 }                           from './ActionControl'
 import {
     // selectors:
@@ -190,10 +185,9 @@ import {
     
     
     
-    // react components:
-    ButtonType,
-    ButtonProps,
-    Button,
+    // hooks:
+    SemanticButtonProps,
+    useSemanticButton,
 }                           from './Button'
 
 
@@ -1192,15 +1186,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface ListItemProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ActionControlProps<TElement>,
-        React.ButtonHTMLAttributes<TElement>,
-        React.AnchorHTMLAttributes<TElement>
+        SemanticButtonProps<TElement>
 {
-    // actions:
-    type?          : ButtonType
-    
-    
-    
     // accessibilities:
     // change default value to `true`
     /**
@@ -1225,20 +1212,18 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
-    // // fn props:
-    // const isNativeLink = !!props.href;
-    // const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
-    // const semanticTag  = props.semanticTag  ?? (isNativeLink ? 'a'    : ['button', 'a'   ]);
-    // const semanticRole = props.semanticRole ?? (isNativeLink ? 'link' : ['button', 'link']);
-    // const tag          = props.tag  ?? (isClientLink ? 'a' : (!isNativeLink ? '' : undefined));
-    // const [, , , isSemanticBtn] = useTestSemantic({ tag, role: props.role, semanticTag, semanticRole }, { semanticTag: 'button', semanticRole: 'button' });
-    // const type         = props.type ?? (isSemanticBtn ? 'button' : undefined);
-    
-    
-    
-    const isNativeLink = !!props.href;
-    const isClientLink = !isNativeLink && !!isClientSideLink(props.children);
-    const tag          = props.tag ?? ((!isNativeLink && !isClientLink) ? '' : undefined);
+    // fn props:
+    const {
+        semanticTag,
+        semanticRole,
+        isSemanticBtn,
+        
+        tag  : buttonTag,
+        type : buttonType,
+    } = useSemanticButton(props);
+    const isDefaultButton = isSemanticBtn && (props.tag === undefined);
+    const tag  = (isDefaultButton ? (props.tag ?? '') : buttonTag );
+    const type = (isDefaultButton ?  props.type       : buttonType);
     
     
     
@@ -1246,13 +1231,15 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     return (
         props.actionCtrl
         ?
-        <Button
+        <ActionControl<TElement>
             // other props:
-            {...(props as ButtonProps)}
+            {...props}
             
             
             // semantics:
-            tag={tag}
+            semanticTag ={semanticTag }
+            semanticRole={semanticRole}
+            tag         ={tag         }
             
             
             // accessibilities:
@@ -1265,6 +1252,13 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             // classes:
             mainClass={props.mainClass ?? [sheet.main, sheetAction.main].join(' ')}
+            
+            
+            // Button props:
+            {...{
+                // actions:
+                type,
+            }}
         />
         :
         <Indicator<TElement>
