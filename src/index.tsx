@@ -28,8 +28,8 @@ import reportWebVitals from './reportWebVitals';
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
 //             import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
-            import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
-//                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
+//             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
+                import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
 //         import CardApp                              from './apps/CardApp';                   // article  article (semantic)
 //         import PopupApp                             from './apps/PopupApp';                  // div
 //             import BadgeApp                         from './apps/BadgeApp';                  // span     status (semantic)
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <NavApp />
+    <NavscrollApp />
     ,
     document.getElementById('root')
 );
