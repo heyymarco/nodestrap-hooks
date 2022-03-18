@@ -1048,6 +1048,20 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                             borderStroke(),
                         ]),
                         ...style({
+                            // layouts:
+                            display        : 'flex',    // use block flexbox, so it takes the entire List's width
+                            flexDirection  : 'inherit', // copy wrapper's stack direction
+                            justifyContent : 'inherit', // copy wrapper's justifyContent
+                            alignItems     : 'inherit', // copy wrapper's justifyContent
+                            flexWrap       : 'inherit', // copy wrapper's flexWrap
+                            
+                            
+                            
+                            // sizes:
+                            flex           : 'inherit', // copy wrapper's flex
+                            
+                            
+                            
                             // borders:
                             ...expandBorderStroke(), // expand borderStroke css vars
                             
