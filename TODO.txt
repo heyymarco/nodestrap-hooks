@@ -1,6 +1,4 @@
 top priority:
-<Accordion> => hide tab, bullet style
-
 Set <Badge>:
 const activeFn = active ?? !!(props.children ?? false); // badge has a content
 to
