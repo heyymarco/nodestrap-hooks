@@ -4,6 +4,9 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
+import type {
+    SingleOrArray,
+}                           from './types'      // cssfn's types
 import {
     // compositions:
     mainComposition,
@@ -399,7 +402,7 @@ export interface AccordionProps<TElement extends HTMLElement = HTMLElement>
     extends
         Omit<ListProps<TElement>, 'listStyle'>
 {
-    listStyle? : ListStyleMod
+    listStyle? : SingleOrArray<ListStyleMod>
 }
 export function Accordion<TElement extends HTMLElement = HTMLElement>(props: AccordionProps<TElement>) {
     return <List {...props} />;
