@@ -851,7 +851,7 @@ export const usesGeneralProps = (cssProps: Refs<{}>): CssProps => {
          * inlineSizeBlock
          *  blockSizeBlock
          */
-        if ((/^(((((inline|block)|(min|max)(Inline|Block))Size)|cursor)(Inline|Block))$/).test(propName)) continue; // exclude
+        if ((/^(((((inline|block)|(min|max)(Inline|Block))Size)|(margin|padding)(Inline|Block)|cursor)(Inline|Block))$/).test(propName)) continue; // exclude
         
         // special props:
         /**
