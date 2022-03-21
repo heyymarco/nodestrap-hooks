@@ -394,9 +394,19 @@ export { ListSeparatorItem, ListSeparatorItem as AccordionSeparatorItem, ListSep
 
 // Accordion => List
 
+export type ListStyleMod = Exclude<ListStyle, 'tab'|'bullet'>
+export interface AccordionProps<TElement extends HTMLElement = HTMLElement>
+    extends
+        Omit<ListProps<TElement>, 'listStyle'>
+{
+    listStyle? : ListStyleMod
+}
+export function Accordion<TElement extends HTMLElement = HTMLElement>(props: AccordionProps<TElement>) {
+    return <List {...props} />;
+}
+Accordion.prototype = List.prototype; // mark as List compatible
+export { Accordion as default }
+
 export type { OrientationName, OrientationVariant }
 
 export type { ListStyle, ListVariant }
-
-export type { ListProps, ListProps as AccordionProps }
-export { List as default, List as Accordion }

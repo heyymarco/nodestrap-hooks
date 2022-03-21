@@ -11,7 +11,7 @@ import {
 	SizeName,
 } 					from '../libs/Basic';
 import {ListItem} from '../libs/List';
-import Accordion, {AccordionItem} from '../libs/Accordion';
+import { Accordion, ListStyleMod, AccordionItem } from '../libs/Accordion';
 import type * as Accordions from '../libs/Accordion';
 
 
@@ -38,7 +38,7 @@ function App() {
 	const [orientation,    setOrientation     ] = useState<Accordions.OrientationName|undefined>(undefined);
 
 	const listStyles = [undefined, 'flat','flush','joined','content','btn','tab','breadcrumb','bullet','numbered'];
-	const [listStyle,    setListStyle     ] = useState<Accordions.ListStyle|undefined>(undefined);
+	const [listStyle,    setListStyle     ] = useState<ListStyleMod|undefined>(undefined);
 
 	
 
@@ -190,7 +190,7 @@ function App() {
 								<input type='radio'
 									value={st}
 									checked={listStyle===st}
-									onChange={(e) => setListStyle((e.target.value || undefined) as (Accordions.ListStyle|undefined))}
+									onChange={(e) => setListStyle((e.target.value || undefined) as (ListStyleMod|undefined))}
 								/>
 								{`${st}`}
 							</label>
