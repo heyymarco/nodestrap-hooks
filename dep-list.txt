@@ -8,7 +8,7 @@
 [published] @cssfn/css-types
 [published] @cssfn/css-var
 [published] @cssfn/cssfn
-[modified ] @cssfn/css-config
+[published] @cssfn/css-config
 [published] @cssfn/react-cssfn
 
 [published] @nodestrap/colors
@@ -60,7 +60,7 @@
 [published] @nodestrap/toggler-menu-button
 
 // layouts:
-[modified ] @nodestrap/list
+[published] @nodestrap/list
 [published] @nodestrap/card
 
 // statuses:
@@ -83,7 +83,7 @@ notifications:
 [published] @nodestrap/progress
 [published] @nodestrap/nav
 [published] @nodestrap/navscroll
-[modified ] @nodestrap/accordion
+[published] @nodestrap/accordion
 [published] @nodestrap/group
 [published] @nodestrap/carousel
 [published] @nodestrap/navbar
