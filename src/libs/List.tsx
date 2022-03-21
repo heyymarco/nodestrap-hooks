@@ -361,7 +361,7 @@ export const usesListItemVariants = () => {
     // layouts:
     const [sizes] = usesSizeVariant((sizeName) => style({
         // overwrites propName = {item}PropName{SizeName}:
-        ...overwriteProps(cssDecls, usesSuffixedProps(usesPrefixedProps(cssProps, 'item'), sizeName)),
+        ...overwriteProps(cssDecls, usesSuffixedProps(usesPrefixedProps(cssProps, 'item', false), sizeName)),
     }));
     
     
@@ -979,7 +979,6 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
             rule('.breadcrumb', {
                 // children:
                 ...children(wrapperElm, {
-                    // children:
                     ...rule(selectorNotfirstVisibleChild, {
                         ...imports([
                             // colors:
@@ -1018,6 +1017,22 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                         
                         // customize:
                         ...usesGeneralProps(usesPrefixedProps(cssProps, 'breadcrumb')), // apply general cssProps starting with breadcrumb***
+                    }),
+                }),
+                
+                
+                
+                // customize:
+                ...rule(orientationBlockSelector,  { // block
+                    // children:
+                    ...children(wrapperElm, {
+                        ...rule(selectorNotfirstVisibleChild, {
+                            // children:
+                            ...children('::before', {
+                                // overwrites propName = {breadcrumbSeparator}PropName{Block}:
+                                ...overwriteProps(cssDecls, usesSuffixedProps(usesPrefixedProps(cssProps, 'breadcrumbSeparator', false), 'block')),
+                            }),
+                        }),
                     }),
                 }),
             }),
@@ -1158,16 +1173,23 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         
-        breadcrumbPaddingInline         : bcssProps.paddingBlock,
-        breadcrumbPaddingBlock          : bcssProps.paddingBlock,
-        breadcrumbPaddingInlineSm       : bcssProps.paddingBlockSm,
-        breadcrumbPaddingBlockSm        : bcssProps.paddingBlockSm,
-        breadcrumbPaddingInlineLg       : bcssProps.paddingBlockLg,
-        breadcrumbPaddingBlockLg        : bcssProps.paddingBlockLg,
+        breadcrumbPaddingInline              : bcssProps.paddingBlock,
+        breadcrumbPaddingBlock               : bcssProps.paddingBlock,
+        breadcrumbPaddingInlineSm            : bcssProps.paddingBlockSm,
+        breadcrumbPaddingBlockSm             : bcssProps.paddingBlockSm,
+        breadcrumbPaddingInlineLg            : bcssProps.paddingBlockLg,
+        breadcrumbPaddingBlockLg             : bcssProps.paddingBlockLg,
         
-        breadcrumbSeparatorImg          : `url("data:image/svg+xml,${escapeSvg("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><polyline points='7.5 3 16.5 12 7.5 21' fill='none' stroke='#000' stroke-linecap='square' stroke-width='3'/></svg>")}")`,
-        breadcrumbSeparatorInlineSize   : '0.8em',
-        breadcrumbSeparatorMarginInline : '0.25em',
+        breadcrumbSeparatorImg               : `url("data:image/svg+xml,${escapeSvg("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><polyline points='7.5 3 16.5 12 7.5 21' fill='none' stroke='#000' stroke-linecap='square' stroke-width='3'/></svg>")}")`,
+        breadcrumbSeparatorImgBlock          : `url("data:image/svg+xml,${escapeSvg("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><polyline points='7.5 3 16.5 12 7.5 21' fill='none' stroke='#000' stroke-linecap='square' stroke-width='3' transform-origin='center' transform='rotate(90)'/></svg>")}")`,
+        breadcrumbSeparatorInlineSize        : '0.8em',
+        breadcrumbSeparatorBlockSize         : 'auto',
+        breadcrumbSeparatorInlineSizeBlock   : 'auto',
+        breadcrumbSeparatorBlockSizeBlock    : '0.8em',
+        breadcrumbSeparatorMarginInline      : '0.25em',
+        breadcrumbSeparatorMarginBlock       : 0,
+        breadcrumbSeparatorMarginInlineBlock : 0,
+        breadcrumbSeparatorMarginBlockBlock  : '0.25em',
         
         
         
