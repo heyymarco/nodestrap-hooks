@@ -34,13 +34,11 @@ import {
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
-// nodestrap utilities:
-import {
-    // hooks:
-    usePropEnabled,
-}                           from './accessibilities'
-
 // nodestrap components:
+import type {
+    // react components:
+    ElementProps,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
@@ -89,6 +87,7 @@ import {
     
     
     // react components:
+    CollapseProps,
     Collapse,
 }                           from './Collapse'
 
@@ -213,15 +212,14 @@ export interface AccordionItemProps<TElement extends HTMLElement = HTMLElement>
     
     // popups:
     lazy?           : boolean
+    
+    
+    // components:
+    collapse?       : React.ReactComponentElement<any, ElementProps>
 }
 export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props: AccordionItemProps<TElement>) {
     // styles:
     const sheet                 = useAccordionItemSheet();
-    
-    
-    
-    // states:
-    const [isActive, setActive] = useTogglerActive(props);
     
     
     
@@ -237,7 +235,42 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
         
         // children:
         children,
-    ...restProps} = props;
+    ...restAccordionProps} = props;
+    const {
+        // layouts:
+        size,
+        // orientation, // already handled on css
+        nude,
+        
+        
+        // colors:
+        theme,
+        gradient,
+        outlined,
+        mild,
+        
+        
+        // <Indicator> states:
+        enabled,
+        inheritEnabled,
+        readOnly,
+        inheritReadOnly,
+        // active,
+        inheritActive = true, // change default value to `true`
+        
+        
+        // performances:
+        lazy,
+        
+        
+        // components:
+        collapse = <Collapse<TElement> />,
+    } = restAccordionProps;
+    
+    
+    
+    // states:
+    const [isActive, setActive] = useTogglerActive({ ...props, inheritActive });
     
     
     
@@ -248,16 +281,40 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
     
     
     
-    // fn props:
-    const propEnabled = usePropEnabled(props);
-    
-    
-    
     // jsx:
+    const defaultCollapseProps : CollapseProps = {
+        // variants:
+        // layouts:
+        size     : size,
+        // orientation : orientation, // already handled on css
+        nude     : nude,
+        // colors:
+        theme    : theme,
+        gradient : gradient,
+        outlined : outlined,
+        mild     : mild,
+        
+        
+        // <Indicator> states:
+        enabled         : enabled,
+        inheritEnabled  : inheritEnabled,
+        readOnly        : readOnly,
+        inheritReadOnly : inheritReadOnly,
+        active          : isActive,
+        inheritActive   : false,
+        
+        
+        // performances:
+        lazy : lazy,
+        
+        
+        // classes:
+        mainClass : sheet.main,
+    };
     return (<>
         <ListItem<TElement>
             // other props:
-            {...restProps}
+            {...restAccordionProps}
             
             
             // semantics:
@@ -319,31 +376,8 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
         >
             { label }
         </ListItem>
-        <Collapse<TElement>
-            // variants:
-            theme={props.theme}
-            size={props.size}
-            gradient={props.gradient}
-            outlined={props.outlined}
-            mild={props.mild}
-            
-            
-            // accessibilities:
-            inheritEnabled={props.inheritEnabled}
-            enabled={propEnabled}
-            inheritActive={props.inheritActive ?? true} // change default value to `true`
-            active={isActive}
-            
-            
-            // popups:
-            lazy={props.lazy}
-            
-            
-            // classes:
-            mainClass={props.mainClass ?? sheet.main}
-        >
-            { children }
-        </Collapse>
+        
+        { React.cloneElement(React.cloneElement(collapse, defaultCollapseProps, children), collapse.props) }
     </>);
 }
 AccordionItem.prototype = ListItem.prototype; // mark as ListItem compatible
