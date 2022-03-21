@@ -884,10 +884,11 @@ export const usesGeneralProps = (cssProps: Refs<{}>): CssProps => {
  * Includes the props in the specified `cssProps` starting with specified `prefix`.
  * @param cssProps The collection of the css vars to be filtered.
  * @param prefix The prefix name of the props to be *included*.
+ * @param remove Remove the prefix to the returning result. The default is `true`.
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `prefix` name.  
- * The returning props has been normalized (renamed), so they don't start with `prefix`.
+ * If `remove === true`, the returning props has been normalized (renamed), so they don't start with `prefix`.
  */
-export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): CssProps => {
+export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string, remove = true): CssProps => {
     const result: CssProps = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
         // excludes the entries if the `propName` not starting with specified `prefix`:
@@ -903,7 +904,7 @@ export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): CssProps 
          */
 
         // if match => normalize the case => include it:
-        result[camelCase(propNameLeft)] = (propValue as Cust.Ref);
+        result[remove ? camelCase(propNameLeft) : propName] = (propValue as Cust.Ref);
     } // for
     return result;
 }
@@ -912,10 +913,11 @@ export const usesPrefixedProps = (cssProps: Refs<{}>, prefix: string): CssProps 
  * Includes the props in the specified `cssProps` ending with specified `suffix`.
  * @param cssProps The collection of the css vars to be filtered.
  * @param suffix The suffix name of the props to be *included*.
+ * @param remove Remove the suffix to the returning result. The default is `true`.
  * @returns A `PropList` which is the copy of the `cssProps` that only having matching `suffix` name.  
- * The returning props has been normalized (renamed), so they don't end with `suffix`.
+ * If `remove === true`, the returning props has been normalized (renamed), so they don't end with `suffix`.
  */
-export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string): CssProps => {
+export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string, remove = true): CssProps => {
     suffix = pascalCase(suffix);
     const result: CssProps = {};
     for (const [propName, propValue] of Object.entries(cssProps)) {
@@ -923,7 +925,7 @@ export const usesSuffixedProps = (cssProps: Refs<{}>, suffix: string): CssProps 
         if (!propName.endsWith(suffix)) continue; // exclude
         if (propName.length <= suffix.length) continue; // at least 1 char left;
 
-        const propNameLeft = propName.slice(0, - suffix.length); // remove the `suffix`
+        const propNameLeft = remove ? propName.slice(0, - suffix.length) : propName; // remove the `suffix`
         /**
          * removing `valid` => `Valid`:
          * colorValid   => color => ok
