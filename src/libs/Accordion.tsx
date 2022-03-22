@@ -236,6 +236,10 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
         onActiveChange, // delete, already handled by `useTogglerActive`
         
         
+        // behaviors:
+        actionCtrl = true, // change default value to `true`
+        
+        
         // children:
         children,
     ...restAccordionProps} = props;
@@ -332,7 +336,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
             
             
             // behaviors:
-            actionCtrl={props.actionCtrl ?? true}
+            actionCtrl={actionCtrl}
             
             
             // classes:
@@ -347,7 +351,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
                 
                 
                 
-                if (!e.defaultPrevented) {
+                if (actionCtrl && !e.defaultPrevented) {
                     handleToggleActive();
                     e.preventDefault();
                 } // if
@@ -357,7 +361,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
                 
                 
                 
-                if (!e.defaultPrevented) {
+                if (actionCtrl && !e.defaultPrevented) {
                     if ((e.key === ' ') || (e.code === 'Space')) {
                         // prevents pressing space for scrolling page
                         e.preventDefault();
@@ -369,7 +373,7 @@ export function AccordionItem<TElement extends HTMLElement = HTMLElement>(props:
                 
                 
                 
-                if (!e.defaultPrevented) {
+                if (actionCtrl && !e.defaultPrevented) {
                     if ((e.key === ' ') || (e.code === 'Space')) {
                         handleToggleActive();
                         e.preventDefault();
