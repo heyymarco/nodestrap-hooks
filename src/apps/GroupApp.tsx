@@ -16,7 +16,7 @@ import {
 	OrientationName,
 }						from '../libs/Button';
 import {
-	Group, ListStyle,
+	Group, ListBasicStyle,
 }						from '../libs/Group';
 import { Check } from '../libs/Check';
 import { TogglerMenuButton } from '../libs/TogglerMenuButton';
@@ -60,7 +60,7 @@ function App() {
 	const [btnStyle,    setBtnStyle     ] = useState<ButtonStyle|undefined>(undefined);
 
 	const listStyles = [undefined, 'content','flat','flush','btn','tab','breadcrumb','bullet'];
-	const [listStyle,    setListStyle     ] = useState<ListStyle|undefined>(undefined);
+	const [listStyle,    setListStyle     ] = useState<ListBasicStyle|undefined>(undefined);
 
 	
 	const [expandMenu,      setExpandMenu   ] = useState(false);
@@ -964,7 +964,7 @@ function App() {
 								<input type='radio'
 									value={st}
 									checked={listStyle===st}
-									onChange={(e) => setListStyle((e.target.value || undefined) as (ListStyle|undefined))}
+									onChange={(e) => setListStyle((e.target.value || undefined) as (ListBasicStyle|undefined))}
 								/>
 								{`${st}`}
 							</label>

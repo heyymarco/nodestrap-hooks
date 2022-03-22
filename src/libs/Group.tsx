@@ -63,7 +63,7 @@ import {
     OrientationName,
     OrientationVariant,
     
-    ListStyle,
+    ListBasicStyle,
     ListVariant,
     
     
@@ -196,9 +196,9 @@ function GroupItem(props: GroupItemProps) {
                 
                 
                 // overlayed element:
-                if (isTypeOf(child, Popup))    return child;
-                if (isTypeOf(child, Collapse)) return child;
-                if (isTypeOf(child, Dropdown)) return child;
+                if (isTypeOf(child, Popup   ) && child.props.targetRef) return child;
+                if (isTypeOf(child, Collapse) && child.props.targetRef) return child;
+                if (isTypeOf(child, Dropdown) && child.props.targetRef) return child;
                 
                 
                 
@@ -232,10 +232,14 @@ GroupItem.prototype = ListItem.prototype; // mark as ListItem compatible
 
 export interface GroupProps<TElement extends HTMLElement = HTMLElement>
     extends
-        ListProps<TElement>
+        Omit<ListProps<TElement>, 'listStyle'|'actionCtrl'>
 {
     // accessibilities:
     label?       : string
+    
+    
+    // variants:
+    listStyle?   : ListBasicStyle
 }
 export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupProps<TElement>) {
     // rest props:
@@ -281,4 +285,4 @@ export { Group as default }
 
 export type { OrientationName, OrientationVariant }
 
-export type { ListStyle, ListVariant }
+export type { ListBasicStyle, ListVariant }
