@@ -46,7 +46,7 @@
 // simple components:
 [published] @nodestrap/visually-hidden
 [published] @nodestrap/icon
-[modified ] @nodestrap/label
+[published] @nodestrap/label
 [published] @nodestrap/masonry
 [published] @nodestrap/button
 [published] @nodestrap/nav-button
@@ -75,7 +75,7 @@ notifications:
 // menus:
 [published] @nodestrap/collapse
 [published] @nodestrap/dropdown
-[modified ] @nodestrap/dropdown-button
+[published] @nodestrap/dropdown-button
 [published] @nodestrap/dropdown-list
 [published] @nodestrap/dropdown-list-button
 
@@ -84,7 +84,7 @@ notifications:
 [published] @nodestrap/nav
 [published] @nodestrap/navscroll
 [published] @nodestrap/accordion
-[modified ] @nodestrap/group
+[published] @nodestrap/group
 [published] @nodestrap/carousel
 [published] @nodestrap/navbar
 
