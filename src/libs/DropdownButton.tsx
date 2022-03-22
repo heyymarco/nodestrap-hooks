@@ -275,7 +275,7 @@ export function DropdownButton<TElement extends HTMLElement = HTMLElement, TClos
         <>
             { React.cloneElement(React.cloneElement(button, defaultButtonProps, buttonChildren), button.props) }
             
-            <Dropdown<HTMLElement, TCloseType>
+            <Dropdown<TElement, TCloseType>
                 // other props:
                 {...restDropdownProps}
                 
