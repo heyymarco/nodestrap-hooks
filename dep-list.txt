@@ -60,7 +60,7 @@
 [published] @nodestrap/toggler-menu-button
 
 // layouts:
-[modified ] @nodestrap/list
+[published] @nodestrap/list
 [published] @nodestrap/card
 
 // statuses:
