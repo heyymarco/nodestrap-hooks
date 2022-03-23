@@ -41,7 +41,7 @@ import {
 }                           from './utilities'
 
 // nodestrap components:
-import {
+import type {
     // react components:
     ElementProps,
 }                           from './Element'
