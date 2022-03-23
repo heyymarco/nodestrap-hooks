@@ -1,14 +1,6 @@
 top priority:
 
-<Group>
-    no numbered group
-    no tab group
-    no bullet group
-    no button group
-    no breadcrumb group
-    no content
-    no actionCtrl
-</Group>
+no parent nude for <List>, <Card>
 
 Set <Badge>:
 const activeFn = active ?? !!(props.children ?? false); // badge has a content
