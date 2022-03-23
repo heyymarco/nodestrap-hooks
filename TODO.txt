@@ -13,6 +13,8 @@ theme='light' & mild={true (default)} => the icon is invisible (blended to the w
 <CloseButton>:
 <Parent mild={false} theme='dark'> => the close button invisible => it should use currentColor on <Button btnStyle='icon'>
 
+change <child.type to React.Child.clone
+
 set range minInlineSize
 fix Check with style btn & nude
 fix Radio bullet on true center
