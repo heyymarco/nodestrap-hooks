@@ -51,6 +51,11 @@ import {
     
     OrientationRuleOptions,
     normalizeOrientationRule,
+    
+    
+    
+    // react components:
+    BasicProps,
 }                           from './Basic'
 import {
     // react components:
@@ -204,18 +209,12 @@ function GroupItem(props: GroupItemProps) {
                 
                 // React element:
                 if (React.isValidElement<ElementProps>(child)) {
-                    return (
-                        <child.type
-                            // other props:
-                            {...child.props}
-                            
-                            
-                            // classes:
-                            classes={[...(child.props.classes ?? []),
-                                sheet.main, // inject GroupItem class
-                            ]}
-                        />
-                    );
+                    return React.cloneElement(child, ({
+                        // classes:
+                        classes: [...(child.props.classes ?? []),
+                            sheet.main, // inject GroupItem class
+                        ],
+                    } as ElementProps));
                 } // if
                 
                 
@@ -244,6 +243,14 @@ export interface GroupProps<TElement extends HTMLElement = HTMLElement>
 export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupProps<TElement>) {
     // rest props:
     const {
+        // layouts:
+        nude,
+        
+        
+        // colors:
+        mild,
+        
+        
         // children:
         children,
     ...restProps} = props;
@@ -251,6 +258,14 @@ export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupPr
     
     
     // jsx:
+    const defaultChildProps : BasicProps = {
+        // layouts:
+        nude,
+        
+        
+        // colors:
+        mild,
+    };
     return (
         <List<TElement>
             // other props:
@@ -274,7 +289,7 @@ export function Group<TElement extends HTMLElement = HTMLElement>(props: GroupPr
                     // essentials:
                     key={index}
                 >
-                    { child }
+                    {React.isValidElement<BasicProps>(child) ? React.cloneElement(React.cloneElement(child, defaultChildProps), child.props) : child}
                 </GroupItem>
             ))}
         </List>

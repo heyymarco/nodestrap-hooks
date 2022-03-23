@@ -84,7 +84,7 @@ notifications:
 [published] @nodestrap/nav
 [published] @nodestrap/navscroll
 [published] @nodestrap/accordion
-[published] @nodestrap/group
+[modified ] @nodestrap/group
 [published] @nodestrap/carousel
 [published] @nodestrap/navbar
 
