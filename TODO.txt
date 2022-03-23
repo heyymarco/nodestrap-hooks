@@ -1,6 +1,6 @@
 top priority:
 
-no parent nude for <List>, <Card>
+default nude at parent level for <List><ListItem>, <Card><Child>
 
 Set <Badge>:
 const activeFn = active ?? !!(props.children ?? false); // badge has a content
