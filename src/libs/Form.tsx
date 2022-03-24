@@ -43,7 +43,6 @@ import {
 import {
     // hooks:
     Result as ValResult,
-    usePropValidation,
     
     
     
@@ -255,6 +254,14 @@ export interface FormProps
     children?        : React.ReactNode
 }
 export function Form(props: FormProps) {
+    // jsx:
+    return (
+        <ValidationProvider {...props}>
+            <FormInternal {...props} />
+        </ValidationProvider>
+    );
+}
+function FormInternal(props: FormProps) {
     // styles:
     const sheet             = useFormSheet();
     
@@ -263,11 +270,6 @@ export function Form(props: FormProps) {
     // states:
     const formValidator     = useFormValidator(props.customValidator);
     const validInvalidState = useValidInvalidState(props, formValidator.validator);
-    
-    
-    
-    // fn props:
-    const propValidation    = usePropValidation(props);
     
     
     
@@ -323,9 +325,7 @@ export function Form(props: FormProps) {
                 validInvalidState.handleAnimationEnd(e);
             }}
         >
-            { props.children && <ValidationProvider {...propValidation}>
-                { props.children }
-            </ValidationProvider> }
+            { props.children }
         </Content>
     );
 }
