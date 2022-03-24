@@ -22,7 +22,7 @@
 [published] @nodestrap/hooks
 [published] @nodestrap/utilities
 [published] @nodestrap/accessibilities
-[modified ] @nodestrap/validations
+[published] @nodestrap/validations
 [published] @nodestrap/dimensions
 [published] @nodestrap/responsive
 
@@ -52,7 +52,7 @@
 [published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
-[modified ] @nodestrap/form
+[published] @nodestrap/form
 [published] @nodestrap/input
 [published] @nodestrap/range
 [published] @nodestrap/check
@@ -84,7 +84,7 @@ notifications:
 [published] @nodestrap/nav
 [published] @nodestrap/navscroll
 [published] @nodestrap/accordion
-[modified ] @nodestrap/group
+[published] @nodestrap/group
 [published] @nodestrap/carousel
 [published] @nodestrap/navbar
 
