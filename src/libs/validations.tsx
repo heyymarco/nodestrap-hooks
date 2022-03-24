@@ -8,10 +8,11 @@ import {
 
 
 // defaults:
-const _defaultEnableValidation  = true;
-const _defaultIsValid           = undefined as (Result|undefined);
+const _defaultEnableRootValidation = false;
+const _defaultEnableValidation     = true;
+const _defaultIsValid              = undefined as (Result|undefined);
 
-const _defaultInheritValidation = true;
+const _defaultInheritValidation    = true;
 
 
 
@@ -53,13 +54,18 @@ export interface Validation {
      */
     isValid?          : Result
 }
+interface ValidationRoot {
+    atRoot?           : true|undefined
+}
 
 /**
  * A react context for validation stuff.
  */
-export const Context = createContext<Validation>(/*defaultValue :*/{
+export const Context = createContext<Validation & ValidationRoot>(/*defaultValue :*/{
     enableValidation  : _defaultEnableValidation,
     isValid           : _defaultIsValid,
+    
+    atRoot            : true,
 });
 Context.displayName  = 'Validation';
 
@@ -67,14 +73,15 @@ Context.displayName  = 'Validation';
 
 // hooks:
 
-export const usePropValidation = (props: ValidationProps): Validation => {
+export const usePropValidation = (props: ValidationProps): Validation & ValidationRoot => {
     // contexts:
     const valContext = useContext(Context);
+    const atRoot     = valContext.atRoot;
 
 
 
     const inheritValidation : boolean = (props.inheritValidation ?? _defaultInheritValidation);
-    const enableValidation = (
+    const enableValidation = atRoot ? (props.enableValidation ?? _defaultEnableRootValidation) : (
         (
             inheritValidation
             ?
@@ -104,8 +111,9 @@ export const usePropValidation = (props: ValidationProps): Validation => {
         return props.isValid;                                    // otherwise => use the component's validity
     })();
     return {
-        enableValidation : enableValidation,
-        isValid          : isValid,
+        enableValidation,
+        isValid,
+        atRoot,
     };
 };
 
@@ -144,7 +152,11 @@ export interface ValidationProps extends Partial<Validation>
 }
 export function ValidationProvider(props: ValidationProps) {
     // fn props:
-    const propValidation = usePropValidation(props);
+    const { atRoot, ...propValidation } = usePropValidation(props);
+    if (atRoot) {
+        propValidation.enableValidation = props.enableValidation ?? _defaultEnableValidation;
+        propValidation.isValid          = props.isValid          ?? _defaultIsValid;
+    } // if
     
     
     

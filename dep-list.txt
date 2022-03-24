@@ -22,7 +22,7 @@
 [published] @nodestrap/hooks
 [published] @nodestrap/utilities
 [published] @nodestrap/accessibilities
-[published] @nodestrap/validations
+[modified ] @nodestrap/validations
 [published] @nodestrap/dimensions
 [published] @nodestrap/responsive
 
