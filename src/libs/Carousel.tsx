@@ -6,9 +6,6 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
-import type {
-    Optional,
-}                           from './types'       // cssfn's types
 import {
     // compositions:
     mainComposition,
@@ -23,6 +20,7 @@ import {
     
     // rules:
     rule,
+    fallbacks,
     
     
     
@@ -53,25 +51,11 @@ import {
 }                           from './stripouts'
 import {
     // utilities:
-    isTypeOf,
     setRef,
 }                           from './utilities'
 
 // nodestrap components:
 import {
-    // general types:
-    Tag,
-    Role,
-    SemanticTag,
-    SemanticRole,
-    
-    
-    
-    // hooks:
-    useTestSemantic,
-    
-    
-    
     // react components:
     ElementProps,
     Element,
@@ -81,6 +65,11 @@ import {
     usesSizeVariant,
     usesPadding,
     expandPadding,
+    
+    
+    
+    // react components:
+    BasicProps,
 }                           from './Basic'
 import {
     // styles:
@@ -247,8 +236,22 @@ export const usesCarouselMediaLayout = () => {
         ]),
         ...style({
             // layouts:
-            ...rule(':first-child:last-child', { // only one child
+            ...rule(':where(:first-child:last-child)', { // only one child
                 display : 'block', // fills the entire parent's width
+                
+                
+                
+                // sizes:
+                // span to maximum width/height while keeps aspect-ratio:
+                boxSizing         : 'border-box', // the final size is including borders & paddings
+                maxInlineSize     : 'fill-available',
+                maxBlockSize      : 'fill-available',
+                ...fallbacks({
+                    maxInlineSize : '100%',
+                    maxBlockSize  : '100%',
+                }),
+                inlineSize        : 'auto',
+                blockSize         : 'auto',
             }),
             
             
@@ -445,27 +448,19 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export interface CarouselItemProps<TElement extends HTMLElement = HTMLElement>
-    extends
-        ElementProps<TElement>
+interface CarouselItemProps<TElement extends HTMLElement = HTMLElement> extends ElementProps<TElement>
 {
+    children: React.ReactNode
 }
-export function CarouselItem<TElement extends HTMLElement = HTMLElement>(props: CarouselItemProps<TElement>) {
+function CarouselItem<TElement extends HTMLElement = HTMLElement>(props: CarouselItemProps<TElement>) {
     // jsx:
     return (
         <Element<TElement>
             // other props:
             {...props}
-            
-            
-            // classes:
-            mainClass={props.mainClass ?? ''}
         />
     );
 }
-
-export type { CarouselItemProps as ItemProps }
-export { CarouselItem as Item }
 
 
 
@@ -480,37 +475,14 @@ export interface CarouselProps<TElement extends HTMLElement = HTMLElement>
     scrollRef?           : React.Ref<HTMLElement> // setter ref
     
     
-    // semantics:
-    itemsTag?            : Tag
-    itemTag?             : Tag
-    
-    itemsRole?           : Role
-    itemRole?            : Role
-    
-    itemsSemanticTag?    : SemanticTag
-    itemSemanticTag?     : SemanticTag
-    
-    itemsSemanticRole?   : SemanticRole
-    itemSemanticRole?    : SemanticRole
-    
-    
-    // classes:
-    itemsMainClass?      : Optional<string>
-    itemsClasses?        : Optional<string>[]
-    itemsVariantClasses? : Optional<string>[]
-    itemsStateClasses?   : Optional<string>[]
-    
-    itemMainClass?       : Optional<string>
-    itemClasses?         : Optional<string>[]
-    itemVariantClasses?  : Optional<string>[]
-    itemStateClasses?    : Optional<string>[]
+    // components:
+    prevBtn?             : React.ReactComponentElement<any, ElementProps>
+    nextBtn?             : React.ReactComponentElement<any, ElementProps>
+    nav?                 : React.ReactComponentElement<any, ElementProps>
     
     
     // children:
     children?            : React.ReactNode
-    prevBtn?             : React.ReactChild | boolean | null
-    nextBtn?             : React.ReactChild | boolean | null
-    nav?                 : React.ReactChild | boolean | null
 }
 export function Carousel<TElement extends HTMLElement = HTMLElement>(props: CarouselProps<TElement>) {
     // styles:
@@ -531,52 +503,33 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
         scrollRef,
         
         
-        // semantics:
-        itemsTag,
-        itemTag,
-        
-        itemsRole,
-        itemRole,
-        
-        itemsSemanticTag,
-        itemSemanticTag,
-        
-        itemsSemanticRole,
-        itemSemanticRole,
-        
-        
-        // classes:
-        itemsMainClass,
-        itemsClasses,
-        itemsVariantClasses,
-        itemsStateClasses,
-        
-        itemMainClass,
-        itemClasses,
-        itemVariantClasses,
-        itemStateClasses,
+        // components:
+        prevBtn = <NavButton />,
+        nextBtn = <NavButton />,
+        nav     = <Navscroll listStyle='bullet' orientation='inline' />,
         
         
         // children:
         children,
-        prevBtn,
-        nextBtn,
-        nav,
-    ...restProps} = props;
+    ...restCarouselProps} = props;
+    const {
+        // layouts:
+        size,
+        // orientation,
+        // nude,
+        
+        
+        // colors:
+        theme,
+        gradient,
+        outlined,
+        mild,
+    } = restCarouselProps;
     
     
     
     // fn props:
     const itemsTotal          = React.Children.count(children);
-    
-    const listTag             = ['ul', 'ol'] as Array<Tag>;
-    const listRole            = 'list';
-    const itemsSemanticTagFn  = itemsSemanticTag  ?? listTag;
-    const itemsSemanticRoleFn = itemsSemanticRole ?? listRole;
-    const [, , isList, isSemanticList] = useTestSemantic({ tag: itemsTag, role: itemsRole, semanticTag: itemsSemanticTagFn, semanticRole: itemsSemanticRoleFn }, { semanticTag: listTag, semanticRole: listRole });
-    
-    const itemSemanticTagFn   = itemSemanticTag  ?? (isSemanticList ? 'li'       : [null]);
-    const itemSemanticRoleFn  = itemSemanticRole ?? (isList         ? 'listitem' : [null]);
     
     
     
@@ -975,10 +928,81 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
     
     
     // jsx:
+    const defaultComponentProps : BasicProps<any> = {
+        // variants:
+        // layouts:
+        size        : size,
+        // orientation : orientation,
+        // nude        : nude,
+        // colors:
+        theme       : theme,
+        gradient    : gradient,
+        outlined    : outlined,
+        mild        : mild,
+    };
+    const defaultPrevBtnProps : ButtonIconProps = {
+        // classes:
+        classes : [
+            'prevBtn',
+        ],
+        
+        
+        // accessibilities:
+        label   : 'Previous',
+        
+        
+        // appearances:
+        icon    : 'prev',
+        
+        
+        // events:
+        onClick : handlePrev,
+        
+        
+        // others:
+        ...defaultComponentProps,
+    };
+    const defaultNextBtnProps : ButtonIconProps = {
+        // classes:
+        classes : [
+            'nextBtn',
+        ],
+        
+        
+        // accessibilities:
+        label   : 'Next',
+        
+        
+        // appearances:
+        icon    : 'next',
+        
+        
+        // events:
+        onClick : handleNext,
+        
+        
+        // others:
+        ...defaultComponentProps,
+    };
+    const defaultNavscrollProps : NavscrollProps = {
+        // classes:
+        classes       : [
+            'nav',
+        ],
+        
+        
+        // scrolls:
+        targetRef     : (infiniteLoop ? listDummyRef : listRef),
+        interpolation : true,
+        
+        
+        // others:
+        ...defaultComponentProps,
+    };
     return (
         <Content<TElement>
             // other props:
-            {...restProps}
+            {...restCarouselProps}
             
             
             // classes:
@@ -995,56 +1019,24 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                     
                     
                     // semantics:
-                    tag ={itemsTag }
-                    role={itemsRole}
-                    semanticTag ={itemsSemanticTagFn }
-                    semanticRole={itemsSemanticRoleFn}
+                    semanticTag ={['ul', 'ol']}
+                    semanticRole='list'
                     
                     
                     // classes:
-                    mainClass={itemsMainClass}
-                    classes={[...(itemsClasses ?? []),
+                    classes={[
                         'items',
                     ]}
-                    variantClasses={itemsVariantClasses}
-                    stateClasses={itemsStateClasses}
                 >
                 {React.Children.map(children, (child, index) => (
-                    isTypeOf(child, CarouselItem)
-                    ?
-                    <child.type
-                        // other props:
-                        {...child.props}
-                        
-                        
-                        // essentials:
-                        key={child.key ?? index}
-                        
-                        
-                        // semantics:
-                        tag ={child.props.tag  ?? itemTag }
-                        role={child.props.role ?? itemRole}
-                        semanticTag ={child.props.semanticTag  ?? itemSemanticTagFn }
-                        semanticRole={child.props.semanticRole ?? itemSemanticRoleFn}
-                        
-                        
-                        // classes:
-                        mainClass={itemMainClass}
-                        classes={itemClasses}
-                        variantClasses={itemVariantClasses}
-                        stateClasses={itemStateClasses}
-                    />
-                    :
                     <CarouselItem
                         // essentials:
                         key={index}
                         
                         
                         // semantics:
-                        tag ={itemTag }
-                        role={itemRole}
-                        semanticTag ={itemSemanticTagFn }
-                        semanticRole={itemSemanticRoleFn}
+                        semanticTag ='li'
+                        semanticRole='listitem'
                     >
                         { child }
                     </CarouselItem>
@@ -1099,165 +1091,28 @@ export function Carousel<TElement extends HTMLElement = HTMLElement>(props: Caro
                 </Element> }
             </> }
             
-            {
-                //#region has class prevBtn
-                isTypeOf(prevBtn, Element)
-                &&
-                prevBtn.props.classes?.includes('prevBtn')
-                //#endregion has class prevBtn
-                ?
-                <prevBtn.type
-                    // other props:
-                    {...prevBtn.props}
-                    
-                    
-                    // events:
-                    onClick={(e) => {
-                        prevBtn.props.onClick?.(e);
-                        
-                        
-                        
-                        handlePrev(e);
-                    }}
-                />
-                :
-                <NavButton
-                    // classes:
-                    classes={[
-                        'prevBtn',
-                    ]}
-                    
-                    
-                    // accessibilities:
-                    label='Previous'
-                    
-                    
-                    // appearances:
-                    icon='prev'
-                    
-                    
-                    // events:
-                    onClick={handlePrev}
-                >
-                    { prevBtn }
-                </NavButton>
-            }
+            { React.cloneElement(React.cloneElement(prevBtn, defaultPrevBtnProps), (!prevBtn.props.onClick ? prevBtn.props : ({...prevBtn.props, onClick: (e) => { prevBtn.props.onClick?.(e); defaultPrevBtnProps.onClick?.(e); }} as ButtonIconProps))) }
             
-            {
-                //#region has class nextBtn
-                isTypeOf(nextBtn, Element)
-                &&
-                nextBtn.props.classes?.includes('nextBtn')
-                //#endregion has class nextBtn
-                ?
-                <nextBtn.type
-                    // other props:
-                    {...nextBtn.props}
-                    
-                    
-                    // events:
-                    onClick={(e) => {
-                        nextBtn.props.onClick?.(e);
-                        
-                        
-                        
-                        handleNext(e);
-                    }}
-                />
-                :
-                <NavButton
-                    // classes:
-                    classes={[
-                        'nextBtn',
-                    ]}
-                    
-                    
-                    // accessibilities:
-                    label='Next'
-                    
-                    
-                    // appearances:
-                    icon='next'
-                    
-                    
-                    // events:
-                    onClick={handleNext}
-                >
-                    { nextBtn }
-                </NavButton>
-            }
+            { React.cloneElement(React.cloneElement(nextBtn, defaultNextBtnProps), (!nextBtn.props.onClick ? nextBtn.props : ({...nextBtn.props, onClick: (e) => { nextBtn.props.onClick?.(e); defaultNextBtnProps.onClick?.(e); }} as ButtonIconProps))) }
             
-            {
-                nav
-                ?
-                (
-                    isTypeOf(nav, Element)
-                    ?
-                    <nav.type
-                        // other props:
-                        {...nav.props}
-                        
-                        
+            { React.cloneElement(React.cloneElement(nav, defaultNavscrollProps,
+                React.Children.map(children, (child, index) => (
+                    <NavscrollItem
                         // essentials:
-                        key={nav.key}
+                        key={index}
                         
                         
-                        // classes:
-                        classes={[...(nav.props.classes ?? []),
-                            'nav', // inject nav class
-                        ]}
+                        // semantics:
+                        tag='button'
                         
                         
-                        {...(isTypeOf(nav, Navscroll) ? ({
-                            // scrolls:
-                            targetRef     : (nav.props as NavscrollProps).targetRef ?? (infiniteLoop ? listDummyRef : listRef),
-                            interpolation : (nav.props as NavscrollProps).interpolation ?? true,
-                        } as NavscrollProps) : {})}
+                        // accessibilities:
+                        {...(React.isValidElement<React.HTMLAttributes<HTMLElement>>(child) ? ({
+                            title : child.props.title,
+                        } as React.HTMLAttributes<HTMLElement>) : {})}
                     />
-                    :
-                    nav
-                )
-                :
-                <Navscroll
-                    // variants:
-                    theme={props.theme}
-                    size={props.size}
-                    listStyle='bullet'
-                    orientation='inline'
-                    
-                    
-                    // behaviors:
-                    actionCtrl={true}
-                    
-                    
-                    // classes:
-                    classes={[
-                        'nav', // inject nav class
-                    ]}
-                    
-                    
-                    // scrolls:
-                    targetRef={(infiniteLoop ? listDummyRef : listRef)}
-                    interpolation={true}
-                >
-                    {React.Children.map(children, (child, index) => (
-                        <NavscrollItem
-                            // essentials:
-                            key={index}
-                            
-                            
-                            // semantics:
-                            tag='button'
-                            
-                            
-                            // accessibilities:
-                            {...(React.isValidElement<React.HTMLAttributes<HTMLElement>>(child) ? ({
-                                title : child.props.title,
-                            } as React.HTMLAttributes<HTMLElement>) : {})}
-                        />
-                    ))}
-                </Navscroll>
-            }
+                ))
+            ), nav.props) }
         </Content>
     );
 }

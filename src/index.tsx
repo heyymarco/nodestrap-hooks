@@ -22,11 +22,11 @@ import reportWebVitals from './reportWebVitals';
 //     import ContentApp                               from './apps/ContentApp';                // div      ???
 //     import LabelApp                                 from './apps/LabelApp';                  // div
 //         import MasonryApp                           from './apps/MasonryApp';                // div      ???
-//         import CarouselApp                          from './apps/CarouselApp';               // div      ???
+        import CarouselApp                          from './apps/CarouselApp';               // div      ???
 //     import ContainerApp                             from './apps/ContainerApp';              // div
 //     import IndicatorApp                             from './apps/IndicatorApp';              // div
 //         import ListApp                              from './apps/ListApp';                   // ul>li    list (semantic)
-            import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
+//             import GroupApp                         from './apps/GroupApp';                  // div      group (semantic)
 //             import AccordionApp                     from './apps/AccordionApp';              // h1-h6    heading (semantic)
 //             import NavApp                           from './apps/NavApp';                    // nav      navigation (semantic)
 //                 import NavscrollApp                 from './apps/NavscrollApp';              // nav      navigation (semantic)
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <GroupApp />
+    <CarouselApp />
     ,
     document.getElementById('root')
 );
