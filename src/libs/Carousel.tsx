@@ -126,12 +126,12 @@ export const useCarouselVariant = (props: CarouselVariant) => {
 
 // styles:
 // .carousel > .items > .item > .media
-const itemsElm    = ':where(.items)'; // zero specificity
-const dummyElm    = '.dummy';
-const itemElm     = '*';              // zero specificity
-const prevBtnElm  = '.prevBtn';
-const nextBtnElm  = '.nextBtn';
-const navElm      = '.nav';
+const itemsElm   = ':where(.items)'; // zero specificity
+const dummyElm   = '.dummy';
+const itemElm    = '*';              // zero specificity
+const prevBtnElm = '.prevBtn';
+const nextBtnElm = '.nextBtn';
+const navElm     = '.nav';
 
 export const usesCarouselItemsLayout = (options: ContentChildrenOptions = {}) => {
     // dependencies:
