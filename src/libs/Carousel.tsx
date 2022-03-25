@@ -203,9 +203,9 @@ export const usesCarouselItemLayout = (options: ContentChildrenOptions = {}) => 
     return style({
         // layouts:
         display         : 'flex',   // use block flexbox, so it takes the entire parent's width
-        flexDirection   : 'row',    // the flex direction to horz, so we can adjust the content's height
-        justifyContent  : 'center', // center items horizontally
-        alignItems      : 'center', // if the content's height is shorter than the section, place it at the center vertically
+        flexDirection   : 'column', // the flex direction to vert
+        justifyContent  : 'center', // center items vertically
+        alignItems      : 'center', // center items horizontally
         flexWrap        : 'nowrap', // no wrapping
         
         
@@ -261,6 +261,11 @@ export const usesCarouselMediaLayout = () => {
                 inlineSize        : 'auto',
                 blockSize         : 'auto',
             }),
+            
+            
+            
+            // sizes:
+            flex                  : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height
             
             
             
