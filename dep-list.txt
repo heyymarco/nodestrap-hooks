@@ -41,7 +41,7 @@
 
 // contents:
 [published] @nodestrap/container
-[modified ] @nodestrap/content   *button
+[published] @nodestrap/content   *button
 
 // simple components:
 [published] @nodestrap/visually-hidden
@@ -85,7 +85,7 @@ notifications:
 [published] @nodestrap/navscroll
 [published] @nodestrap/accordion
 [published] @nodestrap/group
-[modified ] @nodestrap/carousel
+[published] @nodestrap/carousel
 [published] @nodestrap/navbar
 
 // dialogs:
