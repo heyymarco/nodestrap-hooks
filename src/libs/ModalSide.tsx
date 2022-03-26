@@ -129,27 +129,27 @@ export const usesSideDialogLayout = () => {
             // layouts:
             display        : 'flex',
             flexDirection  : 'column',
-            justifyContent : 'start',   // if Card is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the Card's header should be visible first
-            alignItems     : 'stretch', // stretch Card horizontally
+            justifyContent : 'start',   // if <Card> is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the <Card>'s header should be visible first
+            alignItems     : 'stretch', // stretch <Card> horizontally
             flexWrap       : 'nowrap',  // no wrapping
             
             
             
             // children:
-            ...children(['&', '*'], { // Popup & Card
+            ...children(['&', '*'], { // <Collapse> & <Card>
                 // sizes:
                 boxSizing     : 'border-box',     // the final size is including borders & paddings
                 inlineSize    : 'auto',           // follows the content's width, but
                 maxInlineSize : '100%',           // up to the maximum available parent's width
                 blockSize     : 'auto',           // follows the content's height, but
                 maxBlockSize  : '100%',           // up to the maximum available parent's height
-                overflow      : 'hidden',         // force the Card to scroll
+                overflow      : 'hidden',         // force the <Card> to scroll
             }),
             
             
             
             // children:
-            ...children('*', { // Card
+            ...children('*', { // <Card>
                 // sizes:
                 flex          : [[1, 1, '100%']], // growable, shrinkable, initial from parent's height
                 
@@ -173,7 +173,7 @@ export const usesSideDialogVariants = () => {
         ...variants([
             rule('.blockStart>&', {
                 // children:
-                ...children(['&', '*'], { // Card
+                ...children(['&', '*'], { // <Card>
                     // borders:
                     // remove rounded corners on top:
                     [borderRadiusDecls.borderStartStartRadius] : '0px',
@@ -182,7 +182,7 @@ export const usesSideDialogVariants = () => {
             }),
             rule('.blockEnd>&', {
                 // children:
-                ...children(['&', '*'], { // Card
+                ...children(['&', '*'], { // <Card>
                     // borders:
                     // remove rounded corners on bottom:
                     [borderRadiusDecls.borderEndStartRadius  ] : '0px',
@@ -191,7 +191,7 @@ export const usesSideDialogVariants = () => {
             }),
             rule('.inlineStart>&', {
                 // children:
-                ...children(['&', '*'], { // Card
+                ...children(['&', '*'], { // <Card>
                     // borders:
                     // remove rounded corners on left:
                     [borderRadiusDecls.borderStartStartRadius] : '0px',
@@ -200,7 +200,7 @@ export const usesSideDialogVariants = () => {
             }),
             rule('.inlineEnd>&', {
                 // children:
-                ...children(['&', '*'], { // Card
+                ...children(['&', '*'], { // <Card>
                     // borders:
                     // remove rounded corners on right:
                     [borderRadiusDecls.borderStartEndRadius  ] : '0px',
@@ -251,7 +251,7 @@ export const usesSideBackdropLayout = () => {
         ]),
         ...style({
             // layouts:
-            display      : 'grid',    // use a grid for the layout, so we can align the Card both horizontally & vertically
+            display      : 'grid',    // use a grid for the layout, so we can align the <Card> both horizontally & vertically
             
             // child default sizes:
          // justifyItems : 'start',   // align left horizontally // already defined in variant `.(inline|block)(Start|End)`
@@ -382,13 +382,13 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // rest props:
     const {
         // essentials:
-        elmRef,         // moved to Card
+        elmRef,         // moved to <Card>
         
         
         // accessibilities:
-        active,         // from accessibilities, moved to Collapse
-        inheritActive,  // from accessibilities, moved to Collapse
-        tabIndex = -1,  // from ModalElement   , moved to Card
+        active,         // moved to <Collapse>
+        inheritActive,  // moved to <Collapse>
+        tabIndex = -1,  // moved to <Card>
         
         
         // actions:

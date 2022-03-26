@@ -135,8 +135,8 @@ export const usesCardDialogLayout = () => {
             // layouts:
             display        : 'flex',
             flexDirection  : 'column',
-            justifyContent : 'start',   // if Card is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the Card's header should be visible first
-            alignItems     : 'center',  // center Card horizontally
+            justifyContent : 'start',   // if <Card> is not growable, the excess space (if any) placed at the end, and if no sufficient space available => the <Card>'s header should be visible first
+            alignItems     : 'center',  // center <Card> horizontally
             flexWrap       : 'nowrap',  // no wrapping
             
             
@@ -157,8 +157,8 @@ export const usesCardDialogVariants = () => {
                 flex          : [[0, 0, 'auto']], // ungrowable, unshrinkable, initial from it's height
                 
                 boxSizing     : 'content-box',    // the final size is excluding borders & paddings
-                inlineSize    : 'max-content',    // forcing the Card's width follows the Card's items width
-                blockSize     : 'max-content',    // forcing the Card's height follows the Card's items height
+                inlineSize    : 'max-content',    // forcing the <Card>'s width follows the <Card>'s items width
+                blockSize     : 'max-content',    // forcing the <Card>'s height follows the <Card>'s items height
             }),
             rule('.scrollable>&', {
                 // sizes:
@@ -167,14 +167,14 @@ export const usesCardDialogVariants = () => {
                 
                 
                 // children:
-                ...children(['&', '*'], { // Popup & Card
+                ...children(['&', '*'], { // <Popup> & <Card>
                     // sizes:
                     boxSizing     : 'border-box',     // the final size is including borders & paddings
                     inlineSize    : 'auto',           // follows the content's width, but
                     maxInlineSize : '100%',           // up to the maximum available parent's width
                     blockSize     : 'auto',           // follows the content's height, but
                     maxBlockSize  : '100%',           // up to the maximum available parent's height
-                    overflow      : 'hidden',         // force the Card to scroll
+                    overflow      : 'hidden',         // force the <Card> to scroll
                 }),
             }),
         ]),
@@ -242,7 +242,7 @@ export const usesCardBackdropLayout = () => {
         ]),
         ...style({
             // layouts:
-         // display      : 'grid',             // already defined in `usesResponsiveContainerGridLayout()`. We use a grid for the layout, so we can align the Card both horizontally & vertically
+         // display      : 'grid',             // already defined in `usesResponsiveContainerGridLayout()`. We use a grid for the layout, so we can align the <Card> both horizontally & vertically
             
             // child default sizes:
             justifyItems : cssProps.horzAlign, // align (default center) horizontally
