@@ -77,9 +77,9 @@ import {
     usesDialogLayout,
     usesDialogStates,
     
-    usesModalLayout,
-    usesModalVariants,
-    usesModalStates,
+    usesBackdropLayout,
+    usesBackdropVariants,
+    usesBackdropStates,
     
     
     
@@ -119,7 +119,7 @@ export const useModalSideVariant = (props: ModalSideVariant) => {
 
 
 // styles:
-export const usesModalSideElementLayout = () => {
+export const usesSideDialogLayout = () => {
     return style({
         ...imports([
             // layouts:
@@ -161,7 +161,7 @@ export const usesModalSideElementLayout = () => {
         }),
     });
 };
-export const usesModalSideElementVariants = () => {
+export const usesSideDialogVariants = () => {
     // dependencies:
     
     // borders:
@@ -210,7 +210,7 @@ export const usesModalSideElementVariants = () => {
         ]),
     });
 };
-export const usesModalSideElementStates = () => {
+export const usesSideDialogStates = () => {
     return style({
         ...imports([
             // states:
@@ -219,18 +219,18 @@ export const usesModalSideElementStates = () => {
     });
 };
 
-export const useModalSideElementSheet = createUseSheet(() => [
+export const useSideDialogSheet = createUseSheet(() => [
     mainComposition(
         rule('&&', { // makes `.ModalSideElement` is more specific than `.Collapse`
             ...imports([
                 // layouts:
-                usesModalSideElementLayout(),
+                usesSideDialogLayout(),
                 
                 // variants:
-                usesModalSideElementVariants(),
+                usesSideDialogVariants(),
                 
                 // states:
-                usesModalSideElementStates(),
+                usesSideDialogStates(),
             ]),
         }),
     ),
@@ -243,11 +243,11 @@ export const useModalSideElementSheet = createUseSheet(() => [
 
 
 
-export const usesModalSideLayout = () => {
+export const usesSideBackdropLayout = () => {
     return style({
         ...imports([
             // layouts:
-            usesModalLayout(),
+            usesBackdropLayout(),
         ]),
         ...style({
             // layouts:
@@ -264,7 +264,7 @@ export const usesModalSideLayout = () => {
         }),
     });
 };
-export const usesModalSideVariants = () => {
+export const usesSideBackdropVariants = () => {
     // dependencies:
     
     // layouts:
@@ -278,7 +278,7 @@ export const usesModalSideVariants = () => {
     return style({
         ...imports([
             // variants:
-            usesModalVariants(),
+            usesBackdropVariants(),
             
             // layouts:
             sizes(),
@@ -315,26 +315,26 @@ export const usesModalSideVariants = () => {
         ]),
     });
 };
-export const usesModalSideStates = () => {
+export const usesSideBackdropStates = () => {
     return style({
         ...imports([
             // states:
-            usesModalStates(),
+            usesBackdropStates(),
         ]),
     });
 };
 
-export const useModalSideSheet = createUseSheet(() => [
+export const useSideBackdropSheet = createUseSheet(() => [
     mainComposition(
         imports([
             // layouts:
-            usesModalSideLayout(),
+            usesSideBackdropLayout(),
             
             // variants:
-            usesModalSideVariants(),
+            usesSideBackdropVariants(),
             
             // states:
-            usesModalSideStates(),
+            usesSideBackdropStates(),
         ]),
     ),
 ], /*sheetId :*/'g93sfdvlhc'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
@@ -356,7 +356,7 @@ export type ModalSideCloseType = ModalCardCloseType
 
 
 
-export interface ModalSideElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>
+export interface SideDialogProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>
     extends
         DialogProps<TElement, TCloseType>,
         CardProps<TElement>,
@@ -368,9 +368,9 @@ export interface ModalSideElementProps<TElement extends HTMLElement = HTMLElemen
         ModalSideVariant
 {
 }
-export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>(props: ModalSideElementProps<TElement, TCloseType>) {
+export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>(props: SideDialogProps<TElement, TCloseType>) {
     // styles:
-    const sheet        = useModalSideElementSheet();
+    const sheet        = useSideDialogSheet();
     
     
     
@@ -444,10 +444,8 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
     return (
         <Collapse<TElement>
             // accessibilities:
-            {...{
-                active,
-                inheritActive,
-            }}
+            active={active}
+            inheritActive={inheritActive}
             
             
             // layouts:
@@ -494,19 +492,18 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
         </Collapse>
     );
 }
-ModalSideElement.prototype = Dialog.prototype; // mark as ModalElement compatible
 
 
 
 export interface ModalSideProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>
     extends
         ModalProps<TElement, TCloseType>,
-        ModalSideElementProps<TElement, TCloseType>
+        SideDialogProps<TElement, TCloseType>
 {
 }
 export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>(props: ModalSideProps<TElement, TCloseType>) {
     // styles:
-    const sheet              = useModalSideSheet();
+    const sheet              = useSideBackdropSheet();
     
     
     
@@ -528,7 +525,7 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
                 modalSideVariant.class,
             ]}
         >
-            <ModalSideElement<TElement, TCloseType>
+            <SideDialog<TElement, TCloseType>
                 // other props:
                 {...props}
             />

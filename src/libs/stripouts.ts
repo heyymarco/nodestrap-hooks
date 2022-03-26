@@ -205,15 +205,13 @@ export const stripoutImage = () => style({
  * removes browser's default styling on dialog.
  */
 export const stripoutDialog = () => style({
-    display     : unset,
-    ...rule(':not([open])', {
-        display : unset,
-    }),
     position    : unset,
-    
     inset       : unset,
-    width       : unset,
-    height      : unset,
+    
+    display     : unset,
+    
+    inlineSize  : unset,
+    blockSize   : unset,
     
     margin      : unset,
     padding     : unset,

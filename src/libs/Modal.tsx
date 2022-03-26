@@ -173,7 +173,7 @@ export const usesDialogLayout = () => {
         ...imports([
             // resets:
             stripoutFocusableElement(), // clear browser's default styles
-            stripoutDialog(),
+            stripoutDialog(),           // clear browser's default styles
             
             // animations:
             anim(),
@@ -181,19 +181,12 @@ export const usesDialogLayout = () => {
         ...style({
             // layouts:
             display    : 'block',
-            position   : 'absolute',
-            inset      : 0,
             
             
             
             // sizes:
             inlineSize : 'fit-content',
             blockSize  : 'fit-content',
-            
-            
-            
-            // spacings:
-            margin     : 'auto',
             
             
             
@@ -239,7 +232,7 @@ export const useDialogSheet = createUseSheet(() => [
 
 
 
-export const usesModalLayout = () => {
+export const usesBackdropLayout = () => {
     // dependencies:
     
     // animations:
@@ -248,16 +241,25 @@ export const usesModalLayout = () => {
     
     
     return style({
+        // positions:
+        position     : 'fixed',
+        inset        : 0,
+        
+        
+        
         // layouts:
-        display      : 'block',
+        display      : 'grid',
+        
+        // child default sizes:
+        justifyItems : 'center', // center horizontally
+        alignItems   : 'center', // center vertically
         
         
         
         // sizes:
         // fills the entire screen:
         boxSizing    : 'border-box', // the final size is including borders & paddings
-        position     : 'fixed',
-        inset        : 0,
+        minBlockSize : '100vh',
         
         
         
@@ -270,7 +272,7 @@ export const usesModalLayout = () => {
         ...usesGeneralProps(cssProps), // apply general cssProps
     });
 };
-export const usesModalVariants = () => {
+export const usesBackdropVariants = () => {
     // dependencies:
     
     // layouts:
@@ -305,7 +307,7 @@ export const usesModalVariants = () => {
         ]),
     });
 };
-export const usesModalStates = () => {
+export const usesBackdropStates = () => {
     // dependencies:
     
     // animations:
@@ -334,17 +336,17 @@ export const usesDocumentBodyLayout = () => {
     });
 };
 
-export const useModalSheet = createUseSheet(() => [
+export const useBackdropSheet = createUseSheet(() => [
     mainComposition(
         imports([
             // layouts:
-            usesModalLayout(),
+            usesBackdropLayout(),
             
             // variants:
-            usesModalVariants(),
+            usesBackdropVariants(),
             
             // states:
-            usesModalStates(),
+            usesBackdropStates(),
         ]),
     ),
     compositionOf('body',
@@ -420,7 +422,9 @@ export interface DialogProps<TElement extends HTMLElement = HTMLElement, TCloseT
         TogglerExcitedProps
 {
     // accessibilities:
-    tabIndex? : number
+    isModal?   : boolean
+    isVisible? : boolean
+    tabIndex?  : number
 }
 export function Dialog<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: DialogProps<TElement, TCloseType>) {
     // styles:
@@ -436,12 +440,14 @@ export function Dialog<TElement extends HTMLElement = HTMLElement, TCloseType = 
     // rest props:
     const {
         // accessibilities:
+        isModal,
+        isVisible,
         tabIndex = -1,
         
         
         // actions:
         onActiveChange,  // not implemented
-        onExcitedChange,
+        onExcitedChange, // not implemented
     ...restProps} = props;
     
     
@@ -451,6 +457,15 @@ export function Dialog<TElement extends HTMLElement = HTMLElement, TCloseType = 
         <Element<TElement>
             // other props:
             {...restProps}
+            
+            
+            // semantics:
+            semanticTag ={props.semanticTag   ?? 'dialog'}
+            semanticRole={props.semanticRole  ?? 'dialog'}
+            aria-modal={isModal}
+            {...{
+                open : isVisible,
+            }}
             
             
             // accessibilities:
@@ -495,7 +510,7 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseTy
 }
 export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalProps<TElement, TCloseType>) {
     // styles:
-    const sheet                     = useModalSheet();
+    const sheet                     = useBackdropSheet();
     
     
     
@@ -566,7 +581,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     // states:
     const activePassiveState        = useActivePassiveState({ active, inheritActive: false });
-    const isVisible                 = activePassiveState.active || (!!activePassiveState.class);
+    const isActive                  = activePassiveState.active;
+    const isVisible                 = isActive || (!!activePassiveState.class);
     const isNoBackInteractive       = isVisible && ((modalVariant.class !== 'hidden') && (modalVariant.class !== 'interactive'));
     
     
@@ -607,7 +623,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // jsx:
-    const defaultDialogProps : DialogProps<TElement, TCloseType> & { open?: boolean } = {
+    const defaultDialogProps : DialogProps<TElement, TCloseType> = {
         // essentials:
         elmRef          : (elm) => {
             if (dialog.props.elmRef) setRef(dialog.props.elmRef, elm);
@@ -617,14 +633,9 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         },
         
         
-        // semantics:
-        semanticTag     : props.semanticTag   ?? 'dialog',
-        semanticRole    : props.semanticRole  ?? 'dialog',
-        'aria-modal'    : props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined),
-        
-        
         // accessibilities:
-        open            : isVisible,
+        isModal         : !!(props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)),
+        isVisible       : isVisible,
         tabIndex        : tabIndex,
         excited         : excitedFn,
         onExcitedChange : (newExcited) => {
@@ -660,6 +671,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         inheritEnabled  : inheritEnabled,
         readOnly        : readOnly,
         inheritReadOnly : inheritReadOnly,
+        active          : isActive,
+        inheritActive   : false,
     };
     return (
         <Indicator<TElement>
@@ -668,10 +681,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             
             // accessibilities:
-            {...{
-                active        : activePassiveState.active,
-                inheritActive : false,
-            }}
+            active       ={isActive}
+            inheritActive={false}
             
             
             // classes:
