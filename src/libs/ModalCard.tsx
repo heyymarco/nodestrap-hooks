@@ -371,11 +371,11 @@ export interface CardDialogProps<TElement extends HTMLElement = HTMLElement, TCl
         DialogProps<TElement, TCloseType>,
         CardProps<TElement>,
         
-        // states:
-        TogglerExcitedProps,
-        
         // appearances:
-        ModalCardVariant
+        ModalCardVariant,
+        
+        // states:
+        TogglerExcitedProps
 {
 }
 export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: CardDialogProps<TElement, TCloseType>) {
@@ -392,15 +392,15 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // rest props:
     const {
         // essentials:
-        elmRef,         // moved to <Card>
+        elmRef,          // moved to <Card>
         
         
         // accessibilities:
-        isModal,        // moved to <Popup>
-        isVisible,      // moved to <Popup>
-        tabIndex = -1,  // moved to <Card>
-        active,         // moved to <Popup>
-        inheritActive,  // moved to <Popup>
+        isModal,         // moved to <Popup>
+        isVisible,       // moved to <Popup>
+        tabIndex = -1,   // moved to <Card>
+        active,          // moved to <Popup>
+        inheritActive,   // moved to <Popup>
         
         
         // actions:
@@ -409,8 +409,8 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         
         
         // children:
-        header,         // changed the default
-        footer,         // changed the default
+        header,          // changed the default
+        footer,          // changed the default
     ...restProps} = props;
     
     
@@ -497,7 +497,7 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
             inheritActive={inheritActive}
             
             
-            // appearances:
+            // layouts:
             nude={true}
             
             

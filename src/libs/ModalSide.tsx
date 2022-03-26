@@ -151,6 +151,7 @@ export const usesSideDialogLayout = () => {
             // children:
             ...children('*', { // <Card>
                 // sizes:
+                // maximum height of <Card> when side-left & side-right
                 flex          : [[1, 1, '100%']], // growable, shrinkable, initial from parent's height
                 
                 
@@ -173,7 +174,7 @@ export const usesSideDialogVariants = () => {
         ...variants([
             rule('.blockStart>&', {
                 // children:
-                ...children(['&', '*'], { // <Card>
+                ...children(['&', '*'], { // <Collapse> & <Card>
                     // borders:
                     // remove rounded corners on top:
                     [borderRadiusDecls.borderStartStartRadius] : '0px',
@@ -182,7 +183,7 @@ export const usesSideDialogVariants = () => {
             }),
             rule('.blockEnd>&', {
                 // children:
-                ...children(['&', '*'], { // <Card>
+                ...children(['&', '*'], { // <Collapse> & <Card>
                     // borders:
                     // remove rounded corners on bottom:
                     [borderRadiusDecls.borderEndStartRadius  ] : '0px',
@@ -191,7 +192,7 @@ export const usesSideDialogVariants = () => {
             }),
             rule('.inlineStart>&', {
                 // children:
-                ...children(['&', '*'], { // <Card>
+                ...children(['&', '*'], { // <Collapse> & <Card>
                     // borders:
                     // remove rounded corners on left:
                     [borderRadiusDecls.borderStartStartRadius] : '0px',
@@ -200,7 +201,7 @@ export const usesSideDialogVariants = () => {
             }),
             rule('.inlineEnd>&', {
                 // children:
-                ...children(['&', '*'], { // <Card>
+                ...children(['&', '*'], { // <Collapse> & <Card>
                     // borders:
                     // remove rounded corners on right:
                     [borderRadiusDecls.borderStartEndRadius  ] : '0px',
@@ -221,7 +222,7 @@ export const usesSideDialogStates = () => {
 
 export const useSideDialogSheet = createUseSheet(() => [
     mainComposition(
-        rule('&&', { // makes `.ModalSideElement` is more specific than `.Collapse`
+        rule('&&', { // makes `.SideDialog` is more specific than `.Collapse`
             ...imports([
                 // layouts:
                 usesSideDialogLayout(),
@@ -361,11 +362,11 @@ export interface SideDialogProps<TElement extends HTMLElement = HTMLElement, TCl
         DialogProps<TElement, TCloseType>,
         CardProps<TElement>,
         
-        // states:
-        TogglerExcitedProps,
-        
         // appearances:
-        ModalSideVariant
+        ModalSideVariant,
+        
+        // states:
+        TogglerExcitedProps
 {
 }
 export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>(props: SideDialogProps<TElement, TCloseType>) {
@@ -382,22 +383,24 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // rest props:
     const {
         // essentials:
-        elmRef,         // moved to <Card>
+        elmRef,          // moved to <Card>
         
         
         // accessibilities:
-        active,         // moved to <Collapse>
-        inheritActive,  // moved to <Collapse>
-        tabIndex = -1,  // moved to <Card>
+        isModal,         // moved to <Collapse>
+        isVisible,       // moved to <Collapse>
+        tabIndex = -1,   // moved to <Card>
+        active,          // moved to <Collapse>
+        inheritActive,   // moved to <Collapse>
         
         
         // actions:
-        onActiveChange,
-        onExcitedChange,
+        onActiveChange,  // implemented
+        onExcitedChange, // not implemented
         
         
         // children:
-        header,
+        header,          // changed the default
     ...restProps} = props;
     
     
@@ -443,6 +446,15 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // jsx:
     return (
         <Collapse<TElement>
+            // semantics:
+            semanticTag ={props.semanticTag   ?? 'dialog'}
+            semanticRole={props.semanticRole  ?? 'dialog'}
+            aria-modal={isModal}
+            {...{
+                open : isVisible,
+            }}
+            
+            
             // accessibilities:
             active={active}
             inheritActive={inheritActive}
@@ -450,15 +462,12 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
             
             // layouts:
             orientation={props.modalSideStyle?.startsWith('block') ? 'block' : 'inline'}
-            
-            
-            // appearances:
             nude={true}
             
             
             // classes:
             classes={[
-                sheet.main, // inject ModalSideElement class
+                sheet.main, // inject SideDialog class
             ]}
             stateClasses={[...(props.stateClasses ?? []),
                 excitedState.class,
