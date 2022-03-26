@@ -200,3 +200,37 @@ export const stripoutImage = () => style({
         inlineSize : '100%',
     }),
 });
+
+/**
+ * removes browser's default styling on dialog.
+ */
+export const stripoutDialog = () => style({
+    display     : unset,
+    ...rule(':not([open])', {
+        display : unset,
+    }),
+    position    : unset,
+    
+    inset       : unset,
+    width       : unset,
+    height      : unset,
+    
+    margin      : unset,
+    padding     : unset,
+    
+    background  : unset,
+    color       : unset,
+    border      : unset,
+    
+    
+    
+    // children:
+    ...children('::backdrop', {
+        display    : none,
+        position   : unset,
+        
+        inset      : unset,
+        
+        background : unset,
+    }),
+});
