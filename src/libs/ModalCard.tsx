@@ -81,8 +81,8 @@ import {
     
     
     // styles:
-    usesModalElementLayout,
-    usesModalElementStates,
+    usesDialogLayout,
+    usesDialogStates,
     
     usesModalLayout,
     usesModalVariants,
@@ -93,8 +93,8 @@ import {
     // react components:
     ModalCloseType,
     
-    ModalElementProps,
-    ModalElement,
+    DialogProps,
+    Dialog,
     
     ModalProps,
     Modal,
@@ -130,7 +130,7 @@ export const usesModalCardElementLayout = () => {
     return style({
         ...imports([
             // layouts:
-            usesModalElementLayout(),
+            usesDialogLayout(),
         ]),
         ...style({
             // layouts:
@@ -185,7 +185,7 @@ export const usesModalCardElementStates = () => {
     return style({
         ...imports([
             // states:
-            usesModalElementStates(),
+            usesDialogStates(),
         ]),
     });
 };
@@ -369,7 +369,7 @@ export type ModalCardCloseType = 'ui'|ModalCloseType
 
 export interface ModalCardElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>
     extends
-        ModalElementProps<TElement, TCloseType>,
+        DialogProps<TElement, TCloseType>,
         CardProps<TElement>,
         
         // states:
@@ -530,7 +530,7 @@ export function ModalCardElement<TElement extends HTMLElement = HTMLElement, TCl
         </Popup>
     );
 }
-ModalCardElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
+ModalCardElement.prototype = Dialog.prototype; // mark as ModalElement compatible
 
 
 

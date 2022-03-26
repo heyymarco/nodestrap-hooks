@@ -74,8 +74,8 @@ import {
     
     
     // styles:
-    usesModalElementLayout,
-    usesModalElementStates,
+    usesDialogLayout,
+    usesDialogStates,
     
     usesModalLayout,
     usesModalVariants,
@@ -84,8 +84,8 @@ import {
     
     
     // react components:
-    ModalElementProps,
-    ModalElement,
+    DialogProps,
+    Dialog,
     
     ModalProps,
     Modal,
@@ -123,7 +123,7 @@ export const usesModalSideElementLayout = () => {
     return style({
         ...imports([
             // layouts:
-            usesModalElementLayout(),
+            usesDialogLayout(),
         ]),
         ...style({
             // layouts:
@@ -214,7 +214,7 @@ export const usesModalSideElementStates = () => {
     return style({
         ...imports([
             // states:
-            usesModalElementStates(),
+            usesDialogStates(),
         ]),
     });
 };
@@ -358,7 +358,7 @@ export type ModalSideCloseType = ModalCardCloseType
 
 export interface ModalSideElementProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>
     extends
-        ModalElementProps<TElement, TCloseType>,
+        DialogProps<TElement, TCloseType>,
         CardProps<TElement>,
         
         // states:
@@ -494,7 +494,7 @@ export function ModalSideElement<TElement extends HTMLElement = HTMLElement, TCl
         </Collapse>
     );
 }
-ModalSideElement.prototype = ModalElement.prototype; // mark as ModalElement compatible
+ModalSideElement.prototype = Dialog.prototype; // mark as ModalElement compatible
 
 
 
