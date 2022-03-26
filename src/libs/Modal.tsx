@@ -59,6 +59,7 @@ import {
 }                           from './hooks'
 import {
     stripoutFocusableElement,
+    stripoutDialog,
 }                           from './stripouts'
 import {
     // utilities:
@@ -172,20 +173,34 @@ export const usesDialogLayout = () => {
         ...imports([
             // resets:
             stripoutFocusableElement(), // clear browser's default styles
+            stripoutDialog(),
             
             // animations:
             anim(),
         ]),
         ...style({
             // layouts:
-            display : 'inline-block',
+            display    : 'block',
+            position   : 'absolute',
+            inset      : 0,
+            
+            
+            
+            // sizes:
+            inlineSize : 'fit-content',
+            blockSize  : 'fit-content',
+            
+            
+            
+            // spacings:
+            margin     : 'auto',
             
             
             
             // animations:
-            boxShadow : animRefs.boxShadow,
-            filter    : animRefs.filter,
-            anim      : animRefs.anim,
+            boxShadow  : animRefs.boxShadow,
+            filter     : animRefs.filter,
+            anim       : animRefs.anim,
             
             
             
@@ -592,7 +607,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // jsx:
-    const defaultDialogProps : DialogProps<TElement, TCloseType> = {
+    const defaultDialogProps : DialogProps<TElement, TCloseType> & { open?: boolean } = {
         // essentials:
         elmRef          : (elm) => {
             if (dialog.props.elmRef) setRef(dialog.props.elmRef, elm);
@@ -603,12 +618,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         
         // semantics:
-        semanticTag     : props.semanticTag   ?? [null],
+        semanticTag     : props.semanticTag   ?? 'dialog',
         semanticRole    : props.semanticRole  ?? 'dialog',
         'aria-modal'    : props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined),
         
         
         // accessibilities:
+        open            : isVisible,
         tabIndex        : tabIndex,
         excited         : excitedFn,
         onExcitedChange : (newExcited) => {
