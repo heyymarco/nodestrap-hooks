@@ -1,5 +1,7 @@
 top priority:
 
+<Carousel> fix slide using touch sync to nav (infinite loop)
+
 default nude at parent level for <List><ListItem>, <Card><Child>
 
 Set <Badge>:
