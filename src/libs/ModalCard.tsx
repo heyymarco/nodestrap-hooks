@@ -409,8 +409,8 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         
         
         // children:
-        header,
-        footer,
+        header,         // changed the default
+        footer,         // changed the default
     ...restProps} = props;
     
     
