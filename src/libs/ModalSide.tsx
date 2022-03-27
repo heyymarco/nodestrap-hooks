@@ -85,7 +85,6 @@ import {
     
     // react components:
     DialogProps,
-    Dialog,
     
     ModalProps,
     Modal,
@@ -526,6 +525,10 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
         <Modal<TElement, TCloseType>
             // other props:
             {...props}
+        
+        
+            // components:
+            dialog={props.dialog ?? <SideDialog<TElement, TCloseType> />}
             
             
             // classes:
@@ -533,12 +536,7 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
             variantClasses={[...(props.variantClasses ?? []),
                 modalSideVariant.class,
             ]}
-        >
-            <SideDialog<TElement, TCloseType>
-                // other props:
-                {...props}
-            />
-        </Modal>
+        />
     );
 }
 export { ModalSide as default }
