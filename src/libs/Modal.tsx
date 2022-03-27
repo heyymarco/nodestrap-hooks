@@ -71,16 +71,10 @@ import {
 
 // nodestrap components:
 import {
-    // react components:
-    ElementProps,
-    Element,
-}                           from './Element'
-import {
     // hooks:
     usesSizeVariant,
     usesAnim,
     usesExcitedState,
-    useExcitedState,
     TogglerExcitedProps,
 }                           from './Basic'
 import {
@@ -427,75 +421,6 @@ export interface DialogProps<TElement extends HTMLElement = HTMLElement, TCloseT
     isVisible? : boolean
     tabIndex?  : number
 }
-export function Dialog<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: DialogProps<TElement, TCloseType>) {
-    // styles:
-    const sheet        = useDialogSheet();
-    
-    
-    
-    // states:
-    const excitedState = useExcitedState(props);
-    
-    
-    
-    // rest props:
-    const {
-        // accessibilities:
-        isModal,
-        isVisible,
-        tabIndex = -1,
-        
-        
-        // actions:
-        onActiveChange,  // not implemented
-        onExcitedChange, // not implemented
-    ...restProps} = props;
-    
-    
-    
-    // jsx:
-    return (
-        <Element<TElement>
-            // other props:
-            {...restProps}
-            
-            
-            // semantics:
-            semanticTag ={props.semanticTag   ?? 'dialog'}
-            semanticRole={props.semanticRole  ?? 'dialog'}
-            aria-modal={isModal}
-            {...{
-                open : isVisible,
-            }}
-            
-            
-            // accessibilities:
-            {...{
-                tabIndex,
-            }}
-            
-            
-            // classes:
-            mainClass={props.mainClass ?? sheet.main}
-            stateClasses={[...(props.stateClasses ?? []),
-                excitedState.class,
-            ]}
-            
-            
-            // events:
-            onAnimationEnd={(e) => {
-                props.onAnimationEnd?.(e);
-                
-                
-                
-                // states:
-                excitedState.handleAnimationEnd(e);
-            }}
-        />
-    );
-}
-
-
 
 export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>
     extends
@@ -507,10 +432,6 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseTy
 {
     // performances:
     lazy?   : boolean
-    
-    
-    // components:
-    dialog? : React.ReactComponentElement<any, ElementProps>
 }
 export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalProps<TElement, TCloseType>) {
     // styles:
@@ -551,10 +472,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         lazy = false,
         
         
-        // components:
-        dialog = <Dialog<TElement, TCloseType> />,
-        
-        
         // children:
         children,
     ...restBackdropProps} = props;
@@ -580,6 +497,12 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         // active,
         // inheritActive,
     } = restBackdropProps;
+    
+    
+    
+    // verifies:
+    React.Children.only(children);
+    if (!React.isValidElement<DialogProps<TElement, TCloseType>>(children)) throw Error('Invalid child element.');
     
     
     
@@ -648,7 +571,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     const defaultDialogProps : DialogProps<TElement, TCloseType> = {
         // essentials:
         elmRef          : (elm) => {
-            if (dialog.props.elmRef) setRef(dialog.props.elmRef, elm);
+            if (children.props.elmRef) setRef(children.props.elmRef, elm);
             
             setRef(elmRef, elm);
             setRef(childRef, elm);
@@ -661,7 +584,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         tabIndex        : tabIndex,
         excited         : excitedFn,
         onExcitedChange : (newExcited) => {
-            dialog.props.onExcitedChange?.(newExcited);
+            children.props.onExcitedChange?.(newExcited);
             
             onExcitedChange?.(newExcited);
             setExcitedDn(newExcited);
@@ -670,7 +593,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         // actions:
         onActiveChange  : (newActive, closeType) => {
-            dialog.props.onActiveChange?.(newActive, closeType);
+            children.props.onActiveChange?.(newActive, closeType);
             
             onActiveChange?.(newActive, closeType);
         },
@@ -763,9 +686,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                 activePassiveState.handleAnimationEnd(e);
             }}
         >
-            { React.cloneElement(React.cloneElement(dialog, defaultDialogProps,
-                ((!lazy || isVisible) && children)
-            ), dialog.props) }
+            { (!lazy || isVisible) && React.cloneElement(React.cloneElement(children, defaultDialogProps), children.props) }
         </Indicator>
     , containerRef);
 }

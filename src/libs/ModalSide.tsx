@@ -42,7 +42,17 @@ import {
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
+// nodestrap utilities:
+import {
+    // utilities:
+    setRef,
+}                           from './utilities'
+
 // nodestrap components:
+import type {
+    // react components:
+    ElementProps,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
@@ -367,6 +377,8 @@ export interface SideDialogProps<TElement extends HTMLElement = HTMLElement, TCl
         // states:
         TogglerExcitedProps
 {
+    // components:
+    card? : React.ReactComponentElement<any, ElementProps>
 }
 export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseType = ModalSideCloseType>(props: SideDialogProps<TElement, TCloseType>) {
     // styles:
@@ -398,9 +410,13 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         onExcitedChange, // not implemented
         
         
+        // components:
+        card = <Card<TElement> />,
+        
+        
         // children:
         header,          // changed the default
-    ...restProps} = props;
+    ...restCardProps} = props;
     
     
     
@@ -443,6 +459,28 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     
     
     // jsx:
+    const defaultCardProps : CardProps<TElement> = {
+        // other props:
+        ...restCardProps,
+        
+        
+        // essentials:
+        elmRef : !card.props.elmRef ? elmRef : (elm) => {
+            setRef(card.props.elmRef, elm);
+            
+            setRef(elmRef, elm);
+        },
+        
+        
+        // accessibilities:
+        ...{
+            tabIndex,
+        },
+        
+        
+        // children:
+        header : headerFn,
+    };
     return (
         <Collapse<TElement>
             // semantics:
@@ -479,24 +517,7 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
                 excitedState.handleAnimationEnd(e);
             }}
         >
-            <Card<TElement>
-                // other props:
-                {...restProps}
-                
-                
-                // essentials:
-                elmRef={elmRef}
-                
-                
-                // accessibilities:
-                {...{
-                    tabIndex,
-                }}
-                
-                
-                // children:
-                header={headerFn}
-            />
+            { React.cloneElement(React.cloneElement(card, defaultCardProps), card.props) }
         </Collapse>
     );
 }
@@ -522,10 +543,6 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
     
     // rest props:
     const {
-        // components:
-        dialog = <SideDialog<TElement, TCloseType> />,
-        
-        
         // ModalSideVariant:
         modalSideStyle,
         
@@ -539,24 +556,10 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
     
     
     // jsx:
-    const defaultDialogProps : SideDialogProps<TElement, TCloseType> = {
-        // ModalSideVariant:
-        modalSideStyle,
-        
-        
-        // children:
-        header,
-        footer,
-        children,
-    };
     return (
         <Modal<TElement, TCloseType>
             // other props:
             {...restBackdropProps}
-            
-            
-            // components:
-            dialog={React.cloneElement(React.cloneElement(dialog, defaultDialogProps), dialog.props)}
             
             
             // classes:
@@ -564,7 +567,19 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
             variantClasses={[...(props.variantClasses ?? []),
                 modalSideVariant.class,
             ]}
-        />
+        >
+            <SideDialog<TElement, TCloseType>
+                // ModalSideVariant:
+                modalSideStyle={modalSideStyle}
+                
+                
+                // children:
+                header={header}
+                footer={footer}
+            >
+                { children }
+            </SideDialog>
+        </Modal>
     );
 }
 export { ModalSide as default }

@@ -45,7 +45,17 @@ import {
     overwriteProps,
 }                           from './css-config'  // Stores & retrieves configuration using *css custom properties* (css variables)
 
+// nodestrap utilities:
+import {
+    // utilities:
+    setRef,
+}                           from './utilities'
+
 // nodestrap components:
+import type {
+    // react components:
+    ElementProps,
+}                           from './Element'
 import {
     // hooks:
     usesSizeVariant,
@@ -377,6 +387,8 @@ export interface CardDialogProps<TElement extends HTMLElement = HTMLElement, TCl
         // states:
         TogglerExcitedProps
 {
+    // components:
+    card? : React.ReactComponentElement<any, ElementProps>
 }
 export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCardCloseType>(props: CardDialogProps<TElement, TCloseType>) {
     // styles:
@@ -408,10 +420,14 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         onExcitedChange, // not implemented
         
         
+        // components:
+        card = <Card<TElement> />,
+        
+        
         // children:
         header,          // changed the default
         footer,          // changed the default
-    ...restProps} = props;
+    ...restCardProps} = props;
     
     
     
@@ -481,6 +497,29 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     
     
     // jsx:
+    const defaultCardProps : CardProps<TElement> = {
+        // other props:
+        ...restCardProps,
+        
+        
+        // essentials:
+        elmRef : !card.props.elmRef ? elmRef : (elm) => {
+            setRef(card.props.elmRef, elm);
+            
+            setRef(elmRef, elm);
+        },
+        
+        
+        // accessibilities:
+        ...{
+            tabIndex,
+        },
+        
+        
+        // children:
+        header : headerFn,
+        footer : footerFn,
+    };
     return (
         <Popup<TElement>
             // semantics:
@@ -516,25 +555,7 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
                 excitedState.handleAnimationEnd(e);
             }}
         >
-            <Card<TElement>
-                // other props:
-                {...restProps}
-                
-                
-                // essentials:
-                elmRef={elmRef}
-                
-                
-                // accessibilities:
-                {...{
-                    tabIndex,
-                }}
-                
-                
-                // children:
-                header={headerFn}
-                footer={footerFn}
-            />
+            { React.cloneElement(React.cloneElement(card, defaultCardProps), card.props) }
         </Popup>
     );
 }
@@ -560,10 +581,6 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
     
     // rest props:
     const {
-        // components:
-        dialog = <CardDialog<TElement, TCloseType> />,
-        
-        
         // ModalCardVariant:
         modalCardStyle,
         horzAlign,
@@ -579,26 +596,10 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
     
     
     // jsx:
-    const defaultDialogProps : CardDialogProps<TElement, TCloseType> = {
-        // ModalCardVariant:
-        modalCardStyle,
-        horzAlign,
-        vertAlign,
-        
-        
-        // children:
-        header,
-        footer,
-        children,
-    };
     return (
         <Modal<TElement, TCloseType>
             // other props:
             {...restBackdropProps}
-            
-            
-            // components:
-            dialog={React.cloneElement(React.cloneElement(dialog, defaultDialogProps), dialog.props)}
             
             
             // classes:
@@ -613,7 +614,21 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
                 // variants:
                 ...modalCardVariant.style,
             }}
-        />
+        >
+            <CardDialog<TElement, TCloseType>
+                // ModalCardVariant:
+                modalCardStyle={modalCardStyle}
+                horzAlign={horzAlign}
+                vertAlign={vertAlign}
+                
+                
+                // children:
+                header={header}
+                footer={footer}
+            >
+                { children }
+            </CardDialog>
+        </Modal>
     );
 }
 export { ModalCard as default }
