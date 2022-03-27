@@ -247,6 +247,7 @@ export const usesBackdropLayout = () => {
         // positions:
         position     : 'fixed',
         inset        : 0,
+        zIndex       : 1040,
         
         
         
@@ -596,8 +597,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // dom effects:
-    const [containerRef] = useState(() => document.createElement('div'));
+    const [containerRef] = useState(() => (typeof(document) === 'undefined') ? null : document.createElement('div'));
     useIsomorphicLayoutEffect(() => {
+        // conditions:
+        if (!containerRef) return; // server side => no portal
+        
+        
+        
         // setups:
         document.body.appendChild(containerRef);
         
@@ -638,6 +644,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // jsx:
+    if (!containerRef) return <></>; // server side => no portal
     const defaultDialogProps : DialogProps<TElement, TCloseType> = {
         // essentials:
         elmRef          : (elm) => {
