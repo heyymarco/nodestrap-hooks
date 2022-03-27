@@ -19,7 +19,7 @@ import ModalCard, * as ModalCards from '../libs/ModalCard';
 import {
     Prop,
 } from '../libs/css-types'        // ts defs support for jss
-import { ModalStyle } from '../libs/ModalCard';
+import { BackdropStyle } from '../libs/ModalCard';
 
 
 
@@ -47,7 +47,7 @@ function App() {
 	const [tallContent, setTallContent   ] = useState(false);
 
 	const modalStyles = [undefined, 'hidden', 'interactive', 'static'];
-	const [modalStyle,    setModalStyle     ] = useState<ModalStyle|undefined>(undefined);
+	const [backdropStyle,    setModalStyle     ] = useState<BackdropStyle|undefined>(undefined);
 
 	
 
@@ -77,7 +77,7 @@ function App() {
 				<Button onClick={() => setActive(true)}>Show modalCard</Button>
 				<ButtonIcon btnStyle='link' theme='secondary' aria-label='Close' icon='close' />
 				<ModalCard theme={theme} size={size} gradient={enableGrad} outlined={outlined} enabled={enabled} active={active}
-					modalStyle={modalStyle}
+					backdropStyle={backdropStyle}
 
 					header=
 					'Lorem ipsum dolor'
@@ -196,14 +196,14 @@ function App() {
 						}
 					</p>
 					<p>
-						ModalStyle:
+						BackdropStyle:
 						{
 							modalStyles.map(st =>
 								<label key={st ?? ''}>
 									<input type='radio'
 										value={st}
-										checked={modalStyle===st}
-										onChange={(e) => setModalStyle((e.target.value || undefined) as (ModalStyle|undefined))}
+										checked={backdropStyle===st}
+										onChange={(e) => setModalStyle((e.target.value || undefined) as (BackdropStyle|undefined))}
 									/>
 									{`${st}`}
 								</label>

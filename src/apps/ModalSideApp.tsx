@@ -16,7 +16,7 @@ import Content from '../libs/Content';
 import Button from '../libs/Button';
 import ButtonIcon from '../libs/ButtonIcon';
 import ModalSide, * as ModalSides from '../libs/ModalSide';
-import { ModalStyle } from '../libs/ModalSide';
+import { BackdropStyle } from '../libs/ModalSide';
 
 
 
@@ -40,7 +40,7 @@ function App() {
 	const [tallContent, setTallContent   ] = useState(false);
 
 	const modalStyles = [undefined, 'hidden', 'interactive', 'static'];
-	const [modalStyle,    setModalStyle     ] = useState<ModalStyle|undefined>(undefined);
+	const [backdropStyle,    setModalStyle     ] = useState<BackdropStyle|undefined>(undefined);
 
 	
 
@@ -81,7 +81,7 @@ function App() {
 						setActive(newActive);
 					}}
 
-					modalStyle={modalStyle}
+					backdropStyle={backdropStyle}
 					modalSideStyle={modalSideStyle}
 				>
 					<p>
@@ -142,14 +142,14 @@ function App() {
 						</label>
 					</p>
 					<p>
-						ModalStyle:
+						BackdropStyle:
 						{
 							modalStyles.map(st =>
 								<label key={st ?? ''}>
 									<input type='radio'
 										value={st}
-										checked={modalStyle===st}
-										onChange={(e) => setModalStyle((e.target.value || undefined) as (ModalStyle|undefined))}
+										checked={backdropStyle===st}
+										onChange={(e) => setModalStyle((e.target.value || undefined) as (BackdropStyle|undefined))}
 									/>
 									{`${st}`}
 								</label>

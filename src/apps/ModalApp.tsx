@@ -15,7 +15,7 @@ import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 import Button from '../libs/Button';
 import ButtonIcon from '../libs/ButtonIcon';
-import Modal, { ModalStyle } from '../libs/Modal';
+import Modal, { BackdropStyle } from '../libs/Modal';
 
 
 
@@ -33,7 +33,7 @@ function App() {
 	const [active,      setActive   ] = useState(false);
 
 	const modalStyles = [undefined, 'hidden', 'interactive', 'static'];
-	const [modalStyle,    setModalStyle     ] = useState<ModalStyle|undefined>(undefined);
+	const [backdropStyle,    setModalStyle     ] = useState<BackdropStyle|undefined>(undefined);
 
 	
 
@@ -63,7 +63,7 @@ function App() {
 				<Button onClick={() => setActive(true)}>Show modal</Button>
 				<ButtonIcon btnStyle='link' theme='secondary' aria-label='Close' icon='close' />
 				<Modal theme={theme} size={size} gradient={enableGrad} outlined={outlined} enabled={enabled} active={active}
-					modalStyle={modalStyle}
+					backdropStyle={backdropStyle}
 
 					onActiveChange={(newActive) => {
 						setActive(newActive);
@@ -139,14 +139,14 @@ function App() {
 					</label>
 				</p>
 				<p>
-					ModalStyle:
+					BackdropStyle:
 					{
 						modalStyles.map(st =>
 							<label key={st ?? ''}>
 								<input type='radio'
 									value={st}
-									checked={modalStyle===st}
-									onChange={(e) => setModalStyle((e.target.value || undefined) as (ModalStyle|undefined))}
+									checked={backdropStyle===st}
+									onChange={(e) => setModalStyle((e.target.value || undefined) as (BackdropStyle|undefined))}
 								/>
 								{`${st}`}
 							</label>

@@ -148,13 +148,13 @@ export const usesModalAnim = () => {
 
 // appearances:
 
-export type ModalStyle = 'hidden'|'interactive'|'static' // might be added more styles in the future
-export interface ModalVariant {
-    modalStyle? : ModalStyle
+export type BackdropStyle = 'hidden'|'interactive'|'static' // might be added more styles in the future
+export interface BackdropVariant {
+    backdropStyle? : BackdropStyle
 }
-export const useModalVariant = (props: ModalVariant) => {
+export const useModalVariant = ({ backdropStyle }: BackdropVariant) => {
     return {
-        class : props.modalStyle ? props.modalStyle : null,
+        class : backdropStyle ? backdropStyle : null,
     };
 };
 
@@ -415,9 +415,6 @@ export interface DialogProps<TElement extends HTMLElement = HTMLElement, TCloseT
         ModalAction<TCloseType>,
         IndicatorProps<TElement>,
         
-        // appearances:
-        ModalVariant,
-        
         // states:
         TogglerExcitedProps
 {
@@ -499,7 +496,10 @@ export function Dialog<TElement extends HTMLElement = HTMLElement, TCloseType = 
 export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>
     extends
         IndicatorProps<TElement>,
-        DialogProps<TElement, TCloseType>
+        Omit<DialogProps<TElement, TCloseType>, 'isModal'|'isVisible'>,
+        
+        // appearances:
+        BackdropVariant
 {
     // performances:
     lazy?   : boolean
@@ -646,7 +646,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         },
         
         
-        // events:
+        // actions:
         onActiveChange  : (newActive, closeType) => {
             dialog.props.onActiveChange?.(newActive, closeType);
             
@@ -701,7 +701,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                 
                 if (e.target === e.currentTarget) { // only handle click on the overlay, ignores click bubbling from the children
                     if (!e.defaultPrevented) {
-                        if (props.modalStyle !== 'static') {
+                        if (props.backdropStyle !== 'static') {
                             if (onActiveChange) {
                                 onActiveChange(false, 'overlay' as unknown as TCloseType);
                                 e.preventDefault();

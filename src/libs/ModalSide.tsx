@@ -68,8 +68,8 @@ import {
 }                           from './Collapse'
 import {
     // hooks:
-    ModalStyle,
-    ModalVariant,
+    BackdropStyle,
+    BackdropVariant,
     
     
     
@@ -109,9 +109,9 @@ export type ModalSideStyle = 'inlineStart'|'inlineEnd'|'blockStart'|'blockEnd' /
 export interface ModalSideVariant {
     modalSideStyle? : ModalSideStyle
 }
-export const useModalSideVariant = (props: ModalSideVariant) => {
+export const useModalSideVariant = ({ modalSideStyle }: ModalSideVariant) => {
     return {
-        class : props.modalSideStyle ? props.modalSideStyle : 'inlineStart',
+        class : modalSideStyle ? modalSideStyle : 'inlineStart',
     };
 };
 
@@ -520,15 +520,31 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
     
     
     
+    // rest props:
+    const {
+        // components:
+        dialog = <SideDialog<TElement, TCloseType> />,
+        
+        
+        // ModalSideVariant:
+        modalSideStyle,
+    ...restBackdropProps} = props;
+    
+    
+    
     // jsx:
+    const defaultDialogProps : SideDialogProps<TElement, TCloseType> = {
+        // ModalSideVariant:
+        modalSideStyle,
+    };
     return (
         <Modal<TElement, TCloseType>
             // other props:
-            {...props}
-        
-        
+            {...restBackdropProps}
+            
+            
             // components:
-            dialog={props.dialog ?? <SideDialog<TElement, TCloseType> />}
+            dialog={React.cloneElement(React.cloneElement(dialog, defaultDialogProps), dialog.props)}
             
             
             // classes:
@@ -543,4 +559,4 @@ export { ModalSide as default }
 
 export type { OrientationName, OrientationVariant }
 
-export type { ModalStyle, ModalVariant }
+export type { BackdropStyle, BackdropVariant }

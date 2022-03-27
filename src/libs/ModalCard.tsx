@@ -75,8 +75,8 @@ import {
 }                           from './Popup'
 import {
     // hooks:
-    ModalStyle,
-    ModalVariant,
+    BackdropStyle,
+    BackdropVariant,
     
     
     
@@ -111,13 +111,13 @@ export interface ModalCardVariant {
     horzAlign?      : Prop.JustifyItems
     vertAlign?      : Prop.AlignItems
 }
-export const useModalCardVariant = (props: ModalCardVariant) => {
+export const useModalCardVariant = ({ modalCardStyle, horzAlign, vertAlign }: ModalCardVariant) => {
     return {
-        class : props.modalCardStyle ? props.modalCardStyle : null,
+        class : modalCardStyle ? modalCardStyle : null,
         
         style : {
-            [cssDecls.horzAlign] : props.horzAlign,
-            [cssDecls.vertAlign] : props.vertAlign,
+            [cssDecls.horzAlign] : horzAlign,
+            [cssDecls.vertAlign] : vertAlign,
         },
     };
 };
@@ -558,15 +558,35 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
     
     
     
+    // rest props:
+    const {
+        // components:
+        dialog = <CardDialog<TElement, TCloseType> />,
+        
+        
+        // ModalCardVariant:
+        modalCardStyle,
+        horzAlign,
+        vertAlign,
+    ...restBackdropProps} = props;
+    
+    
+    
     // jsx:
+    const defaultDialogProps : CardDialogProps<TElement, TCloseType> = {
+        // ModalCardVariant:
+        modalCardStyle,
+        horzAlign,
+        vertAlign,
+    };
     return (
         <Modal<TElement, TCloseType>
             // other props:
-            {...props}
-        
-        
+            {...restBackdropProps}
+            
+            
             // components:
-            dialog={props.dialog ?? <CardDialog<TElement, TCloseType> />}
+            dialog={React.cloneElement(React.cloneElement(dialog, defaultDialogProps), dialog.props)}
             
             
             // classes:
@@ -588,4 +608,4 @@ export { ModalCard as default }
 
 export type { OrientationName, OrientationVariant }
 
-export type { ModalStyle, ModalVariant }
+export type { BackdropStyle, BackdropVariant }
