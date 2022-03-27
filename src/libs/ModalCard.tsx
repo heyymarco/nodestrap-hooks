@@ -568,6 +568,12 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
         modalCardStyle,
         horzAlign,
         vertAlign,
+        
+        
+        // children:
+        header,
+        footer,
+        children,
     ...restBackdropProps} = props;
     
     
@@ -578,6 +584,12 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
         modalCardStyle,
         horzAlign,
         vertAlign,
+        
+        
+        // children:
+        header,
+        footer,
+        children,
     };
     return (
         <Modal<TElement, TCloseType>

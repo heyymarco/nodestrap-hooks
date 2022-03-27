@@ -528,6 +528,12 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
         
         // ModalSideVariant:
         modalSideStyle,
+        
+        
+        // children:
+        header,
+        footer,
+        children,
     ...restBackdropProps} = props;
     
     
@@ -536,6 +542,12 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
     const defaultDialogProps : SideDialogProps<TElement, TCloseType> = {
         // ModalSideVariant:
         modalSideStyle,
+        
+        
+        // children:
+        header,
+        footer,
+        children,
     };
     return (
         <Modal<TElement, TCloseType>
