@@ -36,9 +36,9 @@ import reportWebVitals from './reportWebVitals';
 //                 import BusyApp                      from './apps/BusyApp';                   // span     status (semantic)
 //             import AlertApp                         from './apps/AlertApp';                  // div      alert (semantic)
 //             import TooltipApp                       from './apps/TooltipApp';                // div      tooltip (semantic)
-//             import ModalApp                         from './apps/ModalApp';                  // div      dialog (semantic)
+            import ModalApp                         from './apps/ModalApp';                  // div      dialog (semantic)
 //                 import ModalCardApp                 from './apps/ModalCardApp';              // div      dialog (semantic)
-                import ModalSideApp                 from './apps/ModalSideApp';              // div      dialog (semantic)
+//                 import ModalSideApp                 from './apps/ModalSideApp';              // div      dialog (semantic)
 //             import CollapseApp                      from './apps/CollapseApp';               // div
 //                 import DropdownApp                  from './apps/DropdownApp';               // div      dialog (semantic)
 //                     import DropdownButtonApp        from './apps/DropdownButtonApp';         // div      dialog (semantic)
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <ModalSideApp />
+    <ModalApp />
     ,
     document.getElementById('root')
 );

@@ -5,6 +5,9 @@ import {
     useRef,
     useEffect,
 }                           from 'react'         // base technology of our nodestrap components
+import {
+    createPortal,
+}                           from 'react-dom'
 
 // cssfn:
 import type {
@@ -593,8 +596,20 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // dom effects:
-    const childRef = useRef<TElement|null>(null);
+    const [containerRef] = useState(() => document.createElement('div'));
+    useIsomorphicLayoutEffect(() => {
+        // setups:
+        document.body.appendChild(containerRef);
+        
+        
+        
+        // cleanups:
+        return () => {
+            containerRef.parentElement?.removeChild(containerRef);
+        };
+    }, []); // runs once at startup
     
+    const childRef = useRef<TElement|null>(null);
     useEffect(() => {
         if (!isVisible) return; // modal is not shown => nothing to do
         
@@ -674,7 +689,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         active          : isActive,
         inheritActive   : false,
     };
-    return (
+    return createPortal(
         <Indicator<TElement>
             // other props:
             {...restBackdropProps}
@@ -745,6 +760,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                 ((!lazy || isVisible) && children)
             ), dialog.props) }
         </Indicator>
-    );
+    , containerRef);
 }
 export { Modal as default }
