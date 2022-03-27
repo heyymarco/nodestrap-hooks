@@ -14,7 +14,7 @@
 [published] @nodestrap/colors
 [published] @nodestrap/borders
 [published] @nodestrap/spacers
-[modified ] @nodestrap/stripouts
+[published] @nodestrap/stripouts
 [published] @nodestrap/breakpoints
 [published] @nodestrap/layouts
 [published] @nodestrap/typos
@@ -89,6 +89,6 @@ notifications:
 [published] @nodestrap/navbar
 
 // dialogs:
-[modified ] @nodestrap/modal
-[modified ] @nodestrap/modal-card
-[modified ] @nodestrap/modal-side
+[published] @nodestrap/modal
+[published] @nodestrap/modal-card
+[published] @nodestrap/modal-side
