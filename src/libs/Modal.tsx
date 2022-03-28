@@ -651,7 +651,8 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     if (typeof(children.type) === 'string') {
         defaultDialogProps = {
             // essentials:
-            ref: defaultDialogProps.elmRef,
+            style : defaultDialogProps.style,
+            ref   : defaultDialogProps.elmRef,
         };
         if (children.type === 'dialog') {
             defaultDialogProps.open = defaultDialogProps.isVisible;
