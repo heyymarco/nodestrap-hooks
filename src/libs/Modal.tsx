@@ -149,7 +149,7 @@ export type BackdropStyle = 'hidden'|'interactive'|'static' // might be added mo
 export interface BackdropVariant {
     backdropStyle? : BackdropStyle
 }
-export const useModalVariant = ({ backdropStyle }: BackdropVariant) => {
+export const useBackdropVariant = ({ backdropStyle }: BackdropVariant) => {
     return {
         class : backdropStyle ? backdropStyle : null,
     };
@@ -410,8 +410,8 @@ export interface ModalAction<TCloseType = ModalCloseType>
 
 export interface DialogProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>
     extends
-        ModalAction<TCloseType>,
         IndicatorProps<TElement>,
+        ModalAction<TCloseType>,
         
         // states:
         TogglerExcitedProps
@@ -439,7 +439,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // variants:
-    const modalVariant              = useModalVariant(props);
+    const backdropVariant           = useBackdropVariant(props);
     
     
     
@@ -451,13 +451,15 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     // rest props:
     const {
         // essentials:
-        elmRef,        // moved to <Dialog>
+        style,          // moved  to <Dialog>
+     // outerRef,       // remain in <Backdrop>
+        elmRef,         // moved  to <Dialog>
         
         
         // accessibilities:
         active,         // from accessibilities
         inheritActive,  // from accessibilities
-        tabIndex,       // from Modal, moved to <Dialog>
+        tabIndex,       // moved  to <Dialog>
         
         excited,
         onExcitedChange,
@@ -506,10 +508,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // states:
-    const activePassiveState        = useActivePassiveState({ active, inheritActive: false });
-    const isActive                  = activePassiveState.active;
-    const isVisible                 = isActive || (!!activePassiveState.class);
-    const isNoBackInteractive       = isVisible && ((modalVariant.class !== 'hidden') && (modalVariant.class !== 'interactive'));
+    const activePassiveState = useActivePassiveState({ active, inheritActive: false });
+    const isActive           = activePassiveState.active;
+    const isVisible          = isActive || (!!activePassiveState.class);
+    const isModal            = isVisible && !['hidden', 'interactive'].includes(backdropVariant.class ?? '');
     
     
     
@@ -537,18 +539,18 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         };
     }, []); // runs once at startup
     
-    const childRef = useRef<TElement|null>(null);
+    const dialogRef = useRef<TElement|null>(null);
     useEffect(() => {
-        if (!isVisible) return; // modal is not shown => nothing to do
+        if (!isVisible) return; // <Dialog> is not shown => nothing to do
         
         
         
         // setups:
-        childRef.current?.focus({ preventScroll: true }); // when actived => focus the <Dialog>, so the user able to use [esc] key to close the modal
-    }, [isVisible]); // (re)run the setups on every time the modal is shown
+        dialogRef.current?.focus({ preventScroll: true }); // when actived => focus the <Dialog>, so the user able to use [esc] key to close the modal
+    }, [isVisible]); // (re)run the setups on every time the <Dialog> is shown
     
     useIsomorphicLayoutEffect(() => {
-        if (!isNoBackInteractive) return; // only for no_back_interactive mode
+        if (!isModal) return; // only for modal mode
         
         
         
@@ -561,7 +563,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         return () => {
             document.body.classList.remove(sheet.body);
         };
-    }, [isNoBackInteractive, sheet.body]); // (re)run the setups on every time the no_back_interactive & sheet.body changes
+    }, [isModal, sheet.body]); // (re)run the setups on every time the isModal & sheet.body changes
     
     
     
@@ -574,18 +576,19 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     }
     let defaultDialogProps : DialogProps<TElement, TCloseType> & NativeDialogProps = {
         // essentials:
+        style           : style,
         elmRef          : (elm) => {
-            if (children.props.elmRef) setRef(children.props.elmRef, elm);
+            setRef(children.props.elmRef, elm);
             
-            setRef(elmRef, elm);
-            setRef(childRef, elm);
+            setRef(elmRef   , elm);
+            setRef(dialogRef, elm);
         },
         
         
         // semantics:
-        semanticTag  : props.semanticTag   ?? [null, 'dialog'],
-        semanticRole : props.semanticRole  ?? 'dialog',
-        'aria-modal' : !!(props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)),
+        semanticTag     : [null, 'dialog'],
+        semanticRole    :        'dialog' ,
+        'aria-modal'    : isModal || undefined,
         
         
         // accessibilities:
@@ -610,14 +613,14 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         // variants:
         // layouts:
-        size        : size,
-        // orientation : orientation,
-        nude        : nude,
+        size            : size,
+     // orientation     : orientation,
+        nude            : nude,
         // colors:
-        theme       : theme,
-        gradient    : gradient,
-        outlined    : outlined,
-        mild        : mild,
+        theme           : theme,
+        gradient        : gradient,
+        outlined        : outlined,
+        mild            : mild,
         
         
         // <Indicator> states:
@@ -652,7 +655,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             variantClasses={[...(props.variantClasses ?? []),
-                modalVariant.class,
+                backdropVariant.class,
             ]}
             
             
@@ -673,7 +676,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                         }
                         else {
                             setExcitedDn(true);
-                            childRef.current?.focus({ preventScroll: true }); // re-focus to the <Dialog>, so the user able to use [esc] key to close the Modal
+                            dialogRef.current?.focus({ preventScroll: true }); // re-focus to the <Dialog>, so the user able to use [esc] key to close the Modal
                             e.preventDefault();
                         } // if static
                     } // if

@@ -60,7 +60,6 @@ import {
     // hooks:
     usesSizeVariant,
     useExcitedState,
-    TogglerExcitedProps,
 }                           from './Basic'
 import {
     // styles:
@@ -382,10 +381,7 @@ export interface CardDialogProps<TElement extends HTMLElement = HTMLElement, TCl
         CardProps<TElement>,
         
         // appearances:
-        ModalCardVariant,
-        
-        // states:
-        TogglerExcitedProps
+        ModalCardVariant
 {
     // components:
     card? : React.ReactComponentElement<any, ElementProps>
@@ -404,7 +400,7 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // rest props:
     const {
         // essentials:
-        elmRef,                   // moved to <Card>
+        elmRef,                   // injected to <Card>
         
         
         // semantics:
@@ -414,15 +410,14 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         
         
         // accessibilities:
-        isVisible,                // moved to <Popup>
-        tabIndex = -1,            // moved to <Card>
         active,                   // moved to <Popup>
         inheritActive,            // moved to <Popup>
+        isVisible,                // moved to <Popup>
+        tabIndex = -1,            // added to <Card>
         
         
         // actions:
         onActiveChange,           // implemented
-        onExcitedChange,          // not implemented
         
         
         // components:
@@ -549,7 +544,7 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
             classes={[
                 sheet.main, // inject CardDialog class
             ]}
-            stateClasses={[...(props.stateClasses ?? []),
+            stateClasses={[
                 excitedState.class,
             ]}
             
@@ -592,6 +587,10 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
         vertAlign,
         
         
+        // components:
+        card,
+        
+        
         // children:
         header,
         footer,
@@ -625,6 +624,10 @@ export function ModalCard<TElement extends HTMLElement = HTMLElement, TCloseType
                 modalCardStyle={modalCardStyle}
                 horzAlign={horzAlign}
                 vertAlign={vertAlign}
+                
+                
+                // components:
+                card={card}
                 
                 
                 // children:

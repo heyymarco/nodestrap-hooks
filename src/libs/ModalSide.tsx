@@ -58,7 +58,6 @@ import {
     usesSizeVariant,
     usesBorderRadius,
     useExcitedState,
-    TogglerExcitedProps,
 }                           from './Basic'
 import CloseButton          from './CloseButton'
 import {
@@ -372,10 +371,7 @@ export interface SideDialogProps<TElement extends HTMLElement = HTMLElement, TCl
         CardProps<TElement>,
         
         // appearances:
-        ModalSideVariant,
-        
-        // states:
-        TogglerExcitedProps
+        ModalSideVariant
 {
     // components:
     card? : React.ReactComponentElement<any, ElementProps>
@@ -394,7 +390,7 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // rest props:
     const {
         // essentials:
-        elmRef,                   // moved to <Card>
+        elmRef,                   // injected to <Card>
         
         
         // semantics:
@@ -404,15 +400,14 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         
         
         // accessibilities:
-        isVisible,                // moved to <Collapse>
-        tabIndex = -1,            // moved to <Card>
         active,                   // moved to <Collapse>
         inheritActive,            // moved to <Collapse>
+        isVisible,                // moved to <Collapse>
+        tabIndex = -1,            // added to <Card>
         
         
         // actions:
         onActiveChange,           // implemented
-        onExcitedChange,          // not implemented
         
         
         // components:
@@ -511,7 +506,7 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
             classes={[
                 sheet.main, // inject SideDialog class
             ]}
-            stateClasses={[...(props.stateClasses ?? []),
+            stateClasses={[
                 excitedState.class,
             ]}
             
@@ -552,6 +547,10 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
         modalSideStyle,
         
         
+        // components:
+        card,
+        
+        
         // children:
         header,
         footer,
@@ -576,6 +575,10 @@ export function ModalSide<TElement extends HTMLElement = HTMLElement, TCloseType
             <SideDialog<TElement, TCloseType>
                 // ModalSideVariant:
                 modalSideStyle={modalSideStyle}
+                
+                
+                // components:
+                card={card}
                 
                 
                 // children:
