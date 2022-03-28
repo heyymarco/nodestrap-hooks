@@ -239,7 +239,10 @@ export const usesBackdropLayout = () => {
     
     return style({
         // positions:
-        position     : 'fixed',
+        position     : 'absolute',
+        ...rule('body>*>&', {
+            position : 'fixed',
+        }),
         inset        : 0,
         zIndex       : 1040,
         
@@ -256,8 +259,10 @@ export const usesBackdropLayout = () => {
         
         // sizes:
         // fills the entire screen:
-        boxSizing    : 'border-box', // the final size is including borders & paddings
-        minBlockSize : '100vh',
+        ...rule('body>*>&', {
+            boxSizing    : 'border-box', // the final size is including borders & paddings
+            minBlockSize : '100vh',
+        }),
         
         
         
@@ -546,7 +551,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         return () => {
             containerElm.parentElement?.removeChild(containerElm);
         };
-    }, []); // runs once at startup
+    }, [viewportElm]); // runs once at startup
     
     const dialogRef = useRef<TElement|null>(null);
     useEffect(() => {

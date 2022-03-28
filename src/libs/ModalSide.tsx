@@ -407,6 +407,7 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         
         
         // actions:
+        onExcitedChange,          // not implemented
         onActiveChange,           // implemented
         
         

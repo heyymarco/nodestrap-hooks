@@ -35,6 +35,8 @@ function App() {
 
 	const modalStyles = [undefined, 'hidden', 'interactive', 'static'];
 	const [backdropStyle,    setModalStyle     ] = useState<BackdropStyle|undefined>(undefined);
+	const [customViewport, setCustomViewport   ] = useState(false);
+	const [viewportRef, setViewportRef] = useState<HTMLElement|null>(null);
 
 	
 
@@ -69,14 +71,20 @@ function App() {
 					onActiveChange={(newActive) => {
 						setActive(newActive);
 					}}
+
+					viewportRef={customViewport ? viewportRef : undefined}
 				>
 					<Element>
-						<form method='dialog'>
-							<button value='confirm'>OK</button>
-						</form>
 						<img style={{width: '200px'}} src="https://assets.codepen.io/12005/windmill.jpg" alt="A windmill" />
 					</Element>
 				</Modal>
+				{customViewport && <div ref={setViewportRef} style={{
+					background: 'pink',
+					height: '300px',
+					position: 'relative',
+				}}>
+					a custom viewport
+				</div>}
                 <hr style={{flexBasis: '100%'}} />
 				<p>
 					Theme:
@@ -158,6 +166,15 @@ function App() {
 							</label>
 						)
 					}
+				</p>
+				<p>
+					<label>
+						<input type='checkbox'
+							checked={customViewport}
+							onChange={(e) => setCustomViewport(e.target.checked)}
+						/>
+						custom viewport
+					</label>
 				</p>
             </Container>
         </div>
