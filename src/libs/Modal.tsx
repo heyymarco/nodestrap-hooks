@@ -429,8 +429,12 @@ export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseTy
         // appearances:
         BackdropVariant
 {
+    // modals:
+    viewportRef? : React.RefObject<HTMLElement>|HTMLElement|null // getter ref
+    
+    
     // performances:
-    lazy?   : boolean
+    lazy?        : boolean
 }
 export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>(props: ModalProps<TElement, TCloseType>) {
     // styles:
@@ -467,6 +471,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         // actions:
         onActiveChange,
+        
+        
+        // modals:
+        viewportRef,
         
         
         // performances:
@@ -521,26 +529,28 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // dom effects:
-    const [containerRef] = useState(() => (typeof(document) === 'undefined') ? null : document.createElement('div'));
+    const [containerElm] = useState(() => (typeof(document) === 'undefined') ? null : document.createElement('div'));
+    const viewportElm    = (viewportRef === null) ? null : ((viewportRef === undefined) ? ((typeof(document) === 'undefined') ? null : document.body) : ((viewportRef instanceof HTMLElement) ? viewportRef : viewportRef?.current));
     useIsomorphicLayoutEffect(() => {
         // conditions:
-        if (!containerRef) return; // server side => no portal
+        if (!containerElm || !viewportElm) return; // server side => no portal
         
         
         
         // setups:
-        document.body.appendChild(containerRef);
+        viewportElm.appendChild(containerElm);
         
         
         
         // cleanups:
         return () => {
-            containerRef.parentElement?.removeChild(containerRef);
+            containerElm.parentElement?.removeChild(containerElm);
         };
     }, []); // runs once at startup
     
     const dialogRef = useRef<TElement|null>(null);
     useEffect(() => {
+        // conditions:
         if (!isVisible) return; // <Dialog> is not shown => nothing to do
         
         
@@ -550,25 +560,27 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     }, [isVisible]); // (re)run the setups on every time the <Dialog> is shown
     
     useIsomorphicLayoutEffect(() => {
-        if (!isModal) return; // only for modal mode
+        // conditions:
+        if (!isModal)     return; // only for modal mode
+        if (!viewportElm) return; // server side => no portal
         
         
         
         // setups:
-        document.body.classList.add(sheet.body);
+        viewportElm.classList.add(sheet.body);
         
         
         
         // cleanups:
         return () => {
-            document.body.classList.remove(sheet.body);
+            viewportElm.classList.remove(sheet.body);
         };
     }, [isModal, sheet.body]); // (re)run the setups on every time the isModal & sheet.body changes
     
     
     
     // jsx:
-    if (!containerRef) return <></>; // server side => no portal
+    if (!containerElm) return <></>; // server side => no portal
     
     interface NativeDialogProps {
         ref?      : React.Ref<TElement>
@@ -710,6 +722,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         >
             { (!lazy || isVisible) && React.cloneElement(React.cloneElement(children, defaultDialogProps), children.props) }
         </Indicator>
-    , containerRef);
+    , containerElm);
 }
 export { Modal as default }
