@@ -30,7 +30,7 @@
 [published] @nodestrap/react-router-link
 
 // abstracts:
-[modified ] @nodestrap/element
+[published] @nodestrap/element
 [published] @nodestrap/basic
 [published] @nodestrap/indicator
 [published] @nodestrap/control
@@ -89,6 +89,6 @@ notifications:
 [published] @nodestrap/navbar
 
 // dialogs:
-[modified ] @nodestrap/modal
-[modified ] @nodestrap/modal-card
-[modified ] @nodestrap/modal-side
+[published] @nodestrap/modal
+[published] @nodestrap/modal-card
+[published] @nodestrap/modal-side
