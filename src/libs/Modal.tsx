@@ -535,7 +535,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     // dom effects:
     const [containerElm] = useState(() => (typeof(document) === 'undefined') ? null : document.createElement('div'));
-    const viewportElm    = (viewportRef === null) ? null : ((viewportRef === undefined) ? ((typeof(document) === 'undefined') ? null : document.body) : ((viewportRef instanceof HTMLElement) ? viewportRef : viewportRef?.current));
+    const viewportElm    = (viewportRef === null) ? null : ((viewportRef === undefined) ? ((typeof(document) === 'undefined') ? null : document.body) : ((viewportRef.constructor === Object) ? (viewportRef as React.RefObject<HTMLElement>)?.current : (viewportRef as HTMLElement)));
     useIsomorphicLayoutEffect(() => {
         // conditions:
         if (!containerElm || !viewportElm) return; // server side => no portal
@@ -551,7 +551,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         return () => {
             containerElm.parentElement?.removeChild(containerElm);
         };
-    }, [viewportElm]); // runs once at startup
+    }, [viewportElm]); // (re)run the setups on every time the viewportElm changes
     
     const dialogRef = useRef<TElement|null>(null);
     useEffect(() => {
