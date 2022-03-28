@@ -417,7 +417,6 @@ export interface DialogProps<TElement extends HTMLElement = HTMLElement, TCloseT
         TogglerExcitedProps
 {
     // accessibilities:
-    isModal?   : boolean
     isVisible? : boolean
     tabIndex?  : number
 }
@@ -425,7 +424,7 @@ export interface DialogProps<TElement extends HTMLElement = HTMLElement, TCloseT
 export interface ModalProps<TElement extends HTMLElement = HTMLElement, TCloseType = ModalCloseType>
     extends
         IndicatorProps<TElement>,
-        Omit<DialogProps<TElement, TCloseType>, 'isModal'|'isVisible'>,
+        Omit<DialogProps<TElement, TCloseType>, 'isVisible'>,
         
         // appearances:
         BackdropVariant
@@ -568,7 +567,12 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     // jsx:
     if (!containerRef) return <></>; // server side => no portal
-    const defaultDialogProps : DialogProps<TElement, TCloseType> = {
+    
+    interface NativeDialogProps {
+        ref?      : React.Ref<TElement>
+        open?     : boolean
+    }
+    let defaultDialogProps : DialogProps<TElement, TCloseType> & NativeDialogProps = {
         // essentials:
         elmRef          : (elm) => {
             if (children.props.elmRef) setRef(children.props.elmRef, elm);
@@ -578,8 +582,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         },
         
         
+        // semantics:
+        semanticTag  : props.semanticTag   ?? [null, 'dialog'],
+        semanticRole : props.semanticRole  ?? 'dialog',
+        'aria-modal' : !!(props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)),
+        
+        
         // accessibilities:
-        isModal         : !!(props['aria-modal'] ?? ((isVisible && isNoBackInteractive) ? true : undefined)),
         isVisible       : isVisible,
         tabIndex        : tabIndex,
         excited         : excitedFn,
@@ -619,6 +628,16 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         active          : isActive,
         inheritActive   : false,
     };
+    if (typeof(children.type) === 'string') {
+        defaultDialogProps = {
+            // essentials:
+            ref: defaultDialogProps.elmRef,
+        };
+        if (children.type === 'dialog') {
+            defaultDialogProps.open = defaultDialogProps.isVisible;
+        } // if
+    } // if
+    
     return createPortal(
         <Indicator<TElement>
             // other props:

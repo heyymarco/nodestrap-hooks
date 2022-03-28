@@ -394,20 +394,25 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // rest props:
     const {
         // essentials:
-        elmRef,          // moved to <Card>
+        elmRef,                   // moved to <Card>
+        
+        
+        // semantics:
+        semanticTag,              // moved to <Collapse>
+        semanticRole,             // moved to <Collapse>
+        'aria-modal' : ariaModal, // moved to <Collapse>
         
         
         // accessibilities:
-        isModal,         // moved to <Collapse>
-        isVisible,       // moved to <Collapse>
-        tabIndex = -1,   // moved to <Card>
-        active,          // moved to <Collapse>
-        inheritActive,   // moved to <Collapse>
+        isVisible,                // moved to <Collapse>
+        tabIndex = -1,            // moved to <Card>
+        active,                   // moved to <Collapse>
+        inheritActive,            // moved to <Collapse>
         
         
         // actions:
-        onActiveChange,  // implemented
-        onExcitedChange, // not implemented
+        onActiveChange,           // implemented
+        onExcitedChange,          // not implemented
         
         
         // components:
@@ -415,7 +420,7 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         
         
         // children:
-        header,          // changed the default
+        header,                   // changed the default
     ...restCardProps} = props;
     
     
@@ -484,9 +489,9 @@ export function SideDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     return (
         <Collapse<TElement>
             // semantics:
-            semanticTag ={props.semanticTag   ?? 'dialog'}
-            semanticRole={props.semanticRole  ?? 'dialog'}
-            aria-modal={isModal}
+            semanticTag ={semanticTag}
+            semanticRole={semanticRole}
+            aria-modal={ariaModal}
             {...{
                 open : isVisible,
             }}

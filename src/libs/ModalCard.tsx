@@ -404,20 +404,25 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     // rest props:
     const {
         // essentials:
-        elmRef,          // moved to <Card>
+        elmRef,                   // moved to <Card>
+        
+        
+        // semantics:
+        semanticTag,              // moved to <Popup>
+        semanticRole,             // moved to <Popup>
+        'aria-modal' : ariaModal, // moved to <Popup>
         
         
         // accessibilities:
-        isModal,         // moved to <Popup>
-        isVisible,       // moved to <Popup>
-        tabIndex = -1,   // moved to <Card>
-        active,          // moved to <Popup>
-        inheritActive,   // moved to <Popup>
+        isVisible,                // moved to <Popup>
+        tabIndex = -1,            // moved to <Card>
+        active,                   // moved to <Popup>
+        inheritActive,            // moved to <Popup>
         
         
         // actions:
-        onActiveChange,  // implemented
-        onExcitedChange, // not implemented
+        onActiveChange,           // implemented
+        onExcitedChange,          // not implemented
         
         
         // components:
@@ -425,8 +430,8 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
         
         
         // children:
-        header,          // changed the default
-        footer,          // changed the default
+        header,                   // changed the default
+        footer,                   // changed the default
     ...restCardProps} = props;
     
     
@@ -523,9 +528,9 @@ export function CardDialog<TElement extends HTMLElement = HTMLElement, TCloseTyp
     return (
         <Popup<TElement>
             // semantics:
-            semanticTag ={props.semanticTag   ?? 'dialog'}
-            semanticRole={props.semanticRole  ?? 'dialog'}
-            aria-modal={isModal}
+            semanticTag ={semanticTag}
+            semanticRole={semanticRole}
+            aria-modal={ariaModal}
             {...{
                 open : isVisible,
             }}

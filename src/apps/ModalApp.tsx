@@ -6,6 +6,7 @@ import {
 }                          from 'react';
 
 import Container from '../libs/Container';
+import Element   from '../libs/Element';
 import Basic   from '../libs/Basic';
 import {
 	ThemeName,
@@ -69,7 +70,12 @@ function App() {
 						setActive(newActive);
 					}}
 				>
-					<img style={{width: '200px'}} src="https://assets.codepen.io/12005/windmill.jpg" alt="A windmill" />
+					<Element>
+						<form method='dialog'>
+							<button value='confirm'>OK</button>
+						</form>
+						<img style={{width: '200px'}} src="https://assets.codepen.io/12005/windmill.jpg" alt="A windmill" />
+					</Element>
 				</Modal>
                 <hr style={{flexBasis: '100%'}} />
 				<p>
