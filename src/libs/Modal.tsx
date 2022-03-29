@@ -588,10 +588,23 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     }, [isModal, viewportElm, sheet.body]); // (re)run the setups on every time the isModal & sheet.body changes
     //#endregion un-scroll the viewport (<body>) while the <Modal> is opened
     
+    //#region delays the rendering of portal until the page is fully hydrated
+    const [isHydrated, setIsHydrated] = useState(false);
+    useEffect(() => {
+        // conditions:
+        if (isServerSide) return; // client side only
+        
+        
+        
+        // setups:
+        setIsHydrated(true);
+    }, []); // run once at startup
+    //#endregion delays the rendering of portal until the page is fully hydrated
+    
     
     
     // jsx:
-    if (!portalElm) return <></>; // server side => no portal => nothing to render
+    if (!isHydrated || !portalElm) return <></>; // page is not already hydrated or server side => nothing to render
     
     interface NativeDialogProps {
         ref?      : React.Ref<TElement>
