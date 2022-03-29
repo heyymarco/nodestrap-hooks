@@ -1,5 +1,5 @@
 top priority:
-
+<Modal viewportRef={null} > should be targeted to <body>
 <Carousel> replace nav with pagination
 <Carousel> fix slide using touch sync to nav (infinite loop)
 
