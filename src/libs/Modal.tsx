@@ -58,9 +58,6 @@ import {
 
 // nodestrap utilities:
 import {
-    useIsomorphicLayoutEffect,
-}                           from './hooks'
-import {
     stripoutFocusableElement,
     stripoutDialog,
 }                           from './stripouts'
@@ -404,6 +401,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
+const isServerSide = (typeof(document) === 'undefined');
+
 export type ModalCloseType = 'overlay'|'shortcut'
 export interface ModalAction<TCloseType = ModalCloseType>
 {
@@ -534,25 +533,29 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     
     // dom effects:
-    const [containerElm] = useState(() => (typeof(document) === 'undefined') ? null : document.createElement('div'));
-    const viewportElm    = (viewportRef === null) ? null : ((viewportRef === undefined) ? ((typeof(document) === 'undefined') ? null : document.body) : ((viewportRef.constructor === Object) ? (viewportRef as React.RefObject<HTMLElement>)?.current : (viewportRef as HTMLElement)));
-    useIsomorphicLayoutEffect(() => {
+    
+    //#region create the portal element and then insert it after the page is fully hydrated
+    const [portalElm] = useState(() => isServerSide ? null : document.createElement('div'));
+    const viewportElm = (viewportRef === null) ? null : ((viewportRef === undefined) ? (isServerSide ? null : document.body) : ((viewportRef.constructor === Object) ? (viewportRef as React.RefObject<HTMLElement>)?.current : (viewportRef as HTMLElement)));
+    useEffect(() => {
         // conditions:
-        if (!containerElm || !viewportElm) return; // server side => no portal
+        if (!portalElm || !viewportElm) return; // server side => no portal
         
         
         
         // setups:
-        viewportElm.appendChild(containerElm);
+        viewportElm.appendChild(portalElm);
         
         
         
         // cleanups:
         return () => {
-            containerElm.parentElement?.removeChild(containerElm);
+            portalElm.parentElement?.removeChild(portalElm);
         };
-    }, [viewportElm]); // (re)run the setups on every time the viewportElm changes
+    }, [portalElm, viewportElm]); // (re)run the setups on every time the portalElm & viewportElm changes
+    //#endregion create the portal element and then insert it after the page is fully hydrated
     
+    //#region focus the <Dialog> while the <Modal> is opened
     const dialogRef = useRef<TElement|null>(null);
     useEffect(() => {
         // conditions:
@@ -563,8 +566,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         // setups:
         dialogRef.current?.focus({ preventScroll: true }); // when actived => focus the <Dialog>, so the user able to use [esc] key to close the modal
     }, [isVisible]); // (re)run the setups on every time the <Dialog> is shown
+    //#endregion focus the <Dialog> while the <Modal> is opened
     
-    useIsomorphicLayoutEffect(() => {
+    //#region un-scroll the viewport (<body>) while the <Modal> is opened
+    useEffect(() => {
         // conditions:
         if (!isModal)     return; // only for modal mode
         if (!viewportElm) return; // server side => no portal
@@ -580,12 +585,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         return () => {
             viewportElm.classList.remove(sheet.body);
         };
-    }, [isModal, sheet.body]); // (re)run the setups on every time the isModal & sheet.body changes
+    }, [isModal, viewportElm, sheet.body]); // (re)run the setups on every time the isModal & sheet.body changes
+    //#endregion un-scroll the viewport (<body>) while the <Modal> is opened
     
     
     
     // jsx:
-    if (!containerElm) return <></>; // server side => no portal
+    if (!portalElm) return <></>; // server side => no portal => nothing to render
     
     interface NativeDialogProps {
         ref?      : React.Ref<TElement>
@@ -728,6 +734,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         >
             { (!lazy || isVisible) && React.cloneElement(React.cloneElement(children, defaultDialogProps), children.props) }
         </Indicator>
-    , containerElm);
+    , portalElm);
 }
 export { Modal as default }
