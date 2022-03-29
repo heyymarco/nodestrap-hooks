@@ -192,7 +192,7 @@ export const usesDialogLayout = () => {
             
             
             // customize:
-            ...usesGeneralProps(usesPrefixedProps(cssProps, 'element')), // apply general cssProps starting with element***
+            ...usesGeneralProps(usesPrefixedProps(cssProps, 'component')), // apply general cssProps starting with component***
         }),
     });
 };
@@ -384,7 +384,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         // backgrounds:
         backg                : 'rgba(0,0,0, 0.5)',
-        elementBoxShadow     : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
+        componentBoxShadow   : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
         
         
         
