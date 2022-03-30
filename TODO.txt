@@ -6,7 +6,7 @@ top priority:
 <Carousel> replace nav with pagination
 <Carousel> fix slide using touch sync to nav (infinite loop)
 
-default nude at parent level for <List><ListItem>, <Card><Child>
+default nude at parent level for <List><ListItem>, <Card><Child>, <ModalCard><Card><Child>
 
 Set <Badge>:
 const activeFn = active ?? !!(props.children ?? false); // badge has a content
