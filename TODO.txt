@@ -1,5 +1,7 @@
 top priority:
 <Modal viewportRef={null} > should be targeted to <body>
+<Modal backdropStyle='static'> should trigger excited when mousedown or touch
+
 <Carousel> replace nav with pagination
 <Carousel> fix slide using touch sync to nav (infinite loop)
 
