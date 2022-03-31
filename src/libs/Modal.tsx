@@ -536,7 +536,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     
     //#region create the portal element and then insert it after the page is fully hydrated
     const [portalElm] = useState(() => isServerSide ? null : document.createElement('div'));
-    const viewportElm = (viewportRef === null) ? null : ((viewportRef === undefined) ? (isServerSide ? null : document.body) : ((viewportRef.constructor === Object) ? (viewportRef as React.RefObject<HTMLElement>)?.current : (viewportRef as HTMLElement)));
+    const viewportElm = (
+        viewportRef
+        ?
+        ((viewportRef.constructor === Object) ? (viewportRef as React.RefObject<HTMLElement>)?.current : (viewportRef as HTMLElement))
+        :
+        (isServerSide ? null : document.body)
+    );
     useEffect(() => {
         // conditions:
         if (!portalElm || !viewportElm) return; // server side => no portal
@@ -600,6 +606,43 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         setIsHydrated(true);
     }, []); // run once at startup
     //#endregion delays the rendering of portal until the page is fully hydrated
+    
+    
+    
+    // handlers:
+    const handleBackdropPress = (e : React.MouseEvent<TElement, MouseEvent> | React.TouchEvent<TElement>, passive = false) => {
+        if (e.target === e.currentTarget) { // only handle click on the overlay, ignores click bubbling from the children
+            if (!e.defaultPrevented) {
+                if (props.backdropStyle === 'static') {
+                    setExcitedDn(true);
+                    dialogRef.current?.focus({ preventScroll: true }); // re-focus to the <Dialog>, so the user able to use [esc] key to close the Modal
+                    if (!passive) e.preventDefault();
+                } // if
+            } // if
+        } // if
+    };
+    const handleBackdropClick : React.MouseEventHandler<TElement> = (e) => {
+        if (e.target === e.currentTarget) { // only handle click on the overlay, ignores click bubbling from the children
+            if (!e.defaultPrevented) {
+                if (props.backdropStyle !== 'static') {
+                    if (onActiveChange) {
+                        onActiveChange(false, 'overlay' as unknown as TCloseType);
+                        e.preventDefault();
+                    } // if
+                } // if
+            } // if
+        } // if
+    };
+    const handleBackdropEscape : React.KeyboardEventHandler<TElement> = (e) => {
+        if (!e.defaultPrevented) {
+            if ((e.key === 'Escape') || (e.code === 'Escape')) {
+                if (onActiveChange) {
+                    onActiveChange(false, 'shortcut' as unknown as TCloseType);
+                    e.preventDefault();
+                } // if
+            } // if
+        } // if
+    };
     
     
     
@@ -698,42 +741,27 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             
             // events:
             // watch left click on the overlay only (not at the <Dialog>):
+            onMouseDown={(e) => {
+                props.onMouseDown?.(e);
+                
+                handleBackdropPress(e);
+            }}
+            onTouchStart={(e) => {
+                props.onTouchStart?.(e);
+                
+                handleBackdropPress(e, true);
+            }}
             onClick={(e) => {
                 props.onClick?.(e);
                 
-                
-                
-                if (e.target === e.currentTarget) { // only handle click on the overlay, ignores click bubbling from the children
-                    if (!e.defaultPrevented) {
-                        if (props.backdropStyle !== 'static') {
-                            if (onActiveChange) {
-                                onActiveChange(false, 'overlay' as unknown as TCloseType);
-                                e.preventDefault();
-                            } // if
-                        }
-                        else {
-                            setExcitedDn(true);
-                            dialogRef.current?.focus({ preventScroll: true }); // re-focus to the <Dialog>, so the user able to use [esc] key to close the Modal
-                            e.preventDefault();
-                        } // if static
-                    } // if
-                } // if
+                handleBackdropClick(e);
             }}
             
             // watch [escape key] on the whole Modal, including <Dialog> & <Dialog>'s children:
             onKeyUp={(e) => {
                 props.onKeyUp?.(e);
                 
-                
-                
-                if (!e.defaultPrevented) {
-                    if ((e.key === 'Escape') || (e.code === 'Escape')) {
-                        if (onActiveChange) {
-                            onActiveChange(false, 'shortcut' as unknown as TCloseType);
-                            e.preventDefault();
-                        } // if
-                    } // if
-                } // if
+                handleBackdropEscape(e);
             }}
             
             onAnimationEnd={(e) => {

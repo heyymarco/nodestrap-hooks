@@ -1,6 +1,4 @@
 top priority:
-<Modal viewportRef={null} > should be targeted to <body>
-<Modal backdropStyle='static'> should trigger excited when mousedown or touch
 <Modal> add backdropFiltr blur to config
 <ModalCard> horz/vert align doesn't work, <ModalSide> don't know
 
@@ -38,6 +36,7 @@ add client side Form for Remix
 medium priority:
 fix Carousel fast clicking
 Media => for profile image, video, static images, gifs, svgs, etc
+Range => onTouchStart => preventDefault() => error: Unable to preventDefault inside passive event listener invocation.
 Range => dial variant
 updated NavScroll with IntersectionObserver
 
