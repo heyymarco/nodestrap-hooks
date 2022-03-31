@@ -15,7 +15,6 @@ import type {
 }                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
-    compositionOf,
     mainComposition,
     
     
@@ -329,13 +328,6 @@ export const usesBackdropStates = () => {
     });
 };
 
-export const usesDocumentBodyLayout = () => {
-    return style({
-        // kill the scroll on the body:
-        overflow: 'hidden',
-    });
-};
-
 export const useBackdropSheet = createUseSheet(() => [
     mainComposition(
         imports([
@@ -347,11 +339,6 @@ export const useBackdropSheet = createUseSheet(() => [
             
             // states:
             usesBackdropStates(),
-        ]),
-    ),
-    compositionOf('body',
-        imports([
-            usesDocumentBodyLayout(),
         ]),
     ),
 ], /*sheetId :*/'z26pqrin5i'); // an unique salt for SSR support, ensures the server-side & client-side have the same generated class names
@@ -583,15 +570,22 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         
         // setups:
-        viewportElm.classList.add(sheet.body);
+        const handlePreventDefault = (e: Event) => e.preventDefault();
+        const noPassiveOptions : AddEventListenerOptions = { passive: false }
+
+        viewportElm.addEventListener('wheel'    , handlePreventDefault, noPassiveOptions);
+        viewportElm.addEventListener('touchmove', handlePreventDefault, noPassiveOptions);
+        viewportElm.addEventListener('keydown'  , handlePreventDefault);
         
         
         
         // cleanups:
         return () => {
-            viewportElm.classList.remove(sheet.body);
+            viewportElm.removeEventListener('wheel'    , handlePreventDefault, noPassiveOptions);
+            viewportElm.removeEventListener('touchmove', handlePreventDefault, noPassiveOptions);
+            viewportElm.removeEventListener('keydown'  , handlePreventDefault);
         };
-    }, [isModal, viewportElm, sheet.body]); // (re)run the setups on every time the isModal & sheet.body changes
+    }, [isModal, viewportElm]); // (re)run the setups on every time the isModal changes
     //#endregion un-scroll the viewport (<body>) while the <Modal> is opened
     
     //#region delays the rendering of portal until the page is fully hydrated
