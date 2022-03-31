@@ -643,6 +643,13 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
             } // if
         } // if
     };
+    const handleContextMenu : React.MouseEventHandler<TElement> = (e) => {
+        if (e.target === e.currentTarget) { // only cancels contextMenu on the overlay, allows at the children
+            if (!e.defaultPrevented) {
+                e.preventDefault();
+            } // if
+        } // if
+    };
     
     
     
@@ -756,6 +763,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
                 
                 handleBackdropClick(e);
             }}
+            onContextMenu={handleContextMenu}
             
             // watch [escape key] on the whole Modal, including <Dialog> & <Dialog>'s children:
             onKeyUp={(e) => {
