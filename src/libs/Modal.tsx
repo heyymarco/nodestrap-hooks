@@ -446,7 +446,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     // rest props:
     const {
         // essentials:
-        style,          // moved  to <Dialog>
+     // style,          // remain in <Backdrop> // <Backdrop> should be styled
      // outerRef,       // remain in <Backdrop>
         elmRef,         // moved  to <Dialog>
         
@@ -660,7 +660,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     }
     let defaultDialogProps : DialogProps<TElement, TCloseType> & NativeDialogProps = {
         // essentials:
-        style           : style,
         elmRef          : (elm) => {
             setRef(children.props.elmRef, elm);
             
@@ -718,7 +717,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     if (typeof(children.type) === 'string') {
         defaultDialogProps = {
             // essentials:
-            style : defaultDialogProps.style,
             ref   : defaultDialogProps.elmRef,
         };
         if (children.type === 'dialog') {
