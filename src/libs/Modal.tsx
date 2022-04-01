@@ -562,6 +562,7 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     //#endregion focus the <Dialog> while the <Modal> is opened
     
     //#region un-scroll the viewport (<body>) while the <Modal> is opened
+    const backdropRef = useRef<TElement|null>(null);
     useEffect(() => {
         // conditions:
         if (!isModal)     return; // only for modal mode
@@ -570,24 +571,24 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         
         // setups:
-        const handlePreventDefault = (e: Event) => {
-            if (e.target === e.currentTarget) { // only handle event on the <body>, ignores click bubbling from the children
-                e.preventDefault();
+        const scrollableElm     = (viewportElm === document.body) ? document.documentElement : viewportElm;
+        const scrollableEvent   = (viewportElm === document.body) ? document                 : viewportElm;
+        const currentScrollTop  = scrollableElm.scrollTop;
+        const currentScrollLeft = scrollableElm.scrollLeft;
+        const handleScroll = (e: Event) => {
+            if (e.target === scrollableEvent) { // only handle click on the viewport, ignores click bubbling from the children
+                scrollableElm.scrollTop  = currentScrollTop;
+                scrollableElm.scrollLeft = currentScrollLeft;
             } // if
         };
-        const noPassiveOptions : AddEventListenerOptions = { passive: false }
-
-        viewportElm.addEventListener('wheel'    , handlePreventDefault, noPassiveOptions);
-        viewportElm.addEventListener('touchmove', handlePreventDefault, noPassiveOptions);
-        viewportElm.addEventListener('keydown'  , handlePreventDefault);
+        
+        scrollableEvent.addEventListener('scroll', handleScroll);
         
         
         
         // cleanups:
         return () => {
-            viewportElm.removeEventListener('wheel'    , handlePreventDefault, noPassiveOptions);
-            viewportElm.removeEventListener('touchmove', handlePreventDefault, noPassiveOptions);
-            viewportElm.removeEventListener('keydown'  , handlePreventDefault);
+            scrollableEvent.removeEventListener('scroll', handleScroll);
         };
     }, [isModal, viewportElm]); // (re)run the setups on every time the isModal changes
     //#endregion un-scroll the viewport (<body>) while the <Modal> is opened
@@ -728,6 +729,10 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         <Indicator<TElement>
             // other props:
             {...restBackdropProps}
+            
+            
+            // essentials:
+            elmRef={backdropRef}
             
             
             // accessibilities:
