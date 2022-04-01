@@ -570,7 +570,11 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         
         
         // setups:
-        const handlePreventDefault = (e: Event) => e.preventDefault();
+        const handlePreventDefault = (e: Event) => {
+            if (e.target === e.currentTarget) { // only handle event on the <body>, ignores click bubbling from the children
+                e.preventDefault();
+            } // if
+        };
         const noPassiveOptions : AddEventListenerOptions = { passive: false }
 
         viewportElm.addEventListener('wheel'    , handlePreventDefault, noPassiveOptions);
