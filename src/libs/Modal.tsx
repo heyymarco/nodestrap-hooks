@@ -562,7 +562,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
     //#endregion focus the <Dialog> while the <Modal> is opened
     
     //#region un-scroll the viewport (<body>) while the <Modal> is opened
-    const backdropRef = useRef<TElement|null>(null);
     useEffect(() => {
         // conditions:
         if (!isModal)     return; // only for modal mode
@@ -729,10 +728,6 @@ export function Modal<TElement extends HTMLElement = HTMLElement, TCloseType = M
         <Indicator<TElement>
             // other props:
             {...restBackdropProps}
-            
-            
-            // essentials:
-            elmRef={backdropRef}
             
             
             // accessibilities:
