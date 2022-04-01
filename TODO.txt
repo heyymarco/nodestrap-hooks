@@ -1,6 +1,5 @@
 top priority:
 <Modal> add backdropFiltr blur to config
-<ModalCard> horz/vert align doesn't work, <ModalSide> don't know
 
 <Carousel> replace nav with pagination
 <Carousel> fix slide using touch sync to nav (infinite loop)
