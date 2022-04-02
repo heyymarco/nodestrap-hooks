@@ -62,25 +62,33 @@ const someOverflowedDescendant = (maxRight: number|null, maxBottom: number|null,
         childRight  = Math.round(childRight);
         childBottom = Math.round(childBottom);
         
+        const { marginInlineEnd: marginInlineEndStr, marginBlockEnd: marginBlockEndStr } = getComputedStyle(child);
+        const marginInlineEnd = parseNumber(marginInlineEndStr) ?? 0;
+        const marginBlockEnd  = parseNumber(marginBlockEndStr ) ?? 0;
+        const maxRightShift   = (maxRight  === null) ? null : Math.round(maxRight  - marginInlineEnd);
+        const maxBottomShift  = (maxBottom === null) ? null : Math.round(maxBottom - marginBlockEnd );
+        
         
         
         if (
             (
-                (maxRight    !== null)
+                (maxRightShift    !== null)
                 &&
-                (childRight  > maxRight )
+                (childRight  > maxRightShift )
             )
             ||
             (
-                (maxBottom   !== null)
+                (maxBottomShift   !== null)
                 &&
-                (childBottom > maxBottom)
+                (childBottom > maxBottomShift)
             )
-        ) return true; // found
+        ) {
+            return true; // found
+        } // if
         
         
         
-        return someOverflowedDescendant(maxRight, maxBottom, child); // nested search
+        return someOverflowedDescendant(maxRightShift, maxBottomShift, child); // nested search
     })) return true; // found
     
     return false; // not found
@@ -198,14 +206,16 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
                 (scrollWidth  > clientWidth ) // horz scrollbar detected
                 ||
                 (scrollHeight > clientHeight) // vert scrollbar detected
-            ) return true;
+            ) {
+                return true;
+            }
             
             
             
             //#region handle padding right & bottom
-            const { paddingInlineEnd, paddingBlockEnd  } = getComputedStyle(elm);
-            const paddingRight  = (parseNumber(paddingInlineEnd) ?? 0);
-            const paddingBottom = (parseNumber(paddingBlockEnd ) ?? 0);
+            const { paddingRight: paddingRightStr, paddingBottom: paddingBottomStr } = getComputedStyle(elm);
+            const paddingRight  = (parseNumber(paddingRightStr ) ?? 0);
+            const paddingBottom = (parseNumber(paddingBottomStr) ?? 0);
             if ((paddingRight === 0) && (paddingBottom === 0)) return false;
             
             
