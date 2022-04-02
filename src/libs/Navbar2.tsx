@@ -49,6 +49,9 @@ import {
 
 // nodestrap utilities:
 import {
+    ResponsiveProvider,
+}                           from './responsive'
+import {
     useIsomorphicLayoutEffect,
 }                           from './hooks'
 import {
@@ -100,17 +103,6 @@ import {
     // configs:
     cssProps as ccssProps,
 }                           from './Container'
-import {
-    // hooks:
-    CurrentActiveProps,
-    useCurrentActive,
-    
-    
-    
-    // react components:
-    NavButtonProps,
-    NavButton,
-}                           from './NavButton'
 import type {
     ListProps,
 }                           from './List'
@@ -121,175 +113,12 @@ import {
 
 
 
-// re-exports:
-export type { CurrentActiveProps }
-export { useCurrentActive }
-
-
-
-// hooks:
-
-// states:
-
-//#region compact
-export interface CompactState {
-    compact? : boolean
-}
-export const useCompactState = <TElement extends HTMLElement = HTMLElement>(props: CompactState, navbarRef: React.RefObject<TElement>) => {
-    // states:
-    const [compactDn, setCompactDn] = useState<boolean>(false); // uncontrollable (dynamic) state: true => compact mode, false => full mode
-    
-    
-    
-    /*
-     * state is compact/full based on [controllable compact] (if set) and fallback to [uncontrollable compact]
-     */
-    const compactFn: boolean = props.compact /*controllable*/ ?? compactDn /*uncontrollable*/;
-    
-    
-    
-    useIsomorphicLayoutEffect(() => {
-        const navbar = navbarRef.current;
-        if (!navbar)                     return; // navbar was unloaded => nothing to do
-        if (props.compact !== undefined) return; // controllable [compact] is set => no uncontrollable required
-        
-        
-        
-        // functions:
-        const handleUpdate = async () => { // keeps the UI responsive (not blocking) while handling the event
-            // prepare the condition for dom measurement:
-            const classList  = navbar.classList;
-            const hasCompact = classList.contains('compact');
-            if (hasCompact) {
-                // turn off ResizeObserver (to avoid triggering `ResizeObserver event` => firing `handleUpdate()`):
-                turnOffResizeObserver();
-                
-                classList.remove('compact'); // kill compact mode, so we can measure the menu's overflows
-            } // if
-            
-            
-            
-            // measuring the menu's overflows:
-            const {
-                scrollWidth,
-                clientWidth,
-                
-                scrollHeight,
-                clientHeight,
-            } = navbar;
-            
-            
-            
-            // restore to original condition as before measurement:
-            if (hasCompact) {
-                classList.add('compact'); // <== warning: causing to trigger `ResizeObserver event` at the next event loop
-                
-                // turn on ResizeObserver soon (to avoid triggering `ResizeObserver event` => firing `handleUpdate()`):
-                setTimeout(() => {
-                    turnOnResizeObserver();
-                }, 0);
-            } // if
-            
-            
-            
-            // update the dynamic compact mode based on the measured menu's overflows:
-            setCompactDn(
-                (scrollWidth > clientWidth)
-                ||
-                (scrollHeight > clientHeight)
-            );
-        };
-        
-        
-        
-        // setups:
-        
-        // update for the first time:
-        handleUpdate();
-        
-        
-        
-        //#region update in the future
-        //#region when navbar / navbar's items resized
-        let initialResizeEvent : boolean|null = null;
-        const resizeObserver = ResizeObserver ? new ResizeObserver(async (entries) => {
-            // ignores the insertion dom event:
-            if (initialResizeEvent) {
-                initialResizeEvent = false;
-                return;
-            } // if
-            
-            
-            
-            // ignores the removal dom event:
-            let items = entries.map((e) => e.target as HTMLElement).filter((item) => {
-                if (navbar.parentElement) { // navbar is still exist on the document
-                    // check if the item is navbar itself or the child of navbar
-                    if ((item === navbar) || (item.parentElement === navbar)) return true; // confirmed
-                } // if
-                
-                
-                
-                resizeObserver?.unobserve(item); // no longer exist => remove from observer
-                return false; // not the child of navbar
-            });
-            if (!items.length) return; // no existing items => nothing to do
-            
-            
-            
-            // ignores resizing by animations:
-            items = items.filter((item) => (item.getAnimations().length === 0));
-            if (!items.length) return; // no non_animating items => nothing to do
-            
-            
-            
-            // update after being resized:
-            await handleUpdate();
-        }) : null;
-        
-        const resizeObserverItems = [navbar, ...(Array.from(navbar.children) as HTMLElement[])];
-        const turnOnResizeObserver = () => {
-            if (resizeObserver && (initialResizeEvent === null)) {
-                resizeObserverItems.forEach((item) => {
-                    // update in the future:
-                    initialResizeEvent = true; // prevent the insertion dom event
-                    resizeObserver.observe(item, { box: 'border-box' });
-                });
-            } // if
-        }
-        const turnOffResizeObserver = () => {
-            initialResizeEvent = null;
-            resizeObserver?.disconnect();
-        }
-        
-        turnOnResizeObserver();
-        //#endregion when navbar / navbar's items resized
-        //#endregion update in the future
-        
-        
-        
-        // cleanups:
-        return () => {
-            resizeObserver?.disconnect();
-        };
-    }, [props.compact, navbarRef]); // (re)run the setups & cleanups on every time the `props.compact` changes
-    
-    
-    
-    return {
-        compact : compactFn,
-        class   : compactFn ? 'compact' : null,
-    };
-};
-//#endregion compact
-
-
-
 // styles:
 const wrapperElm = '.wrapper';
 const logoElm    = '.logo';
 const togglerElm = '.toggler';
 const menusElm   = '.menus';
+const menuElm    = '*>*';
 
 export const usesWrapperLayout = () => {
     // dependencies:
@@ -376,7 +205,7 @@ export const usesMenusLayout = () => {
         
         
         // children:
-        ...children('*>*', { // menu section
+        ...children(menuElm, { // menu section
             ...imports([
                 // layouts:
                 usesMenuLayout(),
@@ -554,7 +383,7 @@ export const usesNavbarStates = () => {
                 }),
                 ...children(menusElm, { // menus section
                     // children:
-                    ...children('*>*', { // menu section
+                    ...children(menuElm, { // menu section
                         // customize:
                         ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'full')), // apply general cssProps starting with menu*** and ending with ***Full
                     }),
@@ -590,7 +419,7 @@ export const usesNavbarStates = () => {
                     ]),
                     ...style({
                         // children:
-                        ...children('*>*', { // menu section
+                        ...children(menuElm, { // menu section
                             // customize:
                             ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'compact')), // apply general cssProps starting with menu*** and ending with ***Compact
                         }),
@@ -740,50 +569,44 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-export interface NavbarMenuProps
-    extends
-        NavButtonProps
-{
-}
-export function NavbarMenu(props: NavbarMenuProps) {
-    // jsx:
-    return (
-        <NavButton
-            // other props:
-            {...props}
-            
-            
-            // variants:
-            mild={props.mild ?? false}
-            
-            
-            // classes:
-            mainClass={props.mainClass ?? ''}
-        />
-    );
-}
-
-export type { NavbarMenuProps as MenuProps }
-export { NavbarMenu as Menu }
-
-
+const responsiveFallbacks = [false, true] as boolean[] & { 0: boolean };
 
 export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
     extends
         IndicatorProps<TElement>,
-        TogglerActiveProps,
-        
-        // states:
-        CompactState
+        TogglerActiveProps
 {
+    // responsives:
+    compact? : boolean
+    
+    
     // components:
     logo?     : React.ReactComponentElement<any, ElementProps> | boolean
     toggler?  : React.ReactComponentElement<any, ElementProps> | boolean
+    
     
     // children:
     children? : ((compact: boolean) => React.ReactNode)
 }
 export function Navbar<TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) {
+    // rest props:
+    const {
+        // responsives:
+        compact,
+    ...restNavbarProps} = props;
+    
+    
+    
+    // jsx:
+    return (
+        <ResponsiveProvider
+            fallbacks={(compact !== undefined) ? [compact] : responsiveFallbacks}
+        >{(compact) =>
+            <NavbarInternal {...restNavbarProps} compact={compact} />
+        }</ResponsiveProvider>
+    );
+}
+function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) {
     // styles:
     const sheet                 = useNavbarSheet();
     
@@ -791,7 +614,6 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     // states:
     const navbarRef             = useRef<TElement|null>(null);
-    const compactState          = useCompactState(props, navbarRef);
     const [isActive, setActive] = useTogglerActive(props);
     
     
@@ -802,6 +624,10 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         defaultActive,  // delete, already handled by `useTogglerActive`
         active,         // delete, already handled by `useTogglerActive`
         onActiveChange, // delete, already handled by `useTogglerActive`
+        
+        
+        // responsives:
+        compact = false,
         
         
         // components:
@@ -838,7 +664,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     
     // verifies:
-    const list = listFn?.(compactState.compact);
+    const list = listFn?.(compact);
     React.Children.only(list);
     if (!React.isValidElement<ListProps<HTMLElement>>(list)) throw Error('Invalid child element.');
     
@@ -967,6 +793,11 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         
         
         // events:
+        onClick        : (e) => {
+            list.props.onClick?.(e);
+            
+            handleClick(e);
+        },
         onAnimationEnd : (e) => {
             list.props.onAnimationEnd?.(e);
             
@@ -985,7 +816,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         // variants:
         // layouts:
         size            : size,
-     // orientation     : orientation,
+    // orientation     : orientation,
         nude            : nude,
         // colors:
         theme           : theme,
@@ -1029,7 +860,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                compactState.class,
+                (compact ? 'compact' : null),
             ]}
             
             
