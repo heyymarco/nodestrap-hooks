@@ -14,7 +14,8 @@ import {
 import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 // import ButtonIcon   from '../libs/ButtonIcon';
-import {Navbar, NavbarMenu} from '../libs/Navbar';
+import { Navbar } from '../libs/Navbar2';
+import { List, ListItem } from '../libs/List';
 
 
 
@@ -58,17 +59,19 @@ function App() {
 
 				logo={hasLogo && <img src="/logo.png" alt="" style={{height: '30px'}}  />}
 				// toggler={<ButtonIcon icon='close'>Close</ButtonIcon>}
-			>
-				<NavbarMenu>hello</NavbarMenu>
-				<NavbarMenu enabled={false}>disabled</NavbarMenu>
-				<NavbarMenu>hoho</NavbarMenu>
-				<NavbarMenu active={true}>active</NavbarMenu>
-				<NavbarMenu theme='danger'>angry</NavbarMenu>
-				<NavbarMenu theme='success'>fine</NavbarMenu>
-				<NavbarMenu size='sm'>small</NavbarMenu>
-				<NavbarMenu size='lg'>big</NavbarMenu>
-				<NavbarMenu gradient={true}>i'm 3d</NavbarMenu>
-			</Navbar>
+			>{(compact) =>
+				<List orientation={compact ? 'block' : 'inline'}>
+					<ListItem>hello</ListItem>
+					<ListItem enabled={false}>disabled</ListItem>
+					<ListItem>hoho</ListItem>
+					<ListItem active={true}>active</ListItem>
+					<ListItem theme='danger'>angry</ListItem>
+					<ListItem theme='success'>fine</ListItem>
+					<ListItem size='sm'>small</ListItem>
+					<ListItem size='lg'>big</ListItem>
+					<ListItem gradient={true}>i'm 3d</ListItem>
+				</List>
+			}</Navbar>
             <Container>
                 <Basic
 					theme={theme} size={size} gradient={enableGrad}
