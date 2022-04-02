@@ -59,9 +59,9 @@ function App() {
 				logo={hasLogo && <img src="/logo.png" alt="" style={{height: '30px'}}  />}
 				// toggler={<ButtonIcon icon='close'>Close</ButtonIcon>}
 			>
-				<>hello</>
+				<NavbarMenu>hello</NavbarMenu>
 				<NavbarMenu enabled={false}>disabled</NavbarMenu>
-				'hoho'
+				<NavbarMenu>hoho</NavbarMenu>
 				<NavbarMenu active={true}>active</NavbarMenu>
 				<NavbarMenu theme='danger'>angry</NavbarMenu>
 				<NavbarMenu theme='success'>fine</NavbarMenu>

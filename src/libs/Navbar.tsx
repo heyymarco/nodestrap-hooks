@@ -57,14 +57,13 @@ import {
 }                           from './hooks'
 import {
     // utilities:
-    isTypeOf,
     setRef,
 }                           from './utilities'
 
 // nodestrap components:
 import {
     // react components:
-    Element,
+    ElementProps,
 }                           from './Element'
 import {
     // hooks:
@@ -83,6 +82,11 @@ import {
     
     // configs:
     cssProps as bcssProps,
+    
+    
+    
+    // react components:
+    BasicProps,
 }                           from './Basic'
 import {
     // hooks:
@@ -139,11 +143,9 @@ import {
     NavButton,
 }                           from './NavButton'
 import {
-    // react components:
-    CheckProps,
-    Check,
-}                           from './Check'
-import TogglerMenuButton    from './TogglerMenuButton'
+    TogglerMenuButtonProps,
+    TogglerMenuButton,
+}                           from './TogglerMenuButton'
 
 
 
@@ -971,9 +973,11 @@ export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
         // states:
         CompactState
 {
+    // components:
+    logo?     : React.ReactComponentElement<any, ElementProps> | boolean
+    toggler?  : React.ReactComponentElement<any, ElementProps> | boolean
+    
     // children:
-    logo?     : React.ReactChild | boolean | null
-    toggler?  : React.ReactChild | boolean | null
     children? : React.ReactNode
 }
 export function Navbar<TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) {
@@ -997,9 +1001,12 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         onActiveChange, // delete, already handled by `useTogglerActive`
         
         
+        // components:
+        logo    = null,
+        toggler = <TogglerMenuButton /> as React.ReactComponentElement<any, TogglerMenuButtonProps>,
+        
+        
         // children:
-        logo,
-        toggler,
         children,
     ...restProps} = props;
     
@@ -1012,96 +1019,78 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     // jsx fn props:
     const logoFn = (() => {
-        // nodestrap's component:
-        if (isTypeOf(logo, Element)) return (
-            <logo.type
-                // other props:
-                {...logo.props}
-                
-                
-                // classes:
-                classes={[...(logo.props.classes ?? []),
-                    'logo', // inject logo class
-                ]}
-            />
-        );
+        // no component:
+        if ((logo === undefined) || (logo === null) || (logo === false) || (logo === true)) {
+            return <></>;
+        } // if
         
         
         
-        // other component:
-        return logo && (
-            <div
-                // classes:
-                className='logo wrapper'
-            >
-                { logo }
-            </div>
-        );
+        // native component:
+        if (React.isValidElement(logo) && (typeof(logo.type) === 'string')) {
+            return (
+                <div
+                    // classes:
+                    className='logo wrapper'
+                >
+                    { logo }
+                </div>
+            );
+        } // if
+        
+        
+        
+        // assumes as nodestrap's component:
+        const defaultLogoProps : BasicProps = {
+            classes : [...(logo.props.classes ?? []),
+                'logo', // inject logo class
+            ],
+        };
+        return React.cloneElement(React.cloneElement(logo, defaultLogoProps), logo.props);
     })();
     
     const togglerFn = (() => {
-        // default (unset):
-        if (toggler === undefined) return (
-            <TogglerMenuButton
-                // accessibilities:
-                active={isActive}
-                onActiveChange={(newActive) => {
-                    setActive(newActive);
-                }}
-                
-                
-                // variants:
-                mild={mildFn}
-                
-                
-                // classes:
-                classes={[
-                    'toggler', // inject toggler class
-                ]}
-            />
-        );
+        // no component:
+        if ((toggler === undefined) || (toggler === null) || (toggler === false) || (toggler === true)) {
+            return <></>;
+        } // if
         
         
         
-        // nodestrap's component:
-        if (isTypeOf(toggler, Element)) return (
-            <toggler.type
-                // other props:
-                {...toggler.props}
-                
-                
-                // classes:
-                classes={[...(toggler.props.classes ?? []),
-                    'toggler', // inject toggler class
-                ]}
-                
-                
-                {...(isTypeOf(toggler, Indicator) ? ({
-                    // accessibilities:
-                    active         : (toggler.props as IndicatorProps).active ?? isActive,
-                } as IndicatorProps) : {})}
-                
-                
-                {...(isTypeOf(toggler, Check) ? ({
-                    // accessibilities:
-                    onActiveChange : (toggler.props as CheckProps).onActiveChange ?? ((newActive) => {
-                        setActive(newActive);
-                    }),
-                } as CheckProps) : {})}
-            />
-        );
+        // native component:
+        if (React.isValidElement(toggler) && (typeof(toggler.type) === 'string')) {
+            return (
+                <div
+                    // classes:
+                    className='toggler wrapper'
+                >
+                    { toggler }
+                </div>
+            );
+        } // if
         
         
         
-        // other component:
-        return toggler && (
-            <div
-                // classes:
-                className='toggler wrapper'
-            >
-                { toggler }
-            </div>
-        );
+        // assumes as nodestrap's component:
+        const defaultTogglerProps : BasicProps & TogglerActiveProps = {
+            classes : [...(toggler.props.classes ?? []),
+                'toggler', // inject toggler class
+            ],
+            
+            
+            // variants:
+            mild : mildFn,
+            // accessibilities:
+            
+            
+            active         : isActive,
+            onActiveChange : (newActive) => {
+                (toggler.props as TogglerMenuButtonProps).onActiveChange?.(newActive);
+                
+                setActive(newActive);
+            }
+        };
+        return React.cloneElement(React.cloneElement(toggler, defaultTogglerProps), toggler.props);
     })();
     
     
@@ -1117,7 +1106,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         } // if
     };
     // watch [click] on the NavbarMenu:
-    const handleClick : React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    const handleClick : React.MouseEventHandler<HTMLElement> = (e) => {
         /* always close the menu even if `defaultPrevented` */
         if (isActive) {
             setActive(false);
@@ -1188,36 +1177,19 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
                     e.currentTarget.parentElement?.dispatchEvent(new AnimationEvent('animationend', { animationName: e.animationName, bubbles: true }));
                 }}
             >
-                {React.Children.map(children, (child, index) => (
-                    isTypeOf(child, NavbarMenu)
+                {React.Children.map(children, (child) => (
+                    React.isValidElement<ElementProps>(child)
                     ?
-                    <child.type
-                        // other props:
-                        {...child.props}
-                        
-                        
-                        // essentials:
-                        key={child.key ?? index}
-                        
-                        
+                    React.cloneElement<ElementProps>(child, {
                         // events:
-                        onClick={(e) => {
+                        onClick : !child.props.onClick ? handleClick : (e) => {
                             child.props.onClick?.(e);
                             
                             handleClick(e);
-                        }}
-                    />
+                        },
+                    })
                     :
-                    <NavbarMenu
-                        // essentials:
-                        key={index}
-                        
-                        
-                        // events:
-                        onClick={handleClick}
-                    >
-                        { child }
-                    </NavbarMenu>
+                    child
                 ))}
             </div> }
         </Indicator>
