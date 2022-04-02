@@ -1,4 +1,5 @@
 top priority:
+<Modal> increase padding right to replace the missing scrollbar
 <Modal> add backdropFiltr blur to config
 
 <Carousel> replace nav with pagination
