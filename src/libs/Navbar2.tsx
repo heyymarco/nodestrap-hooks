@@ -1,7 +1,6 @@
 // react:
 import {
     default as React,
-    useState,
     useRef,
 }                           from 'react'         // base technology of our nodestrap components
 
@@ -52,9 +51,6 @@ import {
     ResponsiveProvider,
 }                           from './responsive'
 import {
-    useIsomorphicLayoutEffect,
-}                           from './hooks'
-import {
     // utilities:
     setRef,
 }                           from './utilities'
@@ -83,7 +79,6 @@ import {
 }                           from './Basic'
 import {
     // hooks:
-    isPassived,
     TogglerActiveProps,
     useTogglerActive,
     
@@ -207,6 +202,18 @@ export const usesMenusLayout = () => {
     return style({
         // layouts:
         gridArea       : 'menus',   // place at the defined `menus` area
+        display        : 'grid',
+        
+        
+        
+        // borders:
+        border         : 'none',
+        borderRadius   : 0,
+        
+        
+        
+        // spacings:
+        padding        : 0,
         
         
         
@@ -558,8 +565,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // menus:
-        menusJustifySelf          : 'end',
-        
         // at full mode, cancel-out Navbar's paddingBlock with negative margin:
         menusMarginBlockFull      : [['calc(0px -', bcssProps.paddingBlock,  ')']],
         
@@ -567,6 +572,9 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         menusMarginInlineCompact  : [['calc(0px -', ccssProps.paddingInline, ')']],
         
         
+        
+        // list:
+        listJustifySelfFull       : 'end',
         
         // menu:
         menuDisplay               : 'flex',
@@ -908,7 +916,7 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
                 
                 
                 // variants:
-                nude={true}
+                mild={mild}
             >
                 { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
             </Collapse>

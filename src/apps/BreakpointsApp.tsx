@@ -9,14 +9,11 @@ import {
     globalDef,
     rule,
     layout,
-    variants,
-    children,
     atRoot,
     rules,
     keyframes,
 }                           from '../libs/cssfn'           // cssfn core
 import {
-    breakpoints,
     isScreenWidthAtLeast,
 } from '../libs/breakpoints';
 
