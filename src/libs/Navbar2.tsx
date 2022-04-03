@@ -104,8 +104,13 @@ import {
     cssProps as ccssProps,
 }                           from './Container'
 import type {
+    // react components:
     ListProps,
 }                           from './List'
+import {
+    // react components:
+    Collapse,
+}                           from './Collapse'
 import {
     TogglerMenuButtonProps,
     TogglerMenuButton,
@@ -114,11 +119,12 @@ import {
 
 
 // styles:
-const wrapperElm = '.wrapper';
-const logoElm    = '.logo';
-const togglerElm = '.toggler';
-const menusElm   = '.menus';
-const menuElm    = '*>*';
+const wrapperElm = '.wrapper'
+const logoElm    = '.logo'
+const togglerElm = '.toggler'
+const menusElm   = '.menus' // .menus
+const listElm    = '*'      // ------ > .list
+const menuElm    = '*>*'    // -------------- > .wrapper > .listItem
 
 export const usesWrapperLayout = () => {
     // dependencies:
@@ -205,10 +211,10 @@ export const usesMenusLayout = () => {
         
         
         // children:
-        ...children(menuElm, { // menu section
+        ...children(listElm, { // list section
             ...imports([
                 // layouts:
-                usesMenuLayout(),
+                usesListLayout(),
             ]),
         }),
         
@@ -241,6 +247,23 @@ export const usesMenusCompactLayout = () => {
         ...fallbacks({
             inlineSize : '-moz-available',
         }),
+    });
+};
+
+export const usesListLayout = () => {
+    return style({
+        // children:
+        ...children(menuElm, { // menu section
+            ...imports([
+                // layouts:
+                usesMenuLayout(),
+            ]),
+        }),
+        
+        
+        
+        // customize:
+        ...usesGeneralProps(usesPrefixedProps(cssProps, 'list')), // apply general cssProps starting with list***
     });
 };
 
@@ -383,9 +406,17 @@ export const usesNavbarStates = () => {
                 }),
                 ...children(menusElm, { // menus section
                     // children:
-                    ...children(menuElm, { // menu section
+                    ...children(listElm, { // list section
+                        // children:
+                        ...children(menuElm, { // menu section
+                            // customize:
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'full')), // apply general cssProps starting with menu*** and ending with ***Full
+                        }),
+                        
+                        
+                        
                         // customize:
-                        ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'full')), // apply general cssProps starting with menu*** and ending with ***Full
+                        ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'list'), 'full')), // apply general cssProps starting with list*** and ending with ***Full
                     }),
                     
                     
@@ -419,9 +450,16 @@ export const usesNavbarStates = () => {
                     ]),
                     ...style({
                         // children:
-                        ...children(menuElm, { // menu section
+                        ...children(listElm, { // list section
+                            ...children(menuElm, { // menu section
+                                // customize:
+                                ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'compact')), // apply general cssProps starting with menu*** and ending with ***Compact
+                            }),
+                            
+                            
+                            
                             // customize:
-                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menu'), 'compact')), // apply general cssProps starting with menu*** and ending with ***Compact
+                            ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'list'), 'compact')), // apply general cssProps starting with list*** and ending with ***Compact
                         }),
                         
                         
@@ -430,15 +468,6 @@ export const usesNavbarStates = () => {
                         ...usesGeneralProps(usesSuffixedProps(usesPrefixedProps(cssProps, 'menus'), 'compact')), // apply general cssProps starting with menus*** and ending with ***Compact
                     }),
                 }),
-                ...states([
-                    isPassived({
-                        // children:
-                        ...children(menusElm, { // menus section
-                            // layouts:
-                            display: 'none', // hide the menus when on compact mode
-                        }),
-                    }),
-                ]),
                 
                 
                 
@@ -778,12 +807,6 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
     
     // jsx:
     const defaultListProps : ListProps = {
-        // classes:
-        classes    : [...(list.props.classes ?? []),
-            'menus', // inject menus class
-        ],
-        
-        
         // styles:
         listStyle  : 'flat',
         
@@ -873,7 +896,22 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
         >
             { logoFn }
             { togglerFn }
-            { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
+            <Collapse
+                // accessibilities:
+                active={!compact || isActive}
+                
+                
+                // classes:
+                classes={[
+                    'menus',
+                ]}
+                
+                
+                // variants:
+                nude={true}
+            >
+                { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
+            </Collapse>
         </Indicator>
     );
 }
