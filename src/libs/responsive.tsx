@@ -283,7 +283,9 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             return someOverflowedDescendant(minLeft, minTop, maxRight, maxBottom, elm);
             //#endregion handle padding right & bottom
         });
-        if (hasOverflowed) setCurrentFallbackIndex(currentFallbackIndex + 1);
+        if (hasOverflowed) {
+            setCurrentFallbackIndex(currentFallbackIndex + 1);
+        } // if
     }); // run on every render & DOM has been updated
     
     
