@@ -1,7 +1,6 @@
 // react:
 import {
     default as React,
-    useRef,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -50,10 +49,6 @@ import {
 import {
     ResponsiveProvider,
 }                           from './responsive'
-import {
-    // utilities:
-    setRef,
-}                           from './utilities'
 
 // nodestrap components:
 import {
@@ -565,6 +560,7 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // menus:
+        menusBackground: 'red', // TODO: remove
         // at full mode, cancel-out Navbar's paddingBlock with negative margin:
         menusMarginBlockFull      : [['calc(0px -', bcssProps.paddingBlock,  ')']],
         
@@ -613,8 +609,8 @@ export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
         IndicatorProps<TElement>,
         TogglerActiveProps
 {
-    // responsives:
-    compact? : boolean
+    // states:
+    compact?  : boolean
     
     
     // components:
@@ -626,31 +622,12 @@ export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
     children? : ((compact: boolean) => React.ReactNode)
 }
 export function Navbar<TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) {
-    // rest props:
-    const {
-        // responsives:
-        compact,
-    ...restNavbarProps} = props;
-    
-    
-    
-    // jsx:
-    return (
-        <ResponsiveProvider
-            fallbacks={(compact !== undefined) ? [compact] : responsiveFallbacks}
-        >{(compact) =>
-            <NavbarInternal {...restNavbarProps} compact={compact} />
-        }</ResponsiveProvider>
-    );
-}
-function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) {
     // styles:
     const sheet                 = useNavbarSheet();
     
     
     
     // states:
-    const navbarRef             = useRef<TElement|null>(null);
     const [isActive, setActive] = useTogglerActive(props);
     
     
@@ -663,8 +640,8 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
         onActiveChange, // delete, already handled by `useTogglerActive`
         
         
-        // responsives:
-        compact = false,
+        // states:
+        compact,
         
         
         // components:
@@ -673,37 +650,8 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
         
         
         // children:
-        children : listFn,
+        children,
     ...restNavbarProps} = props;
-    const {
-        // layouts:
-        size,
-        // orientation,
-        nude,
-        
-        
-        // colors:
-        theme,
-        gradient,
-        outlined,
-        mild     = false,
-        
-        
-        // <Indicator> states:
-        enabled,
-        inheritEnabled,
-        readOnly,
-        inheritReadOnly,
-        // active,
-        // inheritActive,
-    } = restNavbarProps;
-    
-    
-    
-    // verifies:
-    const list = listFn?.(compact);
-    React.Children.only(list);
-    if (!React.isValidElement<ListProps<HTMLElement>>(list)) throw Error('Invalid child element.');
     
     
     
@@ -802,6 +750,112 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
             } // if
         } // if
     };
+    
+    
+    
+    // jsx:
+    return (
+        <Indicator<TElement>
+            // other props:
+            {...restNavbarProps}
+            
+            
+            // semantics:
+            semanticTag ={props.semanticTag  ?? 'nav'       }
+            semanticRole={props.semanticRole ?? 'navigation'}
+            
+            
+            // accessibilities:
+            active={isActive}
+            
+            
+            // variants:
+            mild={mildFn}
+            
+            
+            // classes:
+            mainClass={props.mainClass ?? sheet.main}
+            stateClasses={[...(props.stateClasses ?? []),
+                (compact ? 'compact' : null),
+            ]}
+            
+            
+            // events:
+            onKeyUp={(e) => {
+                props.onKeyUp?.(e);
+                
+                handleKeyUp(e);
+            }}
+        >
+            { logoFn }
+            { togglerFn }
+            <ResponsiveProvider
+                fallbacks={(compact !== undefined) ? [compact] : responsiveFallbacks}
+            >{(compact) =>
+                <NavbarInternal {...restNavbarProps} compact={compact} isActive={isActive} setActive={setActive}>
+                    { children }
+                </NavbarInternal>
+            }</ResponsiveProvider>
+        </Indicator>
+    );
+}
+interface NavbarInternalProps<TElement extends HTMLElement = HTMLElement> extends NavbarProps<TElement> {
+    // states:
+    compact   : boolean
+    
+    isActive  : boolean
+    setActive : React.Dispatch<React.SetStateAction<boolean>>
+}
+function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: NavbarInternalProps<TElement>) {
+    // rest props:
+    const {
+        // essentials:
+        outerRef, // moved  to <Collapse>
+        
+        
+        // states:
+        compact,
+        
+        isActive,
+        setActive,
+        
+        
+        // children:
+        children : listFn,
+    ...restNavbarProps} = props;
+    const {
+        // layouts:
+        size,
+        // orientation,
+        nude,
+        
+        
+        // colors:
+        theme,
+        gradient,
+        outlined,
+        mild     = false,
+        
+        
+        // <Indicator> states:
+        enabled,
+        inheritEnabled,
+        readOnly,
+        inheritReadOnly,
+        // active,
+        // inheritActive,
+    } = restNavbarProps;
+    
+    
+    
+    // verifies:
+    const list = listFn?.(compact);
+    React.Children.only(list);
+    if (!React.isValidElement<ListProps<HTMLElement>>(list)) throw Error('Invalid child element.');
+    
+    
+    
+    // handlers:
     // watch [click] on the NavbarMenu:
     const handleClick : React.MouseEventHandler<HTMLElement> = (e) => {
         /* always close the menu even if `defaultPrevented` */
@@ -847,7 +901,7 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
         // variants:
         // layouts:
         size            : size,
-    // orientation     : orientation,
+     // orientation     : orientation,
         nude            : nude,
         // colors:
         theme           : theme,
@@ -863,64 +917,26 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
         inheritReadOnly : inheritReadOnly,
     };
     return (
-        <Indicator<TElement>
-            // other props:
-            {...restNavbarProps}
-            
-            
-            // semantics:
-            semanticTag ={props.semanticTag  ?? 'nav'       }
-            semanticRole={props.semanticRole ?? 'navigation'}
-            
-            
+        <Collapse
             // essentials:
-            elmRef={(elm) => {
-                setRef(props.elmRef, elm);
-                setRef(navbarRef, elm);
-            }}
+            elmRef={outerRef}
             
             
             // accessibilities:
-            active={isActive}
-            
-            
-            // variants:
-            mild={mildFn}
+            active={!compact || isActive}
             
             
             // classes:
-            mainClass={props.mainClass ?? sheet.main}
-            stateClasses={[...(props.stateClasses ?? []),
-                (compact ? 'compact' : null),
+            classes={[
+                'menus',
             ]}
             
             
-            // events:
-            onKeyUp={(e) => {
-                props.onKeyUp?.(e);
-                
-                handleKeyUp(e);
-            }}
+            // variants:
+            mild={mild}
         >
-            { logoFn }
-            { togglerFn }
-            <Collapse
-                // accessibilities:
-                active={!compact || isActive}
-                
-                
-                // classes:
-                classes={[
-                    'menus',
-                ]}
-                
-                
-                // variants:
-                mild={mild}
-            >
-                { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
-            </Collapse>
-        </Indicator>
+            { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
+        </Collapse>
     );
 }
 export { Navbar as default }
