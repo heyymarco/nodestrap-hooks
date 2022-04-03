@@ -58,6 +58,13 @@ export const useResponsiveCurrentFallback = <TFallback extends {} = any>() => {
 
 const someOverflowedDescendant = (minLeft: number|null, minTop: number|null, maxRight: number|null, maxBottom: number|null, parent: Element): boolean => {
     if (Array.from(parent.children).some((child) => {
+        const {
+            display,
+            overflow,
+        } = getComputedStyle(child);
+        if (display === 'none') return false;
+        if (overflow !== 'visible') return false;
+        
         let {
             left   : childLeft,
             top    : childTop,
@@ -224,12 +231,18 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             
             
             const {
+                display,
+                overflow,
+            } = getComputedStyle(elm);
+            if (display === 'none') return false;
+            if (overflow !== 'visible') return false;
+            
+            
+            
+            const {
                 scrollWidth,
                 scrollHeight
             } = elm;
-            
-            
-            
             if (
                 (scrollWidth  > clientWidth ) // horz scrollbar detected
                 ||
