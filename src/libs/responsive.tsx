@@ -56,29 +56,57 @@ export const useResponsiveCurrentFallback = <TFallback extends {} = any>() => {
 
 // utilities:
 
-const someOverflowedDescendant = (maxRight: number|null, maxBottom: number|null, parent: Element): boolean => {
+const someOverflowedDescendant = (minLeft: number|null, minTop: number|null, maxRight: number|null, maxBottom: number|null, parent: Element): boolean => {
     if (Array.from(parent.children).some((child) => {
-        let { right: childRight, bottom: childBottom } = child.getBoundingClientRect();
-        childRight  = Math.round(childRight);
+        let {
+            left   : childLeft,
+            top    : childTop,
+            right  : childRight,
+            bottom : childBottom
+        } = child.getBoundingClientRect();
+        childLeft   = Math.round(childLeft  );
+        childTop    = Math.round(childTop   );
+        childRight  = Math.round(childRight );
         childBottom = Math.round(childBottom);
         
-        const { marginInlineEnd: marginInlineEndStr, marginBlockEnd: marginBlockEndStr } = getComputedStyle(child);
-        const marginInlineEnd = parseNumber(marginInlineEndStr) ?? 0;
-        const marginBlockEnd  = parseNumber(marginBlockEndStr ) ?? 0;
-        const maxRightShift   = (maxRight  === null) ? null : Math.round(maxRight  - marginInlineEnd);
-        const maxBottomShift  = (maxBottom === null) ? null : Math.round(maxBottom - marginBlockEnd );
+        const {
+            marginLeft   : marginLeftStr,
+            marginTop    : marginTopStr,
+            marginRight  : marginRightStr,
+            marginBottom : marginBottomStr,
+        } = getComputedStyle(child);
+        const marginLeft     = (parseNumber(marginLeftStr  ) ?? 0);
+        const marginTop      = (parseNumber(marginTopStr   ) ?? 0);
+        const marginRight    = (parseNumber(marginRightStr ) ?? 0);
+        const marginBottom   = (parseNumber(marginBottomStr) ?? 0);
+        const minLeftShift   = (minLeft   === null) ? null : Math.round(minLeft   + marginLeft   );
+        const minTopShift    = (minTop    === null) ? null : Math.round(minTop    + marginTop   );
+        const maxRightShift  = (maxRight  === null) ? null : Math.round(maxRight  - marginRight  );
+        const maxBottomShift = (maxBottom === null) ? null : Math.round(maxBottom - marginBottom );
         
         
         
         if (
             (
-                (maxRightShift    !== null)
+                (minLeftShift !== null)
                 &&
-                (childRight  > maxRightShift )
+                (childLeft  < minLeftShift)
             )
             ||
             (
-                (maxBottomShift   !== null)
+                (minTopShift !== null)
+                &&
+                (childTop  < minTopShift)
+            )
+            ||
+            (
+                (maxRightShift !== null)
+                &&
+                (childRight  > maxRightShift)
+            )
+            ||
+            (
+                (maxBottomShift !== null)
                 &&
                 (childBottom > maxBottomShift)
             )
@@ -88,7 +116,7 @@ const someOverflowedDescendant = (maxRight: number|null, maxBottom: number|null,
         
         
         
-        return someOverflowedDescendant(maxRightShift, maxBottomShift, child); // nested search
+        return someOverflowedDescendant(minLeftShift, minTopShift, maxRightShift, maxBottomShift, child); // nested search
     })) return true; // found
     
     return false; // not found
@@ -213,21 +241,33 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             
             
             //#region handle padding right & bottom
-            const { paddingRight: paddingRightStr, paddingBottom: paddingBottomStr } = getComputedStyle(elm);
+            const {
+                paddingLeft   : paddingLeftStr,
+                paddingTop    : paddingTopStr,
+                paddingRight  : paddingRightStr,
+                paddingBottom : paddingBottomStr,
+            } = getComputedStyle(elm);
+            const paddingLeft   = (parseNumber(paddingLeftStr  ) ?? 0);
+            const paddingTop    = (parseNumber(paddingTopStr   ) ?? 0);
             const paddingRight  = (parseNumber(paddingRightStr ) ?? 0);
             const paddingBottom = (parseNumber(paddingBottomStr) ?? 0);
-            if ((paddingRight === 0) && (paddingBottom === 0)) return false;
             
             
             
-            const { right: elmRight, bottom: elmBottom } = elm.getBoundingClientRect();
-            const maxRight  = paddingRight  ? Math.round(elmRight  - paddingRight ) : null;
-            const maxBottom = paddingBottom ? Math.round(elmBottom - paddingBottom) : null;
-            if ((maxRight === null) && (maxBottom === null)) return false;
+            const {
+                left   : elmLeft,
+                top    : elmTop,
+                right  : elmRight,
+                bottom : elmBottom,
+            } = elm.getBoundingClientRect();
+            const minLeft   = Math.round(elmLeft   + paddingLeft  );
+            const minTop    = Math.round(elmTop    + paddingTop   );
+            const maxRight  = Math.round(elmRight  - paddingRight );
+            const maxBottom = Math.round(elmBottom - paddingBottom);
             
             
             
-            return someOverflowedDescendant(maxRight, maxBottom, elm);
+            return someOverflowedDescendant(minLeft, minTop, maxRight, maxBottom, elm);
             //#endregion handle padding right & bottom
         });
         if (hasOverflowed) setCurrentFallbackIndex(currentFallbackIndex + 1);

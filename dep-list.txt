@@ -24,7 +24,7 @@
 [published] @nodestrap/accessibilities
 [published] @nodestrap/validations
 [published] @nodestrap/dimensions
-[published] @nodestrap/responsive
+[modified ] @nodestrap/responsive
 
 // supports:
 [published] @nodestrap/react-router-link
