@@ -55,15 +55,20 @@ export const useResponsiveCurrentFallback = <TFallback extends {} = any>() => {
 
 
 // utilities:
+const isOverflowable = (elm: Element): boolean => {
+    const {
+        display,
+        overflow,
+    } = getComputedStyle(elm);
+    if (display === 'none') return false;
+    if (overflow !== 'visible') return false;
+    
+    return true;
+};
 
 const someOverflowedDescendant = (minLeft: number|null, minTop: number|null, maxRight: number|null, maxBottom: number|null, parent: Element): boolean => {
     if (Array.from(parent.children).some((child) => {
-        const {
-            display,
-            overflow,
-        } = getComputedStyle(child);
-        if (display === 'none') return false;
-        if (overflow !== 'visible') return false;
+        if (!isOverflowable(child)) return false;
         
         let {
             left   : childLeft,
@@ -193,7 +198,10 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             size  : childSize,
         };
     });
-    const sizes = childrenWithSizes.map((childWithSize) => childWithSize.size).filter((size): size is NonNullable<typeof size> => !!size);
+    const sizes = (
+        childrenWithSizes
+        .flatMap(({ ref, size }) => (ref?.current && [size.width, size.height]) || [null, null])
+    );
     
     
     
@@ -230,12 +238,7 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             
             
             
-            const {
-                display,
-                overflow,
-            } = getComputedStyle(elm);
-            if (display === 'none') return false;
-            if (overflow !== 'visible') return false;
+            if (!isOverflowable(elm)) return false;
             
             
             
