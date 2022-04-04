@@ -19,7 +19,7 @@
 [published] @nodestrap/layouts
 [published] @nodestrap/typos
 
-[published] @nodestrap/hooks
+[modified ] @nodestrap/hooks
 [published] @nodestrap/utilities
 [published] @nodestrap/accessibilities
 [published] @nodestrap/validations
