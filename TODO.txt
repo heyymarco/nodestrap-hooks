@@ -34,6 +34,7 @@ add client side Form for Remix
 
 
 medium priority:
+React.cloneElement => cloneElement
 fix Carousel fast clicking
 Media => for profile image, video, static images, gifs, svgs, etc
 Range => onTouchStart => preventDefault() => error: Unable to preventDefault inside passive event listener invocation.
