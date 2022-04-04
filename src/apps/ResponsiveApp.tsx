@@ -33,7 +33,7 @@ function App() {
 			<ResponsiveProvider
 				fallbacks={[
 					// 2000,
-					// 1000,
+					1000,
 					500,
 					300,
 					100,
@@ -49,7 +49,7 @@ function App() {
 						background: 'red',
 						alignSelf : 'flex-start',
 						width: `${fallback}px`,
-						...((fallback !== 500) ? {
+						...((fallback !== 1000) ? {
 							height: '100px',
 						} : {}),
 					}}>
@@ -73,7 +73,7 @@ function App() {
 			<ResponsiveProvider
 				fallbacks={[
 					// 2000,
-					// 1000,
+					1000,
 					500,
 					300,
 					100,

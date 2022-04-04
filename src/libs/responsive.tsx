@@ -4,6 +4,7 @@ import {
     useState,
     useRef,
     useRef as _useRef, // avoids eslint check
+    useCallback,
     createContext,
     useContext,
     
@@ -20,6 +21,7 @@ import type {
 // nodestrap utilities:
 import {
     useIsomorphicLayoutEffect,
+    useTriggerRender,
 }                           from './hooks'
 import {
     // utilities:
@@ -259,7 +261,7 @@ export const useResponsive = (elmRefs: SingleOrArray<React.RefObject<Element>|nu
         return () => {
             observer.disconnect();
         };
-    }, []); // runs once
+    }, [resizeCallback]); // runs once
 };
 
 
@@ -330,12 +332,18 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
     
     // dom effects:
     const childrenRefs = childrenWithRefs.map(({ ref }) => ref);
-    useResponsive(childrenRefs, { horzResponsive, vertResponsive }, () => {
-        // console.log('resize');
-        
-        console.log('reset', currentFallbackIndex);
-        setCurrentFallbackIndex(0);
-    });
+    
+    const triggerRender = useTriggerRender();
+    const resizeCallback = useCallback(() => {
+        if (currentFallbackIndex === 0) {
+            triggerRender();
+        }
+        else {
+            setCurrentFallbackIndex(0);
+        } // if
+    }, [currentFallbackIndex, triggerRender]);
+    useResponsive(childrenRefs, { horzResponsive, vertResponsive }, resizeCallback);
+    
     useIsomorphicLayoutEffect(() => {
         // conditions:
         if (currentFallbackIndex >= maxFallbackIndex) return; // maximum fallbacks has already reached => nothing more fallback
@@ -355,7 +363,6 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
     
     
     // jsx:
-    console.log('current', currentFallback);
     return (
         <Context.Provider value={{ currentFallback }}>
             { childrenWithRefs.map(({ child }) => child) }
