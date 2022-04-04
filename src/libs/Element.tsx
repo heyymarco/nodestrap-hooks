@@ -267,12 +267,14 @@ const htmlPropList = [
 ];
 const isHtmlProp = (propName: string) => (
     (
-        propName.startsWith('on')
-        &&
         !['onActiveChange', 'onExcitedChange'].includes(propName)
+        &&
+        (/^on[A-Z]/g).test(propName)
     )
     ||
     propName.startsWith('aria-')
+    ||
+    propName.startsWith('data-')
     ||
     htmlPropList.includes(propName)
 );

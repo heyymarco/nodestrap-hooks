@@ -30,7 +30,7 @@
 [published] @nodestrap/react-router-link
 
 // abstracts:
-[published] @nodestrap/element
+[modified ] @nodestrap/element
 [published] @nodestrap/basic
 [published] @nodestrap/indicator
 [published] @nodestrap/control
