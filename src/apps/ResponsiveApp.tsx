@@ -41,6 +41,7 @@ function App() {
 			>{(fallback) => ([
 				<div style={{
 					...containerProps,
+					overflow: 'visible',
 					background: 'pink',
 				}}>
 					<div style={{
@@ -64,7 +65,7 @@ function App() {
 				</div>
 			</div>
 
-			<hr />
+			{/* <hr />
 
 			<ResponsiveProvider
 				fallbacks={[
@@ -78,6 +79,7 @@ function App() {
 				<div style={{
 					...containerProps,
 					background: 'pink',
+					overflow: 'visible',
 				}}>
 					<div style={{
 						...childrenProps,
@@ -98,7 +100,7 @@ function App() {
 					alignSelf: 'flex-end',
 				}}>
 				</div>
-			</div>
+			</div> */}
         </div>
     );
 }

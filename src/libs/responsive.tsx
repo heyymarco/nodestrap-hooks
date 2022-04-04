@@ -2,6 +2,7 @@
 import {
     default as React,
     useState,
+    useRef,
     useRef as _useRef, // avoids eslint check
     createContext,
     useContext,
@@ -198,22 +199,42 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             size  : childSize,
         };
     });
-    const sizes = (
-        childrenWithSizes
-        .flatMap(({ ref, size }) => (ref?.current && [size.width, size.height]) || [null, null])
-    );
     
     
     
     // dom effects:
+    const prevTracksizes = useRef<(number|undefined)[]>([]);
+    const trackSizes : (number|undefined)[] = (
+        childrenWithSizes
+        .flatMap(({ ref, size }, index) => {
+            const elm    = ref?.current;
+            if (!elm || !isOverflowable(elm)) {
+                const first  = index * 2;
+                const second = first + 1;
+                return [
+                    prevTracksizes.current?.[first ],
+                    prevTracksizes.current?.[second],
+                ];
+            } // if
+            
+            return [
+                size?.width  ?? undefined,
+                size?.height ?? undefined,
+            ];
+        })
+    );
+    prevTracksizes.current = trackSizes;
+    
     useIsomorphicLayoutEffect(() => {
+        console.log('size changes', trackSizes);
         if (currentFallbackIndex === 0) return; // already been reseted
         
         
         
         // setups:
+        console.log('reset', currentFallbackIndex);
         setCurrentFallbackIndex(0);
-    }, sizes); // resets currentFallbackIndex each time the sizes are changed
+    }, trackSizes); // resets currentFallbackIndex each time the trackSizes are changed
 
     useIsomorphicLayoutEffect(() => {
         if (currentFallbackIndex >= maxFallbackIndex) return; // maximum fallbacks has already reached => nothing more fallback
@@ -294,6 +315,7 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
     
     
     // jsx:
+    console.log('current', currentFallback);
     return (
         <Context.Provider value={{ currentFallback }}>
             { childrenWithSizes.map((childWithSize) => childWithSize.child) }
