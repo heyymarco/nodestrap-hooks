@@ -49,6 +49,9 @@ function App() {
 						background: 'red',
 						alignSelf : 'flex-start',
 						width: `${fallback}px`,
+						...((fallback !== 500) ? {
+							height: '100px',
+						} : {}),
 					}}>
 					</div>
 				</div>
