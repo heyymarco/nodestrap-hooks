@@ -367,7 +367,7 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
         if (hasOverflowed) {
             setCurrentFallbackIndex(currentFallbackIndex + 1);
         } // if
-    }, [currentFallbackIndex, maxFallbackIndex, childrenRefs]); // runs on every render & DOM has been updated
+    }); // runs on every render & DOM has been updated
     
     
     
