@@ -353,6 +353,7 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
     }, [currentFallbackIndex, triggerRender]);
     useResponsive(childrenRefs, responsiveCallback, { horzResponsive, vertResponsive });
     
+    // eslint-disable-next-line
     useIsomorphicLayoutEffect(() => {
         // conditions:
         if (currentFallbackIndex >= maxFallbackIndex) return; // maximum fallbacks has already reached => nothing more fallback
