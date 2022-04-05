@@ -699,6 +699,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     }, [compact, compactDn, triggerRender]);
     useResponsive(navbarRef, responsiveCallback);
     
+    // eslint-disable-next-line
     useLayoutEffect(() => {
         // conditions:
         if (compact !== undefined) return; // controllable [compact] is set => no uncontrollable required
@@ -711,7 +712,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         if (hasOverflowed) {
             setCompactDn(true);
         } // if
-    }/*, [compact, compactDn]*/);
+    }); // runs on every render & DOM has been updated
     
     
     
