@@ -1,6 +1,10 @@
 // react:
 import {
     default as React,
+    useRef,
+    useState,
+    useCallback,
+    useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -47,8 +51,23 @@ import {
 
 // nodestrap utilities:
 import {
-    ResponsiveProvider,
+    // utilities:
+    isOverflowed,
+    
+    
+    
+    // hooks:
+    useResponsive,
 }                           from './responsive'
+import {
+    // hooks:
+    // useIsomorphicLayoutEffect,
+    useTriggerRender,
+}                           from './hooks'
+import {
+    // utilities:
+    setRef,
+}                           from './utilities'
 
 // nodestrap components:
 import {
@@ -602,8 +621,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 // react components:
 
-const responsiveFallbacks = [false, true] as boolean[] & { 0: boolean };
-
 export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
     extends
         IndicatorProps<TElement>,
@@ -623,12 +640,13 @@ export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
 }
 export function Navbar<TElement extends HTMLElement = HTMLElement>(props: NavbarProps<TElement>) {
     // styles:
-    const sheet                 = useNavbarSheet();
+    const sheet                     = useNavbarSheet();
     
     
     
     // states:
-    const [isActive, setActive] = useTogglerActive(props);
+    const [compactDn, setCompactDn] = useState(false);
+    const [isActive, setActive]     = useTogglerActive(props);
     
     
     
@@ -656,7 +674,44 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     
     // fn props:
-    const mildFn = props.mild ?? false;
+    const compactFn = (compact /*controllable*/ ?? compactDn /*uncontrollable*/);
+    const mildFn    = props.mild ?? false;
+    
+    
+    
+    // dom effects:
+    const navbarRef          = useRef<HTMLElement>(null);
+    const menusRef           = useRef<HTMLElement>(null);
+    
+    const triggerRender      = useTriggerRender();
+    const responsiveCallback = useCallback(() => {
+        // conditions:
+        if (compact !== undefined) return; // controllable [compact] is set => no uncontrollable required
+        
+        
+        
+        if (!compactDn) {
+            triggerRender();
+        }
+        else {
+            setCompactDn(false);
+        } // if
+    }, [compact, compactDn, triggerRender]);
+    useResponsive(navbarRef, responsiveCallback);
+    
+    useLayoutEffect(() => {
+        // conditions:
+        if (compact !== undefined) return; // controllable [compact] is set => no uncontrollable required
+        if (compactDn)             return; // already compacted => nothing more fallback
+        
+        
+        
+        const hasOverflowed = !!menusRef.current && isOverflowed(menusRef.current);
+        console.log('hasOverflowed', hasOverflowed);
+        if (hasOverflowed) {
+            setCompactDn(true);
+        } // if
+    }/*, [compact, compactDn]*/);
     
     
     
@@ -760,6 +815,14 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             {...restNavbarProps}
             
             
+            // essentials:
+            elmRef={(elm) => {
+                setRef(props.elmRef, elm);
+                
+                setRef(navbarRef, elm);
+            }}
+            
+            
             // semantics:
             semanticTag ={props.semanticTag  ?? 'nav'       }
             semanticRole={props.semanticRole ?? 'navigation'}
@@ -776,7 +839,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             // classes:
             mainClass={props.mainClass ?? sheet.main}
             stateClasses={[...(props.stateClasses ?? []),
-                (compact ? 'compact' : null),
+                (compactFn ? 'compact' : null),
             ]}
             
             
@@ -789,13 +852,19 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         >
             { logoFn }
             { togglerFn }
-            <ResponsiveProvider
-                fallbacks={(compact !== undefined) ? [compact] : responsiveFallbacks}
-            >{(compact) =>
-                <NavbarInternal {...restNavbarProps} compact={compact} isActive={isActive} setActive={setActive}>
-                    { children }
-                </NavbarInternal>
-            }</ResponsiveProvider>
+            
+            <NavbarInternal
+                {...restNavbarProps}
+                
+                outerRef={menusRef}
+                
+                compact={compactFn}
+                
+                isActive={isActive}
+                setActive={setActive}
+            >
+                { children }
+            </NavbarInternal>
         </Indicator>
     );
 }
