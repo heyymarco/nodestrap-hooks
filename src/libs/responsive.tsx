@@ -62,10 +62,15 @@ export const useResponsiveCurrentFallback = <TFallback extends {} = any>() => {
 const isOverflowable = (element: Element): boolean => {
     const {
         display,
-        overflow,
+        overflowX,
+        overflowY,
     } = getComputedStyle(element);
-    if (display === 'none')     return false; // hidden element => not overflowable
-    if (overflow !== 'visible') return false; // hidden/scroll/clip/overlay/auto/ => not overflowable
+    if (display === 'none') return false; // hidden element => not overflowable
+    if (
+        (overflowX !== 'visible')
+        &&
+        (overflowY !== 'visible')
+    )                       return false; // hidden/scroll/clip/overlay/auto/ => not overflowable
     
     return true;
 };
