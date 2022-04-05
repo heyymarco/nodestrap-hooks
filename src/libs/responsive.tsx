@@ -372,7 +372,6 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
     
     
     // jsx:
-    console.log('render with fallback: ', currentFallback); // TODO: remove
     return (
         <Context.Provider value={{ currentFallback }}>
             { childrenWithRefs.map(({ child }) => child) }
