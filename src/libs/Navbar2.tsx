@@ -578,7 +578,6 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         // menus:
-        menusBackground: 'red', // TODO: remove
         // at full mode, cancel-out Navbar's paddingBlock with negative margin:
         menusMarginBlockFull      : [['calc(0px -', bcssProps.paddingBlock,  ')']],
         
@@ -709,7 +708,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     // dom effects:
     const navbarRef          = useRef<HTMLElement>(null);
-    const menusRef           = useRef<HTMLElement>(null);
+    const menusRef           = useRef<HTMLDivElement>(null);
     
     const triggerRender      = useTriggerRender();
     const responsiveCallback = useCallback(() => {
@@ -736,9 +735,9 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         
         
         const hasOverflowed = !!menusRef.current && isOverflowed(menusRef.current);
-        console.log('hasOverflowed', hasOverflowed);
         if (hasOverflowed) {
             setCompactDn(true);
+            if (isActive) setActive(false);
         } // if
     }); // runs on every render & DOM has been updated
     
@@ -846,6 +845,38 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     
     // jsx:
+    console.log('render ', compactFn ? 'compact' : 'full');
+    const menusComponent = (
+        !compactFn
+        ?
+        <div
+            // essentials:
+            ref={menusRef}
+            
+            
+            // classes:
+            className='menus'
+        />
+        :
+        <Collapse
+            // essentials:
+            elmRef={menusRef}
+            
+            
+            // accessibilities:
+            active={isActive}
+            
+            
+            // classes:
+            classes={[
+                'menus',
+            ]}
+            
+            
+            // variants:
+            mild={mild}
+        />
+    );
     const defaultListProps : ListProps = {
         // styles:
         listStyle  : 'flat',
@@ -938,26 +969,9 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             { logoFn }
             { togglerFn }
             
-            <Collapse
-                // essentials:
-                elmRef={menusRef}
-                
-                
-                // accessibilities:
-                active={!compactFn || isActive}
-                
-                
-                // classes:
-                classes={[
-                    'menus',
-                ]}
-                
-                
-                // variants:
-                mild={mild}
-            >
-                { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
-            </Collapse>
+            {React.cloneElement(menusComponent, undefined,
+                React.cloneElement(React.cloneElement(list, defaultListProps), list.props)
+            )}
         </Indicator>
     );
 }
