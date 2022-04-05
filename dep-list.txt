@@ -34,7 +34,7 @@
 [published] @nodestrap/basic
 [published] @nodestrap/indicator
 [published] @nodestrap/control
-[published] @nodestrap/action-control
+[modified ] @nodestrap/action-control
 [published] @nodestrap/editable-control   *icon
 [published] @nodestrap/editable-text-control
 [published] @nodestrap/editable-action-control
