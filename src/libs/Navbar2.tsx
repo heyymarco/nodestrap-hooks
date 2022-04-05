@@ -845,7 +845,6 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     
     
     // jsx:
-    console.log('render ', compactFn ? 'compact' : 'full');
     const menusComponent = (
         !compactFn
         ?
