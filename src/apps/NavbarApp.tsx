@@ -14,7 +14,7 @@ import {
 import Indicator from '../libs/Indicator';
 import Content from '../libs/Content';
 // import ButtonIcon   from '../libs/ButtonIcon';
-import { Navbar } from '../libs/Navbar2';
+import { Navbar } from '../libs/Navbar';
 import { Nav, NavItem } from '../libs/Nav';
 
 
