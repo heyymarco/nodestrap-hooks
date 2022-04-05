@@ -4,7 +4,6 @@ import {
     useRef,
     useState,
     useCallback,
-    useLayoutEffect,
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
@@ -61,7 +60,7 @@ import {
 }                           from './responsive'
 import {
     // hooks:
-    // useIsomorphicLayoutEffect,
+    useIsomorphicLayoutEffect,
     useTriggerRender,
 }                           from './hooks'
 import {
@@ -668,14 +667,43 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         
         
         // children:
-        children,
+        children : listFn,
     ...restNavbarProps} = props;
+    const {
+        // layouts:
+        size,
+        // orientation,
+        nude,
+        
+        
+        // colors:
+        theme,
+        gradient,
+        outlined,
+        mild     = false,
+        
+        
+        // <Indicator> states:
+        enabled,
+        inheritEnabled,
+        readOnly,
+        inheritReadOnly,
+        // active,
+        // inheritActive,
+    } = restNavbarProps;
     
     
     
     // fn props:
     const compactFn = (compact /*controllable*/ ?? compactDn /*uncontrollable*/);
     const mildFn    = props.mild ?? false;
+    
+    
+    
+    // verifies:
+    const list = listFn?.(compactFn);
+    React.Children.only(list);
+    if (!React.isValidElement<ListProps<HTMLElement>>(list)) throw Error('Invalid child element.');
     
     
     
@@ -700,7 +728,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
     useResponsive(navbarRef, responsiveCallback);
     
     // eslint-disable-next-line
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         // conditions:
         if (compact !== undefined) return; // controllable [compact] is set => no uncontrollable required
         if (compactDn)             return; // already compacted => nothing more fallback
@@ -806,126 +834,6 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             } // if
         } // if
     };
-    
-    
-    
-    // jsx:
-    return (
-        <Indicator<TElement>
-            // other props:
-            {...restNavbarProps}
-            
-            
-            // essentials:
-            elmRef={(elm) => {
-                setRef(props.elmRef, elm);
-                
-                setRef(navbarRef, elm);
-            }}
-            
-            
-            // semantics:
-            semanticTag ={props.semanticTag  ?? 'nav'       }
-            semanticRole={props.semanticRole ?? 'navigation'}
-            
-            
-            // accessibilities:
-            active={isActive}
-            
-            
-            // variants:
-            mild={mildFn}
-            
-            
-            // classes:
-            mainClass={props.mainClass ?? sheet.main}
-            stateClasses={[...(props.stateClasses ?? []),
-                (compactFn ? 'compact' : null),
-            ]}
-            
-            
-            // events:
-            onKeyUp={(e) => {
-                props.onKeyUp?.(e);
-                
-                handleKeyUp(e);
-            }}
-        >
-            { logoFn }
-            { togglerFn }
-            
-            <NavbarInternal
-                {...restNavbarProps}
-                
-                outerRef={menusRef}
-                
-                compact={compactFn}
-                
-                isActive={isActive}
-                setActive={setActive}
-            >
-                { children }
-            </NavbarInternal>
-        </Indicator>
-    );
-}
-interface NavbarInternalProps<TElement extends HTMLElement = HTMLElement> extends NavbarProps<TElement> {
-    // states:
-    compact   : boolean
-    
-    isActive  : boolean
-    setActive : React.Dispatch<React.SetStateAction<boolean>>
-}
-function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: NavbarInternalProps<TElement>) {
-    // rest props:
-    const {
-        // essentials:
-        outerRef, // moved  to <Collapse>
-        
-        
-        // states:
-        compact,
-        
-        isActive,
-        setActive,
-        
-        
-        // children:
-        children : listFn,
-    ...restNavbarProps} = props;
-    const {
-        // layouts:
-        size,
-        // orientation,
-        nude,
-        
-        
-        // colors:
-        theme,
-        gradient,
-        outlined,
-        mild     = false,
-        
-        
-        // <Indicator> states:
-        enabled,
-        inheritEnabled,
-        readOnly,
-        inheritReadOnly,
-        // active,
-        // inheritActive,
-    } = restNavbarProps;
-    
-    
-    
-    // verifies:
-    const list = listFn?.(compact);
-    React.Children.only(list);
-    if (!React.isValidElement<ListProps<HTMLElement>>(list)) throw Error('Invalid child element.');
-    
-    
-    
-    // handlers:
     // watch [click] on the NavbarMenu:
     const handleClick : React.MouseEventHandler<HTMLElement> = (e) => {
         /* always close the menu even if `defaultPrevented` */
@@ -987,26 +895,70 @@ function NavbarInternal<TElement extends HTMLElement = HTMLElement>(props: Navba
         inheritReadOnly : inheritReadOnly,
     };
     return (
-        <Collapse
+        <Indicator<TElement>
+            // other props:
+            {...restNavbarProps}
+            
+            
             // essentials:
-            elmRef={outerRef}
+            elmRef={(elm) => {
+                setRef(props.elmRef, elm);
+                
+                setRef(navbarRef, elm);
+            }}
+            
+            
+            // semantics:
+            semanticTag ={props.semanticTag  ?? 'nav'       }
+            semanticRole={props.semanticRole ?? 'navigation'}
             
             
             // accessibilities:
-            active={!compact || isActive}
-            
-            
-            // classes:
-            classes={[
-                'menus',
-            ]}
+            active={isActive}
             
             
             // variants:
-            mild={mild}
+            mild={mildFn}
+            
+            
+            // classes:
+            mainClass={props.mainClass ?? sheet.main}
+            stateClasses={[...(props.stateClasses ?? []),
+                (compactFn ? 'compact' : null),
+            ]}
+            
+            
+            // events:
+            onKeyUp={(e) => {
+                props.onKeyUp?.(e);
+                
+                handleKeyUp(e);
+            }}
         >
-            { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
-        </Collapse>
+            { logoFn }
+            { togglerFn }
+            
+            <Collapse
+                // essentials:
+                elmRef={menusRef}
+                
+                
+                // accessibilities:
+                active={!compactFn || isActive}
+                
+                
+                // classes:
+                classes={[
+                    'menus',
+                ]}
+                
+                
+                // variants:
+                mild={mild}
+            >
+                { React.cloneElement(React.cloneElement(list, defaultListProps), list.props) }
+            </Collapse>
+        </Indicator>
     );
 }
 export { Navbar as default }
