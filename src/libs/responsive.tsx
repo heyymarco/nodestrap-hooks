@@ -202,7 +202,7 @@ export interface ResponsiveOptions {
     horzResponsive? : boolean
     vertResponsive? : boolean
 }
-export const useResponsive = (resizingElementRefs: SingleOrArray<React.RefObject<Element> | null>, options: ResponsiveOptions = {}, responsiveCallback: () => void) => {
+export const useResponsive = (resizingElementRefs: SingleOrArray<React.RefObject<Element> | null>, responsiveCallback: () => void, options: ResponsiveOptions = {}) => {
     // options:
     const {
         horzResponsive = true,
@@ -351,7 +351,7 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             setCurrentFallbackIndex(0);
         } // if
     }, [currentFallbackIndex, triggerRender]);
-    useResponsive(childrenRefs, { horzResponsive, vertResponsive }, responsiveCallback);
+    useResponsive(childrenRefs, responsiveCallback, { horzResponsive, vertResponsive });
     
     useIsomorphicLayoutEffect(() => {
         // conditions:
