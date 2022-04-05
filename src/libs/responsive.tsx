@@ -20,6 +20,7 @@ import type {
 
 // nodestrap utilities:
 import {
+    // hooks:
     useIsomorphicLayoutEffect,
     useTriggerRender,
 }                           from './hooks'
@@ -63,26 +64,30 @@ const isOverflowable = (element: Element): boolean => {
         display,
         overflow,
     } = getComputedStyle(element);
-    if (display === 'none') return false;
-    if (overflow !== 'visible') return false;
+    if (display === 'none')     return false; // hidden element => not overflowable
+    if (overflow !== 'visible') return false; // hidden/scroll/clip/overlay/auto/ => not overflowable
     
     return true;
 };
 
-const hasOverflowedDescendant = (minLeft: number|null, minTop: number|null, maxRight: number|null, maxBottom: number|null, element: Element): boolean => {
+const hasOverflowedDescendant = (element: Element, minLeft: number|null, minTop: number|null, maxRight: number|null, maxBottom: number|null): boolean => {
     if (Array.from(element.children).some((child) => {
         if (!isOverflowable(child)) return false;
+        
+        
         
         let {
             left   : childLeft,
             top    : childTop,
             right  : childRight,
-            bottom : childBottom
+            bottom : childBottom,
         } = child.getBoundingClientRect();
         childLeft   = Math.round(childLeft  );
         childTop    = Math.round(childTop   );
         childRight  = Math.round(childRight );
         childBottom = Math.round(childBottom);
+        
+        
         
         const {
             marginLeft   : marginLeftStr,
@@ -94,10 +99,10 @@ const hasOverflowedDescendant = (minLeft: number|null, minTop: number|null, maxR
         const marginTop      = (parseNumber(marginTopStr   ) ?? 0);
         const marginRight    = (parseNumber(marginRightStr ) ?? 0);
         const marginBottom   = (parseNumber(marginBottomStr) ?? 0);
-        const minLeftShift   = (minLeft   === null) ? null : Math.round(minLeft   + marginLeft   );
+        const minLeftShift   = (minLeft   === null) ? null : Math.round(minLeft   + marginLeft  );
         const minTopShift    = (minTop    === null) ? null : Math.round(minTop    + marginTop   );
-        const maxRightShift  = (maxRight  === null) ? null : Math.round(maxRight  - marginRight  );
-        const maxBottomShift = (maxBottom === null) ? null : Math.round(maxBottom - marginBottom );
+        const maxRightShift  = (maxRight  === null) ? null : Math.round(maxRight  - marginRight );
+        const maxBottomShift = (maxBottom === null) ? null : Math.round(maxBottom - marginBottom);
         
         
         
@@ -105,25 +110,25 @@ const hasOverflowedDescendant = (minLeft: number|null, minTop: number|null, maxR
             (
                 (minLeftShift !== null)
                 &&
-                (childLeft  < minLeftShift)
+                (childLeft  < minLeftShift)    // smaller than minimum => overflowed
             )
             ||
             (
                 (minTopShift !== null)
                 &&
-                (childTop  < minTopShift)
+                (childTop  < minTopShift)      // smaller than minimum => overflowed
             )
             ||
             (
                 (maxRightShift !== null)
                 &&
-                (childRight  > maxRightShift)
+                (childRight  > maxRightShift)  // bigger than maximum => overflowed
             )
             ||
             (
                 (maxBottomShift !== null)
                 &&
-                (childBottom > maxBottomShift)
+                (childBottom > maxBottomShift) // bigger than maximum => overflowed
             )
         ) {
             return true; // found
@@ -131,7 +136,7 @@ const hasOverflowedDescendant = (minLeft: number|null, minTop: number|null, maxR
         
         
         
-        return hasOverflowedDescendant(minLeftShift, minTopShift, maxRightShift, maxBottomShift, child); // nested search
+        return hasOverflowedDescendant(child, minLeftShift, minTopShift, maxRightShift, maxBottomShift); // nested search
     })) return true; // found
     
     return false; // not found
@@ -154,7 +159,7 @@ export const isOverflowed = (element: Element): boolean => {
         (scrollHeight > clientHeight) // vert scrollbar detected
     ) {
         return true;
-    }
+    } // if
     
     
     
@@ -185,7 +190,7 @@ export const isOverflowed = (element: Element): boolean => {
     
     
     
-    return hasOverflowedDescendant(minLeft, minTop, maxRight, maxBottom, element);
+    return hasOverflowedDescendant(element, minLeft, minTop, maxRight, maxBottom);
     //#endregion handle padding right & bottom
 };
 
@@ -197,7 +202,7 @@ export interface ResponsiveOptions {
     horzResponsive? : boolean
     vertResponsive? : boolean
 }
-export const useResponsive = (elmRefs: SingleOrArray<React.RefObject<Element>|null>, options: ResponsiveOptions = {}, resizeCallback: () => void) => {
+export const useResponsive = (resizingElementRefs: SingleOrArray<React.RefObject<Element> | null>, options: ResponsiveOptions = {}, responsiveCallback: () => void) => {
     // options:
     const {
         horzResponsive = true,
@@ -207,53 +212,56 @@ export const useResponsive = (elmRefs: SingleOrArray<React.RefObject<Element>|nu
     
     
     // states:
-    const prevSizes = useRef<(number | null)[]|undefined>(undefined);
+    const prevSizes = useRef<(number|null)[] | undefined>(undefined); // initial sizes is unknown (undefined) because the DOM is not already mounted
     
     
     
     // dom effects:
     useIsomorphicLayoutEffect(() => {
         // setups:
-        const childrenRefs = [elmRefs].flat().map((elmRef) => elmRef?.current ?? null);
+        const resizingElements = [resizingElementRefs].flat().map((elmRef) => elmRef?.current ?? null);
         
         const handleResize = () => {
             const overflowableChildren = (
-                childrenRefs
-                .map((child) => (child && isOverflowable(child) && child) || null)
+                resizingElements
+                .map((element) => (element && isOverflowable(element) && element) || null)
             );
-            const trackWidths  = horzResponsive ? (
+            const currentWidths  = horzResponsive ? (
                 overflowableChildren
-                .map((child) => child && child.clientWidth)
+                .map((element) => element && element.clientWidth)
             ) : [];
-            const trackHeights = vertResponsive ? (
+            const currentHeights = vertResponsive ? (
                 overflowableChildren
-                .map((child) => child && child.clientHeight)
+                .map((element) => element && element.clientHeight)
             ) : [];
-            const trackSizes   = [...trackWidths, ...trackHeights];
+            const currentSizes   = [...currentWidths, ...currentHeights];
             
+            
+            
+            // watch for changes by comparing currentSizes vs oldSizes:
             const oldSizes = prevSizes.current;
             if (!((): boolean => {
                 if (oldSizes === undefined) return false; // never assigned => difference detected
                 
-                if (trackSizes.length !== oldSizes.length) return false; // difference detected
+                if (currentSizes.length !== oldSizes.length) return false; // difference detected
                 
-                for (let i = 0; i < trackSizes.length; i++) {
-                    if (trackSizes[i] !== oldSizes[i]) return false; // difference detected
+                for (let i = 0; i < currentSizes.length; i++) {
+                    if (currentSizes[i] !== oldSizes[i]) return false; // difference detected
                 } // for
                 
                 return true; // no differences detected
             })()) {
-                prevSizes.current = trackSizes;
+                prevSizes.current = currentSizes; // update changes
                 
-                if (oldSizes !== undefined) { // ever assigned => trigger re-assigned
-                    resizeCallback();
+                if (oldSizes !== undefined) { // only second..third..next update triggers `responsiveCallback`
+                    responsiveCallback();
                 } // if
             } // if
         };
         
         const observer = new ResizeObserver(handleResize);
-        const sizeOptions : ResizeObserverOptions = { box: 'content-box' };
-        childrenRefs.forEach((child) => child && observer.observe(child, sizeOptions));
+        const sizeOptions : ResizeObserverOptions = { box: 'content-box' }; // only watch for client area
+        resizingElements.forEach((element) => element && observer.observe(element, sizeOptions));
         
         
         
@@ -261,7 +269,7 @@ export const useResponsive = (elmRefs: SingleOrArray<React.RefObject<Element>|nu
         return () => {
             observer.disconnect();
         };
-    }, [resizeCallback]); // runs once
+    }, [resizingElementRefs, horzResponsive, vertResponsive, responsiveCallback]); // runs once
 };
 
 
@@ -274,22 +282,23 @@ export interface ResponsiveProviderProps<TFallback>
         ResponsiveOptions
 {
     // responsives:
-    fallbacks       : Fallbacks<TFallback>
+    fallbacks : Fallbacks<TFallback>
+    
     
     // children:
-    children        : React.ReactNode | ((fallback: TFallback) => React.ReactNode)
+    children  : React.ReactNode | ((fallback: TFallback) => React.ReactNode)
 }
 export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFallback>) {
     // rest props:
     const {
         // responsives:
         fallbacks,
-        horzResponsive = true,
-        vertResponsive = false,
+        horzResponsive,
+        vertResponsive,
         
         
         // children:
-        children,
+        children: childrenFn,
     } = props;
     
     
@@ -300,11 +309,11 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
     
     
     // fn props:
-    const maxFallbackIndex  = (fallbacks.length - 1);
-    const currentFallback   = (currentFallbackIndex <= maxFallbackIndex) ? fallbacks[currentFallbackIndex] : fallbacks[maxFallbackIndex];
+    const maxFallbackIndex = (fallbacks.length - 1);
+    const currentFallback  = (currentFallbackIndex <= maxFallbackIndex) ? fallbacks[currentFallbackIndex] : fallbacks[maxFallbackIndex];
     
-    const childrenAbs       = (typeof(children) !== 'function') ? children : children(currentFallback);
-    const childrenWithRefs  = Children.toArray(childrenAbs).map((child) => {
+    const children         = (typeof(childrenFn) !== 'function') ? childrenFn : childrenFn(currentFallback);
+    const childrenWithRefs = Children.toArray(children).map((child) => {
         if (!isValidElement(child)) return {
             child : child,
             ref   : null,
@@ -312,9 +321,9 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
         
         
         
-        const childRef                 = _useRef<HTMLElement>(null);
-        const refName                  = (typeof(child.type) !== 'function') ? 'ref' : 'outerRef';
-        const mutatedChild             = cloneElement(child, {
+        const childRef     = _useRef<HTMLElement>(null);
+        const refName      = (typeof(child.type) !== 'function') ? 'ref' : 'outerRef';
+        const childWithRef = cloneElement(child, {
             [refName]: (elm: HTMLElement) => {
                 setRef((child as any)[refName], elm);
                 
@@ -323,7 +332,7 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
         });
         
         return {
-            child : mutatedChild,
+            child : childWithRef,
             ref   : childRef,
         };
     });
@@ -333,8 +342,8 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
     // dom effects:
     const childrenRefs = childrenWithRefs.map(({ ref }) => ref);
     
-    const triggerRender = useTriggerRender();
-    const resizeCallback = useCallback(() => {
+    const triggerRender      = useTriggerRender();
+    const responsiveCallback = useCallback(() => {
         if (currentFallbackIndex === 0) {
             triggerRender();
         }
@@ -342,7 +351,7 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
             setCurrentFallbackIndex(0);
         } // if
     }, [currentFallbackIndex, triggerRender]);
-    useResponsive(childrenRefs, { horzResponsive, vertResponsive }, resizeCallback);
+    useResponsive(childrenRefs, { horzResponsive, vertResponsive }, responsiveCallback);
     
     useIsomorphicLayoutEffect(() => {
         // conditions:
@@ -350,19 +359,20 @@ export function ResponsiveProvider<TFallback>(props: ResponsiveProviderProps<TFa
         
         
         
-        const hasOverflowed = childrenRefs.some((ref): boolean => {
-            const child = ref?.current;
+        const hasOverflowed = childrenRefs.some((childRef): boolean => {
+            const child = childRef?.current;
             if (!child) return false;
             return isOverflowed(child);
         });
         if (hasOverflowed) {
             setCurrentFallbackIndex(currentFallbackIndex + 1);
         } // if
-    }); // runs on every render & DOM has been updated
+    }, [currentFallbackIndex, maxFallbackIndex, childrenRefs]); // runs on every render & DOM has been updated
     
     
     
     // jsx:
+    console.log('render with fallback: ', currentFallback); // TODO: remove
     return (
         <Context.Provider value={{ currentFallback }}>
             { childrenWithRefs.map(({ child }) => child) }
