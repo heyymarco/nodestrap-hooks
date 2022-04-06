@@ -1288,7 +1288,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
         ?
         <ActionControl<TElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             // semantics:
@@ -1320,7 +1320,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
         :
         <Indicator<TElement>
             // other props:
-            {...props}
+            {...restProps}
             
             
             // semantics:
