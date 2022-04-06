@@ -7,9 +7,6 @@ import {
 }                           from 'react'         // base technology of our nodestrap components
 
 // cssfn:
-import type {
-    PropEx,
-}                           from './css-types'   // ts defs support for cssfn
 import {
     // compositions:
     mainComposition,
@@ -517,36 +514,18 @@ export const useNavbarSheet = createUseSheet(() => [
 
 // configs:
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
-    //#region keyframes
-    const keyframesMenusActive  : PropEx.Keyframes = {
-        from  : {
-            overflowY    : 'hidden',
-            maxBlockSize : 0,
-        },
-        '99%' : {
-            overflowY    : 'hidden',
-            maxBlockSize : '100vh',
-        },
-        to    : {
-            overflowY    : 'unset',
-            maxBlockSize : 'unset',
-        },
-    };
-    const keyframesMenusPassive : PropEx.Keyframes = {
-        from  : keyframesMenusActive.to,
-        '1%'  : keyframesMenusActive['99%'],
-        to    : keyframesMenusActive.from,
-    };
-    //#endregion keyframes
-    
-    
-    
     return {
         //#region positions
         zIndex                    : 1020,
         position                  : 'sticky',
         insetBlockStart           : '0px',
         //#endregion positions
+        
+        
+        
+        //#region backgrounds
+        boxShadow                 : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
+        //#endregion backgrounds
         
         
         
@@ -559,21 +538,12 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
         
         
         //#region spacings
-        paddingInline             : ccssProps.paddingInline, // override to Basic
+        paddingInline             : ccssProps.paddingInline, // override to Container
         paddingBlock              : bcssProps.paddingBlock,  // override to Basic
         
         gapInline                 : bcssProps.paddingInline,
         gapBlock                  : bcssProps.paddingBlock,
         //#endregion spacings
-        
-        
-        
-        //#region animations
-        '@keyframes menusActive'  : keyframesMenusActive,
-        '@keyframes menusPassive' : keyframesMenusPassive,
-        menusAnimActive           : [['300ms', 'ease-out', 'both', keyframesMenusActive ]],
-        menusAnimPassive          : [['300ms', 'ease-out', 'both', keyframesMenusPassive]],
-        //#endregion animations
         
         
         
