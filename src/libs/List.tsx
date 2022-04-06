@@ -1253,6 +1253,18 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     
     
     
+    // rest props:
+    const {
+        // accessibilities:
+        press,
+        
+        // variants:
+        outlined = false,
+        mild     = false,
+    ...restProps} = props;
+    
+    
+    
     // fn props:
     const {
         semanticTag,
@@ -1266,6 +1278,8 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     const tag  = (isDefaultButton ? (props.tag ?? '') : buttonTag );
     const type = (isDefaultButton ?  props.type       : buttonType);
     
+    const pressFn = press ?? ((props.actionCtrl && props.active && !outlined && !mild) || undefined); // if (active (as press) === false) => uncontrolled press
+
     
     
     // jsx:
@@ -1285,10 +1299,12 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             // accessibilities:
             inheritActive={props.inheritActive ?? true} // change default value to `true`
+            press={pressFn}
             
             
             // variants:
-            mild={props.mild ?? false}
+            outlined={outlined}
+            mild={mild}
             
             
             // classes:
@@ -1316,7 +1332,8 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
             
             
             // variants:
-            mild={props.mild ?? false}
+            outlined={outlined}
+            mild={mild}
             
             
             // classes:

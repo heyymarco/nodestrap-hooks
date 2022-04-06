@@ -1,5 +1,4 @@
 top priority:
-<Navbar> <NavbarItem> => active => pressed
 responsive => useTransition on useResponsive
 
 <Modal> increase padding right to replace the missing scrollbar
