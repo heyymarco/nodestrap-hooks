@@ -46,7 +46,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import DropdownListButtonApp    from './apps/DropdownListButtonApp';     // div      dialog|menu (semantic)
 //         import ControlApp                           from './apps/ControlApp';                // div
 //             import ActionControlApp                 from './apps/ActionControlApp';          // div|button|a     button|link (semantic)
-//                 import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
+                import ButtonApp                    from './apps/ButtonApp';                 //     button|a     button|link (semantic)
 //                     import NavButton                from './apps/NavButtonApp';              //     button|a     button|link (semantic)
 //                     import ButtonIconApp            from './apps/ButtonIconApp';             //     button|a     button|link (semantic)
 //                         import CloseButtonApp       from './apps/CloseButtonApp';            //     button|a     button|link (semantic)
@@ -59,7 +59,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
-    import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
+//     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
 //     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 // import JssPluginGlobalApp from './apps/JssPluginGlobalApp';
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <NavbarApp />
+    <ButtonApp />
     ,
     document.getElementById('root')
 );

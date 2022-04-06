@@ -48,7 +48,7 @@
 [published] @nodestrap/icon
 [published] @nodestrap/label
 [published] @nodestrap/masonry
-[published] @nodestrap/button
+[modified ] @nodestrap/button
 [published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button

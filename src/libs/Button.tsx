@@ -449,6 +449,12 @@ export const useSemanticButton = <TElement extends HTMLElement = HTMLElement>(pr
 
 
 
+// defaults:
+const defaultOutlined = false;
+const defaultMild     = false;
+
+
+
 // react components:
 
 export interface ButtonProps
@@ -484,8 +490,11 @@ export function Button(props: ButtonProps) {
     const {
         // accessibilities:
         label,
+        press,
         
-        active : activeAsPress, // aliasing active to press
+        // variants:
+        outlined = defaultOutlined,
+        mild     = defaultMild,
     ...restProps} = props;
     
     
@@ -498,6 +507,8 @@ export function Button(props: ButtonProps) {
         tag,
         type,
     } = useSemanticButton(props);
+    
+    const pressFn = press ?? ((!!props.active && !outlined && !mild) || undefined); // if (active (as press) === false) => uncontrolled press
     
     
     
@@ -518,11 +529,12 @@ export function Button(props: ButtonProps) {
             
             // accessibilities:
             enabled={props.enabled ?? !(props.disabled ?? false)}
-            press={props.press ?? (activeAsPress || undefined)} // if (activeAsPress === false) => uncontrolled press
+            press={pressFn}
             
             
             // variants:
-            mild={props.mild ?? false}
+            outlined={outlined}
+            mild={mild}
             
             
             // classes:
