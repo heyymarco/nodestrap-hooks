@@ -1288,7 +1288,7 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
     const tag  = (isDefaultButton ? (props.tag ?? '') : buttonTag );
     const type = (isDefaultButton ?  props.type       : buttonType);
     
-    const pressFn = press ?? ((actionCtrl && props.active && !outlined && !mild) || undefined); // if (active (as press) === false) => uncontrolled press
+    const pressFn = press ?? ((actionCtrl && !!props.active && !outlined && !mild) || undefined); // if (active (as press) === false) => uncontrolled press
 
     
     
