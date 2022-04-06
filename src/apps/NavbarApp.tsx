@@ -49,7 +49,7 @@ function App() {
 				theme={theme} size={size} gradient={enableGrad}
 				outlined={outlined} mild={mild}
 
-				enabled={enabled}
+				// enabled={enabled}
 				
 				// defaultActive={true}
 				active={active}

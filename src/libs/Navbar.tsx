@@ -621,8 +621,8 @@ export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
 
 export interface NavbarProps<TElement extends HTMLElement = HTMLElement>
     extends
-        IndicatorProps<TElement>,
-        TogglerActiveProps
+        Omit<IndicatorProps<TElement>, 'enabled'>,
+        Omit<TogglerActiveProps, 'enabled'>
 {
     // states:
     compact?  : boolean
@@ -683,7 +683,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         
         
         // <Indicator> states:
-        enabled,
+        // enabled, // not supported yet
         inheritEnabled,
         readOnly,
         inheritReadOnly,
@@ -877,12 +877,17 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         />
     );
     const defaultListProps : ListProps = {
+        // semantics:
+        semanticTag  : ['ul', 'ol'],
+        semanticRole : 'list',
+        
+        
         // styles:
-        listStyle  : 'flat',
+        listStyle    : 'flat',
         
         
         // behaviors:
-        actionCtrl : true,
+        actionCtrl   : true,
         
         
         // events:
@@ -919,7 +924,7 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
         
         
         // <Indicator> states:
-        enabled         : enabled,
+        // enabled         : enabled, // not supported yet
         inheritEnabled  : inheritEnabled,
         readOnly        : readOnly,
         inheritReadOnly : inheritReadOnly,
@@ -941,10 +946,6 @@ export function Navbar<TElement extends HTMLElement = HTMLElement>(props: Navbar
             // semantics:
             semanticTag ={props.semanticTag  ?? 'nav'       }
             semanticRole={props.semanticRole ?? 'navigation'}
-            
-            
-            // accessibilities:
-            active={isActive}
             
             
             // variants:
