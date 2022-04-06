@@ -1269,8 +1269,8 @@ export function ListItem<TElement extends HTMLElement = HTMLElement>(props: List
         actionCtrl = defaultActionCtrl,
         
         // variants:
-        outlined   = defaultOutlined,
-        mild       = defaultMild,
+        outlined   = false, // the default value at <List> level, not at <ListItem>
+        mild       = false, // the default value at <List> level, not at <ListItem>
     ...restProps} = props;
     
     
@@ -1414,12 +1414,12 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
     // rest props:
     const {
         // behaviors:
-        actionCtrl = defaultActionCtrl,
+        actionCtrl = undefined,       // the default <ListItem>'s actionCtrl value, if not assigned
         
         
         // variants:
-        outlined   = defaultOutlined,
-        mild       = defaultMild,
+        outlined   = defaultOutlined, // if `true` => force apply to <ListItem>s, otherwise independent by <ListItem>s
+        mild       = defaultMild,     // if `true` => force apply to <ListItem>s, otherwise independent by <ListItem>s
         
         
         // children:
@@ -1495,12 +1495,12 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                                 
                                 
                                 // behaviors:
-                                actionCtrl={child.props.actionCtrl ?? actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
+                                actionCtrl={child.props.actionCtrl ?? actionCtrl}          // the default <ListItem>'s actionCtrl value, if not assigned
                                 
                                 
                                 // variants:
-                                outlined={child.props.outlined ?? outlined}
-                                mild    ={child.props.mild     ?? mild    }
+                                outlined={(outlined || undefined) ?? child.props.outlined} // if `true` => force apply to <ListItem>s, otherwise independent by <ListItem>s
+                                mild    ={(mild     || undefined) ?? child.props.mild    } // if `true` => force apply to <ListItem>s, otherwise independent by <ListItem>s
                                 
                                 
                                 // events:
@@ -1515,12 +1515,12 @@ export function List<TElement extends HTMLElement = HTMLElement>(props: ListProp
                             :
                             <ListItem
                                 // behaviors:
-                                actionCtrl={actionCtrl} // the default value of [actionCtrl] is belong to List's [actionCtrl]
+                                actionCtrl={actionCtrl}            // the default <ListItem>'s actionCtrl value, if not assigned
                                 
                                 
                                 // variants:
-                                outlined={outlined}
-                                mild    ={mild    }
+                                outlined={(outlined || undefined)} // if `true` => force apply to <ListItem>s, otherwise independent by <ListItem>s
+                                mild    ={(mild     || undefined)} // if `true` => force apply to <ListItem>s, otherwise independent by <ListItem>s
                                 
                                 
                                 // events:
