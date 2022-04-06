@@ -1,4 +1,5 @@
 top priority:
+<Navbar> => logo element must be exist, even if empty <div>
 responsive => useTransition on useResponsive
 
 <Modal> increase padding right to replace the missing scrollbar
