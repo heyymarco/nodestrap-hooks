@@ -48,7 +48,7 @@
 [published] @nodestrap/icon
 [published] @nodestrap/label
 [published] @nodestrap/masonry
-[modified ] @nodestrap/button
+[published] @nodestrap/button
 [published] @nodestrap/nav-button
 [published] @nodestrap/button-icon
 [published] @nodestrap/close-button
@@ -60,11 +60,11 @@
 [published] @nodestrap/toggler-menu-button
 
 // layouts:
-[modified ] @nodestrap/list
+[published] @nodestrap/list
 [published] @nodestrap/card
 
 // statuses:
-[modified ] @nodestrap/popup
+[published] @nodestrap/popup
 [published] @nodestrap/badge
 [published] @nodestrap/busy
 
@@ -86,7 +86,7 @@ notifications:
 [published] @nodestrap/accordion
 [published] @nodestrap/group
 [published] @nodestrap/carousel
-[modified ] @nodestrap/navbar
+[published] @nodestrap/navbar
 
 // dialogs:
 [published] @nodestrap/modal
