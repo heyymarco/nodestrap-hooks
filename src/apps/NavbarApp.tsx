@@ -16,6 +16,7 @@ import Content from '../libs/Content';
 // import ButtonIcon   from '../libs/ButtonIcon';
 import { Navbar } from '../libs/Navbar';
 import { Nav, NavItem } from '../libs/Nav';
+import { ActionControl } from '../libs/ActionControl';
 
 
 
@@ -57,7 +58,7 @@ function App() {
 
 				compact={compact}
 
-				logo={hasLogo && <img src="/logo.png" alt="" style={{height: '30px'}}  />}
+				logo={hasLogo && <ActionControl nude={true}><img src="/logo.png" alt="" style={{height: '30px'}} /></ActionControl>}
 				// toggler={<ButtonIcon icon='close'>Close</ButtonIcon>}
 			>{(compact) =>
 				<Nav orientation={compact ? 'block' : 'inline'}>

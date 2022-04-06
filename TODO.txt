@@ -52,6 +52,5 @@ fix focus-visible
 
 
 stucked:
-Navbar => use List
-[stucked] fix overflow detection Navbar padding-end
+[stucked] <Navbar> => disabled => disabled all
 [stucked] List:variant_tab => move up tab border radius from ListItem to Wrapper
