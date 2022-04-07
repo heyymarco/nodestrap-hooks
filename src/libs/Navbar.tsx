@@ -127,9 +127,9 @@ import {
 const wrapperElm = '.wrapper'
 const logoElm    = '.logo'
 const togglerElm = '.toggler'
-const menusElm   = '.menus' // .menus
-const listElm    = '*'      // ------ > .list
-const menuElm    = '*>*'    // -------------- > .wrapper > .listItem
+const menusElm   = '.menus'     // .menus
+const listElm    = ['ul', 'ol'] // ------ > .list
+const menuElm    = 'li>*'       // -------------- > .wrapper > .listItem
 
 export const usesWrapperLayout = () => {
     // dependencies:
@@ -270,11 +270,6 @@ export const usesListLayout = () => {
 
 export const usesMenuLayout = () => {
     return style({
-        // // sizes:
-        // flex : [[0, 1, 'auto']], // ungrowable, shrinkable (if menu allows wrap), initial from it's width
-        
-        
-        
         // customize:
         ...usesGeneralProps(usesPrefixedProps(cssProps, 'menu')), // apply general cssProps starting with menu***
     });
