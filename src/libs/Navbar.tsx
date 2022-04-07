@@ -187,22 +187,12 @@ export const usesSecondaryLayout = () => {
 };
 export const usesLogoLayout = () => {
     return style({
-        // layouts:
-        gridArea       : '1 / -3', // place at the same `menus`' row / place at the 3rd column from the right (negative columns are placed after all positive ones was placed)
-        
-        
-        
         // customize:
         ...usesGeneralProps(usesPrefixedProps(cssProps, 'logo')), // apply general cssProps starting with logo***
     });
 };
 export const usesTogglerLayout = () => {
     return style({
-        // layouts:
-        gridArea       : '1 / 2', // place at the same `menus`' row / place at the 2nd column from the left
-        
-        
-        
         // customize:
         ...usesGeneralProps(usesPrefixedProps(cssProps, 'toggler')), // apply general cssProps starting with toggler***
     });
@@ -211,7 +201,6 @@ export const usesTogglerLayout = () => {
 export const usesMenusLayout = () => {
     return style({
         // layouts:
-        gridArea       : 'menus',   // place at the defined `menus` area
         display        : 'grid',
         
         
@@ -243,11 +232,6 @@ export const usesMenusLayout = () => {
 };
 export const usesMenusCompactLayout = () => {
     return style({
-        // layouts:
-        gridArea       : '-1 / -3 / -1 / 3', // place at the 1st column from the bottom / place start from the 3rd column from the right to 3rd column from the left (negative columns are placed after all positive ones was placed)
-        
-        
-        
         // backgrounds:
         backg          : 'inherit', // supports for floating menus's background
         
@@ -516,56 +500,76 @@ export const useNavbarSheet = createUseSheet(() => [
 export const [cssProps, cssDecls, cssVals, cssConfig] = createCssConfig(() => {
     return {
         //#region positions
-        zIndex                    : 1020,
-        position                  : 'sticky',
-        insetBlockStart           : '0px',
+        zIndex          : 1020,
+        position        : 'sticky',
+        insetBlockStart : '0px',
         //#endregion positions
         
         
         
         //#region backgrounds
-        boxShadow                 : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
+        boxShadow : [[0, 0, '10px', 'rgba(0,0,0,0.5)']],
         //#endregion backgrounds
         
         
         
         //#region borders
-        borderInline              : 'none',
-        borderBlockStart          : 'none',
-        borderRadius              : 0,
+        borderInline     : 'none',
+        borderBlockStart : 'none',
+        borderRadius     : 0,
         //#endregion borders
         
         
         
         //#region spacings
-        paddingInline             : ccssProps.paddingInline, // override to Container
-        paddingBlock              : bcssProps.paddingBlock,  // override to Basic
+        paddingInline : ccssProps.paddingInline, // override to Container
+        paddingBlock  : bcssProps.paddingBlock,  // override to Basic
         
-        gapInline                 : bcssProps.paddingInline,
-        gapBlock                  : bcssProps.paddingBlock,
+        gapInline     : bcssProps.paddingInline,
+        gapBlock      : bcssProps.paddingBlock,
         //#endregion spacings
         
         
         
-        // menus:
+        //#region menus
+        menusGridAreaFull        : 'menus',   // place at the defined `menus` area
+        menusGridAreaCompact     : '-1 / -3 / -1 / 3', // place at the 1st column from the bottom / place start from the 3rd column from the right to 3rd column from the left (negative columns are placed after all positive ones was placed)
+        
         // at full mode, cancel-out Navbar's paddingBlock with negative margin:
-        menusMarginBlockFull      : [['calc(0px -', bcssProps.paddingBlock,  ')']],
+        menusMarginBlockFull     : [['calc(0px -', bcssProps.paddingBlock,  ')']],
         
         // at compact mode, cancel-out Navbar's paddingInline with negative margin:
-        menusMarginInlineCompact  : [['calc(0px -', ccssProps.paddingInline, ')']],
+        menusMarginInlineCompact : [['calc(0px -', ccssProps.paddingInline, ')']],
+        //#endregion menus
         
         
         
-        // list:
-        listJustifySelfFull       : 'end',
+        //#region list
+        listJustifySelfFull : 'end',
+        //#endregion list
         
-        // menu:
-        menuDisplay               : 'flex',
-        menuFlexDirection         : 'column',
-        menuJustifyContent        : 'center',
-        menuAlignItems            : 'center',
-        menuWhiteSpace            : 'nowrap',
-        menuTextAlign             : 'center',
+        
+        
+        //#region menu
+        menuDisplay        : 'flex',
+        menuFlexDirection  : 'column',
+        menuJustifyContent : 'center',
+        menuAlignItems     : 'center',
+        menuWhiteSpace     : 'nowrap',
+        menuTextAlign      : 'center',
+        //#endregion menu
+        
+        
+        
+        //#region logo
+        logoGridArea    : '1 / -3', // place at the same `menus`' row / place at the 3rd column from the right (negative columns are placed after all positive ones was placed)
+        //#endregion logo
+        
+        
+        
+        //#region toggler
+        togglerGridArea : '1 / 2', // place at the same `menus`' row / place at the 2nd column from the left
+        //#endregion toggler
         
         
         
