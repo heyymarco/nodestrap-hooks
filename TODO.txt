@@ -1,6 +1,4 @@
 top priority:
-<Navbar> => logo element must be exist, even if empty <div>
-<Navbar> => .toggler should NOT part of .wrapper
 responsive => useTransition on useResponsive
 
 <Modal> increase padding right to replace the missing scrollbar
