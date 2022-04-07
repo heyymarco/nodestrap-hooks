@@ -86,7 +86,7 @@ notifications:
 [published] @nodestrap/accordion
 [published] @nodestrap/group
 [published] @nodestrap/carousel
-[modified ] @nodestrap/navbar
+[published] @nodestrap/navbar
 
 // dialogs:
 [published] @nodestrap/modal
