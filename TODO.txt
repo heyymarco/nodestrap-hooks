@@ -36,6 +36,7 @@ add client side Form for Remix
 
 
 medium priority:
+<Basic> => tweak up useExcitedState()
 React.cloneElement => cloneElement
 fix Carousel fast clicking
 Media => for profile image, video, static images, gifs, svgs, etc
