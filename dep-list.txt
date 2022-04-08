@@ -23,7 +23,7 @@
 [published] @nodestrap/utilities
 [published] @nodestrap/accessibilities
 [published] @nodestrap/validations
-[modified ] @nodestrap/dimensions
+[published] @nodestrap/dimensions
 [published] @nodestrap/responsive
 
 // supports:
