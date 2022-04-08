@@ -13,7 +13,7 @@ import reportWebVitals from './reportWebVitals';
 // import TypoApp from './apps/TypoApp';
 // import BreakpointsApp from './apps/BreakpointsApp';
 // import ResponsiveApp from './apps/ResponsiveApp';
-// import DimensionApp from './apps/DimensionApp';
+import DimensionApp from './apps/DimensionApp';
 
 
 // import VisuallyHidden                               from './apps/VisuallyHidden';            // span
@@ -59,7 +59,7 @@ import reportWebVitals from './reportWebVitals';
 //                     import CheckApp                 from './apps/CheckApp';                  // span|button     checkbox|button (semantic)
 //                         import RadioApp             from './apps/RadioApp';                  // span|button     radio   |button (semantic)
 //                         import TogglerMenuButtonApp from './apps/TogglerMenuButtonApp';      // span|button     checkbox|button (semantic)
-    import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
+//     import NavbarApp                                from './apps/NavbarApp';                 // nav      navigation (semantic)
 //     import ProgressApp                              from './apps/ProgressApp';               // div      group (semantic)
 
 // import JssPluginGlobalApp from './apps/JssPluginGlobalApp';
@@ -71,7 +71,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
     // <React.StrictMode>
     // </React.StrictMode>
-    <NavbarApp />
+    <DimensionApp />
     ,
     document.getElementById('root')
 );
