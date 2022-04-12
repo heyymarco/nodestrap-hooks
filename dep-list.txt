@@ -1,94 +1,94 @@
-[undocumented] [published] @cssfn/types
-[undocumented] [published] @cssfn/jss-plugin-extend
-[undocumented] [published] @cssfn/jss-plugin-short
-[undocumented] [published] @cssfn/jss-plugin-camel-case
-[undocumented] [published] @cssfn/jss-plugin-vendor
-[undocumented] [published] @cssfn/css-selector
-[undocumented] [published] @cssfn/jss-plugin-nested
-[undocumented] [published] @cssfn/css-types
-[undocumented] [published] @cssfn/css-var
-[undocumented] [published] @cssfn/cssfn
-[undocumented] [published] @cssfn/css-config
-[undocumented] [published] @cssfn/react-cssfn
+[upgraded] [undocumented] [published] @cssfn/types
+[obsolete] [undocumented] [published] @cssfn/jss-plugin-extend
+[obsolete] [undocumented] [published] @cssfn/jss-plugin-short
+[obsolete] [undocumented] [published] @cssfn/jss-plugin-camel-case
+[obsolete] [undocumented] [published] @cssfn/jss-plugin-vendor
+[upgraded] [undocumented] [published] @cssfn/css-selector
+[obsolete] [undocumented] [published] @cssfn/jss-plugin-nested
+[obsolete] [undocumented] [published] @cssfn/css-types
+[obsolete] [undocumented] [published] @cssfn/css-var
+[obsolete] [undocumented] [published] @cssfn/cssfn
+[obsolete] [undocumented] [published] @cssfn/css-config
+[obsolete] [undocumented] [published] @cssfn/react-cssfn
 
-[documented  ] [published] @nodestrap/colors
-[documented  ] [published] @nodestrap/borders
-[documented  ] [published] @nodestrap/spacers
-[documented  ] [published] @nodestrap/stripouts
-[documented  ] [published] @nodestrap/breakpoints
-[documented  ] [published] @nodestrap/layouts
-[documented  ] [published] @nodestrap/typos
+[obsolete] [documented  ] [published] @nodestrap/colors
+[obsolete] [documented  ] [published] @nodestrap/borders
+[obsolete] [documented  ] [published] @nodestrap/spacers
+[obsolete] [documented  ] [published] @nodestrap/stripouts
+[obsolete] [documented  ] [published] @nodestrap/breakpoints
+[obsolete] [documented  ] [published] @nodestrap/layouts
+[obsolete] [documented  ] [published] @nodestrap/typos
 
-[documented  ] [published] @nodestrap/hooks
-[documented  ] [published] @nodestrap/utilities
-[documented  ] [published] @nodestrap/accessibilities
-[documented  ] [published] @nodestrap/validations
-[undocumented] [published] @nodestrap/dimensions
-[undocumented] [published] @nodestrap/responsive
+[obsolete] [documented  ] [published] @nodestrap/hooks
+[obsolete] [documented  ] [published] @nodestrap/utilities
+[obsolete] [documented  ] [published] @nodestrap/accessibilities
+[obsolete] [documented  ] [published] @nodestrap/validations
+[obsolete] [undocumented] [published] @nodestrap/dimensions
+[obsolete] [undocumented] [published] @nodestrap/responsive
 
 // supports:
-[undocumented] [published] @nodestrap/react-router-link
+[obsolete] [undocumented] [published] @nodestrap/react-router-link
 
 // abstracts:
-[documented  ] [published] @nodestrap/element
-[documented  ] [published] @nodestrap/basic
-[documented  ] [published] @nodestrap/indicator
-[documented  ] [published] @nodestrap/control
-[documented  ] [published] @nodestrap/action-control
-[documented  ] [published] @nodestrap/editable-control   *icon
-[documented  ] [published] @nodestrap/editable-text-control
-[documented  ] [published] @nodestrap/editable-action-control
+[obsolete] [documented  ] [published] @nodestrap/element
+[obsolete] [documented  ] [published] @nodestrap/basic
+[obsolete] [documented  ] [published] @nodestrap/indicator
+[obsolete] [documented  ] [published] @nodestrap/control
+[obsolete] [documented  ] [published] @nodestrap/action-control
+[obsolete] [documented  ] [published] @nodestrap/editable-control   *icon
+[obsolete] [documented  ] [published] @nodestrap/editable-text-control
+[obsolete] [documented  ] [published] @nodestrap/editable-action-control
 
 // contents:
-[documented  ] [published] @nodestrap/container
-[documented  ] [published] @nodestrap/content   *button
+[obsolete] [documented  ] [published] @nodestrap/container
+[obsolete] [documented  ] [published] @nodestrap/content   *button
 
 // simple components:
-[documented  ] [published] @nodestrap/visually-hidden
-[documented  ] [published] @nodestrap/icon
-[documented  ] [published] @nodestrap/label
-[documented  ] [published] @nodestrap/masonry
-[documented  ] [published] @nodestrap/button
-[documented  ] [published] @nodestrap/nav-button
-[documented  ] [published] @nodestrap/button-icon
-[documented  ] [published] @nodestrap/close-button
-[documented  ] [published] @nodestrap/form
-[documented  ] [published] @nodestrap/input
-[documented  ] [published] @nodestrap/range
-[documented  ] [published] @nodestrap/check
-[documented  ] [published] @nodestrap/radio
-[documented  ] [published] @nodestrap/toggler-menu-button
+[obsolete] [documented  ] [published] @nodestrap/visually-hidden
+[obsolete] [documented  ] [published] @nodestrap/icon
+[obsolete] [documented  ] [published] @nodestrap/label
+[obsolete] [documented  ] [published] @nodestrap/masonry
+[obsolete] [documented  ] [published] @nodestrap/button
+[obsolete] [documented  ] [published] @nodestrap/nav-button
+[obsolete] [documented  ] [published] @nodestrap/button-icon
+[obsolete] [documented  ] [published] @nodestrap/close-button
+[obsolete] [documented  ] [published] @nodestrap/form
+[obsolete] [documented  ] [published] @nodestrap/input
+[obsolete] [documented  ] [published] @nodestrap/range
+[obsolete] [documented  ] [published] @nodestrap/check
+[obsolete] [documented  ] [published] @nodestrap/radio
+[obsolete] [documented  ] [published] @nodestrap/toggler-menu-button
 
 // layouts:
-[documented  ] [published] @nodestrap/list
-[documented  ] [published] @nodestrap/card
+[obsolete] [documented  ] [published] @nodestrap/list
+[obsolete] [documented  ] [published] @nodestrap/card
 
 // statuses:
-[documented  ] [published] @nodestrap/popup
-[documented  ] [published] @nodestrap/badge
-[documented  ] [published] @nodestrap/busy
+[obsolete] [documented  ] [published] @nodestrap/popup
+[obsolete] [documented  ] [published] @nodestrap/badge
+[obsolete] [documented  ] [published] @nodestrap/busy
 
 notifications:
-[documented  ] [published] @nodestrap/alert
-[documented  ] [published] @nodestrap/tooltip
+[obsolete] [documented  ] [published] @nodestrap/alert
+[obsolete] [documented  ] [published] @nodestrap/tooltip
 
 // menus:
-[documented  ] [published] @nodestrap/collapse
-[documented  ] [published] @nodestrap/dropdown
-[documented  ] [published] @nodestrap/dropdown-button
-[documented  ] [published] @nodestrap/dropdown-list
-[documented  ] [published] @nodestrap/dropdown-list-button
+[obsolete] [documented  ] [published] @nodestrap/collapse
+[obsolete] [documented  ] [published] @nodestrap/dropdown
+[obsolete] [documented  ] [published] @nodestrap/dropdown-button
+[obsolete] [documented  ] [published] @nodestrap/dropdown-list
+[obsolete] [documented  ] [published] @nodestrap/dropdown-list-button
 
 // composite components:
-[documented  ] [published] @nodestrap/progress
-[documented  ] [published] @nodestrap/nav
-[documented  ] [published] @nodestrap/navscroll
-[documented  ] [published] @nodestrap/accordion
-[documented  ] [published] @nodestrap/group
-[documented  ] [published] @nodestrap/carousel
-[documented  ] [published] @nodestrap/navbar
+[obsolete] [documented  ] [published] @nodestrap/progress
+[obsolete] [documented  ] [published] @nodestrap/nav
+[obsolete] [documented  ] [published] @nodestrap/navscroll
+[obsolete] [documented  ] [published] @nodestrap/accordion
+[obsolete] [documented  ] [published] @nodestrap/group
+[obsolete] [documented  ] [published] @nodestrap/carousel
+[obsolete] [documented  ] [published] @nodestrap/navbar
 
 // dialogs:
-[documented  ] [published] @nodestrap/modal
-[documented  ] [published] @nodestrap/modal-card
-[documented  ] [published] @nodestrap/modal-side
+[obsolete] [documented  ] [published] @nodestrap/modal
+[obsolete] [documented  ] [published] @nodestrap/modal-card
+[obsolete] [documented  ] [published] @nodestrap/modal-side
