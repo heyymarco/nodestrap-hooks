@@ -117,15 +117,15 @@ export type Style                              = CssProps & Rule
 export type StyleCollection                    = ProductOrFactoryOrDeepArray<OptionalOrFalse<Style>>
 
 export type ClassName                          = string        // not a really string: [A-Z_a-z-]+
-export type RealClass                          = (`.${ClassName}` & {})
-export type PseudoClass                        = (`:${ClassName}` & {})
-export type Class                              = RealClass|PseudoClass
+// export type RealClass                          = (`.${ClassName}` & {})
+// export type PseudoClass                        = (`:${ClassName}` & {})
+// export type Class                              = RealClass|PseudoClass
 export type ClassEntry
     <TClassName extends ClassName = ClassName> = readonly [TClassName, StyleCollection]
 export type ClassList
     <TClassName extends ClassName = ClassName> = ClassEntry<TClassName>[]
 
-export type OptionalString                     = OptionalOrFalse<string>
+// export type OptionalString                     = OptionalOrFalse<string>
 
 export type Selector                           = (string & {})
 export type SelectorCollection                 = SingleOrDeepArray<OptionalOrFalse<Selector>>

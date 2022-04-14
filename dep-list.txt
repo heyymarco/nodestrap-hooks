@@ -5,9 +5,9 @@
 [obsolete] [undocumented] [published] @cssfn/jss-plugin-vendor
 [upgraded] [undocumented] [published] @cssfn/css-selector
 [obsolete] [undocumented] [published] @cssfn/jss-plugin-nested
-[obsolete] [undocumented] [published] @cssfn/css-types
+[obsolete] [undocumented] [modified ] @cssfn/css-types
 [obsolete] [undocumented] [published] @cssfn/css-var
-[obsolete] [undocumented] [published] @cssfn/cssfn
+[obsolete] [undocumented] [modified ] @cssfn/cssfn
 [obsolete] [undocumented] [published] @cssfn/css-config
 [obsolete] [undocumented] [published] @cssfn/react-cssfn
 
