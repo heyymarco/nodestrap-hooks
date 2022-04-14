@@ -6,7 +6,7 @@
 [upgraded] [undocumented] [published] @cssfn/css-selector
 [obsolete] [undocumented] [published] @cssfn/jss-plugin-nested
 [upgraded] [undocumented] [modified ] @cssfn/css-types
-[obsolete] [undocumented] [published] @cssfn/css-var
+[upgraded] [undocumented] [published] @cssfn/css-var
 [obsolete] [undocumented] [modified ] @cssfn/cssfn
 [obsolete] [undocumented] [modified ] @cssfn/css-config
 [obsolete] [undocumented] [published] @cssfn/react-cssfn
