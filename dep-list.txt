@@ -8,7 +8,7 @@
 [obsolete] [undocumented] [modified ] @cssfn/css-types
 [obsolete] [undocumented] [published] @cssfn/css-var
 [obsolete] [undocumented] [modified ] @cssfn/cssfn
-[obsolete] [undocumented] [published] @cssfn/css-config
+[obsolete] [undocumented] [modified ] @cssfn/css-config
 [obsolete] [undocumented] [published] @cssfn/react-cssfn
 
 [obsolete] [documented  ] [published] @nodestrap/colors

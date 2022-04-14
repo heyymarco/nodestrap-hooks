@@ -13,7 +13,6 @@ import type {
 import {
     // general types:
     StyleSheet,
-    CssValue,
     CssProps,
     
     
@@ -115,7 +114,7 @@ const settingsHandler: ProxyHandler<CssConfigSettings> = {
 
 
 
-export type CssConfigProps = { [PropName: string]: CssValue }
+export interface CssConfigProps { }
 /**
  * Create, read, update, and delete configurations using *css variables* (css custom properties) stored at `:root` level (default) or at the desired `rule`.  
  * The config's values can be *accessed directly* in CSS and DOM.
@@ -561,7 +560,7 @@ const createCssConfig = <TProps extends CssConfigProps>(initialProps: ProductOrF
         // create a new styleSheet & attach:
         genStyleSheet = createSheet([
             globalDef([
-                rule(settings.rule, genProps),
+                rule(settings.rule, genProps as {}),
                 Object.entries(genKeyframes).map(([name, value]) => keyframes(name, value)),
             ]),
         ])
