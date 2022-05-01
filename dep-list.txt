@@ -1,8 +1,8 @@
 [upgraded] [undocumented] [published] @cssfn/types
 [upgraded] [undocumented] [published] @cssfn/jss-plugin-extend
-[obsolete] [undocumented] [published] @cssfn/jss-plugin-short
+[upgraded] [undocumented] [published] @cssfn/jss-plugin-short
 [upgraded] [undocumented] [published] @cssfn/jss-plugin-camel-case
-[obsolete] [undocumented] [published] @cssfn/jss-plugin-vendor
+[upgraded] [undocumented] [published] @cssfn/jss-plugin-vendor
 [upgraded] [undocumented] [published] @cssfn/css-selector
 [upgraded] [undocumented] [published] @cssfn/jss-plugin-nested
 [upgraded] [undocumented] [modified ] @cssfn/css-types
