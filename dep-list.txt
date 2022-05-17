@@ -9,7 +9,7 @@
 [upgraded] [undocumented] [published] @cssfn/css-var
 [upgraded] [undocumented] [modified ] @cssfn/cssfn
 [upgraded] [undocumented] [modified ] @cssfn/css-config
-[obsolete] [undocumented] [published] @cssfn/react-cssfn
+[upgraded] [undocumented] [published] @cssfn/react-cssfn
 
 [obsolete] [documented  ] [published] @nodestrap/colors
 [obsolete] [documented  ] [published] @nodestrap/borders
