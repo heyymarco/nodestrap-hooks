@@ -11,7 +11,7 @@
 [upgraded] [undocumented] [modified ] @cssfn/css-config
 [upgraded] [undocumented] [published] @cssfn/react-cssfn
 
-[obsolete] [documented  ] [published] @nodestrap/colors
+[upgraded] [documented  ] [published] @nodestrap/colors
 [obsolete] [documented  ] [published] @nodestrap/borders
 [obsolete] [documented  ] [published] @nodestrap/spacers
 [obsolete] [documented  ] [published] @nodestrap/stripouts
