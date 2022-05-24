@@ -12,7 +12,7 @@
 [upgraded] [undocumented] [published] @cssfn/react-cssfn
 
 [upgraded] [documented  ] [published] @nodestrap/colors
-[obsolete] [documented  ] [published] @nodestrap/borders
+[upgraded] [documented  ] [published] @nodestrap/borders
 [obsolete] [documented  ] [published] @nodestrap/spacers
 [obsolete] [documented  ] [published] @nodestrap/stripouts
 [obsolete] [documented  ] [published] @nodestrap/breakpoints
