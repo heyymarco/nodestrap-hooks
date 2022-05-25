@@ -14,7 +14,7 @@
 [upgraded] [documented  ] [published] @nodestrap/colors
 [upgraded] [documented  ] [published] @nodestrap/borders
 [upgraded] [documented  ] [published] @nodestrap/spacers
-[obsolete] [documented  ] [published] @nodestrap/stripouts
+[upgraded] [documented  ] [published] @nodestrap/stripouts
 [obsolete] [documented  ] [published] @nodestrap/breakpoints
 [obsolete] [documented  ] [published] @nodestrap/layouts
 [obsolete] [documented  ] [published] @nodestrap/typos
