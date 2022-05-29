@@ -17,7 +17,7 @@
 [upgraded] [documented  ] [published] @nodestrap/stripouts
 [upgraded] [documented  ] [published] @nodestrap/breakpoints
 [upgraded] [documented  ] [published] @nodestrap/layouts
-[obsolete] [documented  ] [published] @nodestrap/typos
+[upgraded] [documented  ] [published] @nodestrap/typos
 
 [obsolete] [documented  ] [published] @nodestrap/hooks
 [obsolete] [documented  ] [published] @nodestrap/utilities
