@@ -19,7 +19,7 @@
 [upgraded] [documented  ] [published] @nodestrap/layouts
 [upgraded] [documented  ] [published] @nodestrap/typos
 
-[obsolete] [documented  ] [published] @nodestrap/hooks
+[upgraded] [documented  ] [published] @nodestrap/hooks
 [obsolete] [documented  ] [published] @nodestrap/utilities
 [obsolete] [documented  ] [published] @nodestrap/accessibilities
 [obsolete] [documented  ] [published] @nodestrap/validations
