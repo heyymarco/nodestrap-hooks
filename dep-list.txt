@@ -20,7 +20,7 @@
 [upgraded] [documented  ] [published] @nodestrap/typos
 
 [upgraded] [documented  ] [published] @nodestrap/hooks
-[obsolete] [documented  ] [published] @nodestrap/utilities
+[upgraded] [documented  ] [published] @nodestrap/utilities
 [obsolete] [documented  ] [published] @nodestrap/accessibilities
 [obsolete] [documented  ] [published] @nodestrap/validations
 [obsolete] [undocumented] [published] @nodestrap/dimensions
