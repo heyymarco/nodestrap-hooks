@@ -21,8 +21,8 @@
 
 [upgraded] [documented  ] [published] @nodestrap/hooks
 [upgraded] [documented  ] [published] @nodestrap/utilities
-[obsolete] [documented  ] [published] @nodestrap/accessibilities
-[obsolete] [documented  ] [published] @nodestrap/validations
+[upgraded] [documented  ] [published] @nodestrap/accessibilities
+[upgraded] [documented  ] [published] @nodestrap/validations
 [obsolete] [undocumented] [published] @nodestrap/dimensions
 [obsolete] [undocumented] [published] @nodestrap/responsive
 
