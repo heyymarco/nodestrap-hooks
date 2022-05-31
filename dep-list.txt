@@ -23,7 +23,7 @@
 [upgraded] [documented  ] [published] @nodestrap/utilities
 [upgraded] [documented  ] [published] @nodestrap/accessibilities
 [upgraded] [documented  ] [published] @nodestrap/validations
-[obsolete] [undocumented] [published] @nodestrap/dimensions
+[upgraded] [undocumented] [published] @nodestrap/dimensions
 [obsolete] [undocumented] [published] @nodestrap/responsive
 
 // supports:
