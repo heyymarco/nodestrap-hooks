@@ -24,7 +24,7 @@
 [upgraded] [documented  ] [published] @nodestrap/accessibilities
 [upgraded] [documented  ] [published] @nodestrap/validations
 [upgraded] [undocumented] [published] @nodestrap/dimensions
-[obsolete] [undocumented] [published] @nodestrap/responsive
+[upgraded] [undocumented] [published] @nodestrap/responsive
 
 // supports:
 [obsolete] [undocumented] [published] @nodestrap/react-router-link
