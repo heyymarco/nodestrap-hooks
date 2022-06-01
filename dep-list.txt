@@ -27,7 +27,7 @@
 [upgraded] [undocumented] [published] @nodestrap/responsive
 
 // supports:
-[obsolete] [undocumented] [published] @nodestrap/react-router-link
+[upgraded] [undocumented] [published] @nodestrap/react-router-link
 
 // abstracts:
 [obsolete] [documented  ] [published] @nodestrap/element
