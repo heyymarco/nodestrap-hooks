@@ -30,7 +30,7 @@
 [upgraded] [undocumented] [published] @nodestrap/react-router-link
 
 // abstracts:
-[obsolete] [documented  ] [published] @nodestrap/element
+[upgraded] [documented  ] [published] @nodestrap/element
 [obsolete] [documented  ] [published] @nodestrap/basic
 [obsolete] [documented  ] [published] @nodestrap/indicator
 [obsolete] [documented  ] [published] @nodestrap/control
