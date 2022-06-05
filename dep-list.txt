@@ -31,7 +31,7 @@
 
 // abstracts:
 [upgraded] [documented  ] [published] @nodestrap/element
-[obsolete] [documented  ] [published] @nodestrap/basic
+[upgraded] [documented  ] [published] @nodestrap/basic
 [obsolete] [documented  ] [published] @nodestrap/indicator
 [obsolete] [documented  ] [published] @nodestrap/control
 [obsolete] [documented  ] [published] @nodestrap/action-control
