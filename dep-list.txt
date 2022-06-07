@@ -33,7 +33,7 @@
 [upgraded] [documented  ] [published] @nodestrap/element
 [upgraded] [documented  ] [published] @nodestrap/basic
 [upgraded] [documented  ] [published] @nodestrap/indicator
-[obsolete] [documented  ] [published] @nodestrap/control
+[upgraded] [documented  ] [published] @nodestrap/control
 [obsolete] [documented  ] [published] @nodestrap/action-control
 [obsolete] [documented  ] [published] @nodestrap/editable-control   *icon
 [obsolete] [documented  ] [published] @nodestrap/editable-text-control
