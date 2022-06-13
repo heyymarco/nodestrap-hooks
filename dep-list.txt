@@ -36,7 +36,7 @@
 [upgraded] [documented  ] [published] @nodestrap/control
 [upgraded] [documented  ] [published] @nodestrap/action-control
 [upgraded] [documented  ] [published] @nodestrap/editable-control   *icon
-[obsolete] [documented  ] [published] @nodestrap/editable-text-control
+[upgraded] [documented  ] [published] @nodestrap/editable-text-control
 [obsolete] [documented  ] [published] @nodestrap/editable-action-control
 
 // contents:
