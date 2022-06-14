@@ -40,7 +40,7 @@
 [upgraded] [documented  ] [published] @nodestrap/editable-action-control
 
 // contents:
-[obsolete] [documented  ] [published] @nodestrap/container
+[upgraded] [documented  ] [published] @nodestrap/container
 [obsolete] [documented  ] [published] @nodestrap/content   *button
 
 // simple components:
