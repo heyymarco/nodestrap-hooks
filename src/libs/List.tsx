@@ -156,7 +156,7 @@ import {
     // selectors:
     selectorIsFirstVisibleChild,
     selectorIsLastVisibleChild,
-    selectorNotfirstVisibleChild,
+    selectorNotFirstVisibleChild,
     
     
     
@@ -984,7 +984,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
             rule('.breadcrumb', {
                 // children:
                 ...children(wrapperElm, {
-                    ...rule(selectorNotfirstVisibleChild, {
+                    ...rule(selectorNotFirstVisibleChild, {
                         ...imports([
                             // colors:
                             iconColor(), // do not import `iconColor()` on pseudo `::before`
@@ -1031,7 +1031,7 @@ export const usesListVariants = (options?: OrientationRuleOptions) => {
                 ...rule(orientationBlockSelector,  { // block
                     // children:
                     ...children(wrapperElm, {
-                        ...rule(selectorNotfirstVisibleChild, {
+                        ...rule(selectorNotFirstVisibleChild, {
                             // children:
                             ...children('::before', {
                                 // overwrites propName = {breadcrumbSeparator}PropName{Block}:
