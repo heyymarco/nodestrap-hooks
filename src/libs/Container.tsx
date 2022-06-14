@@ -101,7 +101,7 @@ import {
 export const selectorIsVisibleChild        : SelectorCollection = ':where(:not(.foreign):not(.overlay))';
 export const selectorIsFirstVisibleChild   : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:first-child, .first-visible-child)';
 export const selectorIsLastVisibleChild    : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:last-child , .last-visible-child )';
-export const selectorNotfirstVisibleChild  : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:not(:first-child):not(.first-visible-child))';
+export const selectorNotFirstVisibleChild  : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:not(:first-child):not(.first-visible-child))';
 export const selectorNotLastVisibleChild   : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:not(:last-child):not(.last-visible-child))';
 export const selectorNotSecondVisibleChild : SelectorCollection = ':where(:not(.foreign):not(.overlay)):where(:not(:nth-child(2)))';
 
@@ -422,7 +422,7 @@ const usesBorderAsSeparator = (block: boolean, options: BorderSeparatorOptions =
         // removes unecessary border radius:
         // although the border stroke was/not removed, it *affects* the children's border radius
         // do not remove border radius at the parent's corners (:first-child & :last-child)
-        ...rule(selectorNotfirstVisibleChild, {
+        ...rule(selectorNotFirstVisibleChild, {
             ...(
                 block
                 ?
