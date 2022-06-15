@@ -48,7 +48,7 @@
 [upgraded] [documented  ] [published] @nodestrap/icon
 [obsolete] [documented  ] [published] @nodestrap/label
 [obsolete] [documented  ] [published] @nodestrap/masonry
-[obsolete] [documented  ] [published] @nodestrap/button
+[upgraded] [documented  ] [published] @nodestrap/button
 [obsolete] [documented  ] [published] @nodestrap/nav-button
 [obsolete] [documented  ] [published] @nodestrap/button-icon
 [obsolete] [documented  ] [published] @nodestrap/close-button
