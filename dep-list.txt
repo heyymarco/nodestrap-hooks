@@ -46,8 +46,7 @@
 // simple components:
 [upgraded] [documented  ] [published] @nodestrap/visually-hidden
 [upgraded] [documented  ] [published] @nodestrap/icon
-[obsolete] [documented  ] [published] @nodestrap/label
-[obsolete] [documented  ] [published] @nodestrap/masonry
+[upgraded] [documented  ] [published] @nodestrap/label
 [upgraded] [documented  ] [published] @nodestrap/button
 [obsolete] [documented  ] [published] @nodestrap/nav-button
 [obsolete] [documented  ] [published] @nodestrap/button-icon
@@ -62,6 +61,7 @@
 // layouts:
 [obsolete] [documented  ] [published] @nodestrap/list
 [obsolete] [documented  ] [published] @nodestrap/card
+[obsolete] [documented  ] [published] @nodestrap/masonry
 
 // statuses:
 [obsolete] [documented  ] [published] @nodestrap/popup
