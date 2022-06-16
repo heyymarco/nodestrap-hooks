@@ -44,7 +44,7 @@
 [upgraded] [documented  ] [published] @nodestrap/content    *button
 
 // simple components:
-[obsolete] [documented  ] [published] @nodestrap/visually-hidden
+[upgraded] [documented  ] [published] @nodestrap/visually-hidden
 [upgraded] [documented  ] [published] @nodestrap/icon
 [obsolete] [documented  ] [published] @nodestrap/label
 [obsolete] [documented  ] [published] @nodestrap/masonry
