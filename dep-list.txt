@@ -35,13 +35,13 @@
 [upgraded] [documented  ] [published] @nodestrap/indicator
 [upgraded] [documented  ] [published] @nodestrap/control
 [upgraded] [documented  ] [published] @nodestrap/action-control
-[upgraded] [documented  ] [published] @nodestrap/editable-control   *icon
-[upgraded] [documented  ] [published] @nodestrap/editable-text-control
+[upgraded] [documented  ] [published] @nodestrap/editable-control
+[upgraded] [documented  ] [published] @nodestrap/editable-text-control   *icon
 [upgraded] [documented  ] [published] @nodestrap/editable-action-control
 
 // contents:
 [upgraded] [documented  ] [published] @nodestrap/container
-[obsolete] [documented  ] [published] @nodestrap/content   *button
+[upgraded] [documented  ] [published] @nodestrap/content    *button
 
 // simple components:
 [obsolete] [documented  ] [published] @nodestrap/visually-hidden
