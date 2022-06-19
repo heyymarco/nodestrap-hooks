@@ -49,7 +49,7 @@
 [upgraded] [documented  ] [published] @nodestrap/label
 [upgraded] [documented  ] [published] @nodestrap/button
 [upgraded] [documented  ] [published] @nodestrap/nav-button
-[obsolete] [documented  ] [published] @nodestrap/button-icon
+[upgraded] [documented  ] [published] @nodestrap/button-icon
 [obsolete] [documented  ] [published] @nodestrap/close-button
 [obsolete] [documented  ] [published] @nodestrap/form
 [obsolete] [documented  ] [published] @nodestrap/input
