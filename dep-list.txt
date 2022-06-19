@@ -50,7 +50,7 @@
 [upgraded] [documented  ] [published] @nodestrap/button
 [upgraded] [documented  ] [published] @nodestrap/nav-button
 [upgraded] [documented  ] [published] @nodestrap/button-icon
-[obsolete] [documented  ] [published] @nodestrap/close-button
+[upgraded] [documented  ] [published] @nodestrap/close-button
 [obsolete] [documented  ] [published] @nodestrap/form
 [obsolete] [documented  ] [published] @nodestrap/input
 [obsolete] [documented  ] [published] @nodestrap/range
