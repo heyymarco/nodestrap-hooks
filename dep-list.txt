@@ -52,7 +52,7 @@
 [upgraded] [documented  ] [published] @nodestrap/button-icon
 [upgraded] [documented  ] [published] @nodestrap/close-button
 [upgraded] [documented  ] [published] @nodestrap/form
-[obsolete] [documented  ] [published] @nodestrap/input
+[upgraded] [documented  ] [published] @nodestrap/input
 [obsolete] [documented  ] [published] @nodestrap/range
 [obsolete] [documented  ] [published] @nodestrap/check
 [obsolete] [documented  ] [published] @nodestrap/radio
