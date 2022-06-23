@@ -53,7 +53,7 @@
 [upgraded] [documented  ] [published] @nodestrap/close-button
 [upgraded] [documented  ] [published] @nodestrap/form
 [upgraded] [documented  ] [published] @nodestrap/input
-[obsolete] [documented  ] [published] @nodestrap/range
+[upgraded] [documented  ] [published] @nodestrap/range
 [obsolete] [documented  ] [published] @nodestrap/check
 [obsolete] [documented  ] [published] @nodestrap/radio
 [obsolete] [documented  ] [published] @nodestrap/toggler-menu-button
