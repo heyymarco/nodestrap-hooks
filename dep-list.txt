@@ -54,7 +54,7 @@
 [upgraded] [documented  ] [published] @nodestrap/form
 [upgraded] [documented  ] [published] @nodestrap/input
 [upgraded] [documented  ] [published] @nodestrap/range
-[obsolete] [documented  ] [published] @nodestrap/check
+[upgraded] [documented  ] [published] @nodestrap/check
 [obsolete] [documented  ] [published] @nodestrap/radio
 [obsolete] [documented  ] [published] @nodestrap/toggler-menu-button
 
