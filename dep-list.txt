@@ -55,7 +55,7 @@
 [upgraded] [documented  ] [published] @nodestrap/input
 [upgraded] [documented  ] [published] @nodestrap/range
 [upgraded] [documented  ] [published] @nodestrap/check
-[obsolete] [documented  ] [published] @nodestrap/radio
+[upgraded] [documented  ] [published] @nodestrap/radio
 [obsolete] [documented  ] [published] @nodestrap/toggler-menu-button
 
 // layouts:
