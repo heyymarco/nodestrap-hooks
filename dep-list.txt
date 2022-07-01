@@ -60,7 +60,7 @@
 
 // layouts:
 [upgraded] [documented  ] [published] @nodestrap/list
-[obsolete] [documented  ] [published] @nodestrap/card
+[upgraded] [documented  ] [published] @nodestrap/card
 [obsolete] [documented  ] [published] @nodestrap/masonry
 
 // statuses:
