@@ -59,7 +59,7 @@
 [upgraded] [documented  ] [published] @nodestrap/toggler-menu-button
 
 // layouts:
-[obsolete] [documented  ] [published] @nodestrap/list
+[upgraded] [documented  ] [published] @nodestrap/list
 [obsolete] [documented  ] [published] @nodestrap/card
 [obsolete] [documented  ] [published] @nodestrap/masonry
 
