@@ -169,7 +169,7 @@ export const usesMasonryLayout = (options?: OrientationRuleOptions) => {
                         * because finding grid's items at the first row is much easier than at the last row
                         * (we don't need to count the number of grid's item)
                         */
-                        marginInlineStart : cssProps.rowGap,
+                        marginInlineStart : cssProps.columnGap,
                     }),
                 }),
             }),
