@@ -61,7 +61,7 @@
 // layouts:
 [upgraded] [documented  ] [published] @nodestrap/list
 [upgraded] [documented  ] [published] @nodestrap/card
-[obsolete] [documented  ] [published] @nodestrap/masonry
+[upgraded] [documented  ] [published] @nodestrap/masonry
 
 // statuses:
 [obsolete] [documented  ] [published] @nodestrap/popup
