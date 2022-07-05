@@ -65,7 +65,7 @@
 
 // statuses:
 [upgraded] [documented  ] [published] @nodestrap/popup
-[obsolete] [documented  ] [published] @nodestrap/badge
+[upgraded] [documented  ] [published] @nodestrap/badge
 [obsolete] [documented  ] [published] @nodestrap/busy
 
 notifications:
