@@ -64,7 +64,7 @@
 [upgraded] [documented  ] [published] @nodestrap/masonry
 
 // statuses:
-[obsolete] [documented  ] [published] @nodestrap/popup
+[upgraded] [documented  ] [published] @nodestrap/popup
 [obsolete] [documented  ] [published] @nodestrap/badge
 [obsolete] [documented  ] [published] @nodestrap/busy
 
