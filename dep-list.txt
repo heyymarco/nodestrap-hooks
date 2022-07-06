@@ -69,7 +69,7 @@
 [upgraded] [documented  ] [published] @nodestrap/busy
 
 notifications:
-[obsolete] [documented  ] [published] @nodestrap/alert
+[upgraded] [documented  ] [published] @nodestrap/alert
 [obsolete] [documented  ] [published] @nodestrap/tooltip
 
 // menus:
