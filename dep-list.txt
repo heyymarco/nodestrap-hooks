@@ -70,7 +70,7 @@
 
 notifications:
 [upgraded] [documented  ] [published] @nodestrap/alert
-[obsolete] [documented  ] [published] @nodestrap/tooltip
+[upgraded] [documented  ] [published] @nodestrap/tooltip
 
 // menus:
 [obsolete] [documented  ] [published] @nodestrap/collapse
