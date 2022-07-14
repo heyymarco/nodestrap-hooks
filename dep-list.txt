@@ -75,7 +75,7 @@ notifications:
 // menus:
 [upgraded] [documented  ] [published] @nodestrap/collapse
 [upgraded] [documented  ] [published] @nodestrap/dropdown
-[upgraded] [documented  ] [published] @nodestrap/dropdown-button
+[upgraded] [documented  ] [published] [compound] @nodestrap/dropdown-button
 [upgraded] [documented  ] [published] @nodestrap/dropdown-list
 [obsolete] [documented  ] [published] @nodestrap/dropdown-list-button
 
