@@ -77,8 +77,8 @@ notifications:
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/collapse
 [upgraded] [documented  ] [published] [partial compound] @nodestrap/dropdown
 [upgraded] [documented  ] [published] [full    compound] @nodestrap/dropdown-button
-[upgraded] [documented  ] [published] @nodestrap/dropdown-list
-[obsolete] [documented  ] [published] @nodestrap/dropdown-list-button
+[upgraded] [documented  ] [published] [full    compound] @nodestrap/dropdown-list
+[upgraded] [documented  ] [published] [full    compound] @nodestrap/dropdown-list-button
 
 // composite components:
 [obsolete] [documented  ] [published] @nodestrap/progress
