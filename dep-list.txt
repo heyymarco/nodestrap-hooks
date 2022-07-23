@@ -19,9 +19,10 @@
 [upgraded] [documented  ] [published] @nodestrap/layouts
 [upgraded] [documented  ] [published] @nodestrap/typos
 
-[upgraded] [documented  ] [published] @nodestrap/hooks
 [upgraded] [documented  ] [published] @nodestrap/utilities
+[upgraded] [documented  ] [published] @nodestrap/hooks
 [upgraded] [documented  ] [published] @nodestrap/accessibilities
+[upgraded] [documented  ] [published] @nodestrap/expandables
 [upgraded] [documented  ] [published] @nodestrap/validations
 [upgraded] [undocumented] [published] @nodestrap/dimensions
 [upgraded] [undocumented] [published] @nodestrap/responsive
@@ -73,6 +74,11 @@ notifications:
 [upgraded] [documented  ] [published] [partial compound] @nodestrap/alert
 [upgraded] [documented  ] [published] [partial compound] @nodestrap/tooltip
 
+// dialogs:
+[upgraded] [documented  ] [published] [partial compound] @nodestrap/modal
+[obsolete] [documented  ] [published] @nodestrap/modal-card
+[obsolete] [documented  ] [published] @nodestrap/modal-side
+
 // menus:
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/collapse
 [upgraded] [documented  ] [published] [partial compound] @nodestrap/dropdown
@@ -88,8 +94,3 @@ notifications:
 [obsolete] [documented  ] [published] @nodestrap/group
 [obsolete] [documented  ] [published] @nodestrap/carousel
 [obsolete] [documented  ] [published] @nodestrap/navbar
-
-// dialogs:
-[obsolete] [documented  ] [published] @nodestrap/modal
-[obsolete] [documented  ] [published] @nodestrap/modal-card
-[obsolete] [documented  ] [published] @nodestrap/modal-side
