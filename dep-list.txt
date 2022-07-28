@@ -41,15 +41,15 @@
 [upgraded] [documented  ] [published] [todo: compositing editable + action] @nodestrap/editable-action-control
 
 // contents:
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/container
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/container
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/content    *button
 
 // simple components:
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/visually-hidden
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/icon
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/label
-[upgraded] [documented  ] [published] [todo: compositing actionCtrl] @nodestrap/button
-[upgraded] [new         ] [new      ] [full    compound] @nodestrap/toggle-button
+[upgraded] [documented  ] [published] [todo: compositing actionCtrl] [semi organized] @nodestrap/button
+[upgraded] [new         ] [new      ] [full    compound] [full organized] @nodestrap/toggle-button
 [upgraded] [documented  ] [published] [todo: compositing button] @nodestrap/nav-button
 [upgraded] [documented  ] [published] [todo: compositing button] @nodestrap/button-icon
 [upgraded] [documented  ] [published] [todo: compositing button & icon] @nodestrap/close-button
@@ -61,9 +61,9 @@
 [upgraded] [documented  ] [published] [todo: use toggleButtonComponent] @nodestrap/toggler-menu-button
 
 // layouts:
-[upgraded] [documented  ] [published] [todo: ListItem from Button] @nodestrap/list
+[upgraded] [documented  ] [published] [todo: ListItem from Button] [semi organized] @nodestrap/list
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/card
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/masonry
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/masonry
 
 // statuses:
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/popup
@@ -75,11 +75,11 @@ notifications:
 [upgraded] [documented  ] [published] [partial compound] @nodestrap/tooltip
 
 // menus:
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/collapse
-[upgraded] [documented  ] [published] [partial compound] @nodestrap/dropdown
-[upgraded] [documented  ] [published] [full    compound] @nodestrap/dropdown-button
-[upgraded] [documented  ] [published] [full    compound] @nodestrap/dropdown-list
-[upgraded] [documented  ] [published] [full    compound] @nodestrap/dropdown-list-button
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/collapse
+[upgraded] [documented  ] [published] [partial compound] [full organized] @nodestrap/dropdown
+[upgraded] [documented  ] [published] [full    compound] [full organized] @nodestrap/dropdown-button
+[upgraded] [documented  ] [published] [full    compound] [full organized] @nodestrap/dropdown-list
+[upgraded] [documented  ] [published] [full    compound] [full organized] @nodestrap/dropdown-list-button
 
 // dialogs:
 [upgraded] [documented  ] [published] [partial compound] @nodestrap/modal
