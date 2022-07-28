@@ -51,8 +51,8 @@
 [upgraded] [documented  ] [published] [todo: compositing actionCtrl] [semi organized] @nodestrap/button
 [upgraded] [new         ] [new      ] [full    compound] [full organized] @nodestrap/toggle-button
 [upgraded] [documented  ] [published] [todo: compositing button] @nodestrap/nav-button
-[upgraded] [documented  ] [published] [todo: compositing button] @nodestrap/button-icon
-[upgraded] [documented  ] [published] [todo: compositing button & icon] @nodestrap/close-button
+[upgraded] [documented  ] [published] [todo: compositing button] [semi organized] @nodestrap/button-icon
+[upgraded] [documented  ] [published] [todo: compositing button & icon] [full organized] @nodestrap/close-button
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/form
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/input
 [upgraded] [documented  ] [published] [todo: compositing track & thumb] @nodestrap/range
