@@ -33,19 +33,19 @@
 // abstracts:
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/element
 [upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/basic
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/indicator
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/control
-[upgraded] [documented  ] [published] [todo actionCtrlComponent] @nodestrap/action-control
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/editable-control
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/editable-text-control   *icon
-[upgraded] [documented  ] [published] [todo: compositing editable + action] @nodestrap/editable-action-control
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/indicator
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/control
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/action-control
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/editable-control
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/editable-text-control   *icon
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/editable-action-control
 
 // contents:
 [upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/container
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/content    *button
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/content    *button
 
 // simple components:
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/visually-hidden
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/visually-hidden
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/icon
 [upgraded] [documented  ] [published] [          atomic] @nodestrap/label
 [upgraded] [documented  ] [published] [todo: compositing actionCtrl] [semi organized] @nodestrap/button
