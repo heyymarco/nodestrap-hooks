@@ -46,8 +46,8 @@
 
 // simple components:
 [upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/visually-hidden
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/icon
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/label
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/icon
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/label
 [upgraded] [documented  ] [published] [todo: compositing actionCtrl] [semi organized] @nodestrap/button
 [upgraded] [new         ] [new      ] [full    compound] [full organized] @nodestrap/toggle-button
 [upgraded] [documented  ] [published] [todo: compositing button] [full organized] @nodestrap/nav-button
