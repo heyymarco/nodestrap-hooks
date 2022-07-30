@@ -62,17 +62,17 @@
 
 // layouts:
 [upgraded] [documented  ] [published] [todo: ListItem from Button] [semi organized] @nodestrap/list
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/card
+[upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/card
 [upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/masonry
 
 // statuses:
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/popup
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/badge
-[upgraded] [documented  ] [published] [partial compound] @nodestrap/busy
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/popup
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/badge
+[upgraded] [documented  ] [published] [partial compound] [full organized] @nodestrap/busy
 
 notifications:
-[upgraded] [documented  ] [published] [partial compound] @nodestrap/alert
-[upgraded] [documented  ] [published] [partial compound] @nodestrap/tooltip
+[upgraded] [documented  ] [published] [partial compound] [full organized] @nodestrap/alert
+[upgraded] [documented  ] [published] [partial compound] [full organized] @nodestrap/tooltip
 
 // menus:
 [upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/collapse
