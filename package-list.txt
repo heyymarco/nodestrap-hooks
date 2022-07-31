@@ -31,7 +31,7 @@
 [upgraded] [undocumented] [published] [full    compound] @nodestrap/react-router-link
 
 // abstracts:
-[upgraded] [documented  ] [published] [          atomic] @nodestrap/element
+[upgraded] [documented  ] [published] [          atomic] [full organized] @nodestrap/generic
 [upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/basic
 [upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/indicator
 [upgraded] [documented  ] [published] [          atomic] [semi organized] @nodestrap/control
